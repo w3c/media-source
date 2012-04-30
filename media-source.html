@@ -317,7 +317,6 @@ partial interface HTMLMediaElement {
     </div>
     <div class="issue">Using <code><a href="#dom-mediasourceurl">mediaSourceURL</a></code> is one approach to switching the media element into "media source" mode. Alternative approaches should be explored to improve consistency with other APIs and provide a declarative mechanism for enabling "media source" mode.</div>
 
-
     <p>The <dfn id="dom-sourceaddid"><code>sourceAddId(id, type)</code></dfn> method must run the following steps:</p>
     <ol>
       <li>If <var title="true">id</var> is null or an empty string then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
@@ -494,7 +493,7 @@ partial interface HTMLMediaElement {
         <tr>
           <td><dfn id="dom-sourceclose"><code>sourceclose</code></dfn></td>
           <td><code>Event</code></td>
-          <td>When the source transitions from <code><a href="#dom-source_open">SOURCE_OPEN</a></code> or <code><a href="#dom-source_ended">SOURCE_ENDED</a></code> to <code><a href="#dom-source_ended">SOURCE_ENDED</a></code>.</td>
+          <td>When the source transitions from <code><a href="#dom-source_open">SOURCE_OPEN</a></code> or <code><a href="#dom-source_ended">SOURCE_ENDED</a></code> to <code><a href="#dom-source_closed">SOURCE_CLOSED</a></code>.</td>
         </tr>
       </tbody>
     </table>
