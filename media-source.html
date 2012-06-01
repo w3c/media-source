@@ -276,27 +276,27 @@
     <pre class="idl">
 partial interface HTMLMediaElement {
   // URL passed to src attribute to enable the media source logic.
-  readonly attribute [URL] DOMString <a href="#dom-mediasourceurl">mediaSourceURL</a>;
+  readonly attribute DOMString <a href="#dom-mediasourceurl">mediaSourceURL</a>;
 
   // Manages IDs for appending media to the source.
-  void <a href="#dom-sourceaddid">sourceAddId</a>(in DOMString id, in DOMString type);
-  void <a href="#dom-sourceremoveid">sourceRemoveId</a>(in DOMString id);
+  void <a href="#dom-sourceaddid">sourceAddId</a>(DOMString id, DOMString type);
+  void <a href="#dom-sourceremoveid">sourceRemoveId</a>(DOMString id);
 
   // Returns the time ranges buffered for a specific ID.
-  TimeRanges <a href="#dom-sourcebuffered">sourceBuffered</a>(in DOMString id);
+  TimeRanges <a href="#dom-sourcebuffered">sourceBuffered</a>(DOMString id);
 
   // Append segment data.
-  void <a href="#dom-sourceappend">sourceAppend</a>(in DOMString id, in Uint8Array data);
+  void <a href="#dom-sourceappend">sourceAppend</a>(DOMString id, Uint8Array data);
 
   // Abort the current segment.
-  void <a href="#dom-sourceabort">sourceAbort</a>(in DOMString id);
+  void <a href="#dom-sourceabort">sourceAbort</a>(DOMString id);
 
   // end of stream status codes.
   const unsigned short <a href="#dom-eos_no_error">EOS_NO_ERROR</a> = 0;
   const unsigned short <a href="#dom-eos_network_err">EOS_NETWORK_ERR</a> = 1;
   const unsigned short <a href="#dom-eos_decode_err">EOS_DECODE_ERR</a> = 2;
 
-  void <a href="#dom-sourceendofstream">sourceEndOfStream</a>(in unsigned short status);
+  void <a href="#dom-sourceendofstream">sourceEndOfStream</a>(unsigned short status);
 
   // states
   const unsigned short <a href="#dom-source_closed">SOURCE_CLOSED</a> = 0;
@@ -304,6 +304,10 @@ partial interface HTMLMediaElement {
   const unsigned short <a href="#dom-source_ended">SOURCE_ENDED</a> = 2;
 
   readonly attribute unsigned short <a href="#dom-sourcestate">sourceState</a>;
+
+  [TreatNonCallableAsNull] attribute Function? <a href="#dom-onsourceopen">onsourceopen</a>;
+  [TreatNonCallableAsNull] attribute Function? <a href="#dom-onsourceended">onsourceended</a>;
+  [TreatNonCallableAsNull] attribute Function? <a href="#dom-onsourceclose">onsourceclose</a>;
 };
 
     </pre>
@@ -471,6 +475,29 @@ partial interface HTMLMediaElement {
     </p>
 
     <h2 id="event-summary">4. Event Summary</h2>
+    <table>
+      <thead>
+	<tr>
+	  <th><a href="http://dev.w3.org/html5/spec/webappapis.html#event-handlers" title="event handlers">Event handler</a></th>
+	  <th><a href="http://dev.w3.org/html5/spec/webappapis.html#event-handler-event-type">Event handler event type</a></th>
+	</tr>
+      </thead>
+      <tbody>
+	<tr>
+	  <td><dfn id="dom-onsourceopen"><code>onsourceopen</code></dfn></td>
+	  <td><code><a href="#dom-sourceopen">sourceopen</a></code></td>
+	</tr>
+	<tr>
+	  <td><dfn id="dom-onsourceended"><code>onsourceended</code></dfn></td>
+	  <td><code><a href="#dom-sourceended">sourceended</a></code></td>
+	</tr>
+	<tr>
+	  <td><dfn id="dom-onsourceclose"><code>onsourceclose</code></dfn></td>
+	  <td><code><a href="#dom-sourceclose">sourceclose</a></code></td>
+	</tr>
+      </tbody>
+    </table>
+    <hr>
     <table>
       <thead>
         <tr>

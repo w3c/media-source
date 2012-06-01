@@ -274,27 +274,27 @@
     <pre class="idl">
 partial interface HTMLMediaElement {
   // URL passed to src attribute to enable the media source logic.
-  readonly attribute [URL] DOMString <precoderef>mediaSourceURL</precoderef>;
+  readonly attribute DOMString <precoderef>mediaSourceURL</precoderef>;
 
   // Manages IDs for appending media to the source.
-  void <premethodref>sourceAddId</premethodref>(in DOMString id, in DOMString type);
-  void <premethodref>sourceRemoveId</premethodref>(in DOMString id);
+  void <premethodref>sourceAddId</premethodref>(DOMString id, DOMString type);
+  void <premethodref>sourceRemoveId</premethodref>(DOMString id);
 
   // Returns the time ranges buffered for a specific ID.
-  TimeRanges <premethodref>sourceBuffered</premethodref>(in DOMString id);
+  TimeRanges <premethodref>sourceBuffered</premethodref>(DOMString id);
 
   // Append segment data.
-  void <premethodref>sourceAppend</premethodref>(in DOMString id, in Uint8Array data);
+  void <premethodref>sourceAppend</premethodref>(DOMString id, Uint8Array data);
 
   // Abort the current segment.
-  void <premethodref>sourceAbort</premethodref>(in DOMString id);
+  void <premethodref>sourceAbort</premethodref>(DOMString id);
 
   // end of stream status codes.
   const unsigned short <precoderef>EOS_NO_ERROR</precoderef> = 0;
   const unsigned short <precoderef>EOS_NETWORK_ERR</precoderef> = 1;
   const unsigned short <precoderef>EOS_DECODE_ERR</precoderef> = 2;
 
-  void <premethodref>sourceEndOfStream</premethodref>(in unsigned short status);
+  void <premethodref>sourceEndOfStream</premethodref>(unsigned short status);
 
   // states
   const unsigned short <precoderef>SOURCE_CLOSED</precoderef> = 0;
@@ -302,6 +302,10 @@ partial interface HTMLMediaElement {
   const unsigned short <precoderef>SOURCE_ENDED</precoderef> = 2;
 
   readonly attribute unsigned short <precoderef>sourceState</precoderef>;
+
+  [TreatNonCallableAsNull] attribute Function? <precoderef>onsourceopen</precoderef>;
+  [TreatNonCallableAsNull] attribute Function? <precoderef>onsourceended</precoderef>;
+  [TreatNonCallableAsNull] attribute Function? <precoderef>onsourceclose</precoderef>;
 };
 
     </pre>
@@ -452,6 +456,29 @@ partial interface HTMLMediaElement {
     </p>
 
     <h2 id="event-summary">4. Event Summary</h2>
+    <table>
+      <thead>
+	<tr>
+	  <th><a href="http://dev.w3.org/html5/spec/webappapis.html#event-handlers" title="event handlers">Event handler</a></th>
+	  <th><a href="http://dev.w3.org/html5/spec/webappapis.html#event-handler-event-type">Event handler event type</a></th>
+	</tr>
+      </thead>
+      <tbody>
+	<tr>
+	  <td><codedfn>onsourceopen</codedfn></td>
+	  <td><coderef>sourceopen</coderef></td>
+	</tr>
+	<tr>
+	  <td><codedfn>onsourceended</codedfn></td>
+	  <td><coderef>sourceended</coderef></td>
+	</tr>
+	<tr>
+	  <td><codedfn>onsourceclose</codedfn></td>
+	  <td><coderef>sourceclose</coderef></td>
+	</tr>
+      </tbody>
+    </table>
+    <hr />
     <table>
       <thead>
         <tr>
