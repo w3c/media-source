@@ -38,48 +38,123 @@
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="//sourceAddId">
+  <!-- MediaSource tags -->
+  <xsl:template match="//sourceBuffers">
     <xsl:call-template name="coderef_helper">
-      <xsl:with-param name="fragment">sourceaddid</xsl:with-param>
-      <xsl:with-param name="link_text">sourceAddId()</xsl:with-param>
+      <xsl:with-param name="fragment">sourcebuffers</xsl:with-param>
+      <xsl:with-param name="link_text">sourceBuffers</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="//activeSourceBuffers">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">activesourcebuffers</xsl:with-param>
+      <xsl:with-param name="link_text">activeSourceBuffers</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="//sourceRemoveId">
+  <xsl:template match="//addSourceBuffer">
     <xsl:call-template name="coderef_helper">
-      <xsl:with-param name="fragment">sourceremoveid</xsl:with-param>
-      <xsl:with-param name="link_text">sourceRemoveId()</xsl:with-param>
+      <xsl:with-param name="fragment">addsourcebuffer</xsl:with-param>
+      <xsl:with-param name="link_text">addSourceBuffer()</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="//sourceAppend">
+  <xsl:template match="//readyState">
     <xsl:call-template name="coderef_helper">
-      <xsl:with-param name="fragment">sourceappend</xsl:with-param>
-      <xsl:with-param name="link_text">sourceAppend()</xsl:with-param>
+      <xsl:with-param name="fragment">readyState</xsl:with-param>
+      <xsl:with-param name="link_text">readyState</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="//sourceAbort">
+  <!-- SourceBufferList tags -->
+  <xsl:template match="//length">
     <xsl:call-template name="coderef_helper">
-      <xsl:with-param name="fragment">sourceabort</xsl:with-param>
-      <xsl:with-param name="link_text">sourceAbort()</xsl:with-param>
+      <xsl:with-param name="fragment">length</xsl:with-param>
+      <xsl:with-param name="link_text">length</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="//remove">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">remove</xsl:with-param>
+      <xsl:with-param name="link_text">remove()</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="//sourceBuffered">
+  <xsl:template match="//addsourcebuffer">
     <xsl:call-template name="coderef_helper">
-      <xsl:with-param name="fragment">sourcebuffered</xsl:with-param>
-      <xsl:with-param name="link_text">sourceBuffered()</xsl:with-param>
+      <xsl:with-param name="fragment">addsourcebuffer</xsl:with-param>
+      <xsl:with-param name="link_text">addsourcebuffer</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="//sourceState">
+  <xsl:template match="//removesourcebuffer">
     <xsl:call-template name="coderef_helper">
-      <xsl:with-param name="fragment">sourcestate</xsl:with-param>
-      <xsl:with-param name="link_text">sourceState</xsl:with-param>
+      <xsl:with-param name="fragment">removesourcebuffer</xsl:with-param>
+      <xsl:with-param name="link_text">removesourcebuffer</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
-  
+
+  <!-- SourceBuffer tags -->
+  <xsl:template match="//append">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">append</xsl:with-param>
+      <xsl:with-param name="link_text">append()</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//abort">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">abort</xsl:with-param>
+      <xsl:with-param name="link_text">abort()</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//buffered">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">buffered</xsl:with-param>
+      <xsl:with-param name="link_text">buffered</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//SourceBuffer">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">sourcebuffer</xsl:with-param>
+      <xsl:with-param name="link_text">SourceBuffer</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//SourceBufferList">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">sourcebufferlist</xsl:with-param>
+      <xsl:with-param name="link_text">SourceBufferList</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//MediaSource">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">mediasource</xsl:with-param>
+      <xsl:with-param name="link_text">MediaSource</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//open">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">&quot;open&quot;</xsl:with-param>
+      <xsl:with-param name="link_text">&quot;open&quot;</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="//closed">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">closed</xsl:with-param>
+      <xsl:with-param name="link_text">&quot;closed&quot;</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="//ended">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">&quot;ended&quot;</xsl:with-param>
+      <xsl:with-param name="link_text">&quot;ended&quot;</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
 
   <xsl:template match="//codedfn">
     <dfn><xsl:attribute name="id">dom-<xsl:value-of select="translate(.,$upper,$lower)"/></xsl:attribute><code><xsl:value-of select="."/></code></dfn>
@@ -139,20 +214,16 @@
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="//active-id">
-    <a><xsl:attribute name="href">#active-ids</xsl:attribute>active ID</a>
+  <xsl:template match="//active-source-buffer">
+    <a><xsl:attribute name="href">#active-source-buffers</xsl:attribute>active source buffers</a>
   </xsl:template>
 
-  <xsl:template match="//active-ids">
-    <a><xsl:attribute name="href">#active-ids</xsl:attribute>active IDs</a>
+  <xsl:template match="//active-source-buffers">
+    <a><xsl:attribute name="href">#active-source-buffers</xsl:attribute>active source buffers</a>
   </xsl:template>
 
-  <xsl:template match="//source-id">
-    <a><xsl:attribute name="href">#source-id</xsl:attribute>source ID</a>
-  </xsl:template>
-
-  <xsl:template match="//source-ids">
-    <a><xsl:attribute name="href">#source-id</xsl:attribute>source IDs</a>
+  <xsl:template match="//source-buffers">
+    <a><xsl:attribute name="href">#source-buffer</xsl:attribute>source buffers</a>
   </xsl:template>
 
   <xsl:template match="//source-buffer">
@@ -267,11 +338,24 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="//text-track">
+    <xsl:call-template name="code_videoref_helper">
+      <xsl:with-param name="fragment">texttrack</xsl:with-param>
+      <xsl:with-param name="link_text">TextTrack</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//texttracks">
+    <xsl:call-template name="code_videoref_helper">
+      <xsl:with-param name="fragment">dom-media-texttracks</xsl:with-param>
+      <xsl:with-param name="link_text">textTracks</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
   
   <xsl:template match="//ready-state">
     <xsl:call-template name="code_videoref_helper">
       <xsl:with-param name="fragment">dom-media-readystate</xsl:with-param>
-      <xsl:with-param name="link_text">readyState</xsl:with-param>
+      <xsl:with-param name="link_text">HTMLMediaElement.readyState</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
@@ -310,6 +394,13 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="//MEDIA_ERR_SRC_NOT_SUPPORTED">
+    <xsl:call-template name="code_videoref_helper">
+      <xsl:with-param name="fragment">dom-mediaerror-media_err_src_not_supported</xsl:with-param>
+      <xsl:with-param name="link_text">MEDIA_ERR_SRC_NOT_SUPPORTED</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template name="exception_helper">
     <xsl:param name="fragment" />
     <xsl:param name="link_text" />
@@ -335,8 +426,15 @@
       <xsl:with-param name="fragment">syntax_err</xsl:with-param>
       <xsl:with-param name="link_text">SYNTAX_ERR</xsl:with-param>
     </xsl:call-template>
- </xsl:template>
+  </xsl:template>
 
+ 
+  <xsl:template match="//not-found-err">
+     <xsl:call-template name="exception_helper">
+      <xsl:with-param name="fragment">not_found_err</xsl:with-param>
+      <xsl:with-param name="link_text">NOT_FOUND_ERR</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
   <xsl:template match="//not-supported-err">
      <xsl:call-template name="exception_helper">
       <xsl:with-param name="fragment">not_supported_err</xsl:with-param>
