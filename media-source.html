@@ -291,7 +291,7 @@
 
 
     <h3 id="source-buffer-remove">2.10. Removing Source Buffers</h3>
-    <p>Removing a <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> with <code><a href="#dom-remove">remove()</a></code> releases all resources associated with the object. This includes destroying the all the segment data, <a href="#track-buffer">track buffers</a>, and decoders. The media element will also remove the appropriate tracks from <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-audiotracks">audioTracks</a></code>, <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-videotracks">videoTracks</a></code>,  &amp; <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-texttracks">textTracks</a></code> and fire the necessary <code><a href="http://dev.w3.org/html5/spec/media-elements.html#handler-tracklist-onchange">change</a></code> events. Playback may become degraded or stop if the currently selected <code><a href="http://dev.w3.org/html5/spec/media-elements.html#videotrack">VideoTrack</a></code> or the only enabled <code><a href="http://dev.w3.org/html5/spec/media-elements.html#audiotrack">AudioTracks</a></code> are removed.</p>
+    <p>Removing a <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> with <code><a href="#dom-removeSourceBuffer">removeSourceBuffer()</a></code> releases all resources associated with the object. This includes destroying the all the segment data, <a href="#track-buffer">track buffers</a>, and decoders. The media element will also remove the appropriate tracks from <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-audiotracks">audioTracks</a></code>, <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-videotracks">videoTracks</a></code>,  &amp; <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-texttracks">textTracks</a></code> and fire the necessary <code><a href="http://dev.w3.org/html5/spec/media-elements.html#handler-tracklist-onchange">change</a></code> events. Playback may become degraded or stop if the currently selected <code><a href="http://dev.w3.org/html5/spec/media-elements.html#videotrack">VideoTrack</a></code> or the only enabled <code><a href="http://dev.w3.org/html5/spec/media-elements.html#audiotrack">AudioTracks</a></code> are removed.</p>
 
     <h2 id="mediasource">3. MediaSource Object</h2>
     <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the <code><a href="#dom-readyState">readyState</a></code> for this source as well as a list of <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects in <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> to add media data to this source. The HTMLMediaElement fetches this media data from the <code><a href="#dom-mediasource">MediaSource</a></code> object when it is needed during playback.</p>
@@ -305,8 +305,8 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
   // Subset of sourceBuffers that provide data for the selected/enabled tracks.
   readonly attribute <a href="#dom-sourcebufferlist">SourceBufferList</a> <a href="#dom-activesourcebuffers">activeSourceBuffers</a>;
 
-  // Adds another source buffer.
   <a href="#dom-sourcebuffer">SourceBuffer</a> <a href="#dom-addsourcebuffer">addSourceBuffer</a>(DOMString type);
+  void <a href="#dom-removesourcebuffer">removeSourceBuffer</a>(<a href="#dom-sourcebuffer">SourceBuffer</a> sourceBuffer);
 
   enum State { "closed", "open", "ended" };
   readonly attribute State <a href="#dom-readystate">readyState</a>;
@@ -331,6 +331,17 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
       <li>Add the new object to <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> and fire a <code><a href="#dom-addsourcebuffer">addsourcebuffer</a></code> on that object.</li>
       <li>Return the new object to the caller.</li>
     </ol>
+    <p>The <dfn id="dom-removesourcebuffer"><code>removeSourceBuffer(sourceBuffer)</code></dfn> method must run the following steps:</p>
+    <ol>
+      <li>If <var title="true">sourceBuffer</var> is null then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
+      <li>If <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> is empty then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+      <li>If <var title="true">sourceBuffer</var> specifies an object that is not in <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> then throw a <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-not_found_err">NOT_FOUND_ERR</a></code> exception and abort these steps.</li>
+      <li>Remove track information from <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-audiotracks">audioTracks</a></code>, <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-videotracks">videoTracks</a></code>, and <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-texttracks">textTracks</a></code> for all tracks associated with <var title="true">sourceBuffer</var> and fire a simple event named <code><a href="http://dev.w3.org/html5/spec/media-elements.html#handler-tracklist-onchange">change</a></code> on the modified lists.</li>
+      <li>If <var title="true">sourceBuffer</var> is in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>, then remove it from that list and fire a <code><a href="#dom-removesourcebuffer">removesourcebuffer</a></code> event on that object.</li>
+      <li>Remove <var title="true">sourceBuffer</var> from <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> and fire a <code><a href="#dom-removesourcebuffer">removesourcebuffer</a></code> event on that object.</li>
+      <li>Destroy all resources for <var title="true">sourceBuffer</var>.</li>
+    </ol>
+
 
     <p>The <dfn id="dom-readystate"><code>readyState</code></dfn> attribute indicates the current state of the <code><a href="#dom-mediasource">MediaSource</a></code> object. It can have the following values:</p>
     <dl>
@@ -647,13 +658,12 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
     </ol>
 
         <h2 id="sourcebufferlist">5. SourceBufferList Object</h2>
-    <p>SourceBufferList is a simple container object for <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects. It provides a read-only array accessor, fires events when the list is modified, and provides a way to remove SourceBuffer objects from the list.</p>
+    <p>SourceBufferList is a simple container object for <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects. It provides a read-only array accessor and fires events when the list is modified.</p>
 
     <pre class="idl">
 interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
   readonly attribute unsigned long <a href="#dom-length">length</a>;
   <a href="#dom-getter">getter</a> <a href="#dom-sourcebuffer">SourceBuffer</a> (unsigned long index);
-  void <a href="#dom-remove">remove</a>(<a href="#dom-sourcebuffer">SourceBuffer</a> buffer);
 };
     </pre>
     <h3 id="sourcebufferlist-methods">5.1. Methods and Attributes</h3>
@@ -662,15 +672,6 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
     <ol>
       <li>If <var title="true">index</var> is greater than or equal to the <code><a href="#dom-length">length</a></code> attribute then return undefined and abort these steps.</li>
       <li>Return the <var title="true">index</var>'th <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> object in the list.</li>
-    </ol>
-    <p>The <dfn id="dom-remove"><code>remove(buffer)</code></dfn> method must run the following steps:</p>
-    <ol>
-      <li>If <var title="true">buffer</var> is null then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
-      <li>If the list is empty then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-      <li>If <var title="true">buffer</var> specifies an object that is not in this list then throw a <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-not_found_err">NOT_FOUND_ERR</a></code> exception and abort these steps.</li>
-      <li>Remove track information from <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-audiotracks">audioTracks</a></code>, <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-videotracks">videoTracks</a></code>, and <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-texttracks">textTracks</a></code> for all tracks associated with <var title="true">buffer</var> and fire a simple event named <code><a href="http://dev.w3.org/html5/spec/media-elements.html#handler-tracklist-onchange">change</a></code> on the modified lists.</li>
-      <li>Destroy all resources for <var title="true">buffer</var>.</li>
-      <li>Remove <var title="true">buffer</var> from the list and fire an <code><a href="#dom-removesourcebuffer">removesourcebuffer</a></code> event.</li>
     </ol>
 
     <h3 id="sourcebufferlist-events">5.2. Event Summary</h3>

@@ -286,7 +286,7 @@
 
 
     <h3 id="source-buffer-remove">2.10. Removing Source Buffers</h3>
-    <p>Removing a <SourceBuffer/> with <remove/> releases all resources associated with the object. This includes destroying the all the segment data, <track-buffers/>, and decoders. The media element will also remove the appropriate tracks from <audiotracks/>, <videotracks/>,  &amp; <texttracks/> and fire the necessary <videoref name="handler-tracklist-onchange">change</videoref> events. Playback may become degraded or stop if the currently selected <video-track/> or the only enabled <audio-tracks/> are removed.</p>
+    <p>Removing a <SourceBuffer/> with <removeSourceBuffer/> releases all resources associated with the object. This includes destroying the all the segment data, <track-buffers/>, and decoders. The media element will also remove the appropriate tracks from <audiotracks/>, <videotracks/>,  &amp; <texttracks/> and fire the necessary <videoref name="handler-tracklist-onchange">change</videoref> events. Playback may become degraded or stop if the currently selected <video-track/> or the only enabled <audio-tracks/> are removed.</p>
 
     <h2 id="mediasource">3. MediaSource Object</h2>
     <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the <readyState/> for this source as well as a list of <SourceBuffer/> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <SourceBuffer/> objects in <sourceBuffers/> to add media data to this source. The HTMLMediaElement fetches this media data from the <MediaSource/> object when it is needed during playback.</p>
@@ -300,8 +300,8 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
   // Subset of sourceBuffers that provide data for the selected/enabled tracks.
   readonly attribute <precoderef>SourceBufferList</precoderef> <precoderef>activeSourceBuffers</precoderef>;
 
-  // Adds another source buffer.
   <precoderef>SourceBuffer</precoderef> <premethodref>addSourceBuffer</premethodref>(DOMString type);
+  void <premethodref>removeSourceBuffer</premethodref>(<precoderef>SourceBuffer</precoderef> sourceBuffer);
 
   enum State { "closed", "open", "ended" };
   readonly attribute State <precoderef>readyState</precoderef>;
@@ -326,6 +326,17 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
       <li>Add the new object to <sourceBuffers/> and fire a <coderef>addsourcebuffer</coderef> on that object.</li>
       <li>Return the new object to the caller.</li>
     </ol>
+    <p>The <methoddfn name="removeSourceBuffer">removeSourceBuffer(<var title="true">sourceBuffer</var>)</methoddfn> method must run the following steps:</p>
+    <ol>
+      <li>If <var title="true">sourceBuffer</var> is null then throw an <invalid-access-err/> exception and abort these steps.</li>
+      <li>If <sourceBuffers/> is empty then throw an <invalid-state-err/> exception and abort these steps.</li>
+      <li>If <var title="true">sourceBuffer</var> specifies an object that is not in <sourceBuffers/> then throw a <not-found-err/> exception and abort these steps.</li>
+      <li>Remove track information from <audiotracks/>, <videotracks/>, and <texttracks/> for all tracks associated with <var title="true">sourceBuffer</var> and fire a simple event named <videoref name="handler-tracklist-onchange">change</videoref> on the modified lists.</li>
+      <li>If <var title="true">sourceBuffer</var> is in <activeSourceBuffers/>, then remove it from that list and fire a <removesourcebuffer/> event on that object.</li>
+      <li>Remove <var title="true">sourceBuffer</var> from <sourceBuffers/> and fire a <removesourcebuffer/> event on that object.</li>
+      <li>Destroy all resources for <var title="true">sourceBuffer</var>.</li>
+    </ol>
+
 
     <p>The <codedfn>readyState</codedfn> attribute indicates the current state of the <MediaSource/> object. It can have the following values:</p>
     <dl>
@@ -618,13 +629,12 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
     </ol>
 
         <h2 id="sourcebufferlist">5. SourceBufferList Object</h2>
-    <p>SourceBufferList is a simple container object for <SourceBuffer/> objects. It provides a read-only array accessor, fires events when the list is modified, and provides a way to remove SourceBuffer objects from the list.</p>
+    <p>SourceBufferList is a simple container object for <SourceBuffer/> objects. It provides a read-only array accessor and fires events when the list is modified.</p>
 
     <pre class="idl">
 interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
   readonly attribute unsigned long <precoderef>length</precoderef>;
   <precoderef>getter</precoderef> <precoderef>SourceBuffer</precoderef> (unsigned long index);
-  void <premethodref>remove</premethodref>(<precoderef>SourceBuffer</precoderef> buffer);
 };
     </pre>
     <h3 id="sourcebufferlist-methods">5.1. Methods and Attributes</h3>
@@ -633,15 +643,6 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
     <ol>
       <li>If <var title="true">index</var> is greater than or equal to the <length/> attribute then return undefined and abort these steps.</li>
       <li>Return the <var title="true">index</var>'th <SourceBuffer/> object in the list.</li>
-    </ol>
-    <p>The <methoddfn name="remove">remove(<var title="true">buffer</var>)</methoddfn> method must run the following steps:</p>
-    <ol>
-      <li>If <var title="true">buffer</var> is null then throw an <invalid-access-err/> exception and abort these steps.</li>
-      <li>If the list is empty then throw an <invalid-state-err/> exception and abort these steps.</li>
-      <li>If <var title="true">buffer</var> specifies an object that is not in this list then throw a <not-found-err/> exception and abort these steps.</li>
-      <li>Remove track information from <audiotracks/>, <videotracks/>, and <texttracks/> for all tracks associated with <var title="true">buffer</var> and fire a simple event named <videoref name="handler-tracklist-onchange">change</videoref> on the modified lists.</li>
-      <li>Destroy all resources for <var title="true">buffer</var>.</li>
-      <li>Remove <var title="true">buffer</var> from the list and fire an <removesourcebuffer/> event.</li>
     </ol>
 
     <h3 id="sourcebufferlist-events">5.2. Event Summary</h3>

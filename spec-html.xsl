@@ -59,6 +59,14 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="//removeSourceBuffer">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">removeSourceBuffer</xsl:with-param>
+      <xsl:with-param name="link_text">removeSourceBuffer()</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+
   <xsl:template match="//readyState">
     <xsl:call-template name="coderef_helper">
       <xsl:with-param name="fragment">readyState</xsl:with-param>
@@ -71,12 +79,6 @@
     <xsl:call-template name="coderef_helper">
       <xsl:with-param name="fragment">length</xsl:with-param>
       <xsl:with-param name="link_text">length</xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-  <xsl:template match="//remove">
-    <xsl:call-template name="coderef_helper">
-      <xsl:with-param name="fragment">remove</xsl:with-param>
-      <xsl:with-param name="link_text">remove()</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
