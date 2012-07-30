@@ -61,16 +61,29 @@
 
   <xsl:template match="//removeSourceBuffer">
     <xsl:call-template name="coderef_helper">
-      <xsl:with-param name="fragment">removeSourceBuffer</xsl:with-param>
+      <xsl:with-param name="fragment">removesourcebuffer</xsl:with-param>
       <xsl:with-param name="link_text">removeSourceBuffer()</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="//endOfStream">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">endofstream</xsl:with-param>
+      <xsl:with-param name="link_text">endOfStream()</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
 
   <xsl:template match="//readyState">
     <xsl:call-template name="coderef_helper">
       <xsl:with-param name="fragment">readyState</xsl:with-param>
       <xsl:with-param name="link_text">readyState</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//duration">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">duration</xsl:with-param>
+      <xsl:with-param name="link_text">duration</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
@@ -115,6 +128,13 @@
     <xsl:call-template name="coderef_helper">
       <xsl:with-param name="fragment">buffered</xsl:with-param>
       <xsl:with-param name="link_text">buffered</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//timestampOffset">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">timestampoffset</xsl:with-param>
+      <xsl:with-param name="link_text">timestampOffset</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
@@ -268,6 +288,10 @@
     <a><xsl:attribute name="href">#media-segment</xsl:attribute>media segments</a>
   </xsl:template>
   
+  <xsl:template match="//presentation-start-time">
+    <a><xsl:attribute name="href">#presentation-start-time</xsl:attribute>presentation start time</a>
+  </xsl:template>
+
   <xsl:template match="//random-access-point">
     <a><xsl:attribute name="href">#random-access-point</xsl:attribute>random access point</a>
   </xsl:template>

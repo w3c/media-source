@@ -41,7 +41,7 @@
     <div class="head">
       <p><a href="http://www.w3.org/"><img src="http://www.w3.org/Icons/w3c_home" alt="W3C" width="72" height="48" /></a></p>
       <h1>Media Source Extensions</h1>
-      <h2>W3C Editor's Draft 17 July 2012</h2>
+      <h2>W3C Editor's Draft 30 July 2012</h2>
       <dl>
 	<dt>Latest published version:</dt>
 	<dd>Not yet published</dd>
@@ -114,15 +114,17 @@
       <li>
 	<ul>
 	  <li><a href="#source-buffer-create">2.1. Creating Source Buffers</a></li>
-	  <li><a href="#source-buffer-basic-append">2.2. Basic appending model</a></li>
-	  <li><a href="#source-buffer-init-segment-constraints">2.3.  Initialization Segment constraints</a></li>
-	  <li><a href="#source-buffer-media-segment-constraints">2.4. Media Segment constraints</a></li>
-	  <li><a href="#source-buffer-first-init-segment">2.5. Appending the first Initialization Segment</a></li>
-	  <li><a href="#source-buffer-media-segment-unbuffered">2.6. Appending a Media Segment to an unbuffered region</a></li>
-	  <li><a href="#source-buffer-overlapping-segments">2.7. Appending a Media Segment over a buffered region</a></li>
-	  <li><a href="#source-buffer-to-track-buffer">2.8. Source Buffer to Track Buffer transfer</a></li>
-	  <li><a href="#source-buffer-segment-eviction">2.9. Media Segment Eviction</a></li>
-	  <li><a href="#source-buffer-remove">2.10. Removing Source Buffers</a></li>
+	  <li><a href="#source-buffer-remove">2.2. Removing Source Buffers</a></li>
+	  <li><a href="#source-buffer-basic-append">2.3. Basic appending model</a></li>
+	  <li><a href="#source-buffer-init-segment-constraints">2.4.  Initialization Segment constraints</a></li>
+	  <li><a href="#source-buffer-media-segment-constraints">2.5. Media Segment constraints</a></li>
+	  <li><a href="#source-buffer-first-init-segment">2.6. Appending the first Initialization Segment</a></li>
+	  <li><a href="#source-buffer-media-segment-unbuffered">2.7. Appending a Media Segment to an unbuffered region</a></li>
+	  <li><a href="#source-buffer-overlapping-segments">2.8. Appending a Media Segment over a buffered region</a></li>
+	  <li><a href="#source-buffer-to-track-buffer">2.9. Source Buffer to Track Buffer transfer</a></li>
+	  <li><a href="#source-buffer-segment-eviction">2.10. Media Segment Eviction</a></li>
+	  <li><a href="#source-buffer-timestamp-offsets">2.11. Applying Timestamp Offsets</a></li>
+	  <li><a href="#source-buffer-duration-updates">2.12. Presentation Duration Updates</a></li>
 	</ul>
       </li>
       <li><a href="#mediasource">3. MediaSource Object</a>
@@ -207,6 +209,8 @@
     <h4 id="random-access-point">1.2.6. Random Access Point</h4>
     <p>A position in a <media-segment/> where decoding and continuous playback can begin without relying on any previous data in the segment. For video this tends to be the location of I-frames. In the case of audio, most audio frames can be treated as a random access point. Since video tracks tend to have a more sparse distribution of random access points, the location of these points are usually considered the random access points for multiplexed streams.</p>
 
+    <h4 id="presentation-start-time">1.2.7. Presentation Start Time</h4>
+    <p>The presentation start time is the earliest time point in the presentation. It is established by information in the first <media-segment/> ever appended to a <SourceBuffer/> in <sourceBuffers/>. Once the presentation start time has been established, appending <media-segments/> with timestamp earlier than the presentation start time will cause playback to terminate with a <videoref name="dom-mediaerror-media_err_decode">MediaError.MEDIA_ERR_DECODE</videoref> error.</p>
 
     <h2 id="source-buffer-model">2. Source Buffer Model</h2>
     <p>The subsections below outline the buffering model for this proposal. It describes how to add and remove <source-buffers/> from the presentation and describes the various rules and behaviors associated with appending data to an individual <source-buffer/>. At the highest level, the web application simply creates <source-buffers/> and appends a sequence of <init-segments/> and <media-segments/> to update the buffer's state. The media element pulls media data out of the <source-buffers/>, plays it, and fires events just like it would if a normal URL was passed to the <media-src/> attribute. The web application is expected to monitor media element events to determine when it needs to append more <media-segments/>.</p>
@@ -214,7 +218,10 @@
     <h3 id="source-buffer-create">2.1. Creating Source Buffers</h3>
     <p><SourceBuffer/> objects can be created once a <MediaSource/> object enters the <open/> state. The application calls <addSourceBuffer/> with a type string that indicates the format of the data it intends to append to the new SourceBuffer. If the user agent supports the format and has sufficent resources, a new <SourceBuffer/> object is created, added to <sourceBuffers/>, and returned by the method. If the user agent doesn't support the specified format or can't support another <SourceBuffer/> then it will throw an appropriate exception to signal why the request couldn't be satisfied.</p>
 
-    <h3 id="source-buffer-basic-append">2.2. Basic appending model</h3>
+    <h3 id="source-buffer-remove">2.2. Removing Source Buffers</h3>
+    <p>Removing a <SourceBuffer/> with <removeSourceBuffer/> releases all resources associated with the object. This includes destroying the all the segment data, <track-buffers/>, and decoders. The media element will also remove the appropriate tracks from <audiotracks/>, <videotracks/>,  &amp; <texttracks/> and fire the necessary <videoref name="handler-tracklist-onchange">change</videoref> events. Playback may become degraded or stop if the currently selected <video-track/> or the only enabled <audio-tracks/> are removed.</p>
+
+    <h3 id="source-buffer-basic-append">2.3. Basic appending model</h3>
     <p>Updating the state of a <source-buffer/> requires appending at least one <init-segment/> and one or more <media-segments/> via <append/>. The following list outlines some of the basic rules for appending segments.
       <ul>
 	<li>The first segment appended MUST be an <init-segment/>.</li>
@@ -228,7 +235,7 @@
       </ul>
     </p>
 
-    <h3 id="source-buffer-init-segment-constraints">2.3. Initialization Segment constraints</h3>
+    <h3 id="source-buffer-init-segment-constraints">2.4. Initialization Segment constraints</h3>
     <p>To simplify the implementation and facilitate interoperability, a few constraints are placed on the <init-segments/> that are appended to a specific <SourceBuffer/>:
       <ul>
 	<li>The number and type of tracks MUST be consistent across all <init-segments/>. <br/>For example, if the first <init-segment/> has 2 audio tracks and 1 video track, then all <init-segments/> that follow, for this <SourceBuffer/> MUST describe 2 audio tracks and 1 video track.</li>
@@ -240,7 +247,7 @@
       </ul>
     </p>
 
-    <h3 id="source-buffer-media-segment-constraints">2.4. Media Segment constraints</h3>
+    <h3 id="source-buffer-media-segment-constraints">2.5. Media Segment constraints</h3>
     <p>To simplify the implementation and facilitate interoperability, a few constraints are placed on the <media-segments/> that are appended to a specific <SourceBuffer/>:
       <ul>
 	<li>All timestamps must be mapped to the same presentation timeline.</li>
@@ -249,44 +256,61 @@
       </ul>
     </p>
 
-    <h3 id="source-buffer-first-init-segment">2.5. Appending the first Initialization Segment</h3>
+    <h3 id="source-buffer-first-init-segment">2.6. Appending the first Initialization Segment</h3>
     <p>Once a new <SourceBuffer/> has been created, it expects an <init-segment/> to be appended first. This first segment indicates the number and type of streams contained in the <media-segments/> that follow. This allows the media element to configure the necessary decoders and output devices. This first segment can also cause a <ready-state/> transition to <have-metadata/> if this is the first <SourceBuffer/>, or if it is the first track of a specific type (i.e. first audio, first video track, or first text track). If neither of the conditions hold then the tracks for this new <SourceBuffer/> will just appear as disabled tracks and won't affect the current <ready-state/> until they are selected. The media element will also add the appropriate tracks to the <audiotracks/>, <videotracks/>, &amp; <texttracks/> collections and fire the necessary <videoref name="handler-tracklist-onchange">change</videoref> events. The description for <append/> contains all the details.</p>
     
-    <h3 id="source-buffer-media-segment-unbuffered">2.6. Appending a Media Segment to an unbuffered region</h3>
+    <h3 id="source-buffer-media-segment-unbuffered">2.7. Appending a Media Segment to an unbuffered region</h3>
     <p>If a <media-segment/> is appended to a time range that is not covered by existing segments in the <source-buffer/>, then its data is copied directly into the <source-buffer/>. Addition of this data may trigger <ready-state/> transitions depending on what other data is buffered and whether the media element has determined if it can start playback. Calls to <buffered/> will always reflect the current <timeranges/> buffered in the <SourceBuffer/>.</p>
 
-    <h3 id="source-buffer-overlapping-segments">2.7. Appending a Media Segment over a buffered region</h3>
+    <h3 id="source-buffer-overlapping-segments">2.8. Appending a Media Segment over a buffered region</h3>
     <p>There are several ways that <media-segments/> can overlap segments in the <source-buffer/>. Behavior for the different overlap situations are described below. If more than one overlap applies, then the <a href="#source-buffer-overlap-start">start overlap</a> gets resolved first, followed by any <a href="#source-buffer-overlap-complete">complete overlaps</a>, and finally the <a href="#source-buffer-overlap-end">end overlap</a>. If a segment contains multiple tracks then the overlap is resolved independently for each track.</p>
-    <h4 id="source-buffer-overlap-complete">2.7.1 Complete Overlap</h4>
+
+    <h4 id="source-buffer-overlap-complete">2.8.1 Complete Overlap</h4>
     <img src="complete_overlap.png"/>
     <p>The figure above shows how the <source-buffer/> gets updated when a new <media-segment/> completely overlaps a segment in the buffer. In this case, the new segment completely replaces the old segment.</p>
 
-    <h4 id="source-buffer-overlap-start">2.7.2 Start Overlap</h4>
+    <h4 id="source-buffer-overlap-start">2.8.2 Start Overlap</h4>
     <img src="start_overlap.png"/>
     <p>The figure above shows how the <source-buffer/> gets updated when the beginning of a new <media-segment/> overlaps a segment in the buffer. In this case the new segment replaces all the old media data in the overlapping region. Since <media-segments/> are constrained to starting with <random-access-points/>, this provides a seamless transition between segments.</p>
     <p>The one case that requires special attention is where an audio frame overlaps with the start of the new <media-segment/>. The base level behavior that MUST be supported requires dropping the old audio frame that overlaps the start of the new segment and inserting silence for the small gap that is created. A higher quality implementation could support outputting a portion of the old segment and all of the new segment or crossfade during the overlapping region. This is a quality of implementation issue. The key property here though is the small silence gap should not be reflected in the ranges reported by <buffered/></p>
 
-    <h4 id="source-buffer-overlap-end">2.7.3 End Overlap</h4>
+    <h4 id="source-buffer-overlap-end">2.8.3 End Overlap</h4>
     <img src="end_overlap.png"/>
     <p>The figure above shows how the <source-buffer/> gets updated when the end of a new <media-segment/> overlaps a segment in the buffer. In this case, the media element tries to keep as much of the old segment as possible. The amount saved depends on where the closest <random-access-point/>, in the old segment, is to the end of the new segment. In the case of audio, if the gap is smaller than the size of an audio frame, then the media element should insert silence for this gap and not reflect it in <buffered/>.</p>
       <p>An implementation may keep old segment data before the end of the new segment to avoid creating a gap if it wishes. Doing this though can significantly increase implementation complexity and could cause delays at the splice point. The key property that must be preserved is the entirety of the new segment gets added to the <source-buffer/> and it is up to the implementation how much of the old segment data is retained. The web application can use <buffered/> to determine how much of the old segment was preserved.</p>
 
-    <h4 id="source-buffer-overlap-middle">2.7.4 Middle Overlap</h4>
+    <h4 id="source-buffer-overlap-middle">2.8.4 Middle Overlap</h4>
     <img src="middle_overlap.png"/>
     <p>The figure above shows how the <source-buffer/> gets updated when the new <media-segment/> is in the middle of the old segment. This condition is handled by first resolving the <a href="#source-buffer-overlap-start">start overlap</a> and then resolving the <a href="#source-buffer-overlap-end">end overlap</a>.</p>
 
-    <h3 id="source-buffer-to-track-buffer">2.8. Source Buffer to Track Buffer transfer</h3>
+    <h3 id="source-buffer-to-track-buffer">2.9. Source Buffer to Track Buffer transfer</h3>
     <p>The <source-buffer/> represents the media that the web application would like the media element to play. The <track-buffer/> contains the data that will actually get decoded and rendered. In most cases the <track-buffer/> will simply contain a subset of the <source-buffer/> near the current playback position. These two buffers start to diverge though when <media-segments/> that overlap or are very close to the current playback position are appended. Depending on the contents of the new <media-segment/> it may not be possible to switch to the new data immediately because there isn't a <random-access-point/> close enough to the current playback position. The quality of the implementation determines how much data is considered "in the <track-buffer/>". It should transfer data to the <track-buffer/> as late as possible whilst maintaining seamless playback. Some implementations may be able to instantiate multiple decoders or decode the new data significantly faster than real-time to achieve a seamless splice immediately. Other implementations may delay until the next <random-access-point/> before switching to the newly appended data. Notice that this difference in behavior is only observable when appending close to the current playback position. The <track-buffer/> represents a media subsegment, like a group of pictures or something with similar decode dependencies, that the media element commits to playing. This commitment may be influenced by a variety of things like limited decoding resources, hardware decode buffers, a jitter buffer, or the desire to limit implementation complexity.</p>
     
     <p>Here is an example to help clarify the role of the <track-buffer/>. Say the current playback position has a timestamp of 8 and the media element pulled frames with timestamp 9 &amp; 10 into the track buffer. The web application then appends a higher quality <media-segment/> that starts with a <random-access-point/> at timestamp 9. The <source-buffer/> will get updated with the higher quality data, but the media element won't be able to switch to this higher quality data until the next <random-access-point/> at timestamp 20. This is because a frame for timestamp 9 is already in the track buffer. As you can see the track buffer represents the "point of no return." for decoding. If a seek occurs the media element may choose to use the higher quality data since a seek might imply flushing the <track-buffer/> and the user expects a break in playback.</p>
 
 
-    <h3 id="source-buffer-segment-eviction">2.9. Media Segment Eviction</h3>
-    <p>When a new <media-segment/> is appended, memory constraints may cause previously appended segments to get evicted from the <source-buffer/>. The eviction algorithm is implementation dependent, but segments that aren't likely to be needed soon are the most likely to get evicted. The <buffered/> method allows the web application to monitor what time ranges are currently buffered in the <source-buffer/>.</p>
+    <h3 id="source-buffer-segment-eviction">2.10. Media Segment Eviction</h3>
+    <p>When a new <media-segment/> is appended, memory constraints may cause previously appended segments to get evicted from the <source-buffer/>. The eviction algorithm is implementation dependent, but segments that aren't likely to be needed soon are the most likely to get evicted. The <buffered/> attribute allows the web application to monitor what time ranges are currently buffered in the <source-buffer/>.</p>
 
+    <h3 id="source-buffer-timestamp-offsets">2.11. Applying Timestamp Offsets</h3>
+    <p>For some use cases like ad-insertion or seamless playlists, the web application may want to insert a <media-segment/> in the presentation timeline at a location that is different than what the internal timestamps indicate. This can be accomplished by using the <timestampOffset/> attribute on the <SourceBuffer/> object. The value of <timestampOffset/> is added to all timestamps inside a <media-segment/> before the contents of that segment are added to the <source-buffer/>. The <timestampOffset/> applies to an entire media segment. An exception is thrown if the application tries to update the attribute when only part of a media segment has been appended. Both positive or negative offsets can be assigned to <timestampOffset/>. If an offset causes a <media-segment/> timestamp to get converted to a time before the <presentation-start-time/>, playback will terminate with a <videoref name="dom-mediaerror-media_err_decode">MediaError.MEDIA_ERR_DECODE</videoref> error.</p>
 
-    <h3 id="source-buffer-remove">2.10. Removing Source Buffers</h3>
-    <p>Removing a <SourceBuffer/> with <removeSourceBuffer/> releases all resources associated with the object. This includes destroying the all the segment data, <track-buffers/>, and decoders. The media element will also remove the appropriate tracks from <audiotracks/>, <videotracks/>,  &amp; <texttracks/> and fire the necessary <videoref name="handler-tracklist-onchange">change</videoref> events. Playback may become degraded or stop if the currently selected <video-track/> or the only enabled <audio-tracks/> are removed.</p>
+    <p>Here is a simple example to clarify how <timestampOffset/> can be used. Say I have two sounds I want to play in sequence. The first sound is 5 seconds long and the second one is 10 seconds. Both sound files have timestamps that start at 0. First append the <init-segment/> and all <media-segments/> for the first sound. Now set <timestampOffset/> to 5 seconds. Finally append the <init-segment/> and <media-segments/> for the second sound. This will result in a 15 second presentation that plays the two sounds in sequence.</p>
+
+    <h3 id="source-buffer-duration-updates">2.12. Presentation Duration Updates</h3>
+    <p>The sections below describe the various ways that the presentation duration can be updated. Whenever the <duration/> attribute changes value, the HTMLMediaElement.duration is updated to the same value and the appropriate <videoref name="event-media-durationchange">durationchange</videoref> event is fired on that object.</p>
+
+    <h4 id="source-buffer-duration-updates-explicit">2.12.1 Explicit Duration</h4>
+    <p>The web application can explicitly set the presentation duration by setting the <duration/> attribute. If any <SourceBuffer/> objects in <sourceBuffers/> has media data beyond the new duration, this data is removed from the <SourceBuffer/> object. This ensures that <buffered/> never reports any ranges beyond the current duration. If the current playback position is beyond the new duration, then update HTMLMediaElement.currentTime to the new duration and run the seeking algorithm.</p>
+
+    <h4 id="source-buffer-duration-updates-implicit">2.12.2 Implicit Duration</h4>
+    <p>If the <duration/> attribute isn't explictly set before the first <init-segment/> is appended, then the presentation duration will get implicitly set. If the first initialization segment appended contains duration information then the <duration/> attribute will be set to that value. If the first initialization segment does not contain any duration information then the <duration/> attribute will be set to PositiveInfinity to indicate that duration isn't known yet.</p>
+
+    <h4 id="source-buffer-duration-updates-append">2.12.3 Appending Beyond Duration</h4>
+    <p>Any time a <media-segment/> that goes beyond the current value of the <duration/> attribute is appended to a <SourceBuffer/>, the <duration/> attribute will get updated to end timestamp of the <media-segment/>.</p>
+
+    <h4 id="source-buffer-duration-updates-eos">2.12.4 End of Stream Duration</h4>
+    <p>When <endOfStream/> gets called without an error, the <duration/> attribute will get updated to the highest end timestamp across all <SourceBuffer/> objects in <sourceBuffers/>. This allows the duration to properly reflect the end of the appended <media-segments/>. For example, if the duration was explicitly set to 10 seconds and only media segments for 0 to 5 seconds were appended before <endOfStream/> was called, then the duration will get updated to 5 seconds.</p>
 
     <h2 id="mediasource">3. MediaSource Object</h2>
     <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the <readyState/> for this source as well as a list of <SourceBuffer/> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <SourceBuffer/> objects in <sourceBuffers/> to add media data to this source. The HTMLMediaElement fetches this media data from the <MediaSource/> object when it is needed during playback.</p>
@@ -299,6 +323,8 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
 
   // Subset of sourceBuffers that provide data for the selected/enabled tracks.
   readonly attribute <precoderef>SourceBufferList</precoderef> <precoderef>activeSourceBuffers</precoderef>;
+
+  attribute unrestricted double <precoderef>duration</precoderef>;
 
   <precoderef>SourceBuffer</precoderef> <premethodref>addSourceBuffer</premethodref>(DOMString type);
   void <premethodref>removeSourceBuffer</premethodref>(<precoderef>SourceBuffer</precoderef> sourceBuffer);
@@ -315,6 +341,22 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
     <p>The <codedfn>sourceBuffers</codedfn> attribute contains the list of <SourceBuffer/> objects associated with this <MediaSource/>. When <readyState/> equals <closed/> this list will be empty. Once <readyState/> transitions to <open/> SourceBuffer objects can be added to this list by using <addSourceBuffer/>.</p>
 
     <p>The <codedfn>activeSourceBuffers</codedfn> attribute contains the subset of <sourceBuffers/> that represents the <active-source-buffers/>.</p>
+
+    <p>The <codedfn>duration</codedfn> attribute allows the web application to set the presentation duration. The duration is initially set to NaN when the <MediaSource/> object is created.</p>
+    <p>On getting, run the following steps:</p>
+    <ol>
+      <li>If the <readyState/> attribute is <closed/> then return NaN and abort these steps.</li>
+      <li>Return the current value of the attribute.</li>
+    </ol>
+    <p>On setting, run the following steps:</p>
+    <ol>
+      <li>If value being set is negative or NaN then throw an <invalid-access-err/> exception and abort these steps.</li>
+      <li>If the <readyState/> attribute is not <open/> then throw an <invalid-state-err/> exception and abort these steps.</li>
+      <li>Update this attribute to the new value.</li>
+      <li>Remove all media data that is beyond the new duration from all <SourceBuffer/> objects in <sourceBuffers/>.</li>
+      <li>Update HTMLMediaElement.duration to the new duration and schedule the appropriate <videoref name="event-media-durationchange">durationchange</videoref> event to fire.</li>
+      <li>If the HTMLMediaElement.currentTime is beyond the new duration, set HTMLMediaElement.currentTime to the new duration and trigger the appropriate seeking behavior.</li>
+    </ol>
 
     <p>The <methoddfn name="addSourceBuffer">addSourceBuffer(<var title="true">type</var>)</methoddfn> method must run the following steps:</p>
     <ol>
@@ -368,7 +410,12 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
       <li>Change the <readyState/> attribute value to <ended/>.</li>
       <dl class="switch">
           <dt>If <var title="true">error</var> is not set, null, or an empty string</dt>
-          <dd>Notify the media element that it now has all of the media data. Playback should continue until all the media passed in via <append/> has been played.</dd>
+          <dd>
+	    <ol>
+	      <li>Set the <duration/> attribute to the highest end timestamp across all <SourceBuffer/> objects in <sourceBuffers/>.</li>
+	      <li>Notify the media element that it now has all of the media data. Playback should continue until all the media passed in via <append/> has been played.</li>
+	    </ol>
+	  </dd>
           <dt>If <var title="true">error</var> is set to <coderef>&quot;network&quot;</coderef></dt>
           <dd>Run the "If the connection is interrupted, causing the user agent to give up trying to fetch the resource" section of the <resource-fetch-algorithm/></dd>
           <dt>If <var title="true">error</var> is set to <coderef>&quot;decode&quot;</coderef></dt>
@@ -430,6 +477,7 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
     <p>The following steps are run in any case where the media element is going to transition to <videoref name="dom-media-network_empty">NETWORK_EMPTY</videoref> and fire an <videoref name="event-mediacontroller-emptied">emptied</videoref> event. These steps should be run right before the transition.</p>
     <ol>
       <li>Set <readyState/> attribute to <closed/></li>
+      <li>Set <duration/> attribute to NaN.</li>
       <li>Remove all the <SourceBuffer/> objects from <sourceBuffers/> and fire a <coderef>removesourcebuffer</coderef> event for each one.</li>
       <li>Fire a simple event named <coderef>sourceclose</coderef>.</li>
     </ol>
@@ -532,6 +580,9 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
   // Returns the time ranges buffered.
   readonly attribute TimeRanges <precoderef>buffered</precoderef>;
 
+  // Applies an offset to media segment timestamps.
+  attribute double <precoderef>timestampOffset</precoderef>;
+
   // Append segment data.
   void <premethodref>append</premethodref>(Uint8Array data);
 
@@ -539,10 +590,18 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
   void <premethodref>abort</premethodref>();
 };
     </pre>
-   <p>The <codedfn>buffered</codedfn> attribute indicates what <timeranges/> are buffered in the <SourceBuffer/>. When attribute is read the following steps must occur:</p>
+   <p>The <codedfn>buffered</codedfn> attribute indicates what <timeranges/> are buffered in the <SourceBuffer/>. When the attribute is read the following steps must occur:</p>
    <ol>
      <li>If this object has been removed from the <sourceBuffers/> attribute of the <MediaSource/> object that created it then throw an <invalid-state-err/> exception and abort these steps.</li>
      <li>Return <timeranges/> for the <media-segments/> buffered.</li>
+   </ol>
+
+   <p>The <codedfn>timestampOffset</codedfn> attribute controls the offset applied to timestamps inside subsequent <media-segments/> that are appended to this <SourceBuffer/>. The <timestampOffset/> is initially set to 0 which indicates that no offset is being applied. On getting, the initial value or the last value that was successfully set is returned. On setting, run following steps:</p>
+   <ol>
+     <li>If this object has been removed from the <sourceBuffers/> attribute of the <MediaSource/> object that created it, then throw an <invalid-state-err/> exception and abort these steps.</li>
+     <li>If the <readyState/> attribute of the <MediaSource/> object that created this object is not in the <open/> state, then throw an <invalid-state-err/> exception and abort these steps.</li>
+     <li>If this object is waiting for the end of a <media-segment/> to be appended, then throw an <invalid-state-err/> and abort these steps.</li>
+     <li>Update the attribute to the new value.</li>
    </ol>
 
     <p>The <methoddfn name="append">append(<var title="true">data</var>)</methoddfn> method must run the following steps:</p>
@@ -551,12 +610,40 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
       <li>If this object has been removed from the <sourceBuffers/> attribute of the <MediaSource/> object that created it then throw an <invalid-state-err/> exception and abort these steps.</li>
       <li>If the <readyState/> attribute of the <MediaSource/> object that created this object is not in the <open/> state then throw an <invalid-state-err/> exception and abort these steps.</li>
       <li>If <var title="true">data</var>.byteLength is 0 abort these steps.</li>
-      <li>Copy contents of <var title="true">data</var> into the source buffer.</li>
+      <li>Add <var title="true">data</var> to the source buffer:
+	<dl class="switch">
+	  <dt>If <var title="true">data</var> is part of a <media-segment/> and <timestampOffset/> is not 0:</dt>
+	  <dd>
+	    <ol>
+	      <li>Find all timestamps inside <var title="true">data</var> and add <timestampOffset/> to them.</li>
+	      <li>If the <presentation-start-time/> has not been established, set the <presentation-start-time/> based on the modifed timestamps and format specific rules.</li>
+	      <li>If any of the modified timestamps are earlier than the <presentation-start-time/>, run the media element's error handling code to signal a <videoref name="dom-mediaerror-media_err_decode">MediaError.MEDIA_ERR_DECODE</videoref> error, and abort these steps.</li>
+	      <li>Copy the contents of <var title="true">data</var>, with the modified timestamps, into the source buffer.</li>
+	    </ol>
+	  </dd>
+	  <dt>If <var title="true">data</var> is part of a <media-segment/> and the <presentation-start-time/> has not been established:</dt>
+	  <dd>
+	    <ol>
+	      <li>Copy the contents of <var title="true">data</var> into the source buffer.</li>
+	      <li>Set the <presentation-start-time/> based on the format specific rules.</li>
+	    </ol>
+	  </dd>
+	  <dt>Otherwise</dt>
+	  <dd>Copy the contents of <var title="true">data</var> into the source buffer.</dd>
+	</dl>
+      </li>
       <li>Handle end of segment cases:</li>
       <dl class="switch">
 	<dt>If <var title="true">data</var> completes the first <init-segment/> appended to the <source-buffer/> run the following steps:</dt>
 	<dd>
 	  <ol>
+	    <li>Update <duration/> attribute if it currently equals NaN:</li>
+	    <dl class="switch">
+	      <dt>If the initialization segment contains a duration:</dt>
+	      <dd>Set the <duration/> attribute to the value in the initialization segment.</dd>
+	      <dt>Otherwise:</dt>
+	      <dd>Set the <duration/> attribute to PositiveInfinity.</dd>
+	    </dl>
 	    <li>Handle state transitions:</li>
 	    <dl class="switch">
 	      <dt>If the <ready-state/> attribute is <have-nothing/>:</dt>
@@ -609,6 +696,8 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
 	<dd>Set <ready-state/> attribute to <have-future-data/> and fire the <appropriate-event/> for this transition.</dd>
 	<dt>If the <ready-state/> attribute is <have-future-data/> and <var title="true">data</var> causes all objects in <activeSourceBuffers/> to have enough data to start playback.</dt>
 	<dd>Set <ready-state/> attribute to <have-enough-data/> and fire the <appropriate-event/> for this transition.</dd>
+	<dt>If the <media-segment/> contains data beyond the current <duration/></dt>
+	<dd>Update the <duration/> attribute to reflect the end of the appended data. (ie Highest end timestamp reported by HTMLMediaElement.buffered)</dd>
       </dl>
     </ol>
 
@@ -721,8 +810,8 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
       </ol>
 
       <h4 id="webm-start-timestamp">6.1.3. Establishing the Presentation Start Timestamp</h4>
-      <p>The timestamp in the first block of the first media segment appended establishes the starting timestamp for the presentation timeline. All media segments appended after this first segment are expected to have timestamps greater than or equal to this timestamp.</p>
-      <p>If for some reason a web application doesn't want to append data at the beginning of the timeline, it can establish the starting timestamp by appending a <webm-cluster/> element that only contains a Timecode element with the presentation start time. This must be done before any other media segments are appended.</p>
+      <p>The timestamp in the first block of the first media segment appended establishes the <presentation-start-time/>. All media segments appended after this first segment are expected to have timestamps greater than or equal to this timestamp.</p>
+      <p>If for some reason a web application doesn't want to append data at the beginning of the timeline, it can establish the <presentation-start-time/> by appending a <webm-cluster/> element that only contains a Timecode element with the presentation start time. This must be done before any other media segments are appended.</p>
 
       <h4 id="webm-random-access-points">6.1.4. Random Access Points</h4>
       <p>A SimpleBlock element with its Keyframe flag set signals the location of a <random-access-point/> for that track. Media segments containing multiple tracks are only considered a random access point if the first SimpleBlock for each track has its Keyframe flag set. The order of the multiplexed blocks should conform to the <webm-muxer-guidelines/>.</p>
@@ -751,9 +840,9 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
       <p>The Track Fragment Decode Time Box is defined in <a href="http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csnumber=59147">ISO/IEC 14496-12 Amendment 3</a>.</p>
 
       <h4 id="iso-start-timestamp">6.2.3. Establishing the Presentation Start Timestamp</h4>
-      <p>The earliest presentation timestamp of any sample of the first media segment appended establishes the starting timestamp for the presentation timeline. All media segments appended after this first segment are expected to have presentation timestamps greater than or equal to this timestamp.</p>
-      <p>If for some reason a web application doesn't want to append data at the beginning of the timeline, it can establish the starting timestamp by appending a Movie Fragment Box containing a Track Fragment Box
-	containing a Track Fragment Decode Time Box. The start time of the presentation is then the presentation time of a hypothetical sample with zero composition offset. This must be done before any other media segments are appended.</p>
+      <p>The earliest presentation timestamp of any sample of the first media segment appended establishes the <presentation-start-time/>. All media segments appended after this first segment are expected to have presentation timestamps greater than or equal to this timestamp.</p>
+      <p>If for some reason a web application doesn't want to append data at the beginning of the timeline, it can establish the <presentation-start-time/> by appending a Movie Fragment Box containing a Track Fragment Box
+	containing a Track Fragment Decode Time Box. The <presentation-start-time/> is then the presentation time of a hypothetical sample with zero composition offset. This must be done before any other media segments are appended.</p>
 
       <h4 id="iso-random-access-points">6.2.4. Random Access Points</h4>
       <p>A <random-access-point/> as defined in this specification corresponds to a Stream Access Point of type 1 or 2 as defined in Annex I of <a href="http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csnumber=59147">ISO/IEC 14496-12 Amendment 3</a>.</p>
@@ -849,8 +938,12 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
         </tr>
       </thead>
       <tbody>
+	<tr>
+	  <td>30 July 2012</td>
+          <td>Added SourceBuffer.timestampOffset and MediaSource.duration.</td>
+        </tr>
         <tr>
-	  <td>17 July 2012</td>
+	  <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/ab36e8e882c6/media-source/media-source.html">17 July 2012</a></td>
           <td>Replaced SourceBufferList.remove() with MediaSource.removeSourceBuffer().</td>
         </tr>
 	<tr>
