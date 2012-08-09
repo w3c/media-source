@@ -42,7 +42,7 @@
     <div class="head">
       <p><a href="http://www.w3.org/"><img src="http://www.w3.org/Icons/w3c_home" alt="W3C" width="72" height="48"></a></p>
       <h1>Media Source Extensions</h1>
-      <h2>W3C Editor's Draft 30 July 2012</h2>
+      <h2>W3C Editor's Draft 09 August 2012</h2>
       <dl>
 	<dt>Latest published version:</dt>
 	<dd>Not yet published</dd>
@@ -215,7 +215,7 @@
     <p>A position in a <a href="#media-segment">media segment</a> where decoding and continuous playback can begin without relying on any previous data in the segment. For video this tends to be the location of I-frames. In the case of audio, most audio frames can be treated as a random access point. Since video tracks tend to have a more sparse distribution of random access points, the location of these points are usually considered the random access points for multiplexed streams.</p>
 
     <h4 id="presentation-start-time">1.2.7. Presentation Start Time</h4>
-    <p>The presentation start time is the earliest time point in the presentation. It is established by information in the first <a href="#media-segment">media segment</a> ever appended to a <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> in <code><a href="#dom-sourcebuffers">sourceBuffers</a></code>. Once the presentation start time has been established, appending <a href="#media-segment">media segments</a> with timestamp earlier than the presentation start time will cause playback to terminate with a <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-mediaerror-media_err_decode">MediaError.MEDIA_ERR_DECODE</a></code> error.</p>
+    <p>The presentation start time is the earliest time point in the presentation and specifies the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#initial-playback-position">initial playback position</a></code> and <code><a href="http://dev.w3.org/html5/spec/media-elements.html#earliest-possible-position">earliest possible position</a></code>. All presentations created using this specification have a presentation start time of 0. Appending <a href="#media-segment">media segments</a> with negative timestamps will cause playback to terminate with a <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-mediaerror-media_err_decode">MediaError.MEDIA_ERR_DECODE</a></code> error unless <code><a href="#dom-timestampoffset">timestampOffset</a></code> is used to make the timestamps greater than or equal to 0.</p>
 
     <h2 id="source-buffer-model">2. Source Buffer Model</h2>
     <p>The subsections below outline the buffering model for this proposal. It describes how to add and remove <a href="#source-buffer">source buffers</a> from the presentation and describes the various rules and behaviors associated with appending data to an individual <a href="#source-buffer">source buffer</a>. At the highest level, the web application simply creates <a href="#source-buffer">source buffers</a> and appends a sequence of <a href="#init-segment">initialization segments</a> and <a href="#media-segment">media segments</a> to update the buffer's state. The media element pulls media data out of the <a href="#source-buffer">source buffers</a>, plays it, and fires events just like it would if a normal URL was passed to the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#attr-media-src">src</a></code> attribute. The web application is expected to monitor media element events to determine when it needs to append more <a href="#media-segment">media segments</a>.</p>
@@ -641,16 +641,8 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
 	  <dd>
 	    <ol>
 	      <li>Find all timestamps inside <var title="true">data</var> and add <code><a href="#dom-timestampoffset">timestampOffset</a></code> to them.</li>
-	      <li>If the <a href="#presentation-start-time">presentation start time</a> has not been established, set the <a href="#presentation-start-time">presentation start time</a> based on the modifed timestamps and format specific rules.</li>
 	      <li>If any of the modified timestamps are earlier than the <a href="#presentation-start-time">presentation start time</a>, run the media element's error handling code to signal a <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-mediaerror-media_err_decode">MediaError.MEDIA_ERR_DECODE</a></code> error, and abort these steps.</li>
 	      <li>Copy the contents of <var title="true">data</var>, with the modified timestamps, into the source buffer.</li>
-	    </ol>
-	  </dd>
-	  <dt>If <var title="true">data</var> is part of a <a href="#media-segment">media segment</a> and the <a href="#presentation-start-time">presentation start time</a> has not been established:</dt>
-	  <dd>
-	    <ol>
-	      <li>Copy the contents of <var title="true">data</var> into the source buffer.</li>
-	      <li>Set the <a href="#presentation-start-time">presentation start time</a> based on the format specific rules.</li>
 	    </ol>
 	  </dd>
 	  <dt>Otherwise</dt>
@@ -842,11 +834,7 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
 <a href="http://www.webmproject.org/code/specs/container/#cueing-data">Cues</a> or <a href="http://www.webmproject.org/code/specs/container/#chapters">Chapters</a> elements may follow a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element. These elements should be accepted and ignored by the user agent.</li>
       </ol>
 
-      <h4 id="webm-start-timestamp">6.1.3. Establishing the Presentation Start Timestamp</h4>
-      <p>The timestamp in the first block of the first media segment appended establishes the <a href="#presentation-start-time">presentation start time</a>. All media segments appended after this first segment are expected to have timestamps greater than or equal to this timestamp.</p>
-      <p>If for some reason a web application doesn't want to append data at the beginning of the timeline, it can establish the <a href="#presentation-start-time">presentation start time</a> by appending a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element that only contains a Timecode element with the presentation start time. This must be done before any other media segments are appended.</p>
-
-      <h4 id="webm-random-access-points">6.1.4. Random Access Points</h4>
+      <h4 id="webm-random-access-points">6.1.3. Random Access Points</h4>
       <p>A SimpleBlock element with its Keyframe flag set signals the location of a <a href="#random-access-point">random access point</a> for that track. Media segments containing multiple tracks are only considered a random access point if the first SimpleBlock for each track has its Keyframe flag set. The order of the multiplexed blocks should conform to the <a href="http://www.webmproject.org/code/specs/container/#muxer-guidelines">WebM Muxer Guidelines</a>.</p>
     </div>
 
@@ -870,12 +858,7 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
 	<li>The Media Data Boxes shall contain all the samples referenced by the Track Run Boxes (<strong>trun</strong>) of the Movie Fragment Box.</li>
       </ol>
 
-      <h4 id="iso-start-timestamp">6.2.3. Establishing the Presentation Start Timestamp</h4>
-      <p>The earliest presentation timestamp of any sample of the first media segment appended establishes the <a href="#presentation-start-time">presentation start time</a>. All media segments appended after this first segment are expected to have presentation timestamps greater than or equal to this timestamp.</p>
-      <p>If for some reason a web application doesn't want to append data at the beginning of the timeline, it can establish the <a href="#presentation-start-time">presentation start time</a> by appending a Movie Fragment Box containing a Track Fragment Box
-	containing a Track Fragment Decode Time Box. The <a href="#presentation-start-time">presentation start time</a> is then the presentation time of a hypothetical sample with zero composition offset. This must be done before any other media segments are appended.</p>
-
-      <h4 id="iso-random-access-points">6.2.4. Random Access Points</h4>
+      <h4 id="iso-random-access-points">6.2.3. Random Access Points</h4>
       <p>A <a href="#random-access-point">random access point</a> as defined in this specification corresponds to a Stream Access Point of type 1 or 2 as defined in Annex I of <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a>.</p>
     </div>
 
@@ -969,8 +952,12 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
         </tr>
       </thead>
       <tbody>
+        <tr>
+	  <td>09 August 2012</td>
+          <td>Change presentation start time to always be 0 instead of using format specific rules about the first media segment appended.</td>
+        </tr>
 	<tr>
-	  <td>30 July 2012</td>
+	  <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/087ea42f59c8/media-source/media-source.html">30 July 2012</a></td>
           <td>Added SourceBuffer.timestampOffset and MediaSource.duration.</td>
         </tr>
         <tr>
