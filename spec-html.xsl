@@ -569,4 +569,8 @@
   <xsl:template match="//iso-var">
     <strong><var><xsl:value-of select="." /></var></strong>
   </xsl:template>
+
+  <xsl:template match="//iso-14496-12">
+    <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a>
+  </xsl:template>
 </xsl:stylesheet>

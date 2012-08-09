@@ -820,7 +820,7 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
     <h3 id="iso">6.2 ISO Base Media File Format Byte Streams</h3>
     <div class="nonnormative">
       <p>This section defines segment formats for implementations that choose to support the ISO Base Media File Format
-	<a href="http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csnumber=51533">ISO/IEC 14496-12</a> (ISO BMFF).</p> 
+	<iso-14496-12/> (ISO BMFF).</p> 
       <h4 id="iso-init-segments">6.2.1. Initialization Segments</h4>
       <p>An ISO BMFF <init-segment/> shall contain a single Movie Header Box (<iso-box>moov</iso-box>). The tracks in the Movie Header Box shall not contain any samples (i.e. the <iso-var>entry_count</iso-var> in the <iso-box>stts</iso-box>, <iso-box>stsc</iso-box> and <iso-box>stco</iso-box> boxes shall be set to zero). A Movie Extends (<iso-box>mvex</iso-box>) box shall be contained in the
 	Movie Header Box to indicate that Movie Fragments are to be expected.</p>
@@ -837,15 +837,13 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
 	<li>The Media Data Boxes shall contain all the samples referenced by the Track Run Boxes (<iso-box>trun</iso-box>) of the Movie Fragment Box.</li>
       </ol>
 
-      <p>The Track Fragment Decode Time Box is defined in <a href="http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csnumber=59147">ISO/IEC 14496-12 Amendment 3</a>.</p>
-
       <h4 id="iso-start-timestamp">6.2.3. Establishing the Presentation Start Timestamp</h4>
       <p>The earliest presentation timestamp of any sample of the first media segment appended establishes the <presentation-start-time/>. All media segments appended after this first segment are expected to have presentation timestamps greater than or equal to this timestamp.</p>
       <p>If for some reason a web application doesn't want to append data at the beginning of the timeline, it can establish the <presentation-start-time/> by appending a Movie Fragment Box containing a Track Fragment Box
 	containing a Track Fragment Decode Time Box. The <presentation-start-time/> is then the presentation time of a hypothetical sample with zero composition offset. This must be done before any other media segments are appended.</p>
 
       <h4 id="iso-random-access-points">6.2.4. Random Access Points</h4>
-      <p>A <random-access-point/> as defined in this specification corresponds to a Stream Access Point of type 1 or 2 as defined in Annex I of <a href="http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csnumber=59147">ISO/IEC 14496-12 Amendment 3</a>.</p>
+      <p>A <random-access-point/> as defined in this specification corresponds to a Stream Access Point of type 1 or 2 as defined in Annex I of <iso-14496-12/>.</p>
     </div>
 
     <h2 id="examples">7. Examples</h2>
