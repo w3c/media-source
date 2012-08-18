@@ -75,7 +75,7 @@
 
   <xsl:template match="//readyState">
     <xsl:call-template name="coderef_helper">
-      <xsl:with-param name="fragment">readyState</xsl:with-param>
+      <xsl:with-param name="fragment">readystate</xsl:with-param>
       <xsl:with-param name="link_text">readyState</xsl:with-param>
     </xsl:call-template>
   </xsl:template>

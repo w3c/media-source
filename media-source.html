@@ -42,7 +42,7 @@
     <div class="head">
       <p><a href="http://www.w3.org/"><img src="http://www.w3.org/Icons/w3c_home" alt="W3C" width="72" height="48"></a></p>
       <h1>Media Source Extensions</h1>
-      <h2>W3C Editor's Draft 09 August 2012</h2>
+      <h2>W3C Editor's Draft 17 August 2012</h2>
       <dl>
 	<dt>Latest published version:</dt>
 	<dd>Not yet published</dd>
@@ -204,11 +204,11 @@
     <p>A hypothetical buffer that contains a distinct sequence of <a href="#init-segment">initialization segments</a> &amp; <a href="#media-segment">media segments</a>. When <a href="#media-segment">media segments</a> are passed to <code><a href="#dom-append">append()</a></code> they update the state of this buffer. The source buffer only allows a single <a href="#media-segment">media segment</a> to cover a specific point in the presentation timeline of each track. If a <a href="#media-segment">media segment</a> gets appended that contains media data overlapping (in presentation time) with media data from an existing segment, then the new media data will override the old media data. Since <a href="#media-segment">media segments</a> depend on <a href="#init-segment">initialization segments</a> the source buffer is also responsible for maintaining these associations. During playback, the media element pulls segment data out of the source buffers, demultiplexes it if necessary, and enqueues it into <a href="#track-buffer">track buffers</a> so it will get decoded and displayed. <code><a href="#dom-buffered">buffered</a></code> describes the time ranges that are covered by <a href="#media-segment">media segments</a> in the source buffer.</p>
 
     <h4 id="active-source-buffers">1.2.4. Active Source Buffers</h4>
-    <p>The set of <a href="#source-buffer">source buffers</a> that are providing the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-videotrack-selected">selected video track</a></code>, the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-audiotrack-enabled">enabled audio tracks</a></code>, and the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-showing">"showing"</a></code> or <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-hidden">"hidden"</a></code> text tracks. This is a subset of all the source buffers associated with a specific <code><a href="#dom-mediasource">MediaSource</a></code> object. Details about how this set is managed are given <a href="#active-source-buffer-changes">here</a>.</p>
+    <p>The set of <a href="#source-buffer">source buffers</a> that are providing the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-videotrack-selected">selected video track</a></code>, the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-audiotrack-enabled">enabled audio tracks</a></code>, and the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-showing">"showing"</a></code> or <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-hidden">"hidden"</a></code> text tracks. This is a subset of all the source buffers associated with a specific <code><a href="#dom-mediasource">MediaSource</a></code> object. See <a href="#active-source-buffer-changes">Changes to selected/enabled track state</a> for details.</p>
 
 
     <h4 id="track-buffer">1.2.5. Track Buffer</h4>
-    <p>A hypothetical buffer that represents initialization and media data for a single <code><a href="http://dev.w3.org/html5/spec/media-elements.html#audiotrack">AudioTrack</a></code>, <code><a href="http://dev.w3.org/html5/spec/media-elements.html#videotrack">VideoTrack</a></code>, or <code><a href="http://dev.w3.org/html5/spec/media-elements.html#texttrack">TextTrack</a></code> that has been queued for playback. This buffer may not exist in actual implementations, but it is intended to represent media data that will be decoded no matter what <a href="#media-segment">media segments</a> are appended to update the <a href="#source-buffer">source buffer</a>. This distinction is important when considering appends that happen close to the current playback position. Details about transfers between the <a href="#source-buffer">source buffer</a> and track buffers are given <a href="#source-buffer-to-track-buffer">here</a>.</p>
+    <p>A hypothetical buffer that represents initialization and media data for a single <code><a href="http://dev.w3.org/html5/spec/media-elements.html#audiotrack">AudioTrack</a></code>, <code><a href="http://dev.w3.org/html5/spec/media-elements.html#videotrack">VideoTrack</a></code>, or <code><a href="http://dev.w3.org/html5/spec/media-elements.html#texttrack">TextTrack</a></code> that has been queued for playback. This buffer may not exist in actual implementations, but it is intended to represent media data that will be decoded no matter what <a href="#media-segment">media segments</a> are appended to update the <a href="#source-buffer">source buffer</a>. This distinction is important when considering appends that happen close to the current playback position. See <a href="#source-buffer-to-track-buffer">Source Buffer to Track Buffer transfer</a> for details.</p>
 
 
     <h4 id="random-access-point">1.2.6. Random Access Point</h4>
@@ -221,7 +221,7 @@
     <p>The subsections below outline the buffering model for this proposal. It describes how to add and remove <a href="#source-buffer">source buffers</a> from the presentation and describes the various rules and behaviors associated with appending data to an individual <a href="#source-buffer">source buffer</a>. At the highest level, the web application simply creates <a href="#source-buffer">source buffers</a> and appends a sequence of <a href="#init-segment">initialization segments</a> and <a href="#media-segment">media segments</a> to update the buffer's state. The media element pulls media data out of the <a href="#source-buffer">source buffers</a>, plays it, and fires events just like it would if a normal URL was passed to the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#attr-media-src">src</a></code> attribute. The web application is expected to monitor media element events to determine when it needs to append more <a href="#media-segment">media segments</a>.</p>
 
     <h3 id="source-buffer-create">2.1. Creating Source Buffers</h3>
-    <p><code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects can be created once a <code><a href="#dom-mediasource">MediaSource</a></code> object enters the <code><a href="#dom-%22open%22">"open"</a></code> state. The application calls <code><a href="#dom-addsourcebuffer">addSourceBuffer()</a></code> with a type string that indicates the format of the data it intends to append to the new SourceBuffer. If the user agent supports the format and has sufficent resources, a new <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> object is created, added to <code><a href="#dom-sourcebuffers">sourceBuffers</a></code>, and returned by the method. If the user agent doesn't support the specified format or can't support another <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> then it will throw an appropriate exception to signal why the request couldn't be satisfied.</p>
+    <p><code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects can be created once a <code><a href="#dom-mediasource">MediaSource</a></code> object enters the <code><a href="#dom-%22open%22">"open"</a></code> state. The application calls <code><a href="#dom-addsourcebuffer">addSourceBuffer()</a></code> with a type string that indicates the format of the data it intends to append to the new SourceBuffer. If the user agent supports the format and has sufficient resources, a new <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> object is created, added to <code><a href="#dom-sourcebuffers">sourceBuffers</a></code>, and returned by the method. If the user agent doesn't support the specified format or can't support another <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> then it will throw an appropriate exception to signal why the request couldn't be satisfied.</p>
 
     <h3 id="source-buffer-remove">2.2. Removing Source Buffers</h3>
     <p>Removing a <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> with <code><a href="#dom-removesourcebuffer">removeSourceBuffer()</a></code> releases all resources associated with the object. This includes destroying the all the segment data, <a href="#track-buffer">track buffers</a>, and decoders. The media element will also remove the appropriate tracks from <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-audiotracks">audioTracks</a></code>, <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-videotracks">videoTracks</a></code>,  &amp; <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-texttracks">textTracks</a></code> and fire the necessary <code><a href="http://dev.w3.org/html5/spec/media-elements.html#handler-tracklist-onchange">change</a></code> events. Playback may become degraded or stop if the currently selected <code><a href="http://dev.w3.org/html5/spec/media-elements.html#videotrack">VideoTrack</a></code> or the only enabled <code><a href="http://dev.w3.org/html5/spec/media-elements.html#audiotrack">AudioTracks</a></code> are removed.</p>
@@ -229,11 +229,11 @@
     <h3 id="source-buffer-basic-append">2.3. Basic appending model</h3>
     <p>Updating the state of a <a href="#source-buffer">source buffer</a> requires appending at least one <a href="#init-segment">initialization segment</a> and one or more <a href="#media-segment">media segments</a> via <code><a href="#dom-append">append()</a></code>. The following list outlines some of the basic rules for appending segments.
       <ul>
-	<li>The first segment appended MUST be an <a href="#init-segment">initialization segment</a>.</li>
+	<li>The first segment appended must be an <a href="#init-segment">initialization segment</a>.</li>
 	<li>All <a href="#media-segment">media segments</a> are associated with the most recently appended <a href="#init-segment">initialization segment</a>.</li>
 	<li>A whole segment must be appended before another segment can be started unless <code><a href="#dom-abort">abort()</a></code> is called.</li>
 	<li>Segments can be appended in pieces. (i.e. A 4096 byte segment can be spread across four 1024 byte calls to <code><a href="#dom-append">append()</a></code>).</li>
-	<li>If a <a href="#media-segment">media segment</a> requires different configuration information (e.g. codec parameters, new internal trackIDs, metadata) from what is in the most recently appended <a href="#init-segment">initialization segment</a>, a new <a href="#init-segment">initialization segment</a> with the new configuration information MUST be appended before the <a href="#media-segment">media segment</a> requiring this information is appended.</li>
+	<li>If a <a href="#media-segment">media segment</a> requires different configuration information (e.g. codec parameters, new internal trackIDs, metadata) from what is in the most recently appended <a href="#init-segment">initialization segment</a>, a new <a href="#init-segment">initialization segment</a> with the new configuration information must be appended before the <a href="#media-segment">media segment</a> requiring this information is appended.</li>
 	<li>A new <a href="#media-segment">media segment</a> can overlap, in presentation time, a segment that was previously appended. The new segment will override the previous data.</li>
 	<li>Media segments can be appended in any order.<br>Note: In practice finite buffer space and maintaining uninterrupted playback will bias appending towards time increasing order near the current playback position. Out of order appends facilitate adaptive streaming, ad insertion, and video editing use cases.</li>
 	<li>The media element may start copying data from a <a href="#media-segment">media segment</a> to the <a href="#track-buffer">track buffers</a> before the entire segment has been appended. This prevents unnecessary delays for <a href="#media-segment">media segments</a> that cover a large time range.</li>
@@ -243,11 +243,11 @@
     <h3 id="source-buffer-init-segment-constraints">2.4. Initialization Segment constraints</h3>
     <p>To simplify the implementation and facilitate interoperability, a few constraints are placed on the <a href="#init-segment">initialization segments</a> that are appended to a specific <code><a href="#dom-sourcebuffer">SourceBuffer</a></code>:
       <ul>
-	<li>The number and type of tracks MUST be consistent across all <a href="#init-segment">initialization segments</a>. <br>For example, if the first <a href="#init-segment">initialization segment</a> has 2 audio tracks and 1 video track, then all <a href="#init-segment">initialization segments</a> that follow, for this <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> MUST describe 2 audio tracks and 1 video track.</li>
+	<li>The number and type of tracks must be consistent across all <a href="#init-segment">initialization segments</a>. <br>For example, if the first <a href="#init-segment">initialization segment</a> has 2 audio tracks and 1 video track, then all <a href="#init-segment">initialization segments</a> that follow, for this <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> must describe 2 audio tracks and 1 video track.</li>
 	<li>Internal trackIDs do not need to be the same across <a href="#init-segment">initialization segments</a> only if the segment describes one track of each type.<br> For example, if an <a href="#init-segment">initialization segment</a> describes a single audio track and a single video track, the internal trackIDs do not need to be the same.</li>
-	<li>Internal trackIDs MUST be the same across <a href="#init-segment">initialization segments</a> if multiple tracks for a single type are described. (e.g. 2 audio tracks).</li>
+	<li>Internal trackIDs must be the same across <a href="#init-segment">initialization segments</a> if multiple tracks for a single type are described. (e.g. 2 audio tracks).</li>
 	<li>Codecs changes are not allowed. <br> For example, you can't have an <a href="#init-segment">initialization segment</a> that specifies a single AAC track and then follows it with one that contains AMR-WB. Support for multiple codecs is handled with multiple <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects.</li>
-	<li>Video frame size changes are allowed and MUST be supported seamlessly.<br> Note: This will cause the &lt;video&gt; display region to change size if you don't use CSS or HTML attributes (width/height) to constrain the element size.</li>
+	<li>Video frame size changes are allowed and must be supported seamlessly.<br> Note: This will cause the &lt;video&gt; display region to change size if you don't use CSS or HTML attributes (width/height) to constrain the element size.</li>
 	<li>Audio channel count changes are allowed, but they may not be seamless and could trigger downmixing.<br> Note: This is a quality of implementation issue because changing the channel count may require reinitializing the audio device, resamplers, and channel mixers which tends to be audible.</li>
       </ul>
     </p>
@@ -277,7 +277,7 @@
     <h4 id="source-buffer-overlap-start">2.8.2 Start Overlap</h4>
     <img src="start_overlap.png">
     <p>The figure above shows how the <a href="#source-buffer">source buffer</a> gets updated when the beginning of a new <a href="#media-segment">media segment</a> overlaps a segment in the buffer. In this case the new segment replaces all the old media data in the overlapping region. Since <a href="#media-segment">media segments</a> are constrained to starting with <a href="#random-access-point">random access points</a>, this provides a seamless transition between segments.</p>
-    <p>The one case that requires special attention is where an audio frame overlaps with the start of the new <a href="#media-segment">media segment</a>. The base level behavior that MUST be supported requires dropping the old audio frame that overlaps the start of the new segment and inserting silence for the small gap that is created. A higher quality implementation could support outputting a portion of the old segment and all of the new segment or crossfade during the overlapping region. This is a quality of implementation issue. The key property here though is the small silence gap should not be reflected in the ranges reported by <code><a href="#dom-buffered">buffered</a></code></p>
+    <p>The one case that requires special attention is where an audio frame overlaps with the start of the new <a href="#media-segment">media segment</a>. The base level behavior that must be supported requires dropping the old audio frame that overlaps the start of the new segment and inserting silence for the small gap that is created. A higher quality implementation could support outputting a portion of the old segment and all of the new segment or crossfade during the overlapping region. This is a quality of implementation issue. The key property here though is the small silence gap should not be reflected in the ranges reported by <code><a href="#dom-buffered">buffered</a></code>.</p>
 
     <h4 id="source-buffer-overlap-end">2.8.3 End Overlap</h4>
     <img src="end_overlap.png">
@@ -309,7 +309,7 @@
     <p>The web application can explicitly set the presentation duration by setting the <code><a href="#dom-duration">duration</a></code> attribute. If any <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects in <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> has media data beyond the new duration, this data is removed from the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> object. This ensures that <code><a href="#dom-buffered">buffered</a></code> never reports any ranges beyond the current duration. If the current playback position is beyond the new duration, then update HTMLMediaElement.currentTime to the new duration and run the seeking algorithm.</p>
 
     <h4 id="source-buffer-duration-updates-implicit">2.12.2 Implicit Duration</h4>
-    <p>If the <code><a href="#dom-duration">duration</a></code> attribute isn't explictly set before the first <a href="#init-segment">initialization segment</a> is appended, then the presentation duration will get implicitly set. If the first initialization segment appended contains duration information then the <code><a href="#dom-duration">duration</a></code> attribute will be set to that value. If the first initialization segment does not contain any duration information then the <code><a href="#dom-duration">duration</a></code> attribute will be set to PositiveInfinity to indicate that duration isn't known yet.</p>
+    <p>If the <code><a href="#dom-duration">duration</a></code> attribute isn't explicitly set before the first <a href="#init-segment">initialization segment</a> is appended, then the presentation duration will get implicitly set. If the first initialization segment appended contains duration information then the <code><a href="#dom-duration">duration</a></code> attribute will be set to that value. If the first initialization segment does not contain any duration information then the <code><a href="#dom-duration">duration</a></code> attribute will be set to positive Infinity to indicate that duration isn't known yet.</p>
 
     <h4 id="source-buffer-duration-updates-append">2.12.3 Appending Beyond Duration</h4>
     <p>Any time a <a href="#media-segment">media segment</a> that goes beyond the current value of the <code><a href="#dom-duration">duration</a></code> attribute is appended to a <code><a href="#dom-sourcebuffer">SourceBuffer</a></code>, the <code><a href="#dom-duration">duration</a></code> attribute will get updated to end timestamp of the <a href="#media-segment">media segment</a>.</p>
@@ -318,7 +318,7 @@
     <p>When <code><a href="#dom-endofstream">endOfStream()</a></code> gets called without an error, the <code><a href="#dom-duration">duration</a></code> attribute will get updated to the highest end timestamp across all <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects in <code><a href="#dom-sourcebuffers">sourceBuffers</a></code>. This allows the duration to properly reflect the end of the appended <a href="#media-segment">media segments</a>. For example, if the duration was explicitly set to 10 seconds and only media segments for 0 to 5 seconds were appended before <code><a href="#dom-endofstream">endOfStream()</a></code> was called, then the duration will get updated to 5 seconds.</p>
 
     <h2 id="mediasource">3. MediaSource Object</h2>
-    <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the <code><a href="#dom-readyState">readyState</a></code> for this source as well as a list of <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects in <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> to add media data to this source. The HTMLMediaElement fetches this media data from the <code><a href="#dom-mediasource">MediaSource</a></code> object when it is needed during playback.</p>
+    <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the <code><a href="#dom-readystate">readyState</a></code> for this source as well as a list of <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects in <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> to add media data to this source. The HTMLMediaElement fetches this media data from the <code><a href="#dom-mediasource">MediaSource</a></code> object when it is needed during playback.</p>
 
     <pre class="idl">
 [Constructor]
@@ -343,20 +343,20 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
     </pre>
     <h3 id="mediasource-methods">3.1. Methods and Attributes</h3>
     
-    <p>The <dfn id="dom-sourcebuffers"><code>sourceBuffers</code></dfn> attribute contains the list of <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects associated with this <code><a href="#dom-mediasource">MediaSource</a></code>. When <code><a href="#dom-readyState">readyState</a></code> equals <code><a href="#dom-closed">"closed"</a></code> this list will be empty. Once <code><a href="#dom-readyState">readyState</a></code> transitions to <code><a href="#dom-%22open%22">"open"</a></code> SourceBuffer objects can be added to this list by using <code><a href="#dom-addsourcebuffer">addSourceBuffer()</a></code>.</p>
+    <p>The <dfn id="dom-sourcebuffers"><code>sourceBuffers</code></dfn> attribute contains the list of <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects associated with this <code><a href="#dom-mediasource">MediaSource</a></code>. When <code><a href="#dom-readystate">readyState</a></code> equals <code><a href="#dom-closed">"closed"</a></code> this list will be empty. Once <code><a href="#dom-readystate">readyState</a></code> transitions to <code><a href="#dom-%22open%22">"open"</a></code> SourceBuffer objects can be added to this list by using <code><a href="#dom-addsourcebuffer">addSourceBuffer()</a></code>.</p>
 
     <p>The <dfn id="dom-activesourcebuffers"><code>activeSourceBuffers</code></dfn> attribute contains the subset of <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> that represents the <a href="#active-source-buffers">active source buffers</a>.</p>
 
     <p>The <dfn id="dom-duration"><code>duration</code></dfn> attribute allows the web application to set the presentation duration. The duration is initially set to NaN when the <code><a href="#dom-mediasource">MediaSource</a></code> object is created.</p>
     <p>On getting, run the following steps:</p>
     <ol>
-      <li>If the <code><a href="#dom-readyState">readyState</a></code> attribute is <code><a href="#dom-closed">"closed"</a></code> then return NaN and abort these steps.</li>
+      <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute is <code><a href="#dom-closed">"closed"</a></code> then return NaN and abort these steps.</li>
       <li>Return the current value of the attribute.</li>
     </ol>
     <p>On setting, run the following steps:</p>
     <ol>
-      <li>If value being set is negative or NaN then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
-      <li>If the <code><a href="#dom-readyState">readyState</a></code> attribute is not <code><a href="#dom-%22open%22">"open"</a></code> then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+      <li>If the value being set is negative or NaN then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
+      <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute is not <code><a href="#dom-%22open%22">"open"</a></code> then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
       <li>Update this attribute to the new value.</li>
       <li>Remove all media data that is beyond the new duration from all <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects in <code><a href="#dom-sourcebuffers">sourceBuffers</a></code>.</li>
       <li>Update HTMLMediaElement.duration to the new duration and schedule the appropriate <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-media-durationchange">durationchange</a></code> event to fire.</li>
@@ -365,13 +365,13 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
 
     <p>The <dfn id="dom-addsourcebuffer"><code>addSourceBuffer(type)</code></dfn> method must run the following steps:</p>
     <ol>
-      <li>If <var title="true">type</var> is null or an empty then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
+      <li>If <var title="true">type</var> is null or an empty string then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
       <li>If <var title="true">type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects in <code><a href="#dom-sourcebuffers">sourceBuffers</a></code>, then throw a <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-not_supported_err">NOT_SUPPORTED_ERR</a></code> exception and abort these steps.</li>
       <li>If the user agent can't handle any more SourceBuffer objects then throw a <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception and abort these steps.</li>
-      <li>If the <code><a href="#dom-readyState">readyState</a></code> attribute is not in the <code><a href="#dom-%22open%22">"open"</a></code> state then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+      <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute is not in the <code><a href="#dom-%22open%22">"open"</a></code> state then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
       <li>Create a new <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> object and associated resources.</li>
-      <li>Add the new object to <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> and fire a <code><a href="#dom-addsourcebuffer">addsourcebuffer</a></code> on that object.</li>
-      <li>Return the new object to the caller.</li>
+      <li>Add the new object to <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> and fire a <code><a href="#dom-addsourcebuffer">addsourcebuffer</a></code> event on that object.</li>
+      <li>Return the new object.</li>
     </ol>
     <p>The <dfn id="dom-removesourcebuffer"><code>removeSourceBuffer(sourceBuffer)</code></dfn> method must run the following steps:</p>
     <ol>
@@ -396,7 +396,7 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
       <dt><dfn id='dom-"ended"'><code>"ended"</code></dfn></dt>
       <dd>The source is still attached to a media element, but <code><a href="#dom-endofstream">endOfStream()</a></code> has been called. Appending data to <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects in this state is not allowed.</dd>
     </dl>
-    <p>When the <code><a href="#dom-mediasource">MediaSource</a></code> is created <code><a href="#dom-readyState">readyState</a></code> must be set to <code><a href="#dom-closed">"closed"</a></code>.
+    <p>When the <code><a href="#dom-mediasource">MediaSource</a></code> is created <code><a href="#dom-readystate">readyState</a></code> must be set to <code><a href="#dom-closed">"closed"</a></code>.
     </p>
 
 
@@ -413,8 +413,8 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
 
     <p>The <dfn id="dom-endofstream"><code>endOfStream(error)</code></dfn> method must run the following steps:</p>
     <ol>
-      <li>If the <code><a href="#dom-readyState">readyState</a></code> attribute is not in the <code><a href="#dom-%22open%22">"open"</a></code> state then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-      <li>Change the <code><a href="#dom-readyState">readyState</a></code> attribute value to <code><a href="#dom-%22ended%22">"ended"</a></code>.</li>
+      <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute is not in the <code><a href="#dom-%22open%22">"open"</a></code> state then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+      <li>Change the <code><a href="#dom-readystate">readyState</a></code> attribute value to <code><a href="#dom-%22ended%22">"ended"</a></code>.</li>
       <dl class="switch">
           <dt>If <var title="true">error</var> is not set, null, or an empty string</dt>
           <dd>
@@ -425,12 +425,10 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
 	  </dd>
           <dt>If <var title="true">error</var> is set to <code><a href="#dom-%22network%22">"network"</a></code>
 </dt>
-          <dd>Run the "If the connection is interrupted, causing the user agent to give up trying to fetch the resource" section of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>
-</dd>
+          <dd>Run the "If the connection is interrupted, causing the user agent to give up trying to fetch the resource" section of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
           <dt>If <var title="true">error</var> is set to <code><a href="#dom-%22decode%22">"decode"</a></code>
 </dt>
-          <dd>Run the "If the media data is corrupted" section of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>
-</dd>
+          <dd>Run the "If the media data is corrupted" section of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
           <dt>Otherwise</dt>
           <dd>Throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception.</dd>
         </dl>
@@ -450,17 +448,17 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
         <tr>
           <td><dfn id="dom-sourceopen"><code>sourceopen</code></dfn></td>
           <td><code>Event</code></td>
-          <td>When <code><a href="#dom-readyState">readyState</a></code> transitions from <code><a href="#dom-closed">"closed"</a></code> to <code><a href="#dom-%22open%22">"open"</a></code> or from <code><a href="#dom-%22ended%22">"ended"</a></code> to <code><a href="#dom-%22open%22">"open"</a></code>.</td>
+          <td>When <code><a href="#dom-readystate">readyState</a></code> transitions from <code><a href="#dom-closed">"closed"</a></code> to <code><a href="#dom-%22open%22">"open"</a></code> or from <code><a href="#dom-%22ended%22">"ended"</a></code> to <code><a href="#dom-%22open%22">"open"</a></code>.</td>
         </tr>
         <tr>
           <td><dfn id="dom-sourceended"><code>sourceended</code></dfn></td>
           <td><code>Event</code></td>
-          <td>When <code><a href="#dom-readyState">readyState</a></code> transitions from <code><a href="#dom-%22open%22">"open"</a></code> to <code><a href="#dom-%22ended%22">"ended"</a></code>.</td>
+          <td>When <code><a href="#dom-readystate">readyState</a></code> transitions from <code><a href="#dom-%22open%22">"open"</a></code> to <code><a href="#dom-%22ended%22">"ended"</a></code>.</td>
         </tr>
         <tr>
           <td><dfn id="dom-sourceclose"><code>sourceclose</code></dfn></td>
           <td><code>Event</code></td>
-	  <td>When <code><a href="#dom-readyState">readyState</a></code> transitions from <code><a href="#dom-%22open%22">"open"</a></code> to <code><a href="#dom-closed">"closed"</a></code> or <code><a href="#dom-%22ended%22">"ended"</a></code> to <code><a href="#dom-closed">"closed"</a></code>.</td>
+	  <td>When <code><a href="#dom-readystate">readyState</a></code> transitions from <code><a href="#dom-%22open%22">"open"</a></code> to <code><a href="#dom-closed">"closed"</a></code> or <code><a href="#dom-%22ended%22">"ended"</a></code> to <code><a href="#dom-closed">"closed"</a></code>.</td>
         </tr>
       </tbody>
     </table>
@@ -471,17 +469,15 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
     <p>The following steps are run when a media element attempts the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a> with a MediaSource object URL.</p>
     <ol>
       <dl class="switch">
-        <dt>If <code><a href="#dom-readyState">readyState</a></code> is NOT set to <code><a href="#dom-closed">"closed"</a></code>
+        <dt>If <code><a href="#dom-readystate">readyState</a></code> is NOT set to <code><a href="#dom-closed">"closed"</a></code>
 </dt>
         <dd>Abort media element's <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a> and run the steps to report a <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-mediaerror-media_err_src_not_supported">MEDIA_ERR_SRC_NOT_SUPPORTED</a></code> error.</dd>
         <dt>Otherwise</dt>
         <dd>
           <ol>
-            <li>Set <code><a href="#dom-readyState">readyState</a></code> attribute to <code><a href="#dom-%22open%22">"open"</a></code>
-</li>
+            <li>Set <code><a href="#dom-readystate">readyState</a></code> attribute to <code><a href="#dom-%22open%22">"open"</a></code>.</li>
             <li>Fire a simple event named <code><a href="#dom-sourceopen">sourceopen</a></code>.</li>
-            <li>Allow <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a> to progress based on data passed in via <code><a href="#dom-append">append()</a></code>
-</li>
+            <li>Allow the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a> to progress based on data passed in via <code><a href="#dom-append">append()</a></code>.</li>
           </ol>
         </dd>
       </dl>
@@ -490,8 +486,7 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
     <h4 id="mediasource-detach">3.3.2 Detaching from a media element</h4>
     <p>The following steps are run in any case where the media element is going to transition to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-network_empty">NETWORK_EMPTY</a></code> and fire an <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-mediacontroller-emptied">emptied</a></code> event. These steps should be run right before the transition.</p>
     <ol>
-      <li>Set <code><a href="#dom-readyState">readyState</a></code> attribute to <code><a href="#dom-closed">"closed"</a></code>
-</li>
+      <li>Set <code><a href="#dom-readystate">readyState</a></code> attribute to <code><a href="#dom-closed">"closed"</a></code>.</li>
       <li>Set <code><a href="#dom-duration">duration</a></code> attribute to NaN.</li>
       <li>Remove all the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects from <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> and fire a <code><a href="#dom-removesourcebuffer">removesourcebuffer</a></code> event for each one.</li>
       <li>Fire a simple event named <code><a href="#dom-sourceclose">sourceclose</a></code>.</li>
@@ -502,11 +497,11 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
       <li>The media element <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-seeking">seeking algorithm</a></code> starts and has reached the stage where it is about to fire the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-media-seeking">seeking</a></code> event.</li>
       <li>
 	<dl class="switch">
-	  <dt>If the <code><a href="#dom-readyState">readyState</a></code> attribute is set to <code><a href="#dom-%22ended%22">"ended"</a></code>
+	  <dt>If the <code><a href="#dom-readystate">readyState</a></code> attribute is set to <code><a href="#dom-%22ended%22">"ended"</a></code>
 </dt>
 	  <dd>
 	    <ol>
-	      <li>Set the <code><a href="#dom-readyState">readyState</a></code> attribute to <code><a href="#dom-%22open%22">"open"</a></code>
+	      <li>Set the <code><a href="#dom-readystate">readyState</a></code> attribute to <code><a href="#dom-%22open%22">"open"</a></code>
 </li>
 	      <li>Fire a simple event named <code><a href="#dom-sourceopen">sourceopen</a></code> on the <code><a href="#dom-mediasource">MediaSource</a></code> object.</li>
 	    </ol>
@@ -542,7 +537,7 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
       <dd>
 	<ol>
 	  <li>Set <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code> and fire the <a href="http://dev.w3.org/html5/spec/media-elements.html#mediaevents">appropriate event</a> for this transition.</li>
-	  <li>Abort remaining steps</li>
+	  <li>Abort these steps.</li>
 	</ol>
       </dd>
       <dt>If <code><a href="#dom-buffered">buffered</a></code> for all objects in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code> contain <code><a href="http://dev.w3.org/html5/spec/media-elements.html#timeranges">TimeRanges</a></code> that include the current playback position and enough data to ensure uninterrupted playback:</dt>
@@ -550,7 +545,7 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
 	<ol>
 	  <li>Set <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_enough_data">HAVE_ENOUGH_DATA</a></code> and fire the <a href="http://dev.w3.org/html5/spec/media-elements.html#mediaevents">appropriate event</a> for this transition.</li>
 	  <li>Playback may resume at this point if it was previously suspended by a transition to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_current_data">HAVE_CURRENT_DATA</a></code>.</li>
-	  <li>Abort remaining steps</li>
+	  <li>Abort these steps.</li>
 	</ol>
       </dd>
       <dt>If <code><a href="#dom-buffered">buffered</a></code> for at least one object in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code> contains a <code><a href="http://dev.w3.org/html5/spec/media-elements.html#timeranges">TimeRange</a></code> that includes the current playback position but not enough data to ensure uninterrupted playback:</dt>
@@ -558,7 +553,7 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
 	<ol>
 	  <li>Set <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_future_data">HAVE_FUTURE_DATA</a></code> and fire the <a href="http://dev.w3.org/html5/spec/media-elements.html#mediaevents">appropriate event</a> for this transition.</li>
 	  <li>Playback may resume at this point if it was previously suspended by a transition to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_current_data">HAVE_CURRENT_DATA</a></code>.</li>
-	  <li>Abort remaining steps</li>
+	  <li>Abort these steps.</li>
 	</ol>
       </dd>
       <dt>If <code><a href="#dom-buffered">buffered</a></code> for at least one object in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code> contains a <code><a href="http://dev.w3.org/html5/spec/media-elements.html#timeranges">TimeRange</a></code> that ends at the current playback position and does not have a range covering the time immediately after the current position:</dt>
@@ -566,7 +561,7 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
 	<ol>
 	  <li>Set <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_current_data">HAVE_CURRENT_DATA</a></code> and fire the <a href="http://dev.w3.org/html5/spec/media-elements.html#mediaevents">appropriate event</a> for this transition.</li>
 	  <li>Playback is suspended at this point since the media element doesn't have enough data to advance the timeline.</li>
-	  <li>Abort remaining steps.</li>
+	  <li>Abort these steps.</li>
 	</ol>
       </dd>
     </dl>
@@ -624,7 +619,7 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
    <p>The <dfn id="dom-timestampoffset"><code>timestampOffset</code></dfn> attribute controls the offset applied to timestamps inside subsequent <a href="#media-segment">media segments</a> that are appended to this <code><a href="#dom-sourcebuffer">SourceBuffer</a></code>. The <code><a href="#dom-timestampoffset">timestampOffset</a></code> is initially set to 0 which indicates that no offset is being applied. On getting, the initial value or the last value that was successfully set is returned. On setting, run following steps:</p>
    <ol>
      <li>If this object has been removed from the <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> attribute of the <code><a href="#dom-mediasource">MediaSource</a></code> object that created it, then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-     <li>If the <code><a href="#dom-readyState">readyState</a></code> attribute of the <code><a href="#dom-mediasource">MediaSource</a></code> object that created this object is not in the <code><a href="#dom-%22open%22">"open"</a></code> state, then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+     <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute of the <code><a href="#dom-mediasource">MediaSource</a></code> object that created this object is not in the <code><a href="#dom-%22open%22">"open"</a></code> state, then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
      <li>If this object is waiting for the end of a <a href="#media-segment">media segment</a> to be appended, then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> and abort these steps.</li>
      <li>Update the attribute to the new value.</li>
    </ol>
@@ -633,7 +628,7 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
     <ol>
       <li>If <var title="true">data</var> is null then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
       <li>If this object has been removed from the <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> attribute of the <code><a href="#dom-mediasource">MediaSource</a></code> object that created it then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-      <li>If the <code><a href="#dom-readyState">readyState</a></code> attribute of the <code><a href="#dom-mediasource">MediaSource</a></code> object that created this object is not in the <code><a href="#dom-%22open%22">"open"</a></code> state then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+      <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute of the <code><a href="#dom-mediasource">MediaSource</a></code> object that created this object is not in the <code><a href="#dom-%22open%22">"open"</a></code> state then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
       <li>If <var title="true">data</var>.byteLength is 0 abort these steps.</li>
       <li>Add <var title="true">data</var> to the source buffer:
 	<dl class="switch">
@@ -659,7 +654,7 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
 	      <dt>If the initialization segment contains a duration:</dt>
 	      <dd>Set the <code><a href="#dom-duration">duration</a></code> attribute to the value in the initialization segment.</dd>
 	      <dt>Otherwise:</dt>
-	      <dd>Set the <code><a href="#dom-duration">duration</a></code> attribute to PositiveInfinity.</dd>
+	      <dd>Set the <code><a href="#dom-duration">duration</a></code> attribute to positive Infinity.</dd>
 	    </dl>
 	    <li>Handle state transitions:</li>
 	    <dl class="switch">
@@ -724,7 +719,7 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
     <p>The <dfn id="dom-abort"><code>abort()</code></dfn> method must run the following steps:</p>
     <ol>
       <li>If this object has been removed from the <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> attribute of the <code><a href="#dom-mediasource">MediaSource</a></code> object that created it then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-      <li>If the <code><a href="#dom-readyState">readyState</a></code> attribute of the <code><a href="#dom-mediasource">MediaSource</a></code> object that created this object is not in the <code><a href="#dom-%22open%22">"open"</a></code> state then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+      <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute of the <code><a href="#dom-mediasource">MediaSource</a></code> object that created this object is not in the <code><a href="#dom-%22open%22">"open"</a></code> state then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
       <li>The media element aborts parsing the current segment.</li>
       <dl class="switch">
 	<dt>If waiting for the start of a new segment</dt>
@@ -740,7 +735,7 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
     </ol>
 
         <h2 id="sourcebufferlist">5. SourceBufferList Object</h2>
-    <p>SourceBufferList is a simple container object for <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects. It provides a read-only array accessor and fires events when the list is modified.</p>
+    <p>SourceBufferList is a simple container object for <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects. It provides read-only array access and fires events when the list is modified.</p>
 
     <pre class="idl">
 interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
@@ -780,10 +775,10 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
     </table>
 
     <h2 id="byte-stream-formats">6. Byte Stream Formats</h2>
-    <p>The bytes provided through <code><a href="#dom-append">append()</a></code> for a <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM and the ISO Base Media File Format are provided below. If these formats are supported then the byte stream formats described below MUST be supported.</p>
+    <p>The bytes provided through <code><a href="#dom-append">append()</a></code> for a <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM and the ISO Base Media File Format are provided below. If these formats are supported then the byte stream formats described below must be supported.</p>
     <p>This section provides general requirements for all byte stream formats:</p>
     <ul>
-      <li>A byte stream format specification MAY define <a href="#init-segment">initialization segments</a> and MUST define <a href="#media-segment">media segments</a>.</li>
+      <li>A byte stream format specification may define <a href="#init-segment">initialization segments</a> and must define <a href="#media-segment">media segments</a>.</li>
       <li>It must be possible to identify segment boundaries and segment type (initialization or media) by examining the byte stream alone.</li>
       <li>The combination of an Initialization Segment and any contiguous sequence of Media Segments associated with it must:
 	<ol>
@@ -797,7 +792,7 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
 	    </ul>
 	  </li>
 	  <li>Identify the global presentation timestamp of every sample in the sequence of Media Segments</li>
-	  <li>For example, if I1 is associated with M1, M2, M3 then the above must hold for all the combinations I1+M1, I1+M2, I1+M1+M2, I1+M2+M3 etc.</li>
+	  <p>For example, if I1 is associated with M1, M2, M3 then the above must hold for all the combinations I1+M1, I1+M2, I1+M1+M2, I1+M2+M3, etc.</p>
 	</ol>
       </li>
     </ul>
@@ -827,7 +822,7 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
 	<li>The Timecode element in the <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> contains a presentation timestamp in TimecodeScale units.</li>
 	<li>The TimecodeScale in the <a href="#webm-init-segment">WebM initialization segment</a> most recently appended applies to all timestamps in the <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a>
 </li>
-	<li>The Cluster header may contain an "unknown" size value. If it does then the end of the cluster is reached when another <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> header is encountered or an element header that indicates the start of an <a href="#webm-init-segment">WebM initialization segment</a>.</li>
+	<li>The Cluster header may contain an "unknown" size value. If it does then the end of the cluster is reached when another <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> header or an element header that indicates the start of an <a href="#webm-init-segment">WebM initialization segment</a> is encountered.</li>
 	<li>Block &amp; SimpleBlock elements must be in time increasing order consistent with the <a href="http://www.webmproject.org/code/specs/container/#webm-guidelines">WebM spec</a>.</li>
 	<li>If the most recent <a href="#webm-init-segment">WebM initialization segment</a> describes multiple tracks, then blocks from all the tracks must be present and interleaved in time increasing order.</li>
 	<li>
@@ -843,19 +838,19 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
       <p>This section defines segment formats for implementations that choose to support the ISO Base Media File Format
 	<a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a> (ISO BMFF).</p> 
       <h4 id="iso-init-segments">6.2.1. Initialization Segments</h4>
-      <p>An ISO BMFF <a href="#init-segment">initialization segment</a> shall contain a single Movie Header Box (<strong>moov</strong>). The tracks in the Movie Header Box shall not contain any samples (i.e. the <strong><var>entry_count</var></strong> in the <strong>stts</strong>, <strong>stsc</strong> and <strong>stco</strong> boxes shall be set to zero). A Movie Extends (<strong>mvex</strong>) box shall be contained in the
+      <p>An ISO BMFF <a href="#init-segment">initialization segment</a> must contain a single Movie Header Box (<strong>moov</strong>). The tracks in the Movie Header Box must not contain any samples (i.e. the <strong><var>entry_count</var></strong> in the <strong>stts</strong>, <strong>stsc</strong> and <strong>stco</strong> boxes must be set to zero). A Movie Extends (<strong>mvex</strong>) box must be contained in the
 	Movie Header Box to indicate that Movie Fragments are to be expected.</p>
       <p>The <a href="#init-segment">initialization segment</a> may contain Edit Boxes (<strong>edts</strong>) which provide a mapping of composition times for each track to the global presentation time.</p>
       <h4 id="iso-media-segments">6.2.2. Media Segments</h4>
-      <p>An ISO BMFF <a href="#media-segment">media segment</a> shall contain a single Movie Fragment Box (<strong>moof</strong>) followed by one or more Media Data Boxes (<strong>mdat</strong>).</p>
-      <p>The following rules shall apply to ISO BMFF media segments:</p>
+      <p>An ISO BMFF <a href="#media-segment">media segment</a> must contain a single Movie Fragment Box (<strong>moof</strong>) followed by one or more Media Data Boxes (<strong>mdat</strong>).</p>
+      <p>The following rules apply to ISO BMFF media segments:</p>
       <ol>
-	<li>The Movie Fragment Box shall contain at least one Track Fragment Box (<strong>traf</strong>).</li>
-	<li>The Movie Fragment Box shall use movie-fragment relative addressing and the flag <strong><var>default-base-is-moof</var></strong> shall be set; absolute byte-offsets shall not be used.</li>
-	<li>External data references shall not be used.</li>
+	<li>The Movie Fragment Box must contain at least one Track Fragment Box (<strong>traf</strong>).</li>
+	<li>The Movie Fragment Box must use movie-fragment relative addressing and the flag <strong><var>default-base-is-moof</var></strong> must be set; absolute byte-offsets must not be used.</li>
+	<li>External data references must not be used.</li>
 	<li>If the Movie Fragment contains multiple tracks, the duration by which each track extends should be as close to equal as practical.</li>
-	<li>Each Track Fragment Box shall contain a Track Fragment Decode Time Box (<strong>tfdt</strong>)</li>
-	<li>The Media Data Boxes shall contain all the samples referenced by the Track Run Boxes (<strong>trun</strong>) of the Movie Fragment Box.</li>
+	<li>Each Track Fragment Box must contain a Track Fragment Decode Time Box (<strong>tfdt</strong>)</li>
+	<li>The Media Data Boxes must contain all the samples referenced by the Track Run Boxes (<strong>trun</strong>) of the Movie Fragment Box.</li>
       </ol>
 
       <h4 id="iso-random-access-points">6.2.3. Random Access Points</h4>
@@ -952,8 +947,12 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
         </tr>
       </thead>
       <tbody>
+	<tr>
+	  <td>17 August 2012</td>
+          <td>Minor editorial fixes.</td>
+        </tr>
         <tr>
-	  <td>09 August 2012</td>
+	  <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/29687c019735/media-source/media-source.html">09 August 2012</a></td>
           <td>Change presentation start time to always be 0 instead of using format specific rules about the first media segment appended.</td>
         </tr>
 	<tr>
