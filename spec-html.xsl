@@ -87,6 +87,13 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="//duration-change-algorithm">
+    <a href="#duration-change-algorithm">duration change algorithm</a>
+  </xsl:template>
+  <xsl:template match="//new-duration">
+    <var title="true">new duration</var>
+  </xsl:template>
+  
   <!-- SourceBufferList tags -->
   <xsl:template match="//length">
     <xsl:call-template name="coderef_helper">
@@ -233,6 +240,20 @@
     <xsl:call-template name="videoref_helper">
       <xsl:with-param name="fragment">concept-video-intrinsic-width</xsl:with-param>
       <xsl:with-param name="link_text">intrinsic width and height</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+ 
+  <xsl:template match="//normalized-timeranges-object">
+    <xsl:call-template name="videoref_helper">
+      <xsl:with-param name="fragment">normalized-timeranges-object</xsl:with-param>
+      <xsl:with-param name="link_text">normalized TimeRanges object</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//media-err-decode">
+    <xsl:call-template name="code_videoref_helper">
+      <xsl:with-param name="fragment">dom-mediaerror-media_err_decode</xsl:with-param>
+      <xsl:with-param name="link_text">MediaError.MEDIA_ERR_DECODE</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
@@ -420,6 +441,34 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="//hme-currenttime">
+    <xsl:call-template name="code_videoref_helper">
+      <xsl:with-param name="fragment">dom-media-currenttime</xsl:with-param>
+      <xsl:with-param name="link_text">HTMLMediaElement.currentTime</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//hme-duration">
+    <xsl:call-template name="code_videoref_helper">
+      <xsl:with-param name="fragment">media-controller-duration</xsl:with-param>
+      <xsl:with-param name="link_text">media controller duration</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//hme-seek-algorithm">
+    <xsl:call-template name="videoref_helper">
+      <xsl:with-param name="fragment">dom-media-seek</xsl:with-param>
+      <xsl:with-param name="link_text">HTMLMediaElement seek algorithm</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//hme-duration-change-algorithm">
+    <xsl:call-template name="videoref_helper">
+      <xsl:with-param name="fragment">durationChange</xsl:with-param>
+      <xsl:with-param name="link_text">HTMLMediaElement duration change algorithm</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template match="//MEDIA_ERR_SRC_NOT_SUPPORTED">
     <xsl:call-template name="code_videoref_helper">
       <xsl:with-param name="fragment">dom-mediaerror-media_err_src_not_supported</xsl:with-param>
@@ -473,6 +522,36 @@
       <xsl:with-param name="fragment">quota_exceeded_err</xsl:with-param>
       <xsl:with-param name="link_text">QUOTA_EXCEEDED_ERR</xsl:with-param>
     </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="webappsapis_helper">
+    <xsl:param name="fragment" />
+    <xsl:param name="link_text" />
+    <a><xsl:attribute name="href">http://dev.w3.org/html5/spec/webappapis.html#<xsl:value-of select="$fragment"/></xsl:attribute><xsl:value-of select="$link_text"/></a>
+  </xsl:template>
+
+  <xsl:template match="//queue-a-task">
+    <xsl:call-template name="webappsapis_helper">
+      <xsl:with-param name="fragment">queue-a-task</xsl:with-param>
+      <xsl:with-param name="link_text">queue a task</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//fire-a-simple-event">
+    <xsl:call-template name="webappsapis_helper">
+      <xsl:with-param name="fragment">fire-a-simple-event</xsl:with-param>
+      <xsl:with-param name="link_text">fire a simple event</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//queue-a-task-to-fire-an-event-named">
+    <xsl:call-template name="webappsapis_helper">
+      <xsl:with-param name="fragment">queue-a-task</xsl:with-param>
+      <xsl:with-param name="link_text">queue a task</xsl:with-param>
+    </xsl:call-template> to <xsl:call-template name="webappsapis_helper">
+      <xsl:with-param name="fragment">fire-a-simple-event</xsl:with-param>
+      <xsl:with-param name="link_text">fire a simple event</xsl:with-param>
+    </xsl:call-template> named
   </xsl:template>
 
   <xsl:template name="webmref_helper">
