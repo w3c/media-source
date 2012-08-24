@@ -41,7 +41,7 @@
     <div class="head">
       <p><a href="http://www.w3.org/"><img src="http://www.w3.org/Icons/w3c_home" alt="W3C" width="72" height="48" /></a></p>
       <h1>Media Source Extensions</h1>
-      <h2>W3C Editor's Draft 22 August 2012</h2>
+      <h2>W3C Editor's Draft 24 August 2012</h2>
       <dl>
 	<dt>Latest published version:</dt>
 	<dd>Not yet published</dd>
@@ -140,14 +140,19 @@
 	  <li><a href="#sourcebufferlist-events">5.2. Event Summary</a></li>
 	</ul>
       </li>
-      <li><a href="#byte-stream-formats">6. Byte Stream Formats</a></li>
-      <li>
+      <li><a href="#url">6. URL Object</a>
 	<ul>
-	  <li><a href="#webm">6.1 WebM</a></li>
-	  <li><a href="#iso">6.2 ISO Base Media File Format</a></li>
+	  <li><a href="#url-methods">6.1. Methods</a></li>
 	</ul>
       </li>
-      <li><a href="#examples">7. Examples</a></li>
+      <li><a href="#byte-stream-formats">7. Byte Stream Formats</a></li>
+      <li>
+	<ul>
+	  <li><a href="#webm">7.1 WebM</a></li>
+	  <li><a href="#iso">7.2 ISO Base Media File Format</a></li>
+	</ul>
+      </li>
+      <li><a href="#examples">8. Examples</a></li>
       <li><a href="#revision-history">8. Revision History</a></li>
     </ul>
 
@@ -173,7 +178,7 @@
     <h3 id="definitions">1.2. Definitions</h3>
 
     <h4 id="init-segment">1.2.1. Initialization Segment</h4>
-    <p>A sequence of bytes that contains all of the initialization information required to decode a sequence of <media-segments/>. This includes codec initialization data, trackID mappings for multiplexed segments, and timestamp offsets (e.g. edit lists).</p>
+    <p>A sequence of bytes that contains all of the initialization information required to decode a sequence of <media-segments/>. This includes codec initialization data, <track-id/> mappings for multiplexed segments, and timestamp offsets (e.g. edit lists).</p>
 
     <dl class="example">
       <p>Container specific examples of initialization segments:</p>
@@ -211,6 +216,17 @@
     <h4 id="presentation-start-time">1.2.7. Presentation Start Time</h4>
     <p>The presentation start time is the earliest time point in the presentation and specifies the <videoref name="initial-playback-position">initial playback position</videoref> and <videoref name="earliest-possible-position">earliest possible position</videoref>. All presentations created using this specification have a presentation start time of 0. Appending <media-segments/> with negative timestamps will cause playback to terminate with a <media-err-decode/> error unless <timestampOffset/> is used to make the timestamps greater than or equal to 0.</p>
 
+    <h4 id="mediasource-object-url">1.2.8. MediaSource object URL</h4>
+    <p>A MediaSource object URL is a unique <blob-uri/> created by <createObjectURL/>. It is used to attach a <MediaSource/> object to an HTMLMediaElement.</p>
+    <p>These URLs are the same as what the <FileAPI/> specification calls a <blob-uri/>, except that anything in the definition of that feature that refers to <File/> and <Blob/> objects is hereby extended to also apply to <MediaSource/> objects.</p>
+
+    <h4 id="track-id">1.2.9. Track ID</h4>
+    <p>A Track ID is a byte stream format specific identifier that marks sections of the byte stream as being part of a specific track. The Track ID in a <track-description/> identifies which sections of a <media-segment/> belong to that track.</p>
+    
+   <h4 id="track-description">1.2.10. Track Description</h4>
+   <p>A byte stream format specific structure that provides the <track-id/>, codec configuration, and other metadata for a single track. Each track description inside a single <init-segment/> must have a unique <track-id/>.</p>
+
+
     <h2 id="source-buffer-model">2. Source Buffer Model</h2>
     <p>The subsections below outline the buffering model for this proposal. It describes how to add and remove <source-buffers/> from the presentation and describes the various rules and behaviors associated with appending data to an individual <source-buffer/>. At the highest level, the web application simply creates <source-buffers/> and appends a sequence of <init-segments/> and <media-segments/> to update the buffer's state. The media element pulls media data out of the <source-buffers/>, plays it, and fires events just like it would if a normal URL was passed to the <media-src/> attribute. The web application is expected to monitor media element events to determine when it needs to append more <media-segments/>.</p>
 
@@ -227,7 +243,7 @@
 	<li>All <media-segments/> are associated with the most recently appended <init-segment/>.</li>
 	<li>A whole segment must be appended before another segment can be started unless <abort/> is called.</li>
 	<li>Segments can be appended in pieces. (i.e. A 4096 byte segment can be spread across four 1024 byte calls to <append/>).</li>
-	<li>If a <media-segment/> requires different configuration information (e.g. codec parameters, new internal trackIDs, metadata) from what is in the most recently appended <init-segment/>, a new <init-segment/> with the new configuration information must be appended before the <media-segment/> requiring this information is appended.</li>
+	<li>If a <media-segment/> requires different configuration information (e.g. codec parameters, new <track-ids/>, metadata) from what is in the most recently appended <init-segment/>, a new <init-segment/> with the new configuration information must be appended before the <media-segment/> requiring this information is appended.</li>
 	<li>A new <media-segment/> can overlap, in presentation time, a segment that was previously appended. The new segment will override the previous data.</li>
 	<li>Media segments can be appended in any order.<br/>Note: In practice finite buffer space and maintaining uninterrupted playback will bias appending towards time increasing order near the current playback position. Out of order appends facilitate adaptive streaming, ad insertion, and video editing use cases.</li>
 	<li>The media element may start copying data from a <media-segment/> to the <track-buffers/> before the entire segment has been appended. This prevents unnecessary delays for <media-segments/> that cover a large time range.</li>
@@ -238,8 +254,8 @@
     <p>To simplify the implementation and facilitate interoperability, a few constraints are placed on the <init-segments/> that are appended to a specific <SourceBuffer/>:
       <ul>
 	<li>The number and type of tracks must be consistent across all <init-segments/>. <br/>For example, if the first <init-segment/> has 2 audio tracks and 1 video track, then all <init-segments/> that follow, for this <SourceBuffer/> must describe 2 audio tracks and 1 video track.</li>
-	<li>Internal trackIDs do not need to be the same across <init-segments/> only if the segment describes one track of each type.<br/> For example, if an <init-segment/> describes a single audio track and a single video track, the internal trackIDs do not need to be the same.</li>
-	<li>Internal trackIDs must be the same across <init-segments/> if multiple tracks for a single type are described. (e.g. 2 audio tracks).</li>
+	<li><track-ids/> do not need to be the same across <init-segments/> only if the segment describes one track of each type.<br/> For example, if an <init-segment/> describes a single audio track and a single video track, the internal <track-ids/> do not need to be the same.</li>
+	<li><track-ids/> must be the same across <init-segments/> if multiple tracks for a single type are described. (e.g. 2 audio tracks).</li>
 	<li>Codecs changes are not allowed. <br/> For example, you can't have an <init-segment/> that specifies a single AAC track and then follows it with one that contains AMR-WB. Support for multiple codecs is handled with multiple <SourceBuffer/> objects.</li>
 	<li>Video frame size changes are allowed and must be supported seamlessly.<br/> Note: This will cause the &lt;video&gt; display region to change size if you don't use CSS or HTML attributes (width/height) to constrain the element size.</li>
 	<li>Audio channel count changes are allowed, but they may not be seamless and could trigger downmixing.<br/> Note: This is a quality of implementation issue because changing the channel count may require reinitializing the audio device, resamplers, and channel mixers which tends to be audible.</li>
@@ -251,7 +267,8 @@
       <ul>
 	<li>All timestamps must be mapped to the same presentation timeline.</li>
 	<li>Segments should start with a <random-access-point/> to facilitate seamless splicing at the segment boundary.</li>
-	<li>Gaps between <media-segments/> that are smaller than the audio frame size are allowed and should be rendered as silence. Such gaps should not be reflected by <buffered/>.<br/>Note: This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g. Vorbis).</li>
+	<li>Gaps between <media-segments/> that are smaller than the audio frame size are allowed and should not cause playback to stall. Such gaps should not be reflected by <buffered/>.
+	  <p class="note">Note: This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g. Vorbis).</p></li>
       </ul>
     </p>
 
@@ -271,7 +288,7 @@
     <h4 id="source-buffer-overlap-start">2.8.2 Start Overlap</h4>
     <img src="start_overlap.png"/>
     <p>The figure above shows how the <source-buffer/> gets updated when the beginning of a new <media-segment/> overlaps a segment in the buffer. In this case the new segment replaces all the old media data in the overlapping region. Since <media-segments/> are constrained to starting with <random-access-points/>, this provides a seamless transition between segments.</p>
-    <p>The one case that requires special attention is where an audio frame overlaps with the start of the new <media-segment/>. The base level behavior that must be supported requires dropping the old audio frame that overlaps the start of the new segment and inserting silence for the small gap that is created. A higher quality implementation could support outputting a portion of the old segment and all of the new segment or crossfade during the overlapping region. This is a quality of implementation issue. The key property here though is the small silence gap should not be reflected in the ranges reported by <buffered/>.</p>
+    <p>When an audio frame in the <source-buffer/> overlaps with the start of the new <media-segment/> special behavior is required. At a minimum implementations must support dropping the old audio frame that overlaps the start of the new segment and insert silence for the small gap that is created. Higher quality implementations may support crossfading or crosslapping between the overlapping audio frames. No matter which strategy is implemented, no gaps should be created in the ranges reported by <buffered/> and playback must never stall at the overlap.</p>
 
     <h4 id="source-buffer-overlap-end">2.8.3 End Overlap</h4>
     <img src="end_overlap.png"/>
@@ -441,7 +458,7 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
 
     <h3 id="mediasource-algorithms">3.3. Algorithms</h3>
     <h4 id="mediasource-attach">3.3.1 Attaching to a media element</h4>
-    <p> A <MediaSource/> object can be attached to a media element by assigning a MediaSource object URL to the media element <media-src/> attribute or the src attribute of a &lt;source&gt; inside a media element. MediaSource object URLs are created by passing a MediaSource object to window.URL.createObjectURL().</p>
+    <p> A <MediaSource/> object can be attached to a media element by assigning a <MediaSource-object-URL/> to the media element <media-src/> attribute or the src attribute of a &lt;source&gt; inside a media element. A <MediaSource-object-URL/> is created by passing a MediaSource object to <createObjectURL/>.</p>
     <p>If the <resource-fetch-algorithm/> absolute URL matches the MediaSource object URL, run the following steps right before the "Perform a potentially
 CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
     <ol>
@@ -451,7 +468,7 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
         <dt>Otherwise</dt>
         <dd>
           <ol>
-            <li>Set <readyState/> attribute to <open/>.</li>
+            <li>Set the <readyState/> attribute to <open/>.</li>
             <li>Fire a simple event named <coderef>sourceopen</coderef>.</li>
             <li>Allow the <resource-fetch-algorithm/> to progress based on data passed in via <append/>.</li>
           </ol>
@@ -462,8 +479,8 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
     <h4 id="mediasource-detach">3.3.2 Detaching from a media element</h4>
     <p>The following steps are run in any case where the media element is going to transition to <videoref name="dom-media-network_empty">NETWORK_EMPTY</videoref> and fire an <videoref name="event-mediacontroller-emptied">emptied</videoref> event. These steps should be run right before the transition.</p>
     <ol>
-      <li>Set <readyState/> attribute to <closed/>.</li>
-      <li>Set <duration/> attribute to NaN.</li>
+      <li>Set the <readyState/> attribute to <closed/>.</li>
+      <li>Set the <duration/> attribute to NaN.</li>
       <li>Remove all the <SourceBuffer/> objects from <sourceBuffers/> and fire a <coderef>removesourcebuffer</coderef> event for each one.</li>
       <li>Fire a simple event named <coderef>sourceclose</coderef>.</li>
     </ol>
@@ -490,7 +507,7 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
 	<dt>If one or more of the objects in <activeSourceBuffers/> is missing <media-segments/> for the desired seek point</dt>
 	<dd>
 	  <ol>
-	    <li>Set <ready-state/> attribute to <have-metadata/> and fire the <appropriate-event/> for this transition.</li>
+	    <li>Set the <ready-state/> attribute to <have-metadata/> and fire the <appropriate-event/> for this transition.</li>
 	    <li>The media element waits for the necessary <media-segments/> to be passed to <append/>. The web application can use <buffered/> to determine what the media element needs to resume playback.</li>
 	  </ol>
 	</dd>
@@ -509,14 +526,14 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
       <dt>If <buffered/> for all objects in <activeSourceBuffers/> do not contain <timeranges/> for the current playback position:</dt>
       <dd>
 	<ol>
-	  <li>Set <ready-state/> attribute to <have-metadata/> and fire the <appropriate-event/> for this transition.</li>
+	  <li>Set the <ready-state/> attribute to <have-metadata/> and fire the <appropriate-event/> for this transition.</li>
 	  <li>Abort these steps.</li>
 	</ol>
       </dd>
       <dt>If <buffered/> for all objects in <activeSourceBuffers/> contain <timeranges/> that include the current playback position and enough data to ensure uninterrupted playback:</dt>
       <dd>
 	<ol>
-	  <li>Set <ready-state/> attribute to <have-enough-data/> and fire the <appropriate-event/> for this transition.</li>
+	  <li>Set the <ready-state/> attribute to <have-enough-data/> and fire the <appropriate-event/> for this transition.</li>
 	  <li>Playback may resume at this point if it was previously suspended by a transition to <have-current-data/>.</li>
 	  <li>Abort these steps.</li>
 	</ol>
@@ -524,7 +541,7 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
       <dt>If <buffered/> for at least one object in <activeSourceBuffers/> contains a <timerange/> that includes the current playback position but not enough data to ensure uninterrupted playback:</dt>
       <dd>
 	<ol>
-	  <li>Set <ready-state/> attribute to <have-future-data/> and fire the <appropriate-event/> for this transition.</li>
+	  <li>Set the <ready-state/> attribute to <have-future-data/> and fire the <appropriate-event/> for this transition.</li>
 	  <li>Playback may resume at this point if it was previously suspended by a transition to <have-current-data/>.</li>
 	  <li>Abort these steps.</li>
 	</ol>
@@ -532,7 +549,7 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
       <dt>If <buffered/> for at least one object in <activeSourceBuffers/> contains a <timerange/> that ends at the current playback position and does not have a range covering the time immediately after the current position:</dt>
       <dd>
 	<ol>
-	  <li>Set <ready-state/> attribute to <have-current-data/> and fire the <appropriate-event/> for this transition.</li>
+	  <li>Set the <ready-state/> attribute to <have-current-data/> and fire the <appropriate-event/> for this transition.</li>
 	  <li>Playback is suspended at this point since the media element doesn't have enough data to advance the timeline.</li>
 	  <li>Abort these steps.</li>
 	</ol>
@@ -562,6 +579,7 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
     <h4 id="duration-change-algorithm">3.3.6 Duration change.</h4>
     <p>Follow these steps when <duration/> needs to change to a <new-duration/>.</p>
     <ol>
+      <li>If the current value of <duration/> is equal to <new-duration/>, then abort these steps.</li>
       <li>Update <duration/> to <new-duration/>.</li>
       <li>Remove all media data with timestamps that are greater than <new-duration/> from all <SourceBuffer/> objects in <sourceBuffers/>.</li>
       <li>Update the <hme-duration/> to <new-duration/> and run the <hme-duration-change-algorithm/>.</li>
@@ -633,10 +651,10 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
 	    <li>Handle state transitions:</li>
 	    <dl class="switch">
 	      <dt>If the <ready-state/> attribute is <have-nothing/>:</dt>
-	      <dd>Set <ready-state/> attribute to <have-metadata/> and fire the <appropriate-event/> for this transition.</dd>
+	      <dd>Set the <ready-state/> attribute to <have-metadata/> and fire the <appropriate-event/> for this transition.</dd>
 	      <dt>If the <ready-state/> attribute is greater than <have-current-data/> and the <init-segment/> contains the first video or first audio track in the presentation:</dt>
 	      <dd>
-		Set <ready-state/> attribute to <have-metadata/> and fire the <appropriate-event/> for this transition.
+		Set the <ready-state/> attribute to <have-metadata/> and fire the <appropriate-event/> for this transition.
 	      </dd>
 	      <dt>Otherwise:</dt>
 	      <dd>Continue</dd>
@@ -677,11 +695,11 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
 	  </ol>
 	</dd>
 	<dt>If the <ready-state/> attribute is <have-metadata/> and <var title="true">data</var> causes all objects in <activeSourceBuffers/> to have media data for the current playback position.</dt>
-	<dd>Set <ready-state/> attribute to <have-current-data/> and fire the <appropriate-event/> for this transition.</dd>
+	<dd>Set the <ready-state/> attribute to <have-current-data/> and fire the <appropriate-event/> for this transition.</dd>
 	<dt>If the <ready-state/> attribute is <have-current-data/> and <var title="true">data</var> causes all objects in <activeSourceBuffers/> to have media data beyond the current playback position.</dt>
-	<dd>Set <ready-state/> attribute to <have-future-data/> and fire the <appropriate-event/> for this transition.</dd>
+	<dd>Set the <ready-state/> attribute to <have-future-data/> and fire the <appropriate-event/> for this transition.</dd>
 	<dt>If the <ready-state/> attribute is <have-future-data/> and <var title="true">data</var> causes all objects in <activeSourceBuffers/> to have enough data to start playback.</dt>
-	<dd>Set <ready-state/> attribute to <have-enough-data/> and fire the <appropriate-event/> for this transition.</dd>
+	<dd>Set the <ready-state/> attribute to <have-enough-data/> and fire the <appropriate-event/> for this transition.</dd>
 	<dt>If the <media-segment/> contains data beyond the current <duration/></dt>
 	<dd>Run the <duration-change-algorithm/> with <new-duration/> set to the maximum of the current duration and the highest end timestamp reported by <videoref name="dom-media-buffered">HTMLMediaElement.buffered</videoref>.</dd>
       </dl>
@@ -703,7 +721,7 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
       <li>The media element resets the segment parser so that it can accept a new <init-segment/> or <media-segment/>.</li>
     </ol>
 
-        <h2 id="sourcebufferlist">5. SourceBufferList Object</h2>
+    <h2 id="sourcebufferlist">5. SourceBufferList Object</h2>
     <p>SourceBufferList is a simple container object for <SourceBuffer/> objects. It provides read-only array access and fires events when the list is modified.</p>
 
     <pre class="idl">
@@ -743,7 +761,26 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
       </tbody>
     </table>
 
-    <h2 id="byte-stream-formats">6. Byte Stream Formats</h2>
+    <h2 id="url">6. URL Object</h2>
+    <p></p>
+
+    <pre class="idl">
+partial interface <dfn id="dom-url">URL</dfn> {
+  static DOMString <precoderef>createObjectURL</precoderef>(<precoderef>MediaSource</precoderef> mediaSource);
+};
+    </pre>
+    <h3 id="url-methods">6.1. Methods</h3>
+    <p>The <methoddfn name="createobjecturl">createObjectURL(<var title="true">mediaSource</var>)</methoddfn> method must run the following steps.</p>
+    <ol>
+      <li>If <var title="true">mediaSource</var> is NULL the return null.</li>
+      <li>Return a unique <MediaSource-object-URL/> that can be used to dereference the <var title="true">mediaSource</var> argument, and run the rest of the algorithm asynchronously.</li>
+      <li><provide-a-stable-state/></li>
+      <li>Revoke the <MediaSource-object-URL/> by calling <file-revokeObjectURL/> on it.</li>
+    </ol>
+    <p class="note">Note: This algorithm is intended to mirror the behavior of the <FileAPI/> <file-createObjectURL/> method with autoRevoke set to true.</p>
+
+
+    <h2 id="byte-stream-formats">7. Byte Stream Formats</h2>
     <p>The bytes provided through <append/> for a <SourceBuffer/> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM and the ISO Base Media File Format are provided below. If these formats are supported then the byte stream formats described below must be supported.</p>
     <p>This section provides general requirements for all byte stream formats:</p>
     <ul>
@@ -769,7 +806,7 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
 
     <p>Initialization segments are an optimization. They allow a byte stream format to avoid duplication of information in Media Segments that is the same for many Media Segments. Byte stream format specifications need not specify Initialization Segment formats, however. They may instead require that such information is duplicated in every Media Segment.</p>
 
-    <h3 id="webm">6.1 WebM Byte Streams</h3>
+    <h3 id="webm">7.1 WebM Byte Streams</h3>
     <div class="nonnormative">
       <p>This section defines segment formats for implementations that choose to support WebM.</p>
       <h4 id="webm-init-segments">6.1.1. Initialization Segments</h4>
@@ -782,7 +819,7 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
 	<li>Any elements other than an <webm-ebml-header/> or a <webm-cluster/> that occur before, in between, or after the <webm-info/> and <webm-tracks/> elements are ignored.</li>
       </ol>
 
-      <h4 id="webm-media-segments">6.1.2. Media Segments</h4>
+      <h4 id="webm-media-segments">7.1.2. Media Segments</h4>
       <p>A WebM <media-segment/> is a single <webm-cluster/> element.</p>
       <p>The following rules apply to WebM media segments:</p>
       <ol>
@@ -794,19 +831,19 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
 	<li><webm-cues/> or <webm-chapters/> elements may follow a <webm-cluster/> element. These elements should be accepted and ignored by the user agent.</li>
       </ol>
 
-      <h4 id="webm-random-access-points">6.1.3. Random Access Points</h4>
+      <h4 id="webm-random-access-points">7.1.3. Random Access Points</h4>
       <p>A SimpleBlock element with its Keyframe flag set signals the location of a <random-access-point/> for that track. Media segments containing multiple tracks are only considered a random access point if the first SimpleBlock for each track has its Keyframe flag set. The order of the multiplexed blocks should conform to the <webm-muxer-guidelines/>.</p>
     </div>
 
-    <h3 id="iso">6.2 ISO Base Media File Format Byte Streams</h3>
+    <h3 id="iso">7.2 ISO Base Media File Format Byte Streams</h3>
     <div class="nonnormative">
       <p>This section defines segment formats for implementations that choose to support the ISO Base Media File Format
 	<iso-14496-12/> (ISO BMFF).</p> 
-      <h4 id="iso-init-segments">6.2.1. Initialization Segments</h4>
+      <h4 id="iso-init-segments">7.2.1. Initialization Segments</h4>
       <p>An ISO BMFF <init-segment/> must contain a single Movie Header Box (<iso-box>moov</iso-box>). The tracks in the Movie Header Box must not contain any samples (i.e. the <iso-var>entry_count</iso-var> in the <iso-box>stts</iso-box>, <iso-box>stsc</iso-box> and <iso-box>stco</iso-box> boxes must be set to zero). A Movie Extends (<iso-box>mvex</iso-box>) box must be contained in the
 	Movie Header Box to indicate that Movie Fragments are to be expected.</p>
       <p>The <init-segment/> may contain Edit Boxes (<iso-box>edts</iso-box>) which provide a mapping of composition times for each track to the global presentation time.</p>
-      <h4 id="iso-media-segments">6.2.2. Media Segments</h4>
+      <h4 id="iso-media-segments">7.2.2. Media Segments</h4>
       <p>An ISO BMFF <media-segment/> must contain a single Movie Fragment Box (<iso-box>moof</iso-box>) followed by one or more Media Data Boxes (<iso-box>mdat</iso-box>).</p>
       <p>The following rules apply to ISO BMFF media segments:</p>
       <ol>
@@ -818,11 +855,11 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
 	<li>The Media Data Boxes must contain all the samples referenced by the Track Run Boxes (<iso-box>trun</iso-box>) of the Movie Fragment Box.</li>
       </ol>
 
-      <h4 id="iso-random-access-points">6.2.3. Random Access Points</h4>
+      <h4 id="iso-random-access-points">7.2.3. Random Access Points</h4>
       <p>A <random-access-point/> as defined in this specification corresponds to a Stream Access Point of type 1 or 2 as defined in Annex I of <iso-14496-12/>.</p>
     </div>
 
-    <h2 id="examples">7. Examples</h2>
+    <h2 id="examples">8. Examples</h2>
     <p>Example use of the Media Source Extensions</p>
     <div class="block">
       <div class="blockContent">
@@ -912,8 +949,20 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
         </tr>
       </thead>
       <tbody>
+        <tr>
+	  <td>24 August 2012</td>
+          <td>
+	    <ul>
+	      <li>Added early abort on to duration change algorithm.</li>
+	      <li>Added createObjectURL() IDL &amp; algorithm.</li>
+              <li>Added Track ID &amp; Track description definitions.</li>
+              <li>Rewrote start overlap for audio frames text.</li>
+              <li>Removed rendering silence requirement from section 2.5.</li>
+	    </ul>
+	  </td>
+        </tr>
 	<tr>
-	  <td>22 August 2012</td>
+	  <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/340786fcae83/media-source/media-source.html">22 August 2012</a></td>
           <td>
 	    <ul>
 	      <li>Clarified WebM byte stream requirements.</li>

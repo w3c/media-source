@@ -38,6 +38,19 @@
     </xsl:call-template>
   </xsl:template>
 
+
+  <xsl:template match="//track-id">
+    <a href="#track-id">Track ID</a>
+  </xsl:template>
+
+  <xsl:template match="//track-ids">
+    <a href="#track-id">Track IDs</a>
+  </xsl:template>
+ 
+ <xsl:template match="//track-description">
+    <a href="#track-id">track description</a>
+  </xsl:template>
+
   <!-- MediaSource tags -->
   <xsl:template match="//sourceBuffers">
     <xsl:call-template name="coderef_helper">
@@ -182,6 +195,66 @@
     <xsl:call-template name="coderef_helper">
       <xsl:with-param name="fragment">&quot;ended&quot;</xsl:with-param>
       <xsl:with-param name="link_text">&quot;ended&quot;</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <!-- URL tags -->
+  <xsl:template match="//createObjectURL">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">createobjecturl</xsl:with-param>
+      <xsl:with-param name="link_text">createObjectURL()</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//MediaSource-object-URL">
+    <a href="#mediasource-object-url">MediaSource object URL</a>
+  </xsl:template>
+
+
+  <xsl:template name="fileapi_helper">
+    <xsl:param name="fragment" />
+    <xsl:param name="link_text" />
+    <a><xsl:attribute name="href">http://www.w3.org/TR/FileAPI/#<xsl:value-of select="$fragment"/></xsl:attribute><xsl:value-of select="$link_text"/></a>
+  </xsl:template>
+  <xsl:template match="//FileAPI">
+    <xsl:call-template name="fileapi_helper">
+      <xsl:with-param name="fragment"></xsl:with-param>
+      <xsl:with-param name="link_text">File API</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//blob-uri">
+    <xsl:call-template name="fileapi_helper">
+      <xsl:with-param name="fragment">url</xsl:with-param>
+      <xsl:with-param name="link_text">Blob URI</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//File">
+    <xsl:call-template name="fileapi_helper">
+      <xsl:with-param name="fragment">dfn-file</xsl:with-param>
+      <xsl:with-param name="link_text">File</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//Blob">
+    <xsl:call-template name="fileapi_helper">
+      <xsl:with-param name="fragment">dfn-blob</xsl:with-param>
+      <xsl:with-param name="link_text">Blob</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//file-createObjectURL">
+    <xsl:call-template name="fileapi_helper">
+      <xsl:with-param name="fragment">dfn-createObjectURL</xsl:with-param>
+      <xsl:with-param name="link_text">createObjectURL()</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//file-revokeObjectURL">
+    <xsl:call-template name="fileapi_helper">
+      <xsl:with-param name="fragment">dfn-revokeObjectURL</xsl:with-param>
+      <xsl:with-param name="link_text">revokeObjectURL()</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
@@ -524,35 +597,50 @@
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template name="webappsapis_helper">
+  <xsl:template name="webappapis_helper">
     <xsl:param name="fragment" />
     <xsl:param name="link_text" />
     <a><xsl:attribute name="href">http://dev.w3.org/html5/spec/webappapis.html#<xsl:value-of select="$fragment"/></xsl:attribute><xsl:value-of select="$link_text"/></a>
   </xsl:template>
 
   <xsl:template match="//queue-a-task">
-    <xsl:call-template name="webappsapis_helper">
+    <xsl:call-template name="webappapis_helper">
       <xsl:with-param name="fragment">queue-a-task</xsl:with-param>
       <xsl:with-param name="link_text">queue a task</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="//fire-a-simple-event">
-    <xsl:call-template name="webappsapis_helper">
+    <xsl:call-template name="webappapis_helper">
       <xsl:with-param name="fragment">fire-a-simple-event</xsl:with-param>
       <xsl:with-param name="link_text">fire a simple event</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="//queue-a-task-to-fire-an-event-named">
-    <xsl:call-template name="webappsapis_helper">
+    <xsl:call-template name="webappapis_helper">
       <xsl:with-param name="fragment">queue-a-task</xsl:with-param>
       <xsl:with-param name="link_text">queue a task</xsl:with-param>
-    </xsl:call-template> to <xsl:call-template name="webappsapis_helper">
+    </xsl:call-template> to <xsl:call-template name="webappapis_helper">
       <xsl:with-param name="fragment">fire-a-simple-event</xsl:with-param>
       <xsl:with-param name="link_text">fire a simple event</xsl:with-param>
     </xsl:call-template> named
   </xsl:template>
+
+  <xsl:template match="//provide-a-stable-state">
+    <xsl:call-template name="webappapis_helper">
+      <xsl:with-param name="fragment">provide-a-stable-state</xsl:with-param>
+      <xsl:with-param name="link_text">provide a stable state</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//provide-a-stable-state">
+    <xsl:call-template name="webappapis_helper">
+      <xsl:with-param name="fragment">provide-a-stable-state</xsl:with-param>
+      <xsl:with-param name="link_text">provide a stable state</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
 
   <xsl:template name="webmref_helper">
     <xsl:param name="fragment" />
