@@ -41,7 +41,7 @@
     <div class="head">
       <p><a href="http://www.w3.org/"><img src="http://www.w3.org/Icons/w3c_home" alt="W3C" width="72" height="48" /></a></p>
       <h1>Media Source Extensions</h1>
-      <h2>W3C Editor's Draft 24 August 2012</h2>
+      <h2>W3C Editor's Draft 13 September 2012</h2>
       <dl>
 	<dt>Latest published version:</dt>
 	<dd>Not yet published</dd>
@@ -398,16 +398,19 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
     <h5>End of stream error values:</h5>
     <dl>
       <dt><codedfn>&quot;network&quot;</codedfn></dt>
-      <dd>The stream ended prematurely because of a network error. If the JavaScript code fetching media data encounters a network error it should use this status code to terminate playback. This will cause the media element's error handling code to run and the <code>error</code> attribute to be set to <videoref name="dom-mediaerror-media_err_network">MediaError.MEDIA_ERR_NETWORK</videoref></dd>
+      <dd>Terminates playback and signals that a network error has occured.</dd> 
+      <p class="note">Note: If the JavaScript fetching media data encounters a network error it should use this status code to terminate playback.</p>
 
       <dt><codedfn>&quot;decode&quot;</codedfn></dt>
-      <dd>The stream ended prematurely because there was an error while decoding the media data. If the JavaScript code fetching media data has problems parsing the data it should use this status code to terminate playback. This will cause the media element's error handling code to run and the <code>error</code> attribute to be set to <media-err-decode/>.</dd>
+      <dd>Terminates playback and signals that a decoding error has occured.</dd>
+      <p class="note">Note: If the JavaScript code fetching media data has problems parsing the data it should use this status code to terminate playback.</p>
     </dl>
 
     <p>The <methoddfn name="endOfStream">endOfStream(<var title="true">error</var>)</methoddfn> method must run the following steps:</p>
     <ol>
       <li>If the <readyState/> attribute is not in the <open/> state then throw an <invalid-state-err/> exception and abort these steps.</li>
       <li>Change the <readyState/> attribute value to <ended/>.</li>
+      <li><queue-a-task-to-fire-an-event-named/> <coderef>sourceended</coderef> at the <MediaSource/>.</li>
       <dl class="switch">
           <dt>If <var title="true">error</var> is not set, null, or an empty string</dt>
           <dd>
@@ -419,9 +422,23 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
 	    </ol>
 	  </dd>
           <dt>If <var title="true">error</var> is set to <coderef>&quot;network&quot;</coderef></dt>
-          <dd>Run the "If the connection is interrupted, causing the user agent to give up trying to fetch the resource" section of the <resource-fetch-algorithm/>.</dd>
+          <dd>
+	    <dl class="switch">
+	      <dt>If <ready-state/> attribute equals <have-nothing/></dt>
+	      <dd>Run the &quot;<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>&quot; steps of the <resource-fetch-algorithm/>.</dd>
+	      <dt>If <ready-state/> attribute greater than <have-nothing/></dt>
+	      <dd>Run the &quot;<i>If the connection is interrupted after some media data has been received, causing the user agent to give up trying to fetch the resource</i>&quot; steps of the <resource-fetch-algorithm/>.</dd>
+	    </dl>
+	  </dd>
           <dt>If <var title="true">error</var> is set to <coderef>&quot;decode&quot;</coderef></dt>
-          <dd>Run the "If the media data is corrupted" section of the <resource-fetch-algorithm/>.</dd>
+          <dd>
+	    <dl class="switch">
+	      <dt>If <ready-state/> attribute equals <have-nothing/></dt>
+	      <dd>Run the &quot;<i>If the media data can be fetched but is found by inspection to be in an unsupported format, or can otherwise not be rendered at all</i>&quot; steps of the <resource-fetch-algorithm/>.</dd>
+	      <dt>If <ready-state/> attribute greater than <have-nothing/></dt>
+	      <dd>Run the <media-data-is-corrupted/> steps of the <resource-fetch-algorithm/>.</dd>
+	    </dl>
+	  </dd>
           <dt>Otherwise</dt>
           <dd>Throw an <invalid-access-err/> exception.</dd>
         </dl>
@@ -482,7 +499,7 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
       <li>Set the <readyState/> attribute to <closed/>.</li>
       <li>Set the <duration/> attribute to NaN.</li>
       <li>Remove all the <SourceBuffer/> objects from <sourceBuffers/> and fire a <coderef>removesourcebuffer</coderef> event for each one.</li>
-      <li>Fire a simple event named <coderef>sourceclose</coderef>.</li>
+      <li><queue-a-task-to-fire-an-event-named/> <coderef>sourceclose</coderef> at the <MediaSource/>.</li>
     </ol>
 
     <h4 id="mediasource-seeking">3.3.3 Seeking</h4>
@@ -556,7 +573,7 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
       </dd>
     </dl>
 
-    <h4 id="active-source-buffer-changes">3.3.5 Changes to selected/enabled track state.</h4>
+    <h4 id="active-source-buffer-changes">3.3.5 Changes to selected/enabled track state</h4>
     <p>During playback <activeSourceBuffers/> needs to be updated if the <videoref name="dom-videotrack-selected">selected video track</videoref>, the <videoref name="dom-audiotrack-enabled">enabled audio tracks</videoref>, or a text track <videoref name="dom-texttrack-mode">mode</videoref> changes. When one or more of these changes occur the following steps need to be followed.</p>
     <dl class="switch">
       <dt>If the selected video track changes</dt>
@@ -576,7 +593,7 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
       <dd>Add the <SourceBuffer/> associated with the text track to <activeSourceBuffers/></dd>
     </dl>
 
-    <h4 id="duration-change-algorithm">3.3.6 Duration change.</h4>
+    <h4 id="duration-change-algorithm">3.3.6 Duration change</h4>
     <p>Follow these steps when <duration/> needs to change to a <new-duration/>.</p>
     <ol>
       <li>If the current value of <duration/> is equal to <new-duration/>, then abort these steps.</li>
@@ -621,14 +638,14 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
       <li>If this object has been removed from the <sourceBuffers/> attribute of the <MediaSource/> object that created it then throw an <invalid-state-err/> exception and abort these steps.</li>
       <li>If the <readyState/> attribute of the <MediaSource/> object that created this object is not in the <open/> state then throw an <invalid-state-err/> exception and abort these steps.</li>
       <li>If <var title="true">data</var>.byteLength is 0 abort these steps.</li>
-      <li>If <var title="true">data</var> contains anything that violates the <a href="#byte-stream-formats">byte stream format specifications</a>, then run the media element's error handling code to signal a <media-err-decode/> error, and abort these steps.</li>
+      <li>If <var title="true">data</var> contains anything that violates the <a href="#byte-stream-formats">byte stream format specifications</a>, then call <eos-decode/>, and abort these steps.</li>
       <li>Add <var title="true">data</var> to the source buffer:
 	<dl class="switch">
 	  <dt>If <var title="true">data</var> is part of a <media-segment/> and <timestampOffset/> is not 0:</dt>
 	  <dd>
 	    <ol>
 	      <li>Find all timestamps inside <var title="true">data</var> and add <timestampOffset/> to them.</li>
-	      <li>If any of the modified timestamps are earlier than the <presentation-start-time/>, run the media element's error handling code to signal a <media-err-decode/> error, and abort these steps.</li>
+	      <li>If any of the modified timestamps are earlier than the <presentation-start-time/>, then call <eos-decode/>, and abort these steps.</li>
 	      <li>Copy the contents of <var title="true">data</var>, with the modified timestamps, into the source buffer.</li>
 	    </ol>
 	  </dd>
@@ -950,7 +967,11 @@ partial interface <dfn id="dom-url">URL</dfn> {
       </thead>
       <tbody>
         <tr>
-	  <td>24 August 2012</td>
+	  <td>13 September 2012</td>
+          <td>Updated endOfStream() behavior to change based on the value of HTMLMediaElement.readyState.</td>
+        </tr>
+        <tr>
+	  <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/ca093bbbbefb/media-source/media-source.html">24 August 2012</a></td>
           <td>
 	    <ul>
 	      <li>Added early abort on to duration change algorithm.</li>

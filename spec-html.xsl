@@ -106,7 +106,14 @@
   <xsl:template match="//new-duration">
     <var title="true">new duration</var>
   </xsl:template>
-  
+
+  <xsl:template match="//eos-decode">
+    <xsl:call-template name="coderef_helper">
+      <xsl:with-param name="fragment">endofstream</xsl:with-param>
+      <xsl:with-param name="link_text">endOfStream(&quot;decode&quot;)</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
   <!-- SourceBufferList tags -->
   <xsl:template match="//length">
     <xsl:call-template name="coderef_helper">
@@ -320,6 +327,13 @@
     <xsl:call-template name="videoref_helper">
       <xsl:with-param name="fragment">normalized-timeranges-object</xsl:with-param>
       <xsl:with-param name="link_text">normalized TimeRanges object</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//media-data-is-corrupted">
+    <xsl:call-template name="videoref_helper">
+      <xsl:with-param name="fragment">fatal-decode-error</xsl:with-param>
+      <xsl:with-param name="link_text">media data is corrupted</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 

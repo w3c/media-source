@@ -42,7 +42,7 @@
     <div class="head">
       <p><a href="http://www.w3.org/"><img src="http://www.w3.org/Icons/w3c_home" alt="W3C" width="72" height="48"></a></p>
       <h1>Media Source Extensions</h1>
-      <h2>W3C Editor's Draft 24 August 2012</h2>
+      <h2>W3C Editor's Draft 13 September 2012</h2>
       <dl>
 	<dt>Latest published version:</dt>
 	<dd>Not yet published</dd>
@@ -411,17 +411,21 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
     <h5>End of stream error values:</h5>
     <dl>
       <dt><dfn id='dom-"network"'><code>"network"</code></dfn></dt>
-      <dd>The stream ended prematurely because of a network error. If the JavaScript code fetching media data encounters a network error it should use this status code to terminate playback. This will cause the media element's error handling code to run and the <code>error</code> attribute to be set to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-mediaerror-media_err_network">MediaError.MEDIA_ERR_NETWORK</a></code>
-</dd>
+      <dd>Terminates playback and signals that a network error has occured.</dd> 
+      <p class="note">Note: If the JavaScript fetching media data encounters a network error it should use this status code to terminate playback.</p>
 
       <dt><dfn id='dom-"decode"'><code>"decode"</code></dfn></dt>
-      <dd>The stream ended prematurely because there was an error while decoding the media data. If the JavaScript code fetching media data has problems parsing the data it should use this status code to terminate playback. This will cause the media element's error handling code to run and the <code>error</code> attribute to be set to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-mediaerror-media_err_decode">MediaError.MEDIA_ERR_DECODE</a></code>.</dd>
+      <dd>Terminates playback and signals that a decoding error has occured.</dd>
+      <p class="note">Note: If the JavaScript code fetching media data has problems parsing the data it should use this status code to terminate playback.</p>
     </dl>
 
     <p>The <dfn id="dom-endofstream"><code>endOfStream(error)</code></dfn> method must run the following steps:</p>
     <ol>
       <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute is not in the <code><a href="#dom-%22open%22">"open"</a></code> state then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
       <li>Change the <code><a href="#dom-readystate">readyState</a></code> attribute value to <code><a href="#dom-%22ended%22">"ended"</a></code>.</li>
+      <li>
+<a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="#dom-sourceended">sourceended</a></code> at the <code><a href="#dom-mediasource">MediaSource</a></code>.</li>
       <dl class="switch">
           <dt>If <var title="true">error</var> is not set, null, or an empty string</dt>
           <dd>
@@ -434,10 +438,28 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
 	  </dd>
           <dt>If <var title="true">error</var> is set to <code><a href="#dom-%22network%22">"network"</a></code>
 </dt>
-          <dd>Run the "If the connection is interrupted, causing the user agent to give up trying to fetch the resource" section of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
+          <dd>
+	    <dl class="switch">
+	      <dt>If <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute equals <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
+</dt>
+	      <dd>Run the "<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>" steps of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
+	      <dt>If <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute greater than <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
+</dt>
+	      <dd>Run the "<i>If the connection is interrupted after some media data has been received, causing the user agent to give up trying to fetch the resource</i>" steps of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
+	    </dl>
+	  </dd>
           <dt>If <var title="true">error</var> is set to <code><a href="#dom-%22decode%22">"decode"</a></code>
 </dt>
-          <dd>Run the "If the media data is corrupted" section of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
+          <dd>
+	    <dl class="switch">
+	      <dt>If <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute equals <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
+</dt>
+	      <dd>Run the "<i>If the media data can be fetched but is found by inspection to be in an unsupported format, or can otherwise not be rendered at all</i>" steps of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
+	      <dt>If <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute greater than <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
+</dt>
+	      <dd>Run the <a href="http://dev.w3.org/html5/spec/media-elements.html#fatal-decode-error">media data is corrupted</a> steps of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
+	    </dl>
+	  </dd>
           <dt>Otherwise</dt>
           <dd>Throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception.</dd>
         </dl>
@@ -499,7 +521,9 @@ CORS-enabled fetch" step in the <a href="http://dev.w3.org/html5/spec/media-elem
       <li>Set the <code><a href="#dom-readystate">readyState</a></code> attribute to <code><a href="#dom-closed">"closed"</a></code>.</li>
       <li>Set the <code><a href="#dom-duration">duration</a></code> attribute to NaN.</li>
       <li>Remove all the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects from <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> and fire a <code><a href="#dom-removesourcebuffer">removesourcebuffer</a></code> event for each one.</li>
-      <li>Fire a simple event named <code><a href="#dom-sourceclose">sourceclose</a></code>.</li>
+      <li>
+<a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="#dom-sourceclose">sourceclose</a></code> at the <code><a href="#dom-mediasource">MediaSource</a></code>.</li>
     </ol>
 
     <h4 id="mediasource-seeking">3.3.3 Seeking</h4>
@@ -576,7 +600,7 @@ CORS-enabled fetch" step in the <a href="http://dev.w3.org/html5/spec/media-elem
       </dd>
     </dl>
 
-    <h4 id="active-source-buffer-changes">3.3.5 Changes to selected/enabled track state.</h4>
+    <h4 id="active-source-buffer-changes">3.3.5 Changes to selected/enabled track state</h4>
     <p>During playback <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code> needs to be updated if the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-videotrack-selected">selected video track</a></code>, the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-audiotrack-enabled">enabled audio tracks</a></code>, or a text track <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-mode">mode</a></code> changes. When one or more of these changes occur the following steps need to be followed.</p>
     <dl class="switch">
       <dt>If the selected video track changes</dt>
@@ -603,7 +627,7 @@ CORS-enabled fetch" step in the <a href="http://dev.w3.org/html5/spec/media-elem
 </dd>
     </dl>
 
-    <h4 id="duration-change-algorithm">3.3.6 Duration change.</h4>
+    <h4 id="duration-change-algorithm">3.3.6 Duration change</h4>
     <p>Follow these steps when <code><a href="#dom-duration">duration</a></code> needs to change to a <var title="true">new duration</var>.</p>
     <ol>
       <li>If the current value of <code><a href="#dom-duration">duration</a></code> is equal to <var title="true">new duration</var>, then abort these steps.</li>
@@ -648,14 +672,14 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
       <li>If this object has been removed from the <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> attribute of the <code><a href="#dom-mediasource">MediaSource</a></code> object that created it then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
       <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute of the <code><a href="#dom-mediasource">MediaSource</a></code> object that created this object is not in the <code><a href="#dom-%22open%22">"open"</a></code> state then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
       <li>If <var title="true">data</var>.byteLength is 0 abort these steps.</li>
-      <li>If <var title="true">data</var> contains anything that violates the <a href="#byte-stream-formats">byte stream format specifications</a>, then run the media element's error handling code to signal a <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-mediaerror-media_err_decode">MediaError.MEDIA_ERR_DECODE</a></code> error, and abort these steps.</li>
+      <li>If <var title="true">data</var> contains anything that violates the <a href="#byte-stream-formats">byte stream format specifications</a>, then call <code><a href="#dom-endofstream">endOfStream("decode")</a></code>, and abort these steps.</li>
       <li>Add <var title="true">data</var> to the source buffer:
 	<dl class="switch">
 	  <dt>If <var title="true">data</var> is part of a <a href="#media-segment">media segment</a> and <code><a href="#dom-timestampoffset">timestampOffset</a></code> is not 0:</dt>
 	  <dd>
 	    <ol>
 	      <li>Find all timestamps inside <var title="true">data</var> and add <code><a href="#dom-timestampoffset">timestampOffset</a></code> to them.</li>
-	      <li>If any of the modified timestamps are earlier than the <a href="#presentation-start-time">presentation start time</a>, run the media element's error handling code to signal a <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-mediaerror-media_err_decode">MediaError.MEDIA_ERR_DECODE</a></code> error, and abort these steps.</li>
+	      <li>If any of the modified timestamps are earlier than the <a href="#presentation-start-time">presentation start time</a>, then call <code><a href="#dom-endofstream">endOfStream("decode")</a></code>, and abort these steps.</li>
 	      <li>Copy the contents of <var title="true">data</var>, with the modified timestamps, into the source buffer.</li>
 	    </ol>
 	  </dd>
@@ -984,7 +1008,11 @@ partial interface <dfn id="dom-url">URL</dfn> {
       </thead>
       <tbody>
         <tr>
-	  <td>24 August 2012</td>
+	  <td>13 September 2012</td>
+          <td>Added decode error &amp; network error algorithms.</td>
+        </tr>
+        <tr>
+	  <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/ca093bbbbefb/media-source/media-source.html">24 August 2012</a></td>
           <td>
 	    <ul>
 	      <li>Added early abort on to duration change algorithm.</li>
