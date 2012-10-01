@@ -41,7 +41,7 @@
     <div class="head">
       <p><a href="http://www.w3.org/"><img src="http://www.w3.org/Icons/w3c_home" alt="W3C" width="72" height="48" /></a></p>
       <h1>Media Source Extensions</h1>
-      <h2>W3C Editor's Draft 13 September 2012</h2>
+      <h2>W3C Editor's Draft 1 October 2012</h2>
       <dl>
 	<dt>Latest published version:</dt>
 	<dd>Not yet published</dd>
@@ -365,13 +365,12 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
       <li>If the user agent can't handle any more SourceBuffer objects then throw a <quota-exceeded-err/> exception and abort these steps.</li>
       <li>If the <readyState/> attribute is not in the <open/> state then throw an <invalid-state-err/> exception and abort these steps.</li>
       <li>Create a new <SourceBuffer/> object and associated resources.</li>
-      <li>Add the new object to <sourceBuffers/> and <queue-a-task-to-fire-an-event-named/> <coderef>addsourcebuffer</coderef> at <sourceBuffers/>.</li>
+      <li>Add the new object to <sourceBuffers/> and <queue-a-task-to-fire-an-event-named/> <addsourcebuffer/> at <sourceBuffers/>.</li>
       <li>Return the new object.</li>
     </ol>
     <p>The <methoddfn name="removeSourceBuffer">removeSourceBuffer(<var title="true">sourceBuffer</var>)</methoddfn> method must run the following steps:</p>
     <ol>
       <li>If <var title="true">sourceBuffer</var> is null then throw an <invalid-access-err/> exception and abort these steps.</li>
-      <li>If <sourceBuffers/> is empty then throw an <invalid-state-err/> exception and abort these steps.</li>
       <li>If <var title="true">sourceBuffer</var> specifies an object that is not in <sourceBuffers/> then throw a <not-found-err/> exception and abort these steps.</li>
       <li>Remove track information from <audiotracks/>, <videotracks/>, and <texttracks/> for all tracks associated with <var title="true">sourceBuffer</var> and <queue-a-task-to-fire-an-event-named/> <videoref name="handler-tracklist-onchange">change</videoref> at the modified lists.</li>
       <li>If <var title="true">sourceBuffer</var> is in <activeSourceBuffers/>, then remove it from <activeSourceBuffers/> and <queue-a-task-to-fire-an-event-named/> <removesourcebuffer/> at <activeSourceBuffers/>.</li>
@@ -410,7 +409,7 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
     <ol>
       <li>If the <readyState/> attribute is not in the <open/> state then throw an <invalid-state-err/> exception and abort these steps.</li>
       <li>Change the <readyState/> attribute value to <ended/>.</li>
-      <li><queue-a-task-to-fire-an-event-named/> <coderef>sourceended</coderef> at the <MediaSource/>.</li>
+      <li><queue-a-task-to-fire-an-event-named/> <sourceended/> at the <MediaSource/>.</li>
       <dl class="switch">
           <dt>If <var title="true">error</var> is not set, null, or an empty string</dt>
           <dd>
@@ -424,18 +423,18 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
           <dt>If <var title="true">error</var> is set to <coderef>&quot;network&quot;</coderef></dt>
           <dd>
 	    <dl class="switch">
-	      <dt>If <ready-state/> attribute equals <have-nothing/></dt>
-	      <dd>Run the &quot;<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>&quot; steps of the <resource-fetch-algorithm/>.</dd>
-	      <dt>If <ready-state/> attribute greater than <have-nothing/></dt>
+	      <dt>If the <ready-state/> attribute equals <have-nothing/></dt>
+	      <dd>Run the <media-data-cannot-be-fetched/> steps of the <resource-fetch-algorithm/>.</dd>
+	      <dt>If the <ready-state/> attribute is greater than <have-nothing/></dt>
 	      <dd>Run the &quot;<i>If the connection is interrupted after some media data has been received, causing the user agent to give up trying to fetch the resource</i>&quot; steps of the <resource-fetch-algorithm/>.</dd>
 	    </dl>
 	  </dd>
           <dt>If <var title="true">error</var> is set to <coderef>&quot;decode&quot;</coderef></dt>
           <dd>
 	    <dl class="switch">
-	      <dt>If <ready-state/> attribute equals <have-nothing/></dt>
+	      <dt>If the <ready-state/> attribute equals <have-nothing/></dt>
 	      <dd>Run the &quot;<i>If the media data can be fetched but is found by inspection to be in an unsupported format, or can otherwise not be rendered at all</i>&quot; steps of the <resource-fetch-algorithm/>.</dd>
-	      <dt>If <ready-state/> attribute greater than <have-nothing/></dt>
+	      <dt>If the <ready-state/> attribute is greater than <have-nothing/></dt>
 	      <dd>Run the <media-data-is-corrupted/> steps of the <resource-fetch-algorithm/>.</dd>
 	    </dl>
 	  </dd>
@@ -456,17 +455,17 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
       </thead>
       <tbody>
         <tr>
-          <td><codedfn>sourceopen</codedfn></td>
+          <td><eventdfn>sourceopen</eventdfn></td>
           <td><code>Event</code></td>
           <td>When <readyState/> transitions from <closed/> to <open/> or from <ended/> to <open/>.</td>
         </tr>
         <tr>
-          <td><codedfn>sourceended</codedfn></td>
+          <td><eventdfn>sourceended</eventdfn></td>
           <td><code>Event</code></td>
           <td>When <readyState/> transitions from <open/> to <ended/>.</td>
         </tr>
         <tr>
-          <td><codedfn>sourceclose</codedfn></td>
+          <td><eventdfn>sourceclose</eventdfn></td>
           <td><code>Event</code></td>
 	  <td>When <readyState/> transitions from <open/> to <closed/> or <ended/> to <closed/>.</td>
         </tr>
@@ -481,12 +480,12 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
     <ol>
       <dl class="switch">
         <dt>If <readyState/> is NOT set to <closed/></dt>
-        <dd>Abort media element's <resource-fetch-algorithm/> and run the steps to report a <MEDIA_ERR_SRC_NOT_SUPPORTED/> error.</dd>
+        <dd>Run the <media-data-cannot-be-fetched/> steps of the <resource-fetch-algorithm/>.</dd>
         <dt>Otherwise</dt>
         <dd>
           <ol>
             <li>Set the <readyState/> attribute to <open/>.</li>
-            <li>Fire a simple event named <coderef>sourceopen</coderef>.</li>
+            <li>Fire a simple event named <sourceopen/>.</li>
             <li>Allow the <resource-fetch-algorithm/> to progress based on data passed in via <append/>.</li>
           </ol>
         </dd>
@@ -498,8 +497,11 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
     <ol>
       <li>Set the <readyState/> attribute to <closed/>.</li>
       <li>Set the <duration/> attribute to NaN.</li>
-      <li>Remove all the <SourceBuffer/> objects from <sourceBuffers/> and fire a <coderef>removesourcebuffer</coderef> event for each one.</li>
-      <li><queue-a-task-to-fire-an-event-named/> <coderef>sourceclose</coderef> at the <MediaSource/>.</li>
+      <li>Remove all the <SourceBuffer/> objects from <activeSourceBuffers/>.</li>
+      <li><queue-a-task-to-fire-an-event-named/> <removesourcebuffer/> at <activeSourceBuffers/>.</li>
+      <li>Remove all the <SourceBuffer/> objects from <sourceBuffers/>.</li>
+      <li><queue-a-task-to-fire-an-event-named/> <removesourcebuffer/> at <sourceBuffers/>.</li>
+      <li><queue-a-task-to-fire-an-event-named/> <sourceclose/> at the <MediaSource/>.</li>
     </ol>
 
     <h4 id="mediasource-seeking">3.3.3 Seeking</h4>
@@ -511,7 +513,7 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
 	  <dd>
 	    <ol>
 	      <li>Set the <readyState/> attribute to <open/></li>
-	      <li>Fire a simple event named <coderef>sourceopen</coderef> on the <MediaSource/> object.</li>
+	      <li>Fire a simple event named <sourceopen/> on the <MediaSource/> object.</li>
 	    </ol>
 	  </dd>
 	  <dt>Otherwise</dt>
@@ -576,21 +578,51 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
     <h4 id="active-source-buffer-changes">3.3.5 Changes to selected/enabled track state</h4>
     <p>During playback <activeSourceBuffers/> needs to be updated if the <videoref name="dom-videotrack-selected">selected video track</videoref>, the <videoref name="dom-audiotrack-enabled">enabled audio tracks</videoref>, or a text track <videoref name="dom-texttrack-mode">mode</videoref> changes. When one or more of these changes occur the following steps need to be followed.</p>
     <dl class="switch">
-      <dt>If the selected video track changes</dt>
+      <dt>If the selected video track changes:</dt>
       <dd>
 	<ol>
-	  <li>If the <SourceBuffer/> associated with the previously selected video track is not associated with any other enabled tracks then remove it from <activeSourceBuffers/></li>
-	  <li>If the <SourceBuffer/> associated with the newly selected video track is not already in <activeSourceBuffers/> then add it.</li>
+	  <li>If the <SourceBuffer/> associated with the previously selected video track is not associated with any other enabled tracks, run the following steps:
+  	  <ol>
+	    <li>Remove the <SourceBuffer/> from <activeSourceBuffers/>.</li>
+	    <li><queue-a-task-to-fire-an-event-named/> <removesourcebuffer/> at <activeSourceBuffers/></li>
+	  </ol>
+	  </li>
+	  <li>If the <SourceBuffer/> associated with the newly selected video track is not already in <activeSourceBuffers/>, run the following steps:
+	  <ol>
+	    <li>Add the <SourceBuffer/> to <activeSourceBuffers/>.</li>
+	    <li><queue-a-task-to-fire-an-event-named/> <addsourcebuffer/> at <activeSourceBuffers/></li>
+	  </ol>
+	  </li>
 	</ol>
       </dd>
       <dt>If an audio track becomes disabled and the <SourceBuffer/> associated with this track is not associated with any other enabled or selected track</dt>
-      <dd>Remove the <SourceBuffer/> associated with the audio track from <activeSourceBuffers/></dd>
+      <dd>
+	<ol>
+	  <li>Remove the <SourceBuffer/> associated with the audio track from <activeSourceBuffers/></li>
+	  <li><queue-a-task-to-fire-an-event-named/> <removesourcebuffer/> at <activeSourceBuffers/></li>
+	</ol>
+      </dd>
       <dt>If an audio track becomes enabled and the <SourceBuffer/> associated with this track is not already in <activeSourceBuffers/></dt>
-      <dd>Add the <SourceBuffer/> associated with the audio track to <activeSourceBuffers/></dd>
+      <dd>
+	<ol>
+	  <li>Add the <SourceBuffer/> associated with the audio track to <activeSourceBuffers/></li>
+	  <li><queue-a-task-to-fire-an-event-named/> <addsourcebuffer/> at <activeSourceBuffers/></li>
+	</ol>
+      </dd>
       <dt>If a text track <videoref name="dom-texttrack-mode">mode</videoref> becomes <videoref name="dom-texttrack-disabled">&quot;disabled&quot;</videoref> and the <SourceBuffer/> associated with this track is not associated with any other enabled or selected track</dt>
-      <dd>Remove the <SourceBuffer/> associated with the text track from <activeSourceBuffers/></dd>
+      <dd>
+	<ol>
+	  <li>Remove the <SourceBuffer/> associated with the text track from <activeSourceBuffers/></li>
+	  <li><queue-a-task-to-fire-an-event-named/> <removesourcebuffer/> at <activeSourceBuffers/></li>
+	</ol>
+      </dd>
       <dt>If a text track <videoref name="dom-texttrack-mode">mode</videoref> becomes <videoref name="dom-texttrack-showing">&quot;showing&quot;</videoref> or <videoref name="dom-texttrack-hidden">&quot;hidden&quot;</videoref> and the <SourceBuffer/> associated with this track is not already in <activeSourceBuffers/></dt>
-      <dd>Add the <SourceBuffer/> associated with the text track to <activeSourceBuffers/></dd>
+      <dd>
+	<ol>
+	  <li>Add the <SourceBuffer/> associated with the text track to <activeSourceBuffers/></li>
+	  <li><queue-a-task-to-fire-an-event-named/> <addsourcebuffer/> at <activeSourceBuffers/></li>
+	</ol>
+      </dd>
     </dl>
 
     <h4 id="duration-change-algorithm">3.3.6 Duration change</h4>
@@ -598,7 +630,9 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
     <ol>
       <li>If the current value of <duration/> is equal to <new-duration/>, then abort these steps.</li>
       <li>Update <duration/> to <new-duration/>.</li>
-      <li>Remove all media data with timestamps that are greater than <new-duration/> from all <SourceBuffer/> objects in <sourceBuffers/>.</li>
+      <li>Remove all media data with timestamps that are greater than <new-duration/> from all <SourceBuffer/> objects in <sourceBuffers/>.
+      <p class="note">Note: This preserves audio frames that start before and end after the <duration/>. The user agent must end playback at <duration/> even if the audio frame extends beyond this time.</p>
+      </li>
       <li>Update the <hme-duration/> to <new-duration/> and run the <hme-duration-change-algorithm/>.</li>
     </ol>
 
@@ -634,9 +668,16 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
 
     <p>The <methoddfn name="append">append(<var title="true">data</var>)</methoddfn> method must run the following steps:</p>
     <ol>
+      <li>Let <var title="true">media source</var> be the <MediaSource/> object that created this object.</li>
       <li>If <var title="true">data</var> is null then throw an <invalid-access-err/> exception and abort these steps.</li>
-      <li>If this object has been removed from the <sourceBuffers/> attribute of the <MediaSource/> object that created it then throw an <invalid-state-err/> exception and abort these steps.</li>
-      <li>If the <readyState/> attribute of the <MediaSource/> object that created this object is not in the <open/> state then throw an <invalid-state-err/> exception and abort these steps.</li>
+      <li>If this object has been removed from the <sourceBuffers/> attribute of <var title="true">media source</var> then throw an <invalid-state-err/> exception and abort these steps.</li>
+      <li>If the <readyState/> attribute of <var title="true">media source</var> is in the <closed/> state then throw an <invalid-state-err/> exception and abort these steps.</li>
+      <li>If the <readyState/> attribute of <var title="true">media source</var> is in the <ended/> state then run the following steps:
+      <ol>
+	<li>Set the <readyState/> attribute of <var title="true">media source</var> to <open/></li>
+	<li><queue-a-task-to-fire-an-event-named/> <sourceopen/> at <var title="true">media source</var> .</li>
+      </ol>
+      </li>
       <li>If <var title="true">data</var>.byteLength is 0 abort these steps.</li>
       <li>If <var title="true">data</var> contains anything that violates the <a href="#byte-stream-formats">byte stream format specifications</a>, then call <eos-decode/>, and abort these steps.</li>
       <li>Add <var title="true">data</var> to the source buffer:
@@ -766,12 +807,12 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
       </thead>
       <tbody>
         <tr>
-          <td><codedfn>addsourcebuffer</codedfn></td>
+          <td><eventdfn>addsourcebuffer</eventdfn></td>
           <td><code>Event</code></td>
           <td>When a <SourceBuffer/> is added to the list.</td>
         </tr>
         <tr>
-          <td><codedfn>removesourcebuffer</codedfn></td>
+          <td><eventdfn>removesourcebuffer</eventdfn></td>
           <td><code>Event</code></td>
           <td>When a <SourceBuffer/> is removed from the list.</td>
         </tr>
@@ -966,8 +1007,12 @@ partial interface <dfn id="dom-url">URL</dfn> {
         </tr>
       </thead>
       <tbody>
+	<tr>
+	  <td>1 October 2012</td>
+          <td>Fixed various addsourcebuffer &amp; removesourcebuffer bugs and allow append() in ended state.</td>
+        </tr>
         <tr>
-	  <td>13 September 2012</td>
+	  <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/349559debcc3/media-source/media-source.html">13 September 2012</a></td>
           <td>Updated endOfStream() behavior to change based on the value of HTMLMediaElement.readyState.</td>
         </tr>
         <tr>

@@ -31,6 +31,12 @@
     <code><a><xsl:attribute name="href">#dom-<xsl:value-of select="$fragment"/></xsl:attribute><xsl:value-of select="$link_text"/></a></code>
   </xsl:template>
 
+  <xsl:template name="eventref_helper">
+    <xsl:param name="fragment" />
+    <xsl:param name="link_text" />
+    <code><a><xsl:attribute name="href">#dom-evt-<xsl:value-of select="$fragment"/></xsl:attribute><xsl:value-of select="$link_text"/></a></code>
+  </xsl:template>
+
   <xsl:template match="//coderef">
     <xsl:call-template name="coderef_helper">
       <xsl:with-param name="fragment"><xsl:value-of select="translate(.,$upper,$lower)"/></xsl:with-param>
@@ -114,6 +120,27 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="//sourceopen">
+    <xsl:call-template name="eventref_helper">
+      <xsl:with-param name="fragment">sourceopen</xsl:with-param>
+      <xsl:with-param name="link_text">sourceopen</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//sourceended">
+    <xsl:call-template name="eventref_helper">
+      <xsl:with-param name="fragment">sourceended</xsl:with-param>
+      <xsl:with-param name="link_text">sourceended</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//sourceclose">
+    <xsl:call-template name="eventref_helper">
+      <xsl:with-param name="fragment">sourceclose</xsl:with-param>
+      <xsl:with-param name="link_text">sourceclose</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
   <!-- SourceBufferList tags -->
   <xsl:template match="//length">
     <xsl:call-template name="coderef_helper">
@@ -123,14 +150,14 @@
   </xsl:template>
 
   <xsl:template match="//addsourcebuffer">
-    <xsl:call-template name="coderef_helper">
+    <xsl:call-template name="eventref_helper">
       <xsl:with-param name="fragment">addsourcebuffer</xsl:with-param>
       <xsl:with-param name="link_text">addsourcebuffer</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="//removesourcebuffer">
-    <xsl:call-template name="coderef_helper">
+    <xsl:call-template name="eventref_helper">
       <xsl:with-param name="fragment">removesourcebuffer</xsl:with-param>
       <xsl:with-param name="link_text">removesourcebuffer</xsl:with-param>
     </xsl:call-template>
@@ -265,6 +292,10 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="//eventdfn">
+    <dfn><xsl:attribute name="id">dom-evt-<xsl:value-of select="translate(.,$upper,$lower)"/></xsl:attribute><code><xsl:value-of select="."/></code></dfn>
+  </xsl:template>
+
   <xsl:template match="//codedfn">
     <dfn><xsl:attribute name="id">dom-<xsl:value-of select="translate(.,$upper,$lower)"/></xsl:attribute><code><xsl:value-of select="."/></code></dfn>
   </xsl:template>
@@ -335,6 +366,10 @@
       <xsl:with-param name="fragment">fatal-decode-error</xsl:with-param>
       <xsl:with-param name="link_text">media data is corrupted</xsl:with-param>
     </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//media-data-cannot-be-fetched">
+    &quot;<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>&quot;
   </xsl:template>
 
   <xsl:template match="//media-err-decode">

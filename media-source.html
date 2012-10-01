@@ -42,7 +42,7 @@
     <div class="head">
       <p><a href="http://www.w3.org/"><img src="http://www.w3.org/Icons/w3c_home" alt="W3C" width="72" height="48"></a></p>
       <h1>Media Source Extensions</h1>
-      <h2>W3C Editor's Draft 13 September 2012</h2>
+      <h2>W3C Editor's Draft 1 October 2012</h2>
       <dl>
 	<dt>Latest published version:</dt>
 	<dd>Not yet published</dd>
@@ -375,20 +375,19 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
       <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute is not in the <code><a href="#dom-%22open%22">"open"</a></code> state then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
       <li>Create a new <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> object and associated resources.</li>
       <li>Add the new object to <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> and <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
-   <code><a href="#dom-addsourcebuffer">addsourcebuffer</a></code> at <code><a href="#dom-sourcebuffers">sourceBuffers</a></code>.</li>
+   <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> at <code><a href="#dom-sourcebuffers">sourceBuffers</a></code>.</li>
       <li>Return the new object.</li>
     </ol>
     <p>The <dfn id="dom-removesourcebuffer"><code>removeSourceBuffer(sourceBuffer)</code></dfn> method must run the following steps:</p>
     <ol>
       <li>If <var title="true">sourceBuffer</var> is null then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
-      <li>If <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> is empty then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
       <li>If <var title="true">sourceBuffer</var> specifies an object that is not in <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> then throw a <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-not_found_err">NOT_FOUND_ERR</a></code> exception and abort these steps.</li>
       <li>Remove track information from <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-audiotracks">audioTracks</a></code>, <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-videotracks">videoTracks</a></code>, and <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-texttracks">textTracks</a></code> for all tracks associated with <var title="true">sourceBuffer</var> and <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
    <code><a href="http://dev.w3.org/html5/spec/media-elements.html#handler-tracklist-onchange">change</a></code> at the modified lists.</li>
       <li>If <var title="true">sourceBuffer</var> is in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>, then remove it from <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code> and <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
-   <code><a href="#dom-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>.</li>
+   <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>.</li>
       <li>Remove <var title="true">sourceBuffer</var> from <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> and <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
-   <code><a href="#dom-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#dom-sourcebuffers">sourceBuffers</a></code>.</li>
+   <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#dom-sourcebuffers">sourceBuffers</a></code>.</li>
       <li>Destroy all resources for <var title="true">sourceBuffer</var>.</li>
     </ol>
 
@@ -425,7 +424,7 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
       <li>Change the <code><a href="#dom-readystate">readyState</a></code> attribute value to <code><a href="#dom-%22ended%22">"ended"</a></code>.</li>
       <li>
 <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
-   <code><a href="#dom-sourceended">sourceended</a></code> at the <code><a href="#dom-mediasource">MediaSource</a></code>.</li>
+   <code><a href="#dom-evt-sourceended">sourceended</a></code> at the <code><a href="#dom-mediasource">MediaSource</a></code>.</li>
       <dl class="switch">
           <dt>If <var title="true">error</var> is not set, null, or an empty string</dt>
           <dd>
@@ -440,10 +439,12 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
 </dt>
           <dd>
 	    <dl class="switch">
-	      <dt>If <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute equals <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
+	      <dt>If the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute equals <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
 </dt>
-	      <dd>Run the "<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>" steps of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
-	      <dt>If <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute greater than <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
+	      <dd>Run the 
+    "<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>"
+   steps of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
+	      <dt>If the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute is greater than <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
 </dt>
 	      <dd>Run the "<i>If the connection is interrupted after some media data has been received, causing the user agent to give up trying to fetch the resource</i>" steps of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
 	    </dl>
@@ -452,10 +453,10 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
 </dt>
           <dd>
 	    <dl class="switch">
-	      <dt>If <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute equals <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
+	      <dt>If the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute equals <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
 </dt>
 	      <dd>Run the "<i>If the media data can be fetched but is found by inspection to be in an unsupported format, or can otherwise not be rendered at all</i>" steps of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
-	      <dt>If <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute greater than <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
+	      <dt>If the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute is greater than <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
 </dt>
 	      <dd>Run the <a href="http://dev.w3.org/html5/spec/media-elements.html#fatal-decode-error">media data is corrupted</a> steps of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
 	    </dl>
@@ -477,17 +478,17 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
       </thead>
       <tbody>
         <tr>
-          <td><dfn id="dom-sourceopen"><code>sourceopen</code></dfn></td>
+          <td><dfn id="dom-evt-sourceopen"><code>sourceopen</code></dfn></td>
           <td><code>Event</code></td>
           <td>When <code><a href="#dom-readystate">readyState</a></code> transitions from <code><a href="#dom-closed">"closed"</a></code> to <code><a href="#dom-%22open%22">"open"</a></code> or from <code><a href="#dom-%22ended%22">"ended"</a></code> to <code><a href="#dom-%22open%22">"open"</a></code>.</td>
         </tr>
         <tr>
-          <td><dfn id="dom-sourceended"><code>sourceended</code></dfn></td>
+          <td><dfn id="dom-evt-sourceended"><code>sourceended</code></dfn></td>
           <td><code>Event</code></td>
           <td>When <code><a href="#dom-readystate">readyState</a></code> transitions from <code><a href="#dom-%22open%22">"open"</a></code> to <code><a href="#dom-%22ended%22">"ended"</a></code>.</td>
         </tr>
         <tr>
-          <td><dfn id="dom-sourceclose"><code>sourceclose</code></dfn></td>
+          <td><dfn id="dom-evt-sourceclose"><code>sourceclose</code></dfn></td>
           <td><code>Event</code></td>
 	  <td>When <code><a href="#dom-readystate">readyState</a></code> transitions from <code><a href="#dom-%22open%22">"open"</a></code> to <code><a href="#dom-closed">"closed"</a></code> or <code><a href="#dom-%22ended%22">"ended"</a></code> to <code><a href="#dom-closed">"closed"</a></code>.</td>
         </tr>
@@ -503,12 +504,14 @@ CORS-enabled fetch" step in the <a href="http://dev.w3.org/html5/spec/media-elem
       <dl class="switch">
         <dt>If <code><a href="#dom-readystate">readyState</a></code> is NOT set to <code><a href="#dom-closed">"closed"</a></code>
 </dt>
-        <dd>Abort media element's <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a> and run the steps to report a <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-mediaerror-media_err_src_not_supported">MEDIA_ERR_SRC_NOT_SUPPORTED</a></code> error.</dd>
+        <dd>Run the 
+    "<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>"
+   steps of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
         <dt>Otherwise</dt>
         <dd>
           <ol>
             <li>Set the <code><a href="#dom-readystate">readyState</a></code> attribute to <code><a href="#dom-%22open%22">"open"</a></code>.</li>
-            <li>Fire a simple event named <code><a href="#dom-sourceopen">sourceopen</a></code>.</li>
+            <li>Fire a simple event named <code><a href="#dom-evt-sourceopen">sourceopen</a></code>.</li>
             <li>Allow the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a> to progress based on data passed in via <code><a href="#dom-append">append()</a></code>.</li>
           </ol>
         </dd>
@@ -520,10 +523,17 @@ CORS-enabled fetch" step in the <a href="http://dev.w3.org/html5/spec/media-elem
     <ol>
       <li>Set the <code><a href="#dom-readystate">readyState</a></code> attribute to <code><a href="#dom-closed">"closed"</a></code>.</li>
       <li>Set the <code><a href="#dom-duration">duration</a></code> attribute to NaN.</li>
-      <li>Remove all the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects from <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> and fire a <code><a href="#dom-removesourcebuffer">removesourcebuffer</a></code> event for each one.</li>
+      <li>Remove all the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects from <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>.</li>
       <li>
 <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
-   <code><a href="#dom-sourceclose">sourceclose</a></code> at the <code><a href="#dom-mediasource">MediaSource</a></code>.</li>
+   <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>.</li>
+      <li>Remove all the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects from <code><a href="#dom-sourcebuffers">sourceBuffers</a></code>.</li>
+      <li>
+<a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#dom-sourcebuffers">sourceBuffers</a></code>.</li>
+      <li>
+<a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="#dom-evt-sourceclose">sourceclose</a></code> at the <code><a href="#dom-mediasource">MediaSource</a></code>.</li>
     </ol>
 
     <h4 id="mediasource-seeking">3.3.3 Seeking</h4>
@@ -537,7 +547,7 @@ CORS-enabled fetch" step in the <a href="http://dev.w3.org/html5/spec/media-elem
 	    <ol>
 	      <li>Set the <code><a href="#dom-readystate">readyState</a></code> attribute to <code><a href="#dom-%22open%22">"open"</a></code>
 </li>
-	      <li>Fire a simple event named <code><a href="#dom-sourceopen">sourceopen</a></code> on the <code><a href="#dom-mediasource">MediaSource</a></code> object.</li>
+	      <li>Fire a simple event named <code><a href="#dom-evt-sourceopen">sourceopen</a></code> on the <code><a href="#dom-mediasource">MediaSource</a></code> object.</li>
 	    </ol>
 	  </dd>
 	  <dt>Otherwise</dt>
@@ -603,28 +613,75 @@ CORS-enabled fetch" step in the <a href="http://dev.w3.org/html5/spec/media-elem
     <h4 id="active-source-buffer-changes">3.3.5 Changes to selected/enabled track state</h4>
     <p>During playback <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code> needs to be updated if the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-videotrack-selected">selected video track</a></code>, the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-audiotrack-enabled">enabled audio tracks</a></code>, or a text track <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-mode">mode</a></code> changes. When one or more of these changes occur the following steps need to be followed.</p>
     <dl class="switch">
-      <dt>If the selected video track changes</dt>
+      <dt>If the selected video track changes:</dt>
       <dd>
 	<ol>
-	  <li>If the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> associated with the previously selected video track is not associated with any other enabled tracks then remove it from <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
+	  <li>If the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> associated with the previously selected video track is not associated with any other enabled tracks, run the following steps:
+  	  <ol>
+	    <li>Remove the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> from <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>.</li>
+	    <li>
+<a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
 </li>
-	  <li>If the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> associated with the newly selected video track is not already in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code> then add it.</li>
+	  </ol>
+	  </li>
+	  <li>If the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> associated with the newly selected video track is not already in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>, run the following steps:
+	  <ol>
+	    <li>Add the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> to <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>.</li>
+	    <li>
+<a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> at <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
+</li>
+	  </ol>
+	  </li>
 	</ol>
       </dd>
       <dt>If an audio track becomes disabled and the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> associated with this track is not associated with any other enabled or selected track</dt>
-      <dd>Remove the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> associated with the audio track from <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
-</dd>
+      <dd>
+	<ol>
+	  <li>Remove the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> associated with the audio track from <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
+</li>
+	  <li>
+<a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
+</li>
+	</ol>
+      </dd>
       <dt>If an audio track becomes enabled and the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> associated with this track is not already in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
 </dt>
-      <dd>Add the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> associated with the audio track to <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
-</dd>
+      <dd>
+	<ol>
+	  <li>Add the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> associated with the audio track to <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
+</li>
+	  <li>
+<a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> at <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
+</li>
+	</ol>
+      </dd>
       <dt>If a text track <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-mode">mode</a></code> becomes <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-disabled">"disabled"</a></code> and the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> associated with this track is not associated with any other enabled or selected track</dt>
-      <dd>Remove the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> associated with the text track from <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
-</dd>
+      <dd>
+	<ol>
+	  <li>Remove the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> associated with the text track from <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
+</li>
+	  <li>
+<a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
+</li>
+	</ol>
+      </dd>
       <dt>If a text track <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-mode">mode</a></code> becomes <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-showing">"showing"</a></code> or <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-hidden">"hidden"</a></code> and the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> associated with this track is not already in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
 </dt>
-      <dd>Add the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> associated with the text track to <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
-</dd>
+      <dd>
+	<ol>
+	  <li>Add the <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> associated with the text track to <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
+</li>
+	  <li>
+<a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> at <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
+</li>
+	</ol>
+      </dd>
     </dl>
 
     <h4 id="duration-change-algorithm">3.3.6 Duration change</h4>
@@ -632,7 +689,9 @@ CORS-enabled fetch" step in the <a href="http://dev.w3.org/html5/spec/media-elem
     <ol>
       <li>If the current value of <code><a href="#dom-duration">duration</a></code> is equal to <var title="true">new duration</var>, then abort these steps.</li>
       <li>Update <code><a href="#dom-duration">duration</a></code> to <var title="true">new duration</var>.</li>
-      <li>Remove all media data with timestamps that are greater than <var title="true">new duration</var> from all <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects in <code><a href="#dom-sourcebuffers">sourceBuffers</a></code>.</li>
+      <li>Remove all media data with timestamps that are greater than <var title="true">new duration</var> from all <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> objects in <code><a href="#dom-sourcebuffers">sourceBuffers</a></code>.
+      <p class="note">Note: This preserves audio frames that start before and end after the <code><a href="#dom-duration">duration</a></code>. The user agent must end playback at <code><a href="#dom-duration">duration</a></code> even if the audio frame extends beyond this time.</p>
+      </li>
       <li>Update the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#media-controller-duration">media controller duration</a></code> to <var title="true">new duration</var> and run the <a href="http://dev.w3.org/html5/spec/media-elements.html#durationChange">HTMLMediaElement duration change algorithm</a>.</li>
     </ol>
 
@@ -668,9 +727,19 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
 
     <p>The <dfn id="dom-append"><code>append(data)</code></dfn> method must run the following steps:</p>
     <ol>
+      <li>Let <var title="true">media source</var> be the <code><a href="#dom-mediasource">MediaSource</a></code> object that created this object.</li>
       <li>If <var title="true">data</var> is null then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
-      <li>If this object has been removed from the <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> attribute of the <code><a href="#dom-mediasource">MediaSource</a></code> object that created it then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-      <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute of the <code><a href="#dom-mediasource">MediaSource</a></code> object that created this object is not in the <code><a href="#dom-%22open%22">"open"</a></code> state then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+      <li>If this object has been removed from the <code><a href="#dom-sourcebuffers">sourceBuffers</a></code> attribute of <var title="true">media source</var> then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+      <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute of <var title="true">media source</var> is in the <code><a href="#dom-closed">"closed"</a></code> state then throw an <code><a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+      <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute of <var title="true">media source</var> is in the <code><a href="#dom-%22ended%22">"ended"</a></code> state then run the following steps:
+      <ol>
+	<li>Set the <code><a href="#dom-readystate">readyState</a></code> attribute of <var title="true">media source</var> to <code><a href="#dom-%22open%22">"open"</a></code>
+</li>
+	<li>
+<a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="#dom-evt-sourceopen">sourceopen</a></code> at <var title="true">media source</var> .</li>
+      </ol>
+      </li>
       <li>If <var title="true">data</var>.byteLength is 0 abort these steps.</li>
       <li>If <var title="true">data</var> contains anything that violates the <a href="#byte-stream-formats">byte stream format specifications</a>, then call <code><a href="#dom-endofstream">endOfStream("decode")</a></code>, and abort these steps.</li>
       <li>Add <var title="true">data</var> to the source buffer:
@@ -805,12 +874,12 @@ interface <dfn id="dom-sourcebufferlist">SourceBufferList</dfn> : EventTarget {
       </thead>
       <tbody>
         <tr>
-          <td><dfn id="dom-addsourcebuffer"><code>addsourcebuffer</code></dfn></td>
+          <td><dfn id="dom-evt-addsourcebuffer"><code>addsourcebuffer</code></dfn></td>
           <td><code>Event</code></td>
           <td>When a <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> is added to the list.</td>
         </tr>
         <tr>
-          <td><dfn id="dom-removesourcebuffer"><code>removesourcebuffer</code></dfn></td>
+          <td><dfn id="dom-evt-removesourcebuffer"><code>removesourcebuffer</code></dfn></td>
           <td><code>Event</code></td>
           <td>When a <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> is removed from the list.</td>
         </tr>
@@ -1007,9 +1076,13 @@ partial interface <dfn id="dom-url">URL</dfn> {
         </tr>
       </thead>
       <tbody>
+	<tr>
+	  <td>1 October 2012</td>
+          <td>Fixed various addsourcebuffer &amp; removesourcebuffer bugs and allow append() in ended state.</td>
+        </tr>
         <tr>
-	  <td>13 September 2012</td>
-          <td>Added decode error &amp; network error algorithms.</td>
+	  <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/349559debcc3/media-source/media-source.html">13 September 2012</a></td>
+          <td>Updated endOfStream() behavior to change based on the value of HTMLMediaElement.readyState.</td>
         </tr>
         <tr>
 	  <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/ca093bbbbefb/media-source/media-source.html">24 August 2012</a></td>
