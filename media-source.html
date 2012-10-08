@@ -42,7 +42,7 @@
     <div class="head">
       <p><a href="http://www.w3.org/"><img src="http://www.w3.org/Icons/w3c_home" alt="W3C" width="72" height="48"></a></p>
       <h1>Media Source Extensions</h1>
-      <h2>W3C Editor's Draft 1 October 2012</h2>
+      <h2>W3C Editor's Draft 8 October 2012</h2>
       <dl>
 	<dt>Latest published version:</dt>
 	<dd>Not yet published</dd>
@@ -151,15 +151,16 @@
 	  <li><a href="#url-methods">6.1. Methods</a></li>
 	</ul>
       </li>
-      <li><a href="#byte-stream-formats">7. Byte Stream Formats</a></li>
+      <li><a href="#htmlmediaelement-attributes">7. HTMLMediaElement attributes</a></li>
+      <li><a href="#byte-stream-formats">8. Byte Stream Formats</a></li>
       <li>
 	<ul>
-	  <li><a href="#webm">7.1 WebM</a></li>
-	  <li><a href="#iso">7.2 ISO Base Media File Format</a></li>
+	  <li><a href="#webm">8.1 WebM</a></li>
+	  <li><a href="#iso">8.2 ISO Base Media File Format</a></li>
 	</ul>
       </li>
-      <li><a href="#examples">8. Examples</a></li>
-      <li><a href="#revision-history">8. Revision History</a></li>
+      <li><a href="#examples">9. Examples</a></li>
+      <li><a href="#revision-history">10. Revision History</a></li>
     </ul>
 
     <h2 id="introduction">1. Introduction</h2>
@@ -274,8 +275,8 @@
     <p>To simplify the implementation and facilitate interoperability, a few constraints are placed on the <a href="#media-segment">media segments</a> that are appended to a specific <code><a href="#dom-sourcebuffer">SourceBuffer</a></code>:
       <ul>
 	<li>All timestamps must be mapped to the same presentation timeline.</li>
-	<li>Segments should start with a <a href="#random-access-point">random access point</a> to facilitate seamless splicing at the segment boundary.</li>
-	<li>Gaps between <a href="#media-segment">media segments</a> that are smaller than the audio frame size are allowed and should not cause playback to stall. Such gaps should not be reflected by <code><a href="#dom-buffered">buffered</a></code>.
+	<li>Segments must start with a <a href="#random-access-point">random access point</a> to facilitate seamless splicing at the segment boundary.</li>
+	<li>Gaps between <a href="#media-segment">media segments</a> that are smaller than the audio frame size are allowed and must not cause playback to stall. Such gaps must not be reflected by <code><a href="#dom-buffered">buffered</a></code>.
 	  <p class="note">Note: This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g. Vorbis).</p>
 </li>
       </ul>
@@ -297,7 +298,7 @@
     <h4 id="source-buffer-overlap-start">2.8.2 Start Overlap</h4>
     <img src="start_overlap.png">
     <p>The figure above shows how the <a href="#source-buffer">source buffer</a> gets updated when the beginning of a new <a href="#media-segment">media segment</a> overlaps a segment in the buffer. In this case the new segment replaces all the old media data in the overlapping region. Since <a href="#media-segment">media segments</a> are constrained to starting with <a href="#random-access-point">random access points</a>, this provides a seamless transition between segments.</p>
-    <p>When an audio frame in the <a href="#source-buffer">source buffer</a> overlaps with the start of the new <a href="#media-segment">media segment</a> special behavior is required. At a minimum implementations must support dropping the old audio frame that overlaps the start of the new segment and insert silence for the small gap that is created. Higher quality implementations may support crossfading or crosslapping between the overlapping audio frames. No matter which strategy is implemented, no gaps should be created in the ranges reported by <code><a href="#dom-buffered">buffered</a></code> and playback must never stall at the overlap.</p>
+    <p>When an audio frame in the <a href="#source-buffer">source buffer</a> overlaps with the start of the new <a href="#media-segment">media segment</a> special behavior is required. At a minimum implementations must support dropping the old audio frame that overlaps the start of the new segment and insert silence for the small gap that is created. Higher quality implementations may support crossfading or crosslapping between the overlapping audio frames. No matter which strategy is implemented, no gaps are created in the ranges reported by <code><a href="#dom-buffered">buffered</a></code> and playback must never stall at the overlap.</p>
 
     <h4 id="source-buffer-overlap-end">2.8.3 End Overlap</h4>
     <img src="end_overlap.png">
@@ -511,7 +512,9 @@ CORS-enabled fetch" step in the <a href="http://dev.w3.org/html5/spec/media-elem
         <dd>
           <ol>
             <li>Set the <code><a href="#dom-readystate">readyState</a></code> attribute to <code><a href="#dom-%22open%22">"open"</a></code>.</li>
-            <li>Fire a simple event named <code><a href="#dom-evt-sourceopen">sourceopen</a></code>.</li>
+            <li>
+<a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="#dom-evt-sourceopen">sourceopen</a></code> at the <code><a href="#dom-mediasource">MediaSource</a></code>.</li>
             <li>Allow the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a> to progress based on data passed in via <code><a href="#dom-append">append()</a></code>.</li>
           </ol>
         </dd>
@@ -519,7 +522,8 @@ CORS-enabled fetch" step in the <a href="http://dev.w3.org/html5/spec/media-elem
     </ol>
 
     <h4 id="mediasource-detach">3.3.2 Detaching from a media element</h4>
-    <p>The following steps are run in any case where the media element is going to transition to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-network_empty">NETWORK_EMPTY</a></code> and fire an <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-mediacontroller-emptied">emptied</a></code> event. These steps should be run right before the transition.</p>
+    <p>The following steps are run in any case where the media element is going to transition to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-network_empty">NETWORK_EMPTY</a></code> and <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-mediacontroller-emptied">emptied</a></code> at the media element. These steps should be run right before the transition.</p>
     <ol>
       <li>Set the <code><a href="#dom-readystate">readyState</a></code> attribute to <code><a href="#dom-closed">"closed"</a></code>.</li>
       <li>Set the <code><a href="#dom-duration">duration</a></code> attribute to NaN.</li>
@@ -537,31 +541,17 @@ CORS-enabled fetch" step in the <a href="http://dev.w3.org/html5/spec/media-elem
     </ol>
 
     <h4 id="mediasource-seeking">3.3.3 Seeking</h4>
+    <p>Run the following steps as part of the "<i>Wait until the user agent has established whether or not the media data for the new playback position is available, and, if it is, until it has decoded enough data to play back that position"</i> step of the 
+    media element
+    <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-seek">seek algorithm</a>:</p>
     <ol>
-      <li>The media element <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-seeking">seeking algorithm</a></code> starts and has reached the stage where it is about to fire the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-media-seeking">seeking</a></code> event.</li>
-      <li>
-	<dl class="switch">
-	  <dt>If the <code><a href="#dom-readystate">readyState</a></code> attribute is set to <code><a href="#dom-%22ended%22">"ended"</a></code>
-</dt>
-	  <dd>
-	    <ol>
-	      <li>Set the <code><a href="#dom-readystate">readyState</a></code> attribute to <code><a href="#dom-%22open%22">"open"</a></code>
-</li>
-	      <li>Fire a simple event named <code><a href="#dom-evt-sourceopen">sourceopen</a></code> on the <code><a href="#dom-mediasource">MediaSource</a></code> object.</li>
-	    </ol>
-	  </dd>
-	  <dt>Otherwise</dt>
-	  <dd>Continue</dd>
-	</dl>
-      </li>
-      <li>The media element <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-seeking">seeking algorithm</a></code> fires the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-media-seeking">seeking</a></code> event</li>
-      <li>The media element looks for <a href="#media-segment">media segments</a> containing the desired seek point in each <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> object in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>
-</li>
+      <li>The media element looks for <a href="#media-segment">media segments</a> containing the <var title="true">new playback position</var> in each <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> object in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>.</li>
       <dl class="switch">
-	<dt>If one or more of the objects in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code> is missing <a href="#media-segment">media segments</a> for the desired seek point</dt>
+	<dt>If one or more of the objects in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code> is missing <a href="#media-segment">media segments</a> for the <var title="true">new playback position</var>
+</dt>
 	<dd>
 	  <ol>
-	    <li>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code> and fire the <a href="http://dev.w3.org/html5/spec/media-elements.html#mediaevents">appropriate event</a> for this transition.</li>
+	    <li>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code>.</li>
 	    <li>The media element waits for the necessary <a href="#media-segment">media segments</a> to be passed to <code><a href="#dom-append">append()</a></code>. The web application can use <code><a href="#dom-buffered">buffered</a></code> to determine what the media element needs to resume playback.</li>
 	  </ol>
 	</dd>
@@ -569,8 +559,10 @@ CORS-enabled fetch" step in the <a href="http://dev.w3.org/html5/spec/media-elem
 	<dd>Continue</dd>
       </dl>
       <li>The media element resets all decoders and initializes each one with data from the appropriate <a href="#init-segment">initialization segment</a>.</li>
-      <li>The media element feeds data from the <a href="#media-segment">media segments</a> into the decoders until the desired seek point is reached.</li>
-      <li>The media element resumes the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-seeking">seeking algorithm</a></code> and fires the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-media-seeked">seeked</a></code> event indicating that the seek has completed.</li>
+      <li>The media element feeds data from the <a href="#media-segment">media segments</a> into the decoders until the <var title="true">new playback position</var> is reached.</li>
+      <li>Resume the 
+    media element
+    <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-seek">seek algorithm</a> at the "<i>Await a stable state</i>" step.</li>
     </ol>
 
 
@@ -580,14 +572,19 @@ CORS-enabled fetch" step in the <a href="http://dev.w3.org/html5/spec/media-elem
       <dt>If <code><a href="#dom-buffered">buffered</a></code> for all objects in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code> do not contain <code><a href="http://dev.w3.org/html5/spec/media-elements.html#timeranges">TimeRanges</a></code> for the current playback position:</dt>
       <dd>
 	<ol>
-	  <li>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code> and fire the <a href="http://dev.w3.org/html5/spec/media-elements.html#mediaevents">appropriate event</a> for this transition.</li>
+	  <li>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code>.</li>
+	  <li>If this is the first transition to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code>, then <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-media-loadedmetadata">loadedmetadata</a></code> at the media element.</li>
 	  <li>Abort these steps.</li>
 	</ol>
       </dd>
       <dt>If <code><a href="#dom-buffered">buffered</a></code> for all objects in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code> contain <code><a href="http://dev.w3.org/html5/spec/media-elements.html#timeranges">TimeRanges</a></code> that include the current playback position and enough data to ensure uninterrupted playback:</dt>
       <dd>
 	<ol>
-	  <li>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_enough_data">HAVE_ENOUGH_DATA</a></code> and fire the <a href="http://dev.w3.org/html5/spec/media-elements.html#mediaevents">appropriate event</a> for this transition.</li>
+	  <li>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_enough_data">HAVE_ENOUGH_DATA</a></code>.</li>
+	  <li>
+<a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-media-canplaythrough">canplaythrough</a></code> at the media element.</li>
 	  <li>Playback may resume at this point if it was previously suspended by a transition to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_current_data">HAVE_CURRENT_DATA</a></code>.</li>
 	  <li>Abort these steps.</li>
 	</ol>
@@ -595,7 +592,9 @@ CORS-enabled fetch" step in the <a href="http://dev.w3.org/html5/spec/media-elem
       <dt>If <code><a href="#dom-buffered">buffered</a></code> for at least one object in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code> contains a <code><a href="http://dev.w3.org/html5/spec/media-elements.html#timeranges">TimeRange</a></code> that includes the current playback position but not enough data to ensure uninterrupted playback:</dt>
       <dd>
 	<ol>
-	  <li>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_future_data">HAVE_FUTURE_DATA</a></code> and fire the <a href="http://dev.w3.org/html5/spec/media-elements.html#mediaevents">appropriate event</a> for this transition.</li>
+	  <li>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_future_data">HAVE_FUTURE_DATA</a></code>.</li>
+	  <li>If the previous value of <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> was less than <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_future_data">HAVE_FUTURE_DATA</a></code>, then <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-media-canplay">canplay</a></code> at the media element.</li>
 	  <li>Playback may resume at this point if it was previously suspended by a transition to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_current_data">HAVE_CURRENT_DATA</a></code>.</li>
 	  <li>Abort these steps.</li>
 	</ol>
@@ -603,7 +602,9 @@ CORS-enabled fetch" step in the <a href="http://dev.w3.org/html5/spec/media-elem
       <dt>If <code><a href="#dom-buffered">buffered</a></code> for at least one object in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code> contains a <code><a href="http://dev.w3.org/html5/spec/media-elements.html#timeranges">TimeRange</a></code> that ends at the current playback position and does not have a range covering the time immediately after the current position:</dt>
       <dd>
 	<ol>
-	  <li>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_current_data">HAVE_CURRENT_DATA</a></code> and fire the <a href="http://dev.w3.org/html5/spec/media-elements.html#mediaevents">appropriate event</a> for this transition.</li>
+	  <li>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_current_data">HAVE_CURRENT_DATA</a></code>.</li>
+	  <li>If this is the first transition to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_current_data">HAVE_CURRENT_DATA</a></code>, then <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-media-loadeddata">loadeddata</a></code> at the media element.</li>
 	  <li>Playback is suspended at this point since the media element doesn't have enough data to advance the timeline.</li>
 	  <li>Abort these steps.</li>
 	</ol>
@@ -771,10 +772,17 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
 	    <li>Handle state transitions:</li>
 	    <dl class="switch">
 	      <dt>If the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute is <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_nothing">HAVE_NOTHING</a></code>:</dt>
-	      <dd>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code> and fire the <a href="http://dev.w3.org/html5/spec/media-elements.html#mediaevents">appropriate event</a> for this transition.</dd>
+	      <dd>
+	       <ol>
+		 <li>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code>.</li>
+		 <li>
+<a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+    <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-media-loadedmetadata">loadedmetadata</a></code> at the media element.</li>
+	       </ol>
+	      </dd>
 	      <dt>If the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute is greater than <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_current_data">HAVE_CURRENT_DATA</a></code> and the <a href="#init-segment">initialization segment</a> contains the first video or first audio track in the presentation:</dt>
 	      <dd>
-		Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code> and fire the <a href="http://dev.w3.org/html5/spec/media-elements.html#mediaevents">appropriate event</a> for this transition.
+		Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code>.
 	      </dd>
 	      <dt>Otherwise:</dt>
 	      <dd>Continue</dd>
@@ -817,11 +825,31 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
 	  </ol>
 	</dd>
 	<dt>If the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute is <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code> and <var title="true">data</var> causes all objects in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code> to have media data for the current playback position.</dt>
-	<dd>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_current_data">HAVE_CURRENT_DATA</a></code> and fire the <a href="http://dev.w3.org/html5/spec/media-elements.html#mediaevents">appropriate event</a> for this transition.</dd>
+	<dd>
+	  <ol>
+	    <li>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_current_data">HAVE_CURRENT_DATA</a></code>.</li>
+	    <li>If this is the first transition to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_current_data">HAVE_CURRENT_DATA</a></code>, then <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-media-loadeddata">loadeddata</a></code> at the media element.</li>
+	  </ol>
+	</dd>
 	<dt>If the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute is <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_current_data">HAVE_CURRENT_DATA</a></code> and <var title="true">data</var> causes all objects in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code> to have media data beyond the current playback position.</dt>
-	<dd>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_future_data">HAVE_FUTURE_DATA</a></code> and fire the <a href="http://dev.w3.org/html5/spec/media-elements.html#mediaevents">appropriate event</a> for this transition.</dd>
+	<dd>
+	  <ol>
+	    <li>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_future_data">HAVE_FUTURE_DATA</a></code>.</li>
+	    <li>
+<a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-media-canplay">canplay</a></code> at the media element.</li>
+	  </ol>
+	</dd>
 	<dt>If the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute is <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_future_data">HAVE_FUTURE_DATA</a></code> and <var title="true">data</var> causes all objects in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code> to have enough data to start playback.</dt>
-	<dd>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_enough_data">HAVE_ENOUGH_DATA</a></code> and fire the <a href="http://dev.w3.org/html5/spec/media-elements.html#mediaevents">appropriate event</a> for this transition.</dd>
+	<dd>
+	  <ol>
+	    <li>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_enough_data">HAVE_ENOUGH_DATA</a></code>.</li>
+	    <li>
+<a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named
+   <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-media-canplaythrough">canplaythrough</a></code> at the media element.</li>
+	  </ol>
+	</dd>
 	<dt>If the <a href="#media-segment">media segment</a> contains data beyond the current <code><a href="#dom-duration">duration</a></code>
 </dt>
 	<dd>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var title="true">new duration</var> set to the maximum of the current duration and the highest end timestamp reported by <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-buffered">HTMLMediaElement.buffered</a></code>.</dd>
@@ -904,8 +932,35 @@ partial interface <dfn id="dom-url">URL</dfn> {
     </ol>
     <p class="note">Note: This algorithm is intended to mirror the behavior of the <a href="http://www.w3.org/TR/FileAPI/#">File API</a> <a href="http://www.w3.org/TR/FileAPI/#dfn-createObjectURL">createObjectURL()</a> method with autoRevoke set to true.</p>
 
+    <h2 id="htmlmediaelement-attributes">7. HTMLMediaElement attributes</h2>
+    <p>This section specifies what existing attributes on the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#htmlmediaelement">HTMLMediaElement</a></code> should return when a <code><a href="#dom-mediasource">MediaSource</a></code> is attached to the element.</p>
 
-    <h2 id="byte-stream-formats">7. Byte Stream Formats</h2>
+    <p>The <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-seekable">HTMLMediaElement.seekable</a></code> attribute returns a new static <a href="http://dev.w3.org/html5/spec/media-elements.html#normalized-timeranges-object">normalized TimeRanges object</a> created based on the following steps:</p>
+    <dl class="switch">
+      <dt>If <code><a href="#dom-duration">duration</a></code> equals NaN</dt>
+      <dd>Return an empty <code><a href="http://dev.w3.org/html5/spec/media-elements.html#timeranges">TimeRanges</a></code> object.</dd>
+      <dt>If <code><a href="#dom-duration">duration</a></code> equals positive Infinity</dt>
+      <dd>Return a single range with a start time of 0 and an end time equal to the highest end time reported by the <code><a href="#dom-htmlmediaelement.buffered">HTMLMediaElement.buffered</a></code> attribute.</dd>
+      <dt>Otherwise</dt>
+      <dd>Return a single range with a start time of 0 and an end time equal to <code><a href="#dom-duration">duration</a></code>.</dd>
+    </dl>
+
+    <p id="dom-htmlmediaelement.buffered">The <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-buffered">HTMLMediaElement.buffered</a></code> attribute returns a new static <a href="http://dev.w3.org/html5/spec/media-elements.html#normalized-timeranges-object">normalized TimeRanges object</a> created based on the following steps:</p>
+    <ol>
+      <li>Let <var title="true">active ranges</var> be the ranges returned by <code><a href="#dom-buffered">buffered</a></code> for each <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> object in <code><a href="#dom-activesourcebuffers">activeSourceBuffers</a></code>.</li>
+      <li>Let <var title="true">intersection range</var> be the intersection of the <var title="true">active ranges</var>.</li>
+      <li>
+<p>If <code><a href="#dom-readystate">readyState</a></code> is <code><a href="#dom-%22ended%22">"ended"</a></code>, then run the following steps:</p>
+        <ol>
+	  <li>Let <var title="true">highest end time</var> be the largest end time in the <var title="true">active ranges</var>.</li>
+	  <li>Let <var title="true">highest intersection end time</var> be the highest end time in the <var title="true">intersection range</var>.</li>
+	  <li>If the <var title="true">highest intersection end time</var> is less than the <var title="true">highest end time</var>, then update the <var title="true">intersection range</var> so that the <var title="true">highest intersection end time</var> equals the <var title="true">highest end time</var>.</li>
+	</ol>
+      </li>
+      <li>Return the <var title="true">intersection range</var>.</li>
+    </ol>
+    
+    <h2 id="byte-stream-formats">8. Byte Stream Formats</h2>
     <p>The bytes provided through <code><a href="#dom-append">append()</a></code> for a <code><a href="#dom-sourcebuffer">SourceBuffer</a></code> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM and the ISO Base Media File Format are provided below. If these formats are supported then the byte stream formats described below must be supported.</p>
     <p>This section provides general requirements for all byte stream formats:</p>
     <ul>
@@ -931,10 +986,10 @@ partial interface <dfn id="dom-url">URL</dfn> {
 
     <p>Initialization segments are an optimization. They allow a byte stream format to avoid duplication of information in Media Segments that is the same for many Media Segments. Byte stream format specifications need not specify Initialization Segment formats, however. They may instead require that such information is duplicated in every Media Segment.</p>
 
-    <h3 id="webm">7.1 WebM Byte Streams</h3>
+    <h3 id="webm">8.1 WebM Byte Streams</h3>
     <div class="nonnormative">
       <p>This section defines segment formats for implementations that choose to support WebM.</p>
-      <h4 id="webm-init-segments">6.1.1. Initialization Segments</h4>
+      <h4 id="webm-init-segments">8.1.1. Initialization Segments</h4>
       <p>A WebM <a href="#init-segment">initialization segment</a> must contain a subset of the elements at the start of a typical WebM file.</p>
       <p>The following rules apply to WebM initialization segments:</p>
       <ol>
@@ -944,7 +999,7 @@ partial interface <dfn id="dom-url">URL</dfn> {
 	<li>Any elements other than an <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> or a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> that occur before, in between, or after the <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> and <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> elements are ignored.</li>
       </ol>
 
-      <h4 id="webm-media-segments">7.1.2. Media Segments</h4>
+      <h4 id="webm-media-segments">8.1.2. Media Segments</h4>
       <p>A WebM <a href="#media-segment">media segment</a> is a single <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element.</p>
       <p>The following rules apply to WebM media segments:</p>
       <ol>
@@ -955,22 +1010,22 @@ partial interface <dfn id="dom-url">URL</dfn> {
 	<li>Block &amp; SimpleBlock elements must be in time increasing order consistent with the <a href="http://www.webmproject.org/code/specs/container/#webm-guidelines">WebM spec</a>.</li>
 	<li>If the most recent <a href="#webm-init-segment">WebM initialization segment</a> describes multiple tracks, then blocks from all the tracks must be interleaved in time increasing order. At least one block from all audio and video tracks must be present.</li>
 	<li>
-<a href="http://www.webmproject.org/code/specs/container/#cueing-data">Cues</a> or <a href="http://www.webmproject.org/code/specs/container/#chapters">Chapters</a> elements may follow a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element. These elements should be accepted and ignored by the user agent.</li>
+<a href="http://www.webmproject.org/code/specs/container/#cueing-data">Cues</a> or <a href="http://www.webmproject.org/code/specs/container/#chapters">Chapters</a> elements may follow a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element. These elements must be accepted and ignored by the user agent.</li>
       </ol>
 
-      <h4 id="webm-random-access-points">7.1.3. Random Access Points</h4>
-      <p>A SimpleBlock element with its Keyframe flag set signals the location of a <a href="#random-access-point">random access point</a> for that track. Media segments containing multiple tracks are only considered a random access point if the first SimpleBlock for each track has its Keyframe flag set. The order of the multiplexed blocks should conform to the <a href="http://www.webmproject.org/code/specs/container/#muxer-guidelines">WebM Muxer Guidelines</a>.</p>
+      <h4 id="webm-random-access-points">8.1.3. Random Access Points</h4>
+      <p>A SimpleBlock element with its Keyframe flag set signals the location of a <a href="#random-access-point">random access point</a> for that track. Media segments containing multiple tracks are only considered a random access point if the first SimpleBlock for each track has its Keyframe flag set. The order of the multiplexed blocks must conform to the <a href="http://www.webmproject.org/code/specs/container/#muxer-guidelines">WebM Muxer Guidelines</a>.</p>
     </div>
 
-    <h3 id="iso">7.2 ISO Base Media File Format Byte Streams</h3>
+    <h3 id="iso">8.2 ISO Base Media File Format Byte Streams</h3>
     <div class="nonnormative">
       <p>This section defines segment formats for implementations that choose to support the ISO Base Media File Format
 	<a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a> (ISO BMFF).</p> 
-      <h4 id="iso-init-segments">7.2.1. Initialization Segments</h4>
+      <h4 id="iso-init-segments">8.2.1. Initialization Segments</h4>
       <p>An ISO BMFF <a href="#init-segment">initialization segment</a> must contain a single Movie Header Box (<strong>moov</strong>). The tracks in the Movie Header Box must not contain any samples (i.e. the <strong><var>entry_count</var></strong> in the <strong>stts</strong>, <strong>stsc</strong> and <strong>stco</strong> boxes must be set to zero). A Movie Extends (<strong>mvex</strong>) box must be contained in the
 	Movie Header Box to indicate that Movie Fragments are to be expected.</p>
       <p>The <a href="#init-segment">initialization segment</a> may contain Edit Boxes (<strong>edts</strong>) which provide a mapping of composition times for each track to the global presentation time.</p>
-      <h4 id="iso-media-segments">7.2.2. Media Segments</h4>
+      <h4 id="iso-media-segments">8.2.2. Media Segments</h4>
       <p>An ISO BMFF <a href="#media-segment">media segment</a> must contain a single Movie Fragment Box (<strong>moof</strong>) followed by one or more Media Data Boxes (<strong>mdat</strong>).</p>
       <p>The following rules apply to ISO BMFF media segments:</p>
       <ol>
@@ -982,11 +1037,11 @@ partial interface <dfn id="dom-url">URL</dfn> {
 	<li>The Media Data Boxes must contain all the samples referenced by the Track Run Boxes (<strong>trun</strong>) of the Movie Fragment Box.</li>
       </ol>
 
-      <h4 id="iso-random-access-points">7.2.3. Random Access Points</h4>
+      <h4 id="iso-random-access-points">8.2.3. Random Access Points</h4>
       <p>A <a href="#random-access-point">random access point</a> as defined in this specification corresponds to a Stream Access Point of type 1 or 2 as defined in Annex I of <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a>.</p>
     </div>
 
-    <h2 id="examples">8. Examples</h2>
+    <h2 id="examples">9. Examples</h2>
     <p>Example use of the Media Source Extensions</p>
     <div class="block">
       <div class="blockContent">
@@ -1067,7 +1122,7 @@ partial interface <dfn id="dom-url">URL</dfn> {
       </div>
     </div>
 
-    <h2 id="revision-history">8. Revision History</h2>
+    <h2 id="revision-history">10. Revision History</h2>
     <table>
       <thead>
         <tr>
@@ -1077,7 +1132,18 @@ partial interface <dfn id="dom-url">URL</dfn> {
       </thead>
       <tbody>
 	<tr>
-	  <td>1 October 2012</td>
+	  <td>8 October 2012</td>
+          <td>
+	    <ul>
+	      <li>Defined what HTMLMediaElement.seekable and HTMLMediaElement.buffered should return.</li>
+	      <li>Updated seeking algorithm to run inside Step 10 of the HTMLMediaElement seeking algorithm.</li>
+	      <li>Removed transition from "ended" to "open" in the seeking algorithm.</li>
+	      <li>Clarified all the event targets.</li>
+	    </ul>
+	  </td>
+        </tr>
+	<tr>
+	  <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/7bab66368f2c/media-source/media-source.html">1 October 2012</a></td>
           <td>Fixed various addsourcebuffer &amp; removesourcebuffer bugs and allow append() in ended state.</td>
         </tr>
         <tr>

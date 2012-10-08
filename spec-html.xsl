@@ -333,13 +333,6 @@
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="//appropriate-event">
-    <xsl:call-template name="videoref_helper">
-      <xsl:with-param name="fragment">mediaevents</xsl:with-param>
-      <xsl:with-param name="link_text">appropriate event</xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-
   <xsl:template match="//resource-fetch-algorithm">
     <xsl:call-template name="videoref_helper">
       <xsl:with-param name="fragment">concept-media-load-resource</xsl:with-param>
@@ -563,6 +556,34 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="//loadedmetadata">
+    <xsl:call-template name="code_videoref_helper">
+      <xsl:with-param name="fragment">event-media-loadedmetadata</xsl:with-param>
+      <xsl:with-param name="link_text">loadedmetadata</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//loadeddata">
+    <xsl:call-template name="code_videoref_helper">
+      <xsl:with-param name="fragment">event-media-loadeddata</xsl:with-param>
+      <xsl:with-param name="link_text">loadeddata</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//canplay">
+    <xsl:call-template name="code_videoref_helper">
+      <xsl:with-param name="fragment">event-media-canplay</xsl:with-param>
+      <xsl:with-param name="link_text">canplay</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="//canplaythrough">
+    <xsl:call-template name="code_videoref_helper">
+      <xsl:with-param name="fragment">event-media-canplaythrough</xsl:with-param>
+      <xsl:with-param name="link_text">canplaythrough</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template match="//hme-currenttime">
     <xsl:call-template name="code_videoref_helper">
       <xsl:with-param name="fragment">dom-media-currenttime</xsl:with-param>
@@ -578,9 +599,10 @@
   </xsl:template>
 
   <xsl:template match="//hme-seek-algorithm">
+    media element
     <xsl:call-template name="videoref_helper">
       <xsl:with-param name="fragment">dom-media-seek</xsl:with-param>
-      <xsl:with-param name="link_text">HTMLMediaElement seek algorithm</xsl:with-param>
+      <xsl:with-param name="link_text">seek algorithm</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
 
