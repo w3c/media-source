@@ -671,7 +671,7 @@
   <xsl:template name="webappapis_helper">
     <xsl:param name="fragment" />
     <xsl:param name="link_text" />
-    <a><xsl:attribute name="href">http://dev.w3.org/html5/spec/webappapis.html#<xsl:value-of select="$fragment"/></xsl:attribute><xsl:value-of select="$link_text"/></a>
+    <a><xsl:attribute name="href">http://dev.w3.org/html5/spec/textFieldSelection.html#<xsl:value-of select="$fragment"/></xsl:attribute><xsl:value-of select="$link_text"/></a>
   </xsl:template>
 
   <xsl:template match="//queue-a-task">
@@ -704,14 +704,6 @@
       <xsl:with-param name="link_text">provide a stable state</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
-
-  <xsl:template match="//provide-a-stable-state">
-    <xsl:call-template name="webappapis_helper">
-      <xsl:with-param name="fragment">provide-a-stable-state</xsl:with-param>
-      <xsl:with-param name="link_text">provide a stable state</xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-
 
   <xsl:template name="webmref_helper">
     <xsl:param name="fragment" />
