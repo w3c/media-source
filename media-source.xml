@@ -41,7 +41,7 @@
     <div class="head">
       <p><a href="http://www.w3.org/"><img src="http://www.w3.org/Icons/w3c_home" alt="W3C" width="72" height="48" /></a></p>
       <h1>Media Source Extensions</h1>
-      <h2>W3C Editor's Draft 8 October 2012</h2>
+      <h2>W3C Editor's Draft 18 October 2012</h2>
       <dl>
 	<dt>Latest published version:</dt>
 	<dd>Not yet published</dd>
@@ -133,7 +133,13 @@
 	  <li><a href="#mediasource-algorithms">3.3. Algorithms</a></li>
 	</ul>
       </li>
-      <li><a href="#sourcebuffer">4. SourceBuffer Object</a></li>
+      <li><a href="#sourcebuffer">4. SourceBuffer Object</a>
+        <ul>
+	  <li><a href="#sourcebuffer-methods">4.1. Methods and Attributes</a></li>
+	  <li><a href="#sourcebuffer-algorithms">4.2. Algorithms</a></li>
+	</ul>
+      </li>
+
       <li><a href="#sourcebufferlist">5. SourceBufferList Object</a>
 	<ul>
 	  <li><a href="#sourcebufferlist-methods">5.1. Methods and Attributes</a></li>
@@ -226,6 +232,9 @@
     
    <h4 id="track-description">1.2.10. Track Description</h4>
    <p>A byte stream format specific structure that provides the <track-id/>, codec configuration, and other metadata for a single track. Each track description inside a single <init-segment/> must have a unique <track-id/>.</p>
+
+   <h4 id="coded-frame">1.2.11. Coded Frame</h4>
+   <p>A unit of compressed media data that has a presentation timestamp and  decode timestamp. The presentation timestamp indicates when the frame should be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp must be present in the bytestream. If frames cannot be decoded out of order and a decode timestamp is not present in the bytestream, then the decode timestamp is equal to the presentation timestamp.</p>
 
 
     <h2 id="source-buffer-model">2. Source Buffer Model</h2>
@@ -410,7 +419,7 @@ interface <dfn id="dom-mediasource">MediaSource</dfn> : EventTarget {
     <ol>
       <li>If the <readyState/> attribute is not in the <open/> state then throw an <invalid-state-err/> exception and abort these steps.</li>
       <li>Change the <readyState/> attribute value to <ended/>.</li>
-      <li><queue-a-task-to-fire-an-event-named/> <sourceended/> at the <MediaSource/>.</li>
+      <li><Queue-a-task-to-fire-an-event-named/> <sourceended/> at the <MediaSource/>.</li>
       <dl class="switch">
           <dt>If <var title="true">error</var> is not set, null, or an empty string</dt>
           <dd>
@@ -486,7 +495,7 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
         <dd>
           <ol>
             <li>Set the <readyState/> attribute to <open/>.</li>
-            <li><queue-a-task-to-fire-an-event-named/> <sourceopen/> at the <MediaSource/>.</li>
+            <li><Queue-a-task-to-fire-an-event-named/> <sourceopen/> at the <MediaSource/>.</li>
             <li>Allow the <resource-fetch-algorithm/> to progress based on data passed in via <append/>.</li>
           </ol>
         </dd>
@@ -499,10 +508,10 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
       <li>Set the <readyState/> attribute to <closed/>.</li>
       <li>Set the <duration/> attribute to NaN.</li>
       <li>Remove all the <SourceBuffer/> objects from <activeSourceBuffers/>.</li>
-      <li><queue-a-task-to-fire-an-event-named/> <removesourcebuffer/> at <activeSourceBuffers/>.</li>
+      <li><Queue-a-task-to-fire-an-event-named/> <removesourcebuffer/> at <activeSourceBuffers/>.</li>
       <li>Remove all the <SourceBuffer/> objects from <sourceBuffers/>.</li>
-      <li><queue-a-task-to-fire-an-event-named/> <removesourcebuffer/> at <sourceBuffers/>.</li>
-      <li><queue-a-task-to-fire-an-event-named/> <sourceclose/> at the <MediaSource/>.</li>
+      <li><Queue-a-task-to-fire-an-event-named/> <removesourcebuffer/> at <sourceBuffers/>.</li>
+      <li><Queue-a-task-to-fire-an-event-named/> <sourceclose/> at the <MediaSource/>.</li>
     </ol>
 
     <h4 id="mediasource-seeking">3.3.3 Seeking</h4>
@@ -541,7 +550,7 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
       <dd>
 	<ol>
 	  <li>Set the <ready-state/> attribute to <have-enough-data/>.</li>
-	  <li><queue-a-task-to-fire-an-event-named/> <canplaythrough/> at the media element.</li>
+	  <li><Queue-a-task-to-fire-an-event-named/> <canplaythrough/> at the media element.</li>
 	  <li>Playback may resume at this point if it was previously suspended by a transition to <have-current-data/>.</li>
 	  <li>Abort these steps.</li>
 	</ol>
@@ -575,13 +584,13 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
 	  <li>If the <SourceBuffer/> associated with the previously selected video track is not associated with any other enabled tracks, run the following steps:
   	  <ol>
 	    <li>Remove the <SourceBuffer/> from <activeSourceBuffers/>.</li>
-	    <li><queue-a-task-to-fire-an-event-named/> <removesourcebuffer/> at <activeSourceBuffers/></li>
+	    <li><Queue-a-task-to-fire-an-event-named/> <removesourcebuffer/> at <activeSourceBuffers/></li>
 	  </ol>
 	  </li>
 	  <li>If the <SourceBuffer/> associated with the newly selected video track is not already in <activeSourceBuffers/>, run the following steps:
 	  <ol>
 	    <li>Add the <SourceBuffer/> to <activeSourceBuffers/>.</li>
-	    <li><queue-a-task-to-fire-an-event-named/> <addsourcebuffer/> at <activeSourceBuffers/></li>
+	    <li><Queue-a-task-to-fire-an-event-named/> <addsourcebuffer/> at <activeSourceBuffers/></li>
 	  </ol>
 	  </li>
 	</ol>
@@ -590,28 +599,28 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
       <dd>
 	<ol>
 	  <li>Remove the <SourceBuffer/> associated with the audio track from <activeSourceBuffers/></li>
-	  <li><queue-a-task-to-fire-an-event-named/> <removesourcebuffer/> at <activeSourceBuffers/></li>
+	  <li><Queue-a-task-to-fire-an-event-named/> <removesourcebuffer/> at <activeSourceBuffers/></li>
 	</ol>
       </dd>
       <dt>If an audio track becomes enabled and the <SourceBuffer/> associated with this track is not already in <activeSourceBuffers/></dt>
       <dd>
 	<ol>
 	  <li>Add the <SourceBuffer/> associated with the audio track to <activeSourceBuffers/></li>
-	  <li><queue-a-task-to-fire-an-event-named/> <addsourcebuffer/> at <activeSourceBuffers/></li>
+	  <li><Queue-a-task-to-fire-an-event-named/> <addsourcebuffer/> at <activeSourceBuffers/></li>
 	</ol>
       </dd>
       <dt>If a text track <videoref name="dom-texttrack-mode">mode</videoref> becomes <videoref name="dom-texttrack-disabled">&quot;disabled&quot;</videoref> and the <SourceBuffer/> associated with this track is not associated with any other enabled or selected track</dt>
       <dd>
 	<ol>
 	  <li>Remove the <SourceBuffer/> associated with the text track from <activeSourceBuffers/></li>
-	  <li><queue-a-task-to-fire-an-event-named/> <removesourcebuffer/> at <activeSourceBuffers/></li>
+	  <li><Queue-a-task-to-fire-an-event-named/> <removesourcebuffer/> at <activeSourceBuffers/></li>
 	</ol>
       </dd>
       <dt>If a text track <videoref name="dom-texttrack-mode">mode</videoref> becomes <videoref name="dom-texttrack-showing">&quot;showing&quot;</videoref> or <videoref name="dom-texttrack-hidden">&quot;hidden&quot;</videoref> and the <SourceBuffer/> associated with this track is not already in <activeSourceBuffers/></dt>
       <dd>
 	<ol>
 	  <li>Add the <SourceBuffer/> associated with the text track to <activeSourceBuffers/></li>
-	  <li><queue-a-task-to-fire-an-event-named/> <addsourcebuffer/> at <activeSourceBuffers/></li>
+	  <li><Queue-a-task-to-fire-an-event-named/> <addsourcebuffer/> at <activeSourceBuffers/></li>
 	</ol>
       </dd>
     </dl>
@@ -628,7 +637,7 @@ CORS-enabled fetch" step in the <resource-fetch-algorithm/>.</p>
     </ol>
 
    <h2 id="sourcebuffer">4. SourceBuffer Object</h2>
-    <pre class="idl">
+   <pre class="idl">
 interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
   // Returns the time ranges buffered.
   readonly attribute TimeRanges <precoderef>buffered</precoderef>;
@@ -641,153 +650,243 @@ interface <dfn id="dom-sourcebuffer">SourceBuffer</dfn> : EventTarget {
 
   // Abort the current segment append sequence.
   void <premethodref>abort</premethodref>();
+
+  // Remove media for a specific time range.
+  void <premethodref>remove</premethodref>(double start, double end);
 };
-    </pre>
+   </pre>
+   <h3 id="sourcebuffer-methods">4.1. Methods and Attributes</h3>
+
+   <p>The <dfn id="sourcebuffer-parent-media-source">parent media source</dfn> of a <SourceBuffer/> object is the <MediaSource/> object that created it.</p>
+
    <p>The <codedfn>buffered</codedfn> attribute indicates what <timeranges/> are buffered in the <SourceBuffer/>. When the attribute is read the following steps must occur:</p>
    <ol>
-     <li>If this object has been removed from the <sourceBuffers/> attribute of the <MediaSource/> object that created it then throw an <invalid-state-err/> exception and abort these steps.</li>
+     <li>If this object has been removed from the <sourceBuffers/> attribute of the <parent-media-source/> then throw an <invalid-state-err/> exception and abort these steps.</li>
      <li>Return a new static <normalized-timeranges-object/> for the <media-segments/> buffered.</li>
    </ol>
 
    <p>The <codedfn>timestampOffset</codedfn> attribute controls the offset applied to timestamps inside subsequent <media-segments/> that are appended to this <SourceBuffer/>. The <timestampOffset/> is initially set to 0 which indicates that no offset is being applied. On getting, the initial value or the last value that was successfully set is returned. On setting, run following steps:</p>
    <ol>
-     <li>If this object has been removed from the <sourceBuffers/> attribute of the <MediaSource/> object that created it, then throw an <invalid-state-err/> exception and abort these steps.</li>
-     <li>If the <readyState/> attribute of the <MediaSource/> object that created this object is not in the <open/> state, then throw an <invalid-state-err/> exception and abort these steps.</li>
+     <li>If this object has been removed from the <sourceBuffers/> attribute of the <parent-media-source/>, then throw an <invalid-state-err/> exception and abort these steps.</li>
+     <li>If the <readyState/> attribute of the <parent-media-source/> is not in the <open/> state, then throw an <invalid-state-err/> exception and abort these steps.</li>
      <li>If this object is waiting for the end of a <media-segment/> to be appended, then throw an <invalid-state-err/> and abort these steps.</li>
      <li>Update the attribute to the new value.</li>
    </ol>
 
-    <p>The <methoddfn name="append">append(<var title="true">data</var>)</methoddfn> method must run the following steps:</p>
+   <p>The <methoddfn name="append">append(<var title="true">data</var>)</methoddfn> method must run the following steps:</p>
+   <ol>
+     <li>If <var title="true">data</var> is null then throw an <invalid-access-err/> exception and abort these steps.</li>
+     <li>If this object has been removed from the <sourceBuffers/> attribute of the <parent-media-source/> then throw an <invalid-state-err/> exception and abort these steps.</li>
+     <li>If the <readyState/> attribute of the <parent-media-source/> is in the <closed/> state then throw an <invalid-state-err/> exception and abort these steps.</li>
+     <li>
+       <p>If the <readyState/> attribute of the <parent-media-source/> is in the <ended/> state then run the following steps:</p>
+       <ol>
+	 <li>Set the <readyState/> attribute of the <parent-media-source/> to <open/></li>
+	 <li><Queue-a-task-to-fire-an-event-named/> <sourceopen/> at the <parent-media-source/> .</li>
+       </ol>
+     </li>
+     <li>If <var title="true">data</var>.byteLength is 0 abort these steps.</li>
+     <li>Add <var title="true">data</var> to the end of the <input-buffer/></li>
+     <li>Run the <segment-parser-loop/>.</li>
+   </ol>
+
+    <p>The <methoddfn name="abort">abort()</methoddfn> method must run the following steps:</p>
     <ol>
-      <li>Let <var title="true">media source</var> be the <MediaSource/> object that created this object.</li>
-      <li>If <var title="true">data</var> is null then throw an <invalid-access-err/> exception and abort these steps.</li>
-      <li>If this object has been removed from the <sourceBuffers/> attribute of <var title="true">media source</var> then throw an <invalid-state-err/> exception and abort these steps.</li>
-      <li>If the <readyState/> attribute of <var title="true">media source</var> is in the <closed/> state then throw an <invalid-state-err/> exception and abort these steps.</li>
-      <li>If the <readyState/> attribute of <var title="true">media source</var> is in the <ended/> state then run the following steps:
-      <ol>
-	<li>Set the <readyState/> attribute of <var title="true">media source</var> to <open/></li>
-	<li><queue-a-task-to-fire-an-event-named/> <sourceopen/> at <var title="true">media source</var> .</li>
-      </ol>
+      <li>If this object has been removed from the <sourceBuffers/> attribute of the <parent-media-source/> then throw an <invalid-state-err/> exception and abort these steps.</li>
+      <li>If the <readyState/> attribute of the <parent-media-source/> is not in the <open/> state then throw an <invalid-state-err/> exception and abort these steps.</li>
+      <li>The media element aborts parsing the current segment.</li>
+      <li>If the <append-state/> equals <parsing-media-segment/> and the <input-buffer/> contains some complete <coded-frames/>, then run the <coded-frame-processing-algorithm/> as if the media segment only contained these frames.</li>
+      <li>Remove all bytes from the <input-buffer/>.</li>
+      <li>Set <append-state/> to <waiting-for-segment/>.</li>
+    </ol>
+
+    <p>The <methoddfn name="remove">remove(<var title="true">start</var>, <var title="true">end</var>)</methoddfn> method must run the following steps:</p>
+    <ol>
+      <li>If <var title="true">start</var> is negative or greater than <duration/>, then throw an <invalid-access-err/> exception and abort these steps.</li>
+      <li>If <var title="true">end</var> is less than or equal to <var title="true">start</var>, then throw an <invalid-access-err/> exception and abort these steps.</li>
+      <li>If this object has been removed from the <sourceBuffers/> attribute of the <parent-media-source/> then throw an <invalid-state-err/> exception and abort these steps.</li>
+      <li>If the <readyState/> attribute of the <parent-media-source/> is not in the <open/> state then throw an <invalid-state-err/> exception and abort these steps.</li>
+      <li><p>For each track in this source buffer, run the following steps:</p>
+        <ol>
+	  <li>
+	    <p>Let <var title="true">next random access point timestamp</var> be the timestamp of the next <random-access-point/>, for this track, that is greater than or equal to <var title="true">end</var>.</p>
+	    <p class="note">Note: <var title="true">next random access point timestamp</var> can be different across tracks because the dependencies between <coded-frames/> within a track are usually different than the dependencies in another track.</p></li>
+	  <li>Remove all media data, for this track, that contain starting timestamps greater than or equal to <var title="true">start</var> and less than the <var title="true">next random access point timestamp</var>.</li>
+	</ol>
       </li>
-      <li>If <var title="true">data</var>.byteLength is 0 abort these steps.</li>
-      <li>If <var title="true">data</var> contains anything that violates the <a href="#byte-stream-formats">byte stream format specifications</a>, then call <eos-decode/>, and abort these steps.</li>
-      <li>Add <var title="true">data</var> to the source buffer:
-	<dl class="switch">
-	  <dt>If <var title="true">data</var> is part of a <media-segment/> and <timestampOffset/> is not 0:</dt>
-	  <dd>
-	    <ol>
-	      <li>Find all timestamps inside <var title="true">data</var> and add <timestampOffset/> to them.</li>
-	      <li>If any of the modified timestamps are earlier than the <presentation-start-time/>, then call <eos-decode/>, and abort these steps.</li>
-	      <li>Copy the contents of <var title="true">data</var>, with the modified timestamps, into the source buffer.</li>
-	    </ol>
-	  </dd>
-	  <dt>Otherwise</dt>
-	  <dd>Copy the contents of <var title="true">data</var> into the source buffer.</dd>
-	</dl>
+      
+    </ol>
+
+    <h3 id="sourcebuffer-algorithms">4.2. Algorithms</h3>
+
+    <h4 id="sourcebuffer-segment-parser-loop">4.2.1 Segment Parser Loop</h4>
+    <p>All SourceBuffer objects have an internal <dfn id="sourcebuffer-append-state">append state</dfn> variable that keeps track of the high-level segment parsing state. It is initially set to <waiting-for-segment/> and can transition to the following states as data is appended.</p>
+    <table>
+      <thead>
+	<tr>
+          <th>Append state name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><dfn id="sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</dfn></td>
+          <td>Waiting for the start of an <init-segment/> or <media-segment/> to be appended.</td>
+        </tr>
+        <tr>
+          <td><dfn id="sourcebuffer-parsing-init-segment">PARSING_INIT_SEGMENT</dfn></td>
+          <td>Currently parsing an <init-segment/>.</td>
+        </tr>
+	<tr>
+	  <td><dfn id="sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</dfn></td>
+          <td>Currently parsing a <media-segment/>.</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <p>The <dfn id="sourcebuffer-input-buffer">input buffer</dfn> is a byte buffer that is used to hold unparsed bytes across <append/> calls. The buffer is empty when the SourceBuffer object is created.</p>
+
+    <p>While the <input-buffer/> is not empty, run the following steps in a loop:</p>
+    <ol>
+      <li>If the <input-buffer/> starts with bytes that violate the <byte-stream-format-specs/>, then call <eos-decode/>, and abort this algorithm.</li>
+      <li>Remove any bytes that the <byte-stream-format-specs/> say should be ignored from the start of the <input-buffer/>.</li>
+      <li>
+	<p>If the <append-state/> equals <waiting-for-segment/>, then run the following steps:</p>
+	<ol>
+	  <li>If the beginning of the <input-buffer/> indicates the start of an <init-segment/>, set the <append-state/> to <parsing-init-segment/>.</li>
+	  <li>If the beginning of the <input-buffer/> indicates the start of an <media-segment/>, set <append-state/> to <parsing-media-segment/>.</li>
+	  <li>Return  to the top of the loop.</li>
+	</ol>
       </li>
-      <li>Handle end of segment cases:</li>
+      <li>
+	<p>If the <append-state/> equals <parsing-init-segment/>, then run the following steps:</p>
+	<ol>
+	  <li>If the <input-buffer/> does not contain a complete <init-segment/> yet, then exit the loop.</li>
+	  <li>Run the <init-segment-received-algorithm/>.</li>
+	  <li>Remove the <init-segment/> bytes from the beginning of the <input-buffer/>.</li>
+	  <li>Set <append-state/> to <waiting-for-segment/>.</li>
+	  <li>Return  to the top of the loop.</li>
+	</ol>
+      </li>
+      <li>
+	<p>If the <append-state/> equals <parsing-media-segment/>, then run the following steps:</p>
+	<ol>
+	  <li>
+	    <p>If the <input-buffer/> does not contain a complete <media-segment/> header yet, then exit the loop.</p>
+	    <p class="note">Note: Implementations may choose to implement this state as an incremental parser so that it is not necessary to have the entire media segment before running the <coded-frame-processing-algorithm/>.</p>
+	  </li>
+	  <li>Run the <coded-frame-processing-algorithm/>.</li>
+	  <li>Remove the <media-segment/> bytes from the beginning of the <input-buffer/>.</li>
+	  <li>
+	    <p>Set <append-state/> to <waiting-for-segment/>.</p>
+	    <p class="note">Note: Incremental parsers should only do this transition after the entire media segment has been received.</p>
+	  </li>
+	  <li>Return  to the top of the loop.</li>
+	</ol>
+      </li>
+    </ol>
+
+    <h4 id="sourcebuffer-init-segment-received">4.2.2 Initialization Segment Received</h4>
+    <p>The following steps are run when the <segment-parser-loop/> successfully parses a complete <init-segment/>:</p>
+    <ol>
+      <li>Update the <duration/> attribute if it currently equals NaN:</li>
       <dl class="switch">
-	<dt>If <var title="true">data</var> completes the first <init-segment/> appended to the <source-buffer/> run the following steps:</dt>
+	<dt>If the initialization segment contains a duration:</dt>
+	<dd>Run the <duration-change-algorithm/> with <new-duration/> set to the duration in the initialization segment.</dd>
+	<dt>Otherwise:</dt>
+	<dd>Run the <duration-change-algorithm/> with <new-duration/> set to positive Infinity.</dd>
+      </dl>
+      <li>Handle state transitions:</li>
+      <dl class="switch">
+	<dt>If the <ready-state/> attribute is <have-nothing/>:</dt>
 	<dd>
 	  <ol>
-	    <li>Update <duration/> attribute if it currently equals NaN:</li>
-	    <dl class="switch">
-	      <dt>If the initialization segment contains a duration:</dt>
-	      <dd>Run the <duration-change-algorithm/> with <new-duration/> set to the duration in the initialization segment.</dd>
-	      <dt>Otherwise:</dt>
-	      <dd>Run the <duration-change-algorithm/> with <new-duration/> set to positive Infinity.</dd>
-	    </dl>
-	    <li>Handle state transitions:</li>
-	    <dl class="switch">
-	      <dt>If the <ready-state/> attribute is <have-nothing/>:</dt>
-	      <dd>
-	       <ol>
-		 <li>Set the <ready-state/> attribute to <have-metadata/>.</li>
-		 <li><queue-a-task-to-fire-an-event-named/>  <loadedmetadata/> at the media element.</li>
-	       </ol>
-	      </dd>
-	      <dt>If the <ready-state/> attribute is greater than <have-current-data/> and the <init-segment/> contains the first video or first audio track in the presentation:</dt>
-	      <dd>
-		Set the <ready-state/> attribute to <have-metadata/>.
-	      </dd>
-	      <dt>Otherwise:</dt>
-	      <dd>Continue</dd>
-	    </dl>
-	    <li>Update <audiotracks/></li>
-	    <dl class="switch">
-	      <dt>If <init-segment/> contains the first audio track:</dt>
-	      <dd>
-		<ol>
-		  <li>Add an <audio-track/> and mark it as enabled.</li>
-		  <li>Add this <SourceBuffer/> to <activeSourceBuffers/>.</li>
-		</ol>
-	      </dd>
-	      <dt>If <init-segment/> contains audio tracks beyond those already in the presentation:</dt>
-	      <dd>Add a disabled <audio-track/> for each audio track in the <init-segment/>.</dd>
-	    </dl>
-	    <li>Update <videotracks/>:</li>
-	    <dl class="switch">
-	      <dt>If <init-segment/> contains the first video track:</dt>
-	      <dd>
-		<ol>
-		  <li>Add a <video-track/> and mark it as selected.</li>
-		  <li>Add this <SourceBuffer/> to <activeSourceBuffers/>.</li>
-		</ol>
-	      </dd>
-	      <dt>If <init-segment/> contains the video tracks beyond those already in the presentation:</dt>
-	      <dd>Add a disabled <video-track/> for each video track in the <init-segment/>.</dd>
-	    </dl>
-	    <li>Update <texttracks/></li>
-	    <dl class="switch">
-	      <dd>
-		<ol>
-		  <li>Add a <text-track/> for each text track in the <init-segment/>.</li>
-		  <li>If the text track <videoref name="dom-texttrack-mode">mode</videoref> is <videoref name="dom-texttrack-showing">&quot;showing&quot;</videoref> or <videoref name="dom-texttrack-hidden">&quot;hidden&quot;</videoref> then add this <SourceBuffer/> to <activeSourceBuffers/>.</li>
-		</ol>
-	      </dd>
-	    </dl>
+	    <li>Set the <ready-state/> attribute to <have-metadata/>.</li>
+	    <li><Queue-a-task-to-fire-an-event-named/>  <loadedmetadata/> at the media element.</li>
 	  </ol>
 	</dd>
-	<dt>If the <ready-state/> attribute is <have-metadata/> and <var title="true">data</var> causes all objects in <activeSourceBuffers/> to have media data for the current playback position.</dt>
+	<dt>If the <ready-state/> attribute is greater than <have-current-data/> and the <init-segment/> contains the first video or first audio track in the presentation:</dt>
 	<dd>
+	  Set the <ready-state/> attribute to <have-metadata/>.
+	</dd>
+	<dt>Otherwise:</dt>
+	<dd>Continue</dd>
+      </dl>
+      <li>Update <audiotracks/></li>
+      <dl class="switch">
+	<dt>If <init-segment/> contains the first audio track:</dt>
+	<dd>
+	  <ol>
+	    <li>Add an <audio-track/> and mark it as enabled.</li>
+	    <li>Add this <SourceBuffer/> to <activeSourceBuffers/>.</li>
+	  </ol>
+	</dd>
+	<dt>If <init-segment/> contains audio tracks beyond those already in the presentation:</dt>
+	<dd>Add a disabled <audio-track/> for each audio track in the <init-segment/>.</dd>
+      </dl>
+      <li>Update <videotracks/>:</li>
+      <dl class="switch">
+	<dt>If <init-segment/> contains the first video track:</dt>
+	<dd>
+	  <ol>
+	    <li>Add a <video-track/> and mark it as selected.</li>
+	    <li>Add this <SourceBuffer/> to <activeSourceBuffers/>.</li>
+	  </ol>
+	</dd>
+	<dt>If <init-segment/> contains the video tracks beyond those already in the presentation:</dt>
+	<dd>Add a disabled <video-track/> for each video track in the <init-segment/>.</dd>
+      </dl>
+      <li>Update <texttracks/></li>
+      <dl class="switch">
+	<dd>
+	  <ol>
+	    <li>Add a <text-track/> for each text track in the <init-segment/>.</li>
+	    <li>If the text track <videoref name="dom-texttrack-mode">mode</videoref> is <videoref name="dom-texttrack-showing">&quot;showing&quot;</videoref> or <videoref name="dom-texttrack-hidden">&quot;hidden&quot;</videoref> then add this <SourceBuffer/> to <activeSourceBuffers/>.</li>
+	  </ol>
+	</dd>
+      </dl>
+    </ol>
+
+    <h4 id="sourcebuffer-coded-frame-processing">4.2.3 Coded Frame Processing</h4>
+    <p>When a complete <coded-frame/> has been parsed by the <segment-parser-loop/> then the following steps are run:</p>
+    <ol>
+      <li>
+	<p>For each <coded-frame/> in the <media-segment/> run the following steps:</p>
+	<ol>
+	  <li>Let <var title="true">presentation timestamp</var> be a double precision floating point representation of the coded frame's presentation timestamp.</li>
+	  <li>Let <var title="true">decode timestamp</var> be a double precision floating point representation of the coded frame's decode timestamp.</li>
+	  <li>
+	    <p>If <timestampOffset/> is not 0, then run the following steps:</p>
+	    <ol>
+	      <li>Add <timestampOffset/> to the <var title="true">presentation timestamp</var>.</li>
+	      <li>Add <timestampOffset/> to the <var title="true">decode timestamp</var>.</li>
+	      <li>If the <var title="true">presentation timestamp</var> or <var title="true">decode timestamp</var> is less than the <presentation-start-time/>, then call <eos-decode/>, and abort these steps.</li>
+	    </ol>
+	  </li>
+	  <li>Add the <coded-frame/> with the <var title="true">presentation timestamp</var> and <var title="true">decode timestamp</var>, to the source buffer.</li>
+	</ol>
+      </li>
+      <li><p>If the <ready-state/> attribute is <have-metadata/> and the new <coded-frames/> cause all objects in <activeSourceBuffers/> to have media data for the current playback position, then run the following steps:</p>
 	  <ol>
 	    <li>Set the <ready-state/> attribute to <have-current-data/>.</li>
 	    <li>If this is the first transition to <have-current-data/>, then <queue-a-task-to-fire-an-event-named/> <loadeddata/> at the media element.</li>
 	  </ol>
-	</dd>
-	<dt>If the <ready-state/> attribute is <have-current-data/> and <var title="true">data</var> causes all objects in <activeSourceBuffers/> to have media data beyond the current playback position.</dt>
-	<dd>
-	  <ol>
-	    <li>Set the <ready-state/> attribute to <have-future-data/>.</li>
-	    <li><queue-a-task-to-fire-an-event-named/> <canplay/> at the media element.</li>
-	  </ol>
-	</dd>
-	<dt>If the <ready-state/> attribute is <have-future-data/> and <var title="true">data</var> causes all objects in <activeSourceBuffers/> to have enough data to start playback.</dt>
-	<dd>
-	  <ol>
-	    <li>Set the <ready-state/> attribute to <have-enough-data/>.</li>
-	    <li><queue-a-task-to-fire-an-event-named/> <canplaythrough/> at the media element.</li>
-	  </ol>
-	</dd>
-	<dt>If the <media-segment/> contains data beyond the current <duration/></dt>
-	<dd>Run the <duration-change-algorithm/> with <new-duration/> set to the maximum of the current duration and the highest end timestamp reported by <videoref name="dom-media-buffered">HTMLMediaElement.buffered</videoref>.</dd>
-      </dl>
-    </ol>
-
-    <p>The <methoddfn name="abort">abort()</methoddfn> method must run the following steps:</p>
-    <ol>
-      <li>If this object has been removed from the <sourceBuffers/> attribute of the <MediaSource/> object that created it then throw an <invalid-state-err/> exception and abort these steps.</li>
-      <li>If the <readyState/> attribute of the <MediaSource/> object that created this object is not in the <open/> state then throw an <invalid-state-err/> exception and abort these steps.</li>
-      <li>The media element aborts parsing the current segment.</li>
-      <dl class="switch">
-	<dt>If waiting for the start of a new segment</dt>
-	<dd>Continue</dd>
-	<dt>If the current segment is an <init-segment/></dt>
-	<dd>Flush any data associated with this partial segment.</dd>
-	<dt>If the current segment is a <media-segment/></dt>
-	<dd>The media element may keep any media data it finds valuable in the partial segment. For example if the abort happens in the middle of a 10 second <media-segment/>, the media element may choose to keep the 5 seconds of media data it has already parsed in the source buffer. <buffered/> will reflect what data, if any, was kept.</dd>
-      </dl>
-      <li>The media element resets the segment parser so that it can accept a new <init-segment/> or <media-segment/>.</li>
+      </li>
+      <li>
+	<p>If the <ready-state/> attribute is <have-current-data/> and the new <coded-frames/> cause all objects in <activeSourceBuffers/> to have media data beyond the current playback position, then run the following steps:</p>
+	<ol>
+	  <li>Set the <ready-state/> attribute to <have-future-data/>.</li>
+	  <li><Queue-a-task-to-fire-an-event-named/> <canplay/> at the media element.</li>
+	</ol>
+      </li>
+      <li>
+	<p>If the <ready-state/> attribute is <have-future-data/> and the new <coded-frames/> cause all objects in <activeSourceBuffers/> to have enough data to start playback, then run the following steps:</p>
+	<ol>
+	  <li>Set the <ready-state/> attribute to <have-enough-data/>.</li>
+	  <li><Queue-a-task-to-fire-an-event-named/> <canplaythrough/> at the media element.</li>
+	</ol>
+      </li>
+      <li>If the <media-segment/> contains data beyond the current <duration/>, then run the <duration-change-algorithm/> with <new-duration/> set to the maximum of the current duration and the highest end timestamp reported by <videoref name="dom-media-buffered">HTMLMediaElement.buffered</videoref>.</li>
     </ol>
 
     <h2 id="sourcebufferlist">5. SourceBufferList Object</h2>
@@ -947,7 +1046,8 @@ partial interface <dfn id="dom-url">URL</dfn> {
 	<li>External data references must not be used.</li>
 	<li>If the Movie Fragment contains multiple tracks, the duration by which each track extends should be as close to equal as practical.</li>
 	<li>Each Track Fragment Box must contain a Track Fragment Decode Time Box (<iso-box>tfdt</iso-box>)</li>
-	<li>The Media Data Boxes must contain all the samples referenced by the Track Run Boxes (<iso-box>trun</iso-box>) of the Movie Fragment Box.</li>
+	<li>The first sample in each Track Fragment Run Box (<iso-box>trun</iso-box>) must indicate that the sample is a <random-access-point/>.</li>
+	<li>The Media Data Boxes must contain all the samples referenced by the Track Fragment Run Boxes (<iso-box>trun</iso-box>) of the Movie Fragment Box.</li>
       </ol>
 
       <h4 id="iso-random-access-points">8.2.3. Random Access Points</h4>
@@ -1045,7 +1145,11 @@ partial interface <dfn id="dom-url">URL</dfn> {
       </thead>
       <tbody>
 	<tr>
-	  <td>8 October 2012</td>
+	  <td>18 October 2012</td>
+          <td>Refactored SourceBuffer.append() &amp; added SourceBuffer.remove().</td>
+        </tr>
+	<tr>
+	  <td><a href="http://dvcs.w3.org/hg/html-media/rev/6d127e69c9f8">8 October 2012</a></td>
           <td>
 	    <ul>
 	      <li>Defined what HTMLMediaElement.seekable and HTMLMediaElement.buffered should return.</li>

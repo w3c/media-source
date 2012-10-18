@@ -53,9 +53,18 @@
     <a href="#track-id">Track IDs</a>
   </xsl:template>
  
- <xsl:template match="//track-description">
+  <xsl:template match="//track-description">
     <a href="#track-id">track description</a>
   </xsl:template>
+
+  <xsl:template match="//coded-frame">
+    <a href="#coded-frame">coded frame</a>
+  </xsl:template>
+
+  <xsl:template match="//coded-frames">
+    <a href="#coded-frame">coded frames</a>
+  </xsl:template>
+
 
   <!-- MediaSource tags -->
   <xsl:template match="//sourceBuffers">
@@ -164,6 +173,46 @@
   </xsl:template>
 
   <!-- SourceBuffer tags -->
+  <xsl:template match="//parent-media-source">
+    <a href="#sourcebuffer-parent-media-source">parent media source</a>
+  </xsl:template>
+
+  <xsl:template match="//segment-parser-loop">
+    <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a>
+  </xsl:template>
+
+  <xsl:template match="//append-state">
+    <a href="#sourcebuffer-append-state">append state</a>
+  </xsl:template>
+
+  <xsl:template match="//waiting-for-segment">
+    <a href="#sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</a>
+  </xsl:template>
+
+  <xsl:template match="//parsing-init-segment">
+    <a href="#sourcebuffer-parsing-init-segment">PARSING_INIT_SEGMENT</a>
+  </xsl:template>
+
+  <xsl:template match="//parsing-media-segment">
+    <a href="#sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</a>
+  </xsl:template>
+
+  <xsl:template match="//byte-stream-format-specs">
+    <a href="#byte-stream-formats">byte stream format specifications</a>
+  </xsl:template>
+
+  <xsl:template match="//init-segment-received-algorithm">
+    <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a>
+  </xsl:template>
+
+  <xsl:template match="//coded-frame-processing-algorithm">
+    <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>
+  </xsl:template>
+
+  <xsl:template match="//input-buffer">
+    <a href="#sourcebuffer-input-buffer">input buffer</a>
+  </xsl:template>
+
   <xsl:template match="//append">
     <xsl:call-template name="coderef_helper">
       <xsl:with-param name="fragment">append</xsl:with-param>
@@ -692,6 +741,16 @@
     <xsl:call-template name="webappapis_helper">
       <xsl:with-param name="fragment">queue-a-task</xsl:with-param>
       <xsl:with-param name="link_text">queue a task</xsl:with-param>
+    </xsl:call-template> to <xsl:call-template name="webappapis_helper">
+      <xsl:with-param name="fragment">fire-a-simple-event</xsl:with-param>
+      <xsl:with-param name="link_text">fire a simple event</xsl:with-param>
+    </xsl:call-template> named
+  </xsl:template>
+
+  <xsl:template match="//Queue-a-task-to-fire-an-event-named">
+    <xsl:call-template name="webappapis_helper">
+      <xsl:with-param name="fragment">queue-a-task</xsl:with-param>
+      <xsl:with-param name="link_text">Queue a task</xsl:with-param>
     </xsl:call-template> to <xsl:call-template name="webappapis_helper">
       <xsl:with-param name="fragment">fire-a-simple-event</xsl:with-param>
       <xsl:with-param name="link_text">fire a simple event</xsl:with-param>
