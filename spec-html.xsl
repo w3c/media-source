@@ -720,7 +720,7 @@
   <xsl:template name="webappapis_helper">
     <xsl:param name="fragment" />
     <xsl:param name="link_text" />
-    <a><xsl:attribute name="href">http://dev.w3.org/html5/spec/textFieldSelection.html#<xsl:value-of select="$fragment"/></xsl:attribute><xsl:value-of select="$link_text"/></a>
+    <a><xsl:attribute name="href">http://dev.w3.org/html5/spec/webappapis.html#<xsl:value-of select="$fragment"/></xsl:attribute><xsl:value-of select="$link_text"/></a>
   </xsl:template>
 
   <xsl:template match="//queue-a-task">
