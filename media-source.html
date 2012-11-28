@@ -405,7 +405,7 @@ table.exceptions table {
   </p>
   <h1 class="title" id="title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-09-november-2012"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 09 November 2012</h2>
+  <h2 id="w3c-editor-s-draft-28-november-2012"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 28 November 2012</h2>
   <dl>
     
       <dt>This version:</dt>
@@ -763,6 +763,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 <span class="idlMethod">    <span class="idlMethType"><a>void</a></span>         <span class="idlMethName"><a href="#widl-MediaSource-removeSourceBuffer-void-SourceBuffer-sourceBuffer">removeSourceBuffer</a></span> (<span class="idlParam"><span class="idlParamType"><a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a></span> <span class="idlParamName">sourceBuffer</span></span>);</span>
 <span class="idlAttribute">    readonly attribute <span class="idlAttrType"><a href="#idl-def-ReadyState" class="idlType"><code>ReadyState</code></a></span>          <span class="idlAttrName"><a href="#widl-MediaSource-readyState">readyState</a></span>;</span>
 <span class="idlMethod">    <span class="idlMethType"><a>void</a></span>         <span class="idlMethName"><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream</a></span> (<span class="idlParam">optional <span class="idlParamType"><a href="#idl-def-EndOfStreamError" class="idlType"><code>EndOfStreamError</code></a></span> <span class="idlParamName">error</span></span>);</span>
+<span class="idlMethod">    static <span class="idlMethType"><a>bool</a></span>  <span class="idlMethName"><a href="#widl-MediaSource-isTypeSupported-bool-DOMString-type">isTypeSupported</a></span> (<span class="idlParam"><span class="idlParamType"><a>DOMString</a></span> <span class="idlParamName">type</span></span>);</span>
 };</span></pre><section id="attributes"><h3><span class="secno">3.1 </span>Attributes</h3><dl class="attributes"><dt id="widl-MediaSource-activeSourceBuffers"><code>activeSourceBuffers</code> of type <span class="idlAttrType"><a href="#idl-def-SourceBufferList" class="idlType"><code>SourceBufferList</code></a></span>, readonly</dt><dd>
           Contains the subset of <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> that represents the <a href="#active-source-buffers">active source buffers</a>.
         </dd><dt id="widl-MediaSource-duration"><code>duration</code> of type <span class="idlAttrType"><a>unrestricted double</a></span></dt><dd>
@@ -788,8 +789,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>Adds a new <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> to <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.</p>
           <p>When this method is invoked, the user agent must run the following steps:</p>
           <ol>
-            <li>If <var title="true">type</var> is null or an empty string then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
-            <li>If <var title="true">type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-not_supported_err">NOT_SUPPORTED_ERR</a></code> exception and abort these steps.</li>
+            <li>If <var>type</var> is null or an empty string then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
+            <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-not_supported_err">NOT_SUPPORTED_ERR</a></code> exception and abort these steps.</li>
             <li>If the user agent can't handle any more SourceBuffer objects then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not in the <code><a href="#idl-def-ReadyState">"open"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>Create a new <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object and associated resources.</li>
@@ -805,7 +806,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>
               <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-sourceended">sourceended</a></code> at the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a>.</li>
             <li><dl class="switch">
-                <dt>If <var title="true">error</var> is not set, null, or an empty string</dt>
+                <dt>If <var>error</var> is not set, null, or an empty string</dt>
                 <dd>
 	          <ol>
 	            <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the highest end timestamp across all <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.<br>
@@ -814,7 +815,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	            <li>Notify the media element that it now has all of the media data. Playback should continue until all the media passed in via <code><a href="#widl-SourceBuffer-append-void-Uint8Array-data">append()</a></code> has been played.</li>
 	          </ol>
 	        </dd>
-                <dt>If <var title="true">error</var> is set to <code><a href="#idl-def-EndOfStreamError">"network"</a></code>
+                <dt>If <var>error</var> is set to <code><a href="#idl-def-EndOfStreamError">"network"</a></code>
                 </dt>
                 <dd>
 	          <dl class="switch">
@@ -826,7 +827,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	            <dd>Run the "<i>If the connection is interrupted after some media data has been received, causing the user agent to give up trying to fetch the resource</i>" steps of the <a href="http://dev.w3.org/html5/spec/media-elements.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
 	          </dl>
 	        </dd>
-                <dt>If <var title="true">error</var> is set to <code><a href="#idl-def-EndOfStreamError">"decode"</a></code>
+                <dt>If <var>error</var> is set to <code><a href="#idl-def-EndOfStreamError">"decode"</a></code>
                 </dt>
                 <dd>
 	          <dl class="switch">
@@ -843,17 +844,34 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               </dl>
             </li>
           </ol>
-        <table class="parameters"><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">error</td><td class="prmType"><code><a href="#idl-def-EndOfStreamError" class="idlType"><code>EndOfStreamError</code></a></code></td><td class="prmNullFalse">✘</td><td class="prmOptTrue">✔</td><td class="prmDesc"></td></tr></table><div><em>Return type: </em><code><a>void</a></code></div></dd><dt id="widl-MediaSource-removeSourceBuffer-void-SourceBuffer-sourceBuffer"><code>removeSourceBuffer</code></dt><dd>
+        <table class="parameters"><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">error</td><td class="prmType"><code><a href="#idl-def-EndOfStreamError" class="idlType"><code>EndOfStreamError</code></a></code></td><td class="prmNullFalse">✘</td><td class="prmOptTrue">✔</td><td class="prmDesc"></td></tr></table><div><em>Return type: </em><code><a>void</a></code></div></dd><dt id="widl-MediaSource-isTypeSupported-bool-DOMString-type"><code>isTypeSupported</code>, static</dt><dd>
+          <p>Check to see whether the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> is capable of creating <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects for the the specified MIME type.</p>
+          <p>When this method is invoked, the user agent must run the following steps:</p>
+          <ol>
+            <li>If <var>type</var> an empty string, then return false.</li>
+            <li>If <var>type</var> does not contain a valid MIME type string, then return false.</li>
+            <li>If <var>type</var> contains a media type or media subtype that the MediaSource does not support, then return false.</li>
+            <li>If <var>type</var> contains at a codec that the MediaSource does not support, then return false.</li>
+            <li>If the MediaSource does not support the specified combination of media type, media subtype, and codecs then return false.</li>
+            <li>Return true.</li>
+          </ol>
+          <div class="note"><div class="note-title"><span>Note</span></div><p class="">
+            If true is returned from this method, it only indicates that the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> implementation is capable of creating <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects for the specified MIME type. A <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> call may still fail if sufficient resources are not available to support the addition of a new <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.
+          </p></div>
+          <div class="note"><div class="note-title"><span>Note</span></div><p class="">
+            This method returning true implies that HTMLMediaElement.canPlayType() will return "maybe" or "probably" since it does not make sense for a <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> to support a type the HTMLMediaElement knows it cannot play.
+          </p></div>
+        <table class="parameters"><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code><a>DOMString</a></code></td><td class="prmNullFalse">✘</td><td class="prmOptFalse">✘</td><td class="prmDesc"></td></tr></table><div><em>Return type: </em><code><a>bool</a></code></div></dd><dt id="widl-MediaSource-removeSourceBuffer-void-SourceBuffer-sourceBuffer"><code>removeSourceBuffer</code></dt><dd>
           <p>Removes a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> from <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.</p>
 
           <p>When this method is invoked, the user agent must run the following steps:</p>
           <ol>
-            <li>If <var title="true">sourceBuffer</var> is null then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
-            <li>If <var title="true">sourceBuffer</var> specifies an object that is not in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-not_found_err">NOT_FOUND_ERR</a></code> exception and abort these steps.</li>
-            <li>Remove track information from <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-audiotracks">audioTracks</a></code>, <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-videotracks">videoTracks</a></code>, and <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-texttracks">textTracks</a></code> for all tracks associated with <var title="true">sourceBuffer</var> and <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named <a href="http://dev.w3.org/html5/spec/media-elements.html#handler-tracklist-onchange">change</a> at the modified lists.</li>
-            <li>If <var title="true">sourceBuffer</var> is in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>, then remove it from <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> and <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>.</li>
-            <li>Remove <var title="true">sourceBuffer</var> from <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> and <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.</li>
-            <li>Destroy all resources for <var title="true">sourceBuffer</var>.</li>
+            <li>If <var>sourceBuffer</var> is null then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
+            <li>If <var>sourceBuffer</var> specifies an object that is not in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-not_found_err">NOT_FOUND_ERR</a></code> exception and abort these steps.</li>
+            <li>Remove track information from <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-audiotracks">audioTracks</a></code>, <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-videotracks">videoTracks</a></code>, and <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-texttracks">textTracks</a></code> for all tracks associated with <var>sourceBuffer</var> and <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named <a href="http://dev.w3.org/html5/spec/media-elements.html#handler-tracklist-onchange">change</a> at the modified lists.</li>
+            <li>If <var>sourceBuffer</var> is in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>, then remove it from <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> and <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>.</li>
+            <li>Remove <var>sourceBuffer</var> from <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> and <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.</li>
+            <li>Destroy all resources for <var>sourceBuffer</var>.</li>
           </ol>
         <table class="parameters"><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">sourceBuffer</td><td class="prmType"><code><a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a></code></td><td class="prmNullFalse">✘</td><td class="prmOptFalse">✘</td><td class="prmDesc"></td></tr></table><div><em>Return type: </em><code><a>void</a></code></div></dd></dl></section>
 
@@ -933,9 +951,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <h4><span class="secno">3.4.3 </span>Seeking</h4>
           <p>Run the following steps as part of the "<i>Wait until the user agent has established whether or not the media data for the new playback position is available, and, if it is, until it has decoded enough data to play back that position"</i> step of the <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-seek">seek algorithm</a>:</p>
           <ol>
-            <li>The media element looks for <a href="#media-segment">media segments</a> containing the <var title="true">new playback position</var> in each <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>.</li>
+            <li>The media element looks for <a href="#media-segment">media segments</a> containing the <var>new playback position</var> in each <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>.</li>
             <dl class="switch">
-	      <dt>If one or more of the objects in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> is missing <a href="#media-segment">media segments</a> for the <var title="true">new playback position</var>
+	      <dt>If one or more of the objects in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> is missing <a href="#media-segment">media segments</a> for the <var>new playback position</var>
               </dt>
 	      <dd>
 	        <ol>
@@ -947,7 +965,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	      <dd>Continue</dd>
             </dl>
             <li>The media element resets all decoders and initializes each one with data from the appropriate <a href="#init-segment">initialization segment</a>.</li>
-            <li>The media element feeds data from the <a href="#media-segment">media segments</a> into the decoders until the <var title="true">new playback position</var> is reached.</li>
+            <li>The media element feeds data from the <a href="#media-segment">media segments</a> into the decoders until the <var>new playback position</var> is reached.</li>
             <li>Resume the <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-seek">seek algorithm</a> at the "<i>Await a stable state</i>" step.</li>
           </ol>
         </section>
@@ -1071,10 +1089,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>Follow these steps when <code><a href="#widl-MediaSource-duration">duration</a></code> needs to change to a <var>new duration</var>.</p>
           <ol>
             <li>If the current value of <code><a href="#widl-MediaSource-duration">duration</a></code> is equal to <var>new duration</var>, then abort these steps.</li>
-            <li>Update <code><a href="#widl-MediaSource-duration">duration</a></code> to <var>new duration</var>.</li>
-            <li>Remove all media data with timestamps that are greater than <var>new duration</var> from all <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.
+            <li>Set <var>old duration</var> to the current value of <code><a href="#widl-MediaSource-duration">duration</a></code>.
+            </li><li>Update <code><a href="#widl-MediaSource-duration">duration</a></code> to <var>new duration</var>.</li>
+            <li>If the <var>new duration</var> is less than <var>old duration</var>, then call <code><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove</a>(<var>new duration</var>, <var>old duration</var>)</code> on all objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.
               <div class="note"><div class="note-title"><span>Note</span></div><p class="">This preserves audio frames that start before and end after the <code><a href="#widl-MediaSource-duration">duration</a></code>. The user agent must end playback at <code><a href="#widl-MediaSource-duration">duration</a></code> even if the audio frame extends beyond this time.</p></div>
             </li>
+
             <li>Update the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#media-controller-duration">media controller duration</a></code> to <var>new duration</var> and run the <a href="http://dev.w3.org/html5/spec/media-elements.html#durationChange">HTMLMediaElement duration change algorithm</a>.</li>
           </ol>
         </section>
@@ -1124,7 +1144,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
           <p>When this method is invoked, the user agent must run the following steps:</p>
           <ol>
-            <li>If <var title="true">data</var> is null then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
+            <li>If <var>data</var> is null then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState">"closed"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>
@@ -1136,8 +1156,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   <a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-sourceopen">sourceopen</a></code> at the <a href="#parent-media-source">parent media source</a> .</li>
               </ol>
             </li>
-            <li>If <var title="true">data</var>.byteLength is 0, then abort these steps.</li>
-            <li>Add <var title="true">data</var> to the end of the <a href="#sourcebuffer-input-buffer">input buffer</a>
+            <li>If <var>data</var>.byteLength is 0, then abort these steps.</li>
+            <li>Add <var>data</var> to the end of the <a href="#sourcebuffer-input-buffer">input buffer</a>
             </li>
             <li>Run the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a>.</li>
           </ol>
@@ -1146,21 +1166,26 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
           <p>When this method is invoked, the user agent must run the following steps:</p>
           <ol>
-            <li>If <var title="true">start</var> is negative or greater than <code><a href="#widl-MediaSource-duration">duration</a></code>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
-            <li>If <var title="true">end</var> is less than or equal to <var title="true">start</var>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
+            <li>If <var>start</var> is negative or greater than <code><a href="#widl-MediaSource-duration">duration</a></code>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
+            <li>If <var>end</var> is less than or equal to <var>start</var>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is not in the <code><a href="#idl-def-ReadyState">"open"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>
               <p>For each track in this source buffer, run the following steps:</p>
               <ol>
-	        <li>
-	          <p>Let <var title="true">next random access point timestamp</var> be the timestamp of the next <a href="#random-access-point">random access point</a>, for this track, that is greater than or equal to <var title="true">end</var>.</p>
-	          <div class="note"><div class="note-title"><span>Note</span></div><p class=""><var title="true">next random access point timestamp</var> can be different across tracks because the dependencies between <a href="#coded-frame">coded frames</a> within a track are usually different than the dependencies in another track.</p></div>
+	        <li>Let <var>remove end timestamp</var> be the current value of <code><a href="#widl-MediaSource-duration">duration</a></code></li>
+                <li>
+                  <p>If this track has a <a href="#random-access-point">random access point</a> timestamp that is greater than or equal to <var>end</var>, then update <var>remove end timestamp</var> to that timestamp.</p>
+	          <div class="note"><div class="note-title"><span>Note</span></div><p class="">Random access point timestamps can be different across tracks because the dependencies between <a href="#coded-frame">coded frames</a> within a track are usually different than the dependencies in another track.</p></div>
                 </li>
-	        <li>Remove all media data, for this track, that contain starting timestamps greater than or equal to <var title="true">start</var> and less than the <var title="true">next random access point timestamp</var>.</li>
+	        <li>Remove all media data, for this track, that contain starting timestamps greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>.</li>
+                <li>
+                  <p>If this object is in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>, the <a href="http://dev.w3.org/html5/spec/media-elements.html#current-playback-position">current playback position</a> is greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>, and <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> is greater than <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code>, then set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code> and stall playback.</p>
+                  <div class="note"><div class="note-title"><span>Note</span></div><p class="">This transition occurs because media data for the current position has been removed. Playback cannot progress until media for the <a href="http://dev.w3.org/html5/spec/media-elements.html#current-playback-position">current playback position</a> is appended or the <a href="#active-source-buffer-changes">selected/enabled tracks change</a>.</p></div>
+                </li>
 	      </ol>
             </li>
-        </ol>
+       </ol>
 
         <table class="parameters"><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">start</td><td class="prmType"><code><a>double</a></code></td><td class="prmNullFalse">✘</td><td class="prmOptFalse">✘</td><td class="prmDesc"></td></tr><tr><td class="prmName">end</td><td class="prmType"><code><a>double</a></code></td><td class="prmNullFalse">✘</td><td class="prmOptFalse">✘</td><td class="prmDesc"></td></tr></table><div><em>Return type: </em><code><a>void</a></code></div></dd></dl></section>
 
@@ -1319,7 +1344,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	            <li>If the <var>presentation timestamp</var> or <var>decode timestamp</var> is less than the <a href="#presentation-start-time">presentation start time</a>, then call <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream("decode")</a></code>, and abort these steps.</li>
 	          </ol>
 	        </li>
-	        <li>Add the <a href="#coded-frame">coded frame</a> with the <var>presentation timestamp</var> and <var title="true">decode timestamp</var>, to the source buffer.</li>
+	        <li>Add the <a href="#coded-frame">coded frame</a> with the <var>presentation timestamp</var> and <var>decode timestamp</var>, to the source buffer.</li>
 	      </ol>
             </li>
             <li>
@@ -1449,7 +1474,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       <p>The bytes provided through <code><a href="#widl-SourceBuffer-append-void-Uint8Array-data">append()</a></code> for a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM and the ISO Base Media File Format are provided below. If these formats are supported then the byte stream formats described below must be supported.</p>
       <p>This section provides general requirements for all byte stream formats:</p>
       <ul>
-        <li>A byte stream format specification may define <a href="#init-segment">initialization segments</a> and must define <a href="#media-segment">media segments</a>.</li>
+        <li>A byte stream format specification must define <a href="#init-segment">initialization segments</a> and <a href="#media-segment">media segments</a>.</li>
         <li>It must be possible to identify segment boundaries and segment type (initialization or media) by examining the byte stream alone.</li>
         <li>The combination of an Initialization Segment and any contiguous sequence of Media Segments associated with it must:
 	  <ol>
@@ -1468,8 +1493,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </li>
       </ul>
       <p>Byte stream specifications must at a minimum define constraints which ensure that the above requirements hold. Additional constraints may be defined, for example to simplify implementation.</p>
-
-      <p>Initialization segments are an optimization. They allow a byte stream format to avoid duplication of information in Media Segments that is the same for many Media Segments. Byte stream format specifications need not specify Initialization Segment formats, however. They may instead require that such information is duplicated in every Media Segment.</p>
 
       <section id="webm" class="nonnormative">
         <h3><span class="secno">8.1 </span>WebM Byte Streams</h3>
@@ -1636,7 +1659,18 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </thead>
         <tbody>
           <tr>
-	    <td>09 November 2012</td>
+	    <td>28 November 2012</td>
+            <td>
+              <ul>
+                <li>Added transition to HAVE_METADATA when current playback position is removed.</li>
+                <li>Added remove() calls to duration change algorithm.</li>
+                <li>Added MediaSource.isTypeSupported() method.</li>
+                <li>Remove initialization segments are optional text.</li>
+              </ul>
+            </td>
+          </tr>
+	  <tr>
+	    <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/3e4d27b3a98f/media-source/media-source.html">09 November 2012</a></td>
             <td>Converted document to ReSpec.</td>
           </tr>
 	  <tr>

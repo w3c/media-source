@@ -128,6 +128,7 @@
     'resource-fetch-algorithm': { func: videoref_helper, fragment: 'concept-media-load-resource', link_text: 'resource fetch algorithm',  },
     'intrinsic-width-and-height': { func: videoref_helper, fragment: 'concept-video-intrinsic-width', link_text: 'intrinsic width and height',  },
     'normalized-timeranges-object': { func: videoref_helper, fragment: 'normalized-timeranges-object', link_text: 'normalized TimeRanges object',  },
+    'current-playback-position': { func: videoref_helper, fragment: 'current-playback-position', link_text: 'current playback position',  },
     'media-data-is-corrupted': { func: videoref_helper, fragment: 'fatal-decode-error', link_text: 'media data is corrupted',  },
     'media-err-decode': { func: code_videoref_helper, fragment: 'dom-mediaerror-media_err_decode', link_text: 'MediaError.MEDIA_ERR_DECODE',  },
     'media-src': { func: code_videoref_helper, fragment: 'attr-media-src', link_text: 'src',  },
