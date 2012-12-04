@@ -31,6 +31,10 @@
     link_helper(doc, df, '#'+ id, text);
   }
 
+  function var_helper(doc, df, id, text) {
+    df.appendChild($("<var/>").wrapInner($("<a/>").attr({href: id}).text(text))[0]);
+  }
+
   function link_helper(doc, df, id, text) {
     df.appendChild($("<a/>").attr({href: id}).text(text)[0]);
   }
@@ -65,8 +69,9 @@
     'eos-decode': { func: idlref_helper, fragment: 'widl-MediaSource-endOfStream-void-EndOfStreamError-error', link_text: 'endOfStream("decode")',  },
     'readyState': { func: idlref_helper, fragment: 'widl-MediaSource-readyState', link_text: 'readyState',  },
     'duration': { func: idlref_helper, fragment: 'widl-MediaSource-duration', link_text: 'duration',  },
-    'append': { func: idlref_helper, fragment: 'widl-SourceBuffer-append-void-Uint8Array-data', link_text: 'append()',  },
     'abort': { func: idlref_helper, fragment: 'widl-SourceBuffer-abort-void', link_text: 'abort()',  },
+    'append': { func: idlref_helper, fragment: 'widl-SourceBuffer-append-void-Uint8Array-data', link_text: 'append()',  },
+    'remove': { func: idlref_helper, fragment: 'widl-SourceBuffer-remove-void-double-start-double-end', link_text: 'remove()',  },
     'buffered': { func: idlref_helper, fragment: 'widl-SourceBuffer-buffered', link_text: 'buffered',  },
     'timestampOffset': { func: idlref_helper, fragment: 'widl-SourceBuffer-timestampOffset', link_text: 'timestampOffset',  },
     'length': { func: idlref_helper, fragment: 'widl-SourceBufferList-length', link_text: 'length',  },
@@ -105,15 +110,17 @@
 
     'duration-change-algorithm': { func: link_helper, fragment: '#duration-change-algorithm', link_text: 'duration change algorithm', },
     'segment-parser-loop': { func: link_helper, fragment: '#sourcebuffer-segment-parser-loop', link_text: 'segment parser loop', },
-    'append-state': { func: link_helper, fragment: '#sourcebuffer-append-state', link_text: 'append state', },
+    'append-state': { func: var_helper, fragment: '#sourcebuffer-append-state', link_text: 'append state', },
     'waiting-for-segment': { func: link_helper, fragment: '#sourcebuffer-waiting-for-segment', link_text: 'WAITING_FOR_SEGMENT', },
     'parsing-init-segment': { func: link_helper, fragment: '#sourcebuffer-parsing-init-segment', link_text: 'PARSING_INIT_SEGMENT', },
     'parsing-media-segment': { func: link_helper, fragment: '#sourcebuffer-parsing-media-segment', link_text: 'PARSING_MEDIA_SEGMENT', },
     'byte-stream-format-specs': { func: link_helper, fragment: '#byte-stream-formats', link_text: 'byte stream format specifications', },
     'init-segment-received-algorithm': { func: link_helper, fragment: '#sourcebuffer-init-segment-received', link_text: 'initialization segment received algorithm', },
     'coded-frame-processing-algorithm': { func: link_helper, fragment: '#sourcebuffer-coded-frame-processing', link_text: 'coded frame processing algorithm', },
-    'input-buffer': { func: link_helper, fragment: '#sourcebuffer-input-buffer', link_text: 'input buffer', },
+    'input-buffer': { func: var_helper, fragment: '#sourcebuffer-input-buffer', link_text: 'input buffer', },
+    'buffer-full-flag': { func: var_helper, fragment: '#sourcebuffer-buffer-full-flag', link_text: 'buffer full flag', },
     'MediaSource-object-URL': { func: link_helper, fragment: '#mediasource-object-url', link_text: 'MediaSource object URL', },
+    'first-init-segment-flag': { func: var_helper, fragment: '#first-init-segment-flag', link_text: 'first initialization segment flag', },
 
     'FileAPI': { func: fileapi_helper, fragment: '', link_text: 'File API',  },
     'blob-uri': { func: fileapi_helper, fragment: 'url', link_text: 'Blob URI',  },
@@ -134,13 +141,22 @@
     'media-src': { func: code_videoref_helper, fragment: 'attr-media-src', link_text: 'src',  },
     'timerange': { func: code_videoref_helper, fragment: 'timeranges', link_text: 'TimeRange',  },
     'timeranges': { func: code_videoref_helper, fragment: 'timeranges', link_text: 'TimeRanges',  },
+    'timeranges-length': { func: code_videoref_helper, fragment: 'dom-timeranges-length', link_text: 'length',  },
     'video-track': { func: code_videoref_helper, fragment: 'videotrack', link_text: 'VideoTrack',  },
+    'videotrack-id': { func: code_videoref_helper, fragment: 'dom-videotrack-id', link_text: 'id',  },
+    'videotrack-selected': { func: code_videoref_helper, fragment: 'dom-videtrack-selected', link_text: 'selected',  },
+    'videotracklist-length': { func: code_videoref_helper, fragment: 'dom-videotracklist-length', link_text: 'length',  },
     'videotracks': { func: code_videoref_helper, fragment: 'dom-media-videotracks', link_text: 'videoTracks',  },
     'audio-track': { func: code_videoref_helper, fragment: 'audiotrack', link_text: 'AudioTrack',  },
-    'audio-tracks': { func: code_videoref_helper, fragment: 'audiotrack', link_text: 'AudioTracks',  },
+    'audiotracklist-length': { func: code_videoref_helper, fragment: 'dom-audiotracklist-length', link_text: 'length',  },
     'audiotracks': { func: code_videoref_helper, fragment: 'dom-media-audiotracks', link_text: 'audioTracks',  },
+    'audiotrack-id': { func: code_videoref_helper, fragment: 'dom-audiotrack-id', link_text: 'id',  },
+    'audiotrack-enabled': { func: code_videoref_helper, fragment: 'dom-audiotrack-enabled', link_text: 'enabled',  },
     'text-track': { func: code_videoref_helper, fragment: 'texttrack', link_text: 'TextTrack',  },
     'texttracks': { func: code_videoref_helper, fragment: 'dom-media-texttracks', link_text: 'textTracks',  },
+    'texttrack-mode': { func: code_videoref_helper, fragment: 'dom-texttrack-mode', link_text: 'mode',  },
+    'texttrack-showing': { func: code_videoref_helper, fragment: 'dom-texttrack-showing', link_text: '"showing"',  },
+    'texttrack-hidden': { func: code_videoref_helper, fragment: 'dom-texttrack-hidden', link_text: '"hidden"',  },
     'ready-state': { func: code_videoref_helper, fragment: 'dom-media-readystate', link_text: 'HTMLMediaElement.readyState',  },
     'have-nothing': { func: code_videoref_helper, fragment: 'dom-media-have_nothing', link_text: 'HAVE_NOTHING',  },
     'have-metadata': { func: code_videoref_helper, fragment: 'dom-media-have_metadata', link_text: 'HAVE_METADATA',  },
