@@ -64,12 +64,10 @@
     'sourceBuffers': { func: idlref_helper, fragment: 'widl-MediaSource-sourceBuffers', link_text: 'sourceBuffers',  },
     'activeSourceBuffers': { func: idlref_helper, fragment: 'widl-MediaSource-activeSourceBuffers', link_text: 'activeSourceBuffers',  },
     'addSourceBuffer': { func: idlref_helper, fragment: 'widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type', link_text: 'addSourceBuffer()',  },
-    'removeSourceBuffer': { func: idlref_helper, fragment: 'widl-MediaSource-removeSourceBuffer-void-SourceBuffer-sourceBuffer', link_text: 'removeSourceBuffer()',  },
     'endOfStream': { func: idlref_helper, fragment: 'widl-MediaSource-endOfStream-void-EndOfStreamError-error', link_text: 'endOfStream()',  },
     'eos-decode': { func: idlref_helper, fragment: 'widl-MediaSource-endOfStream-void-EndOfStreamError-error', link_text: 'endOfStream("decode")',  },
     'readyState': { func: idlref_helper, fragment: 'widl-MediaSource-readyState', link_text: 'readyState',  },
     'duration': { func: idlref_helper, fragment: 'widl-MediaSource-duration', link_text: 'duration',  },
-    'abort': { func: idlref_helper, fragment: 'widl-SourceBuffer-abort-void', link_text: 'abort()',  },
     'append': { func: idlref_helper, fragment: 'widl-SourceBuffer-append-void-Uint8Array-data', link_text: 'append()',  },
     'remove': { func: idlref_helper, fragment: 'widl-SourceBuffer-remove-void-double-start-double-end', link_text: 'remove()',  },
     'buffered': { func: idlref_helper, fragment: 'widl-SourceBuffer-buffered', link_text: 'buffered',  },
@@ -141,7 +139,6 @@
     'media-src': { func: code_videoref_helper, fragment: 'attr-media-src', link_text: 'src',  },
     'timerange': { func: code_videoref_helper, fragment: 'timeranges', link_text: 'TimeRange',  },
     'timeranges': { func: code_videoref_helper, fragment: 'timeranges', link_text: 'TimeRanges',  },
-    'timeranges-length': { func: code_videoref_helper, fragment: 'dom-timeranges-length', link_text: 'length',  },
     'video-track': { func: code_videoref_helper, fragment: 'videotrack', link_text: 'VideoTrack',  },
     'videotrack-id': { func: code_videoref_helper, fragment: 'dom-videotrack-id', link_text: 'id',  },
     'videotrack-selected': { func: code_videoref_helper, fragment: 'dom-videtrack-selected', link_text: 'selected',  },
@@ -234,6 +231,14 @@
       } else {
         console.log("Found def-id '" + def_id + "' but it does not correspond to anything");
       }
+    });
+
+    // Move algorithm text after method parameter & return value information.
+    $("ol.method-algorithm").each(function() {
+      var parent = this.parentNode;
+      parent.removeChild(this);
+      parent.appendChild($("<p/>").text("When this method is invoked, the user agent must run the following steps:")[0]);
+      parent.appendChild(this);
     });
 
     // Validate that all defined def-ids are actually used.

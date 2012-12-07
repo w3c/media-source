@@ -81,7 +81,7 @@
     </section>
 
     <section id="abstract">
-      This proposal extends HTMLMediaElement to allow 
+      This specification extends HTMLMediaElement to allow 
       JavaScript to generate media streams for playback. 
       Allowing JavaScript to generate streams facilitates a variety of use 
       cases like adaptive streaming and time shifting live streams.
@@ -90,7 +90,7 @@
 
     <section id="introduction">
       <h2>Introduction</h2>
-      <p>This proposal allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;. 
+      <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;. 
         It defines objects that allow JavaScript to pass media segments to an <a def-id="videoref" name="htmlmediaelement">HTMLMediaElement</a>.
         A buffering model is also included to describe how the user agent should act when different media segments are 
         appended at different times. Byte stream specifications for WebM &amp; ISO Base Media File Format are given to specify the
@@ -99,7 +99,7 @@
 
       <section id="goals">
         <h3>Goals</h3>
-        <p>This proposal was designed with the following goals in mind:</p>
+        <p>This specification was designed with the following goals in mind:</p>
         <ul>
           <li>Allow JavaScript to construct media streams independent of how the media is fetched.</li>
           <li>Define a splicing and buffering model that facilitates use cases like adaptive streaming, ad-insertion, time-shifting, and video editing.</li>
@@ -164,61 +164,52 @@
 
     <section id="source-buffer-model">
       <h2>Source Buffer Model</h2>
-      <p>The subsections below outline the buffering model for this proposal. It describes how to add and remove <a def-id="source-buffers"></a> from the presentation and describes the various rules and behaviors associated with appending data to an individual <a def-id="source-buffer"></a>. At the highest level, the web application simply creates <a def-id="source-buffers"></a> and appends a sequence of <a def-id="init-segments"></a> and <a def-id="media-segments"></a> to update the buffer's state. The media element pulls media data out of the <a def-id="source-buffers"></a>, plays it, and fires events just like it would if a normal URL was passed to the <a def-id="media-src"></a> attribute. The web application is expected to monitor media element events to determine when it needs to append more <a def-id="media-segments"></a>.</p>
-
-      <section id="source-buffer-basic-append">
-        <h3>Basic appending model</h3>
-        <p>Updating the state of a <a def-id="source-buffer"></a> requires appending at least one <a def-id="init-segment"></a> and one or more <a def-id="media-segments"></a> via <a def-id="append"></a>. The following list outlines some of the basic rules for appending segments.
-          <ul>
-	    <li>The first segment appended must be an <a def-id="init-segment"></a>.</li>
-	    <li>All <a def-id="media-segments"></a> are associated with the most recently appended <a def-id="init-segment"></a>.</li>
-	    <li>A whole segment must be appended before another segment can be started unless <a def-id="abort"></a> is called.</li>
-	    <li>Segments can be appended in pieces. (i.e. A 4096 byte segment can be spread across four 1024 byte calls to <a def-id="append"></a>).</li>
-	    <li>If a <a def-id="media-segment"></a> requires different configuration information (e.g. codec parameters, new <a def-id="track-ids"></a>, metadata) from what is in the most recently appended <a def-id="init-segment"></a>, a new <a def-id="init-segment"></a> with the new configuration information must be appended before the <a def-id="media-segment"></a> requiring this information is appended.</li>
-	    <li>A new <a def-id="media-segment"></a> can overlap, in presentation time, a segment that was previously appended. The new segment will override the previous data.</li>
-	    <li>Media segments can be appended in any order.<p class="note">In practice finite buffer space and maintaining uninterrupted playback will bias appending towards time increasing order near the current playback position. Out of order appends facilitate adaptive streaming, ad insertion, and video editing use cases.</p>
-            </li>
-	    <li>The media element may start copying data from a <a def-id="media-segment"></a> to the <a def-id="track-buffers"></a> before the entire segment has been appended. This prevents unnecessary delays for <a def-id="media-segments"></a> that cover a large time range.</li>
-          </ul>
-        </p>
-      </section>
+      <div class="nonnormative">
+        <p>The subsections below outline the buffering model for this specification. It describes the various rules and behaviors associated with appending data to an individual <a def-id="source-buffer"></a>. At the highest level, the web application simply creates <a def-id="source-buffers"></a> and appends a sequence of <a def-id="init-segments"></a> and <a def-id="media-segments"></a> to update the buffer's state. The media element pulls media data out of the <a def-id="source-buffers"></a>, plays it, and fires events just like it would if a normal URL was passed to the <a def-id="media-src"></a> attribute. The web application is expected to monitor media element events to determine when it needs to append more <a def-id="media-segments"></a>.</p>
+      </div>
 
       <section id="source-buffer-overlapping-segments">
         <h3>Appending a Media Segment over a buffered region</h3>
-        <p>There are several ways that <a def-id="media-segments"></a> can overlap segments in the <a def-id="source-buffer"></a>. Behavior for the different overlap situations are described below. If more than one overlap applies, then the <a href="#source-buffer-overlap-start">start overlap</a> gets resolved first, followed by any <a href="#source-buffer-overlap-complete">complete overlaps</a>, and finally the <a href="#source-buffer-overlap-end">end overlap</a>. If a segment contains multiple tracks then the overlap is resolved independently for each track.</p>
+        <p>There are several ways that <a def-id="media-segments"></a> can overlap segments in the <a def-id="source-buffer"></a>. Behavior for the different overlap situations are described below. If more than one overlap applies, then the <a href="#source-buffer-overlap-start">start overlap</a> must be resolved first, followed by any <a href="#source-buffer-overlap-complete">complete overlaps</a>, and finally the <a href="#source-buffer-overlap-end">end overlap</a>. If a segment contains multiple tracks then the overlap is resolved independently for each track.</p>
 
         <section id="source-buffer-overlap-complete">
           <h4>Complete Overlap</h4>
           <img src="complete_overlap.png">
-          <p>The figure above shows how the <a def-id="source-buffer"></a> gets updated when a new <a def-id="media-segment"></a> completely overlaps a segment in the buffer. In this case, the new segment completely replaces the old segment.</p>
+          <p>The figure above shows how the <a def-id="source-buffer"></a> is updated when a new <a def-id="media-segment"></a> completely overlaps a segment in the buffer. In this case, the new segment completely replaces the old segment.</p>
         </section>
 
         <section id="source-buffer-overlap-start">
           <h4>Start Overlap</h4>
           <img src="start_overlap.png">
-          <p>The figure above shows how the <a def-id="source-buffer"></a> gets updated when the beginning of a new <a def-id="media-segment"></a> overlaps a segment in the buffer. In this case the new segment replaces all the old media data in the overlapping region. Since <a def-id="media-segments"></a> are constrained to starting with <a def-id="random-access-points"></a>, this provides a seamless transition between segments.</p>
+          <p>The figure above shows how the <a def-id="source-buffer"></a> is updated when the beginning of a new <a def-id="media-segment"></a> overlaps a segment in the buffer. In this case, the new segment replaces all the old media data in the overlapping region. Since <a def-id="media-segments"></a> are constrained to starting with <a def-id="random-access-points"></a>, this provides a seamless transition between segments.</p>
           <p>When an audio frame in the <a def-id="source-buffer"></a> overlaps with the start of the new <a def-id="media-segment"></a> special behavior is required. At a minimum implementations must support dropping the old audio frame that overlaps the start of the new segment and insert silence for the small gap that is created. Higher quality implementations may support crossfading or crosslapping between the overlapping audio frames. No matter which strategy is implemented, no gaps are created in the ranges reported by <a def-id="buffered"></a> and playback must never stall at the overlap.</p>
         </section>
 
         <section id="source-buffer-overlap-end">
           <h4>End Overlap</h4>
           <img src="end_overlap.png">
-          <p>The figure above shows how the <a def-id="source-buffer"></a> gets updated when the end of a new <a def-id="media-segment"></a> overlaps a segment in the buffer. In this case, the media element tries to keep as much of the old segment as possible. The amount saved depends on where the closest <a def-id="random-access-point"></a>, in the old segment, is to the end of the new segment. In the case of audio, if the gap is smaller than the size of an audio frame, then the media element should insert silence for this gap and not reflect it in <a def-id="buffered"></a>.</p>
-          <p>An implementation may keep old segment data before the end of the new segment to avoid creating a gap if it wishes. Doing this though can significantly increase implementation complexity and could cause delays at the splice point. The key property that must be preserved is the entirety of the new segment gets added to the <a def-id="source-buffer"></a> and it is up to the implementation how much of the old segment data is retained. The web application can use <a def-id="buffered"></a> to determine how much of the old segment was preserved.</p>
+          <p>The figure above shows how the <a def-id="source-buffer"></a> is updated when the end of a new <a def-id="media-segment"></a> overlaps the beginning of a segment in the buffer. In this case, the <a def-id="source-buffer"></a> tries to keep as much of the old segment as possible. The amount saved depends on where the closest <a def-id="random-access-point"></a>, in the old segment, is to the end of the new segment. In the case of audio, if the gap is smaller than the size of an audio frame, then the <a def-id="source-buffer"></a> should insert silence for this gap and not reflect it in <a def-id="buffered"></a>. The entire new segment must be added to the <a def-id="source-buffer"></a>, but it is up to the implementation to determine how much of the old segment data is retained.</p>
+
+
+          <p class="note">An implementation may keep old segment data before the end of the new segment to avoid creating a gap if it wishes. Doing this though can significantly increase implementation complexity and could cause delays at the splice point.</p>
+
+          <p class="note"> The web application can use <a def-id="buffered"></a> to determine how much of the old segment was preserved.</p>
         </section>
 
         <section id="source-buffer-overlap-middle">
           <h4>Middle Overlap</h4>
           <img src="middle_overlap.png">
-          <p>The figure above shows how the <a def-id="source-buffer"></a> gets updated when the new <a def-id="media-segment"></a> is in the middle of the old segment. This condition is handled by first resolving the <a href="#source-buffer-overlap-start">start overlap</a> and then resolving the <a href="#source-buffer-overlap-end">end overlap</a>.</p>
+          <p>The figure above shows how the <a def-id="source-buffer"></a> is updated when the new <a def-id="media-segment"></a> is in the middle of the old segment. This condition is handled by first resolving the <a href="#source-buffer-overlap-start">start overlap</a> and then resolving the <a href="#source-buffer-overlap-end">end overlap</a>.</p>
         </section>
       </section>
 
       <section id="source-buffer-to-track-buffer">
         <h3>Source Buffer to Track Buffer transfer</h3>
+        <div class="nonnormative">
         <p>The <a def-id="source-buffer"></a> represents the media that the web application would like the media element to play. The <a def-id="track-buffer"></a> contains the data that will actually get decoded and rendered. In most cases the <a def-id="track-buffer"></a> will simply contain a subset of the <a def-id="source-buffer"></a> near the current playback position. These two buffers start to diverge though when <a def-id="media-segments"></a> that overlap or are very close to the current playback position are appended. Depending on the contents of the new <a def-id="media-segment"></a> it may not be possible to switch to the new data immediately because there isn't a <a def-id="random-access-point"></a> close enough to the current playback position. The quality of the implementation determines how much data is considered "in the <a def-id="track-buffer"></a>". It should transfer data to the <a def-id="track-buffer"></a> as late as possible whilst maintaining seamless playback. Some implementations may be able to instantiate multiple decoders or decode the new data significantly faster than real-time to achieve a seamless splice immediately. Other implementations may delay until the next <a def-id="random-access-point"></a> before switching to the newly appended data. Notice that this difference in behavior is only observable when appending close to the current playback position. The <a def-id="track-buffer"></a> represents a media subsegment, like a group of pictures or something with similar decode dependencies, that the media element commits to playing. This commitment may be influenced by a variety of things like limited decoding resources, hardware decode buffers, a jitter buffer, or the desire to limit implementation complexity.</p>
-        
+
         <p>Here is an example to help clarify the role of the <a def-id="track-buffer"></a>. Say the current playback position has a timestamp of 8 and the media element pulled frames with timestamp 9 &amp; 10 into the track buffer. The web application then appends a higher quality <a def-id="media-segment"></a> that starts with a <a def-id="random-access-point"></a> at timestamp 9. The <a def-id="source-buffer"></a> will get updated with the higher quality data, but the media element won't be able to switch to this higher quality data until the next <a def-id="random-access-point"></a> at timestamp 20. This is because a frame for timestamp 9 is already in the track buffer. As you can see the track buffer represents the "point of no return." for decoding. If a seek occurs the media element may choose to use the higher quality data since a seek might imply flushing the <a def-id="track-buffer"></a> and the user expects a break in playback.</p>
+        </div>
       </section>
     </section>
 
@@ -265,6 +256,11 @@
           Contains the subset of <a def-id="sourceBuffers"></a> that represents the <a def-id="active-source-buffers"></a>.
         </dd>
 
+        <dt>readonly attribute ReadyState readyState</dt>
+        <dd>
+          <p>Indicates the current state of the <a>MediaSource</a> object. When the <a>MediaSource</a> is created <a def-id="readyState"></a> must be set to <a def-id="closed"></a>.
+        </dd>
+
         <dt>attribute unrestricted double duration</dt>
         <dd>
           <p>Allows the web application to set the presentation duration. The duration is initially set to NaN when the <a>MediaSource</a> object is created.</p>
@@ -286,8 +282,8 @@
         <dt>SourceBuffer addSourceBuffer(DOMString type)</dt>
         <dd>
           <p>Adds a new <a>SourceBuffer</a> to <a def-id="sourceBuffers"></a>.</p>
-          <p>When this method is invoked, the user agent must run the following steps:</p>
-          <ol>
+
+          <ol class="method-algorithm">
             <li>If <var>type</var> is null or an empty string then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw a <a def-id="not-supported-err"></a> exception and abort these steps.</li>
             <li>If the user agent can't handle any more SourceBuffer objects then throw a <a def-id="quota-exceeded-err"></a> exception and abort these steps.</li>
@@ -302,8 +298,7 @@
         <dd>
           <p>Removes a <a>SourceBuffer</a> from <a def-id="sourceBuffers"></a>.</p>
 
-          <p>When this method is invoked, the user agent must run the following steps:</p>
-          <ol>
+          <ol class="method-algorithm">
             <li>If <var>sourceBuffer</var> is null then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If <var>sourceBuffer</var> specifies an object that is not in <a def-id="sourceBuffers"></a> then throw a <a def-id="not-found-err"></a> exception and abort these steps.</li>
             <li>Remove track information from <a def-id="audiotracks"></a>, <a def-id="videotracks"></a>, and <a def-id="texttracks"></a> for all tracks associated with <var>sourceBuffer</var> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="videoref" name="handler-tracklist-onchange">change</a> at the modified lists.</li>
@@ -313,15 +308,41 @@
           </ol>
         </dd>
 
-        <dt>readonly attribute ReadyState readyState</dt>
+        <dt>SourceBuffer? getSourceBuffer(VideoTrack videoTrack)</dt>
         <dd>
-          <p>Indicates the current state of the <a>MediaSource</a> object. When the <a>MediaSource</a> is created <a def-id="readyState"></a> must be set to <a def-id="closed"></a>.
+          <p>Gets the <a>SourceBuffer</a> object that created a specific <a def-id="video-track"></a>.</p>
+
+          <ol class="method-algorithm">
+            <li>If <var>videoTrack</var> was not created by any <a>SourceBuffer</a> object in <a def-id="sourceBuffers"></a> then return null.</li>
+            <li>Return the <a>SourceBuffer</a> object in <a def-id="sourceBuffers"></a> that created <var>videoTrack</var>.
+          </ol>
         </dd>
+
+        <dt>SourceBuffer? getSourceBuffer(AudioTrack audioTrack)</dt>
+        <dd>
+          <p>Gets the <a>SourceBuffer</a> object that created a specific <a def-id="audio-track"></a>.</p>
+
+          <ol class="method-algorithm">
+            <li>If <var>audioTrack</var> was not created by any <a>SourceBuffer</a> object in <a def-id="sourceBuffers"></a> then return null.</li>
+            <li>Return the <a>SourceBuffer</a> object in <a def-id="sourceBuffers"></a> that created <var>audioTrack</var>.
+          </ol>
+        </dd>
+
+        <dt>SourceBuffer? getSourceBuffer(TextTrack textTrack)</dt>
+        <dd>
+          <p>Gets the <a>SourceBuffer</a> object that created a specific <a def-id="text-track"></a>.</p>
+
+          <ol class="method-algorithm">
+            <li>If <var>textTrack</var> was not created by any <a>SourceBuffer</a> object in <a def-id="sourceBuffers"></a> then return null.</li>
+            <li>Return the <a>SourceBuffer</a> object in <a def-id="sourceBuffers"></a> that created <var>textTrack</var>.
+          </ol>
+        </dd>
+
         <dt>void endOfStream(optional EndOfStreamError error)</dt>
         <dd>
           <p>Signals the end of the stream.</p>
-          <p>When this method is invoked, the user agent must run the following steps:</p>
-          <ol>
+
+          <ol class="method-algorithm">
             <li>If the <a def-id="readyState"></a> attribute is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>Change the <a def-id="readyState"></a> attribute value to <a def-id="ended"></a>.</li>
             <li>
@@ -370,8 +391,8 @@
         <dt>static bool isTypeSupported(DOMString type)</dt>
         <dd>
           <p>Check to see whether the <a>MediaSource</a> is capable of creating <a>SourceBuffer</a> objects for the the specified MIME type.</p>
-          <p>When this method is invoked, the user agent must run the following steps:</p>
-          <ol>
+
+          <ol class="method-algorithm">
             <li>If <var>type</var> an empty string, then return false.</li>
             <li>If <var>type</var> does not contain a valid MIME type string, then return false.</li>
             <li>If <var>type</var> contains a media type or media subtype that the MediaSource does not support, then return false.</li>
@@ -645,8 +666,7 @@
         <dd>
           <p>Appends segment data to the source buffer.</p>
 
-          <p>When this method is invoked, the user agent must run the following steps:</p>
-          <ol>
+          <ol class="method-algorithm">
             <li>If <var>data</var> is null then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="closed"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
@@ -674,8 +694,7 @@
         <dd>
           <p>Aborts the current segment and resets the segment parser.</p>
 
-          <p>When this method is invoked, the user agent must run the following steps:</p>
-          <ol>
+          <ol class="method-algorithm">
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>The media element aborts parsing the current segment.</li>
@@ -689,8 +708,7 @@
         <dd>
           <p>Removes media for a specific time range.</p>
 
-          <p>When this method is invoked, the user agent must run the following steps:</p>
-          <ol>
+          <ol class="method-algorithm">
             <li>If <var>start</var> is negative or greater than <a def-id="duration"></a>, then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If <var>end</var> is less than or equal to <var>start</var>, then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
@@ -776,6 +794,7 @@
             <li>
 	      <p>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a>, then run the following steps:</p>
 	      <ol>
+                <li>If the <a def-id="first-init-segment-flag"></a> is false, then run <a def-id="eos-decode"></a> and exit the loop.</li>
 	        <li>
 	          <p>If the <a def-id="input-buffer"></a> does not contain a complete <a def-id="media-segment"></a> header yet, then exit the loop.</p>
 	          <p class="note">Implementations may choose to implement this state as an incremental parser so that it is not necessary to have the entire media segment before running the <a def-id="coded-frame-processing-algorithm"></a>.</p>
@@ -950,8 +969,8 @@
         <dt>getter SourceBuffer (unsigned long index)</dt>
         <dd>
           <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e. []).</p>
-          <p>When this method is invoked, the user agent must run the following steps:</p>
-          <ol>
+
+          <ol class="method-algorithm">
             <li>If <var>index</var> is greater than or equal to the <a def-id="length"></a> attribute then return undefined and abort these steps.</li>
             <li>Return the <var>index</var>'th <a>SourceBuffer</a> object in the list.</li>
           </ol>
@@ -992,8 +1011,8 @@
         <dt>static DOMString createObjectURL(MediaSource mediaSource)</dt>
         <dd>
           <p>Creates URLs for <a>MediaSource</a> objects.</p>
-          <p>When this method is invoked, the user agent must run the following steps:</p>
-          <ol>
+
+          <ol class="method-algorithm">
             <li>If <var>mediaSource</var> is NULL the return null.</li>
             <li>Return a unique <a def-id="MediaSource-object-URL"></a> that can be used to dereference the <var>mediaSource</var> argument, and run the rest of the algorithm asynchronously.</li>
             <li><a def-id="provide-a-stable-state"></a></li>
@@ -1259,7 +1278,16 @@
         </thead>
         <tbody>
           <tr>
-	    <td>06 December 2012</a></td>
+	    <td>08 December 2012</a></td>
+            <td>
+              <ul>
+                <li>Added MediaSource.getSourceBuffer() methods.</li>
+                <li>Section 2 cleanup.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+	    <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/43be42e69533/media-source/media-source.html">06 December 2012</a></td>
             <td>
               <ul>
                 <li>append() now throws a QUOTA_EXCEEDED_ERR when the SourceBuffer is full.</li>
