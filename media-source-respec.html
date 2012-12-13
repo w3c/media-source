@@ -93,8 +93,8 @@
       <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;. 
         It defines objects that allow JavaScript to pass media segments to an <a def-id="videoref" name="htmlmediaelement">HTMLMediaElement</a>.
         A buffering model is also included to describe how the user agent should act when different media segments are 
-        appended at different times. Byte stream specifications for WebM &amp; ISO Base Media File Format are given to specify the
-        expected format of media segments used with these extensions.</p>
+        appended at different times. Byte stream specifications for WebM, ISO Base Media File Format, and MPEG-2 Transport Streams are given to specify the
+        expected format of byte streams used with these extensions.</p>
       <img src="pipeline_model.png">
 
       <section id="goals">
@@ -105,7 +105,7 @@
           <li>Define a splicing and buffering model that facilitates use cases like adaptive streaming, ad-insertion, time-shifting, and video editing.</li>
           <li>Minimize the need for media parsing in JavaScript.</li>
           <li>Leverage the browser cache as much as possible.</li>
-          <li>Provide byte stream definitions for WebM &amp; the ISO Base Media File Format.</li>
+          <li>Provide byte stream definitions for WebM, the ISO Base Media File Format, and MPEG-2 Transport Streams.</li>
           <li>Not require support for any particular media format or codec.</li>
         </ul>
       </section>
@@ -116,7 +116,7 @@
         <dl>
           <dt id="init-segment">Initialization Segment</dt>
           <dd>
-	    <p>A sequence of bytes that contains all of the initialization information required to decode a sequence of <a def-id="media-segments"></a>. This includes codec initialization data, <a def-id="track-id"></a> mappings for multiplexed segments, and timestamp offsets (e.g. edit lists).</p>
+	    <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of <a def-id="media-segments"></a>. This includes codec initialization data, <a def-id="track-id"></a> mappings for multiplexed segments, and timestamp offsets (e.g. edit lists).</p>
             <p class="note">The <a def-id="byte-stream-format-specs"></a> contain format specific examples.</p>
 
           <dt id="media-segment">Media Segment</dt>
@@ -125,20 +125,14 @@
             <p class="note">The <a def-id="byte-stream-format-specs"></a> contain format specific examples.</p>
           </dd>
 
-          <dt id="source-buffer">Source Buffer</dt>
-          <dd><p>A hypothetical buffer that contains a distinct sequence of <a def-id="init-segments"></a> &amp; <a def-id="media-segments"></a>. When <a def-id="media-segments"></a> are passed to <a def-id="append"></a> they update the state of this buffer. The source buffer only allows a single <a def-id="media-segment"></a> to cover a specific point in the presentation timeline of each track. If a <a def-id="media-segment"></a> gets appended that contains media data overlapping (in presentation time) with media data from an existing segment, then the new media data will override the old media data. Since <a def-id="media-segments"></a> depend on <a def-id="init-segments"></a> the source buffer is also responsible for maintaining these associations. During playback, the media element pulls segment data out of the source buffers, demultiplexes it if necessary, and enqueues it into <a def-id="track-buffers"></a> so it will get decoded and displayed. <a def-id="buffered"></a> describes the time ranges that are covered by <a def-id="media-segments"></a> in the source buffer.</p></dd>
-
-          <dt id="active-source-buffers">Active Source Buffers</dt>
-          <dd><p>The set of <a def-id="source-buffers"></a> that are providing the <a def-id="videoref" name="dom-videotrack-selected">selected video track</a>, the <a def-id="videoref" name="dom-audiotrack-enabled">enabled audio tracks</a>, and the <a def-id="videoref" name="dom-texttrack-showing">"showing"</a> or <a def-id="videoref" name="dom-texttrack-hidden">"hidden"</a> text tracks. This is a subset of all the source buffers associated with a specific <a>MediaSource</a> object. See <a href="#active-source-buffer-changes">Changes to selected/enabled track state</a> for details.</p></dd>
-          
-          <dt id="track-buffer">Track Buffer</dt>
-          <dd><p>A hypothetical buffer that represents initialization and media data for a single <a def-id="audio-track"></a>, <a def-id="video-track"></a>, or <a def-id="text-track"></a> that has been queued for playback. This buffer may not exist in actual implementations, but it is intended to represent media data that will be decoded no matter what <a def-id="media-segments"></a> are appended to update the <a def-id="source-buffer"></a>. This distinction is important when considering appends that happen close to the current playback position. See <a href="#source-buffer-to-track-buffer">Source Buffer to Track Buffer transfer</a> for details.</p></dd>
+          <dt id="decoder-buffer">Decoder Buffer</dt>
+          <dd><p>A buffer that holds initialization data and <a def-id="coded-frames"></a> that will be decoded and rendered. This buffer may not exist in actual implementations, but it is intended to represent media data that will be decoded no matter what <a def-id="media-segments"></a> are appended to update the <a>SourceBuffer</a>. This distinction is important when considering appends that happen close to the current playback position. See <a href="#track-buffer-to-decoder-buffer">Track Buffer to Decoder Buffer transfer</a> for details.</p></dd>
 
           <dt id="random-access-point">Random Access Point</dt>
           <dd><p>A position in a <a def-id="media-segment"></a> where decoding and continuous playback can begin without relying on any previous data in the segment. For video this tends to be the location of I-frames. In the case of audio, most audio frames can be treated as a random access point. Since video tracks tend to have a more sparse distribution of random access points, the location of these points are usually considered the random access points for multiplexed streams.</p></dd>
 
           <dt id="presentation-start-time">Presentation Start Time</dt>
-          <dd><p>The presentation start time is the earliest time point in the presentation and specifies the <a def-id="videoref" name="initial-playback-position">initial playback position</a> and <a def-id="videoref" name="earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0. Appending <a def-id="media-segments"></a> with negative timestamps will cause playback to terminate with a <a def-id="media-err-decode"></a> error unless <a def-id="timestampOffset"></a> is used to make the timestamps greater than or equal to 0.</p></dd>
+          <dd><p>The presentation start time is the earliest time point in the presentation and specifies the <a def-id="videoref" name="initial-playback-position">initial playback position</a> and <a def-id="videoref" name="earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0.</dd>
 
           <dt id="mediasource-object-url">MediaSource object URL</dt>
           <dd>
@@ -155,8 +149,14 @@
           <dt id="coded-frame">Coded Frame</dt>
           <dd><p>A unit of compressed media data that has a presentation timestamp and  decode timestamp. The presentation timestamp indicates when the frame should be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp must be present in the bytestream. If frames cannot be decoded out of order and a decode timestamp is not present in the bytestream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
 
-          <dt id="parent-media-source">Parent Media Source</dt> 
+          <dt id="parent-media-source">Parent Media Source</dt>
           <dd>The parent media source of a <a>SourceBuffer</a> object is the <a>MediaSource</a> object that created it.</p>
+
+          <dt id="append-sequence">Append Sequence</dt>
+          <dd>A series of <a def-id="append"></a> calls on a <a>SourceBuffer</a> without any intervening <a def-id="abort"></a> calls. The
+          <a def-id="media-segments"></a> in an append sequence must be adjacent and monotonically increasing in time without any gaps. An
+          <a def-id="abort"></a> call starts a new append sequence which allows <a def-id="media-segments"></a> to be appended in non-monotonically
+          increasing order.</p>
         </dl>
       </section>
     </section>
@@ -165,30 +165,34 @@
     <section id="source-buffer-model">
       <h2>Source Buffer Model</h2>
       <div class="nonnormative">
-        <p>The subsections below outline the buffering model for this specification. It describes the various rules and behaviors associated with appending data to an individual <a def-id="source-buffer"></a>. At the highest level, the web application simply creates <a def-id="source-buffers"></a> and appends a sequence of <a def-id="init-segments"></a> and <a def-id="media-segments"></a> to update the buffer's state. The media element pulls media data out of the <a def-id="source-buffers"></a>, plays it, and fires events just like it would if a normal URL was passed to the <a def-id="media-src"></a> attribute. The web application is expected to monitor media element events to determine when it needs to append more <a def-id="media-segments"></a>.</p>
+        <p>The subsections below outline the buffering model for this specification. It describes the various rules and behaviors associated with appending
+ data to an individual <a>SourceBuffer</a>. At the highest level, the web application creates <a>SourceBuffer</a> objects and appends sequences of 
+<a def-id="init-segments"></a> and <a def-id="media-segments"></a> to update their state. The media element pulls media data out of the 
+<a>MediaSource</a> object, plays it, and fires events just like it would if a normal URL was passed to the <a def-id="media-src"></a> attribute.
+ The web application is expected to monitor media element events to determine when it needs to append more <a def-id="media-segments"></a>.</p>
       </div>
 
       <section id="source-buffer-overlapping-segments">
         <h3>Appending a Media Segment over a buffered region</h3>
-        <p>There are several ways that <a def-id="media-segments"></a> can overlap segments in the <a def-id="source-buffer"></a>. Behavior for the different overlap situations are described below. If more than one overlap applies, then the <a href="#source-buffer-overlap-start">start overlap</a> must be resolved first, followed by any <a href="#source-buffer-overlap-complete">complete overlaps</a>, and finally the <a href="#source-buffer-overlap-end">end overlap</a>. If a segment contains multiple tracks then the overlap is resolved independently for each track.</p>
+        <p>There are several ways that <a def-id="media-segments"></a> can overlap segments in the <a>SourceBuffer</a>. Behavior for the different overlap situations are described below. If more than one overlap applies, then the <a href="#source-buffer-overlap-start">start overlap</a> must be resolved first, followed by any <a href="#source-buffer-overlap-complete">complete overlaps</a>, and finally the <a href="#source-buffer-overlap-end">end overlap</a>. If a segment contains multiple tracks then the overlap is resolved independently for each track.</p>
 
         <section id="source-buffer-overlap-complete">
           <h4>Complete Overlap</h4>
           <img src="complete_overlap.png">
-          <p>The figure above shows how the <a def-id="source-buffer"></a> is updated when a new <a def-id="media-segment"></a> completely overlaps a segment in the buffer. In this case, the new segment completely replaces the old segment.</p>
+          <p>The figure above shows how the <a>SourceBuffer</a> is updated when a new <a def-id="media-segment"></a> completely overlaps a segment in the buffer. In this case, the new segment completely replaces the old segment.</p>
         </section>
 
         <section id="source-buffer-overlap-start">
           <h4>Start Overlap</h4>
           <img src="start_overlap.png">
-          <p>The figure above shows how the <a def-id="source-buffer"></a> is updated when the beginning of a new <a def-id="media-segment"></a> overlaps a segment in the buffer. In this case, the new segment replaces all the old media data in the overlapping region. Since <a def-id="media-segments"></a> are constrained to starting with <a def-id="random-access-points"></a>, this provides a seamless transition between segments.</p>
-          <p>When an audio frame in the <a def-id="source-buffer"></a> overlaps with the start of the new <a def-id="media-segment"></a> special behavior is required. At a minimum implementations must support dropping the old audio frame that overlaps the start of the new segment and insert silence for the small gap that is created. Higher quality implementations may support crossfading or crosslapping between the overlapping audio frames. No matter which strategy is implemented, no gaps are created in the ranges reported by <a def-id="buffered"></a> and playback must never stall at the overlap.</p>
+          <p>The figure above shows how the <a>SourceBuffer</a> is updated when the beginning of a new <a def-id="media-segment"></a> overlaps a segment in the buffer. In this case, the new segment replaces all the old media data in the overlapping region. Since <a def-id="media-segments"></a> are constrained to starting with <a def-id="random-access-points"></a>, this provides a seamless transition between segments.</p>
+          <p>When an audio frame in the <a>SourceBuffer</a> overlaps with the start of the new <a def-id="media-segment"></a> special behavior is required. At a minimum implementations must support dropping the old audio frame that overlaps the start of the new segment and insert silence for the small gap that is created. Higher quality implementations may support crossfading or crosslapping between the overlapping audio frames. No matter which strategy is implemented, no gaps are created in the ranges reported by <a def-id="buffered"></a> and playback must never stall at the overlap.</p>
         </section>
 
         <section id="source-buffer-overlap-end">
           <h4>End Overlap</h4>
           <img src="end_overlap.png">
-          <p>The figure above shows how the <a def-id="source-buffer"></a> is updated when the end of a new <a def-id="media-segment"></a> overlaps the beginning of a segment in the buffer. In this case, the <a def-id="source-buffer"></a> tries to keep as much of the old segment as possible. The amount saved depends on where the closest <a def-id="random-access-point"></a>, in the old segment, is to the end of the new segment. In the case of audio, if the gap is smaller than the size of an audio frame, then the <a def-id="source-buffer"></a> should insert silence for this gap and not reflect it in <a def-id="buffered"></a>. The entire new segment must be added to the <a def-id="source-buffer"></a>, but it is up to the implementation to determine how much of the old segment data is retained.</p>
+          <p>The figure above shows how the <a>SourceBuffer</a> is updated when the end of a new <a def-id="media-segment"></a> overlaps the beginning of a segment in the buffer. In this case, the <a>SourceBuffer</a> tries to keep as much of the old segment as possible. The amount saved depends on where the closest <a def-id="random-access-point"></a>, in the old segment, is to the end of the new segment. In the case of audio, if the gap is smaller than the size of an audio frame, then the <a>SourceBuffer</a> may render silence for this gap. This gap must not be reflect in <a def-id="buffered"></a>. The entire new segment must be added to the <a>SourceBuffer</a>, but it is up to the implementation to determine how much of the old segment data is retained.</p>
 
 
           <p class="note">An implementation may keep old segment data before the end of the new segment to avoid creating a gap if it wishes. Doing this though can significantly increase implementation complexity and could cause delays at the splice point.</p>
@@ -199,16 +203,16 @@
         <section id="source-buffer-overlap-middle">
           <h4>Middle Overlap</h4>
           <img src="middle_overlap.png">
-          <p>The figure above shows how the <a def-id="source-buffer"></a> is updated when the new <a def-id="media-segment"></a> is in the middle of the old segment. This condition is handled by first resolving the <a href="#source-buffer-overlap-start">start overlap</a> and then resolving the <a href="#source-buffer-overlap-end">end overlap</a>.</p>
+          <p>The figure above shows how the <a>SourceBuffer</a> is updated when the new <a def-id="media-segment"></a> is in the middle of the old segment. This condition is handled by first resolving the <a href="#source-buffer-overlap-start">start overlap</a> and then resolving the <a href="#source-buffer-overlap-end">end overlap</a>.</p>
         </section>
       </section>
 
-      <section id="source-buffer-to-track-buffer">
-        <h3>Source Buffer to Track Buffer transfer</h3>
+      <section id="track-buffer-to-decoder-buffer">
+        <h3>Track Buffer to Decoder Buffer transfer</h3>
         <div class="nonnormative">
-        <p>The <a def-id="source-buffer"></a> represents the media that the web application would like the media element to play. The <a def-id="track-buffer"></a> contains the data that will actually get decoded and rendered. In most cases the <a def-id="track-buffer"></a> will simply contain a subset of the <a def-id="source-buffer"></a> near the current playback position. These two buffers start to diverge though when <a def-id="media-segments"></a> that overlap or are very close to the current playback position are appended. Depending on the contents of the new <a def-id="media-segment"></a> it may not be possible to switch to the new data immediately because there isn't a <a def-id="random-access-point"></a> close enough to the current playback position. The quality of the implementation determines how much data is considered "in the <a def-id="track-buffer"></a>". It should transfer data to the <a def-id="track-buffer"></a> as late as possible whilst maintaining seamless playback. Some implementations may be able to instantiate multiple decoders or decode the new data significantly faster than real-time to achieve a seamless splice immediately. Other implementations may delay until the next <a def-id="random-access-point"></a> before switching to the newly appended data. Notice that this difference in behavior is only observable when appending close to the current playback position. The <a def-id="track-buffer"></a> represents a media subsegment, like a group of pictures or something with similar decode dependencies, that the media element commits to playing. This commitment may be influenced by a variety of things like limited decoding resources, hardware decode buffers, a jitter buffer, or the desire to limit implementation complexity.</p>
+        <p>The <a def-id="track-buffer"></a> represents the media that the web application would like the media element to play. The <a def-id="decoder-buffer"></a> contains the data that will actually get decoded and rendered. In most cases the <a def-id="decoder-buffer"></a> will simply contain a subset of the <a def-id="track-buffer"></a> near the current playback position. These two buffers start to diverge when <a def-id="media-segments"></a> that overlap or are very close to the current playback position are appended. Depending on the contents of the new <a def-id="media-segment"></a> it may not be possible to switch to the new data immediately because there isn't a <a def-id="random-access-point"></a> close enough to the current playback position. The quality of the implementation determines how much data is considered &quot;in the <a def-id="decoder-buffer"></a>.&quot; It should transfer data to the <a def-id="decoder-buffer"></a> as late as possible whilst maintaining seamless playback. Some implementations may be able to instantiate multiple decoders or decode the new data significantly faster than real-time to achieve a seamless splice immediately. Other implementations may delay until the next <a def-id="random-access-point"></a> before switching to the newly appended data. Notice that this difference in behavior is only observable when appending close to the current playback position. The <a def-id="decoder-buffer"></a> represents a media subsegment, like a group of pictures or something with similar decode dependencies, that the media element commits to playing. This commitment may be influenced by a variety of things like limited decoding resources, hardware decode buffers, a jitter buffer, or the desire to limit implementation complexity.</p>
 
-        <p>Here is an example to help clarify the role of the <a def-id="track-buffer"></a>. Say the current playback position has a timestamp of 8 and the media element pulled frames with timestamp 9 &amp; 10 into the track buffer. The web application then appends a higher quality <a def-id="media-segment"></a> that starts with a <a def-id="random-access-point"></a> at timestamp 9. The <a def-id="source-buffer"></a> will get updated with the higher quality data, but the media element won't be able to switch to this higher quality data until the next <a def-id="random-access-point"></a> at timestamp 20. This is because a frame for timestamp 9 is already in the track buffer. As you can see the track buffer represents the "point of no return." for decoding. If a seek occurs the media element may choose to use the higher quality data since a seek might imply flushing the <a def-id="track-buffer"></a> and the user expects a break in playback.</p>
+        <p>Here is an example to help clarify the role of the <a def-id="decoder-buffer"></a>. Say the current playback position has a timestamp of 8 and the media element pulled frames with timestamp 9 &amp; 10 into the decoder buffer. The web application then appends a higher quality <a def-id="media-segment"></a> that starts with a <a def-id="random-access-point"></a> at timestamp 9. The <a def-id="track-buffer"></a> will get updated with the higher quality data, but the media element won't be able to switch to this higher quality data until the next <a def-id="random-access-point"></a> at timestamp 20. This is because a frame for timestamp 9 is already in the decoder buffer. The decoder buffer represents the "point of no return." for decoding. If a seek occurs the media element may choose to use the higher quality data since a seek might imply flushing the <a def-id="decoder-buffer"></a> and the user expects a break in playback.</p>
         </div>
       </section>
     </section>
@@ -228,7 +232,7 @@
         </dd>
         <dt>ended</dt>
         <dd>
-          The source is still attached to a media element, but <a def-id="endOfStream"></a> has been called. Appending data to <a>SourceBuffer</a> objects in this state is not allowed.
+          The source is still attached to a media element, but <a def-id="endOfStream"></a> has been called.
         </dd>
       </dl>
 
@@ -253,7 +257,13 @@
 
         <dt>readonly attribute SourceBufferList activeSourceBuffers</dt>
         <dd>
-          Contains the subset of <a def-id="sourceBuffers"></a> that represents the <a def-id="active-source-buffers"></a>.
+          <p>Contains the subset of <a def-id="sourceBuffers"></a> that are providing the 
+            <a def-id="videoref" name="dom-videotrack-selected">selected video track</a>,  the 
+            <a def-id="videoref" name="dom-audiotrack-enabled">enabled audio tracks</a>, and the 
+            <a def-id="videoref" name="dom-texttrack-showing">"showing"</a> or <a def-id="videoref" name="dom-texttrack-hidden">"hidden"</a> text tracks.
+          </p>
+          <p class="note">The <a href="#active-source-buffer-changes">Changes to selected/enabled track state</a> section describes how this attribute gets
+            updated.</p>
         </dd>
 
         <dt>readonly attribute ReadyState readyState</dt>
@@ -273,7 +283,7 @@
           <ol>
             <li>If the value being set is negative or NaN then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the value being set.
+            <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the value being assigned to this attribute.
 	      <p class="note"><a def-id="append"></a> and <a def-id="endOfStream"></a> can update the duration under certain circumstances.</p>
             </li>
           </ol>
@@ -393,7 +403,7 @@
           <p>Check to see whether the <a>MediaSource</a> is capable of creating <a>SourceBuffer</a> objects for the the specified MIME type.</p>
 
           <ol class="method-algorithm">
-            <li>If <var>type</var> an empty string, then return false.</li>
+            <li>If <var>type</var> is an empty string, then return false.</li>
             <li>If <var>type</var> does not contain a valid MIME type string, then return false.</li>
             <li>If <var>type</var> contains a media type or media subtype that the MediaSource does not support, then return false.</li>
             <li>If <var>type</var> contains at a codec that the MediaSource does not support, then return false.</li>
@@ -401,7 +411,7 @@
             <li>Return true.</li>
           </ol>
           <p class="note">
-            If true is returned from this method, it only indicates that the <a>MediaSource</a> implementation is capable of creating <a>SourceBuffer</a> objects for the specified MIME type. A <a def-id="addSourceBuffer"></a> call may still fail if sufficient resources are not available to support the addition of a new <a>SourceBuffer</a>.
+            If true is returned from this method, it only indicates that the <a>MediaSource</a> implementation is capable of creating <a>SourceBuffer</a> objects for the specified MIME type. An <a def-id="addSourceBuffer"></a> call may still fail if sufficient resources are not available to support the addition of a new <a>SourceBuffer</a>.
           </p>
           <p class="note">
             This method returning true implies that HTMLMediaElement.canPlayType() will return "maybe" or "probably" since it does not make sense for a <a>MediaSource</a> to support a type the HTMLMediaElement knows it cannot play.
@@ -492,7 +502,9 @@
 	      <dd>
 	        <ol>
 	          <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.</li>
-	          <li>The media element waits for the necessary <a def-id="media-segments"></a> to be passed to <a def-id="append"></a>. The web application can use <a def-id="buffered"></a> to determine what the media element needs to resume playback.</li>
+	          <li>The media element waits for the necessary <a def-id="media-segments"></a> to be passed to <a def-id="append"></a>.
+                    <p class="note">The web application can use <a def-id="buffered"></a> to determine what the media element needs to resume playback.</p>
+                  </li>
 	        </ol>
 	      </dd>
 	      <dt>Otherwise</dt>
@@ -507,7 +519,8 @@
 
         <section id="buffer-monitoring">
           <h4>SourceBuffer Monitoring</h4>
-          <p>The following steps are periodically run during playback to make sure that all of the <a>SourceBuffer</a> objects in <a def-id="activeSourceBuffers"></a> have enough data to ensure uninterrupted playback. Appending new segments and changes to <a def-id="activeSourceBuffers"></a> also cause these steps to run because they affect the conditions that trigger state transitions. The web application can monitor changes in <a def-id="ready-state"></a> to drive <a def-id="media-segment"></a> appending.</p>
+          <p>The following steps are periodically run during playback to make sure that all of the <a>SourceBuffer</a> objects in <a def-id="activeSourceBuffers"></a> have enough data to ensure uninterrupted playback. Appending new segments and changes to <a def-id="activeSourceBuffers"></a> also cause these steps to run because they affect the conditions that trigger state transitions.</p>
+          <p class="note">The web application can monitor changes in <a def-id="ready-state"></a> to drive <a def-id="media-segment"></a> appending.</p>
           <dl class="switch">
             <dt>If <a def-id="buffered"></a> for all objects in <a def-id="activeSourceBuffers"></a> do not contain <a def-id="timeranges"></a> for the current playback position:</dt>
             <dd>
@@ -552,7 +565,7 @@
           <h4>Changes to selected/enabled track state</h4>
           <p>During playback <a def-id="activeSourceBuffers"></a> needs to be updated if the <a def-id="videoref" name="dom-videotrack-selected">selected video track</a>, the <a def-id="videoref" name="dom-audiotrack-enabled">enabled audio tracks</a>, or a text track <a def-id="videoref" name="dom-texttrack-mode">mode</a> changes. When one or more of these changes occur the following steps need to be followed.</p>
           <dl class="switch">
-            <dt>If the selected video track changes:</dt>
+            <dt>If the selected video track changes, then run the following steps:</dt>
             <dd>
 	      <ol>
 	        <li>If the <a>SourceBuffer</a> associated with the previously selected video track is not associated with any other enabled tracks, run the following steps:
@@ -573,7 +586,7 @@
 	        </li>
 	      </ol>
             </dd>
-            <dt>If an audio track becomes disabled and the <a>SourceBuffer</a> associated with this track is not associated with any other enabled or selected track</dt>
+            <dt>If an audio track becomes disabled and the <a>SourceBuffer</a> associated with this track is not associated with any other enabled or selected track, then run the following steps:</dt>
             <dd>
 	      <ol>
 	        <li>Remove the <a>SourceBuffer</a> associated with the audio track from <a def-id="activeSourceBuffers"></a>
@@ -583,7 +596,7 @@
                 </li>
 	      </ol>
             </dd>
-            <dt>If an audio track becomes enabled and the <a>SourceBuffer</a> associated with this track is not already in <a def-id="activeSourceBuffers"></a>
+            <dt>If an audio track becomes enabled and the <a>SourceBuffer</a> associated with this track is not already in <a def-id="activeSourceBuffers"></a>, then run the following steps:
             </dt>
             <dd>
 	      <ol>
@@ -594,7 +607,7 @@
                 </li>
 	      </ol>
             </dd>
-            <dt>If a text track <a def-id="videoref" name="dom-texttrack-mode">mode</a> becomes <a def-id="videoref" name="dom-texttrack-disabled">"disabled"</a> and the <a>SourceBuffer</a> associated with this track is not associated with any other enabled or selected track</dt>
+            <dt>If a text track <a def-id="videoref" name="dom-texttrack-mode">mode</a> becomes <a def-id="videoref" name="dom-texttrack-disabled">"disabled"</a> and the <a>SourceBuffer</a> associated with this track is not associated with any other enabled or selected track, then run the following steps:</dt>
             <dd>
 	      <ol>
 	        <li>Remove the <a>SourceBuffer</a> associated with the text track from <a def-id="activeSourceBuffers"></a>
@@ -604,7 +617,7 @@
                 </li>
 	      </ol>
             </dd>
-            <dt>If a text track <a def-id="videoref" name="dom-texttrack-mode">mode</a> becomes <a def-id="videoref" name="dom-texttrack-showing">"showing"</a> or <a def-id="videoref" name="dom-texttrack-hidden">"hidden"</a> and the <a>SourceBuffer</a> associated with this track is not already in <a def-id="activeSourceBuffers"></a>
+            <dt>If a text track <a def-id="videoref" name="dom-texttrack-mode">mode</a> becomes <a def-id="videoref" name="dom-texttrack-showing">"showing"</a> or <a def-id="videoref" name="dom-texttrack-hidden">"hidden"</a> and the <a>SourceBuffer</a> associated with this track is not already in <a def-id="activeSourceBuffers"></a>, then run the following steps:
             </dt>
             <dd>
 	      <ol>
@@ -652,7 +665,7 @@
         <dt>attribute double timestampOffset</dt>
         <dd>
           <p>Controls the offset applied to timestamps inside subsequent <a def-id="media-segments"></a> that are appended to this <a>SourceBuffer</a>. The <a def-id="timestampOffset"></a> is initially set to 0 which indicates that no offset is being applied.</p>
-          <p> On getting, the initial value or the last value that was successfully set is returned.</p>
+          <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run following steps:</p>
           <ol>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
@@ -697,8 +710,8 @@
           <ol class="method-algorithm">
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>The media element aborts parsing the current segment.</li>
             <li>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a> and the <a def-id="input-buffer"></a> contains some complete <a def-id="coded-frames"></a>, then run the <a def-id="coded-frame-processing-algorithm"></a> as if the media segment only contained these frames.</li>
+            <li>Unset the <a def-id="last-decode-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
             <li>Remove all bytes from the <a def-id="input-buffer"></a>.</li>
             <li>Set <a def-id="append-state"></a> to <a def-id="waiting-for-segment"></a>.</li>
           </ol>
@@ -714,14 +727,14 @@
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>
-              <p>For each track in this source buffer, run the following steps:</p>
+              <p>For each <a def-id="track-buffer"></a> in this source buffer, run the following steps:</p>
               <ol>
 	        <li>Let <var>remove end timestamp</var> be the current value of <a def-id="duration"></a></li>
                 <li>
-                  <p>If this track has a <a def-id="random-access-point"></a> timestamp that is greater than or equal to <var>end</var>, then update <var>remove end timestamp</var> to that timestamp.</p>
+                  <p>If this <a def-id="track-buffer"></a> has a <a def-id="random-access-point"></a> timestamp that is greater than or equal to <var>end</var>, then update <var>remove end timestamp</var> to that timestamp.</p>
 	          <p class="note">Random access point timestamps can be different across tracks because the dependencies between <a def-id="coded-frames"></a> within a track are usually different than the dependencies in another track.</p>
                 </li>
-	        <li>Remove all media data, for this track, that contain starting timestamps greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>.</li>
+	        <li>Remove all media data, from this <a def-id="track-buffer"></a>, that contain starting timestamps greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>.</li>
                 <li>
                   <p>If this object is in <a def-id="activeSourceBuffers"></a>, the <a def-id="current-playback-position"></a> is greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>, and <a def-id="ready-state"></a> is greater than <a def-id="have-metadata"></a>, then set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a> and stall playback.</p>
                   <p class="note">This transition occurs because media data for the current position has been removed. Playback cannot progress until media for the <a def-id="current-playback-position"></a> is appended or the <a href="#active-source-buffer-changes">selected/enabled tracks change</a>.</p>
@@ -734,6 +747,17 @@
 
         </dd>
       </dl>
+
+      <section id="track-buffers">
+        <h3>Track Buffers</h3>
+        <p>A <dfn id="track-buffer">track buffer</dfn> stores the <a def-id="track-descriptions"></a> and <a def-id="coded-frames"></a> for an individual
+          track. The track buffer is updated as <a def-id="init-segments"></a> and <a def-id="media-segments"></a> are appended to the 
+          <a>SourceBuffer</a>.</p>
+
+        <p>Each <a def-id="track-buffer"></a> has a <dfn id="last-decode-timestamp">last decode timestamp</dfn> variable that stores
+          the decode timestamp of the last <a def-id="coded-frame"></a> appended in the current <a def-id="append-sequence"></a>. The variable is initially
+          unset to indicate that no <a def-id="coded-frames"></a> have been appended yet.</p>
+      </section>
 
       <section id="sourcebuffer-algorithms">
         <h3>Algorithms</h3>
@@ -825,14 +849,19 @@
 	      <dd>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to positive Infinity.</dd>
             </dl>
             <li>If the <a def-id="init-segment"></a> has no audio, video, or text tracks, then call <a def-id="eos-decode"></a> and abort these steps.</li>
-            <li>
-              <p>If the <a def-id="first-init-segment-flag"></a> is true, then verify the following properties. If any of the checks fail then call <a def-id="eos-decode"></a> and abort these steps.</p>
-              <ul>
-                <li>The number of audio, video, and text tracks match what was in the first <a def-id="init-segment"></a>.</li>
-                <li>The codecs for each track, match what was specified in the first <a def-id="init-segment"></a>.</li>
-                <li>If more than one track for a single type are present (ie 2 audio tracks), then the <a def-id="track-ids"></a> match the ones in the
-                  first <a def-id="init-segment"></a>.</li>
-              </ul>
+            <li>If the <a def-id="first-init-segment-flag"></a> is true, then run the following steps:
+              <ol>
+                <li>Verify the following properties. If any of the checks fail then call <a def-id="eos-decode"></a> and abort these steps.
+                  <ul>
+                    <li>The number of audio, video, and text tracks match what was in the first <a def-id="init-segment"></a>.</li>
+                    <li>The codecs for each track, match what was specified in the first <a def-id="init-segment"></a>.</li>
+                    <li>If more than one track for a single type are present (ie 2 audio tracks), then the <a def-id="track-ids"></a> match the ones in the
+                      first <a def-id="init-segment"></a>.</li>
+                  </ul>
+                </li>
+                <li>Add the appropriate <a def-id="track-descriptions"></a> from this <a def-id="init-segment"></a> to each of the 
+                  <a def-id="track-buffers"></a>.</li>
+              </ol>
             </li>
             <li>Let <var>active track flag</var> equal false.</li>
             <li>
@@ -854,6 +883,8 @@
                       </ol>
                     </li>
                     <li>Add <var>new audio track</var> to <a def-id="audiotracks"></a>.</li>
+                    <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
+                    <li>Add the <a def-id="track-description"></a> for this track to the <a def-id="track-buffer"></a>.</li>
                   </ol>
                 </li>
                 <li>
@@ -872,6 +903,8 @@
                       </ol>
                     </li>
                     <li>Add <var>new video track</var> to <a def-id="videotracks"></a>.</li>
+                    <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
+                    <li>Add the <a def-id="track-description"></a> for this track to the <a def-id="track-buffer"></a>.</li>
                   </ol>
                 </li>
                 <li>
@@ -885,9 +918,16 @@
                       <a def-id="texttrack-hidden"></a>, then set <var>active track flag</var> to true.
                     </li>
                     <li>Add <var>new text track</var> to <a def-id="texttracks"></a>.</li>
+                    <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
+                    <li>Add the <a def-id="track-description"></a> for this track to the <a def-id="track-buffer"></a>.</li>
                   </ol>
                 </li>
-                <li>If <var>active track flag</var> equals true, then add this <a>SourceBuffer</a> to <a def-id="activeSourceBuffers"></a>.</li>
+                <li>If <var>active track flag</var> equals true, then run the following steps:
+                  <ol>
+                    <li>Add this <a>SourceBuffer</a> to <a def-id="activeSourceBuffers"></a>.</li>
+                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="addsourcebuffer"></a> at <a def-id="activeSourceBuffers"></a></li>
+                  </ol>
+                </li>
                 <li>Set <a def-id="first-init-segment-flag"></a> to true.</li>
               </ol>
             </li>
@@ -895,7 +935,7 @@
               <p>If the <a def-id="ready-state"></a> attribute is <a def-id="have-nothing"></a>, then run the following steps:</p>
               <ol>
                 <li>
-                  If one or more objects in <a def-id="activeSourceBuffers"></a> have <a def-id="first-init-segment-flag"></a> set to false, then abort
+                  If one or more objects in <a def-id="sourceBuffers"></a> have <a def-id="first-init-segment-flag"></a> set to false, then abort
                   these steps.</li>
                 <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.</li>
 	        <li><a def-id="Queue-a-task-to-fire-an-event-named"></a>  <a def-id="loadedmetadata"></a> at the media element.</li>
@@ -910,7 +950,7 @@
 
         <section id="sourcebuffer-coded-frame-processing">
           <h4>Coded Frame Processing</h4>
-          <p>When a complete <a def-id="coded-frame"></a> has been parsed by the <a def-id="segment-parser-loop"></a> then the following steps are run:</p>
+          <p>When complete <a def-id="coded-frames"></a> have been parsed by the <a def-id="segment-parser-loop"></a> then the following steps are run:</p>
           <ol>
             <li>
 	      <p>For each <a def-id="coded-frame"></a> in the <a def-id="media-segment"></a> run the following steps:</p>
@@ -925,7 +965,12 @@
 	            <li>If the <var>presentation timestamp</var> or <var>decode timestamp</var> is less than the <a def-id="presentation-start-time"></a>, then call <a def-id="eos-decode"></a>, and abort these steps.</li>
 	          </ol>
 	        </li>
-	        <li>Add the <a def-id="coded-frame"></a> with the <var>presentation timestamp</var> and <var>decode timestamp</var>, to the source buffer.</li>
+                <li>Let <var>track buffer</var> equal the <a def-id="track-buffer"></a> that the coded frame should be added to.</li>
+                <li>If <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> is set and <var>decode timestamp</var> is less than 
+                  <a def-id="last-decode-timestamp"></a>, then call <a def-id="eos-decode"></a> and abort these steps.</li>
+	        <li>Add the <a def-id="coded-frame"></a> with the <var>presentation timestamp</var> and <var>decode timestamp</var>, to the 
+                  <var>track buffer</var>.</li>
+                <li>Set <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> to <var>decode timestamp</var>.</li>
 	      </ol>
             </li>
             <li>
@@ -1055,7 +1100,7 @@
     
     <section id="byte-stream-formats">
       <h2>Byte Stream Formats</h2>
-      <p>The bytes provided through <a def-id="append"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM and the ISO Base Media File Format are provided below. These format specifications are intended to be the authoritative source for how data from these containers is formatted and passed to a <a>SourceBuffer</a>. If a <a>MediaSource</a> implementation claims to support any of these container formats, then it must implement the corresponding byte stream format specification described below.</p>
+      <p>The bytes provided through <a def-id="append"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM , the ISO Base Media File Format, and MPEG-2 Transport Streams are provided below. These format specifications are intended to be the authoritative source for how data from these containers is formatted and passed to a <a>SourceBuffer</a>. If a <a>MediaSource</a> implementation claims to support any of these container formats, then it must implement the corresponding byte stream format specification described below.</p>
       <p>This section provides general requirements for all byte stream formats:</p>
       <ul>
         <li>A byte stream format specification must define <a def-id="init-segments"></a> and <a def-id="media-segments"></a>.</li>
@@ -1182,7 +1227,73 @@
           <p>A <a def-id="random-access-point"></a> as defined in this specification corresponds to a Stream Access Point of type 1 or 2 as defined in Annex I of <a def-id="iso-14496-12"></a>.</p>
 	</section>
       </section>
+
+      <section id="mpeg2ts" class="nonnormative">
+        <h3>MPEG-2 Transport Stream Byte Streams</h3>
+        <p>This section defines segment formats for implementations that choose to support MPEG-2 Transport Streams
+          (MPEG-2 TS) specified in <a def-id="iso-13818-1"></a>.</p>
+        
+        <section id="mpeg2ts-general">
+          <h4>General</h4>
+          <p>MPEG-2 TS media and initialization segments must conform to the MPEG-2 TS Adaptive Profile (ISO/IEC 13818-1:2012 Amd. 2).</p>
+          <p>The following rules must apply to all MPEG-2 TS segments:</p>
+          <ol>
+            <li>Segments must contain complete MPEG-2 TS packets.</li>
+            <li>Segments must contain only complete PES packets and sections.</li>
+            <li>Segments must contain exactly one program.</li>
+            <li>All MPEG-2 TS packets must have the transport_error_indicator set to 0</li>
+          </ol>
+        </section>
+        <section id="mpeg2ts-init-segments">
+          <h4>Initialization Segments</h4>
+          <p>An MPEG-2 TS initialization segment must contain a single PAT and a single PMT. Other SI, such as CAT, that are invariant for all subsequent
+            media segments, may be present.</p>
+        </section>
+  
+        <section id="mpeg2ts-media-segments">
+          <h4>Media Segments</h4>
+          <p>The following rules apply to all MPEG-2 TS media segments:</p>
+          <ol>
+            <li>PSI that is identical to the information in the initialization segment may appear repeatedly throughout the segment.</li>
+            <li>The media segment will not rely on initialization information in another media segment.</li>
+            <li>Media Segments must contain only complete PES packets and sections.</li>
+            <li>Each PES packet must be comprised of one or more complete access units.</li>
+            <li>Each PES packet must have a PTS timestamp.</li>
+            <li>PCR must be present in the Segment prior to the first byte of a TS packet payload containing media data.</li>
+            <li>The presentation duration of each media component within the Media Segment should be as close to equal as practical.</li>
+          </ol>
+        </section>
+
+        <section id="mpeg2ts-random-access-points">
+          <h4>Random Access Points</h4>
+          <p>A random access point as defined in this specification corresponds to Elementary Stream Random Access Point as defined in 
+            <a def-id="iso-13818-1"></a>.</p>
+        </section>
+        <section id="mpeg2ts-discontinuities">
+          <h4>Timestamp Rollover &amp; Discontinuities</h4>
+          <p>Timestamp rollovers and discontinuities must be handled by the UA. The UA's MPEG-2 TS implementation must maintain an internal offset
+          variable, <dfn id="mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</dfn>, to keep track of the offset that needs to be applied to timestamps
+          that have rolled over or are part of a discontinuity. <var>MPEG2TS_timestampOffset</var> is initially set to 0 when the <a>SourceBuffer</a> is 
+          created.  This offset must be applied to the timestamps as part of the conversion process from MPEG-2 TS packets
+          into <a def-id="coded-frames"></a> for the <a def-id="coded-frame-processing-algorithm"></a>. This results in the coded frame timestamps 
+          for a packet being computed by the following equations:</p>
+          <pre>
+Coded Frame Presentation Timestamp = (MPEG-2 TS presentation timestamp) + <var>MPEG2TS_timestampOffset</var>
+Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_timestampOffset</var></pre>
+
+          <p><a def-id="mpeg2ts-timestampOffset"></a> is updated in the following ways:</p>
+          <ul>
+            <li>Each time a timestamp rollover is detected, 2^33 must be added to <var>MPEG2TS_timestampOffset</var>.</li>
+            <li>When a discontinuity is detected, <var>MPEG2TS_timestampOffset</var> must be adjusted to make the timestamps after the discontinuity appear
+              to come immediately after the timestamps before the discontinuity.</li>
+            <li>When <a def-id="abort"></a> is called, <var>MPEG2TS_timestampOffset</var> must be set to 0.</li>
+            <li>When <a def-id="timestampOffset"></a> is successfully set, <var>MPEG2TS_timestampOffset</var> must be set to 0.</li>
+          </ul>
+        </section>
+      </section>
     </section>
+
+
 
     <section id="examples">
       <h2>Examples</h2>
@@ -1278,7 +1389,19 @@
         </thead>
         <tbody>
           <tr>
-	    <td>08 December 2012</a></td>
+	    <td>13 December 2012</td>
+            <td>
+              <ul>
+                <li>Added MPEG-2 Transport Stream section.</li>
+                <li>Added text to require abort() for out-of-order appends.</li>
+                <li>Renamed "track buffer" to "decoder buffer".</li>
+                <li>Redefined "track buffer" to mean the per-track buffers that hold the SourceBuffer media data.</li>
+                <li>Editorial fixes.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+	    <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/ee6e8ae9337c/media-source/media-source.html">08 December 2012</a></td>
             <td>
               <ul>
                 <li>Added MediaSource.getSourceBuffer() methods.</li>

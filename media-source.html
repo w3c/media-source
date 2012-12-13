@@ -397,7 +397,7 @@ table.exceptions table {
   </p>
   <h1 class="title" id="title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-08-december-2012"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 08 December 2012</h2>
+  <h2 id="w3c-editor-s-draft-13-december-2012"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 13 December 2012</h2>
   <dl>
     
       <dt>This version:</dt>
@@ -505,7 +505,7 @@ table.exceptions table {
       
     
   
-</section><section id="toc"><h2 class="introductory">Table of Contents</h2><ul class="toc"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a><ul class="toc"><li class="tocline"><a href="#goals" class="tocxref"><span class="secno">1.1 </span>Goals</a></li><li class="tocline"><a href="#definitions" class="tocxref"><span class="secno">1.2 </span>Definitions</a></li></ul></li><li class="tocline"><a href="#source-buffer-model" class="tocxref"><span class="secno">2. </span>Source Buffer Model</a><ul class="toc"><li class="tocline"><a href="#source-buffer-overlapping-segments" class="tocxref"><span class="secno">2.1 </span>Appending a Media Segment over a buffered region</a><ul class="toc"><li class="tocline"><a href="#source-buffer-overlap-complete" class="tocxref"><span class="secno">2.1.1 </span>Complete Overlap</a></li><li class="tocline"><a href="#source-buffer-overlap-start" class="tocxref"><span class="secno">2.1.2 </span>Start Overlap</a></li><li class="tocline"><a href="#source-buffer-overlap-end" class="tocxref"><span class="secno">2.1.3 </span>End Overlap</a></li><li class="tocline"><a href="#source-buffer-overlap-middle" class="tocxref"><span class="secno">2.1.4 </span>Middle Overlap</a></li></ul></li><li class="tocline"><a href="#source-buffer-to-track-buffer" class="tocxref"><span class="secno">2.2 </span>Source Buffer to Track Buffer transfer</a></li></ul></li><li class="tocline"><a href="#mediasource" class="tocxref"><span class="secno">3. </span>MediaSource Object</a><ul class="toc"><li class="tocline"><a href="#attributes" class="tocxref"><span class="secno">3.1 </span>Attributes</a></li><li class="tocline"><a href="#methods" class="tocxref"><span class="secno">3.2 </span>Methods</a></li><li class="tocline"><a href="#mediasource-events" class="tocxref"><span class="secno">3.3 </span>Event Summary</a></li><li class="tocline"><a href="#mediasource-algorithms" class="tocxref"><span class="secno">3.4 </span>Algorithms</a><ul class="toc"><li class="tocline"><a href="#mediasource-attach" class="tocxref"><span class="secno">3.4.1 </span>Attaching to a media element</a></li><li class="tocline"><a href="#mediasource-detach" class="tocxref"><span class="secno">3.4.2 </span>Detaching from a media element</a></li><li class="tocline"><a href="#mediasource-seeking" class="tocxref"><span class="secno">3.4.3 </span>Seeking</a></li><li class="tocline"><a href="#buffer-monitoring" class="tocxref"><span class="secno">3.4.4 </span>SourceBuffer Monitoring</a></li><li class="tocline"><a href="#active-source-buffer-changes" class="tocxref"><span class="secno">3.4.5 </span>Changes to selected/enabled track state</a></li><li class="tocline"><a href="#duration-change-algorithm" class="tocxref"><span class="secno">3.4.6 </span>Duration change</a></li></ul></li></ul></li><li class="tocline"><a href="#sourcebuffer" class="tocxref"><span class="secno">4. </span>SourceBuffer Object</a><ul class="toc"><li class="tocline"><a href="#attributes-1" class="tocxref"><span class="secno">4.1 </span>Attributes</a></li><li class="tocline"><a href="#methods-1" class="tocxref"><span class="secno">4.2 </span>Methods</a></li><li class="tocline"><a href="#sourcebuffer-algorithms" class="tocxref"><span class="secno">4.3 </span>Algorithms</a><ul class="toc"><li class="tocline"><a href="#sourcebuffer-segment-parser-loop" class="tocxref"><span class="secno">4.3.1 </span>Segment Parser Loop</a></li><li class="tocline"><a href="#sourcebuffer-init-segment-received" class="tocxref"><span class="secno">4.3.2 </span>Initialization Segment Received</a></li><li class="tocline"><a href="#sourcebuffer-coded-frame-processing" class="tocxref"><span class="secno">4.3.3 </span>Coded Frame Processing</a></li></ul></li></ul></li><li class="tocline"><a href="#sourcebufferlist" class="tocxref"><span class="secno">5. </span>SourceBufferList Object</a><ul class="toc"><li class="tocline"><a href="#attributes-2" class="tocxref"><span class="secno">5.1 </span>Attributes</a></li><li class="tocline"><a href="#methods-2" class="tocxref"><span class="secno">5.2 </span>Methods</a></li><li class="tocline"><a href="#sourcebufferlist-events" class="tocxref"><span class="secno">5.3 </span>Event Summary</a></li></ul></li><li class="tocline"><a href="#url" class="tocxref"><span class="secno">6. </span>URL Object</a><ul class="toc"><li class="tocline"><a href="#methods-3" class="tocxref"><span class="secno">6.1 </span>Methods</a></li></ul></li><li class="tocline"><a href="#htmlmediaelement-attributes" class="tocxref"><span class="secno">7. </span>HTMLMediaElement attributes</a></li><li class="tocline"><a href="#byte-stream-formats" class="tocxref"><span class="secno">8. </span>Byte Stream Formats</a><ul class="toc"><li class="tocline"><a href="#webm" class="tocxref"><span class="secno">8.1 </span>WebM Byte Streams</a><ul class="toc"><li class="tocline"><a href="#webm-init-segments" class="tocxref"><span class="secno">8.1.1 </span>Initialization Segments</a></li><li class="tocline"><a href="#webm-media-segments" class="tocxref"><span class="secno">8.1.2 </span>Media Segments</a></li><li class="tocline"><a href="#webm-random-access-points" class="tocxref"><span class="secno">8.1.3 </span>Random Access Points</a></li></ul></li><li class="tocline"><a href="#iso" class="tocxref"><span class="secno">8.2 </span>ISO Base Media File Format Byte Streams</a><ul class="toc"><li class="tocline"><a href="#iso-init-segments" class="tocxref"><span class="secno">8.2.1 </span>Initialization Segments</a></li><li class="tocline"><a href="#iso-media-segments" class="tocxref"><span class="secno">8.2.2 </span>Media Segments</a></li><li class="tocline"><a href="#iso-random-access-points" class="tocxref"><span class="secno">8.2.3 </span>Random Access Points</a></li></ul></li></ul></li><li class="tocline"><a href="#examples" class="tocxref"><span class="secno">9. </span>Examples</a></li><li class="tocline"><a href="#revision-history" class="tocxref"><span class="secno">10. </span>Revision History</a></li></ul></section>
+</section><section id="toc"><h2 class="introductory">Table of Contents</h2><ul class="toc"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a><ul class="toc"><li class="tocline"><a href="#goals" class="tocxref"><span class="secno">1.1 </span>Goals</a></li><li class="tocline"><a href="#definitions" class="tocxref"><span class="secno">1.2 </span>Definitions</a></li></ul></li><li class="tocline"><a href="#source-buffer-model" class="tocxref"><span class="secno">2. </span>Source Buffer Model</a><ul class="toc"><li class="tocline"><a href="#source-buffer-overlapping-segments" class="tocxref"><span class="secno">2.1 </span>Appending a Media Segment over a buffered region</a><ul class="toc"><li class="tocline"><a href="#source-buffer-overlap-complete" class="tocxref"><span class="secno">2.1.1 </span>Complete Overlap</a></li><li class="tocline"><a href="#source-buffer-overlap-start" class="tocxref"><span class="secno">2.1.2 </span>Start Overlap</a></li><li class="tocline"><a href="#source-buffer-overlap-end" class="tocxref"><span class="secno">2.1.3 </span>End Overlap</a></li><li class="tocline"><a href="#source-buffer-overlap-middle" class="tocxref"><span class="secno">2.1.4 </span>Middle Overlap</a></li></ul></li><li class="tocline"><a href="#track-buffer-to-decoder-buffer" class="tocxref"><span class="secno">2.2 </span>Track Buffer to Decoder Buffer transfer</a></li></ul></li><li class="tocline"><a href="#mediasource" class="tocxref"><span class="secno">3. </span>MediaSource Object</a><ul class="toc"><li class="tocline"><a href="#attributes" class="tocxref"><span class="secno">3.1 </span>Attributes</a></li><li class="tocline"><a href="#methods" class="tocxref"><span class="secno">3.2 </span>Methods</a></li><li class="tocline"><a href="#mediasource-events" class="tocxref"><span class="secno">3.3 </span>Event Summary</a></li><li class="tocline"><a href="#mediasource-algorithms" class="tocxref"><span class="secno">3.4 </span>Algorithms</a><ul class="toc"><li class="tocline"><a href="#mediasource-attach" class="tocxref"><span class="secno">3.4.1 </span>Attaching to a media element</a></li><li class="tocline"><a href="#mediasource-detach" class="tocxref"><span class="secno">3.4.2 </span>Detaching from a media element</a></li><li class="tocline"><a href="#mediasource-seeking" class="tocxref"><span class="secno">3.4.3 </span>Seeking</a></li><li class="tocline"><a href="#buffer-monitoring" class="tocxref"><span class="secno">3.4.4 </span>SourceBuffer Monitoring</a></li><li class="tocline"><a href="#active-source-buffer-changes" class="tocxref"><span class="secno">3.4.5 </span>Changes to selected/enabled track state</a></li><li class="tocline"><a href="#duration-change-algorithm" class="tocxref"><span class="secno">3.4.6 </span>Duration change</a></li></ul></li></ul></li><li class="tocline"><a href="#sourcebuffer" class="tocxref"><span class="secno">4. </span>SourceBuffer Object</a><ul class="toc"><li class="tocline"><a href="#attributes-1" class="tocxref"><span class="secno">4.1 </span>Attributes</a></li><li class="tocline"><a href="#methods-1" class="tocxref"><span class="secno">4.2 </span>Methods</a></li><li class="tocline"><a href="#track-buffers" class="tocxref"><span class="secno">4.3 </span>Track Buffers</a></li><li class="tocline"><a href="#sourcebuffer-algorithms" class="tocxref"><span class="secno">4.4 </span>Algorithms</a><ul class="toc"><li class="tocline"><a href="#sourcebuffer-segment-parser-loop" class="tocxref"><span class="secno">4.4.1 </span>Segment Parser Loop</a></li><li class="tocline"><a href="#sourcebuffer-init-segment-received" class="tocxref"><span class="secno">4.4.2 </span>Initialization Segment Received</a></li><li class="tocline"><a href="#sourcebuffer-coded-frame-processing" class="tocxref"><span class="secno">4.4.3 </span>Coded Frame Processing</a></li></ul></li></ul></li><li class="tocline"><a href="#sourcebufferlist" class="tocxref"><span class="secno">5. </span>SourceBufferList Object</a><ul class="toc"><li class="tocline"><a href="#attributes-2" class="tocxref"><span class="secno">5.1 </span>Attributes</a></li><li class="tocline"><a href="#methods-2" class="tocxref"><span class="secno">5.2 </span>Methods</a></li><li class="tocline"><a href="#sourcebufferlist-events" class="tocxref"><span class="secno">5.3 </span>Event Summary</a></li></ul></li><li class="tocline"><a href="#url" class="tocxref"><span class="secno">6. </span>URL Object</a><ul class="toc"><li class="tocline"><a href="#methods-3" class="tocxref"><span class="secno">6.1 </span>Methods</a></li></ul></li><li class="tocline"><a href="#htmlmediaelement-attributes" class="tocxref"><span class="secno">7. </span>HTMLMediaElement attributes</a></li><li class="tocline"><a href="#byte-stream-formats" class="tocxref"><span class="secno">8. </span>Byte Stream Formats</a><ul class="toc"><li class="tocline"><a href="#webm" class="tocxref"><span class="secno">8.1 </span>WebM Byte Streams</a><ul class="toc"><li class="tocline"><a href="#webm-init-segments" class="tocxref"><span class="secno">8.1.1 </span>Initialization Segments</a></li><li class="tocline"><a href="#webm-media-segments" class="tocxref"><span class="secno">8.1.2 </span>Media Segments</a></li><li class="tocline"><a href="#webm-random-access-points" class="tocxref"><span class="secno">8.1.3 </span>Random Access Points</a></li></ul></li><li class="tocline"><a href="#iso" class="tocxref"><span class="secno">8.2 </span>ISO Base Media File Format Byte Streams</a><ul class="toc"><li class="tocline"><a href="#iso-init-segments" class="tocxref"><span class="secno">8.2.1 </span>Initialization Segments</a></li><li class="tocline"><a href="#iso-media-segments" class="tocxref"><span class="secno">8.2.2 </span>Media Segments</a></li><li class="tocline"><a href="#iso-random-access-points" class="tocxref"><span class="secno">8.2.3 </span>Random Access Points</a></li></ul></li><li class="tocline"><a href="#mpeg2ts" class="tocxref"><span class="secno">8.3 </span>MPEG-2 Transport Stream Byte Streams</a><ul class="toc"><li class="tocline"><a href="#mpeg2ts-general" class="tocxref"><span class="secno">8.3.1 </span>General</a></li><li class="tocline"><a href="#mpeg2ts-init-segments" class="tocxref"><span class="secno">8.3.2 </span>Initialization Segments</a></li><li class="tocline"><a href="#mpeg2ts-media-segments" class="tocxref"><span class="secno">8.3.3 </span>Media Segments</a></li><li class="tocline"><a href="#mpeg2ts-random-access-points" class="tocxref"><span class="secno">8.3.4 </span>Random Access Points</a></li><li class="tocline"><a href="#mpeg2ts-discontinuities" class="tocxref"><span class="secno">8.3.5 </span>Timestamp Rollover &amp; Discontinuities</a></li></ul></li></ul></li><li class="tocline"><a href="#examples" class="tocxref"><span class="secno">9. </span>Examples</a></li><li class="tocline"><a href="#revision-history" class="tocxref"><span class="secno">10. </span>Revision History</a></li></ul></section>
 
 
     <section id="introduction">
@@ -513,8 +513,8 @@ table.exceptions table {
       <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;. 
         It defines objects that allow JavaScript to pass media segments to an <a href="http://dev.w3.org/html5/spec/media-elements.html#htmlmediaelement">HTMLMediaElement</a>.
         A buffering model is also included to describe how the user agent should act when different media segments are 
-        appended at different times. Byte stream specifications for WebM &amp; ISO Base Media File Format are given to specify the
-        expected format of media segments used with these extensions.</p>
+        appended at different times. Byte stream specifications for WebM, ISO Base Media File Format, and MPEG-2 Transport Streams are given to specify the
+        expected format of byte streams used with these extensions.</p>
       <img src="pipeline_model.png">
 
       <section id="goals">
@@ -525,7 +525,7 @@ table.exceptions table {
           <li>Define a splicing and buffering model that facilitates use cases like adaptive streaming, ad-insertion, time-shifting, and video editing.</li>
           <li>Minimize the need for media parsing in JavaScript.</li>
           <li>Leverage the browser cache as much as possible.</li>
-          <li>Provide byte stream definitions for WebM &amp; the ISO Base Media File Format.</li>
+          <li>Provide byte stream definitions for WebM, the ISO Base Media File Format, and MPEG-2 Transport Streams.</li>
           <li>Not require support for any particular media format or codec.</li>
         </ul>
       </section>
@@ -536,7 +536,7 @@ table.exceptions table {
         <dl>
           <dt id="init-segment">Initialization Segment</dt>
           <dd>
-	    <p>A sequence of bytes that contains all of the initialization information required to decode a sequence of <a href="#media-segment">media segments</a>. This includes codec initialization data, <a href="#track-id">Track ID</a> mappings for multiplexed segments, and timestamp offsets (e.g. edit lists).</p>
+	    <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of <a href="#media-segment">media segments</a>. This includes codec initialization data, <a href="#track-id">Track ID</a> mappings for multiplexed segments, and timestamp offsets (e.g. edit lists).</p>
             <div class="note"><div class="note-title"><span>Note</span></div><p class="">The <a href="#byte-stream-formats">byte stream format specifications</a> contain format specific examples.</p></div>
 
           </dd><dt id="media-segment">Media Segment</dt>
@@ -545,20 +545,14 @@ table.exceptions table {
             <div class="note"><div class="note-title"><span>Note</span></div><p class="">The <a href="#byte-stream-formats">byte stream format specifications</a> contain format specific examples.</p></div>
           </dd>
 
-          <dt id="source-buffer">Source Buffer</dt>
-          <dd><p>A hypothetical buffer that contains a distinct sequence of <a href="#init-segment">initialization segments</a> &amp; <a href="#media-segment">media segments</a>. When <a href="#media-segment">media segments</a> are passed to <code><a href="#widl-SourceBuffer-append-void-Uint8Array-data">append()</a></code> they update the state of this buffer. The source buffer only allows a single <a href="#media-segment">media segment</a> to cover a specific point in the presentation timeline of each track. If a <a href="#media-segment">media segment</a> gets appended that contains media data overlapping (in presentation time) with media data from an existing segment, then the new media data will override the old media data. Since <a href="#media-segment">media segments</a> depend on <a href="#init-segment">initialization segments</a> the source buffer is also responsible for maintaining these associations. During playback, the media element pulls segment data out of the source buffers, demultiplexes it if necessary, and enqueues it into <a href="#track-buffer">track buffers</a> so it will get decoded and displayed. <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> describes the time ranges that are covered by <a href="#media-segment">media segments</a> in the source buffer.</p></dd>
-
-          <dt id="active-source-buffers">Active Source Buffers</dt>
-          <dd><p>The set of <a href="#source-buffer">source buffers</a> that are providing the <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-videotrack-selected">selected video track</a>, the <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-audiotrack-enabled">enabled audio tracks</a>, and the <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-showing">"showing"</a> or <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-hidden">"hidden"</a> text tracks. This is a subset of all the source buffers associated with a specific <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object. See <a href="#active-source-buffer-changes">Changes to selected/enabled track state</a> for details.</p></dd>
-          
-          <dt id="track-buffer">Track Buffer</dt>
-          <dd><p>A hypothetical buffer that represents initialization and media data for a single <code><a href="http://dev.w3.org/html5/spec/media-elements.html#audiotrack">AudioTrack</a></code>, <code><a href="http://dev.w3.org/html5/spec/media-elements.html#videotrack">VideoTrack</a></code>, or <code><a href="http://dev.w3.org/html5/spec/media-elements.html#texttrack">TextTrack</a></code> that has been queued for playback. This buffer may not exist in actual implementations, but it is intended to represent media data that will be decoded no matter what <a href="#media-segment">media segments</a> are appended to update the <a href="#source-buffer">source buffer</a>. This distinction is important when considering appends that happen close to the current playback position. See <a href="#source-buffer-to-track-buffer">Source Buffer to Track Buffer transfer</a> for details.</p></dd>
+          <dt id="decoder-buffer">Decoder Buffer</dt>
+          <dd><p>A buffer that holds initialization data and <a href="#coded-frame">coded frames</a> that will be decoded and rendered. This buffer may not exist in actual implementations, but it is intended to represent media data that will be decoded no matter what <a href="#media-segment">media segments</a> are appended to update the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>. This distinction is important when considering appends that happen close to the current playback position. See <a href="#track-buffer-to-decoder-buffer">Track Buffer to Decoder Buffer transfer</a> for details.</p></dd>
 
           <dt id="random-access-point">Random Access Point</dt>
           <dd><p>A position in a <a href="#media-segment">media segment</a> where decoding and continuous playback can begin without relying on any previous data in the segment. For video this tends to be the location of I-frames. In the case of audio, most audio frames can be treated as a random access point. Since video tracks tend to have a more sparse distribution of random access points, the location of these points are usually considered the random access points for multiplexed streams.</p></dd>
 
           <dt id="presentation-start-time">Presentation Start Time</dt>
-          <dd><p>The presentation start time is the earliest time point in the presentation and specifies the <a href="http://dev.w3.org/html5/spec/media-elements.html#initial-playback-position">initial playback position</a> and <a href="http://dev.w3.org/html5/spec/media-elements.html#earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0. Appending <a href="#media-segment">media segments</a> with negative timestamps will cause playback to terminate with a <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-mediaerror-media_err_decode">MediaError.MEDIA_ERR_DECODE</a></code> error unless <code><a href="#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> is used to make the timestamps greater than or equal to 0.</p></dd>
+          <dd><p>The presentation start time is the earliest time point in the presentation and specifies the <a href="http://dev.w3.org/html5/spec/media-elements.html#initial-playback-position">initial playback position</a> and <a href="http://dev.w3.org/html5/spec/media-elements.html#earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0.</p></dd>
 
           <dt id="mediasource-object-url">MediaSource object URL</dt>
           <dd>
@@ -575,8 +569,14 @@ table.exceptions table {
           <dt id="coded-frame">Coded Frame</dt>
           <dd><p>A unit of compressed media data that has a presentation timestamp and  decode timestamp. The presentation timestamp indicates when the frame should be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp must be present in the bytestream. If frames cannot be decoded out of order and a decode timestamp is not present in the bytestream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
 
-          <dt id="parent-media-source">Parent Media Source</dt> 
+          <dt id="parent-media-source">Parent Media Source</dt>
           <dd>The parent media source of a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object is the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object that created it.<p></p>
+
+          </dd><dt id="append-sequence">Append Sequence</dt>
+          <dd>A series of <code><a href="#widl-SourceBuffer-append-void-Uint8Array-data">append()</a></code> calls on a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> without any intervening <code><a href="#widl-SourceBuffer-abort-void">abort()</a></code> calls. The
+          <a href="#media-segment">media segments</a> in an append sequence must be adjacent and monotonically increasing in time without any gaps. An
+          <code><a href="#widl-SourceBuffer-abort-void">abort()</a></code> call starts a new append sequence which allows <a href="#media-segment">media segments</a> to be appended in non-monotonically
+          increasing order.<p></p>
         </dd></dl>
       </section>
     </section>
@@ -585,30 +585,34 @@ table.exceptions table {
     <section id="source-buffer-model">
       <!--OddPage--><h2><span class="secno">2. </span>Source Buffer Model</h2>
       <div class="nonnormative">
-        <p>The subsections below outline the buffering model for this specification. It describes the various rules and behaviors associated with appending data to an individual <a href="#source-buffer">source buffer</a>. At the highest level, the web application simply creates <a href="#source-buffer">source buffers</a> and appends a sequence of <a href="#init-segment">initialization segments</a> and <a href="#media-segment">media segments</a> to update the buffer's state. The media element pulls media data out of the <a href="#source-buffer">source buffers</a>, plays it, and fires events just like it would if a normal URL was passed to the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#attr-media-src">src</a></code> attribute. The web application is expected to monitor media element events to determine when it needs to append more <a href="#media-segment">media segments</a>.</p>
+        <p>The subsections below outline the buffering model for this specification. It describes the various rules and behaviors associated with appending
+ data to an individual <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>. At the highest level, the web application creates <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects and appends sequences of 
+<a href="#init-segment">initialization segments</a> and <a href="#media-segment">media segments</a> to update their state. The media element pulls media data out of the 
+<a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object, plays it, and fires events just like it would if a normal URL was passed to the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#attr-media-src">src</a></code> attribute.
+ The web application is expected to monitor media element events to determine when it needs to append more <a href="#media-segment">media segments</a>.</p>
       </div>
 
       <section id="source-buffer-overlapping-segments">
         <h3><span class="secno">2.1 </span>Appending a Media Segment over a buffered region</h3>
-        <p>There are several ways that <a href="#media-segment">media segments</a> can overlap segments in the <a href="#source-buffer">source buffer</a>. Behavior for the different overlap situations are described below. If more than one overlap applies, then the <a href="#source-buffer-overlap-start">start overlap</a> must be resolved first, followed by any <a href="#source-buffer-overlap-complete">complete overlaps</a>, and finally the <a href="#source-buffer-overlap-end">end overlap</a>. If a segment contains multiple tracks then the overlap is resolved independently for each track.</p>
+        <p>There are several ways that <a href="#media-segment">media segments</a> can overlap segments in the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>. Behavior for the different overlap situations are described below. If more than one overlap applies, then the <a href="#source-buffer-overlap-start">start overlap</a> must be resolved first, followed by any <a href="#source-buffer-overlap-complete">complete overlaps</a>, and finally the <a href="#source-buffer-overlap-end">end overlap</a>. If a segment contains multiple tracks then the overlap is resolved independently for each track.</p>
 
         <section id="source-buffer-overlap-complete">
           <h4><span class="secno">2.1.1 </span>Complete Overlap</h4>
           <img src="complete_overlap.png">
-          <p>The figure above shows how the <a href="#source-buffer">source buffer</a> is updated when a new <a href="#media-segment">media segment</a> completely overlaps a segment in the buffer. In this case, the new segment completely replaces the old segment.</p>
+          <p>The figure above shows how the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> is updated when a new <a href="#media-segment">media segment</a> completely overlaps a segment in the buffer. In this case, the new segment completely replaces the old segment.</p>
         </section>
 
         <section id="source-buffer-overlap-start">
           <h4><span class="secno">2.1.2 </span>Start Overlap</h4>
           <img src="start_overlap.png">
-          <p>The figure above shows how the <a href="#source-buffer">source buffer</a> is updated when the beginning of a new <a href="#media-segment">media segment</a> overlaps a segment in the buffer. In this case, the new segment replaces all the old media data in the overlapping region. Since <a href="#media-segment">media segments</a> are constrained to starting with <a href="#random-access-point">random access points</a>, this provides a seamless transition between segments.</p>
-          <p>When an audio frame in the <a href="#source-buffer">source buffer</a> overlaps with the start of the new <a href="#media-segment">media segment</a> special behavior is required. At a minimum implementations must support dropping the old audio frame that overlaps the start of the new segment and insert silence for the small gap that is created. Higher quality implementations may support crossfading or crosslapping between the overlapping audio frames. No matter which strategy is implemented, no gaps are created in the ranges reported by <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> and playback must never stall at the overlap.</p>
+          <p>The figure above shows how the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> is updated when the beginning of a new <a href="#media-segment">media segment</a> overlaps a segment in the buffer. In this case, the new segment replaces all the old media data in the overlapping region. Since <a href="#media-segment">media segments</a> are constrained to starting with <a href="#random-access-point">random access points</a>, this provides a seamless transition between segments.</p>
+          <p>When an audio frame in the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> overlaps with the start of the new <a href="#media-segment">media segment</a> special behavior is required. At a minimum implementations must support dropping the old audio frame that overlaps the start of the new segment and insert silence for the small gap that is created. Higher quality implementations may support crossfading or crosslapping between the overlapping audio frames. No matter which strategy is implemented, no gaps are created in the ranges reported by <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> and playback must never stall at the overlap.</p>
         </section>
 
         <section id="source-buffer-overlap-end">
           <h4><span class="secno">2.1.3 </span>End Overlap</h4>
           <img src="end_overlap.png">
-          <p>The figure above shows how the <a href="#source-buffer">source buffer</a> is updated when the end of a new <a href="#media-segment">media segment</a> overlaps the beginning of a segment in the buffer. In this case, the <a href="#source-buffer">source buffer</a> tries to keep as much of the old segment as possible. The amount saved depends on where the closest <a href="#random-access-point">random access point</a>, in the old segment, is to the end of the new segment. In the case of audio, if the gap is smaller than the size of an audio frame, then the <a href="#source-buffer">source buffer</a> should insert silence for this gap and not reflect it in <code><a href="#widl-SourceBuffer-buffered">buffered</a></code>. The entire new segment must be added to the <a href="#source-buffer">source buffer</a>, but it is up to the implementation to determine how much of the old segment data is retained.</p>
+          <p>The figure above shows how the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> is updated when the end of a new <a href="#media-segment">media segment</a> overlaps the beginning of a segment in the buffer. In this case, the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> tries to keep as much of the old segment as possible. The amount saved depends on where the closest <a href="#random-access-point">random access point</a>, in the old segment, is to the end of the new segment. In the case of audio, if the gap is smaller than the size of an audio frame, then the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> may render silence for this gap. This gap must not be reflect in <code><a href="#widl-SourceBuffer-buffered">buffered</a></code>. The entire new segment must be added to the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>, but it is up to the implementation to determine how much of the old segment data is retained.</p>
 
 
           <div class="note"><div class="note-title"><span>Note</span></div><p class="">An implementation may keep old segment data before the end of the new segment to avoid creating a gap if it wishes. Doing this though can significantly increase implementation complexity and could cause delays at the splice point.</p></div>
@@ -619,16 +623,16 @@ table.exceptions table {
         <section id="source-buffer-overlap-middle">
           <h4><span class="secno">2.1.4 </span>Middle Overlap</h4>
           <img src="middle_overlap.png">
-          <p>The figure above shows how the <a href="#source-buffer">source buffer</a> is updated when the new <a href="#media-segment">media segment</a> is in the middle of the old segment. This condition is handled by first resolving the <a href="#source-buffer-overlap-start">start overlap</a> and then resolving the <a href="#source-buffer-overlap-end">end overlap</a>.</p>
+          <p>The figure above shows how the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> is updated when the new <a href="#media-segment">media segment</a> is in the middle of the old segment. This condition is handled by first resolving the <a href="#source-buffer-overlap-start">start overlap</a> and then resolving the <a href="#source-buffer-overlap-end">end overlap</a>.</p>
         </section>
       </section>
 
-      <section id="source-buffer-to-track-buffer">
-        <h3><span class="secno">2.2 </span>Source Buffer to Track Buffer transfer</h3>
+      <section id="track-buffer-to-decoder-buffer">
+        <h3><span class="secno">2.2 </span>Track Buffer to Decoder Buffer transfer</h3>
         <div class="nonnormative">
-        <p>The <a href="#source-buffer">source buffer</a> represents the media that the web application would like the media element to play. The <a href="#track-buffer">track buffer</a> contains the data that will actually get decoded and rendered. In most cases the <a href="#track-buffer">track buffer</a> will simply contain a subset of the <a href="#source-buffer">source buffer</a> near the current playback position. These two buffers start to diverge though when <a href="#media-segment">media segments</a> that overlap or are very close to the current playback position are appended. Depending on the contents of the new <a href="#media-segment">media segment</a> it may not be possible to switch to the new data immediately because there isn't a <a href="#random-access-point">random access point</a> close enough to the current playback position. The quality of the implementation determines how much data is considered "in the <a href="#track-buffer">track buffer</a>". It should transfer data to the <a href="#track-buffer">track buffer</a> as late as possible whilst maintaining seamless playback. Some implementations may be able to instantiate multiple decoders or decode the new data significantly faster than real-time to achieve a seamless splice immediately. Other implementations may delay until the next <a href="#random-access-point">random access point</a> before switching to the newly appended data. Notice that this difference in behavior is only observable when appending close to the current playback position. The <a href="#track-buffer">track buffer</a> represents a media subsegment, like a group of pictures or something with similar decode dependencies, that the media element commits to playing. This commitment may be influenced by a variety of things like limited decoding resources, hardware decode buffers, a jitter buffer, or the desire to limit implementation complexity.</p>
+        <p>The <a href="#track-buffer">track buffer</a> represents the media that the web application would like the media element to play. The <a href="#decoder-buffer">decoder buffer</a> contains the data that will actually get decoded and rendered. In most cases the <a href="#decoder-buffer">decoder buffer</a> will simply contain a subset of the <a href="#track-buffer">track buffer</a> near the current playback position. These two buffers start to diverge when <a href="#media-segment">media segments</a> that overlap or are very close to the current playback position are appended. Depending on the contents of the new <a href="#media-segment">media segment</a> it may not be possible to switch to the new data immediately because there isn't a <a href="#random-access-point">random access point</a> close enough to the current playback position. The quality of the implementation determines how much data is considered "in the <a href="#decoder-buffer">decoder buffer</a>." It should transfer data to the <a href="#decoder-buffer">decoder buffer</a> as late as possible whilst maintaining seamless playback. Some implementations may be able to instantiate multiple decoders or decode the new data significantly faster than real-time to achieve a seamless splice immediately. Other implementations may delay until the next <a href="#random-access-point">random access point</a> before switching to the newly appended data. Notice that this difference in behavior is only observable when appending close to the current playback position. The <a href="#decoder-buffer">decoder buffer</a> represents a media subsegment, like a group of pictures or something with similar decode dependencies, that the media element commits to playing. This commitment may be influenced by a variety of things like limited decoding resources, hardware decode buffers, a jitter buffer, or the desire to limit implementation complexity.</p>
 
-        <p>Here is an example to help clarify the role of the <a href="#track-buffer">track buffer</a>. Say the current playback position has a timestamp of 8 and the media element pulled frames with timestamp 9 &amp; 10 into the track buffer. The web application then appends a higher quality <a href="#media-segment">media segment</a> that starts with a <a href="#random-access-point">random access point</a> at timestamp 9. The <a href="#source-buffer">source buffer</a> will get updated with the higher quality data, but the media element won't be able to switch to this higher quality data until the next <a href="#random-access-point">random access point</a> at timestamp 20. This is because a frame for timestamp 9 is already in the track buffer. As you can see the track buffer represents the "point of no return." for decoding. If a seek occurs the media element may choose to use the higher quality data since a seek might imply flushing the <a href="#track-buffer">track buffer</a> and the user expects a break in playback.</p>
+        <p>Here is an example to help clarify the role of the <a href="#decoder-buffer">decoder buffer</a>. Say the current playback position has a timestamp of 8 and the media element pulled frames with timestamp 9 &amp; 10 into the decoder buffer. The web application then appends a higher quality <a href="#media-segment">media segment</a> that starts with a <a href="#random-access-point">random access point</a> at timestamp 9. The <a href="#track-buffer">track buffer</a> will get updated with the higher quality data, but the media element won't be able to switch to this higher quality data until the next <a href="#random-access-point">random access point</a> at timestamp 20. This is because a frame for timestamp 9 is already in the decoder buffer. The decoder buffer represents the "point of no return." for decoding. If a seek occurs the media element may choose to use the higher quality data since a seek might imply flushing the <a href="#decoder-buffer">decoder buffer</a> and the user expects a break in playback.</p>
         </div>
       </section>
     </section>
@@ -646,7 +650,7 @@ table.exceptions table {
         </td></tr><tr><td><code>open</code></td><td>
           The source has been opened by a media element and is ready for data to be appended to the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.
         </td></tr><tr><td><code>ended</code></td><td>
-          The source is still attached to a media element, but <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream()</a></code> has been called. Appending data to <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in this state is not allowed.
+          The source is still attached to a media element, but <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream()</a></code> has been called.
         </td></tr></table>
 
       <pre class="idl"><span class="idlEnum" id="idl-def-EndOfStreamError">enum <span class="idlEnumID">EndOfStreamError</span> {
@@ -674,7 +678,13 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 <span class="idlMethod">    <span class="idlMethType"><a>void</a></span>          <span class="idlMethName"><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream</a></span> (<span class="idlParam">optional <span class="idlParamType"><a href="#idl-def-EndOfStreamError" class="idlType"><code>EndOfStreamError</code></a></span> <span class="idlParamName">error</span></span>);</span>
 <span class="idlMethod">    static <span class="idlMethType"><a>bool</a></span>   <span class="idlMethName"><a href="#widl-MediaSource-isTypeSupported-bool-DOMString-type">isTypeSupported</a></span> (<span class="idlParam"><span class="idlParamType"><a>DOMString</a></span> <span class="idlParamName">type</span></span>);</span>
 };</span></pre><section id="attributes"><h3><span class="secno">3.1 </span>Attributes</h3><dl class="attributes"><dt id="widl-MediaSource-activeSourceBuffers"><code>activeSourceBuffers</code> of type <span class="idlAttrType"><a href="#idl-def-SourceBufferList" class="idlType"><code>SourceBufferList</code></a></span>, readonly</dt><dd>
-          Contains the subset of <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> that represents the <a href="#active-source-buffers">active source buffers</a>.
+          <p>Contains the subset of <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> that are providing the 
+            <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-videotrack-selected">selected video track</a>,  the 
+            <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-audiotrack-enabled">enabled audio tracks</a>, and the 
+            <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-showing">"showing"</a> or <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-hidden">"hidden"</a> text tracks.
+          </p>
+          <div class="note"><div class="note-title"><span>Note</span></div><p class="">The <a href="#active-source-buffer-changes">Changes to selected/enabled track state</a> section describes how this attribute gets
+            updated.</p></div>
         </dd><dt id="widl-MediaSource-duration"><code>duration</code> of type <span class="idlAttrType"><a>unrestricted double</a></span></dt><dd>
           <p>Allows the web application to set the presentation duration. The duration is initially set to NaN when the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object is created.</p>
           <p>On getting, run the following steps:</p>
@@ -686,7 +696,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <ol>
             <li>If the value being set is negative or NaN then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not <code><a href="#idl-def-ReadyState">"open"</a></code> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the value being set.
+            <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the value being assigned to this attribute.
 	      <div class="note"><div class="note-title"><span>Note</span></div><p class=""><code><a href="#widl-SourceBuffer-append-void-Uint8Array-data">append()</a></code> and <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream()</a></code> can update the duration under certain circumstances.</p></div>
             </li>
           </ol>
@@ -779,13 +789,13 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
           
           <div class="note"><div class="note-title"><span>Note</span></div><p class="">
-            If true is returned from this method, it only indicates that the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> implementation is capable of creating <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects for the specified MIME type. A <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> call may still fail if sufficient resources are not available to support the addition of a new <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.
+            If true is returned from this method, it only indicates that the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> implementation is capable of creating <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects for the specified MIME type. An <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> call may still fail if sufficient resources are not available to support the addition of a new <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.
           </p></div>
           <div class="note"><div class="note-title"><span>Note</span></div><p class="">
             This method returning true implies that HTMLMediaElement.canPlayType() will return "maybe" or "probably" since it does not make sense for a <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> to support a type the HTMLMediaElement knows it cannot play.
           </p></div>
         <table class="parameters"><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code><a>DOMString</a></code></td><td class="prmNullFalse">✘</td><td class="prmOptFalse">✘</td><td class="prmDesc"></td></tr></table><div><em>Return type: </em><code><a>bool</a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>If <var>type</var> an empty string, then return false.</li>
+            <li>If <var>type</var> is an empty string, then return false.</li>
             <li>If <var>type</var> does not contain a valid MIME type string, then return false.</li>
             <li>If <var>type</var> contains a media type or media subtype that the MediaSource does not support, then return false.</li>
             <li>If <var>type</var> contains at a codec that the MediaSource does not support, then return false.</li>
@@ -887,7 +897,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	      <dd>
 	        <ol>
 	          <li>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code>.</li>
-	          <li>The media element waits for the necessary <a href="#media-segment">media segments</a> to be passed to <code><a href="#widl-SourceBuffer-append-void-Uint8Array-data">append()</a></code>. The web application can use <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> to determine what the media element needs to resume playback.</li>
+	          <li>The media element waits for the necessary <a href="#media-segment">media segments</a> to be passed to <code><a href="#widl-SourceBuffer-append-void-Uint8Array-data">append()</a></code>.
+                    <div class="note"><div class="note-title"><span>Note</span></div><p class="">The web application can use <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> to determine what the media element needs to resume playback.</p></div>
+                  </li>
 	        </ol>
 	      </dd>
 	      <dt>Otherwise</dt>
@@ -902,7 +914,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
         <section id="buffer-monitoring">
           <h4><span class="secno">3.4.4 </span>SourceBuffer Monitoring</h4>
-          <p>The following steps are periodically run during playback to make sure that all of the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> have enough data to ensure uninterrupted playback. Appending new segments and changes to <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> also cause these steps to run because they affect the conditions that trigger state transitions. The web application can monitor changes in <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> to drive <a href="#media-segment">media segment</a> appending.</p>
+          <p>The following steps are periodically run during playback to make sure that all of the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> have enough data to ensure uninterrupted playback. Appending new segments and changes to <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> also cause these steps to run because they affect the conditions that trigger state transitions.</p>
+          <div class="note"><div class="note-title"><span>Note</span></div><p class="">The web application can monitor changes in <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> to drive <a href="#media-segment">media segment</a> appending.</p></div>
           <dl class="switch">
             <dt>If <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> for all objects in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> do not contain <code><a href="http://dev.w3.org/html5/spec/media-elements.html#timeranges">TimeRanges</a></code> for the current playback position:</dt>
             <dd>
@@ -947,7 +960,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <h4><span class="secno">3.4.5 </span>Changes to selected/enabled track state</h4>
           <p>During playback <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> needs to be updated if the <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-videotrack-selected">selected video track</a>, the <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-audiotrack-enabled">enabled audio tracks</a>, or a text track <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-mode">mode</a> changes. When one or more of these changes occur the following steps need to be followed.</p>
           <dl class="switch">
-            <dt>If the selected video track changes:</dt>
+            <dt>If the selected video track changes, then run the following steps:</dt>
             <dd>
 	      <ol>
 	        <li>If the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> associated with the previously selected video track is not associated with any other enabled tracks, run the following steps:
@@ -968,7 +981,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	        </li>
 	      </ol>
             </dd>
-            <dt>If an audio track becomes disabled and the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> associated with this track is not associated with any other enabled or selected track</dt>
+            <dt>If an audio track becomes disabled and the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> associated with this track is not associated with any other enabled or selected track, then run the following steps:</dt>
             <dd>
 	      <ol>
 	        <li>Remove the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> associated with the audio track from <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>
@@ -978,7 +991,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 </li>
 	      </ol>
             </dd>
-            <dt>If an audio track becomes enabled and the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> associated with this track is not already in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>
+            <dt>If an audio track becomes enabled and the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> associated with this track is not already in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>, then run the following steps:
             </dt>
             <dd>
 	      <ol>
@@ -989,7 +1002,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 </li>
 	      </ol>
             </dd>
-            <dt>If a text track <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-mode">mode</a> becomes <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-disabled">"disabled"</a> and the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> associated with this track is not associated with any other enabled or selected track</dt>
+            <dt>If a text track <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-mode">mode</a> becomes <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-disabled">"disabled"</a> and the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> associated with this track is not associated with any other enabled or selected track, then run the following steps:</dt>
             <dd>
 	      <ol>
 	        <li>Remove the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> associated with the text track from <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>
@@ -999,7 +1012,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 </li>
 	      </ol>
             </dd>
-            <dt>If a text track <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-mode">mode</a> becomes <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-showing">"showing"</a> or <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-hidden">"hidden"</a> and the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> associated with this track is not already in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>
+            <dt>If a text track <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-mode">mode</a> becomes <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-showing">"showing"</a> or <a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-hidden">"hidden"</a> and the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> associated with this track is not already in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>, then run the following steps:
             </dt>
             <dd>
 	      <ol>
@@ -1048,7 +1061,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
         </dd><dt id="widl-SourceBuffer-timestampOffset"><code>timestampOffset</code> of type <span class="idlAttrType"><a>double</a></span></dt><dd>
           <p>Controls the offset applied to timestamps inside subsequent <a href="#media-segment">media segments</a> that are appended to this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>. The <code><a href="#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> is initially set to 0 which indicates that no offset is being applied.</p>
-          <p> On getting, the initial value or the last value that was successfully set is returned.</p>
+          <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run following steps:</p>
           <ol>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
@@ -1063,8 +1076,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <div><em>No parameters.</em></div><div><em>Return type: </em><code><a>void</a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is not in the <code><a href="#idl-def-ReadyState">"open"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>The media element aborts parsing the current segment.</li>
             <li>If the <var><a href="#sourcebuffer-append-state">append state</a></var> equals <a href="#sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</a> and the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> contains some complete <a href="#coded-frame">coded frames</a>, then run the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> as if the media segment only contained these frames.</li>
+            <li>Unset the <var><a href="#last-decode-timestamp">last decode timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
             <li>Remove all bytes from the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
             <li>Set <var><a href="#sourcebuffer-append-state">append state</a></var> to <a href="#sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</a>.</li>
           </ol></dd><dt id="widl-SourceBuffer-append-void-Uint8Array-data"><code>append</code></dt><dd>
@@ -1103,14 +1116,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is not in the <code><a href="#idl-def-ReadyState">"open"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>
-              <p>For each track in this source buffer, run the following steps:</p>
+              <p>For each <a href="#track-buffer">track buffer</a> in this source buffer, run the following steps:</p>
               <ol>
 	        <li>Let <var>remove end timestamp</var> be the current value of <code><a href="#widl-MediaSource-duration">duration</a></code></li>
                 <li>
-                  <p>If this track has a <a href="#random-access-point">random access point</a> timestamp that is greater than or equal to <var>end</var>, then update <var>remove end timestamp</var> to that timestamp.</p>
+                  <p>If this <a href="#track-buffer">track buffer</a> has a <a href="#random-access-point">random access point</a> timestamp that is greater than or equal to <var>end</var>, then update <var>remove end timestamp</var> to that timestamp.</p>
 	          <div class="note"><div class="note-title"><span>Note</span></div><p class="">Random access point timestamps can be different across tracks because the dependencies between <a href="#coded-frame">coded frames</a> within a track are usually different than the dependencies in another track.</p></div>
                 </li>
-	        <li>Remove all media data, for this track, that contain starting timestamps greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>.</li>
+	        <li>Remove all media data, from this <a href="#track-buffer">track buffer</a>, that contain starting timestamps greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>.</li>
                 <li>
                   <p>If this object is in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>, the <a href="http://dev.w3.org/html5/spec/media-elements.html#current-playback-position">current playback position</a> is greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>, and <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> is greater than <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code>, then set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code> and stall playback.</p>
                   <div class="note"><div class="note-title"><span>Note</span></div><p class="">This transition occurs because media data for the current position has been removed. Playback cannot progress until media for the <a href="http://dev.w3.org/html5/spec/media-elements.html#current-playback-position">current playback position</a> is appended or the <a href="#active-source-buffer-changes">selected/enabled tracks change</a>.</p></div>
@@ -1121,11 +1134,22 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> to false.</li>
        </ol></dd></dl></section>
 
+      <section id="track-buffers">
+        <h3><span class="secno">4.3 </span>Track Buffers</h3>
+        <p>A <dfn id="track-buffer">track buffer</dfn> stores the <a href="#track-description">track descriptions</a> and <a href="#coded-frame">coded frames</a> for an individual
+          track. The track buffer is updated as <a href="#init-segment">initialization segments</a> and <a href="#media-segment">media segments</a> are appended to the 
+          <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</p>
+
+        <p>Each <a href="#track-buffer">track buffer</a> has a <dfn id="last-decode-timestamp">last decode timestamp</dfn> variable that stores
+          the decode timestamp of the last <a href="#coded-frame">coded frame</a> appended in the current <a href="#append-sequence">append sequence</a>. The variable is initially
+          unset to indicate that no <a href="#coded-frame">coded frames</a> have been appended yet.</p>
+      </section>
+
       <section id="sourcebuffer-algorithms">
-        <h3><span class="secno">4.3 </span>Algorithms</h3>
+        <h3><span class="secno">4.4 </span>Algorithms</h3>
 
         <section id="sourcebuffer-segment-parser-loop">
-          <h4><span class="secno">4.3.1 </span>Segment Parser Loop</h4>
+          <h4><span class="secno">4.4.1 </span>Segment Parser Loop</h4>
           <p>All SourceBuffer objects have an internal <dfn id="sourcebuffer-append-state">append state</dfn> variable that keeps track of the high-level segment parsing state. It is initially set to <a href="#sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</a> and can transition to the following states as data is appended.</p>
           <table class="old-table">
             <thead>
@@ -1199,7 +1223,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </section>
 
         <section id="sourcebuffer-init-segment-received">
-          <h4><span class="secno">4.3.2 </span>Initialization Segment Received</h4>
+          <h4><span class="secno">4.4.2 </span>Initialization Segment Received</h4>
           <p>The following steps are run when the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> successfully parses a complete <a href="#init-segment">initialization segment</a>:</p>
           <p>Each SourceBuffer object has an internal <dfn id="first-init-segment-flag">first initialization segment flag</dfn> that tracks whether the first <a href="#init-segment">initialization segment</a> has been appended. This flag is set to false when the SourceBuffer is created and updated by the algorithm below.</p>
           <ol>
@@ -1211,14 +1235,19 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	      <dd>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to positive Infinity.</dd>
             </dl>
             <li>If the <a href="#init-segment">initialization segment</a> has no audio, video, or text tracks, then call <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream("decode")</a></code> and abort these steps.</li>
-            <li>
-              <p>If the <var><a href="#first-init-segment-flag">first initialization segment flag</a></var> is true, then verify the following properties. If any of the checks fail then call <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream("decode")</a></code> and abort these steps.</p>
-              <ul>
-                <li>The number of audio, video, and text tracks match what was in the first <a href="#init-segment">initialization segment</a>.</li>
-                <li>The codecs for each track, match what was specified in the first <a href="#init-segment">initialization segment</a>.</li>
-                <li>If more than one track for a single type are present (ie 2 audio tracks), then the <a href="#track-id">Track IDs</a> match the ones in the
-                  first <a href="#init-segment">initialization segment</a>.</li>
-              </ul>
+            <li>If the <var><a href="#first-init-segment-flag">first initialization segment flag</a></var> is true, then run the following steps:
+              <ol>
+                <li>Verify the following properties. If any of the checks fail then call <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream("decode")</a></code> and abort these steps.
+                  <ul>
+                    <li>The number of audio, video, and text tracks match what was in the first <a href="#init-segment">initialization segment</a>.</li>
+                    <li>The codecs for each track, match what was specified in the first <a href="#init-segment">initialization segment</a>.</li>
+                    <li>If more than one track for a single type are present (ie 2 audio tracks), then the <a href="#track-id">Track IDs</a> match the ones in the
+                      first <a href="#init-segment">initialization segment</a>.</li>
+                  </ul>
+                </li>
+                <li>Add the appropriate <a href="#track-description">track descriptions</a> from this <a href="#init-segment">initialization segment</a> to each of the 
+                  <a href="#track-buffer">track buffers</a>.</li>
+              </ol>
             </li>
             <li>Let <var>active track flag</var> equal false.</li>
             <li>
@@ -1240,6 +1269,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                       </ol>
                     </li>
                     <li>Add <var>new audio track</var> to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-audiotracks">audioTracks</a></code>.</li>
+                    <li>Create a new <a href="#track-buffer">track buffer</a> to store <a href="#coded-frame">coded frames</a> for this track.</li>
+                    <li>Add the <a href="#track-description">track description</a> for this track to the <a href="#track-buffer">track buffer</a>.</li>
                   </ol>
                 </li>
                 <li>
@@ -1258,6 +1289,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                       </ol>
                     </li>
                     <li>Add <var>new video track</var> to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-videotracks">videoTracks</a></code>.</li>
+                    <li>Create a new <a href="#track-buffer">track buffer</a> to store <a href="#coded-frame">coded frames</a> for this track.</li>
+                    <li>Add the <a href="#track-description">track description</a> for this track to the <a href="#track-buffer">track buffer</a>.</li>
                   </ol>
                 </li>
                 <li>
@@ -1271,9 +1304,16 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                       <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-texttrack-hidden">"hidden"</a></code>, then set <var>active track flag</var> to true.
                     </li>
                     <li>Add <var>new text track</var> to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-texttracks">textTracks</a></code>.</li>
+                    <li>Create a new <a href="#track-buffer">track buffer</a> to store <a href="#coded-frame">coded frames</a> for this track.</li>
+                    <li>Add the <a href="#track-description">track description</a> for this track to the <a href="#track-buffer">track buffer</a>.</li>
                   </ol>
                 </li>
-                <li>If <var>active track flag</var> equals true, then add this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> to <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>.</li>
+                <li>If <var>active track flag</var> equals true, then run the following steps:
+                  <ol>
+                    <li>Add this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> to <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>.</li>
+                    <li><a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> at <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code></li>
+                  </ol>
+                </li>
                 <li>Set <var><a href="#first-init-segment-flag">first initialization segment flag</a></var> to true.</li>
               </ol>
             </li>
@@ -1281,7 +1321,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <p>If the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute is <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_nothing">HAVE_NOTHING</a></code>, then run the following steps:</p>
               <ol>
                 <li>
-                  If one or more objects in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> have <var><a href="#first-init-segment-flag">first initialization segment flag</a></var> set to false, then abort
+                  If one or more objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> have <var><a href="#first-init-segment-flag">first initialization segment flag</a></var> set to false, then abort
                   these steps.</li>
                 <li>Set the <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://dev.w3.org/html5/spec/media-elements.html#dom-media-have_metadata">HAVE_METADATA</a></code>.</li>
 	        <li><a href="http://dev.w3.org/html5/spec/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://dev.w3.org/html5/spec/webappapis.html#fire-a-simple-event">fire a simple event</a> named  <code><a href="http://dev.w3.org/html5/spec/media-elements.html#event-media-loadedmetadata">loadedmetadata</a></code> at the media element.</li>
@@ -1295,8 +1335,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </section>
 
         <section id="sourcebuffer-coded-frame-processing">
-          <h4><span class="secno">4.3.3 </span>Coded Frame Processing</h4>
-          <p>When a complete <a href="#coded-frame">coded frame</a> has been parsed by the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> then the following steps are run:</p>
+          <h4><span class="secno">4.4.3 </span>Coded Frame Processing</h4>
+          <p>When complete <a href="#coded-frame">coded frames</a> have been parsed by the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> then the following steps are run:</p>
           <ol>
             <li>
 	      <p>For each <a href="#coded-frame">coded frame</a> in the <a href="#media-segment">media segment</a> run the following steps:</p>
@@ -1311,7 +1351,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	            <li>If the <var>presentation timestamp</var> or <var>decode timestamp</var> is less than the <a href="#presentation-start-time">presentation start time</a>, then call <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream("decode")</a></code>, and abort these steps.</li>
 	          </ol>
 	        </li>
-	        <li>Add the <a href="#coded-frame">coded frame</a> with the <var>presentation timestamp</var> and <var>decode timestamp</var>, to the source buffer.</li>
+                <li>Let <var>track buffer</var> equal the <a href="#track-buffer">track buffer</a> that the coded frame should be added to.</li>
+                <li>If <var><a href="#last-decode-timestamp">last decode timestamp</a></var> for <var>track buffer</var> is set and <var>decode timestamp</var> is less than 
+                  <var><a href="#last-decode-timestamp">last decode timestamp</a></var>, then call <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream("decode")</a></code> and abort these steps.</li>
+	        <li>Add the <a href="#coded-frame">coded frame</a> with the <var>presentation timestamp</var> and <var>decode timestamp</var>, to the 
+                  <var>track buffer</var>.</li>
+                <li>Set <var><a href="#last-decode-timestamp">last decode timestamp</a></var> for <var>track buffer</var> to <var>decode timestamp</var>.</li>
 	      </ol>
             </li>
             <li>
@@ -1438,7 +1483,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
     
     <section id="byte-stream-formats">
       <!--OddPage--><h2><span class="secno">8. </span>Byte Stream Formats</h2>
-      <p>The bytes provided through <code><a href="#widl-SourceBuffer-append-void-Uint8Array-data">append()</a></code> for a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM and the ISO Base Media File Format are provided below. These format specifications are intended to be the authoritative source for how data from these containers is formatted and passed to a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>. If a <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> implementation claims to support any of these container formats, then it must implement the corresponding byte stream format specification described below.</p>
+      <p>The bytes provided through <code><a href="#widl-SourceBuffer-append-void-Uint8Array-data">append()</a></code> for a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM , the ISO Base Media File Format, and MPEG-2 Transport Streams are provided below. These format specifications are intended to be the authoritative source for how data from these containers is formatted and passed to a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>. If a <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> implementation claims to support any of these container formats, then it must implement the corresponding byte stream format specification described below.</p>
       <p>This section provides general requirements for all byte stream formats:</p>
       <ul>
         <li>A byte stream format specification must define <a href="#init-segment">initialization segments</a> and <a href="#media-segment">media segments</a>.</li>
@@ -1565,7 +1610,72 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>A <a href="#random-access-point">random access point</a> as defined in this specification corresponds to a Stream Access Point of type 1 or 2 as defined in Annex I of <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a>.</p>
 	</section>
       </section>
+
+      <section id="mpeg2ts" class="nonnormative">
+        <h3><span class="secno">8.3 </span>MPEG-2 Transport Stream Byte Streams</h3>
+        <p>This section defines segment formats for implementations that choose to support MPEG-2 Transport Streams
+          (MPEG-2 TS) specified in <a href="http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=44169">ISO/IEC 13818-1</a>.</p>
+        
+        <section id="mpeg2ts-general">
+          <h4><span class="secno">8.3.1 </span>General</h4>
+          <p>MPEG-2 TS media and initialization segments must conform to the MPEG-2 TS Adaptive Profile (ISO/IEC 13818-1:2012 Amd. 2).</p>
+          <p>The following rules must apply to all MPEG-2 TS segments:</p>
+          <ol>
+            <li>Segments must contain complete MPEG-2 TS packets.</li>
+            <li>Segments must contain only complete PES packets and sections.</li>
+            <li>Segments must contain exactly one program.</li>
+            <li>All MPEG-2 TS packets must have the transport_error_indicator set to 0</li>
+          </ol>
+        </section>
+        <section id="mpeg2ts-init-segments">
+          <h4><span class="secno">8.3.2 </span>Initialization Segments</h4>
+          <p>An MPEG-2 TS initialization segment must contain a single PAT and a single PMT. Other SI, such as CAT, that are invariant for all subsequent
+            media segments, may be present.</p>
+        </section>
+  
+        <section id="mpeg2ts-media-segments">
+          <h4><span class="secno">8.3.3 </span>Media Segments</h4>
+          <p>The following rules apply to all MPEG-2 TS media segments:</p>
+          <ol>
+            <li>PSI that is identical to the information in the initialization segment may appear repeatedly throughout the segment.</li>
+            <li>The media segment will not rely on initialization information in another media segment.</li>
+            <li>Media Segments must contain only complete PES packets and sections.</li>
+            <li>Each PES packet must be comprised of one or more complete access units.</li>
+            <li>Each PES packet must have a PTS timestamp.</li>
+            <li>PCR must be present in the Segment prior to the first byte of a TS packet payload containing media data.</li>
+            <li>The presentation duration of each media component within the Media Segment should be as close to equal as practical.</li>
+          </ol>
+        </section>
+
+        <section id="mpeg2ts-random-access-points">
+          <h4><span class="secno">8.3.4 </span>Random Access Points</h4>
+          <p>A random access point as defined in this specification corresponds to Elementary Stream Random Access Point as defined in 
+            <a href="http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=44169">ISO/IEC 13818-1</a>.</p>
+        </section>
+        <section id="mpeg2ts-discontinuities">
+          <h4><span class="secno">8.3.5 </span>Timestamp Rollover &amp; Discontinuities</h4>
+          <p>Timestamp rollovers and discontinuities must be handled by the UA. The UA's MPEG-2 TS implementation must maintain an internal offset
+          variable, <dfn id="mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</dfn>, to keep track of the offset that needs to be applied to timestamps
+          that have rolled over or are part of a discontinuity. <var>MPEG2TS_timestampOffset</var> is initially set to 0 when the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> is 
+          created.  This offset must be applied to the timestamps as part of the conversion process from MPEG-2 TS packets
+          into <a href="#coded-frame">coded frames</a> for the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>. This results in the coded frame timestamps 
+          for a packet being computed by the following equations:</p>
+          <pre>Coded Frame Presentation Timestamp = (MPEG-2 TS presentation timestamp) + <var>MPEG2TS_timestampOffset</var>
+Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_timestampOffset</var></pre>
+
+          <p><var><a href="#mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</a></var> is updated in the following ways:</p>
+          <ul>
+            <li>Each time a timestamp rollover is detected, 2^33 must be added to <var>MPEG2TS_timestampOffset</var>.</li>
+            <li>When a discontinuity is detected, <var>MPEG2TS_timestampOffset</var> must be adjusted to make the timestamps after the discontinuity appear
+              to come immediately after the timestamps before the discontinuity.</li>
+            <li>When <code><a href="#widl-SourceBuffer-abort-void">abort()</a></code> is called, <var>MPEG2TS_timestampOffset</var> must be set to 0.</li>
+            <li>When <code><a href="#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> is successfully set, <var>MPEG2TS_timestampOffset</var> must be set to 0.</li>
+          </ul>
+        </section>
+      </section>
     </section>
+
+
 
     <section id="examples">
       <!--OddPage--><h2><span class="secno">9. </span>Examples</h2>
@@ -1660,7 +1770,19 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </thead>
         <tbody>
           <tr>
-	    <td>08 December 2012</td>
+	    <td>13 December 2012</td>
+            <td>
+              <ul>
+                <li>Added MPEG-2 Transport Stream section.</li>
+                <li>Added text to require abort() for out-of-order appends.</li>
+                <li>Renamed "track buffer" to "decoder buffer".</li>
+                <li>Redefined "track buffer" to mean the per-track buffers that hold the SourceBuffer media data.</li>
+                <li>Editorial fixes.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+	    <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/ee6e8ae9337c/media-source/media-source.html">08 December 2012</a></td>
             <td>
               <ul>
                 <li>Added MediaSource.getSourceBuffer() methods.</li>

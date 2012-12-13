@@ -69,6 +69,7 @@
     'readyState': { func: idlref_helper, fragment: 'widl-MediaSource-readyState', link_text: 'readyState',  },
     'duration': { func: idlref_helper, fragment: 'widl-MediaSource-duration', link_text: 'duration',  },
     'append': { func: idlref_helper, fragment: 'widl-SourceBuffer-append-void-Uint8Array-data', link_text: 'append()',  },
+    'abort': { func: idlref_helper, fragment: 'widl-SourceBuffer-abort-void', link_text: 'abort()',  },
     'remove': { func: idlref_helper, fragment: 'widl-SourceBuffer-remove-void-double-start-double-end', link_text: 'remove()',  },
     'buffered': { func: idlref_helper, fragment: 'widl-SourceBuffer-buffered', link_text: 'buffered',  },
     'timestampOffset': { func: idlref_helper, fragment: 'widl-SourceBuffer-timestampOffset', link_text: 'timestampOffset',  },
@@ -86,12 +87,7 @@
     'addsourcebuffer': { func: eventref_helper, fragment: 'addsourcebuffer', link_text: 'addsourcebuffer',  },
     'removesourcebuffer': { func: eventref_helper, fragment: 'removesourcebuffer', link_text: 'removesourcebuffer',  },
 
-    'active-source-buffers': { func: term_helper, fragment: 'active-source-buffers', link_text: 'active source buffers', },
-    'source-buffers': { func: term_helper, fragment: 'source-buffer', link_text: 'source buffers', },
-    'source-buffer': { func: term_helper, fragment: 'source-buffer', link_text: 'source buffer', },
-    'source-buffers': { func: term_helper, fragment: 'source-buffer', link_text: 'source buffers', },
-    'track-buffer': { func: term_helper, fragment: 'track-buffer', link_text: 'track buffer', },
-    'track-buffers': { func: term_helper, fragment: 'track-buffer', link_text: 'track buffers', },
+    'decoder-buffer': { func: term_helper, fragment: 'decoder-buffer', link_text: 'decoder buffer', },
     'init-segment': { func: term_helper, fragment: 'init-segment', link_text: 'initialization segment', },
     'init-segments': { func: term_helper, fragment: 'init-segment', link_text: 'initialization segments', },
     'media-segment': { func: term_helper, fragment: 'media-segment', link_text: 'media segment', },
@@ -102,9 +98,11 @@
     'track-id': { func: term_helper, fragment: 'track-id', link_text: 'Track ID', },
     'track-ids': { func: term_helper, fragment: 'track-id', link_text: 'Track IDs', },
     'track-description': { func: term_helper, fragment: 'track-description', link_text: 'track description', },
+    'track-descriptions': { func: term_helper, fragment: 'track-description', link_text: 'track descriptions', },
     'coded-frame': { func: term_helper, fragment: 'coded-frame', link_text: 'coded frame', },
     'coded-frames': { func: term_helper, fragment: 'coded-frame', link_text: 'coded frames', },
     'parent-media-source': { func: term_helper, fragment: 'parent-media-source', link_text: 'parent media source', },
+    'append-sequence': { func: term_helper, fragment: 'append-sequence', link_text: 'append sequence', },
 
     'duration-change-algorithm': { func: link_helper, fragment: '#duration-change-algorithm', link_text: 'duration change algorithm', },
     'segment-parser-loop': { func: link_helper, fragment: '#sourcebuffer-segment-parser-loop', link_text: 'segment parser loop', },
@@ -119,6 +117,10 @@
     'buffer-full-flag': { func: var_helper, fragment: '#sourcebuffer-buffer-full-flag', link_text: 'buffer full flag', },
     'MediaSource-object-URL': { func: link_helper, fragment: '#mediasource-object-url', link_text: 'MediaSource object URL', },
     'first-init-segment-flag': { func: var_helper, fragment: '#first-init-segment-flag', link_text: 'first initialization segment flag', },
+
+    'track-buffer': { func: term_helper, fragment: 'track-buffer', link_text: 'track buffer', },
+    'track-buffers': { func: term_helper, fragment: 'track-buffer', link_text: 'track buffers', },
+    'last-decode-timestamp': { func: var_helper, fragment: '#last-decode-timestamp', link_text: 'last decode timestamp', },
 
     'FileAPI': { func: fileapi_helper, fragment: '', link_text: 'File API',  },
     'blob-uri': { func: fileapi_helper, fragment: 'url', link_text: 'Blob URI',  },
@@ -135,7 +137,6 @@
     'normalized-timeranges-object': { func: videoref_helper, fragment: 'normalized-timeranges-object', link_text: 'normalized TimeRanges object',  },
     'current-playback-position': { func: videoref_helper, fragment: 'current-playback-position', link_text: 'current playback position',  },
     'media-data-is-corrupted': { func: videoref_helper, fragment: 'fatal-decode-error', link_text: 'media data is corrupted',  },
-    'media-err-decode': { func: code_videoref_helper, fragment: 'dom-mediaerror-media_err_decode', link_text: 'MediaError.MEDIA_ERR_DECODE',  },
     'media-src': { func: code_videoref_helper, fragment: 'attr-media-src', link_text: 'src',  },
     'timerange': { func: code_videoref_helper, fragment: 'timeranges', link_text: 'TimeRange',  },
     'timeranges': { func: code_videoref_helper, fragment: 'timeranges', link_text: 'TimeRanges',  },
@@ -191,6 +192,11 @@
     'webm-init-segment': { func: link_helper, fragment: '#webm-init-segments', link_text: 'WebM initialization segment', },
 
     'iso-14496-12': { func: link_helper, fragment: 'http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip', link_text: 'ISO/IEC 14496-12', },
+
+    'iso-13818-1': { func: link_helper, fragment: 'http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=44169', link_text: 'ISO/IEC 13818-1', },
+
+    'mpeg2ts-timestampOffset': { func: var_helper, fragment: '#mpeg2ts-timestampOffset', link_text: 'MPEG2TS_timestampOffset', },
+
 
     'media-data-cannot-be-fetched': { func: fragment_helper, fragment: '', link_text: '&quot;<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>&quot;', },
   };
