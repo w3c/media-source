@@ -8,10 +8,10 @@
     <script class="remove">
       var respecConfig = {
       // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use ED.
-      specStatus:           "ED",
+      specStatus: "ED",
 
       // the specification's short name, as in http://www.w3.org/TR/short-name/
-      shortName:            "",
+      shortName: "media-source",
 
       // if there a publicly available Editor's Draft, this is the link
       edDraftURI:           "http://dvcs.w3.org/hg/html-media/raw-file/tip/media-source/media-source.html",
@@ -23,11 +23,11 @@
       // only "name" is required
       editors:  [
       { name: "Aaron Colwell",  url: "",
-      company: "Google Inc.", companyURL: "http://google.com/" },
+      company: "Google Inc.", companyURL: "http://www.google.com/" },
       { name: "Adrian Bateman", url: "",
-      company: "Microsoft Corporation", companyURL: "http://microsoft.com/" },
+      company: "Microsoft Corporation", companyURL: "http://www.microsoft.com/" },
       { name: "Mark Watson", url: "",
-      company: "Netflix Inc.", companyURL: "http://netflix.com/" },
+      company: "Netflix Inc.", companyURL: "http://www.netflix.com/" },
       ],
 
       // name of the WG
@@ -95,7 +95,7 @@
         A buffering model is also included to describe how the user agent should act when different media segments are 
         appended at different times. Byte stream specifications for WebM, ISO Base Media File Format, and MPEG-2 Transport Streams are given to specify the
         expected format of byte streams used with these extensions.</p>
-      <img src="pipeline_model.png">
+      <img src="pipeline_model.png" alt="Media Source Pipeline Model Diagram">
 
       <section id="goals">
         <h3>Goals</h3>
@@ -178,20 +178,20 @@
 
         <section id="source-buffer-overlap-complete">
           <h4>Complete Overlap</h4>
-          <img src="complete_overlap.png">
+          <img src="complete_overlap.png" alt="Complete overlap diagram">
           <p>The figure above shows how the <a>SourceBuffer</a> is updated when a new <a def-id="media-segment"></a> completely overlaps a segment in the buffer. In this case, the new segment completely replaces the old segment.</p>
         </section>
 
         <section id="source-buffer-overlap-start">
           <h4>Start Overlap</h4>
-          <img src="start_overlap.png">
+          <img src="start_overlap.png" alt="Start overlap diagram">
           <p>The figure above shows how the <a>SourceBuffer</a> is updated when the beginning of a new <a def-id="media-segment"></a> overlaps a segment in the buffer. In this case, the new segment replaces all the old media data in the overlapping region. Since <a def-id="media-segments"></a> are constrained to starting with <a def-id="random-access-points"></a>, this provides a seamless transition between segments.</p>
           <p>When an audio frame in the <a>SourceBuffer</a> overlaps with the start of the new <a def-id="media-segment"></a> special behavior is required. At a minimum implementations must support dropping the old audio frame that overlaps the start of the new segment and insert silence for the small gap that is created. Higher quality implementations may support crossfading or crosslapping between the overlapping audio frames. No matter which strategy is implemented, no gaps are created in the ranges reported by <a def-id="buffered"></a> and playback must never stall at the overlap.</p>
         </section>
 
         <section id="source-buffer-overlap-end">
           <h4>End Overlap</h4>
-          <img src="end_overlap.png">
+          <img src="end_overlap.png" alt="End overlap diagram">
           <p>The figure above shows how the <a>SourceBuffer</a> is updated when the end of a new <a def-id="media-segment"></a> overlaps the beginning of a segment in the buffer. In this case, the <a>SourceBuffer</a> tries to keep as much of the old segment as possible. The amount saved depends on where the closest <a def-id="random-access-point"></a>, in the old segment, is to the end of the new segment. In the case of audio, if the gap is smaller than the size of an audio frame, then the <a>SourceBuffer</a> may render silence for this gap. This gap must not be reflect in <a def-id="buffered"></a>. The entire new segment must be added to the <a>SourceBuffer</a>, but it is up to the implementation to determine how much of the old segment data is retained.</p>
 
 
@@ -202,7 +202,7 @@
 
         <section id="source-buffer-overlap-middle">
           <h4>Middle Overlap</h4>
-          <img src="middle_overlap.png">
+          <img src="middle_overlap.png" alt="Middle overlap diagram">
           <p>The figure above shows how the <a>SourceBuffer</a> is updated when the new <a def-id="media-segment"></a> is in the middle of the old segment. This condition is handled by first resolving the <a href="#source-buffer-overlap-start">start overlap</a> and then resolving the <a href="#source-buffer-overlap-end">end overlap</a>.</p>
         </section>
       </section>
@@ -457,21 +457,20 @@
           <p> A <a>MediaSource</a> object can be attached to a media element by assigning a <a def-id="MediaSource-object-URL"></a> to the media element <a def-id="media-src"></a> attribute or the src attribute of a &lt;source&gt; inside a media element. A <a def-id="MediaSource-object-URL"></a> is created by passing a MediaSource object to <a def-id="createObjectURL"></a>.</p>
           <p>If the <a def-id="resource-fetch-algorithm"></a> absolute URL matches the MediaSource object URL, run the following steps right before the "Perform a potentially
             CORS-enabled fetch" step in the <a def-id="resource-fetch-algorithm"></a>.</p>
-          <ol>
-            <dl class="switch">
-              <dt>If <a def-id="readyState"></a> is NOT set to <a def-id="closed"></a></dt>
-              <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
-              <dt>Otherwise</dt>
-              <dd>
-                <ol>
-                  <li>Set the <a def-id="readyState"></a> attribute to <a def-id="open"></a>.</li>
-                  <li>
-                    <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a>MediaSource</a>.</li>
-                  <li>Allow the <a def-id="resource-fetch-algorithm"></a> to progress based on data passed in via <a def-id="append"></a>.</li>
-                </ol>
-              </dd>
-            </dl>
-          </ol>
+
+          <dl class="switch">
+            <dt>If <a def-id="readyState"></a> is NOT set to <a def-id="closed"></a></dt>
+            <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
+            <dt>Otherwise</dt>
+            <dd>
+              <ol>
+                <li>Set the <a def-id="readyState"></a> attribute to <a def-id="open"></a>.</li>
+                <li>
+                  <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a>MediaSource</a>.</li>
+                <li>Allow the <a def-id="resource-fetch-algorithm"></a> to progress based on data passed in via <a def-id="append"></a>.</li>
+              </ol>
+            </dd>
+          </dl>
         </section>
 
         <section id="mediasource-detach">
@@ -495,21 +494,22 @@
           <h4>Seeking</h4>
           <p>Run the following steps as part of the "<i>Wait until the user agent has established whether or not the media data for the new playback position is available, and, if it is, until it has decoded enough data to play back that position"</i> step of the <a def-id="hme-seek-algorithm"></a>:</p>
           <ol>
-            <li>The media element looks for <a def-id="media-segments"></a> containing the <var>new playback position</var> in each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a>.</li>
-            <dl class="switch">
-	      <dt>If one or more of the objects in <a def-id="activeSourceBuffers"></a> is missing <a def-id="media-segments"></a> for the <var>new playback position</var>
-              </dt>
-	      <dd>
-	        <ol>
-	          <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.</li>
-	          <li>The media element waits for the necessary <a def-id="media-segments"></a> to be passed to <a def-id="append"></a>.
-                    <p class="note">The web application can use <a def-id="buffered"></a> to determine what the media element needs to resume playback.</p>
-                  </li>
-	        </ol>
-	      </dd>
-	      <dt>Otherwise</dt>
-	      <dd>Continue</dd>
-            </dl>
+            <li>The media element looks for <a def-id="media-segments"></a> containing the <var>new playback position</var> in each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a>.
+              <dl class="switch">
+	        <dt>If one or more of the objects in <a def-id="activeSourceBuffers"></a> is missing <a def-id="media-segments"></a> for the <var>new playback position</var>
+                </dt>
+	        <dd>
+	          <ol>
+	            <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.</li>
+	            <li>The media element waits for the necessary <a def-id="media-segments"></a> to be passed to <a def-id="append"></a>.
+                      <p class="note">The web application can use <a def-id="buffered"></a> to determine what the media element needs to resume playback.</p>
+                    </li>
+	          </ol>
+	        </dd>
+	        <dt>Otherwise</dt>
+	        <dd>Continue</dd>
+              </dl>
+            </li>
             <li>The media element resets all decoders and initializes each one with data from the appropriate <a def-id="init-segment"></a>.</li>
             <li>The media element feeds data from the <a def-id="media-segments"></a> into the decoders until the <var>new playback position</var> is reached.</li>
             <li>Resume the <a def-id="hme-seek-algorithm"></a> at the "<i>Await a stable state</i>" step.</li>
@@ -841,13 +841,14 @@
           <p>The following steps are run when the <a def-id="segment-parser-loop"></a> successfully parses a complete <a def-id="init-segment"></a>:</p>
           <p>Each SourceBuffer object has an internal <dfn id="first-init-segment-flag">first initialization segment flag</dfn> that tracks whether the first <a def-id="init-segment"></a> has been appended. This flag is set to false when the SourceBuffer is created and updated by the algorithm below.</p>
           <ol>
-            <li>Update the <a def-id="duration"></a> attribute if it currently equals NaN:</li>
-            <dl class="switch">
-	      <dt>If the initialization segment contains a duration:</dt>
-	      <dd>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the duration in the initialization segment.</dd>
-	      <dt>Otherwise:</dt>
-	      <dd>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to positive Infinity.</dd>
-            </dl>
+            <li>Update the <a def-id="duration"></a> attribute if it currently equals NaN:
+              <dl class="switch">
+	        <dt>If the initialization segment contains a duration:</dt>
+	        <dd>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the duration in the initialization segment.</dd>
+	        <dt>Otherwise:</dt>
+	        <dd>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to positive Infinity.</dd>
+              </dl>
+            </li>
             <li>If the <a def-id="init-segment"></a> has no audio, video, or text tracks, then call <a def-id="eos-decode"></a> and abort these steps.</li>
             <li>If the <a def-id="first-init-segment-flag"></a> is true, then run the following steps:
               <ol>
@@ -1151,8 +1152,8 @@
 	      </ul>
 	    </li>
 	    <li>Identify the global presentation timestamp of every sample in the sequence of Media Segments</li>
-	    <p>For example, if I1 is associated with M1, M2, M3 then the above must hold for all the combinations I1+M1, I1+M2, I1+M1+M2, I1+M2+M3, etc.</p>
 	  </ol>
+	  <p>For example, if I1 is associated with M1, M2, M3 then the above must hold for all the combinations I1+M1, I1+M2, I1+M1+M2, I1+M2+M3, etc.</p>
         </li>
       </ul>
       <p>Byte stream specifications must at a minimum define constraints which ensure that the above requirements hold. Additional constraints may be defined, for example to simplify implementation.</p>
@@ -1389,7 +1390,13 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-	    <td>13 December 2012</td>
+	    <td>14 December 2012</td>
+            <td>
+              Pubrules, Link Checker, and Markup Validation fixes.
+            </td>
+          </tr>
+          <tr>
+	    <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/e1c91093dfdc/media-source/media-source.html">13 December 2012</a></td>
             <td>
               <ul>
                 <li>Added MPEG-2 Transport Stream section.</li>

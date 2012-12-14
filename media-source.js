@@ -1,4 +1,6 @@
 (function() {
+  var HTML_spec_url = "http://www.w3.org/html/wg/drafts/html/master/embedded-content-0.html";
+
   function eventdfn_helper(doc, df, id, text) {
     df.appendChild($("<dfn/>").attr({id: 'dom-evt-' + text.toLowerCase()}).wrapInner($("<code/>").text(text))[0]);
   }
@@ -12,11 +14,11 @@
   }
 
   function videoref_helper(doc, df, id, text) {
-    link_helper(doc, df, 'http://dev.w3.org/html5/spec/media-elements.html#' + id, text);
+    link_helper(doc, df, HTML_spec_url + '#' + id, text);
   }
 
   function code_videoref_helper(doc, df, id, text) {
-    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: "http://dev.w3.org/html5/spec/media-elements.html#" + id}).text(text))[0]);
+    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: HTML_spec_url + "#" + id}).text(text))[0]);
   }
 
   function fileapi_helper(doc, df, id, text) {
@@ -125,7 +127,7 @@
     'FileAPI': { func: fileapi_helper, fragment: '', link_text: 'File API',  },
     'blob-uri': { func: fileapi_helper, fragment: 'url', link_text: 'Blob URI',  },
     'File': { func: fileapi_helper, fragment: 'dfn-file', link_text: 'File',  },
-    'Blob': { func: fileapi_helper, fragment: 'dfn-blob', link_text: 'Blob',  },
+    'Blob': { func: fileapi_helper, fragment: 'dfn-Blob', link_text: 'Blob',  },
     'file-createObjectURL': { func: fileapi_helper, fragment: 'dfn-createObjectURL', link_text: 'createObjectURL()',  },
     'file-revokeObjectURL': { func: fileapi_helper, fragment: 'dfn-revokeObjectURL', link_text: 'revokeObjectURL()',  },
 
@@ -142,7 +144,7 @@
     'timeranges': { func: code_videoref_helper, fragment: 'timeranges', link_text: 'TimeRanges',  },
     'video-track': { func: code_videoref_helper, fragment: 'videotrack', link_text: 'VideoTrack',  },
     'videotrack-id': { func: code_videoref_helper, fragment: 'dom-videotrack-id', link_text: 'id',  },
-    'videotrack-selected': { func: code_videoref_helper, fragment: 'dom-videtrack-selected', link_text: 'selected',  },
+    'videotrack-selected': { func: code_videoref_helper, fragment: 'dom-videotrack-selected', link_text: 'selected',  },
     'videotracklist-length': { func: code_videoref_helper, fragment: 'dom-videotracklist-length', link_text: 'length',  },
     'videotracks': { func: code_videoref_helper, fragment: 'dom-media-videotracks', link_text: 'videoTracks',  },
     'audio-track': { func: code_videoref_helper, fragment: 'audiotrack', link_text: 'AudioTrack',  },
