@@ -1,4 +1,4 @@
-<!DOCTYPE html SYSTEM "about:legacy-compat">
+﻿<!DOCTYPE html SYSTEM "about:legacy-compat">
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -44,7 +44,7 @@
       // This is important for Rec-track documents, do not copy a patent URI from a random
       // document unless you know what you're doing. If in doubt ask your friendly neighbourhood
       // Team Contact.
-      wgPatentURI:  "",
+      wgPatentURI: "http://www.w3.org/2004/01/pp-impl/40318/status",
 
       noIDLIn: true,
 
@@ -150,13 +150,13 @@
           <dd><p>A unit of compressed media data that has a presentation timestamp and  decode timestamp. The presentation timestamp indicates when the frame should be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp must be present in the bytestream. If frames cannot be decoded out of order and a decode timestamp is not present in the bytestream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
 
           <dt id="parent-media-source">Parent Media Source</dt>
-          <dd>The parent media source of a <a>SourceBuffer</a> object is the <a>MediaSource</a> object that created it.</p>
+          <dd>The parent media source of a <a>SourceBuffer</a> object is the <a>MediaSource</a> object that created it.</dd>
 
           <dt id="append-sequence">Append Sequence</dt>
           <dd>A series of <a def-id="append"></a> calls on a <a>SourceBuffer</a> without any intervening <a def-id="abort"></a> calls. The
           <a def-id="media-segments"></a> in an append sequence must be adjacent and monotonically increasing in time without any gaps. An
           <a def-id="abort"></a> call starts a new append sequence which allows <a def-id="media-segments"></a> to be appended in non-monotonically
-          increasing order.</p>
+          increasing order.</dd>
         </dl>
       </section>
     </section>
@@ -1131,7 +1131,7 @@
             </li>
           </ol>
         </li>
-        <li>The following rules apply to all <a def-id="media-segments"></a> within a byte stream:</a>
+        <li>The following rules apply to all <a def-id="media-segments"></a> within a byte stream:
           <ol>
             <li>All timestamps must be mapped to the same presentation timeline.</li>
 	    <li>Segments must start with a <a def-id="random-access-point"></a> to facilitate seamless splicing at the segment boundary.</li>

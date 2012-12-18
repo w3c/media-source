@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -397,7 +397,7 @@ table.exceptions table {
   </p>
   <h1 class="title" id="title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-14-december-2012"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 14 December 2012</h2>
+  <h2 id="w3c-editor-s-draft-18-december-2012"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 18 December 2012</h2>
   <dl>
     
       <dt>This version:</dt>
@@ -491,7 +491,7 @@ table.exceptions table {
           
           
             
-              <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="" rel="disclosure">public list of any patent disclosures</a> 
+              <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="http://www.w3.org/2004/01/pp-impl/40318/status" rel="disclosure">public list of any patent disclosures</a> 
             
             made in connection with the deliverables of the group; that page also includes instructions for 
             disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains
@@ -570,14 +570,14 @@ table.exceptions table {
           <dd><p>A unit of compressed media data that has a presentation timestamp and  decode timestamp. The presentation timestamp indicates when the frame should be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp must be present in the bytestream. If frames cannot be decoded out of order and a decode timestamp is not present in the bytestream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
 
           <dt id="parent-media-source">Parent Media Source</dt>
-          <dd>The parent media source of a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object is the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object that created it.<p></p>
+          <dd>The parent media source of a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object is the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object that created it.</dd>
 
-          </dd><dt id="append-sequence">Append Sequence</dt>
+          <dt id="append-sequence">Append Sequence</dt>
           <dd>A series of <code><a href="#widl-SourceBuffer-append-void-Uint8Array-data">append()</a></code> calls on a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> without any intervening <code><a href="#widl-SourceBuffer-abort-void">abort()</a></code> calls. The
           <a href="#media-segment">media segments</a> in an append sequence must be adjacent and monotonically increasing in time without any gaps. An
           <code><a href="#widl-SourceBuffer-abort-void">abort()</a></code> call starts a new append sequence which allows <a href="#media-segment">media segments</a> to be appended in non-monotonically
-          increasing order.<p></p>
-        </dd></dl>
+          increasing order.</dd>
+        </dl>
       </section>
     </section>
 
