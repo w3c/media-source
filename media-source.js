@@ -25,6 +25,10 @@
     link_helper(doc, df, 'http://www.w3.org/TR/FileAPI/#' + id, text);
   }
 
+  function streamapi_helper(doc, df, id, text) {
+      link_helper(doc, df, 'http://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm#' + id, text);
+  }
+
   function webappapis_helper(doc, df, id, text) {
     link_helper(doc, df, 'http://dev.w3.org/html5/spec/webappapis.html#' + id, text);
   }
@@ -70,9 +74,11 @@
     'eos-decode': { func: idlref_helper, fragment: 'widl-MediaSource-endOfStream-void-EndOfStreamError-error', link_text: 'endOfStream("decode")',  },
     'readyState': { func: idlref_helper, fragment: 'widl-MediaSource-readyState', link_text: 'readyState',  },
     'duration': { func: idlref_helper, fragment: 'widl-MediaSource-duration', link_text: 'duration',  },
-    'append': { func: idlref_helper, fragment: 'widl-SourceBuffer-append-void-Uint8Array-data', link_text: 'append()',  },
+    'appendArrayBuffer': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendArrayBuffer-void-ArrayBuffer-data', link_text: 'appendArrayBuffer()',  },
+    'appendStream': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize', link_text: 'appendStream()',  },
     'abort': { func: idlref_helper, fragment: 'widl-SourceBuffer-abort-void', link_text: 'abort()',  },
     'remove': { func: idlref_helper, fragment: 'widl-SourceBuffer-remove-void-double-start-double-end', link_text: 'remove()',  },
+    'appending': { func: idlref_helper, fragment: 'widl-SourceBuffer-appending', link_text: 'appending',  },
     'buffered': { func: idlref_helper, fragment: 'widl-SourceBuffer-buffered', link_text: 'buffered',  },
     'timestampOffset': { func: idlref_helper, fragment: 'widl-SourceBuffer-timestampOffset', link_text: 'timestampOffset',  },
     'length': { func: idlref_helper, fragment: 'widl-SourceBufferList-length', link_text: 'length',  },
@@ -82,6 +88,11 @@
     'ended': { func: idlref_helper, fragment: 'idl-def-ReadyState', link_text: '"ended"',  },
     'network': { func: idlref_helper, fragment: 'idl-def-EndOfStreamError', link_text: '"network"',  },
     'decode': { func: idlref_helper, fragment: 'idl-def-EndOfStreamError', link_text: '"decode"',  },
+
+    'appendstart': { func: eventref_helper, fragment: 'appendstart', link_text: 'appendstart',  },
+    'appendend': { func: eventref_helper, fragment: 'appendend', link_text: 'appendend',  },
+    'appenderror': { func: eventref_helper, fragment: 'error', link_text: 'error',  },
+    'appendabort': { func: eventref_helper, fragment: 'abort', link_text: 'abort',  },
 
     'sourceopen': { func: eventref_helper, fragment: 'sourceopen', link_text: 'sourceopen',  },
     'sourceended': { func: eventref_helper, fragment: 'sourceended', link_text: 'sourceended',  },
@@ -113,6 +124,9 @@
     'parsing-init-segment': { func: link_helper, fragment: '#sourcebuffer-parsing-init-segment', link_text: 'PARSING_INIT_SEGMENT', },
     'parsing-media-segment': { func: link_helper, fragment: '#sourcebuffer-parsing-media-segment', link_text: 'PARSING_MEDIA_SEGMENT', },
     'byte-stream-format-specs': { func: link_helper, fragment: '#byte-stream-formats', link_text: 'byte stream format specifications', },
+    'append-error-algorithm': { func: link_helper, fragment: '#sourcebuffer-append-error', link_text: 'append error algorithm', },
+    'reset-parser-state-algorithm': { func: link_helper, fragment: '#sourcebuffer-reset-parser-state', link_text: 'reset parser state algorithm', },
+    'stream-append-loop': { func: link_helper, fragment: '#sourcebuffer-stream-append-loop', link_text: 'stream append loop', },
     'init-segment-received-algorithm': { func: link_helper, fragment: '#sourcebuffer-init-segment-received', link_text: 'initialization segment received algorithm', },
     'coded-frame-processing-algorithm': { func: link_helper, fragment: '#sourcebuffer-coded-frame-processing', link_text: 'coded frame processing algorithm', },
     'input-buffer': { func: var_helper, fragment: '#sourcebuffer-input-buffer', link_text: 'input buffer', },
@@ -131,6 +145,8 @@
     'file-createObjectURL': { func: fileapi_helper, fragment: 'dfn-createObjectURL', link_text: 'createObjectURL()',  },
     'file-revokeObjectURL': { func: fileapi_helper, fragment: 'dfn-revokeObjectURL', link_text: 'revokeObjectURL()',  },
 
+    'Stream': { func: streamapi_helper, fragment: 'idl-def-Stream', link_text: 'Stream', },
+
     'eventdfn': { func: eventdfn_helper, fragment: '', link_text: '', },
 
     'videoref': { func: videoref_helper, fragment: '', link_text: '', },
@@ -144,18 +160,24 @@
     'timeranges': { func: code_videoref_helper, fragment: 'timeranges', link_text: 'TimeRanges',  },
     'video-track': { func: code_videoref_helper, fragment: 'videotrack', link_text: 'VideoTrack',  },
     'videotrack-id': { func: code_videoref_helper, fragment: 'dom-videotrack-id', link_text: 'id',  },
-    'videotrack-selected': { func: code_videoref_helper, fragment: 'dom-videotrack-selected', link_text: 'selected',  },
+    'videotrack-kind': { func: code_videoref_helper, fragment: 'dom-videotrack-kind', link_text: 'kind', },
+    'videotrack-language': { func: code_videoref_helper, fragment: 'dom-videotrack-language', link_text: 'language', },
+    'videotrack-selected': { func: code_videoref_helper, fragment: 'dom-videotrack-selected', link_text: 'selected', },
     'videotracklist-length': { func: code_videoref_helper, fragment: 'dom-videotracklist-length', link_text: 'length',  },
     'videotracks': { func: code_videoref_helper, fragment: 'dom-media-videotracks', link_text: 'videoTracks',  },
     'audio-track': { func: code_videoref_helper, fragment: 'audiotrack', link_text: 'AudioTrack',  },
     'audiotracklist-length': { func: code_videoref_helper, fragment: 'dom-audiotracklist-length', link_text: 'length',  },
     'audiotracks': { func: code_videoref_helper, fragment: 'dom-media-audiotracks', link_text: 'audioTracks',  },
     'audiotrack-id': { func: code_videoref_helper, fragment: 'dom-audiotrack-id', link_text: 'id',  },
-    'audiotrack-enabled': { func: code_videoref_helper, fragment: 'dom-audiotrack-enabled', link_text: 'enabled',  },
+    'audiotrack-kind': { func: code_videoref_helper, fragment: 'dom-audiotrack-kind', link_text: 'kind', },
+    'audiotrack-language': { func: code_videoref_helper, fragment: 'dom-audiotrack-language', link_text: 'language', },
+    'audiotrack-enabled': { func: code_videoref_helper, fragment: 'dom-audiotrack-enabled', link_text: 'enabled', },
     'text-track': { func: code_videoref_helper, fragment: 'texttrack', link_text: 'TextTrack',  },
     'texttracks': { func: code_videoref_helper, fragment: 'dom-media-texttracks', link_text: 'textTracks',  },
     'texttrack-mode': { func: code_videoref_helper, fragment: 'dom-texttrack-mode', link_text: 'mode',  },
-    'texttrack-showing': { func: code_videoref_helper, fragment: 'dom-texttrack-showing', link_text: '"showing"',  },
+    'texttrack-kind': { func: code_videoref_helper, fragment: 'dom-texttrack-kind', link_text: 'kind', },
+    'texttrack-language': { func: code_videoref_helper, fragment: 'dom-texttrack-language', link_text: 'language', },
+    'texttrack-showing': { func: code_videoref_helper, fragment: 'dom-texttrack-showing', link_text: '"showing"', },
     'texttrack-hidden': { func: code_videoref_helper, fragment: 'dom-texttrack-hidden', link_text: '"hidden"',  },
     'ready-state': { func: code_videoref_helper, fragment: 'dom-media-readystate', link_text: 'HTMLMediaElement.readyState',  },
     'have-nothing': { func: code_videoref_helper, fragment: 'dom-media-have_nothing', link_text: 'HAVE_NOTHING',  },
