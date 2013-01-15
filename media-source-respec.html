@@ -316,40 +316,13 @@
           <ol class="method-algorithm">
             <li>If <var>sourceBuffer</var> is null then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If <var>sourceBuffer</var> specifies an object that is not in <a def-id="sourceBuffers"></a> then throw a <a def-id="not-found-err"></a> exception and abort these steps.</li>
-            <li>Remove track information from <a def-id="audiotracks"></a>, <a def-id="videotracks"></a>, and <a def-id="texttracks"></a> for all tracks associated with <var>sourceBuffer</var> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="videoref" name="handler-tracklist-onchange">change</a> at the modified lists.</li>
+            <li>Set the the sourceBuffer attribute in all tracks in <var>sourceBuffer</var>.<a def-id="sourcebuffer-audioTracks"></a>, <var>sourceBuffer</var>.<a def-id="sourcebuffer-videoTracks"></a>, and <var>sourceBuffer</var>.<a def-id="sourcebuffer-textTracks"></a> to null.</li>
+            <li>Remove all the tracks in <var>sourceBuffer</var>.<a def-id="sourcebuffer-audioTracks"></a>, <var>sourceBuffer</var>.<a def-id="sourcebuffer-videoTracks"></a>, and <var>sourceBuffer</var>.<a def-id="sourcebuffer-textTracks"></a> from the respective <a def-id="audiotracks"></a>, <a def-id="videotracks"></a>, and <a def-id="texttracks"></a> attributes on the HTMLMediaElement.</li>
+            <li>Remove all the tracks in <var>sourceBuffer</var>.<a def-id="sourcebuffer-audioTracks"></a>, <var>sourceBuffer</var>.<a def-id="sourcebuffer-videoTracks"></a>, and <var>sourceBuffer</var>.<a def-id="sourcebuffer-textTracks"></a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the modified lists.</li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the HTMLMediaElement track lists that were modified.</li>
             <li>If <var>sourceBuffer</var> is in <a def-id="activeSourceBuffers"></a>, then remove it from <a def-id="activeSourceBuffers"></a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="removesourcebuffer"></a> at <a def-id="activeSourceBuffers"></a>.</li>
             <li>Remove <var>sourceBuffer</var> from <a def-id="sourceBuffers"></a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="removesourcebuffer"></a> at <a def-id="sourceBuffers"></a>.</li>
             <li>Destroy all resources for <var>sourceBuffer</var>.</li>
-          </ol>
-        </dd>
-
-        <dt>SourceBuffer? getSourceBuffer(VideoTrack videoTrack)</dt>
-        <dd>
-          <p>Gets the <a>SourceBuffer</a> object that created a specific <a def-id="video-track"></a>.</p>
-
-          <ol class="method-algorithm">
-            <li>If <var>videoTrack</var> was not created by any <a>SourceBuffer</a> object in <a def-id="sourceBuffers"></a> then return null.</li>
-            <li>Return the <a>SourceBuffer</a> object in <a def-id="sourceBuffers"></a> that created <var>videoTrack</var>.
-          </ol>
-        </dd>
-
-        <dt>SourceBuffer? getSourceBuffer(AudioTrack audioTrack)</dt>
-        <dd>
-          <p>Gets the <a>SourceBuffer</a> object that created a specific <a def-id="audio-track"></a>.</p>
-
-          <ol class="method-algorithm">
-            <li>If <var>audioTrack</var> was not created by any <a>SourceBuffer</a> object in <a def-id="sourceBuffers"></a> then return null.</li>
-            <li>Return the <a>SourceBuffer</a> object in <a def-id="sourceBuffers"></a> that created <var>audioTrack</var>.
-          </ol>
-        </dd>
-
-        <dt>SourceBuffer? getSourceBuffer(TextTrack textTrack)</dt>
-        <dd>
-          <p>Gets the <a>SourceBuffer</a> object that created a specific <a def-id="text-track"></a>.</p>
-
-          <ol class="method-algorithm">
-            <li>If <var>textTrack</var> was not created by any <a>SourceBuffer</a> object in <a def-id="sourceBuffers"></a> then return null.</li>
-            <li>Return the <a>SourceBuffer</a> object in <a def-id="sourceBuffers"></a> that created <var>textTrack</var>.
           </ol>
         </dd>
 
@@ -401,22 +374,6 @@
               </dl>
             </li>
           </ol>
-        </dd>
-
-        <dt>void setTrackInfo(VideoTrack track, DOMString kind, DOMString language)</dt>
-        <dd>
-            <p>Set the <a def-id="videotrack-kind"></a> and <a def-id="videotrack-language"></a> of the <a def-id="video-track"></a> <var>track</var>.</p>
-            <p class="note">This method would be unnecessary if the <a def-id="videotrack-kind"></a> and <a def-id="videotrack-language"></a> attributes of <a def-id="video-track"></a> were not read-only.</p>
-        </dd>
-        <dt>void setTrackInfo(AudioTrack track, DOMString kind, DOMString language)</dt>
-        <dd>
-            <p>Set the <a def-id="audiotrack-kind"></a> and <a def-id="audiotrack-language"></a> of the <a def-id="audio-track"></a> <var>track</var>.</p>
-            <p class="note">This method would be unnecessary if the <a def-id="audiotrack-kind"></a> and <a def-id="audiotrack-language"></a> attributes of <a def-id="audio-track"></a> were not read-only.</p>
-        </dd>
-        <dt>void setTrackInfo(TextTrack track, DOMString kind, DOMString language)</dt>
-        <dd>
-            <p>Set the <a def-id="texttrack-kind"></a> and <a def-id="texttrack-language"></a> of the <a def-id="text-track"></a> <var>track</var>.</p>
-            <p class="note">This method would be unnecessary if the <a def-id="texttrack-kind"></a> and <a def-id="texttrack-language"></a> attributes of <a def-id="text-track"></a> were not read-only.</p>
         </dd>
 
         <dt>static bool isTypeSupported(DOMString type)</dt>
@@ -703,6 +660,21 @@
             <li>Update the attribute to the new value.</li>
           </ol>
           <p class="issue"><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=19676">Bug 19676</a> - timestampOffset accuracy</p>
+        </dd>
+
+        <dt>readonly attribute AudioTrackList audioTracks</dt>
+        <dd>
+          The list of <a def-id="audio-track"></a> objects created by this object.
+        </dd>
+
+        <dt>readonly attribute VideoTrackList videoTracks</dt>
+        <dd>
+          The list of <a def-id="video-track"></a> objects created by this object.
+        </dd>
+
+        <dt>readonly attribute TextTrackList textTracks</dt>
+        <dd>
+          The list of <a def-id="text-track"></a> objects created by this object.
         </dd>
 
         <dt>void appendArrayBuffer(ArrayBuffer data)</dt>
@@ -1053,7 +1025,8 @@
                         <li>Set <var>active track flag</var> to true.</li>
                       </ol>
                     </li>
-                    <li>Add <var>new audio track</var> to <a def-id="audiotracks"></a>.</li>
+                    <li>Add <var>new audio track</var> to the <a def-id="sourcebuffer-audioTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
+                    <li>Add <var>new audio track</var> to the <a def-id="audiotracks"></a> attribute on the HTMLMediaElement.</li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
                     <li>Add the <a def-id="track-description"></a> for this track to the <a def-id="track-buffer"></a>.</li>
                   </ol>
@@ -1073,7 +1046,8 @@
                         <li>Set <var>active track flag</var> to true.</li>
                       </ol>
                     </li>
-                    <li>Add <var>new video track</var> to <a def-id="videotracks"></a>.</li>
+                    <li>Add <var>new video track</var> to the <a def-id="sourcebuffer-videoTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
+                    <li>Add <var>new video track</var> to the <a def-id="videotracks"></a> attribute on the HTMLMediaElement.</li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
                     <li>Add the <a def-id="track-description"></a> for this track to the <a def-id="track-buffer"></a>.</li>
                   </ol>
@@ -1088,7 +1062,8 @@
                       If the <a def-id="texttrack-mode"></a> property on <var>new text track</var> equals <a def-id="texttrack-showing"></a> or
                       <a def-id="texttrack-hidden"></a>, then set <var>active track flag</var> to true.
                     </li>
-                    <li>Add <var>new text track</var> to <a def-id="texttracks"></a>.</li>
+                    <li>Add <var>new text track</var> to the <a def-id="sourcebuffer-textTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
+                    <li>Add <var>new text track</var> to the <a def-id="texttracks"></a> attribute on the HTMLMediaElement.</li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
                     <li>Add the <a def-id="track-description"></a> for this track to the <a def-id="track-buffer"></a>.</li>
                   </ol>
@@ -1270,7 +1245,156 @@
         <li>Return the <var>intersection range</var>.</li>
       </ol>
     </section>
-    
+
+    <section id="audio-track-extensions">
+      <h2>AudioTrack Extensions</h2>
+      <p>This section specifies extensions to the HTML <a def-id="audio-track"></a> definition.</p>
+
+      <dl title="partial interface AudioTrack" class="idl">
+        <dt>attribute DOMString kind</dt>
+        <dd>
+          <p>Allows the web application to get and update the track <a def-id="audiotrack-kind"></a>.</p>
+          <p>On getting, return the current value of the attribute. This is either the value provided when this object was created or the value provided on
+            the last successful set operation.<p>
+          <p>On setting, run the following steps:</p>
+          <ol>
+            <li>If the value being assigned to this attribute does not match one of the <a def-id="videoref" name="dom-TrackList-getKind-categories">kind categories</a>, then abort these steps.</li>
+            <li>Update this attribute to the new value.</li>
+            <li>If the <a def-id="audiotrack-sourceBuffer"></a> attribute on this track is not null, then
+              <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
+              <a def-id="audiotrack-sourceBuffer"></a>.<a def-id="sourcebuffer-audioTracks"></a>.
+            </li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="audiotracks"></a> attribute on the
+              HTMLMediaElement.
+            </li>
+          </ol>
+        </dd>
+
+        <dt>attribute DOMString language</dt>
+        <dd>
+          <p>Allows the web application to get and update the track <a def-id="audiotrack-language"></a>.</p>
+          <p>On getting, return the current value of the attribute. This is either the value provided when this object was created or the value provided on
+            the last successful set operation.<p>
+          <p>On setting, run the following steps:</p>
+          <ol>
+            <li>If the value being assigned to this attribute is not an empty string or a BCP 47 language tag[[BCP47]], then abort these steps.</li>
+            <li>Update this attribute to the new value.</li>
+            <li>If the <a def-id="audiotrack-sourceBuffer"></a> attribute on this track is not null, then
+              <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
+              <a def-id="audiotrack-sourceBuffer"></a>.<a def-id="sourcebuffer-audioTracks"></a>.
+            </li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="audiotracks"></a> attribute on the
+              HTMLMediaElement.
+            </li>
+          </ol>
+        </dd>
+
+        <dt>readonly attribute SourceBuffer? sourceBuffer</dt>
+        <dd>
+          <p>Returns the <a>SourceBuffer</a> that created this track. Returns null if this track was not created by a <a>SourceBuffer</a> or the <a>SourceBuffer</a> has been removed from the <a def-id="sourceBuffers"></a> attribute of its <a def-id="parent-media-source"></a>.</p>
+        </dd>
+      </dl>
+    </section>
+
+    <section id="video-track-extensions">
+      <h2>VideoTrack Extensions</h2>
+      <p>This section specifies extensions to the HTML <a def-id="video-track"></a> definition.</p>
+
+      <dl title="partial interface VideoTrack" class="idl">
+        <dt>attribute DOMString kind</dt>
+        <dd>
+          <p>Allows the web application to get and update the track <a def-id="videotrack-kind"></a>.</p>
+          <p>On getting, return the current value of the attribute. This is either the value provided when this object was created or the value provided on
+            the last successful set operation.<p>
+          <p>On setting, run the following steps:</p>
+          <ol>
+            <li>If the value being assigned to this attribute does not match one of the <a def-id="videoref" name="dom-TrackList-getKind-categories">kind categories</a>, then abort these steps.</li>
+            <li>Update this attribute to the new value.</li>
+            <li>If the <a def-id="videotrack-sourceBuffer"></a> attribute on this track is not null, then
+              <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
+              <a def-id="videotrack-sourceBuffer"></a>.<a def-id="sourcebuffer-videoTracks"></a>.
+            </li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="videotracks"></a> attribute on the
+              HTMLMediaElement.
+            </li>
+          </ol>
+        </dd>
+
+        <dt>attribute DOMString language</dt>
+        <dd>
+          <p>Allows the web application to get and update the track <a def-id="videotrack-language"></a>.</p>
+          <p>On getting, return the current value of the attribute. This is either the value provided when this object was created or the value provided on
+            the last successful set operation.<p>
+          <p>On setting, run the following steps:</p>
+          <ol>
+            <li>If the value being assigned to this attribute is not an empty string or a BCP 47 language tag[[BCP47]], then abort these steps.</li>
+            <li>Update this attribute to the new value.</li>
+            <li>If the <a def-id="videotrack-sourceBuffer"></a> attribute on this track is not null, then
+              <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
+              <a def-id="videotrack-sourceBuffer"></a>.<a def-id="sourcebuffer-videoTracks"></a>.
+            </li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="videotracks"></a> attribute on the
+              HTMLMediaElement.
+            </li>
+          </ol>
+        </dd>
+
+        <dt>readonly attribute SourceBuffer? sourceBuffer</dt>
+        <dd>
+          <p>Returns the <a>SourceBuffer</a> that created this track. Returns null if this track was not created by a <a>SourceBuffer</a> or the <a>SourceBuffer</a> has been removed from the <a def-id="sourceBuffers"></a> attribute of its <a def-id="parent-media-source"></a>.</p>
+        </dd>
+    </section>
+
+    <section id="text-track-extensions">
+      <h2>TextTrack Extensions</h2>
+      <p>This section specifies extensions to the HTML <a def-id="text-track"></a> definition.</p>
+
+      <dl title="partial interface TextTrack" class="idl">
+        <dt>attribute DOMString kind</dt>
+        <dd>
+          <p>Allows the web application to get and update the track <a def-id="texttrack-kind"></a>.</p>
+          <p>On getting, return the current value of the attribute. This is either the value provided when this object was created or the value provided on
+            the last successful set operation.<p>
+          <p>On setting, run the following steps:</p>
+          <ol>
+            <li>If the value being assigned to this attribute does not match one of the <a def-id="videoref" name="text-track-kind">text track kinds</a>, then abort these steps.</li>
+            <li>Update this attribute to the new value.</li>
+            <li>If the <a def-id="texttrack-sourceBuffer"></a> attribute on this track is not null, then
+              <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
+              <a def-id="texttrack-sourceBuffer"></a>.<a def-id="sourcebuffer-textTracks"></a>.
+            </li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="texttracks"></a> attribute on the
+              HTMLMediaElement.
+            </li>
+          </ol>
+        </dd>
+
+        <dt>attribute DOMString language</dt>
+        <dd>
+          <p>Allows the web application to get and update the track <a def-id="texttrack-language"></a>.</p>
+          <p>On getting, return the current value of the attribute. This is either the value provided when this object was created or the value provided on
+            the last successful set operation.<p>
+          <p>On setting, run the following steps:</p>
+          <ol>
+            <li>If the value being assigned to this attribute is not an valid <a def-id="videoref" name="text-track-language">text track language</a>, 
+              then abort these steps.</li>
+            <li>Update this attribute to the new value.</li>
+            <li>If the <a def-id="texttrack-sourceBuffer"></a> attribute on this track is not null, then
+              <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
+              <a def-id="texttrack-sourceBuffer"></a>.<a def-id="sourcebuffer-textTracks"></a>.
+            </li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="texttracks"></a> attribute on the
+              HTMLMediaElement.
+            </li>
+          </ol>
+        </dd>
+
+        <dt>readonly attribute SourceBuffer? sourceBuffer</dt>
+        <dd>
+          <p>Returns the <a>SourceBuffer</a> that created this track. Returns null if this track was not created by a <a>SourceBuffer</a> or the <a>SourceBuffer</a> has been removed from the <a def-id="sourceBuffers"></a> attribute of its <a def-id="parent-media-source"></a>.</p>
+        </dd>
+    </section>
+
     <section id="byte-stream-formats">
       <h2>Byte Stream Formats</h2>
       <p>The bytes provided through <a def-id="appendArrayBuffer"></a> and <a def-id="appendStream"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM , the ISO Base Media File Format, and MPEG-2 Transport Streams are provided below. These format specifications are intended to be the authoritative source for how data from these containers is formatted and passed to a <a>SourceBuffer</a>. If a <a>MediaSource</a> implementation claims to support any of these container formats, then it must implement the corresponding byte stream format specification described below.</p>
@@ -1570,6 +1694,10 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
           </tr>
         </thead>
         <tbody>
+          <tr>
+	    <td>15 January 2013</td>
+            <td>Replace setTrackInfo() and getSourceBuffer() with AudioTrack, VideoTrack, and TextTrack extensions.</td>
+          </tr>
           <tr>
 	    <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/52a85235137b/media-source/media-source.html">04 January 2013</a></td>
             <td>
