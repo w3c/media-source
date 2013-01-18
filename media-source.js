@@ -1,5 +1,5 @@
 (function() {
-  var HTML_spec_url = "http://www.w3.org/html/wg/drafts/html/master/embedded-content-0.html";
+    var HTML_spec_url = "http://www.w3.org/TR/html5/embedded-content-0.html";
 
   function eventdfn_helper(doc, df, id, text) {
     df.appendChild($("<dfn/>").attr({id: 'dom-evt-' + text.toLowerCase()}).wrapInner($("<code/>").text(text))[0]);
@@ -30,7 +30,7 @@
   }
 
   function webappapis_helper(doc, df, id, text) {
-    link_helper(doc, df, 'http://dev.w3.org/html5/spec/webappapis.html#' + id, text);
+    link_helper(doc, df, 'http://www.w3.org/TR/html5/webappapis.html#' + id, text);
   }
 
   function term_helper(doc, df, id, text) {
