@@ -14,7 +14,7 @@
       shortName: "media-source",
 
       // if there a publicly available Editor's Draft, this is the link
-      edDraftURI:           "http://dvcs.w3.org/hg/html-media/raw-file/tip/media-source/media-source.html",
+      edDraftURI:           "http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/media-source.html",
 
       // if this is a LCWD, uncomment and set the end of its review period
       // lcEnd: "2009-08-05",
@@ -497,9 +497,22 @@
 
         <section id="buffer-monitoring">
           <h4>SourceBuffer Monitoring</h4>
-          <p>The following steps are periodically run during playback to make sure that all of the <a>SourceBuffer</a> objects in <a def-id="activeSourceBuffers"></a> have enough data to ensure uninterrupted playback. Appending new segments and changes to <a def-id="activeSourceBuffers"></a> also cause these steps to run because they affect the conditions that trigger state transitions.</p>
-          <p class="note">The web application can monitor changes in <a def-id="ready-state"></a> to drive <a def-id="media-segment"></a> appending.</p>
-          <p class="issue"><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=18592">Bug 18592</a> - How much is "enough data to ensure uninterrupted playback"</p>
+          <p>The following steps are periodically run during playback to make sure that all of the <a>SourceBuffer</a> objects in <a def-id="activeSourceBuffers"></a> have <a def-id="enough-data"></a>. Appending new segments and changes to <a def-id="activeSourceBuffers"></a> also cause these steps to run because they affect the conditions that trigger state transitions.</p>
+
+          <p>Having <dfn id="enough-data">enough data to ensure uninterrupted playback</dfn> is an implementation specific condition where the user agent
+          determines that it currently has enough data to play the presentation without stalling for a meaningful period of time. This condition is
+          constantly evaluated to determine when to transition the media element into and out of the <a def-id="have-enough-data"></a> ready state.
+          These transitions indicate when the user agent believes it has enough data buffered or it needs more data respectively.</p>
+
+          <p class="note">An implementation may choose to use bytes buffered, time buffered, the append rate, or any other metric it sees fit to
+            determine when it has enough data. The metrics used may change during playback so web applications should only rely on the value of
+            <a def-id="ready-state"></a> to determine whether more data is needed or not.</p>
+
+          <p class="note">When the media element needs more data, it should transition from <a def-id="have-enough-data"></a> to
+            <a def-id="have-future-data"></a> early enough for a web application to be able to respond without causing an interruption in playback.
+            For example, transitioning when the current playback position is 500ms before the end of the buffered data gives the application roughly
+            500ms to append more data before playback stalls.</p>
+
           <dl class="switch">
             <dt>If <a def-id="buffered"></a> for all objects in <a def-id="activeSourceBuffers"></a> do not contain <a def-id="timeranges"></a> for the current playback position:</dt>
             <dd>
@@ -509,7 +522,7 @@
 	        <li>Abort these steps.</li>
 	      </ol>
             </dd>
-            <dt>If <a def-id="buffered"></a> for all objects in <a def-id="activeSourceBuffers"></a> contain <a def-id="timeranges"></a> that include the current playback position and enough data to ensure uninterrupted playback:</dt>
+            <dt>If <a def-id="buffered"></a> for all objects in <a def-id="activeSourceBuffers"></a> contain <a def-id="timeranges"></a> that include the current playback position and <a def-id="enough-data"></a>:</dt>
             <dd>
 	      <ol>
 	        <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-enough-data"></a>.</li>
@@ -519,7 +532,7 @@
 	        <li>Abort these steps.</li>
 	      </ol>
             </dd>
-            <dt>If <a def-id="buffered"></a> for at least one object in <a def-id="activeSourceBuffers"></a> contains a <a def-id="timerange"></a> that includes the current playback position but not enough data to ensure uninterrupted playback:</dt>
+            <dt>If <a def-id="buffered"></a> for at least one object in <a def-id="activeSourceBuffers"></a> contains a <a def-id="timerange"></a> that includes the current playback position but not <a def-id="enough-data"></a>:</dt>
             <dd>
 	      <ol>
 	        <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-future-data"></a>.</li>
@@ -695,7 +708,6 @@
                   <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a def-id="parent-media-source"></a> .</li>
               </ol>
             </li>
-            <li>If <var>data</var>.byteLength is 0, then abort these steps.</li>
             <li>
               <p>If the <a def-id="buffer-full-flag"></a> equals true, then throw a <a def-id="quota-exceeded-err"></a> exception and abort these step.</p>
               <p class="note">The web application must use <a def-id="remove"></a> to free up space in the <a>SourceBuffer</a>.</p>
@@ -727,7 +739,6 @@
 	        <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a def-id="parent-media-source"></a> .</li>
               </ol>
             </li>
-            <li>If <var>maxSize</var> equals 0, then abort these steps.</li>
             <li>
               <p>If the <a def-id="buffer-full-flag"></a> equals true, then throw a <a def-id="quota-exceeded-err"></a> exception and abort these step.</p>
               <p class="note">The web application must use <a def-id="remove"></a> to free up space in the <a>SourceBuffer</a>.</p>
@@ -1135,7 +1146,7 @@
 	      </ol>
             </li>
             <li>
-	      <p>If the <a def-id="ready-state"></a> attribute is <a def-id="have-future-data"></a> and the new <a def-id="coded-frames"></a> cause all objects in <a def-id="activeSourceBuffers"></a> to have enough data to start playback, then run the following steps:</p>
+	      <p>If the <a def-id="ready-state"></a> attribute is <a def-id="have-future-data"></a> and the new <a def-id="coded-frames"></a> cause all objects in <a def-id="activeSourceBuffers"></a> to have <a def-id="enough-data"></a>, then run the following steps:</p>
 	      <ol>
 	        <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-enough-data"></a>.</li>
 	        <li>
@@ -1230,20 +1241,23 @@
 
       <p id="dom-htmlmediaelement.buffered">The <a def-id="hme-buffered"></a> attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
       <ol>
+        <li>If <a def-id="activeSourceBuffers"></a>.length equals 0 then return an empty <a def-id="timeranges"></a> object and abort these steps.</li>
         <li>Let <var>active ranges</var> be the ranges returned by <a def-id="buffered"></a> for each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a>.</li>
-        <li>Let <var>intersection range</var> be the intersection of the <var>active ranges</var>.</li>
-        <li>
-          <p>If <a def-id="readyState"></a> is <a def-id="ended"></a>, then run the following steps:</p>
+        <li>Let <var>highest end time</var> be the largest range end time in the <var>active ranges</var>.</li>
+        <li>Let <var>intersection ranges</var> equal a <a def-id="timerange"></a> object containing a single range from 0 to <var>highest end time</var>.</li>
+        <li>For each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a> run the following steps:
           <ol>
-	    <li>Let <var>highest end time</var> be the largest end time in the <var>active ranges</var>.</li>
-	    <li>Let <var>highest intersection end time</var> be the highest end time in the <var>intersection range</var>.</li>
-	    <li>If the <var>highest intersection end time</var> is less than the <var>highest end time</var>, then update the <var>intersection range</var> so that the <var>highest intersection end time</var> equals the <var>highest end time</var>.</li>
-	  </ol>
-        <p class="issue"><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=18615">Bug 18615</a> - Define how SourceBuffer.buffered maps to HTMLMediaElement.buffered</p>
-        <p class="issue"><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=18400">Bug 18400</a> - Define and document timestamp heuristics</p>
+            <li>Let <var>source ranges</var> equal the ranges returned by the <a def-id="buffered"></a> attribute on the current <a>SourceBuffer</a>.</li>
+            <li>If <a def-id="readyState"></a> is <a def-id="ended"></a>, then set the end time on the last range in <var>source ranges</var> to 
+              <var>highest end time</var>.</li>
+            <li>Let <var>new intersection ranges</var> equal the the intersection between the <var>intersection ranges</var> and the <var>source ranges</var>.</li>
+            <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
+          </ol>
         </li>
-        <li>Return the <var>intersection range</var>.</li>
+        <li>Return the <var>intersection ranges</var>.</li>
       </ol>
+      <p class="issue"><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=18615">Bug 18615</a> - Define how SourceBuffer.buffered maps to HTMLMediaElement.buffered</p>
+      <p class="issue"><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=18400">Bug 18400</a> - Define and document timestamp heuristics</p>
     </section>
 
     <section id="audio-track-extensions">
@@ -1695,7 +1709,17 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-	    <td>15 January 2013</td>
+	    <td>30 January 2013</td>
+            <td>
+              <ul>
+                <li>Remove early abort step on 0-byte appends so the same events fire as a normal append with bytes.</li>
+                <li>Added definition for 'enough data to ensure uninterrupted playback'.</li>
+                <li>Updated buffered ranges algorithm to properly compute the ranges for Philip's example.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+	    <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/fd2a58eec443/media-source/media-source.html">15 January 2013</a></td>
             <td>Replace setTrackInfo() and getSourceBuffer() with AudioTrack, VideoTrack, and TextTrack extensions.</td>
           </tr>
           <tr>

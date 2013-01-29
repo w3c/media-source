@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -388,26 +388,26 @@ table.exceptions table {
     border-collapse:    collapse;
     width:  100%;
 }
-</style><link rel="stylesheet" href="http://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='http://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
+</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='http://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
   <body><div class="head">
   <p>
     
-      <a href="http://www.w3.org/"><img width="72" height="48" src="http://www.w3.org/Icons/w3c_home" alt="W3C"></a>
+      <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
     
   </p>
   <h1 class="title" id="title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-18-january-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 18 January 2013</h2>
+  <h2 id="w3c-editor-s-draft-30-january-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 30 January 2013</h2>
   <dl>
     
       <dt>This version:</dt>
-      <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/tip/media-source/media-source.html">http://dvcs.w3.org/hg/html-media/raw-file/tip/media-source/media-source.html</a></dd>
+      <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/media-source.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/media-source.html</a></dd>
       <dt>Latest published version:</dt>
       <dd><a href="http://www.w3.org/TR/media-source/">http://www.w3.org/TR/media-source/</a></dd>
     
     
       <dt>Latest editor's draft:</dt>
-      <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/tip/media-source/media-source.html">http://dvcs.w3.org/hg/html-media/raw-file/tip/media-source/media-source.html</a></dd>
+      <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/media-source.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/media-source.html</a></dd>
     
     
     
@@ -898,9 +898,22 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
         <section id="buffer-monitoring">
           <h4><span class="secno">3.4.4 </span>SourceBuffer Monitoring</h4>
-          <p>The following steps are periodically run during playback to make sure that all of the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> have enough data to ensure uninterrupted playback. Appending new segments and changes to <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> also cause these steps to run because they affect the conditions that trigger state transitions.</p>
-          <div class="note"><div class="note-title"><span>Note</span></div><p class="">The web application can monitor changes in <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> to drive <a href="#media-segment">media segment</a> appending.</p></div>
-          <div class="issue"><div class="issue-title"><span>Issue 3</span></div><p class=""><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=18592">Bug 18592</a> - How much is "enough data to ensure uninterrupted playback"</p></div>
+          <p>The following steps are periodically run during playback to make sure that all of the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> have <a href="#enough-data">enough data to ensure uninterrupted playback</a>. Appending new segments and changes to <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> also cause these steps to run because they affect the conditions that trigger state transitions.</p>
+
+          <p>Having <dfn id="enough-data">enough data to ensure uninterrupted playback</dfn> is an implementation specific condition where the user agent
+          determines that it currently has enough data to play the presentation without stalling for a meaningful period of time. This condition is
+          constantly evaluated to determine when to transition the media element into and out of the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_enough_data">HAVE_ENOUGH_DATA</a></code> ready state.
+          These transitions indicate when the user agent believes it has enough data buffered or it needs more data respectively.</p>
+
+          <div class="note"><div class="note-title"><span>Note</span></div><p class="">An implementation may choose to use bytes buffered, time buffered, the append rate, or any other metric it sees fit to
+            determine when it has enough data. The metrics used may change during playback so web applications should only rely on the value of
+            <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> to determine whether more data is needed or not.</p></div>
+
+          <div class="note"><div class="note-title"><span>Note</span></div><p class="">When the media element needs more data, it should transition from <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_enough_data">HAVE_ENOUGH_DATA</a></code> to
+            <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_future_data">HAVE_FUTURE_DATA</a></code> early enough for a web application to be able to respond without causing an interruption in playback.
+            For example, transitioning when the current playback position is 500ms before the end of the buffered data gives the application roughly
+            500ms to append more data before playback stalls.</p></div>
+
           <dl class="switch">
             <dt>If <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> for all objects in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> do not contain <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRanges</a></code> for the current playback position:</dt>
             <dd>
@@ -910,7 +923,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	        <li>Abort these steps.</li>
 	      </ol>
             </dd>
-            <dt>If <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> for all objects in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> contain <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRanges</a></code> that include the current playback position and enough data to ensure uninterrupted playback:</dt>
+            <dt>If <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> for all objects in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> contain <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRanges</a></code> that include the current playback position and <a href="#enough-data">enough data to ensure uninterrupted playback</a>:</dt>
             <dd>
 	      <ol>
 	        <li>Set the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_enough_data">HAVE_ENOUGH_DATA</a></code>.</li>
@@ -920,7 +933,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	        <li>Abort these steps.</li>
 	      </ol>
             </dd>
-            <dt>If <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> for at least one object in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> contains a <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRange</a></code> that includes the current playback position but not enough data to ensure uninterrupted playback:</dt>
+            <dt>If <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> for at least one object in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> contains a <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRange</a></code> that includes the current playback position but not <a href="#enough-data">enough data to ensure uninterrupted playback</a>:</dt>
             <dd>
 	      <ol>
 	        <li>Set the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_future_data">HAVE_FUTURE_DATA</a></code>.</li>
@@ -1031,7 +1044,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
     <section id="sourcebuffer">
       <!--OddPage--><h2><span class="secno">4. </span>SourceBuffer Object</h2>
 
-      <div class="issue"><div class="issue-title"><span>Issue 4</span></div><p class=""><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=20327">Bug 20327</a> - Continuous splice flag</p></div>
+      <div class="issue"><div class="issue-title"><span>Issue 3</span></div><p class=""><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=20327">Bug 20327</a> - Continuous splice flag</p></div>
 
       <pre class="idl"><span class="idlInterface" id="idl-def-SourceBuffer">interface <span class="idlInterfaceID">SourceBuffer</span> : <span class="idlSuperclass"><a>EventTarget</a></span> {
 <span class="idlAttribute">    readonly attribute <span class="idlAttrType"><a>boolean</a></span>        <span class="idlAttrName"><a href="#widl-SourceBuffer-appending">appending</a></span>;</span>
@@ -1067,7 +1080,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>If this object is waiting for the end of a <a href="#media-segment">media segment</a> to be appended, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> and abort these steps.</li>
             <li>Update the attribute to the new value.</li>
           </ol>
-          <div class="issue"><div class="issue-title"><span>Issue 5</span></div><p class=""><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=19676">Bug 19676</a> - timestampOffset accuracy</p></div>
+          <div class="issue"><div class="issue-title"><span>Issue 4</span></div><p class=""><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=19676">Bug 19676</a> - timestampOffset accuracy</p></div>
         </dd><dt id="widl-SourceBuffer-videoTracks"><code>videoTracks</code> of type <span class="idlAttrType"><a>VideoTrackList</a></span>, readonly</dt><dd>
           The list of <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#videotrack">VideoTrack</a></code> objects created by this object.
         </dd></dl></section><section id="methods-1"><h3><span class="secno">4.2 </span>Methods</h3><dl class="methods"><dt id="widl-SourceBuffer-abort-void"><code>abort</code></dt><dd>
@@ -1103,7 +1116,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   <a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-sourceopen">sourceopen</a></code> at the <a href="#parent-media-source">parent media source</a> .</li>
               </ol>
             </li>
-            <li>If <var>data</var>.byteLength is 0, then abort these steps.</li>
             <li>
               <p>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true, then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception and abort these step.</p>
               <div class="note"><div class="note-title"><span>Note</span></div><p class="">The web application must use <code><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove()</a></code> to free up space in the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</p></div>
@@ -1132,7 +1144,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	        <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-sourceopen">sourceopen</a></code> at the <a href="#parent-media-source">parent media source</a> .</li>
               </ol>
             </li>
-            <li>If <var>maxSize</var> equals 0, then abort these steps.</li>
             <li>
               <p>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true, then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception and abort these step.</p>
               <div class="note"><div class="note-title"><span>Note</span></div><p class="">The web application must use <code><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove()</a></code> to free up space in the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</p></div>
@@ -1318,7 +1329,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Set the <code><a href="#widl-SourceBuffer-appending">appending</a></code> attribute to false.</li>
             <li>
               <a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-error">error</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.
-              <div class="issue"><div class="issue-title"><span>Issue 6</span></div><p class="">Need a way to convey error information.</p></div>
+              <div class="issue"><div class="issue-title"><span>Issue 5</span></div><p class="">Need a way to convey error information.</p></div>
             </li>
             <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-appendend">appendend</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
           </ol>
@@ -1517,7 +1528,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	      </ol>
             </li>
             <li>
-	      <p>If the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute is <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_future_data">HAVE_FUTURE_DATA</a></code> and the new <a href="#coded-frame">coded frames</a> cause all objects in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> to have enough data to start playback, then run the following steps:</p>
+	      <p>If the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute is <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_future_data">HAVE_FUTURE_DATA</a></code> and the new <a href="#coded-frame">coded frames</a> cause all objects in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> to have <a href="#enough-data">enough data to ensure uninterrupted playback</a>, then run the following steps:</p>
 	      <ol>
 	        <li>Set the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_enough_data">HAVE_ENOUGH_DATA</a></code>.</li>
 	        <li>
@@ -1609,20 +1620,23 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
       <p id="dom-htmlmediaelement.buffered">The <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-buffered">HTMLMediaElement.buffered</a></code> attribute returns a new static <a href="http://www.w3.org/TR/html5/embedded-content-0.html#normalized-timeranges-object">normalized TimeRanges object</a> created based on the following steps:</p>
       <ol>
+        <li>If <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>.length equals 0 then return an empty <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRanges</a></code> object and abort these steps.</li>
         <li>Let <var>active ranges</var> be the ranges returned by <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> for each <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>.</li>
-        <li>Let <var>intersection range</var> be the intersection of the <var>active ranges</var>.</li>
-        <li>
-          <p>If <code><a href="#widl-MediaSource-readyState">readyState</a></code> is <code><a href="#idl-def-ReadyState">"ended"</a></code>, then run the following steps:</p>
+        <li>Let <var>highest end time</var> be the largest range end time in the <var>active ranges</var>.</li>
+        <li>Let <var>intersection ranges</var> equal a <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRange</a></code> object containing a single range from 0 to <var>highest end time</var>.</li>
+        <li>For each <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> run the following steps:
           <ol>
-	    <li>Let <var>highest end time</var> be the largest end time in the <var>active ranges</var>.</li>
-	    <li>Let <var>highest intersection end time</var> be the highest end time in the <var>intersection range</var>.</li>
-	    <li>If the <var>highest intersection end time</var> is less than the <var>highest end time</var>, then update the <var>intersection range</var> so that the <var>highest intersection end time</var> equals the <var>highest end time</var>.</li>
-	  </ol>
-        <div class="issue"><div class="issue-title"><span>Issue 7</span></div><p class=""><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=18615">Bug 18615</a> - Define how SourceBuffer.buffered maps to HTMLMediaElement.buffered</p></div>
-        <div class="issue"><div class="issue-title"><span>Issue 8</span></div><p class=""><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=18400">Bug 18400</a> - Define and document timestamp heuristics</p></div>
+            <li>Let <var>source ranges</var> equal the ranges returned by the <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> attribute on the current <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</li>
+            <li>If <code><a href="#widl-MediaSource-readyState">readyState</a></code> is <code><a href="#idl-def-ReadyState">"ended"</a></code>, then set the end time on the last range in <var>source ranges</var> to 
+              <var>highest end time</var>.</li>
+            <li>Let <var>new intersection ranges</var> equal the the intersection between the <var>intersection ranges</var> and the <var>source ranges</var>.</li>
+            <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
+          </ol>
         </li>
-        <li>Return the <var>intersection range</var>.</li>
+        <li>Return the <var>intersection ranges</var>.</li>
       </ol>
+      <div class="issue"><div class="issue-title"><span>Issue 6</span></div><p class=""><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=18615">Bug 18615</a> - Define how SourceBuffer.buffered maps to HTMLMediaElement.buffered</p></div>
+      <div class="issue"><div class="issue-title"><span>Issue 7</span></div><p class=""><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=18400">Bug 18400</a> - Define and document timestamp heuristics</p></div>
     </section>
 
     <section id="audio-track-extensions">
@@ -1860,7 +1874,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <h3><span class="secno">11.2 </span>ISO Base Media File Format Byte Streams</h3>
         <p>This section defines segment formats for implementations that choose to support the ISO Base Media File Format
 	  <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a> (ISO BMFF).</p> 
-          <div class="issue"><div class="issue-title"><span>Issue 9</span></div><p class=""><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=18933">Bug 18933</a> - Segment byte boundaries are not defined</p></div>
+          <div class="issue"><div class="issue-title"><span>Issue 8</span></div><p class=""><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=18933">Bug 18933</a> - Segment byte boundaries are not defined</p></div>
 
 	<section id="iso-init-segments">
           <h4><span class="secno">11.2.1 </span>Initialization Segments</h4>
@@ -2057,7 +2071,17 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-	    <td>15 January 2013</td>
+	    <td>30 January 2013</td>
+            <td>
+              <ul>
+                <li>Remove early abort step on 0-byte appends so the same events fire as a normal append with bytes.</li>
+                <li>Added definition for 'enough data to ensure uninterrupted playback'.</li>
+                <li>Updated buffered ranges algorithm to properly compute the ranges for Philip's example.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+	    <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/fd2a58eec443/media-source/media-source.html">15 January 2013</a></td>
             <td>Replace setTrackInfo() and getSourceBuffer() with AudioTrack, VideoTrack, and TextTrack extensions.</td>
           </tr>
           <tr>

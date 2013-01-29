@@ -119,6 +119,7 @@
     'coded-frames': { func: term_helper, fragment: 'coded-frame', link_text: 'coded frames', },
     'parent-media-source': { func: term_helper, fragment: 'parent-media-source', link_text: 'parent media source', },
     'append-sequence': { func: term_helper, fragment: 'append-sequence', link_text: 'append sequence', },
+    'enough-data': { func: term_helper, fragment: 'enough-data', link_text: 'enough data to ensure uninterrupted playback', },
 
     'duration-change-algorithm': { func: link_helper, fragment: '#duration-change-algorithm', link_text: 'duration change algorithm', },
     'segment-parser-loop': { func: link_helper, fragment: '#sourcebuffer-segment-parser-loop', link_text: 'segment parser loop', },
