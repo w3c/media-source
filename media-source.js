@@ -141,6 +141,7 @@
     'track-buffer': { func: term_helper, fragment: 'track-buffer', link_text: 'track buffer', },
     'track-buffers': { func: term_helper, fragment: 'track-buffer', link_text: 'track buffers', },
     'last-decode-timestamp': { func: var_helper, fragment: '#last-decode-timestamp', link_text: 'last decode timestamp', },
+    'highest-presentation-timestamp': { func: var_helper, fragment: '#highest-presentation-timestamp', link_text: 'highest presentation timestamp', },
 
     'FileAPI': { func: fileapi_helper, fragment: '', link_text: 'File API',  },
     'blob-uri': { func: fileapi_helper, fragment: 'url', link_text: 'Blob URI',  },

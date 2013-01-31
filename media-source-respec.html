@@ -386,7 +386,7 @@
           </ol>
         </dd>
 
-        <dt>static bool isTypeSupported(DOMString type)</dt>
+        <dt>static boolean isTypeSupported(DOMString type)</dt>
         <dd>
           <p>Check to see whether the <a>MediaSource</a> is capable of creating <a>SourceBuffer</a> objects for the the specified MIME type.</p>
 
@@ -826,6 +826,10 @@
         <p>Each <a def-id="track-buffer"></a> has a <dfn id="last-decode-timestamp">last decode timestamp</dfn> variable that stores
           the decode timestamp of the last <a def-id="coded-frame"></a> appended in the current <a def-id="append-sequence"></a>. The variable is initially
           unset to indicate that no <a def-id="coded-frames"></a> have been appended yet.</p>
+
+        <p>Each <a def-id="track-buffer"></a> has a <dfn id="highest-presentation-timestamp">highest presentation timestamp</dfn> variable that stores
+          the highest presentation timestamp encountered in a <a def-id="coded-frame"></a> appended in the current <a def-id="append-sequence"></a>.
+          The variable is initially unset to indicate that no <a def-id="coded-frames"></a> have been appended yet.</p>
       </section>
 
       <section id="sourcebuffer-events">
@@ -952,6 +956,7 @@
           <ol>
             <li>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a> and the <a def-id="input-buffer"></a> contains some complete <a def-id="coded-frames"></a>, then run the <a def-id="coded-frame-processing-algorithm"></a> as if the media segment only contained these frames.</li>
             <li>Unset the <a def-id="last-decode-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
+            <li>Unset the <a def-id="highest-presentation-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
             <li>Remove all bytes from the <a def-id="input-buffer"></a>.</li>
             <li>Set <a def-id="append-state"></a> to <a def-id="waiting-for-segment"></a>.</li>
           </ol>
@@ -1132,7 +1137,15 @@
 	      <p>For each <a def-id="coded-frame"></a> in the <a def-id="media-segment"></a> run the following steps:</p>
 	      <ol>
 	        <li>Let <var>presentation timestamp</var> be a double precision floating point representation of the coded frame's presentation timestamp.</li>
-	        <li>Let <var>decode timestamp</var> be a double precision floating point representation of the coded frame's decode timestamp.</li>
+	        <li>Let <var>decode timestamp</var> be a double precision floating point representation of the coded frame's decode timestamp.
+                  <p class="note">Implementations don't have to internally store timestamps in a double precision floating point representation. This
+                    representation is used here because it is the represention for timestamps in the HTML spec. The intention here is to make the
+                    behavior clear without adding unnecessary complexity to the algorithm to deal with the fact that adding a timestampOffset may
+                    cause a timestamp rollover in the underlying timestamp representation used by the bytestream format. Implementations can use any
+                    internal timestamp representation they wish, but the addition of timestampOffset should behave in a similar manner to what would happen
+                    if a double precision floating point representation was used.
+                  </p>
+                </li>
 	        <li>
 	          <p>If <a def-id="timestampOffset"></a> is not 0, then run the following steps:</p>
 	          <ol>
@@ -1142,11 +1155,35 @@
 	          </ol>
 	        </li>
                 <li>Let <var>track buffer</var> equal the <a def-id="track-buffer"></a> that the coded frame should be added to.</li>
-                <li>If <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> is set and <var>decode timestamp</var> is less than 
-                  <a def-id="last-decode-timestamp"></a>, then call <a def-id="eos-decode"></a> and abort these steps.</li>
-	        <li>Add the <a def-id="coded-frame"></a> with the <var>presentation timestamp</var> and <var>decode timestamp</var>, to the 
+                <li>If <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> is set and <var>decode timestamp</var> is less than
+                  <a def-id="last-decode-timestamp"></a> or the difference between <var>decode timestamp</var> and <a def-id="last-decode-timestamp"></a>
+                  is greater than 100 milliseconds, then call <a def-id="eos-decode"></a> and abort these steps.
+                  <p class="note">These checks trigger an error when the application attempts out-of-order appends without an intervening
+                    <a def-id="abort"></a>.</p>
+                </li>
+
+                <li>If <a def-id="highest-presentation-timestamp"></a> for <var>track buffer</var> is set and less than <var>presentation timestamp</var>,
+                  then run the following steps:
+                  <ol>
+                    <li>Remove all <a def-id="coded-frames"></a> from <var>track buffer</var> that have a presentation timestamp greater than
+                      <a def-id="highest-presentation-timestamp"></a> and less than or equal to <var>presentation timestamp</var>.</li>
+                    <li>Remove all <a def-id="coded-frames"></a> from <var>track buffer</var> that have decoding dependencies on the coded frames removed in
+                      the previous step.
+                      <p class="note">For example if an I-frame is removed in the previous step, then all P-frames & B-frames that depend on that I-frame
+                       should be removed from <var>track buffer</var>. This makes sure that decode dependencies are properly maintained during overlaps.</p>
+                    </li>
+                    </li>
+                  </ol>
+                </li>
+	        <li>Add the <a def-id="coded-frame"></a> with the <var>presentation timestamp</var> and <var>decode timestamp</var>, to the
                   <var>track buffer</var>.</li>
                 <li>Set <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> to <var>decode timestamp</var>.</li>
+                <li>If <a def-id="highest-presentation-timestamp"></a> for <var>track buffer</var> is unset or <var>presentation timestamp</var> is greater
+                  than <a def-id="highest-presentation-timestamp"></a>, then set <a def-id="highest-presentation-timestamp"></a> for <var>track buffer</var>
+                  to <var>presentation timestamp</var>.
+                  <p class="note">The greater than check is needed because bidirectional prediction between coded frames can cause
+                    <var>presentation timestamp</var> to not be monotonically increasing eventhough the decode timestamps are monotonically increasing.</p>
+                </li>
 	      </ol>
             </li>
             <li>
@@ -1529,18 +1566,30 @@
         <h3>ISO Base Media File Format Byte Streams</h3>
         <p>This section defines segment formats for implementations that choose to support the ISO Base Media File Format
 	  <a def-id="iso-14496-12"></a> (ISO BMFF).</p> 
-          <p class="issue"><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=18933">Bug 18933</a> - Segment byte boundaries are not defined</p>
 
 	<section id="iso-init-segments">
           <h4>Initialization Segments</h4>
-          <p>An ISO BMFF <a def-id="init-segment"></a> must contain a single Movie Header Box (<span class="iso-box">moov</span>). The tracks in the Movie Header Box must not contain any samples (i.e. the <span class="iso-var">entry_count</span> in the <span class="iso-box">stts</span>, <span class="iso-box">stsc</span> and <span class="iso-box">stco</span> boxes must be set to zero). A Movie Extends (<span class="iso-box">mvex</span>) box must be contained in the
-	    Movie Header Box to indicate that Movie Fragments are to be expected.</p>
+          <p>An ISO BMFF <a def-id="init-segment"></a> is defined in this specification as a single Movie Header Box (<span class="iso-box">moov</span>).
+            The tracks in the  Movie Header Box must not contain any samples (i.e. the <span class="iso-var">entry_count</span> in the
+            <span class="iso-box">stts</span>, <span class="iso-box">stsc</span> and <span class="iso-box">stco</span> boxes must be set to zero). A Movie
+            Extends (<span class="iso-box">mvex</span>) box must be contained in the Movie Header Box to indicate that Movie Fragments are to be expected.
+          </p>
           <p>The <a def-id="init-segment"></a> may contain Edit Boxes (<span class="iso-box">edts</span>) which provide a mapping of composition times for each track to the global presentation time.</p>
+          <p>Valid top-level boxes such as <span class="iso-box">ftyp</span>, <span class="iso-box">styp</span>, and <span class="iso-box">sidx</span> are
+            allowed to appear before the <span class="iso-box">moov</span> box. These boxes must be accepted and ignored by the user agent and are not
+            considered part of the <a def-id="init-segment"></a> in this specification.</p>
 	</section>
         
 	<section id="iso-media-segments">
           <h4>Media Segments</h4>
-          <p>An ISO BMFF <a def-id="media-segment"></a> must contain a single Movie Fragment Box (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>).</p>
+          <p>An ISO BMFF <a def-id="media-segment"></a> is defined in this specification as a single Movie Fragment Box
+            (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>).</p>
+          <p>Valid top-level boxes defined in <a def-id="iso-14496-12"></a> other than <span class="iso-box">moov</span>, 
+            <span class="iso-box">moof</span>, and <span class="iso-box">mdat</span> are allowed to appear between the end of an
+            <a def-id="init-segment"></a> or <a def-id="media-segment"></a> and before the beginning of a new <a def-id="media-segment"></a>.
+            These boxes must be accepted and ignored by the user agent and are not considered part of the <a def-id="media-segment"></a> in this
+            specification.
+          </p>
           <p>The following rules apply to ISO BMFF media segments:</p>
           <ol>
 	    <li>The Movie Fragment Box must contain at least one Track Fragment Box (<span class="iso-box">traf</span>).</li>
@@ -1728,7 +1777,19 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-	    <td>31 January 2013</td>
+	    <td>05 February 2013</a></td>
+            <td>
+              <ul>
+                <li>Bug 19676 - Added a note clarifying that the internal timestamp representation doesn't have to be a double.</li>
+                <li>Added steps to the coded frame processing algorithm to remove old frames when new ones overlap them.</li>
+                <li>Fix isTypeSupported() return type.</li>
+                <li>Bug 18933 - Clarify what top-level boxes to ignore for ISO-BMFF.</li>
+                <li>Bug 18400 - Add a check to avoid creating huge hidden gaps when out-of-order appends occur w/o calling abort().</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+	    <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/b35722b0cd8f/media-source/media-source.html">31 January 2013</a></td>
             <td>
               <ul>
                 <li>Make remove() asynchronous.</li>
