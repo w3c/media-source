@@ -388,7 +388,7 @@ table.exceptions table {
     border-collapse:    collapse;
     width:  100%;
 }
-</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='http://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
+</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
   <body><div class="head">
   <p>
     
@@ -397,7 +397,7 @@ table.exceptions table {
   </p>
   <h1 class="title" id="title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-30-january-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 30 January 2013</h2>
+  <h2 id="w3c-editor-s-draft-31-january-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 31 January 2013</h2>
   <dl>
     
       <dt>This version:</dt>
@@ -698,6 +698,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <ol>
             <li>If the value being set is negative or NaN then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not <code><a href="#idl-def-ReadyState">"open"</a></code> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true on any <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the value being assigned to this attribute.
 	      <div class="note"><div class="note-title"><span>Note</span></div><p class=""><code><a href="#widl-SourceBuffer-appendArrayBuffer-void-ArrayBuffer-data">appendArrayBuffer()</a></code>, <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> and <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream()</a></code> can update the duration under certain circumstances.</p></div>
             </li>
@@ -724,6 +725,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           
         <table class="parameters"><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">error</td><td class="prmType"><code><a href="#idl-def-EndOfStreamError" class="idlType"><code>EndOfStreamError</code></a></code></td><td class="prmNullFalse">✘</td><td class="prmOptTrue">✔</td><td class="prmDesc"></td></tr></table><div><em>Return type: </em><code><a>void</a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not in the <code><a href="#idl-def-ReadyState">"open"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true on any <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>Change the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute value to <code><a href="#idl-def-ReadyState">"ended"</a></code>.</li>
             <li>
               <a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-sourceended">sourceended</a></code> at the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a>.</li>
@@ -789,6 +791,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <table class="parameters"><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">sourceBuffer</td><td class="prmType"><code><a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a></code></td><td class="prmNullFalse">✘</td><td class="prmOptFalse">✘</td><td class="prmDesc"></td></tr></table><div><em>Return type: </em><code><a>void</a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If <var>sourceBuffer</var> is null then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If <var>sourceBuffer</var> specifies an object that is not in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-not_found_err">NOT_FOUND_ERR</a></code> exception and abort these steps.</li>
+            <li>If the <var>sourceBuffer</var>.<code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then run the following steps:
+              <ol>
+                <li>Abort the <a href="#sourcebuffer-stream-append-loop">stream append loop</a> algorithm if it is running.</li>
+                <li>Set the <var>sourceBuffer</var>.<code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute to false.</li>
+                <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-abort">abort</a></code> at <var>sourceBuffer</var>.</li>
+                <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at <var>sourceBuffer</var>.</li>
+              </ol>
+            </li>
             <li>Set the the sourceBuffer attribute in all tracks in <var>sourceBuffer</var>.<code><a href="#widl-SourceBuffer-audioTracks">audioTracks</a></code>, <var>sourceBuffer</var>.<code><a href="#widl-SourceBuffer-videoTracks">videoTracks</a></code>, and <var>sourceBuffer</var>.<code><a href="#widl-SourceBuffer-textTracks">textTracks</a></code> to null.</li>
             <li>Remove all the tracks in <var>sourceBuffer</var>.<code><a href="#widl-SourceBuffer-audioTracks">audioTracks</a></code>, <var>sourceBuffer</var>.<code><a href="#widl-SourceBuffer-videoTracks">videoTracks</a></code>, and <var>sourceBuffer</var>.<code><a href="#widl-SourceBuffer-textTracks">textTracks</a></code> from the respective <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-audiotracks">audioTracks</a></code>, <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-videotracks">videoTracks</a></code>, and <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-texttracks">textTracks</a></code> attributes on the HTMLMediaElement.</li>
             <li>Remove all the tracks in <var>sourceBuffer</var>.<code><a href="#widl-SourceBuffer-audioTracks">audioTracks</a></code>, <var>sourceBuffer</var>.<code><a href="#widl-SourceBuffer-videoTracks">videoTracks</a></code>, and <var>sourceBuffer</var>.<code><a href="#widl-SourceBuffer-textTracks">textTracks</a></code> and <a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#handler-tracklist-onchange">change</a></code> at the modified lists.</li>
@@ -1047,7 +1057,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       <div class="issue"><div class="issue-title"><span>Issue 3</span></div><p class=""><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=20327">Bug 20327</a> - Continuous splice flag</p></div>
 
       <pre class="idl"><span class="idlInterface" id="idl-def-SourceBuffer">interface <span class="idlInterfaceID">SourceBuffer</span> : <span class="idlSuperclass"><a>EventTarget</a></span> {
-<span class="idlAttribute">    readonly attribute <span class="idlAttrType"><a>boolean</a></span>        <span class="idlAttrName"><a href="#widl-SourceBuffer-appending">appending</a></span>;</span>
+<span class="idlAttribute">    readonly attribute <span class="idlAttrType"><a>boolean</a></span>        <span class="idlAttrName"><a href="#widl-SourceBuffer-updating">updating</a></span>;</span>
 <span class="idlAttribute">    readonly attribute <span class="idlAttrType"><a>TimeRanges</a></span>     <span class="idlAttrName"><a href="#widl-SourceBuffer-buffered">buffered</a></span>;</span>
 <span class="idlAttribute">             attribute <span class="idlAttrType"><a>double</a></span>         <span class="idlAttrName"><a href="#widl-SourceBuffer-timestampOffset">timestampOffset</a></span>;</span>
 <span class="idlAttribute">    readonly attribute <span class="idlAttrType"><a>AudioTrackList</a></span> <span class="idlAttrName"><a href="#widl-SourceBuffer-audioTracks">audioTracks</a></span>;</span>
@@ -1057,9 +1067,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 <span class="idlMethod">    <span class="idlMethType"><a>void</a></span> <span class="idlMethName"><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream</a></span> (<span class="idlParam"><span class="idlParamType"><a>Stream</a></span> <span class="idlParamName">stream</span></span>, <span class="idlParam">optional <span class="idlParamType"><a>unsigned long long</a></span> <span class="idlParamName">maxSize</span></span>);</span>
 <span class="idlMethod">    <span class="idlMethType"><a>void</a></span> <span class="idlMethName"><a href="#widl-SourceBuffer-abort-void">abort</a></span> ();</span>
 <span class="idlMethod">    <span class="idlMethType"><a>void</a></span> <span class="idlMethName"><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove</a></span> (<span class="idlParam"><span class="idlParamType"><a>double</a></span> <span class="idlParamName">start</span></span>, <span class="idlParam"><span class="idlParamType"><a>double</a></span> <span class="idlParamName">end</span></span>);</span>
-};</span></pre><section id="attributes-1"><h3><span class="secno">4.1 </span>Attributes</h3><dl class="attributes"><dt id="widl-SourceBuffer-appending"><code>appending</code> of type <span class="idlAttrType"><a>boolean</a></span>, readonly</dt><dd>
-          <p>Indicates whether an <code><a href="#widl-SourceBuffer-appendArrayBuffer-void-ArrayBuffer-data">appendArrayBuffer()</a></code> or <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> operation is still being processed.</p>
-        </dd><dt id="widl-SourceBuffer-audioTracks"><code>audioTracks</code> of type <span class="idlAttrType"><a>AudioTrackList</a></span>, readonly</dt><dd>
+};</span></pre><section id="attributes-1"><h3><span class="secno">4.1 </span>Attributes</h3><dl class="attributes"><dt id="widl-SourceBuffer-audioTracks"><code>audioTracks</code> of type <span class="idlAttrType"><a>AudioTrackList</a></span>, readonly</dt><dd>
           The list of <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#audiotrack">AudioTrack</a></code> objects created by this object.
         </dd><dt id="widl-SourceBuffer-buffered"><code>buffered</code> of type <span class="idlAttrType"><a>TimeRanges</a></span>, readonly</dt><dd>
           <p>Indicates what <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRanges</a></code> are buffered in the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</p>
@@ -1076,11 +1084,15 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>On setting, run the following steps:</p>
           <ol>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is not in the <code><a href="#idl-def-ReadyState">"open"</a></code> state, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>If this object is waiting for the end of a <a href="#media-segment">media segment</a> to be appended, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> and abort these steps.</li>
             <li>Update the attribute to the new value.</li>
           </ol>
           <div class="issue"><div class="issue-title"><span>Issue 4</span></div><p class=""><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=19676">Bug 19676</a> - timestampOffset accuracy</p></div>
+        </dd><dt id="widl-SourceBuffer-updating"><code>updating</code> of type <span class="idlAttrType"><a>boolean</a></span>, readonly</dt><dd>
+          <p>Indicates whether an <code><a href="#widl-SourceBuffer-appendArrayBuffer-void-ArrayBuffer-data">appendArrayBuffer()</a></code>, <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code>, or <code><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove()</a></code> operation is still being
+            processed.</p>
         </dd><dt id="widl-SourceBuffer-videoTracks"><code>videoTracks</code> of type <span class="idlAttrType"><a>VideoTrackList</a></span>, readonly</dt><dd>
           The list of <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#videotrack">VideoTrack</a></code> objects created by this object.
         </dd></dl></section><section id="methods-1"><h3><span class="secno">4.2 </span>Methods</h3><dl class="methods"><dt id="widl-SourceBuffer-abort-void"><code>abort</code></dt><dd>
@@ -1090,14 +1102,15 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <div><em>No parameters.</em></div><div><em>Return type: </em><code><a>void</a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is not in the <code><a href="#idl-def-ReadyState">"open"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>Run the <a href="#sourcebuffer-reset-parser-state">reset parser state algorithm</a>.</li>
-            <li>If the <code><a href="#widl-SourceBuffer-appending">appending</a></code> attribute equals true, then run the following steps:
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then run the following steps:
               <ol>
-                <li>Set the <code><a href="#widl-SourceBuffer-appending">appending</a></code> attribute to false.</li>
+                <li>Abort the <a href="#sourcebuffer-stream-append-loop">stream append loop</a> algorithm if it is running.</li>
+                <li>Set the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute to false.</li>
                 <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-abort">abort</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
-                <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-appendend">appendend</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
+                <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
               </ol>
             </li>
+            <li>Run the <a href="#sourcebuffer-reset-parser-state">reset parser state algorithm</a>.</li>
           </ol></dd><dt id="widl-SourceBuffer-appendArrayBuffer-void-ArrayBuffer-data"><code>appendArrayBuffer</code></dt><dd>
           <p>Appends the segment data in an ArrayBuffer to the source buffer.</p>
 
@@ -1105,7 +1118,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <table class="parameters"><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType"><code><a>ArrayBuffer</a></code></td><td class="prmNullFalse">✘</td><td class="prmOptFalse">✘</td><td class="prmDesc"></td></tr></table><div><em>Return type: </em><code><a>void</a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If <var>data</var> is null then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-SourceBuffer-appending">appending</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState">"closed"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>
               <p>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState">"ended"</a></code> state then run the following steps:</p>
@@ -1121,8 +1134,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <div class="note"><div class="note-title"><span>Note</span></div><p class="">The web application must use <code><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove()</a></code> to free up space in the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</p></div>
             </li>
             <li>Add <var>data</var> to the end of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
-            <li>Set the <code><a href="#widl-SourceBuffer-appending">appending</a></code> attribute to true.</li>
-            <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-appendstart">appendstart</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
+            <li>Set the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute to true.</li>
+            <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-updatestart">updatestart</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
             <li>Asynchronously run the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> algorithm.</li>
           </ol></dd><dt id="widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize"><code>appendStream</code></dt><dd>
           <p>Appends segment data to the source buffer from a <a href="http://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm#idl-def-Stream">Stream</a>.</p>
@@ -1134,7 +1147,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState">"closed"</a></code> state then throw
               an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-SourceBuffer-appending">appending</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these
               steps.</li>
             <li>
               <p>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState">"ended"</a></code> state then run
@@ -1148,8 +1161,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <p>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true, then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception and abort these step.</p>
               <div class="note"><div class="note-title"><span>Note</span></div><p class="">The web application must use <code><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove()</a></code> to free up space in the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</p></div>
             </li>
-            <li>Set the <code><a href="#widl-SourceBuffer-appending">appending</a></code> attribute to true.</li>
-            <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-appendstart">appendstart</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
+            <li>Set the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute to true.</li>
+            <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-updatestart">updatestart</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
             <li>Asynchronously run the <a href="#sourcebuffer-stream-append-loop">stream append loop</a> algorithm with <var>stream</var> and <var>maxSize</var>.</li>
           </ol></dd><dt id="widl-SourceBuffer-remove-void-double-start-double-end"><code>remove</code></dt><dd>
           <p>Removes media for a specific time range.</p>
@@ -1160,7 +1173,11 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>If <var>start</var> is negative or greater than <code><a href="#widl-MediaSource-duration">duration</a></code>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If <var>end</var> is less than or equal to <var>start</var>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is not in the <code><a href="#idl-def-ReadyState">"open"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+            <li>Set the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute to true.</li>
+            <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-updatestart">updatestart</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
+            <li>Return control to the caller and run the rest of the steps asynchronously.</li>
             <li>
               <p>For each <a href="#track-buffer">track buffer</a> in this source buffer, run the following steps:</p>
               <ol>
@@ -1178,6 +1195,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             </li>
             <li>If <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true and this object is ready to accept more bytes, then set 
               the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> to false.</li>
+            <li>Set the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute to false.</li>
+            <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
        </ol></dd></dl></section>
 
       <section id="track-buffers">
@@ -1203,14 +1222,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </thead>
           <tbody>
             <tr>
-              <td><dfn id="dom-evt-appendstart"><code>appendstart</code></dfn></td>
+              <td><dfn id="dom-evt-updatestart"><code>updatestart</code></dfn></td>
               <td><code>Event</code></td>
-              <td><code><a href="#widl-SourceBuffer-appending">appending</a></code> transitions from false to true.</td>
+              <td><code><a href="#widl-SourceBuffer-updating">updating</a></code> transitions from false to true.</td>
             </tr>
             <tr>
-              <td><dfn id="dom-evt-appendend"><code>appendend</code></dfn></td>
+              <td><dfn id="dom-evt-updateend"><code>updateend</code></dfn></td>
               <td><code>Event</code></td>
-              <td><code><a href="#widl-SourceBuffer-appending">appending</a></code> transitions from true to false.</td>
+              <td><code><a href="#widl-SourceBuffer-updating">updating</a></code> transitions from true to false.</td>
             </tr>
             <tr>
               <td><dfn id="dom-evt-error"><code>error</code></dfn></td>
@@ -1220,7 +1239,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <tr>
               <td><dfn id="dom-evt-abort"><code>abort</code></dfn></td>
               <td><code>Event</code></td>
-              <td>The append was aborted by an <code><a href="#widl-SourceBuffer-abort-void">abort()</a></code> call.</td>
+              <td>The append or remove was aborted by an <code><a href="#widl-SourceBuffer-abort-void">abort()</a></code> call.</td>
             </tr>
           </tbody>
         </table>
@@ -1304,8 +1323,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	      </ol>
             </li>
             <li><i>Need more data:</i> If the <a href="#sourcebuffer-stream-append-loop">stream append loop</a> algorithm is running and still has data to read, then abort these steps.
-            </li><li>Set the <code><a href="#widl-SourceBuffer-appending">appending</a></code> attribute to false.</li>
-            <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-appendend">appendend</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
+            </li><li>Set the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute to false.</li>
+            <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
           </ol>
         </section>
 
@@ -1326,12 +1345,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <ol>
             <li>Run the <a href="#sourcebuffer-reset-parser-state">reset parser state algorithm</a>.</li>
             <li>Abort the <a href="#sourcebuffer-stream-append-loop">stream append loop</a> algorithm if it is running.</li>
-            <li>Set the <code><a href="#widl-SourceBuffer-appending">appending</a></code> attribute to false.</li>
+            <li>Set the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute to false.</li>
             <li>
               <a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-error">error</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.
               <div class="issue"><div class="issue-title"><span>Issue 5</span></div><p class="">Need a way to convey error information.</p></div>
             </li>
-            <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-appendend">appendend</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
+            <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
           </ol>
         </section>
 
@@ -1366,8 +1385,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Add <var>data</var> to the end of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
             <li>Run the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> algorithm.</li>
             <li>Jump to the <i>loop top</i> step above.</li>
-            <li><i>Loop Done: </i>Set the <code><a href="#widl-SourceBuffer-appending">appending</a></code> attribute to false.</li>
-            <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-appendend">appendend</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
+            <li><i>Loop Done: </i>Set the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute to false.</li>
+            <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
           </ol>
         </section>
 
@@ -1994,12 +2013,12 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
     // Append the initialization segment.
     var firstAppendHandler = function(e) {
       var sourceBuffer = e.target;
-      sourceBuffer.removeEventListener('appendend', firstAppendHandler);
+      sourceBuffer.removeEventListener('updateend', firstAppendHandler);
 
       // Append some initial media data.
       appendNextMediaSegment(mediaSource);
     };
-    sourceBuffer.addEventListener('appendend', firstAppendHandler);
+    sourceBuffer.addEventListener('updateend', firstAppendHandler);
     sourceBuffer.appendArrayBuffer(initSegment);
   }
 
@@ -2071,7 +2090,16 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-	    <td>30 January 2013</td>
+	    <td>31 January 2013</td>
+            <td>
+              <ul>
+                <li>Make remove() asynchronous.</li>
+                <li>Added steps to various algorithms to throw an INVALID_STATE_ERR exception when async appends or remove() are pending.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+	    <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/aae26333e7d1/media-source/media-source.html">30 January 2013</a></td>
             <td>
               <ul>
                 <li>Remove early abort step on 0-byte appends so the same events fire as a normal append with bytes.</li>
@@ -2135,7 +2163,7 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
             </td>
           </tr>
           <tr>
-	    <td><a href="http://dvcs.w3.org/hg/html-media/rev/0c638da9a67a">28 November 2012</a></td>
+	    <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/0c638da9a67a/media-source/media-source.html">28 November 2012</a></td>
             <td>
               <ul>
                 <li>Added transition to HAVE_METADATA when current playback position is removed.</li>

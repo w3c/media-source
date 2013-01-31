@@ -78,7 +78,7 @@
     'appendStream': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize', link_text: 'appendStream()',  },
     'abort': { func: idlref_helper, fragment: 'widl-SourceBuffer-abort-void', link_text: 'abort()',  },
     'remove': { func: idlref_helper, fragment: 'widl-SourceBuffer-remove-void-double-start-double-end', link_text: 'remove()',  },
-    'appending': { func: idlref_helper, fragment: 'widl-SourceBuffer-appending', link_text: 'appending',  },
+    'updating': { func: idlref_helper, fragment: 'widl-SourceBuffer-updating', link_text: 'updating',  },
     'sourcebuffer-audioTracks': { func: idlref_helper, fragment: 'widl-SourceBuffer-audioTracks', link_text: 'audioTracks',  },
     'sourcebuffer-videoTracks': { func: idlref_helper, fragment: 'widl-SourceBuffer-videoTracks', link_text: 'videoTracks',  },
     'sourcebuffer-textTracks': { func: idlref_helper, fragment: 'widl-SourceBuffer-textTracks', link_text: 'textTracks',  },
@@ -92,10 +92,10 @@
     'network': { func: idlref_helper, fragment: 'idl-def-EndOfStreamError', link_text: '"network"',  },
     'decode': { func: idlref_helper, fragment: 'idl-def-EndOfStreamError', link_text: '"decode"',  },
 
-    'appendstart': { func: eventref_helper, fragment: 'appendstart', link_text: 'appendstart',  },
-    'appendend': { func: eventref_helper, fragment: 'appendend', link_text: 'appendend',  },
-    'appenderror': { func: eventref_helper, fragment: 'error', link_text: 'error',  },
-    'appendabort': { func: eventref_helper, fragment: 'abort', link_text: 'abort',  },
+    'updatestart': { func: eventref_helper, fragment: 'updatestart', link_text: 'updatestart',  },
+    'updateend': { func: eventref_helper, fragment: 'updateend', link_text: 'updateend',  },
+    'updateerror': { func: eventref_helper, fragment: 'error', link_text: 'error',  },
+    'updateabort': { func: eventref_helper, fragment: 'abort', link_text: 'abort',  },
 
     'sourceopen': { func: eventref_helper, fragment: 'sourceopen', link_text: 'sourceopen',  },
     'sourceended': { func: eventref_helper, fragment: 'sourceended', link_text: 'sourceended',  },

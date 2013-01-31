@@ -288,6 +288,7 @@
           <ol>
             <li>If the value being set is negative or NaN then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the value being assigned to this attribute.
 	      <p class="note"><a def-id="appendArrayBuffer"></a>, <a def-id="appendStream"></a> and <a def-id="endOfStream"></a> can update the duration under certain circumstances.</p>
             </li>
@@ -316,6 +317,14 @@
           <ol class="method-algorithm">
             <li>If <var>sourceBuffer</var> is null then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If <var>sourceBuffer</var> specifies an object that is not in <a def-id="sourceBuffers"></a> then throw a <a def-id="not-found-err"></a> exception and abort these steps.</li>
+            <li>If the <var>sourceBuffer</var>.<a def-id="updating"></a> attribute equals true, then run the following steps:
+              <ol>
+                <li>Abort the <a def-id="stream-append-loop"></a> algorithm if it is running.</li>
+                <li>Set the <var>sourceBuffer</var>.<a def-id="updating"></a> attribute to false.</li>
+                <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateabort"></a> at <var>sourceBuffer</var>.</li>
+                <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at <var>sourceBuffer</var>.</li>
+              </ol>
+            </li>
             <li>Set the the sourceBuffer attribute in all tracks in <var>sourceBuffer</var>.<a def-id="sourcebuffer-audioTracks"></a>, <var>sourceBuffer</var>.<a def-id="sourcebuffer-videoTracks"></a>, and <var>sourceBuffer</var>.<a def-id="sourcebuffer-textTracks"></a> to null.</li>
             <li>Remove all the tracks in <var>sourceBuffer</var>.<a def-id="sourcebuffer-audioTracks"></a>, <var>sourceBuffer</var>.<a def-id="sourcebuffer-videoTracks"></a>, and <var>sourceBuffer</var>.<a def-id="sourcebuffer-textTracks"></a> from the respective <a def-id="audiotracks"></a>, <a def-id="videotracks"></a>, and <a def-id="texttracks"></a> attributes on the HTMLMediaElement.</li>
             <li>Remove all the tracks in <var>sourceBuffer</var>.<a def-id="sourcebuffer-audioTracks"></a>, <var>sourceBuffer</var>.<a def-id="sourcebuffer-videoTracks"></a>, and <var>sourceBuffer</var>.<a def-id="sourcebuffer-textTracks"></a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the modified lists.</li>
@@ -332,6 +341,7 @@
 
           <ol class="method-algorithm">
             <li>If the <a def-id="readyState"></a> attribute is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>Change the <a def-id="readyState"></a> attribute value to <a def-id="ended"></a>.</li>
             <li>
               <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceended"></a> at the <a>MediaSource</a>.</li>
@@ -646,9 +656,10 @@
       <p class="issue"><a href="https://www.w3.org/Bugs/Public/show_bug.cgi?id=20327">Bug 20327</a> - Continuous splice flag</p>
 
       <dl title="interface SourceBuffer : EventTarget" class="idl">
-        <dt>readonly attribute boolean appending</dt>
+        <dt>readonly attribute boolean updating</dt>
         <dd>
-          <p>Indicates whether an <a def-id="appendArrayBuffer"></a> or <a def-id="appendStream"></a> operation is still being processed.</p>
+          <p>Indicates whether an <a def-id="appendArrayBuffer"></a>, <a def-id="appendStream"></a>, or <a def-id="remove"></a> operation is still being
+            processed.</p>
         </dd>
 
         <dt>readonly attribute TimeRanges buffered</dt>
@@ -668,6 +679,7 @@
           <p>On setting, run the following steps:</p>
           <ol>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is not in the <a def-id="open"></a> state, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If this object is waiting for the end of a <a def-id="media-segment"></a> to be appended, then throw an <a def-id="invalid-state-err"></a> and abort these steps.</li>
             <li>Update the attribute to the new value.</li>
@@ -697,7 +709,7 @@
           <ol class="method-algorithm">
             <li>If <var>data</var> is null then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="appending"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="closed"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>
               <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run the following steps:</p>
@@ -713,8 +725,8 @@
               <p class="note">The web application must use <a def-id="remove"></a> to free up space in the <a>SourceBuffer</a>.</p>
             </li>
             <li>Add <var>data</var> to the end of the <a def-id="input-buffer"></a>.</li>
-            <li>Set the <a def-id="appending"></a> attribute to true.</li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="appendstart"></a> at this <a>SourceBuffer</a> object.</li>
+            <li>Set the <a def-id="updating"></a> attribute to true.</li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
             <li>Asynchronously run the <a def-id="segment-parser-loop"></a> algorithm.</li>
           </ol>
         </dd>
@@ -729,7 +741,7 @@
               an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="closed"></a> state then throw
               an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="appending"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these
               steps.</li>
             <li>
               <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run
@@ -743,8 +755,8 @@
               <p>If the <a def-id="buffer-full-flag"></a> equals true, then throw a <a def-id="quota-exceeded-err"></a> exception and abort these step.</p>
               <p class="note">The web application must use <a def-id="remove"></a> to free up space in the <a>SourceBuffer</a>.</p>
             </li>
-            <li>Set the <a def-id="appending"></a> attribute to true.</li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="appendstart"></a> at this <a>SourceBuffer</a> object.</li>
+            <li>Set the <a def-id="updating"></a> attribute to true.</li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
             <li>Asynchronously run the <a def-id="stream-append-loop"></a> algorithm with <var>stream</var> and <var>maxSize</var>.</li>
           </ol>
         </dd>
@@ -756,14 +768,15 @@
           <ol class="method-algorithm">
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>Run the <a def-id="reset-parser-state-algorithm"></a>.</li>
-            <li>If the <a def-id="appending"></a> attribute equals true, then run the following steps:
+            <li>If the <a def-id="updating"></a> attribute equals true, then run the following steps:
               <ol>
-                <li>Set the <a def-id="appending"></a> attribute to false.</li>
-                <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="appendabort"></a> at this <a>SourceBuffer</a> object.</li>
-                <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="appendend"></a> at this <a>SourceBuffer</a> object.</li>
+                <li>Abort the <a def-id="stream-append-loop"></a> algorithm if it is running.</li>
+                <li>Set the <a def-id="updating"></a> attribute to false.</li>
+                <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateabort"></a> at this <a>SourceBuffer</a> object.</li>
+                <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
               </ol>
             </li>
+            <li>Run the <a def-id="reset-parser-state-algorithm"></a>.</li>
           </ol>
         </dd>
 
@@ -775,7 +788,11 @@
             <li>If <var>start</var> is negative or greater than <a def-id="duration"></a>, then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If <var>end</var> is less than or equal to <var>start</var>, then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>Set the <a def-id="updating"></a> attribute to true.</li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
+            <li>Return control to the caller and run the rest of the steps asynchronously.</li>
             <li>
               <p>For each <a def-id="track-buffer"></a> in this source buffer, run the following steps:</p>
               <ol>
@@ -793,6 +810,8 @@
             </li>
             <li>If <a def-id="buffer-full-flag"></a> equals true and this object is ready to accept more bytes, then set 
               the <a def-id="buffer-full-flag"></a> to false.</li>
+            <li>Set the <a def-id="updating"></a> attribute to false.</li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
        </ol>
 
         </dd>
@@ -821,14 +840,14 @@
           </thead>
           <tbody>
             <tr>
-              <td><a def-id="eventdfn">appendstart</a></td>
+              <td><a def-id="eventdfn">updatestart</a></td>
               <td><code>Event</code></td>
-              <td><a def-id="appending"></a> transitions from false to true.</td>
+              <td><a def-id="updating"></a> transitions from false to true.</td>
             </tr>
             <tr>
-              <td><a def-id="eventdfn">appendend</a></td>
+              <td><a def-id="eventdfn">updateend</a></td>
               <td><code>Event</code></td>
-              <td><a def-id="appending"></a> transitions from true to false.</td>
+              <td><a def-id="updating"></a> transitions from true to false.</td>
             </tr>
             <tr>
               <td><a def-id="eventdfn">error</a></td>
@@ -838,7 +857,7 @@
             <tr>
               <td><a def-id="eventdfn">abort</a></td>
               <td><code>Event</code></td>
-              <td>The append was aborted by an <a def-id="abort"></a> call.</td>
+              <td>The append or remove was aborted by an <a def-id="abort"></a> call.</td>
             </tr>
           </tbody>
         </table>
@@ -922,8 +941,8 @@
 	      </ol>
             </li>
             <li><i>Need more data:</i> If the <a def-id="stream-append-loop"></a> algorithm is running and still has data to read, then abort these steps.
-            <li>Set the <a def-id="appending"></a> attribute to false.</li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="appendend"></a> at this <a>SourceBuffer</a> object.</li>
+            <li>Set the <a def-id="updating"></a> attribute to false.</li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
           </ol>
         </section>
 
@@ -944,12 +963,12 @@
           <ol>
             <li>Run the <a def-id="reset-parser-state-algorithm"></a>.</li>
             <li>Abort the <a def-id="stream-append-loop"></a> algorithm if it is running.</li>
-            <li>Set the <a def-id="appending"></a> attribute to false.</li>
+            <li>Set the <a def-id="updating"></a> attribute to false.</li>
             <li>
-              <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="appenderror"></a> at this <a>SourceBuffer</a> object.
+              <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateerror"></a> at this <a>SourceBuffer</a> object.
               <p class="issue">Need a way to convey error information.</p>
             </li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="appendend"></a> at this <a>SourceBuffer</a> object.</li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
           </ol>
         </section>
 
@@ -984,8 +1003,8 @@
             <li>Add <var>data</var> to the end of the <a def-id="input-buffer"></a>.</li>
             <li>Run the <a def-id="segment-parser-loop"></a> algorithm.</li>
             <li>Jump to the <i>loop top</i> step above.</li>
-            <li><i>Loop Done: </i>Set the <a def-id="appending"></a> attribute to false.</li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="appendend"></a> at this <a>SourceBuffer</a> object.</li>
+            <li><i>Loop Done: </i>Set the <a def-id="updating"></a> attribute to false.</li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
           </ol>
         </section>
 
@@ -1632,12 +1651,12 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
     // Append the initialization segment.
     var firstAppendHandler = function(e) {
       var sourceBuffer = e.target;
-      sourceBuffer.removeEventListener('appendend', firstAppendHandler);
+      sourceBuffer.removeEventListener('updateend', firstAppendHandler);
 
       // Append some initial media data.
       appendNextMediaSegment(mediaSource);
     };
-    sourceBuffer.addEventListener('appendend', firstAppendHandler);
+    sourceBuffer.addEventListener('updateend', firstAppendHandler);
     sourceBuffer.appendArrayBuffer(initSegment);
   }
 
@@ -1709,7 +1728,16 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-	    <td>30 January 2013</td>
+	    <td>31 January 2013</td>
+            <td>
+              <ul>
+                <li>Make remove() asynchronous.</li>
+                <li>Added steps to various algorithms to throw an INVALID_STATE_ERR exception when async appends or remove() are pending.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+	    <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/aae26333e7d1/media-source/media-source.html">30 January 2013</a></td>
             <td>
               <ul>
                 <li>Remove early abort step on 0-byte appends so the same events fire as a normal append with bytes.</li>
@@ -1773,7 +1801,7 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
             </td>
           </tr>
           <tr>
-	    <td><a href="http://dvcs.w3.org/hg/html-media/rev/0c638da9a67a">28 November 2012</a></td>
+	    <td><a href="http://dvcs.w3.org/hg/html-media/raw-file/0c638da9a67a/media-source/media-source.html">28 November 2012</a></td>
             <td>
               <ul>
                 <li>Added transition to HAVE_METADATA when current playback position is removed.</li>
