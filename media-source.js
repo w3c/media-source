@@ -93,7 +93,8 @@
     'decode': { func: idlref_helper, fragment: 'idl-def-EndOfStreamError', link_text: '"decode"',  },
 
     'updatestart': { func: eventref_helper, fragment: 'updatestart', link_text: 'updatestart',  },
-    'updateend': { func: eventref_helper, fragment: 'updateend', link_text: 'updateend',  },
+    'update': { func: eventref_helper, fragment: 'update', link_text: 'update', },
+    'updateend': { func: eventref_helper, fragment: 'updateend', link_text: 'updateend', },
     'updateerror': { func: eventref_helper, fragment: 'error', link_text: 'error',  },
     'updateabort': { func: eventref_helper, fragment: 'abort', link_text: 'abort',  },
 
@@ -133,6 +134,8 @@
     'stream-append-loop': { func: link_helper, fragment: '#sourcebuffer-stream-append-loop', link_text: 'stream append loop', },
     'init-segment-received-algorithm': { func: link_helper, fragment: '#sourcebuffer-init-segment-received', link_text: 'initialization segment received algorithm', },
     'coded-frame-processing-algorithm': { func: link_helper, fragment: '#sourcebuffer-coded-frame-processing', link_text: 'coded frame processing algorithm', },
+    'audio-splice-frame-algorithm': { func: link_helper, fragment: '#sourcebuffer-audio-splice-frame-algorithm', link_text: 'audio splice frame algorithm', },
+    'audio-splice-rendering-algorithm': { func: link_helper, fragment: '#sourcebuffer-audio-splice-rendering-algorithm', link_text: 'audio splice rendering algorithm', },
     'input-buffer': { func: var_helper, fragment: '#sourcebuffer-input-buffer', link_text: 'input buffer', },
     'buffer-full-flag': { func: var_helper, fragment: '#sourcebuffer-buffer-full-flag', link_text: 'buffer full flag', },
     'MediaSource-object-URL': { func: link_helper, fragment: '#mediasource-object-url', link_text: 'MediaSource object URL', },
@@ -164,6 +167,8 @@
     'timerange': { func: code_videoref_helper, fragment: 'timeranges', link_text: 'TimeRange',  },
     'timeranges': { func: code_videoref_helper, fragment: 'timeranges', link_text: 'TimeRanges',  },
     'tracklist-change': { func: code_videoref_helper, fragment: 'handler-tracklist-onchange', link_text: 'change',  },
+    'tracklist-addtrack': { func: code_videoref_helper, fragment: 'handler-tracklist-onaddtrack', link_text: 'addtrack',  },
+    'tracklist-removetrack': { func: code_videoref_helper, fragment: 'handler-tracklist-onremovetrack', link_text: 'removetrack',  },
     'video-track': { func: code_videoref_helper, fragment: 'videotrack', link_text: 'VideoTrack',  },
     'videotrack-id': { func: code_videoref_helper, fragment: 'dom-videotrack-id', link_text: 'id',  },
     'videotrack-kind': { func: code_videoref_helper, fragment: 'dom-videotrack-kind', link_text: 'kind', },
