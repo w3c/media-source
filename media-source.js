@@ -104,14 +104,12 @@
     'addsourcebuffer': { func: eventref_helper, fragment: 'addsourcebuffer', link_text: 'addsourcebuffer',  },
     'removesourcebuffer': { func: eventref_helper, fragment: 'removesourcebuffer', link_text: 'removesourcebuffer',  },
 
-    'decoder-buffer': { func: term_helper, fragment: 'decoder-buffer', link_text: 'decoder buffer', },
     'init-segment': { func: term_helper, fragment: 'init-segment', link_text: 'initialization segment', },
     'init-segments': { func: term_helper, fragment: 'init-segment', link_text: 'initialization segments', },
     'media-segment': { func: term_helper, fragment: 'media-segment', link_text: 'media segment', },
     'media-segments': { func: term_helper, fragment: 'media-segment', link_text: 'media segments', },
     'presentation-start-time': { func: term_helper, fragment: 'presentation-start-time', link_text: 'presentation start time', },
     'random-access-point': { func: term_helper, fragment: 'random-access-point', link_text: 'random access point', },
-    'random-access-points': { func: term_helper, fragment: 'random-access-point', link_text: 'random access points', },
     'track-id': { func: term_helper, fragment: 'track-id', link_text: 'Track ID', },
     'track-ids': { func: term_helper, fragment: 'track-id', link_text: 'Track IDs', },
     'track-description': { func: term_helper, fragment: 'track-description', link_text: 'track description', },
@@ -145,6 +143,7 @@
     'track-buffers': { func: term_helper, fragment: 'track-buffer', link_text: 'track buffers', },
     'last-decode-timestamp': { func: var_helper, fragment: '#last-decode-timestamp', link_text: 'last decode timestamp', },
     'highest-presentation-timestamp': { func: var_helper, fragment: '#highest-presentation-timestamp', link_text: 'highest presentation timestamp', },
+    'need-RAP-flag': { func: var_helper, fragment: '#need-RAP-flag', link_text: 'need random access point flag', },
 
     'FileAPI': { func: fileapi_helper, fragment: '', link_text: 'File API',  },
     'blob-uri': { func: fileapi_helper, fragment: 'url', link_text: 'Blob URI',  },
