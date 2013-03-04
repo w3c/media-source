@@ -152,7 +152,7 @@
           <dd>The parent media source of a <a>SourceBuffer</a> object is the <a>MediaSource</a> object that created it.</dd>
 
           <dt id="append-sequence">Append Sequence</dt>
-          <dd>A series of <a def-id="appendArrayBuffer"></a> or <a def-id="appendStream"></a> calls on a <a>SourceBuffer</a> without any intervening <a def-id="abort"></a> calls. The
+          <dd>A series of <a def-id="appendBuffer"></a> or <a def-id="appendStream"></a> calls on a <a>SourceBuffer</a> without any intervening <a def-id="abort"></a> calls. The
           <a def-id="media-segments"></a> in an append sequence must be adjacent and monotonically increasing in time without any gaps. An
           <a def-id="abort"></a> call starts a new append sequence which allows <a def-id="media-segments"></a> to be appended in non-monotonically
           increasing order.</dd>
@@ -228,7 +228,7 @@
             <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the value being assigned to this attribute.
-	      <p class="note"><a def-id="appendArrayBuffer"></a>, <a def-id="appendStream"></a> and <a def-id="endOfStream"></a> can update the duration under certain circumstances.</p>
+	      <p class="note"><a def-id="appendBuffer"></a>, <a def-id="appendStream"></a> and <a def-id="endOfStream"></a> can update the duration under certain circumstances.</p>
             </li>
           </ol>
         </dd>
@@ -240,7 +240,12 @@
           <ol class="method-algorithm">
             <li>If <var>type</var> is null or an empty string then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw a <a def-id="not-supported-err"></a> exception and abort these steps.</li>
-            <li>If the user agent can't handle any more SourceBuffer objects then throw a <a def-id="quota-exceeded-err"></a> exception and abort these steps.</li>
+            <li>If the user agent can't handle any more SourceBuffer objects then throw a <a def-id="quota-exceeded-err"></a> exception and abort these steps.
+              <p class="note">For example, a user agent may throw a <a def-id="quota-exceeded-err"></a> exception if the media element has reached the
+                <a def-id="have-metadata"></a> readyState. This can occur if the user agent's media engine does not support adding more tracks during
+                playback.
+              </p>
+            </li>
             <li>If the <a def-id="readyState"></a> attribute is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>Create a new <a>SourceBuffer</a> object and associated resources.</li>
             <li>Add the new object to <a def-id="sourceBuffers"></a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="addsourcebuffer"></a> at <a def-id="sourceBuffers"></a>.</li>
@@ -305,7 +310,7 @@
 	            <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the highest end timestamp across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.<br>
 		      <p class="note">This allows the duration to properly reflect the end of the appended media segments. For example, if the duration was explicitly set to 10 seconds and only media segments for 0 to 5 seconds were appended before endOfStream() was called, then the duration will get updated to 5 seconds.</p>
 	            </li>
-	            <li>Notify the media element that it now has all of the media data. Playback should continue until all the media passed in via <a def-id="appendArrayBuffer"></a> and <a def-id="appendStream"></a> has been played.</li>
+	            <li>Notify the media element that it now has all of the media data. Playback should continue until all the media passed in via <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a> has been played.</li>
 	          </ol>
 	        </dd>
                 <dt>If <var>error</var> is set to <a def-id="network"></a>
@@ -408,7 +413,7 @@
                 <li>Set the <a def-id="readyState"></a> attribute to <a def-id="open"></a>.</li>
                 <li>
                   <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a>MediaSource</a>.</li>
-                <li>Allow the <a def-id="resource-fetch-algorithm"></a> to progress based on data passed in via <a def-id="appendArrayBuffer"></a> and <a def-id="appendStream"></a>.</li>
+                <li>Allow the <a def-id="resource-fetch-algorithm"></a> to progress based on data passed in via <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a>.</li>
               </ol>
             </dd>
           </dl>
@@ -442,7 +447,7 @@
 	        <dd>
 	          <ol>
 	            <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.</li>
-	            <li>The media element waits for the necessary <a def-id="media-segments"></a> to be passed to <a def-id="appendArrayBuffer"></a> or <a def-id="appendStream"></a>.
+	            <li>The media element waits for the necessary <a def-id="media-segments"></a> to be passed to <a def-id="appendBuffer"></a> or <a def-id="appendStream"></a>.
                       <p class="note">The web application can use <a def-id="buffered"></a> to determine what the media element needs to resume playback.</p>
                     </li>
 	          </ol>
@@ -606,10 +611,30 @@
     <section id="sourcebuffer">
       <h2>SourceBuffer Object</h2>
 
+
+      <dl title="enum AbortMode" class="idl">
+        <dt>continuation</dt>
+        <dd>
+          <p>The next <a def-id="append-sequence"></a> will be placed immediately after the <a def-id="append-sequence"></a> that was just aborted.</p>
+        </dd>
+        <dt>timestampOffset</dt>
+        <dd>
+          <p>The next <a def-id="append-sequence"></a> will be inserted at the presentation time specified by the <a def-id="timestampOffset"></a>
+            attribute instead of the time computed from the <a def-id="timestampOffset"></a> attribute and coded frame timestamps.
+          </p>
+        </dd>
+      </dl>
+      <p class="note">
+        These abort modes cause the <a def-id="timestampOffset"></a> attribute to get updated when the first <a def-id="coded-frame"></a> of the new
+        <a def-id="append-sequence"></a> is appended. This allows the rest of the  <a def-id="coded-frames"></a> in the sequence to follow the normal
+        presentation &amp; decode timestamp computation rules and provides a way for the application to observe what offset is being applied to these
+        timestamps.
+      </p>
+
       <dl title="interface SourceBuffer : EventTarget" class="idl">
         <dt>readonly attribute boolean updating</dt>
         <dd>
-          <p>Indicates whether an <a def-id="appendArrayBuffer"></a>, <a def-id="appendStream"></a>, or <a def-id="remove"></a> operation is still being
+          <p>Indicates whether an <a def-id="appendBuffer"></a>, <a def-id="appendStream"></a>, or <a def-id="remove"></a> operation is still being
             processed.</p>
         </dd>
 
@@ -631,7 +656,6 @@
           <ol>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="closed"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>
               <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run the following steps:</p>
               <ol>
@@ -659,15 +683,20 @@
           The list of <a def-id="text-track"></a> objects created by this object.
         </dd>
 
-        <dt>void appendArrayBuffer(ArrayBuffer data)</dt>
+        <dt>void appendBuffer(ArrayBuffer data)</dt>
         <dd>
           <p>Appends the segment data in an ArrayBuffer to the source buffer.</p>
+          <p>The steps for this method are the same as the ArrayBufferView version of <a def-id="appendBuffer"></a>.</p>
+        </dd>
+
+        <dt>void appendBuffer(ArrayBufferView data)</dt>
+        <dd>
+          <p>Appends the segment data in an ArrayBufferView to the source buffer.</p>
 
           <ol class="method-algorithm">
             <li>If <var>data</var> is null then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="closed"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>
               <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run the following steps:</p>
               <ol>
@@ -700,8 +729,6 @@
             <li>If <var>stream</var> is null then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw
               an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="closed"></a> state then throw
-              an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these
               steps.</li>
             <li>
@@ -722,13 +749,23 @@
           </ol>
         </dd>
 
-        <dt>void abort()</dt>
+        <dt>void abort(optional AbortMode mode)</dt>
         <dd>
           <p>Aborts the current segment and resets the segment parser.</p>
 
           <ol class="method-algorithm">
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If <var>mode</var> is set and does not equal null, an empty string, or a valid <a>AbortMode</a>, then throw an 
+              <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="continuation-timestamp"></a> is unset, then run the following steps:
+              <ol>
+                <li>If <var>mode</var> equals <a def-id="AbortMode-continuation"></a> and the <a def-id="highest-presentation-end-timestamp"></a> is unset,
+                  then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+                <li>If the <a def-id="highest-presentation-end-timestamp"></a> is set, then update the <a def-id="continuation-timestamp"></a> to
+                  equal the <a def-id="highest-presentation-end-timestamp"></a>.</li>
+              </ol>
+            </li>
             <li>If the <a def-id="updating"></a> attribute equals true, then run the following steps:
               <ol>
                 <li>Abort the <a def-id="stream-append-loop"></a> algorithm if it is running.</li>
@@ -736,6 +773,14 @@
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateabort"></a> at this <a>SourceBuffer</a> object.</li>
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
               </ol>
+            </li>
+            <li>
+              <dl class="switch">
+                <dt>If <var>mode</var> is not set, null, or an empty string:</dt>
+                <dd>Unset the <a def-id="abort-mode"></a>.</dd>
+                <dt>Otherwise:</dt>
+                <dd>Update the <a def-id="abort-mode"></a> to equal <var>mode</var>.</dd>
+              </dl>
             </li>
             <li>Run the <a def-id="reset-parser-state-algorithm"></a>.</li>
           </ol>
@@ -793,10 +838,10 @@
           the highest presentation timestamp encountered in a <a def-id="coded-frame"></a> appended in the current <a def-id="append-sequence"></a>.
           The variable is initially unset to indicate that no <a def-id="coded-frames"></a> have been appended yet.</p>
 
-         <p>Each <a def-id="track-buffer"></a> has a <dfn id="need-RAP-flag">need random access point flag</dfn> variable that keeps track of whether
-           the track buffer is waiting for a <a def-id="random-access-point"></a> <a def-id="coded-frame"></a>. The variable is initially set to true to
-           indicate that <a def-id="random-access-point"></a> <a def-id="coded-frame"></a> is needed before anything can be added to the
-           <a def-id="track-buffer"></a>.</p>
+        <p>Each <a def-id="track-buffer"></a> has a <dfn id="need-RAP-flag">need random access point flag</dfn> variable that keeps track of whether
+          the track buffer is waiting for a <a def-id="random-access-point"></a> <a def-id="coded-frame"></a>. The variable is initially set to true to
+          indicate that <a def-id="random-access-point"></a> <a def-id="coded-frame"></a> is needed before anything can be added to the
+          <a def-id="track-buffer"></a>.</p>
       </section>
 
       <section id="sourcebuffer-events">
@@ -867,12 +912,28 @@
               </tr>
             </tbody>
           </table>
-          
-          <p>The <dfn id="sourcebuffer-input-buffer">input buffer</dfn> is a byte buffer that is used to hold unparsed bytes across <a def-id="appendArrayBuffer"></a> and <a def-id="appendStream"></a> calls. The buffer is empty when the SourceBuffer object is created.</p>
 
-          <p>The <dfn id="sourcebuffer-buffer-full-flag">buffer full flag</dfn> keeps track of whether <a def-id="appendArrayBuffer"></a> or 
-            <a def-id="appendStream"></a> is allowed to accept more bytes. It is set to false when the SourceBuffer object is created and gets updated 
+          <p>The <dfn id="sourcebuffer-input-buffer">input buffer</dfn> is a byte buffer that is used to hold unparsed bytes across <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a> calls. The buffer is empty when the SourceBuffer object is created.</p>
+
+          <p>The <dfn id="sourcebuffer-buffer-full-flag">buffer full flag</dfn> keeps track of whether <a def-id="appendBuffer"></a> or
+            <a def-id="appendStream"></a> is allowed to accept more bytes. It is set to false when the SourceBuffer object is created and gets updated
             as data is appended and removed.</p>
+
+          <p>The <dfn id="sourcebuffer-abort-mode">abort mode</dfn> variable keeps track of the <a>AbortMode</a> passed to the last <a def-id="abort"></a>
+            call. It is unset when the SourceBuffer object is created and gets updated by <a def-id="abort"></a> and the
+            <a def-id="coded-frame-processing-algorithm"></a>.
+          </p>
+
+          <p>The <dfn id="sourcebuffer-continuation-timestamp">continuation timestamp</dfn> variable keeps track of the start timestamp for the next
+            <a def-id="append-sequence"></a> if <a def-id="abort"></a> is called with <a def-id="AbortMode-continuation"></a>.
+            It is unset when the SourceBuffer object is created and gets updated by <a def-id="abort"></a> and the
+            <a def-id="coded-frame-processing-algorithm"></a>.
+          </p>
+
+          <p>The <dfn id="sourcebuffer-highest-presentation-end-timestamp">highest presentation end timestamp</dfn> variable stores the highest presentation
+            end timestamp encountered in the current <a def-id="append-sequence"></a>. It is unset when the SourceBuffer object is created and gets updated
+            by the <a def-id="reset-parser-state-algorithm"></a> and the <a def-id="coded-frame-processing-algorithm"></a>.
+          </p>
 
           <p>When this algorithm is invoked, run the following steps:</p>
 
@@ -927,6 +988,7 @@
             <li>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a> and the <a def-id="input-buffer"></a> contains some complete <a def-id="coded-frames"></a>, then run the <a def-id="coded-frame-processing-algorithm"></a> as if the media segment only contained these frames.</li>
             <li>Unset the <a def-id="last-decode-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
             <li>Unset the <a def-id="highest-presentation-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
+            <li>Unset the <a def-id="highest-presentation-end-timestamp"></a>.</li>
             <li>Set the <a def-id="need-RAP-flag"></a> on all <a def-id="track-buffers"></a> to true.</li>
             <li>Remove all bytes from the <a def-id="input-buffer"></a>.</li>
             <li>Set <a def-id="append-state"></a> to <a def-id="waiting-for-segment"></a>.</li>
@@ -957,7 +1019,6 @@
           <ol>
             <li>If <var>maxSize</var> is set, then let <var>bytesLeft</var> equal <var>maxSize</var>.</li>
             <li><i>Loop Top: </i>If <var>maxSize</var> is set and <var>bytesLeft</var> equals 0, then jump to the <i>loop done</i> step below.</li>
-            <li>If <var>stream</var> has been aborted, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</li>
             <li>If <var>stream</var> has been closed, then jump to the <i>loop done</i> step below.</li>
             <li>
               <p>If the <a def-id="buffer-full-flag"></a> equals true, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</p>
@@ -1132,6 +1193,27 @@
                   </p>
                 </li>
                 <li>Let <var>frame duration</var> be a double precision floating point representation of the coded frame's duration in seconds.</li>
+
+                <li> If <a def-id="abort-mode"></a> is set, then run the following steps:
+                  <ol>
+                    <li>
+                      <dl class="switch">
+                        <dt>If <a def-id="abort-mode"></a> equals <a def-id="AbortMode-continuation"></a>:</dt>
+                        <dd>Set <a def-id="timestampOffset"></a> equal to <a def-id="continuation-timestamp"></a> - <var>presentation timestamp</var>.</dd>
+                        <dt>If <a def-id="abort-mode"></a> equals <a def-id="AbortMode-timestampOffset"></a>:</dt>
+                        <dd>
+                          <ol>
+                            <li>Let <var>old timestampOffset</var> equal the current value of <a def-id="timestampOffset"></a>.</li>
+                            <li>Set <a def-id="timestampOffset"></a> equal to <var>old timestampOffset</var> - <var>presentation timestamp</var>.</li>
+                          </ol>
+                        </dd>
+                      </dl>
+                    </li>
+                    <li>Unset <a def-id="continuation-timestamp"></a>.</li>
+                    <li>Unset <a def-id="abort-mode"></a>.</li>
+                  </ol>
+                </li>
+
 	        <li>
 	          <p>If <a def-id="timestampOffset"></a> is not 0, then run the following steps:</p>
 	          <ol>
@@ -1204,6 +1286,9 @@
                   <p class="note">The greater than check is needed because bidirectional prediction between coded frames can cause
                     <var>presentation timestamp</var> to not be monotonically increasing eventhough the decode timestamps are monotonically increasing.</p>
                 </li>
+                <li>If <a def-id="highest-presentation-end-timestamp"></a> is unset or <var>frame end timestamp</var> is greater than
+                  <a def-id="highest-presentation-end-timestamp"></a>, then set <a def-id="highest-presentation-end-timestamp"></a> equal to
+                  <var>frame end timestamp</var>.</li>
 	      </ol>
             </li>
             <li>
@@ -1576,7 +1661,7 @@
 
     <section id="byte-stream-formats">
       <h2>Byte Stream Formats</h2>
-      <p>The bytes provided through <a def-id="appendArrayBuffer"></a> and <a def-id="appendStream"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM , the ISO Base Media File Format, and MPEG-2 Transport Streams are provided below. These format specifications are intended to be the authoritative source for how data from these containers is formatted and passed to a <a>SourceBuffer</a>. If a <a>MediaSource</a> implementation claims to support any of these container formats, then it must implement the corresponding byte stream format specification described below.</p>
+      <p>The bytes provided through <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM , the ISO Base Media File Format, and MPEG-2 Transport Streams are provided below. These format specifications are intended to be the authoritative source for how data from these containers is formatted and passed to a <a>SourceBuffer</a>. If a <a>MediaSource</a> implementation claims to support any of these container formats, then it must implement the corresponding byte stream format specification described below.</p>
       <p>This section provides general requirements for all byte stream formats:</p>
       <ul>
         <li>A byte stream format specification must define <a def-id="init-segments"></a> and <a def-id="media-segments"></a>.</li>
@@ -1812,7 +1897,7 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
       appendNextMediaSegment(mediaSource);
     };
     sourceBuffer.addEventListener('updateend', firstAppendHandler);
-    sourceBuffer.appendArrayBuffer(initSegment);
+    sourceBuffer.appendBuffer(initSegment);
   }
 
   function appendNextMediaSegment(mediaSource) {
@@ -1837,7 +1922,7 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
       return;
     }
 
-    mediaSource.sourceBuffers[0].appendArrayBuffer(mediaSegment);
+    mediaSource.sourceBuffers[0].appendBuffer(mediaSegment);
   }
 
   function onSeeking(mediaSource, e) {
@@ -1883,7 +1968,19 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-            <td>25 February 2013</td>
+            <td>05 March 2013</td>
+            <td>
+              <ul>
+                <li>Bug 21170 - Remove 'stream aborted' step from stream append loop algorithm.</li>
+                <li>Bug 21171 - Added informative note about when addSourceBuffer() might throw an QUOTA_EXCEEDED_ERR exception.</li>
+                <li>Bug 20901 - Add support for 'continuation' and 'timestampOffset' abort modes.</li>
+                <li>Bug 21159 - Rename appendArrayBuffer to appendBuffer() and add ArrayBufferView overload.</li>
+                <li>Bug 21198 - Remove redundant 'closed' readyState checks.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/668a1c82fb88/media-source/media-source.html">25 February 2013</a></td>
             <td>
               <ul>
                  <li>Remove Source Buffer Model section since all the behavior is covered by the algorithms now.</li>

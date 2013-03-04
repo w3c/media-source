@@ -397,7 +397,7 @@ table.exceptions table {
   </p>
   <h1 class="title" id="title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-25-february-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 25 February 2013</h2>
+  <h2 id="w3c-editor-s-draft-05-march-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 05 March 2013</h2>
   <dl>
     
       <dt>This version:</dt>
@@ -572,9 +572,9 @@ table.exceptions table {
           <dd>The parent media source of a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object is the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object that created it.</dd>
 
           <dt id="append-sequence">Append Sequence</dt>
-          <dd>A series of <code><a href="#widl-SourceBuffer-appendArrayBuffer-void-ArrayBuffer-data">appendArrayBuffer()</a></code> or <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> calls on a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> without any intervening <code><a href="#widl-SourceBuffer-abort-void">abort()</a></code> calls. The
+          <dd>A series of <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code> or <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> calls on a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> without any intervening <code><a href="#widl-SourceBuffer-abort-void-AbortMode-mode">abort()</a></code> calls. The
           <a href="#media-segment">media segments</a> in an append sequence must be adjacent and monotonically increasing in time without any gaps. An
-          <code><a href="#widl-SourceBuffer-abort-void">abort()</a></code> call starts a new append sequence which allows <a href="#media-segment">media segments</a> to be appended in non-monotonically
+          <code><a href="#widl-SourceBuffer-abort-void-AbortMode-mode">abort()</a></code> call starts a new append sequence which allows <a href="#media-segment">media segments</a> to be appended in non-monotonically
           increasing order.</dd>
         </dl>
       </section>
@@ -638,7 +638,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not <code><a href="#idl-def-ReadyState">"open"</a></code> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true on any <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the value being assigned to this attribute.
-	      <div class="note"><div class="note-title"><span>Note</span></div><p class=""><code><a href="#widl-SourceBuffer-appendArrayBuffer-void-ArrayBuffer-data">appendArrayBuffer()</a></code>, <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> and <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream()</a></code> can update the duration under certain circumstances.</p></div>
+	      <div class="note"><div class="note-title"><span>Note</span></div><p class=""><code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code>, <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> and <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream()</a></code> can update the duration under certain circumstances.</p></div>
             </li>
           </ol>
         </dd><dt id="widl-MediaSource-readyState"><code>readyState</code> of type <span class="idlAttrType"><a href="#idl-def-ReadyState" class="idlType"><code>ReadyState</code></a></span>, readonly</dt><dd>
@@ -652,7 +652,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <table class="parameters"><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code><a>DOMString</a></code></td><td class="prmNullFalse">✘</td><td class="prmOptFalse">✘</td><td class="prmDesc"></td></tr></table><div><em>Return type: </em><code><a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If <var>type</var> is null or an empty string then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-not_supported_err">NOT_SUPPORTED_ERR</a></code> exception and abort these steps.</li>
-            <li>If the user agent can't handle any more SourceBuffer objects then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception and abort these steps.</li>
+            <li>If the user agent can't handle any more SourceBuffer objects then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception and abort these steps.
+              <div class="note"><div class="note-title"><span>Note</span></div><p class="">For example, a user agent may throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception if the media element has reached the
+                <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_metadata">HAVE_METADATA</a></code> readyState. This can occur if the user agent's media engine does not support adding more tracks during
+                playback.
+              </p></div>
+            </li>
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not in the <code><a href="#idl-def-ReadyState">"open"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>Create a new <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object and associated resources.</li>
             <li>Add the new object to <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> and <a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> at <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.</li>
@@ -674,7 +679,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	            <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the highest end timestamp across all <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.<br>
 		      <div class="note"><div class="note-title"><span>Note</span></div><p class="">This allows the duration to properly reflect the end of the appended media segments. For example, if the duration was explicitly set to 10 seconds and only media segments for 0 to 5 seconds were appended before endOfStream() was called, then the duration will get updated to 5 seconds.</p></div>
 	            </li>
-	            <li>Notify the media element that it now has all of the media data. Playback should continue until all the media passed in via <code><a href="#widl-SourceBuffer-appendArrayBuffer-void-ArrayBuffer-data">appendArrayBuffer()</a></code> and <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> has been played.</li>
+	            <li>Notify the media element that it now has all of the media data. Playback should continue until all the media passed in via <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code> and <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> has been played.</li>
 	          </ol>
 	        </dd>
                 <dt>If <var>error</var> is set to <code><a href="#idl-def-EndOfStreamError">"network"</a></code>
@@ -809,7 +814,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <li>Set the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute to <code><a href="#idl-def-ReadyState">"open"</a></code>.</li>
                 <li>
                   <a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-sourceopen">sourceopen</a></code> at the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a>.</li>
-                <li>Allow the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a> to progress based on data passed in via <code><a href="#widl-SourceBuffer-appendArrayBuffer-void-ArrayBuffer-data">appendArrayBuffer()</a></code> and <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code>.</li>
+                <li>Allow the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a> to progress based on data passed in via <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code> and <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code>.</li>
               </ol>
             </dd>
           </dl>
@@ -843,7 +848,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	        <dd>
 	          <ol>
 	            <li>Set the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_metadata">HAVE_METADATA</a></code>.</li>
-	            <li>The media element waits for the necessary <a href="#media-segment">media segments</a> to be passed to <code><a href="#widl-SourceBuffer-appendArrayBuffer-void-ArrayBuffer-data">appendArrayBuffer()</a></code> or <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code>.
+	            <li>The media element waits for the necessary <a href="#media-segment">media segments</a> to be passed to <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code> or <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code>.
                       <div class="note"><div class="note-title"><span>Note</span></div><p class="">The web application can use <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> to determine what the media element needs to resume playback.</p></div>
                     </li>
 	          </ol>
@@ -1007,6 +1012,24 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
     <section id="sourcebuffer">
       <!--OddPage--><h2><span class="secno">3. </span>SourceBuffer Object</h2>
 
+
+      <pre class="idl"><span class="idlEnum" id="idl-def-AbortMode">enum <span class="idlEnumID">AbortMode</span> {
+    "<span class="idlEnumItem">continuation</span>",
+    "<span class="idlEnumItem">timestampOffset</span>"
+};</span></pre><table class="simple"><tr><th colspan="2">Enumeration description</th></tr><tr><td><code>continuation</code></td><td>
+          <p>The next <a href="#append-sequence">append sequence</a> will be placed immediately after the <a href="#append-sequence">append sequence</a> that was just aborted.</p>
+        </td></tr><tr><td><code>timestampOffset</code></td><td>
+          <p>The next <a href="#append-sequence">append sequence</a> will be inserted at the presentation time specified by the <code><a href="#widl-SourceBuffer-timestampOffset">timestampOffset</a></code>
+            attribute instead of the time computed from the <code><a href="#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> attribute and coded frame timestamps.
+          </p>
+        </td></tr></table>
+      <div class="note"><div class="note-title"><span>Note</span></div><p class="">
+        These abort modes cause the <code><a href="#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> attribute to get updated when the first <a href="#coded-frame">coded frame</a> of the new
+        <a href="#append-sequence">append sequence</a> is appended. This allows the rest of the  <a href="#coded-frame">coded frames</a> in the sequence to follow the normal
+        presentation &amp; decode timestamp computation rules and provides a way for the application to observe what offset is being applied to these
+        timestamps.
+      </p></div>
+
       <pre class="idl"><span class="idlInterface" id="idl-def-SourceBuffer">interface <span class="idlInterfaceID">SourceBuffer</span> : <span class="idlSuperclass"><a>EventTarget</a></span> {
 <span class="idlAttribute">    readonly attribute <span class="idlAttrType"><a>boolean</a></span>        <span class="idlAttrName"><a href="#widl-SourceBuffer-updating">updating</a></span>;</span>
 <span class="idlAttribute">    readonly attribute <span class="idlAttrType"><a>TimeRanges</a></span>     <span class="idlAttrName"><a href="#widl-SourceBuffer-buffered">buffered</a></span>;</span>
@@ -1014,9 +1037,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 <span class="idlAttribute">    readonly attribute <span class="idlAttrType"><a>AudioTrackList</a></span> <span class="idlAttrName"><a href="#widl-SourceBuffer-audioTracks">audioTracks</a></span>;</span>
 <span class="idlAttribute">    readonly attribute <span class="idlAttrType"><a>VideoTrackList</a></span> <span class="idlAttrName"><a href="#widl-SourceBuffer-videoTracks">videoTracks</a></span>;</span>
 <span class="idlAttribute">    readonly attribute <span class="idlAttrType"><a>TextTrackList</a></span>  <span class="idlAttrName"><a href="#widl-SourceBuffer-textTracks">textTracks</a></span>;</span>
-<span class="idlMethod">    <span class="idlMethType"><a>void</a></span> <span class="idlMethName"><a href="#widl-SourceBuffer-appendArrayBuffer-void-ArrayBuffer-data">appendArrayBuffer</a></span> (<span class="idlParam"><span class="idlParamType"><a>ArrayBuffer</a></span> <span class="idlParamName">data</span></span>);</span>
+<span class="idlMethod">    <span class="idlMethType"><a>void</a></span> <span class="idlMethName"><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBuffer-data">appendBuffer</a></span> (<span class="idlParam"><span class="idlParamType"><a>ArrayBuffer</a></span> <span class="idlParamName">data</span></span>);</span>
+<span class="idlMethod">    <span class="idlMethType"><a>void</a></span> <span class="idlMethName"><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer</a></span> (<span class="idlParam"><span class="idlParamType"><a>ArrayBufferView</a></span> <span class="idlParamName">data</span></span>);</span>
 <span class="idlMethod">    <span class="idlMethType"><a>void</a></span> <span class="idlMethName"><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream</a></span> (<span class="idlParam"><span class="idlParamType"><a>Stream</a></span> <span class="idlParamName">stream</span></span>, <span class="idlParam">optional <span class="idlParamType"><a>unsigned long long</a></span> <span class="idlParamName">maxSize</span></span>);</span>
-<span class="idlMethod">    <span class="idlMethType"><a>void</a></span> <span class="idlMethName"><a href="#widl-SourceBuffer-abort-void">abort</a></span> ();</span>
+<span class="idlMethod">    <span class="idlMethType"><a>void</a></span> <span class="idlMethName"><a href="#widl-SourceBuffer-abort-void-AbortMode-mode">abort</a></span> (<span class="idlParam">optional <span class="idlParamType"><a href="#idl-def-AbortMode" class="idlType"><code>AbortMode</code></a></span> <span class="idlParamName">mode</span></span>);</span>
 <span class="idlMethod">    <span class="idlMethType"><a>void</a></span> <span class="idlMethName"><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove</a></span> (<span class="idlParam"><span class="idlParamType"><a>double</a></span> <span class="idlParamName">start</span></span>, <span class="idlParam"><span class="idlParamType"><a>double</a></span> <span class="idlParamName">end</span></span>);</span>
 };</span></pre><section id="attributes-1"><h3><span class="secno">3.1 </span>Attributes</h3><dl class="attributes"><dt id="widl-SourceBuffer-audioTracks"><code>audioTracks</code> of type <span class="idlAttrType"><a>AudioTrackList</a></span>, readonly</dt><dd>
           The list of <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#audiotrack">AudioTrack</a></code> objects created by this object.
@@ -1036,7 +1060,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <ol>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState">"closed"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>
               <p>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState">"ended"</a></code> state then run the following steps:</p>
               <ol>
@@ -1048,17 +1071,27 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Update the attribute to the new value.</li>
           </ol>
         </dd><dt id="widl-SourceBuffer-updating"><code>updating</code> of type <span class="idlAttrType"><a>boolean</a></span>, readonly</dt><dd>
-          <p>Indicates whether an <code><a href="#widl-SourceBuffer-appendArrayBuffer-void-ArrayBuffer-data">appendArrayBuffer()</a></code>, <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code>, or <code><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove()</a></code> operation is still being
+          <p>Indicates whether an <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code>, <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code>, or <code><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove()</a></code> operation is still being
             processed.</p>
         </dd><dt id="widl-SourceBuffer-videoTracks"><code>videoTracks</code> of type <span class="idlAttrType"><a>VideoTrackList</a></span>, readonly</dt><dd>
           The list of <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#videotrack">VideoTrack</a></code> objects created by this object.
-        </dd></dl></section><section id="methods-1"><h3><span class="secno">3.2 </span>Methods</h3><dl class="methods"><dt id="widl-SourceBuffer-abort-void"><code>abort</code></dt><dd>
+        </dd></dl></section><section id="methods-1"><h3><span class="secno">3.2 </span>Methods</h3><dl class="methods"><dt id="widl-SourceBuffer-abort-void-AbortMode-mode"><code>abort</code></dt><dd>
           <p>Aborts the current segment and resets the segment parser.</p>
 
           
-        <div><em>No parameters.</em></div><div><em>Return type: </em><code><a>void</a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
+        <table class="parameters"><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">mode</td><td class="prmType"><code><a href="#idl-def-AbortMode" class="idlType"><code>AbortMode</code></a></code></td><td class="prmNullFalse">✘</td><td class="prmOptTrue">✔</td><td class="prmDesc"></td></tr></table><div><em>Return type: </em><code><a>void</a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is not in the <code><a href="#idl-def-ReadyState">"open"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+            <li>If <var>mode</var> is set and does not equal null, an empty string, or a valid <a href="#idl-def-AbortMode" class="idlType"><code>AbortMode</code></a>, then throw an 
+              <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
+            <li>If the <var><a href="#sourcebuffer-continuation-timestamp">continuation timestamp</a></var> is unset, then run the following steps:
+              <ol>
+                <li>If <var>mode</var> equals <code><a href="#idl-def-AbortMode">"continuation"</a></code> and the <var><a href="#sourcebuffer-highest-presentation-end-timestamp">highest presentation end timestamp</a></var> is unset,
+                  then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+                <li>If the <var><a href="#sourcebuffer-highest-presentation-end-timestamp">highest presentation end timestamp</a></var> is set, then update the <var><a href="#sourcebuffer-continuation-timestamp">continuation timestamp</a></var> to
+                  equal the <var><a href="#sourcebuffer-highest-presentation-end-timestamp">highest presentation end timestamp</a></var>.</li>
+              </ol>
+            </li>
             <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then run the following steps:
               <ol>
                 <li>Abort the <a href="#sourcebuffer-stream-append-loop">stream append loop</a> algorithm if it is running.</li>
@@ -1067,16 +1100,26 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
               </ol>
             </li>
+            <li>
+              <dl class="switch">
+                <dt>If <var>mode</var> is not set, null, or an empty string:</dt>
+                <dd>Unset the <var><a href="#sourcebuffer-abort-mode">abort mode</a></var>.</dd>
+                <dt>Otherwise:</dt>
+                <dd>Update the <var><a href="#sourcebuffer-abort-mode">abort mode</a></var> to equal <var>mode</var>.</dd>
+              </dl>
+            </li>
             <li>Run the <a href="#sourcebuffer-reset-parser-state">reset parser state algorithm</a>.</li>
-          </ol></dd><dt id="widl-SourceBuffer-appendArrayBuffer-void-ArrayBuffer-data"><code>appendArrayBuffer</code></dt><dd>
+          </ol></dd><dt id="widl-SourceBuffer-appendBuffer-void-ArrayBuffer-data"><code>appendBuffer</code></dt><dd>
           <p>Appends the segment data in an ArrayBuffer to the source buffer.</p>
+          <p>The steps for this method are the same as the ArrayBufferView version of <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code>.</p>
+        <table class="parameters"><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType"><code><a>ArrayBuffer</a></code></td><td class="prmNullFalse">✘</td><td class="prmOptFalse">✘</td><td class="prmDesc"></td></tr></table><div><em>Return type: </em><code><a>void</a></code></div></dd><dt id="widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data"><code>appendBuffer</code></dt><dd>
+          <p>Appends the segment data in an ArrayBufferView to the source buffer.</p>
 
           
-        <table class="parameters"><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType"><code><a>ArrayBuffer</a></code></td><td class="prmNullFalse">✘</td><td class="prmOptFalse">✘</td><td class="prmDesc"></td></tr></table><div><em>Return type: </em><code><a>void</a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
+        <table class="parameters"><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType"><code><a>ArrayBufferView</a></code></td><td class="prmNullFalse">✘</td><td class="prmOptFalse">✘</td><td class="prmDesc"></td></tr></table><div><em>Return type: </em><code><a>void</a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If <var>data</var> is null then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState">"closed"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>
               <p>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState">"ended"</a></code> state then run the following steps:</p>
               <ol>
@@ -1105,8 +1148,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <table class="parameters"><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">stream</td><td class="prmType"><code><a>Stream</a></code></td><td class="prmNullFalse">✘</td><td class="prmOptFalse">✘</td><td class="prmDesc"></td></tr><tr><td class="prmName">maxSize</td><td class="prmType"><code><a>unsigned long long</a></code></td><td class="prmNullFalse">✘</td><td class="prmOptTrue">✔</td><td class="prmDesc"></td></tr></table><div><em>Return type: </em><code><a>void</a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If <var>stream</var> is null then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw
-              an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState">"closed"</a></code> state then throw
               an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these
               steps.</li>
@@ -1175,10 +1216,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           the highest presentation timestamp encountered in a <a href="#coded-frame">coded frame</a> appended in the current <a href="#append-sequence">append sequence</a>.
           The variable is initially unset to indicate that no <a href="#coded-frame">coded frames</a> have been appended yet.</p>
 
-         <p>Each <a href="#track-buffer">track buffer</a> has a <dfn id="need-RAP-flag">need random access point flag</dfn> variable that keeps track of whether
-           the track buffer is waiting for a <a href="#random-access-point">random access point</a> <a href="#coded-frame">coded frame</a>. The variable is initially set to true to
-           indicate that <a href="#random-access-point">random access point</a> <a href="#coded-frame">coded frame</a> is needed before anything can be added to the
-           <a href="#track-buffer">track buffer</a>.</p>
+        <p>Each <a href="#track-buffer">track buffer</a> has a <dfn id="need-RAP-flag">need random access point flag</dfn> variable that keeps track of whether
+          the track buffer is waiting for a <a href="#random-access-point">random access point</a> <a href="#coded-frame">coded frame</a>. The variable is initially set to true to
+          indicate that <a href="#random-access-point">random access point</a> <a href="#coded-frame">coded frame</a> is needed before anything can be added to the
+          <a href="#track-buffer">track buffer</a>.</p>
       </section>
 
       <section id="sourcebuffer-events">
@@ -1215,7 +1256,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <tr>
               <td><dfn id="dom-evt-abort"><code>abort</code></dfn></td>
               <td><code>Event</code></td>
-              <td>The append or remove was aborted by an <code><a href="#widl-SourceBuffer-abort-void">abort()</a></code> call. <code><a href="#widl-SourceBuffer-updating">updating</a></code> transitions from true to false.</td>
+              <td>The append or remove was aborted by an <code><a href="#widl-SourceBuffer-abort-void-AbortMode-mode">abort()</a></code> call. <code><a href="#widl-SourceBuffer-updating">updating</a></code> transitions from true to false.</td>
             </tr>
           </tbody>
         </table>
@@ -1249,12 +1290,28 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               </tr>
             </tbody>
           </table>
-          
-          <p>The <dfn id="sourcebuffer-input-buffer">input buffer</dfn> is a byte buffer that is used to hold unparsed bytes across <code><a href="#widl-SourceBuffer-appendArrayBuffer-void-ArrayBuffer-data">appendArrayBuffer()</a></code> and <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> calls. The buffer is empty when the SourceBuffer object is created.</p>
 
-          <p>The <dfn id="sourcebuffer-buffer-full-flag">buffer full flag</dfn> keeps track of whether <code><a href="#widl-SourceBuffer-appendArrayBuffer-void-ArrayBuffer-data">appendArrayBuffer()</a></code> or 
-            <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> is allowed to accept more bytes. It is set to false when the SourceBuffer object is created and gets updated 
+          <p>The <dfn id="sourcebuffer-input-buffer">input buffer</dfn> is a byte buffer that is used to hold unparsed bytes across <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code> and <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> calls. The buffer is empty when the SourceBuffer object is created.</p>
+
+          <p>The <dfn id="sourcebuffer-buffer-full-flag">buffer full flag</dfn> keeps track of whether <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code> or
+            <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> is allowed to accept more bytes. It is set to false when the SourceBuffer object is created and gets updated
             as data is appended and removed.</p>
+
+          <p>The <dfn id="sourcebuffer-abort-mode">abort mode</dfn> variable keeps track of the <a href="#idl-def-AbortMode" class="idlType"><code>AbortMode</code></a> passed to the last <code><a href="#widl-SourceBuffer-abort-void-AbortMode-mode">abort()</a></code>
+            call. It is unset when the SourceBuffer object is created and gets updated by <code><a href="#widl-SourceBuffer-abort-void-AbortMode-mode">abort()</a></code> and the
+            <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>.
+          </p>
+
+          <p>The <dfn id="sourcebuffer-continuation-timestamp">continuation timestamp</dfn> variable keeps track of the start timestamp for the next
+            <a href="#append-sequence">append sequence</a> if <code><a href="#widl-SourceBuffer-abort-void-AbortMode-mode">abort()</a></code> is called with <code><a href="#idl-def-AbortMode">"continuation"</a></code>.
+            It is unset when the SourceBuffer object is created and gets updated by <code><a href="#widl-SourceBuffer-abort-void-AbortMode-mode">abort()</a></code> and the
+            <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>.
+          </p>
+
+          <p>The <dfn id="sourcebuffer-highest-presentation-end-timestamp">highest presentation end timestamp</dfn> variable stores the highest presentation
+            end timestamp encountered in the current <a href="#append-sequence">append sequence</a>. It is unset when the SourceBuffer object is created and gets updated
+            by the <a href="#sourcebuffer-reset-parser-state">reset parser state algorithm</a> and the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>.
+          </p>
 
           <p>When this algorithm is invoked, run the following steps:</p>
 
@@ -1309,6 +1366,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>If the <var><a href="#sourcebuffer-append-state">append state</a></var> equals <a href="#sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</a> and the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> contains some complete <a href="#coded-frame">coded frames</a>, then run the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> as if the media segment only contained these frames.</li>
             <li>Unset the <var><a href="#last-decode-timestamp">last decode timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
             <li>Unset the <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
+            <li>Unset the <var><a href="#sourcebuffer-highest-presentation-end-timestamp">highest presentation end timestamp</a></var>.</li>
             <li>Set the <var><a href="#need-RAP-flag">need random access point flag</a></var> on all <a href="#track-buffer">track buffers</a> to true.</li>
             <li>Remove all bytes from the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
             <li>Set <var><a href="#sourcebuffer-append-state">append state</a></var> to <a href="#sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</a>.</li>
@@ -1339,7 +1397,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <ol>
             <li>If <var>maxSize</var> is set, then let <var>bytesLeft</var> equal <var>maxSize</var>.</li>
             <li><i>Loop Top: </i>If <var>maxSize</var> is set and <var>bytesLeft</var> equals 0, then jump to the <i>loop done</i> step below.</li>
-            <li>If <var>stream</var> has been aborted, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> and abort this algorithm.</li>
             <li>If <var>stream</var> has been closed, then jump to the <i>loop done</i> step below.</li>
             <li>
               <p>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> and abort this algorithm.</p>
@@ -1514,6 +1571,27 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   </p></div>
                 </li>
                 <li>Let <var>frame duration</var> be a double precision floating point representation of the coded frame's duration in seconds.</li>
+
+                <li> If <var><a href="#sourcebuffer-abort-mode">abort mode</a></var> is set, then run the following steps:
+                  <ol>
+                    <li>
+                      <dl class="switch">
+                        <dt>If <var><a href="#sourcebuffer-abort-mode">abort mode</a></var> equals <code><a href="#idl-def-AbortMode">"continuation"</a></code>:</dt>
+                        <dd>Set <code><a href="#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> equal to <var><a href="#sourcebuffer-continuation-timestamp">continuation timestamp</a></var> - <var>presentation timestamp</var>.</dd>
+                        <dt>If <var><a href="#sourcebuffer-abort-mode">abort mode</a></var> equals <code><a href="#idl-def-AbortMode">"timestampOffset"</a></code>:</dt>
+                        <dd>
+                          <ol>
+                            <li>Let <var>old timestampOffset</var> equal the current value of <code><a href="#widl-SourceBuffer-timestampOffset">timestampOffset</a></code>.</li>
+                            <li>Set <code><a href="#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> equal to <var>old timestampOffset</var> - <var>presentation timestamp</var>.</li>
+                          </ol>
+                        </dd>
+                      </dl>
+                    </li>
+                    <li>Unset <var><a href="#sourcebuffer-continuation-timestamp">continuation timestamp</a></var>.</li>
+                    <li>Unset <var><a href="#sourcebuffer-abort-mode">abort mode</a></var>.</li>
+                  </ol>
+                </li>
+
 	        <li>
 	          <p>If <code><a href="#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> is not 0, then run the following steps:</p>
 	          <ol>
@@ -1527,7 +1605,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   <var><a href="#last-decode-timestamp">last decode timestamp</a></var> or the difference between <var>decode timestamp</var> and <var><a href="#last-decode-timestamp">last decode timestamp</a></var>
                   is greater than 100 milliseconds, then call <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream("decode")</a></code> and abort these steps.
                   <div class="note"><div class="note-title"><span>Note</span></div><p class="">These checks trigger an error when the application attempts out-of-order appends without an intervening
-                    <code><a href="#widl-SourceBuffer-abort-void">abort()</a></code>.</p></div>
+                    <code><a href="#widl-SourceBuffer-abort-void-AbortMode-mode">abort()</a></code>.</p></div>
                 </li>
 
                 <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
@@ -1586,6 +1664,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   <div class="note"><div class="note-title"><span>Note</span></div><p class="">The greater than check is needed because bidirectional prediction between coded frames can cause
                     <var>presentation timestamp</var> to not be monotonically increasing eventhough the decode timestamps are monotonically increasing.</p></div>
                 </li>
+                <li>If <var><a href="#sourcebuffer-highest-presentation-end-timestamp">highest presentation end timestamp</a></var> is unset or <var>frame end timestamp</var> is greater than
+                  <var><a href="#sourcebuffer-highest-presentation-end-timestamp">highest presentation end timestamp</a></var>, then set <var><a href="#sourcebuffer-highest-presentation-end-timestamp">highest presentation end timestamp</a></var> equal to
+                  <var>frame end timestamp</var>.</li>
 	      </ol>
             </li>
             <li>
@@ -1940,7 +2021,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
     <section id="byte-stream-formats">
       <!--OddPage--><h2><span class="secno">10. </span>Byte Stream Formats</h2>
-      <p>The bytes provided through <code><a href="#widl-SourceBuffer-appendArrayBuffer-void-ArrayBuffer-data">appendArrayBuffer()</a></code> and <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> for a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM , the ISO Base Media File Format, and MPEG-2 Transport Streams are provided below. These format specifications are intended to be the authoritative source for how data from these containers is formatted and passed to a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>. If a <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> implementation claims to support any of these container formats, then it must implement the corresponding byte stream format specification described below.</p>
+      <p>The bytes provided through <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code> and <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> for a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM , the ISO Base Media File Format, and MPEG-2 Transport Streams are provided below. These format specifications are intended to be the authoritative source for how data from these containers is formatted and passed to a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>. If a <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> implementation claims to support any of these container formats, then it must implement the corresponding byte stream format specification described below.</p>
       <p>This section provides general requirements for all byte stream formats:</p>
       <ul>
         <li>A byte stream format specification must define <a href="#init-segment">initialization segments</a> and <a href="#media-segment">media segments</a>.</li>
@@ -2135,7 +2216,7 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
             <li>Each time a timestamp rollover is detected, 2^33 must be added to <var>MPEG2TS_timestampOffset</var>.</li>
             <li>When a discontinuity is detected, <var>MPEG2TS_timestampOffset</var> must be adjusted to make the timestamps after the discontinuity appear
               to come immediately after the timestamps before the discontinuity.</li>
-            <li>When <code><a href="#widl-SourceBuffer-abort-void">abort()</a></code> is called, <var>MPEG2TS_timestampOffset</var> must be set to 0.</li>
+            <li>When <code><a href="#widl-SourceBuffer-abort-void-AbortMode-mode">abort()</a></code> is called, <var>MPEG2TS_timestampOffset</var> must be set to 0.</li>
             <li>When <code><a href="#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> is successfully set, <var>MPEG2TS_timestampOffset</var> must be set to 0.</li>
           </ul>
         </section>
@@ -2174,7 +2255,7 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
       appendNextMediaSegment(mediaSource);
     };
     sourceBuffer.addEventListener('updateend', firstAppendHandler);
-    sourceBuffer.appendArrayBuffer(initSegment);
+    sourceBuffer.appendBuffer(initSegment);
   }
 
   function appendNextMediaSegment(mediaSource) {
@@ -2199,7 +2280,7 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
       return;
     }
 
-    mediaSource.sourceBuffers[0].appendArrayBuffer(mediaSegment);
+    mediaSource.sourceBuffers[0].appendBuffer(mediaSegment);
   }
 
   function onSeeking(mediaSource, e) {
@@ -2245,7 +2326,19 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-            <td>25 February 2013</td>
+            <td>05 March 2013</td>
+            <td>
+              <ul>
+                <li>Bug 21170 - Remove 'stream aborted' step from stream append loop algorithm.</li>
+                <li>Bug 21171 - Added informative note about when addSourceBuffer() might throw an QUOTA_EXCEEDED_ERR exception.</li>
+                <li>Bug 20901 - Add support for 'continuation' and 'timestampOffset' abort modes.</li>
+                <li>Bug 21159 - Rename appendArrayBuffer to appendBuffer() and add ArrayBufferView overload.</li>
+                <li>Bug 21198 - Remove redundant 'closed' readyState checks.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/668a1c82fb88/media-source/media-source.html">25 February 2013</a></td>
             <td>
               <ul>
                  <li>Remove Source Buffer Model section since all the behavior is covered by the algorithms now.</li>
