@@ -153,9 +153,16 @@
 
           <dt id="append-sequence">Append Sequence</dt>
           <dd>A series of <a def-id="appendBuffer"></a> or <a def-id="appendStream"></a> calls on a <a>SourceBuffer</a> without any intervening <a def-id="abort"></a> calls. The
-          <a def-id="media-segments"></a> in an append sequence must be adjacent and monotonically increasing in time without any gaps. An
-          <a def-id="abort"></a> call starts a new append sequence which allows <a def-id="media-segments"></a> to be appended in non-monotonically
-          increasing order.</dd>
+            <a def-id="media-segments"></a> in an append sequence must be adjacent and monotonically increasing in time without any gaps. An
+            <a def-id="abort"></a> call starts a new append sequence which allows <a def-id="media-segments"></a> to be appended in non-monotonically
+            increasing order.
+          </dd>
+
+          <dt id="append-window">Append Window</dt>
+          <dd>A presentation timestamp range used to filter out <a def-id="coded-frames"></a> while appending. The append window represents a single
+            continuous time range with a single start time and end time. Coded frames with presentation timestamps within this range are allowed to be appended
+            to the <a>SourceBuffer</a> while coded frames outside this range are filtered out. The append window start and end times are controlled by
+            the <a def-id="appendWindowStart"></a> and <a def-id="appendWindowEnd"></a> attributes respectively.</dd>
         </dl>
       </section>
     </section>
@@ -683,6 +690,36 @@
           The list of <a def-id="text-track"></a> objects created by this object.
         </dd>
 
+        <dt>attribute double appendWindowStart</dt>
+        <dd>
+          <p>The presentation timestamp for the start of the <a def-id="append-window"></a>. This attribute is initially set to 0.</p>
+          <p>On getting, Return the initial value or the last value that was successfully set.</p>
+          <p>On setting, run the following steps:</p>
+          <ol>
+            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an
+              <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If the new value is less than 0 or greater than or equal to <a def-id="appendWindowEnd"></a> then throw an <a def-id="invalid-access-err"></a> exception
+              and abort these steps.</li>
+            <li>Update the attribute to the new value.</li>
+          </ol>
+        </dd>
+
+        <dt>attribute double appendWindowEnd</dt>
+        <dd>
+          <p>The presentation timestamp for the end of the <a def-id="append-window"></a>. This attribute is initially set to positive Infinity.</p>
+          <p>On getting, Return the initial value or the last value that was successfully set.</p>
+          <p>On setting, run the following steps:</p>
+          <ol>
+            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an
+              <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If the new value is less than or equal to <a def-id="appendWindowStart"></a> then throw an <a def-id="invalid-access-err"></a> exception and abort these
+              steps.</li>
+            <li>Update the attribute to the new value.</li>
+          </ol>
+        </dd>
+
         <dt>void appendBuffer(ArrayBuffer data)</dt>
         <dd>
           <p>Appends the segment data in an ArrayBuffer to the source buffer.</p>
@@ -706,9 +743,11 @@
                   <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a def-id="parent-media-source"></a> .</li>
               </ol>
             </li>
+            <li>Run the <a def-id="coded-frame-eviction-algorithm"></a>.</li>
             <li>
               <p>If the <a def-id="buffer-full-flag"></a> equals true, then throw a <a def-id="quota-exceeded-err"></a> exception and abort these step.</p>
-              <p class="note">The web application must use <a def-id="remove"></a> to free up space in the <a>SourceBuffer</a>.</p>
+              <p class="note">This is the signal that the implementation was unable to evict enough data to accomodate the append or the append is too big. The web
+                application must use <a def-id="remove"></a> to explicitly free up space and/or reduce the size of the append.</p>
             </li>
             <li>Add <var>data</var> to the end of the <a def-id="input-buffer"></a>.</li>
             <li>Set the <a def-id="updating"></a> attribute to true.</li>
@@ -739,9 +778,11 @@
 	        <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a def-id="parent-media-source"></a> .</li>
               </ol>
             </li>
+            <li>Run the <a def-id="coded-frame-eviction-algorithm"></a>.</li>
             <li>
               <p>If the <a def-id="buffer-full-flag"></a> equals true, then throw a <a def-id="quota-exceeded-err"></a> exception and abort these step.</p>
-              <p class="note">The web application must use <a def-id="remove"></a> to free up space in the <a>SourceBuffer</a>.</p>
+              <p class="note">This is the signal that the implementation was unable to evict enough data to accomodate the append or the append is too big. The web
+                application must use <a def-id="remove"></a> to explicitly free up space and/or reduce the size of the append.</p>
             </li>
             <li>Set the <a def-id="updating"></a> attribute to true.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
@@ -782,6 +823,8 @@
                 <dd>Update the <a def-id="abort-mode"></a> to equal <var>mode</var>.</dd>
               </dl>
             </li>
+            <li>Set <a def-id="appendWindowStart"></a> to 0.</li>
+            <li>Set <a def-id="appendWindowEnd"></a> to positive Infinity.</li>
             <li>Run the <a def-id="reset-parser-state-algorithm"></a>.</li>
           </ol>
         </dd>
@@ -799,23 +842,7 @@
             <li>Set the <a def-id="updating"></a> attribute to true.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
             <li>Return control to the caller and run the rest of the steps asynchronously.</li>
-            <li>
-              <p>For each <a def-id="track-buffer"></a> in this source buffer, run the following steps:</p>
-              <ol>
-	        <li>Let <var>remove end timestamp</var> be the current value of <a def-id="duration"></a></li>
-                <li>
-                  <p>If this <a def-id="track-buffer"></a> has a <a def-id="random-access-point"></a> timestamp that is greater than or equal to <var>end</var>, then update <var>remove end timestamp</var> to that timestamp.</p>
-	          <p class="note">Random access point timestamps can be different across tracks because the dependencies between <a def-id="coded-frames"></a> within a track are usually different than the dependencies in another track.</p>
-                </li>
-	        <li>Remove all media data, from this <a def-id="track-buffer"></a>, that contain starting timestamps greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>.</li>
-                <li>
-                  <p>If this object is in <a def-id="activeSourceBuffers"></a>, the <a def-id="current-playback-position"></a> is greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>, and <a def-id="ready-state"></a> is greater than <a def-id="have-metadata"></a>, then set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a> and stall playback.</p>
-                  <p class="note">This transition occurs because media data for the current position has been removed. Playback cannot progress until media for the <a def-id="current-playback-position"></a> is appended or the <a href="#active-source-buffer-changes">selected/enabled tracks change</a>.</p>
-                </li>
-	      </ol>
-            </li>
-            <li>If <a def-id="buffer-full-flag"></a> equals true and this object is ready to accept more bytes, then set 
-              the <a def-id="buffer-full-flag"></a> to false.</li>
+            <li>Run the <a def-id="coded-frame-removal-algorithm"></a> with <var>start</var> and <var>end</var> as the start and end of the removal range.</li>
             <li>Set the <a def-id="updating"></a> attribute to false.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="update"></a> at this <a>SourceBuffer</a> object.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
@@ -1020,10 +1047,6 @@
             <li>If <var>maxSize</var> is set, then let <var>bytesLeft</var> equal <var>maxSize</var>.</li>
             <li><i>Loop Top: </i>If <var>maxSize</var> is set and <var>bytesLeft</var> equals 0, then jump to the <i>loop done</i> step below.</li>
             <li>If <var>stream</var> has been closed, then jump to the <i>loop done</i> step below.</li>
-            <li>
-              <p>If the <a def-id="buffer-full-flag"></a> equals true, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</p>
-              <p class="note">The web application must use <a def-id="remove"></a> to free up space in the <a>SourceBuffer</a>.</p>
-            </li>
             <li>Read data from <var>stream</var> into <var>data</var>:
               <dl class="switch">
                 <dt>If <var>maxSize</var> is set:</dt>
@@ -1037,6 +1060,11 @@
               </dl>
             </li>
             <li>If an error occured while reading from <var>stream</var>, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</li>
+            <li>Run the <a def-id="coded-frame-eviction-algorithm"></a>.</li>
+            <li>
+              <p>If the <a def-id="buffer-full-flag"></a> equals true, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</p>
+              <p class="note">The web application must use <a def-id="remove"></a> to free up space in the <a>SourceBuffer</a>.</p>
+            </li>
             <li>Add <var>data</var> to the end of the <a def-id="input-buffer"></a>.</li>
             <li>Run the <a def-id="segment-parser-loop"></a> algorithm.</li>
             <li>Jump to the <i>loop top</i> step above.</li>
@@ -1229,8 +1257,17 @@
                   <p class="note">These checks trigger an error when the application attempts out-of-order appends without an intervening
                     <a def-id="abort"></a>.</p>
                 </li>
-
                 <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
+                <li>If <var>presentation timestamp</var> is less than <a def-id="appendWindowStart"></a>, then set the <a def-id="need-RAP-flag"></a> to true, drop the
+                  coded frame, and jump to the top of the loop to start processing the next coded frame.
+                  <p class="note">Some implementations may choose to collect some of these coded frames that are outside the <a def-id="append-window"></a> and use them
+                    to generate a splice at the first coded frame that has a presentation timestamp greater than or equal to <a def-id="appendWindowStart"></a> even if
+                    that frame is not a <a def-id="random-access-point"></a>. Supporting this requires multiple decoders or faster than real-time decoding so for now
+                    this behavior will not be a normative requirement.
+                  </p>
+                </li>
+                <li>If <var>frame end timestamp</var> is greater than <a def-id="appendWindowEnd"></a>, then set the <a def-id="need-RAP-flag"></a> to true, drop the
+                  coded frame, and jump to the top of the loop to start processing the next coded frame.
                 <li>If the <a def-id="need-RAP-flag"></a> on <var>track buffer</var> equals true, then run the following steps:
                   <ol>
                     <li>If the coded frame is not a <a def-id="random-access-point"></a>, then drop the coded frame and jump to the top of the loop to start
@@ -1239,15 +1276,19 @@
                   </ol>
                 </li>
                 <li>Let <var>spliced frame</var> be an unset variable for holding audio splice information</li>
-                <li>If <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> is unset and <var>presentation timestamp</var> lies within a
-                  <a def-id="coded-frame"></a> already stored in <var>track buffer</var>, then run the following steps:
+                <li>If <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> is unset and there is a <a def-id="coded-frame"></a> in
+                  <var>track buffer</var> with a presentation timestamp less than or equal to <var>presentation timestamp</var> and
+                  <var>presentation timestamp</var> is less than this coded frame's presentation timestamp plus its frame duration, then run the
+                  following steps:
                   <ol>
-                    <li>Let <var>overlapped frame</var> be the <a def-id="coded-frame"></a> in <var>track buffer</var> that contains <var>presentation timestamp</var>.</li>
+                    <li>Let <var>overlapped frame</var> be the <a def-id="coded-frame"></a> in <var>track buffer</var> that matches the condition above.</li>
                     <li>If <var>track buffer</var> contains audio <a def-id="coded-frames"></a>, then run the <a def-id="audio-splice-frame-algorithm"></a> and if a splice 
                       frame is returned, assign it to <var>spliced frame</var>.</li>
-                    <li>If <var>track buffer</var> contains video <a def-id="coded-frames"></a> and <var>presentation timestamp</var> is less than 1 microsecond 
-                      beyond the presentation timestamp of <var>overlapped frame</var>, then remove <var>overlapped frame</var> and any
-                      <a def-id="coded-frames"></a> that depend on it from <var>track buffer</var>.
+                    <li>Let <var>overlapped frame presentation timestamp</var> equal the presentation timestamp of <var>overlapped frame</var>.</li>
+                    <li>Let <var>remove window timestamp</var> equal <var>overlapped frame presentation timestamp</var> plus 1 microsecond.</li>
+                    <li>If <var>track buffer</var> contains video <a def-id="coded-frames"></a> and the <var>presentation timestamp</var> is greater than or equal to
+                      the <var>overlapped frame presentation timestamp</var> and the <var>presentation timestamp</var> is less than the <var>remove window timestamp</var>,
+                      then remove <var>overlapped frame</var> and any <a def-id="coded-frames"></a> that depend on it from <var>track buffer</var>.
                       <p class="note">
                         This is to compensate for minor errors in frame timestamp computations that can appear when converting back and forth between double precision
                         floating point numbers and rationals. This tolerance allows a frame to replace an existing one as long as it is within 1 microsecond of the existing
@@ -1318,6 +1359,54 @@
           </ol>
         </section>
 
+        <section id="sourcebuffer-coded-frame-removal">
+          <h4>Coded Frame Removal Algorithm</h4>
+          <p>Follow these steps when <a def-id="coded-frames"></a> for a specific time range need to be removed from the SourceBuffer:</p>
+          <ol>
+            <li>Let <var>start</var> be the starting presentation timestamp for the removal range.</li>
+            <li>Let <var>end</var> be the end presentation timestamp for the removal range. </li>
+            <li><p>For each <a def-id="track-buffer"></a> in this source buffer, run the following steps:</p>
+              <ol>
+	        <li>Let <var>remove end timestamp</var> be the current value of <a def-id="duration"></a></li>
+                <li>
+                  <p>If this <a def-id="track-buffer"></a> has a <a def-id="random-access-point"></a> timestamp that is greater than or equal to
+                    <var>end</var>, then update <var>remove end timestamp</var> to that random access point timestamp.</p>
+	          <p class="note">Random access point timestamps can be different across tracks because the dependencies between <a def-id="coded-frames"></a> within a
+                    track are usually different than the dependencies in another track.</p>
+                </li>
+	        <li>Remove all media data, from this <a def-id="track-buffer"></a>, that contain starting timestamps greater than or equal to
+                  <var>start</var> and less than the <var>remove end timestamp</var>.</li>
+                <li>
+                  <p>If this object is in <a def-id="activeSourceBuffers"></a>, the <a def-id="current-playback-position"></a> is greater than or equal to
+                    <var>start</var> and less than the <var>remove end timestamp</var>, and <a def-id="ready-state"></a> is greater than
+                    <a def-id="have-metadata"></a>, then set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a> and stall playback.</p>
+                  <p class="note">This transition occurs because media data for the current position has been removed. Playback cannot progress until media for the
+                    <a def-id="current-playback-position"></a> is appended or the <a href="#active-source-buffer-changes">selected/enabled tracks change</a>.</p>
+                </li>
+	      </ol>
+            </li>
+            <li>If <a def-id="buffer-full-flag"></a> equals true and this object is ready to accept more bytes, then set
+              the <a def-id="buffer-full-flag"></a> to false.</li>
+          </ol>
+        </section>
+
+        <section id="sourcebuffer-coded-frame-eviction">
+          <h4>Coded Frame Eviction Algorithm</h4>
+          <p>This algorithm is run to free up space in this source buffer when new data is appended.</p>
+          <ol>
+            <li>Let <var>new data</var> equal the data that is about to be appended to this SourceBuffer.</li>
+            <li>If the <a def-id="buffer-full-flag"></a> equals false, then abort these steps.</li>
+            <li>Let <var>removal ranges</var> equal a list of presentation time ranges that can be evicted from the presentation to make room for the
+              <var>new data</var>.
+              <p class="note">Implementations may use different methods for selecting <var>removal ranges</var> so web applications must not depend on a
+                specific behavior. The web application can use the <a def-id="buffered"></a> attribute to observe whether portions of the buffered data have been evicted.
+              </p>
+            </li>
+            <li>For each range in <var>removal ranges</var>, run the <a def-id="coded-frame-removal-algorithm"></a> with <var>start</var> and <var>end</var> equal to
+              the removal range start and end timestamp respectively.</li>
+          </ol>
+        </section>
+
         <section id="sourcebuffer-audio-splice-frame-algorithm">
           <h4>Audio Splice Frame Algorithm</h4>
           <p>Follow these steps when the <a def-id="coded-frame-processing-algorithm"></a> needs to generate a splice frame for two overlapping audio
@@ -1328,9 +1417,12 @@
             <li>Let <var>presentation timestamp</var> be the presentation timestamp for <var>new coded frame</var></li>
             <li>Let <var>decode timestamp</var> be the decode timestamp for <var>new coded frame</var>.</li>
             <li>Let <var>frame duration</var> be the duration of <var>new coded frame</var>.</li>
-            <li>Let <var>overlapped frame</var> be the <a def-id="coded-frame"></a> in <var>track buffer</var> that overlaps with <var>new coded frame</var>
-              (ie. it contains <var>presentation timestamp).</li>
-            <li>Round &amp; update <var>presentation timestamp</var> and <var>decode timestamp</var> to the nearest audio sample timestamp based on sample rate of the audio in <var>overlapped frame</var>.
+            <li>Let <var>overlapped frame</var> be the <a def-id="coded-frame"></a> in <var>track buffer</var> with a presentation timestamp less than or equal to 
+              <var>presentation timestamp</var> and <var>presentation timestamp</var> is less than this coded frame's presentation timestamp plus its frame duration.
+            </li>
+            <li>Update <var>presentation timestamp</var> and <var>decode timestamp</var> to the nearest audio sample timestamp based on sample rate of the 
+              audio in <var>overlapped frame</var>. If a timestamp is equidistant from both audio sample timestamps, then use the higher timestamp. (eg.
+              floor(x * sample_rate + 0.5) / sample_rate).
               <div class="note">
                 <p>For example, given the following values:</p>
                 <ul>
@@ -1339,7 +1431,7 @@
                   <li><var>presentation timestamp</var> equals 10.01255</li>
                   <li><var>decode timestamp</var> equals 10.01255</li>
                 </ul>
-                <p><var>presentation timestamp</var> and <var>decode timestamp</var> are rounded & updated to 10.0125 since 10.01255 is closer to
+                <p><var>presentation timestamp</var> and <var>decode timestamp</var> are updated to 10.0125 since 10.01255 is closer to
                 10 + 100/8000 (10.0125) than 10 + 101/8000 (10.012625)</p>
               </div>
             </li>
@@ -1968,7 +2060,17 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-            <td>05 March 2013</td>
+            <td>12 March 2013</td>
+            <td>
+              <ul>
+                <li>Bug 21112 - Add appendWindowStart & appendWindowEnd attributes.</li>
+                <li>Bug 19676 - Clarify overlapped frame definitions and splice logic.</li>
+                <li>Bug 21172 - Added coded frame removal and eviction algorithms.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/dcd406812201/media-source/media-source.html">05 March 2013</a></td>
             <td>
               <ul>
                 <li>Bug 21170 - Remove 'stream aborted' step from stream append loop algorithm.</li>
