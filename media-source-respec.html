@@ -48,6 +48,17 @@
 
       noIDLIn: true,
 
+      scheme: "https",
+
+      preProcess: [ mediaSourcePreProcessor ],
+
+      // Empty definitions for MediaSource, SourceBuffer, and AbortMode are here to
+      // prevent error messages from being displayed for references to these objects.
+      definitionMap: {
+          MediaSource: function() {},
+          SourceBuffer: function() {},
+          AbortMode: function() {},
+      },
       postProcess: [ mediaSourcePostProcessor ]
       };
     </script>
@@ -123,7 +134,7 @@
 
           <dt id="media-segment">Media Segment</dt>
           <dd>
-	    <p>A sequence of bytes that contain packetized &amp; timestamped media data for a portion of the presentation timeline. Media segments are always associated with the most recently appended <a def-id="init-segment"></a>.</p>
+	    <p>A sequence of bytes that contain packetized &amp; timestamped media data for a portion of the <a def-id="media-timeline"></a>. Media segments are always associated with the most recently appended <a def-id="init-segment"></a>.</p>
             <p class="note">The <a def-id="byte-stream-format-specs"></a> contain format specific examples.</p>
           </dd>
 
@@ -136,7 +147,7 @@
           <dt id="mediasource-object-url">MediaSource object URL</dt>
           <dd>
             <p>A MediaSource object URL is a unique <a def-id="blob-uri"></a> created by <a def-id="createObjectURL"></a>. It is used to attach a <a>MediaSource</a> object to an HTMLMediaElement.</p>
-            <p>These URLs are the same as what the <a def-id="FileAPI"></a> specification calls a <a def-id="blob-uri"></a>, except that anything in the definition of that feature that refers to <a def-id="File"></a> and <a def-id="Blob"></a> objects is hereby extended to also apply to <a>MediaSource</a> objects.</p>
+            <p>These URLs are the same as a <a def-id="blob-uri"></a>[[FILE-API]], except that anything in the definition of that feature that refers to <a def-id="File"></a> and <a def-id="Blob"></a> objects is hereby extended to also apply to <a>MediaSource</a> objects.</p>
           </dd>
 
           <dt id="track-id">Track ID</dt>
@@ -153,7 +164,7 @@
 
           <dt id="append-sequence">Append Sequence</dt>
           <dd>A series of <a def-id="appendBuffer"></a> or <a def-id="appendStream"></a> calls on a <a>SourceBuffer</a> without any intervening <a def-id="abort"></a> calls. The
-            <a def-id="media-segments"></a> in an append sequence must be adjacent and monotonically increasing in time without any gaps. An
+            <a def-id="media-segments"></a> in an append sequence must be adjacent and monotonically increasing in decode time without any gaps. An
             <a def-id="abort"></a> call starts a new append sequence which allows <a def-id="media-segments"></a> to be appended in non-monotonically
             increasing order.
           </dd>
@@ -521,7 +532,7 @@
 	      <ol>
 	        <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-current-data"></a>.</li>
 	        <li>If this is the first transition to <a def-id="have-current-data"></a>, then <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="loadeddata"></a> at the media element.</li>
-	        <li>Playback is suspended at this point since the media element doesn't have enough data to advance the timeline.</li>
+	        <li>Playback is suspended at this point since the media element doesn't have enough data to advance the <a def-id="media-timeline"></a>.</li>
 	        <li>Abort these steps.</li>
 	      </ol>
             </dd>
@@ -752,17 +763,13 @@
             <li>Add <var>data</var> to the end of the <a def-id="input-buffer"></a>.</li>
             <li>Set the <a def-id="updating"></a> attribute to true.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
-            <li>Asynchronously run the <a def-id="segment-parser-loop"></a> algorithm.</li>
-            <li>When the <a def-id="segment-parser-loop"></a> returns control to this algorithm, run the remaining steps.</li>
-            <li>Set the <a def-id="updating"></a> attribute to false.</li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="update"></a> at this <a>SourceBuffer</a> object.</li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
+            <li>Asynchronously run the <a def-id="buffer-append"></a> algorithm.</li>
           </ol>
         </dd>
 
         <dt>void appendStream(Stream stream, optional unsigned long long maxSize)</dt>
         <dd>
-          <p>Appends segment data to the source buffer from a <a def-id="Stream"></a>.</p>
+          <p>Appends segment data to the source buffer from a <a def-id="Stream"></a>[[STREAMS-API]].</p>
 
           <ol class="method-algorithm">
             <li>If <var>stream</var> is null then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
@@ -809,12 +816,14 @@
             </li>
             <li>If the <a def-id="updating"></a> attribute equals true, then run the following steps:
               <ol>
-                <li>Abort the <a def-id="stream-append-loop"></a> algorithm if it is running.</li>
+                <li>Abort the <a def-id="segment-parser-loop"></a>, <a def-id="buffer-append"></a>, and <a def-id="stream-append-loop"></a> algorithms if
+                  they are running.</li>
                 <li>Set the <a def-id="updating"></a> attribute to false.</li>
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateabort"></a> at this <a>SourceBuffer</a> object.</li>
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
               </ol>
             </li>
+            <li>Run the <a def-id="reset-parser-state-algorithm"></a>.</li>
             <li>
               <dl class="switch">
                 <dt>If <var>mode</var> is not set, null, or an empty string:</dt>
@@ -825,7 +834,6 @@
             </li>
             <li>Set <a def-id="appendWindowStart"></a> to 0.</li>
             <li>Set <a def-id="appendWindowEnd"></a> to positive Infinity.</li>
-            <li>Run the <a def-id="reset-parser-state-algorithm"></a>.</li>
           </ol>
         </dd>
 
@@ -966,7 +974,7 @@
 
           <ol>
             <li><i>Loop Top:</i> If the <a def-id="input-buffer"></a> is empty, then jump to the <i>need more data</i> step below.</li>
-            <li>If the <a def-id="input-buffer"></a> starts with bytes that violate the <a def-id="byte-stream-format-specs"></a>, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</li>
+            <li>If the <a def-id="input-buffer"></a> starts with bytes that violate the <a def-id="byte-stream-format-specs"></a>, then call <a def-id="eos-decode"></a> and abort this algorithm.</li>
             <li>Remove any bytes that the <a def-id="byte-stream-format-specs"></a> say should be ignored from the start of the <a def-id="input-buffer"></a>.</li>
             <li>
 	      <p>If the <a def-id="append-state"></a> equals <a def-id="waiting-for-segment"></a>, then run the following steps:</p>
@@ -989,12 +997,18 @@
             <li>
 	      <p>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a>, then run the following steps:</p>
 	      <ol>
-                <li>If the <a def-id="first-init-segment-flag"></a> is false, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</li>
+                <li>If the <a def-id="first-init-segment-flag"></a> is false, then call <a def-id="eos-decode"></a> and abort this algorithm.</li>
 	        <li>
 	          <p>If the <a def-id="input-buffer"></a> does not contain a complete <a def-id="media-segment"></a> header yet, then jump to the <i>need more data</i> step below.</p>
-	          <p class="note">Implementations may choose to implement this state as an incremental parser so that it is not necessary to have the entire media segment before running the <a def-id="coded-frame-processing-algorithm"></a>.</p>
 	        </li>
-	        <li>Run the <a def-id="coded-frame-processing-algorithm"></a>.</li>
+	        <li>If the <a def-id="input-buffer"></a> contains one or more complete <a def-id="coded-frames"></a>, then run the
+                  <a def-id="coded-frame-processing-algorithm"></a>.
+                  <p class="note">
+                    The frequency at which the coded frame processing algorithm is run is implementation-specific. The coded frame processing algorithm may
+                    be called when the input buffer contains the complete media segment or it may be called multiple times as complete coded frames are
+                    added to the input buffer.
+                  </p>
+                </li>
 	        <li>Remove the <a def-id="media-segment"></a> bytes from the beginning of the <a def-id="input-buffer"></a>.</li>
                 <li>If this <a>SourceBuffer</a> is full and cannot accept more media data, then set the <a def-id="buffer-full-flag"></a> to true.</li>
 	        <li>
@@ -1037,6 +1051,18 @@
           </ol>
         </section>
 
+        <section id="sourcebuffer-buffer-append">
+          <h4>Buffer Append Algorithm</h4>
+          <p>When <a def-id="appendBuffer"></a> is called, the following steps are run to process the appended data.</p>
+          <ol>
+            <li>Run the <a def-id="segment-parser-loop"></a> algorithm.</li>
+            <li>If the <a def-id="segment-parser-loop"></a> algorithm in the previous step was aborted, then abort this algorithm.</li>
+            <li>Set the <a def-id="updating"></a> attribute to false.</li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="update"></a> at this <a>SourceBuffer</a> object.</li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
+          </ol>
+        </section>
+
         <section id="sourcebuffer-stream-append-loop">
           <h4>Stream Append Loop</h4>
           <p>When a <a def-id="Stream"></a> is passed to <a def-id="appendStream"></a>, the following steps are run to transfer data from the
@@ -1067,6 +1093,7 @@
             </li>
             <li>Add <var>data</var> to the end of the <a def-id="input-buffer"></a>.</li>
             <li>Run the <a def-id="segment-parser-loop"></a> algorithm.</li>
+            <li>If the <a def-id="segment-parser-loop"></a> algorithm in the previous step was aborted, then abort this algorithm.</li>
             <li>Jump to the <i>loop top</i> step above.</li>
             <li><i>Loop Done: </i>Set the <a def-id="updating"></a> attribute to false.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="update"></a> at this <a>SourceBuffer</a> object.</li>
@@ -1286,9 +1313,9 @@
                       frame is returned, assign it to <var>spliced frame</var>.</li>
                     <li>Let <var>overlapped frame presentation timestamp</var> equal the presentation timestamp of <var>overlapped frame</var>.</li>
                     <li>Let <var>remove window timestamp</var> equal <var>overlapped frame presentation timestamp</var> plus 1 microsecond.</li>
-                    <li>If <var>track buffer</var> contains video <a def-id="coded-frames"></a> and the <var>presentation timestamp</var> is greater than or equal to
-                      the <var>overlapped frame presentation timestamp</var> and the <var>presentation timestamp</var> is less than the <var>remove window timestamp</var>,
-                      then remove <var>overlapped frame</var> and any <a def-id="coded-frames"></a> that depend on it from <var>track buffer</var>.
+                    <li>If <var>track buffer</var> contains video <a def-id="coded-frames"></a> and the <var>presentation timestamp</var> is less than the
+                      <var>remove window timestamp</var>, then remove <var>overlapped frame</var> and any <a def-id="coded-frames"></a> that depend on it
+                      from <var>track buffer</var>.
                       <p class="note">
                         This is to compensate for minor errors in frame timestamp computations that can appear when converting back and forth between double precision
                         floating point numbers and rationals. This tolerance allows a frame to replace an existing one as long as it is within 1 microsecond of the existing
@@ -1454,8 +1481,9 @@
               </ol>
             </li>
             <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
-            <li>Let <var>fade out coded frames</var> equal <var>overlapped frame</var> as well as any addition frames in <var>track buffer</var> that overlap
-              <var>presentation timestamp</var> plus the splice duration of 5 milliseconds.</li>
+            <li>Let <var>splice end timestamp</var> equal the sum of <var>presentation timestamp</var> and the splice duration of 5 milliseconds.</li>
+            <li>Let <var>fade out coded frames</var> equal <var>overlapped frame</var> as well as any additional frames in <var>track buffer</var> that
+              have a presentation timestamp greater than <var>presentation timestamp</var> and less than <var>splice end timestamp</var>.</li>
             <li>Remove all the frames included in <var>fade out coded frames</var> from <var>track buffer</var>.
             <li>Return a splice frame with the following properties:
               <ul>
@@ -1463,7 +1491,10 @@
                 <li>The decode time set to the <var>overlapped frame</var> decode time.</li>
                 <li>The frame duration set to difference between <var>frame end timestamp</var> and the <var>overlapped frame</var> presentation time.</li>
                 <li>The fade out coded frames equals <var>fade-out coded frames</var>.</li>
-                <li>The fade in coded frame equals <var>new coded frame</var>.</li>
+                <li>The fade in coded frame equal <var>new coded frame</var>.
+                  <p class="note">If the <var>new coded frame</var> is less than 5 milliseconds in duration, then coded frames that are appended after the
+                    <var>new coded frame</var> will be needed to properly render the splice.</p>
+                </li>
                 <li>The splice timestamp equals <var>presentation timestamp</var>.</li>
               </ul>
               <p class="note">See the <a def-id="audio-splice-rendering-algorithm"></a> for details on how this splice frame is rendered.</p>
@@ -1564,7 +1595,7 @@
             <li><a def-id="provide-a-stable-state"></a></li>
             <li>Revoke the <a def-id="MediaSource-object-URL"></a> by calling <a def-id="file-revokeObjectURL"></a> on it.</li>
           </ol>
-          <p class="note">This algorithm is intended to mirror the behavior of the <a def-id="FileAPI"></a> <a def-id="file-createObjectURL"></a> method with autoRevoke set to true.</p>
+          <p class="note">This algorithm is intended to mirror the behavior of the <a def-id="file-createObjectURL"></a>[[FILE-API]] method with autoRevoke set to true.</p>
         </dd>
       </dl>
     </section>
@@ -1785,7 +1816,7 @@
         </li>
         <li>The following rules apply to all <a def-id="media-segments"></a> within a byte stream:
           <ol>
-            <li>All timestamps must be mapped to the same presentation timeline.</li>
+            <li>All timestamps must be mapped to the same <a def-id="media-timeline"></a>.</li>
 	    <li>Gaps between <a def-id="media-segments"></a> that are smaller than the audio frame size are allowed and must not cause playback to stall. Such gaps must not be reflected by <a def-id="buffered"></a>.
 	      <p class="note">This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g. Vorbis).</p>
             </li>
@@ -2060,7 +2091,23 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-            <td>12 March 2013</td>
+            <td>26 March 2013</td>
+            <td>
+              <ul>
+                <li>Bug 21301 - Change timeline references to "media timeline" links.</li>
+                <li>Bug 19676 - Clarified "fade out coded frames" definition.</li>
+                <li>Bug 21276 - Convert a few append error scenarios to endOfStream('decode') errors.</li>
+                <li>Bug 21376 - Changed 'time' to 'decode time' to append sequence definition.</li>
+                <li>Bug 21374 - Clarify the abort() behavior.</li>
+                <li>Bug 21373 - Clarified incremental parsing text in segment parser loop.</li>
+                <li>Bug 21364 - Remove redundant condition from remove overlapped frame step.</li>
+                <li>Bug 21327 - Clarify what to do with a splice that starts with an audio frame with a duration less than 5ms.</li>
+                <li>Update to ReSpec 3.1.48</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/f0fb58d45f96/media-source/media-source.html">12 March 2013</a></td>
             <td>
               <ul>
                 <li>Bug 21112 - Add appendWindowStart & appendWindowEnd attributes.</li>

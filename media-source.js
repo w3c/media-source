@@ -77,8 +77,8 @@
     'appendBuffer': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data', link_text: 'appendBuffer()',  },
     'appendStream': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize', link_text: 'appendStream()',  },
     'abort': { func: idlref_helper, fragment: 'widl-SourceBuffer-abort-void-AbortMode-mode', link_text: 'abort()',  },
-    'AbortMode-continuation': { func: idlref_helper, fragment: 'idl-def-AbortMode', link_text: '"continuation"',  },
-    'AbortMode-timestampOffset': { func: idlref_helper, fragment: 'idl-def-AbortMode', link_text: '"timestampOffset"',  },
+    'AbortMode-continuation': { func: idlref_helper, fragment: 'idl-def-AbortMode.continuation', link_text: '"continuation"',  },
+    'AbortMode-timestampOffset': { func: idlref_helper, fragment: 'idl-def-AbortMode.timestampOffset', link_text: '"timestampOffset"',  },
     'remove': { func: idlref_helper, fragment: 'widl-SourceBuffer-remove-void-double-start-double-end', link_text: 'remove()',  },
     'updating': { func: idlref_helper, fragment: 'widl-SourceBuffer-updating', link_text: 'updating',  },
     'sourcebuffer-audioTracks': { func: idlref_helper, fragment: 'widl-SourceBuffer-audioTracks', link_text: 'audioTracks',  },
@@ -90,11 +90,11 @@
     'appendWindowEnd': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendWindowEnd', link_text: 'appendWindowEnd', },
     'length': { func: idlref_helper, fragment: 'widl-SourceBufferList-length', link_text: 'length',  },
     'createObjectURL': { func: idlref_helper, fragment: 'widl-URL-createObjectURL-DOMString-MediaSource-mediaSource', link_text: 'createObjectURL()',  },
-    'open': { func: idlref_helper, fragment: 'idl-def-ReadyState', link_text: '"open"',  },
-    'closed': { func: idlref_helper, fragment: 'idl-def-ReadyState', link_text: '"closed"',  },
-    'ended': { func: idlref_helper, fragment: 'idl-def-ReadyState', link_text: '"ended"',  },
-    'network': { func: idlref_helper, fragment: 'idl-def-EndOfStreamError', link_text: '"network"',  },
-    'decode': { func: idlref_helper, fragment: 'idl-def-EndOfStreamError', link_text: '"decode"',  },
+    'open': { func: idlref_helper, fragment: 'idl-def-ReadyState.open', link_text: '"open"',  },
+    'closed': { func: idlref_helper, fragment: 'idl-def-ReadyState.closed', link_text: '"closed"',  },
+    'ended': { func: idlref_helper, fragment: 'idl-def-ReadyState.ended', link_text: '"ended"',  },
+    'network': { func: idlref_helper, fragment: 'idl-def-EndOfStreamError.network', link_text: '"network"',  },
+    'decode': { func: idlref_helper, fragment: 'idl-def-EndOfStreamError.decode', link_text: '"decode"',  },
 
     'updatestart': { func: eventref_helper, fragment: 'updatestart', link_text: 'updatestart',  },
     'update': { func: eventref_helper, fragment: 'update', link_text: 'update', },
@@ -135,6 +135,7 @@
     'append-error-algorithm': { func: link_helper, fragment: '#sourcebuffer-append-error', link_text: 'append error algorithm', },
     'reset-parser-state-algorithm': { func: link_helper, fragment: '#sourcebuffer-reset-parser-state', link_text: 'reset parser state algorithm', },
     'stream-append-loop': { func: link_helper, fragment: '#sourcebuffer-stream-append-loop', link_text: 'stream append loop', },
+    'buffer-append': { func: link_helper, fragment: '#sourcebuffer-buffer-append', link_text: 'buffer append ', },
     'init-segment-received-algorithm': { func: link_helper, fragment: '#sourcebuffer-init-segment-received', link_text: 'initialization segment received algorithm', },
     'coded-frame-processing-algorithm': { func: link_helper, fragment: '#sourcebuffer-coded-frame-processing', link_text: 'coded frame processing algorithm', },
     'coded-frame-removal-algorithm': { func: link_helper, fragment: '#sourcebuffer-coded-frame-removal', link_text: 'coded frame removal algorithm', },
@@ -155,7 +156,6 @@
     'highest-presentation-timestamp': { func: var_helper, fragment: '#highest-presentation-timestamp', link_text: 'highest presentation timestamp', },
     'need-RAP-flag': { func: var_helper, fragment: '#need-RAP-flag', link_text: 'need random access point flag', },
 
-    'FileAPI': { func: fileapi_helper, fragment: '', link_text: 'File API',  },
     'blob-uri': { func: fileapi_helper, fragment: 'url', link_text: 'Blob URI',  },
     'File': { func: fileapi_helper, fragment: 'dfn-file', link_text: 'File',  },
     'Blob': { func: fileapi_helper, fragment: 'dfn-Blob', link_text: 'Blob',  },
@@ -167,6 +167,7 @@
     'eventdfn': { func: eventdfn_helper, fragment: '', link_text: '', },
 
     'videoref': { func: videoref_helper, fragment: '', link_text: '', },
+    'media-timeline': { func: videoref_helper, fragment: 'media-timeline', link_text: 'media timeline',  },
     'resource-fetch-algorithm': { func: videoref_helper, fragment: 'concept-media-load-resource', link_text: 'resource fetch algorithm',  },
     'intrinsic-width-and-height': { func: videoref_helper, fragment: 'concept-video-intrinsic-width', link_text: 'intrinsic width and height',  },
     'normalized-timeranges-object': { func: videoref_helper, fragment: 'normalized-timeranges-object', link_text: 'normalized TimeRanges object',  },
@@ -248,6 +249,12 @@
     'media-data-cannot-be-fetched': { func: fragment_helper, fragment: '', link_text: '&quot;<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>&quot;', },
   };
 
+  function mediaSourcePreProcessor() {
+     $("a[def-id]").each(function () {
+       $(this).addClass('externalDFN');
+     });
+  }
+
   function mediaSourcePostProcessor() {
     var doc = document;
     doc.normalize();
@@ -306,8 +313,9 @@
       var href = link.attr('href');
       var matched = /^#(.+)$/.exec(href);
       if (matched) {
-	if (!document.querySelector(href)) {
-	  console.log("Internal link to an id '" + matched[1] + "' which does not exist");
+	var id = matched[1];
+	if (!document.getElementById(id)) {
+	  console.log("Internal link to an id '" + id + "' which does not exist");
 	}
       }
     });
@@ -315,5 +323,6 @@
     return;
   }
 
+  window.mediaSourcePreProcessor = mediaSourcePreProcessor;
   window.mediaSourcePostProcessor = mediaSourcePostProcessor;
 })();
