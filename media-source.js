@@ -124,6 +124,7 @@
     'append-sequence': { func: term_helper, fragment: 'append-sequence', link_text: 'append sequence', },
     'append-window': { func: term_helper, fragment: 'append-window', link_text: 'append window', },
     'enough-data': { func: term_helper, fragment: 'enough-data', link_text: 'enough data to ensure uninterrupted playback', },
+    'active-track-buffers': { func: term_helper, fragment: 'active-track-buffers', link_text: 'active track buffers', },
 
     'duration-change-algorithm': { func: link_helper, fragment: '#duration-change-algorithm', link_text: 'duration change algorithm', },
     'segment-parser-loop': { func: link_helper, fragment: '#sourcebuffer-segment-parser-loop', link_text: 'segment parser loop', },
@@ -153,6 +154,7 @@
     'track-buffer': { func: term_helper, fragment: 'track-buffer', link_text: 'track buffer', },
     'track-buffers': { func: term_helper, fragment: 'track-buffer', link_text: 'track buffers', },
     'last-decode-timestamp': { func: var_helper, fragment: '#last-decode-timestamp', link_text: 'last decode timestamp', },
+    'last-frame-duration': { func: var_helper, fragment: '#last-frame-duration', link_text: 'last frame duration', },
     'highest-presentation-timestamp': { func: var_helper, fragment: '#highest-presentation-timestamp', link_text: 'highest presentation timestamp', },
     'need-RAP-flag': { func: var_helper, fragment: '#need-RAP-flag', link_text: 'need random access point flag', },
 

@@ -421,7 +421,7 @@ table.exceptions table {
   </p>
   <h1 class="title" id="title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-26-march-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 26 March 2013</h2>
+  <h2 id="w3c-editor-s-draft-08-april-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 08 April 2013</h2>
   <dl>
     
       <dt>This version:</dt>
@@ -596,20 +596,27 @@ table.exceptions table {
           <dd><p>A unit of compressed media data that has a presentation timestamp and  decode timestamp. The presentation timestamp indicates when the frame should be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp must be present in the bytestream. If frames cannot be decoded out of order and a decode timestamp is not present in the bytestream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
 
           <dt id="parent-media-source">Parent Media Source</dt>
-          <dd>The parent media source of a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object is the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object that created it.</dd>
+          <dd><p>The parent media source of a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object is the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object that created it.</p></dd>
 
           <dt id="append-sequence">Append Sequence</dt>
-          <dd>A series of <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code> or <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> calls on a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> without any intervening <code><a href="#widl-SourceBuffer-abort-void-AbortMode-mode">abort()</a></code> calls. The
+          <dd><p>A series of <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code> or <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> calls on a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> without any intervening <code><a href="#widl-SourceBuffer-abort-void-AbortMode-mode">abort()</a></code> calls. The
             <a href="#media-segment">media segments</a> in an append sequence must be adjacent and monotonically increasing in decode time without any gaps. An
             <code><a href="#widl-SourceBuffer-abort-void-AbortMode-mode">abort()</a></code> call starts a new append sequence which allows <a href="#media-segment">media segments</a> to be appended in non-monotonically
-            increasing order.
+            increasing order.</p>
           </dd>
 
           <dt id="append-window">Append Window</dt>
-          <dd>A presentation timestamp range used to filter out <a href="#coded-frame">coded frames</a> while appending. The append window represents a single
+          <dd><p>A presentation timestamp range used to filter out <a href="#coded-frame">coded frames</a> while appending. The append window represents a single
             continuous time range with a single start time and end time. Coded frames with presentation timestamps within this range are allowed to be appended
             to the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> while coded frames outside this range are filtered out. The append window start and end times are controlled by
-            the <code><a href="#widl-SourceBuffer-appendWindowStart">appendWindowStart</a></code> and <code><a href="#widl-SourceBuffer-appendWindowEnd">appendWindowEnd</a></code> attributes respectively.</dd>
+            the <code><a href="#widl-SourceBuffer-appendWindowStart">appendWindowStart</a></code> and <code><a href="#widl-SourceBuffer-appendWindowEnd">appendWindowEnd</a></code> attributes respectively.</p></dd>
+
+          <dt id="active-track-buffers">Active Track Buffers</dt>
+          <dd><p>The <a href="#track-buffer">track buffers</a> that provide <a href="#coded-frame">coded frames</a> for the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-audiotrack-enabled">enabled</a></code>
+              <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-audiotracks">audioTracks</a></code>, the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-videotrack-selected">selected</a></code> <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-videotracks">videoTracks</a></code>, and the
+              <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-texttrack-showing">"showing"</a></code> or <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-texttrack-hidden">"hidden"</a></code> <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-texttracks">textTracks</a></code>. All these tracks are associated with
+            <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in the <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> list.</p>
+          </dd>
         </dl>
       </section>
     </section>
@@ -892,7 +899,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               </dl>
             </li>
             <li>The media element resets all decoders and initializes each one with data from the appropriate <a href="#init-segment">initialization segment</a>.</li>
-            <li>The media element feeds data from the <a href="#media-segment">media segments</a> into the decoders until the <var>new playback position</var> is reached.</li>
+            <li>The media element feeds <a href="#coded-frame">coded frames</a> from the <a href="#active-track-buffers">active track buffers</a> into the decoders starting with the
+              closest <a href="#random-access-point">random access point</a> before the the <var>new playback position</var>.</li>
             <li>Resume the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-seek">seek algorithm</a> at the "<i>Await a stable state</i>" step.</li>
           </ol>
         </section>
@@ -1259,6 +1267,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           the decode timestamp of the last <a href="#coded-frame">coded frame</a> appended in the current <a href="#append-sequence">append sequence</a>. The variable is initially
           unset to indicate that no <a href="#coded-frame">coded frames</a> have been appended yet.</p>
 
+        <p>Each <a href="#track-buffer">track buffer</a> has a <dfn id="last-frame-duration">last frame duration</dfn> variable that stores
+          the frame duration of the last <a href="#coded-frame">coded frame</a> appended in the current <a href="#append-sequence">append sequence</a>. The variable is initially
+          unset to indicate that no <a href="#coded-frame">coded frames</a> have been appended yet.</p>
+
         <p>Each <a href="#track-buffer">track buffer</a> has a <dfn id="highest-presentation-timestamp">highest presentation timestamp</dfn> variable that stores
           the highest presentation timestamp encountered in a <a href="#coded-frame">coded frame</a> appended in the current <a href="#append-sequence">append sequence</a>.
           The variable is initially unset to indicate that no <a href="#coded-frame">coded frames</a> have been appended yet.</p>
@@ -1418,6 +1430,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <ol>
             <li>If the <var><a href="#sourcebuffer-append-state">append state</a></var> equals <a href="#sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</a> and the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> contains some complete <a href="#coded-frame">coded frames</a>, then run the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> as if the media segment only contained these frames.</li>
             <li>Unset the <var><a href="#last-decode-timestamp">last decode timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
+            <li>Unset the <var><a href="#last-frame-duration">last frame duration</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
             <li>Unset the <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
             <li>Unset the <var><a href="#sourcebuffer-highest-presentation-end-timestamp">highest presentation end timestamp</a></var>.</li>
             <li>Set the <var><a href="#need-RAP-flag">need random access point flag</a></var> on all <a href="#track-buffer">track buffers</a> to true.</li>
@@ -1670,7 +1683,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <li>Let <var>track buffer</var> equal the <a href="#track-buffer">track buffer</a> that the coded frame should be added to.</li>
                 <li>If <var><a href="#last-decode-timestamp">last decode timestamp</a></var> for <var>track buffer</var> is set and <var>decode timestamp</var> is less than
                   <var><a href="#last-decode-timestamp">last decode timestamp</a></var> or the difference between <var>decode timestamp</var> and <var><a href="#last-decode-timestamp">last decode timestamp</a></var>
-                  is greater than 100 milliseconds, then call <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream("decode")</a></code> and abort these steps.
+                  is greater than 2 times <var><a href="#last-frame-duration">last frame duration</a></var>, then call <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream("decode")</a></code> and abort these steps.
                   <div class="note"><div class="note-title"><span>Note</span></div><p class="">These checks trigger an error when the application attempts out-of-order appends without an intervening
                     <code><a href="#widl-SourceBuffer-abort-void-AbortMode-mode">abort()</a></code>.</p></div>
                 </li>
@@ -1724,11 +1737,24 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                       <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> and less than or equal to <var>frame end timestamp</var>.</dd>
                   </dl>
                 </li>
-                <li>Remove all <a href="#coded-frame">coded frames</a> from <var>track buffer</var> that have decoding dependencies on the coded frames removed in
-                  the previous step.
-                  <div class="note"><div class="note-title"><span>Note</span></div><p class="">For example if an I-frame is removed in the previous step, then all P-frames &amp; B-frames that depend on that I-frame
-                    should be removed from <var>track buffer</var>. This makes sure that decode dependencies are properly maintained during overlaps.</p></div>
-                </li>
+                <li>Remove decoding dependencies of the coded frames removed in the previous step:
+                  <dl class="switch">
+                    <dt>If detailed information about decoding dependencies is available:</dt>
+                    <dd>Remove all <a href="#coded-frame">coded frames</a> from <var>track buffer</var> that have decoding dependencies on the coded frames removed in
+                      the previous step.
+                      <div class="note"><div class="note-title"><span>Note</span></div><p class="">For example if an I-frame is removed in the previous step, then all P-frames &amp; B-frames that depend on that I-frame
+                        should be removed from <var>track buffer</var>. This makes sure that decode dependencies are properly maintained during overlaps.
+                      </p></div>
+                    </dd>
+                    <dt>Otherwise:</dt>
+                    <dd>Remove all <a href="#coded-frame">coded frames</a> between the coded frames removed in the previous step and the next
+                      <a href="#random-access-point">random access point</a> after those removed frames.
+                      <div class="note"><div class="note-title"><span>Note</span></div><p class="">Removing all <a href="#coded-frame">coded frames</a> until the next <a href="#random-access-point">random access point</a> is a conservative
+                        estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point
+                        depended on the frames that were removed.
+                      </p></div>
+                    </dd>
+                </dl></li>
                 <li>
                   <dl class="switch">
                     <dt>If <var>spliced frame</var> is set:</dt>
@@ -1738,6 +1764,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                       <var>track buffer</var>.</dd>
                   </dl>
                 </li><li>Set <var><a href="#last-decode-timestamp">last decode timestamp</a></var> for <var>track buffer</var> to <var>decode timestamp</var>.</li>
+                <li>Set <var><a href="#last-frame-duration">last frame duration</a></var> for <var>track buffer</var> to <var>frame duration</var>.</li>
                 <li>If <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> for <var>track buffer</var> is unset or <var>frame end timestamp</var> is greater
                   than <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var>, then set <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> for <var>track buffer</var>
                   to <var>frame end timestamp</var>.
@@ -1861,6 +1888,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                     <li>The decode time set to the <var>overlapped frame</var> decode time.</li>
                     <li>The frame duration set to difference between <var>presentation timestamp</var> and the <var>overlapped frame</var> presentation time.</li>
                   </ul>
+                  <div class="note"><div class="note-title"><span>Note</span></div><p class="">
+                    Some implementations may apply fades to/from silence to coded frames on either side of the inserted silence to make the transition less
+                    jarring.
+                  </p></div>
                 </li>
                 <li>Return to caller without providing a splice frame.
                   <div class="note"><div class="note-title"><span>Note</span></div><p class="">
@@ -1906,10 +1937,13 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Let <var>fade out samples</var> be the samples generated by decoding <var>fade out coded frames</var>.</li>
             <li>Trim <var>fade out samples</var> so that it only contains samples between <var>presentation timestamp</var> and <var>splice end timestamp</var>.</li>
             <li>Let <var>fade in samples</var> be the samples generated by decoding <var>fade in coded frames</var>.</li>
-            <li>Convert <var>fade out samples</var> and <var>fade in samples</var> to a common sample rate and channel layout.</li>
+            <li>If <var>fade out samples</var> and <var>fade in samples</var> do not have a common sample rate and channel layout, then convert
+              <var>fade out samples</var> and <var>fade in samples</var> to a common sample rate and channel layout.</li>
             <li>Let <var>output samples</var> be a buffer to hold the output samples.</li>
-            <li>Apply a linear gain fade out to the samples between <var>splice timestamp</var> and <var>splice end timestamp</var> in <var>fade out samples</var>.</li>
-            <li>Apply a linear gain fade in to the samples between <var>splice timestamp</var> and <var>splice end timestamp</var> in <var>fade in samples</var>.</li>
+            <li>Apply a linear gain fade out with a starting gain of 1 and an ending gain of 0 to the samples between
+              <var>splice timestamp</var> and <var>splice end timestamp</var> in <var>fade out samples</var>.</li>
+            <li>Apply a linear gain fade in with a starting gain of 0 and an ending gain of 1 to the samples between <var>splice timestamp</var> and
+              <var>splice end timestamp</var> in <var>fade in samples</var>.</li>
             <li>Copy samples between <var>presentation timestamp</var> to <var>splice timestamp</var> from <var>fade out samples</var> into <var>output samples</var>.</li>
             <li>For each sample between <var>splice timestamp</var> and <var>splice end timestamp</var>, compute the sum of a sample from <var>fade out samples</var> and the
               corresponding sample in <var>fade in samples</var> and store the result in <var>output samples</var>.</li>
@@ -2460,8 +2494,19 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
           </tr>
         </thead>
         <tbody>
+          <tr><td>08 April 2013</td>
+            <td>
+              <ul>
+                <li>Bug 21327 - Crossfade clarifications.</li>
+                <li>Bug 21334 - Clarified seeking behavoir.</li>
+                <li>Bug 21326 - Add a note stating some implementations may choose to add fades to/from silence.</li>
+                <li>Bug 21375 - Clarified decode dependency removal.</li>
+                <li>Bug 21376 - Replace 100ms limit with 2x last frame duration limit.</li>
+              </ul>
+            </td>
+          </tr>
           <tr>
-            <td>26 March 2013</td>
+            <td><a href="https://dvcs.w3.org/hg/html-media/rev/1e6898152c5b">26 March 2013</a></td>
             <td>
               <ul>
                 <li>Bug 21301 - Change timeline references to "media timeline" links.</li>

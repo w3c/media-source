@@ -160,20 +160,27 @@
           <dd><p>A unit of compressed media data that has a presentation timestamp and  decode timestamp. The presentation timestamp indicates when the frame should be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp must be present in the bytestream. If frames cannot be decoded out of order and a decode timestamp is not present in the bytestream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
 
           <dt id="parent-media-source">Parent Media Source</dt>
-          <dd>The parent media source of a <a>SourceBuffer</a> object is the <a>MediaSource</a> object that created it.</dd>
+          <dd><p>The parent media source of a <a>SourceBuffer</a> object is the <a>MediaSource</a> object that created it.</p></dd>
 
           <dt id="append-sequence">Append Sequence</dt>
-          <dd>A series of <a def-id="appendBuffer"></a> or <a def-id="appendStream"></a> calls on a <a>SourceBuffer</a> without any intervening <a def-id="abort"></a> calls. The
+          <dd><p>A series of <a def-id="appendBuffer"></a> or <a def-id="appendStream"></a> calls on a <a>SourceBuffer</a> without any intervening <a def-id="abort"></a> calls. The
             <a def-id="media-segments"></a> in an append sequence must be adjacent and monotonically increasing in decode time without any gaps. An
             <a def-id="abort"></a> call starts a new append sequence which allows <a def-id="media-segments"></a> to be appended in non-monotonically
-            increasing order.
+            increasing order.</p>
           </dd>
 
           <dt id="append-window">Append Window</dt>
-          <dd>A presentation timestamp range used to filter out <a def-id="coded-frames"></a> while appending. The append window represents a single
+          <dd><p>A presentation timestamp range used to filter out <a def-id="coded-frames"></a> while appending. The append window represents a single
             continuous time range with a single start time and end time. Coded frames with presentation timestamps within this range are allowed to be appended
             to the <a>SourceBuffer</a> while coded frames outside this range are filtered out. The append window start and end times are controlled by
-            the <a def-id="appendWindowStart"></a> and <a def-id="appendWindowEnd"></a> attributes respectively.</dd>
+            the <a def-id="appendWindowStart"></a> and <a def-id="appendWindowEnd"></a> attributes respectively.</p></dd>
+
+          <dt id="active-track-buffers">Active Track Buffers</dt>
+          <dd><p>The <a def-id="track-buffers"></a> that provide <a def-id="coded-frames"></a> for the <a def-id="audiotrack-enabled"></a>
+              <a def-id="audiotracks"></a>, the <a def-id="videotrack-selected"></a> <a def-id="videotracks"></a>, and the
+              <a def-id="texttrack-showing"></a> or <a def-id="texttrack-hidden"></a> <a def-id="texttracks"></a>. All these tracks are associated with
+            <a>SourceBuffer</a> objects in the <a def-id="activeSourceBuffers"></a> list.</p>
+          </dd>
         </dl>
       </section>
     </section>
@@ -475,7 +482,8 @@
               </dl>
             </li>
             <li>The media element resets all decoders and initializes each one with data from the appropriate <a def-id="init-segment"></a>.</li>
-            <li>The media element feeds data from the <a def-id="media-segments"></a> into the decoders until the <var>new playback position</var> is reached.</li>
+            <li>The media element feeds <a def-id="coded-frames"></a> from the <a def-id="active-track-buffers"></a> into the decoders starting with the
+              closest <a def-id="random-access-point"></a> before the the <var>new playback position</var>.</li>
             <li>Resume the <a def-id="hme-seek-algorithm"></a> at the "<i>Await a stable state</i>" step.</li>
           </ol>
         </section>
@@ -869,6 +877,10 @@
           the decode timestamp of the last <a def-id="coded-frame"></a> appended in the current <a def-id="append-sequence"></a>. The variable is initially
           unset to indicate that no <a def-id="coded-frames"></a> have been appended yet.</p>
 
+        <p>Each <a def-id="track-buffer"></a> has a <dfn id="last-frame-duration">last frame duration</dfn> variable that stores
+          the frame duration of the last <a def-id="coded-frame"></a> appended in the current <a def-id="append-sequence"></a>. The variable is initially
+          unset to indicate that no <a def-id="coded-frames"></a> have been appended yet.</p>
+
         <p>Each <a def-id="track-buffer"></a> has a <dfn id="highest-presentation-timestamp">highest presentation timestamp</dfn> variable that stores
           the highest presentation timestamp encountered in a <a def-id="coded-frame"></a> appended in the current <a def-id="append-sequence"></a>.
           The variable is initially unset to indicate that no <a def-id="coded-frames"></a> have been appended yet.</p>
@@ -1028,6 +1040,7 @@
           <ol>
             <li>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a> and the <a def-id="input-buffer"></a> contains some complete <a def-id="coded-frames"></a>, then run the <a def-id="coded-frame-processing-algorithm"></a> as if the media segment only contained these frames.</li>
             <li>Unset the <a def-id="last-decode-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
+            <li>Unset the <a def-id="last-frame-duration"></a> on all <a def-id="track-buffers"></a>.</li>
             <li>Unset the <a def-id="highest-presentation-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
             <li>Unset the <a def-id="highest-presentation-end-timestamp"></a>.</li>
             <li>Set the <a def-id="need-RAP-flag"></a> on all <a def-id="track-buffers"></a> to true.</li>
@@ -1280,7 +1293,7 @@
                 <li>Let <var>track buffer</var> equal the <a def-id="track-buffer"></a> that the coded frame should be added to.</li>
                 <li>If <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> is set and <var>decode timestamp</var> is less than
                   <a def-id="last-decode-timestamp"></a> or the difference between <var>decode timestamp</var> and <a def-id="last-decode-timestamp"></a>
-                  is greater than 100 milliseconds, then call <a def-id="eos-decode"></a> and abort these steps.
+                  is greater than 2 times <a def-id="last-frame-duration"></a>, then call <a def-id="eos-decode"></a> and abort these steps.
                   <p class="note">These checks trigger an error when the application attempts out-of-order appends without an intervening
                     <a def-id="abort"></a>.</p>
                 </li>
@@ -1334,10 +1347,23 @@
                       <a def-id="highest-presentation-timestamp"></a> and less than or equal to <var>frame end timestamp</var>.</dd>
                   </dl>
                 </li>
-                <li>Remove all <a def-id="coded-frames"></a> from <var>track buffer</var> that have decoding dependencies on the coded frames removed in
-                  the previous step.
-                  <p class="note">For example if an I-frame is removed in the previous step, then all P-frames & B-frames that depend on that I-frame
-                    should be removed from <var>track buffer</var>. This makes sure that decode dependencies are properly maintained during overlaps.</p>
+                <li>Remove decoding dependencies of the coded frames removed in the previous step:
+                  <dl class="switch">
+                    <dt>If detailed information about decoding dependencies is available:</dt>
+                    <dd>Remove all <a def-id="coded-frames"></a> from <var>track buffer</var> that have decoding dependencies on the coded frames removed in
+                      the previous step.
+                      <p class="note">For example if an I-frame is removed in the previous step, then all P-frames & B-frames that depend on that I-frame
+                        should be removed from <var>track buffer</var>. This makes sure that decode dependencies are properly maintained during overlaps.
+                      </p>
+                    </dd>
+                    <dt>Otherwise:</dt>
+                    <dd>Remove all <a def-id="coded-frames"></a> between the coded frames removed in the previous step and the next
+                      <a def-id="random-access-point"></a> after those removed frames.
+                      <p class="note">Removing all <a def-id="coded-frames"></a> until the next <a def-id="random-access-point"></a> is a conservative
+                        estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point
+                        depended on the frames that were removed.
+                      </p>
+                    </dd>
                 </li>
                 <li>
                   <dl class="switch">
@@ -1348,6 +1374,7 @@
                       <var>track buffer</var>.</dd>
                   </dl>
                 <li>Set <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> to <var>decode timestamp</var>.</li>
+                <li>Set <a def-id="last-frame-duration"></a> for <var>track buffer</var> to <var>frame duration</var>.</li>
                 <li>If <a def-id="highest-presentation-timestamp"></a> for <var>track buffer</var> is unset or <var>frame end timestamp</var> is greater
                   than <a def-id="highest-presentation-timestamp"></a>, then set <a def-id="highest-presentation-timestamp"></a> for <var>track buffer</var>
                   to <var>frame end timestamp</var>.
@@ -1471,6 +1498,10 @@
                     <li>The decode time set to the <var>overlapped frame</var> decode time.</li>
                     <li>The frame duration set to difference between <var>presentation timestamp</var> and the <var>overlapped frame</var> presentation time.</li>
                   </ul>
+                  <p class="note">
+                    Some implementations may apply fades to/from silence to coded frames on either side of the inserted silence to make the transition less
+                    jarring.
+                  </p>
                 </li>
                 <li>Return to caller without providing a splice frame.
                   <p class="note">
@@ -1516,10 +1547,13 @@
             <li>Let <var>fade out samples</var> be the samples generated by decoding <var>fade out coded frames</var>.</li>
             <li>Trim <var>fade out samples</var> so that it only contains samples between <var>presentation timestamp</var> and <var>splice end timestamp</var>.</li>
             <li>Let <var>fade in samples</var> be the samples generated by decoding <var>fade in coded frames</var>.</li>
-            <li>Convert <var>fade out samples</var> and <var>fade in samples</var> to a common sample rate and channel layout.</li>
+            <li>If <var>fade out samples</var> and <var>fade in samples</var> do not have a common sample rate and channel layout, then convert
+              <var>fade out samples</var> and <var>fade in samples</var> to a common sample rate and channel layout.</li>
             <li>Let <var>output samples</var> be a buffer to hold the output samples.</li>
-            <li>Apply a linear gain fade out to the samples between <var>splice timestamp</var> and <var>splice end timestamp</var> in <var>fade out samples</var>.</li>
-            <li>Apply a linear gain fade in to the samples between <var>splice timestamp</var> and <var>splice end timestamp</var> in <var>fade in samples</var>.</li>
+            <li>Apply a linear gain fade out with a starting gain of 1 and an ending gain of 0 to the samples between
+              <var>splice timestamp</var> and <var>splice end timestamp</var> in <var>fade out samples</var>.</li>
+            <li>Apply a linear gain fade in with a starting gain of 0 and an ending gain of 1 to the samples between <var>splice timestamp</var> and
+              <var>splice end timestamp</var> in <var>fade in samples</var>.</li>
             <li>Copy samples between <var>presentation timestamp</var> to <var>splice timestamp</var> from <var>fade out samples</var> into <var>output samples</var>.</li>
             <li>For each sample between <var>splice timestamp</var> and <var>splice end timestamp</var>, compute the sum of a sample from <var>fade out samples</var> and the
               corresponding sample in <var>fade in samples</var> and store the result in <var>output samples</var>.</li>
@@ -2090,8 +2124,19 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
           </tr>
         </thead>
         <tbody>
+          <td>08 April 2013</a></td>
+            <td>
+              <ul>
+                <li>Bug 21327 - Crossfade clarifications.</li>
+                <li>Bug 21334 - Clarified seeking behavoir.</li>
+                <li>Bug 21326 - Add a note stating some implementations may choose to add fades to/from silence.</li>
+                <li>Bug 21375 - Clarified decode dependency removal.</li>
+                <li>Bug 21376 - Replace 100ms limit with 2x last frame duration limit.</li>
+              </ul>
+            </td>
+          </tr>
           <tr>
-            <td>26 March 2013</td>
+            <td><a href="https://dvcs.w3.org/hg/html-media/rev/1e6898152c5b">26 March 2013</a></td>
             <td>
               <ul>
                 <li>Bug 21301 - Change timeline references to "media timeline" links.</li>
