@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -421,7 +421,7 @@ table.exceptions table {
   </p>
   <h1 class="title" id="title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-08-april-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 08 April 2013</h2>
+  <h2 id="w3c-editor-s-draft-24-april-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 24 April 2013</h2>
   <dl>
     
       <dt>This version:</dt>
@@ -582,8 +582,10 @@ table.exceptions table {
 
           <dt id="mediasource-object-url">MediaSource object URL</dt>
           <dd>
-            <p>A MediaSource object URL is a unique <a href="http://www.w3.org/TR/FileAPI/#url">Blob URI</a> created by <code><a href="#widl-URL-createObjectURL-DOMString-MediaSource-mediaSource">createObjectURL()</a></code>. It is used to attach a <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object to an HTMLMediaElement.</p>
-            <p>These URLs are the same as a <a href="http://www.w3.org/TR/FileAPI/#url">Blob URI</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>], except that anything in the definition of that feature that refers to <a href="http://www.w3.org/TR/FileAPI/#dfn-file">File</a> and <a href="http://www.w3.org/TR/FileAPI/#dfn-Blob">Blob</a> objects is hereby extended to also apply to <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> objects.</p>
+            <p>A MediaSource object URL is a unique <a href="http://www.w3.org/TR/FileAPI/#url">Blob URI</a> [<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] created by <code><a href="#widl-URL-createObjectURL-DOMString-MediaSource-mediaSource">createObjectURL()</a></code>. It is used to attach a <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object to an HTMLMediaElement.</p>
+            <p>These URLs are the same as a <a href="http://www.w3.org/TR/FileAPI/#url">Blob URI</a>, except that anything in the definition of that feature that refers to <a href="http://www.w3.org/TR/FileAPI/#dfn-file">File</a> and <a href="http://www.w3.org/TR/FileAPI/#dfn-Blob">Blob</a> objects is hereby extended to also apply to <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> objects.</p>
+            <p>The <a href="http://www.w3.org/TR/html5/browsers.html#origin-0">origin</a> of the MediaSource object URL is specified by the <a href="http://www.w3.org/TR/FileAPI/#originOfBlob">Origin of Blob URIs</a> [<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>].</p>
+            <div class="note"><div class="note-title"><span>Note</span></div><p class="">For example, the <a href="http://www.w3.org/TR/html5/browsers.html#origin-0">origin</a> of the MediaSource object URL affects the way that the media element is <a href="http://www.w3.org/TR/html5/embedded-content-0.html#security-with-canvas-elements">consumed by canvas</a>.</p></div>
           </dd>
 
           <dt id="track-id">Track ID</dt>

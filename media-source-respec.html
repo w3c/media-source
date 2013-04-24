@@ -1,4 +1,4 @@
-<!DOCTYPE html SYSTEM "about:legacy-compat">
+﻿<!DOCTYPE html SYSTEM "about:legacy-compat">
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -146,8 +146,10 @@
 
           <dt id="mediasource-object-url">MediaSource object URL</dt>
           <dd>
-            <p>A MediaSource object URL is a unique <a def-id="blob-uri"></a> created by <a def-id="createObjectURL"></a>. It is used to attach a <a>MediaSource</a> object to an HTMLMediaElement.</p>
-            <p>These URLs are the same as a <a def-id="blob-uri"></a>[[FILE-API]], except that anything in the definition of that feature that refers to <a def-id="File"></a> and <a def-id="Blob"></a> objects is hereby extended to also apply to <a>MediaSource</a> objects.</p>
+            <p>A MediaSource object URL is a unique <a def-id="blob-uri"></a> [[FILE-API]] created by <a def-id="createObjectURL"></a>. It is used to attach a <a>MediaSource</a> object to an HTMLMediaElement.</p>
+            <p>These URLs are the same as a <a def-id="blob-uri"></a>, except that anything in the definition of that feature that refers to <a def-id="File"></a> and <a def-id="Blob"></a> objects is hereby extended to also apply to <a>MediaSource</a> objects.</p>
+            <p>The <a def-id="origin">origin</a> of the MediaSource object URL is specified by the <a def-id="blob-origin"></a> [[FILE-API]].</p>
+            <p class="note">For example, the <a def-id="origin"></a> of the MediaSource object URL affects the way that the media element is <a href="http://www.w3.org/TR/html5/embedded-content-0.html#security-with-canvas-elements">consumed by canvas</a>.</p>
           </dd>
 
           <dt id="track-id">Track ID</dt>

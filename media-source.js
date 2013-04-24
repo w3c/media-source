@@ -33,6 +33,10 @@
     link_helper(doc, df, 'http://www.w3.org/TR/html5/webappapis.html#' + id, text);
   }
 
+  function browsers_helper(doc, df, id, text) {
+      link_helper(doc, df, 'http://www.w3.org/TR/html5/browsers.html#' + id, text);
+  }
+
   function term_helper(doc, df, id, text) {
     link_helper(doc, df, '#'+ id, text);
   }
@@ -159,7 +163,8 @@
     'need-RAP-flag': { func: var_helper, fragment: '#need-RAP-flag', link_text: 'need random access point flag', },
 
     'blob-uri': { func: fileapi_helper, fragment: 'url', link_text: 'Blob URI',  },
-    'File': { func: fileapi_helper, fragment: 'dfn-file', link_text: 'File',  },
+    'blob-origin': { func: fileapi_helper, fragment: 'originOfBlob', link_text: 'Origin of Blob URIs', },
+    'File': { func: fileapi_helper, fragment: 'dfn-file', link_text: 'File', },
     'Blob': { func: fileapi_helper, fragment: 'dfn-Blob', link_text: 'Blob',  },
     'file-createObjectURL': { func: fileapi_helper, fragment: 'dfn-createObjectURL', link_text: 'createObjectURL()',  },
     'file-revokeObjectURL': { func: fileapi_helper, fragment: 'dfn-revokeObjectURL', link_text: 'revokeObjectURL()',  },
@@ -229,6 +234,8 @@
     'queue-a-task-to-fire-an-event-named': { func: queue_and_fire_helper, fragment: '', link_text: 'queue a task',  },
     'Queue-a-task-to-fire-an-event-named': { func: queue_and_fire_helper, fragment: '', link_text: 'Queue a task',  },
     'provide-a-stable-state': { func: webappapis_helper, fragment: 'provide-a-stable-state', link_text: 'provide a stable state',  },
+
+    'origin': { func: browsers_helper, fragment: 'origin-0', link_text: 'origin', },
 
     'webm-spec': { func: webmref_helper, fragment: 'webm-guidelines', link_text: 'WebM spec',  },
     'webm-ebml-header': { func: webmref_helper, fragment: 'ebml-basics', link_text: 'EBML Header',  },
