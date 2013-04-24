@@ -58,6 +58,7 @@
           MediaSource: function() {},
           SourceBuffer: function() {},
           AbortMode: function() {},
+          MediaPlaybackQuality: function() {},
       },
       postProcess: [ mediaSourcePostProcessor ]
       };
@@ -726,7 +727,7 @@
           </ol>
         </dd>
 
-        <dt>attribute double appendWindowEnd</dt>
+        <dt>attribute unrestricted double appendWindowEnd</dt>
         <dd>
           <p>The presentation timestamp for the end of the <a def-id="append-window"></a>. This attribute is initially set to positive Infinity.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
@@ -1060,7 +1061,6 @@
             <li>Set the <a def-id="updating"></a> attribute to false.</li>
             <li>
               <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateerror"></a> at this <a>SourceBuffer</a> object.
-              <p class="issue">Need a way to convey error information.</p>
             </li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
           </ol>
@@ -1616,9 +1616,30 @@
       </section>
     </section>
 
+    <section id="mediaplaybackquality">
+      <h2>MediaPlaybackQuality Object</h2>
+      <dl title="interface MediaPlaybackQuality" class="idl">
+        <dt>readonly attribute Date creationTime</dt>
+        <dd>
+          <p>The local time when this object was created.(i.e. set to new Date()).</p>
+        </dd>
+
+        <dt>readonly attribute unsigned long totalVideoFrames</dt>
+        <dd>
+          <p>The total number of frames that would have been displayed if no frames are dropped.</p>
+        </dd>
+
+        <dt>readonly attribute unsigned long droppedVideoFrames</dt>
+        <dd>
+          <p>The total number of frames dropped predecode or dropped because the frame missed
+            its display deadline.</p>
+        </dd>
+      </dl>
+    </section>
+
     <section id="url">
-      <h2>URL Object</h2>
-      <p></p>
+      <h2>URL Object Extensions</h2>
+      <p>This section specifies extensions to the <a def-id="URL"></a>[[FILE-API]] object definition.</p>
 
       <dl title="partial interface URL" class="idl">
         <dt>static DOMString createObjectURL(MediaSource mediaSource)</dt>
@@ -1636,37 +1657,70 @@
       </dl>
     </section>
 
-    <section id="htmlmediaelement-attributes">
-      <h2>HTMLMediaElement attributes</h2>
-      <p>This section specifies what existing attributes on the <a def-id="videoref" name="htmlmediaelement">HTMLMediaElement</a> should return when a <a>MediaSource</a> is attached to the element.</p>
+    <section id="htmlmediaelement-extensions">
+      <h2>HTMLMediaElement Extensions</h2>
 
-      <p>The <a def-id="videoref" name="dom-media-seekable">HTMLMediaElement.seekable</a> attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
-      <dl class="switch">
-        <dt>If <a def-id="duration"></a> equals NaN</dt>
-        <dd>Return an empty <a def-id="timeranges"></a> object.</dd>
-        <dt>If <a def-id="duration"></a> equals positive Infinity</dt>
-        <dd>Return a single range with a start time of 0 and an end time equal to the highest end time reported by the <a def-id="hme-buffered"></a> attribute.</dd>
-        <dt>Otherwise</dt>
-        <dd>Return a single range with a start time of 0 and an end time equal to <a def-id="duration"></a>.</dd>
-      </dl>
+      <section id="htmlmediaelement-existing-attributes">
+        <h2>Modifications to Existing Attribute Behavior</h2>
+        <p>This section specifies what existing attributes on the <a def-id="htmlmediaelement"></a> should return when a <a>MediaSource</a> is attached to the element.</p>
 
-      <p id="dom-htmlmediaelement.buffered">The <a def-id="hme-buffered"></a> attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
-      <ol>
-        <li>If <a def-id="activeSourceBuffers"></a>.length equals 0 then return an empty <a def-id="timeranges"></a> object and abort these steps.</li>
-        <li>Let <var>active ranges</var> be the ranges returned by <a def-id="buffered"></a> for each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a>.</li>
-        <li>Let <var>highest end time</var> be the largest range end time in the <var>active ranges</var>.</li>
-        <li>Let <var>intersection ranges</var> equal a <a def-id="timerange"></a> object containing a single range from 0 to <var>highest end time</var>.</li>
-        <li>For each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a> run the following steps:
-          <ol>
-            <li>Let <var>source ranges</var> equal the ranges returned by the <a def-id="buffered"></a> attribute on the current <a>SourceBuffer</a>.</li>
-            <li>If <a def-id="readyState"></a> is <a def-id="ended"></a>, then set the end time on the last range in <var>source ranges</var> to 
-              <var>highest end time</var>.</li>
-            <li>Let <var>new intersection ranges</var> equal the the intersection between the <var>intersection ranges</var> and the <var>source ranges</var>.</li>
-            <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
-          </ol>
-        </li>
-        <li>Return the <var>intersection ranges</var>.</li>
-      </ol>
+        <p>The <a def-id="videoref" name="dom-media-seekable">HTMLMediaElement.seekable</a> attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
+        <dl class="switch">
+          <dt>If <a def-id="duration"></a> equals NaN</dt>
+          <dd>Return an empty <a def-id="timeranges"></a> object.</dd>
+          <dt>If <a def-id="duration"></a> equals positive Infinity</dt>
+          <dd>Return a single range with a start time of 0 and an end time equal to the highest end time reported by the <a def-id="hme-buffered"></a> attribute.</dd>
+          <dt>Otherwise</dt>
+          <dd>Return a single range with a start time of 0 and an end time equal to <a def-id="duration"></a>.</dd>
+        </dl>
+
+        <p id="dom-htmlmediaelement.buffered">The <a def-id="hme-buffered"></a> attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
+        <ol>
+          <li>If <a def-id="activeSourceBuffers"></a>.length equals 0 then return an empty <a def-id="timeranges"></a> object and abort these steps.</li>
+          <li>Let <var>active ranges</var> be the ranges returned by <a def-id="buffered"></a> for each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a>.</li>
+          <li>Let <var>highest end time</var> be the largest range end time in the <var>active ranges</var>.</li>
+          <li>Let <var>intersection ranges</var> equal a <a def-id="timerange"></a> object containing a single range from 0 to <var>highest end time</var>.</li>
+          <li>For each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a> run the following steps:
+            <ol>
+              <li>Let <var>source ranges</var> equal the ranges returned by the <a def-id="buffered"></a> attribute on the current <a>SourceBuffer</a>.</li>
+              <li>If <a def-id="readyState"></a> is <a def-id="ended"></a>, then set the end time on the last range in <var>source ranges</var> to
+                <var>highest end time</var>.</li>
+              <li>Let <var>new intersection ranges</var> equal the the intersection between the <var>intersection ranges</var> and the <var>source ranges</var>.</li>
+              <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
+            </ol>
+          </li>
+          <li>Return the <var>intersection ranges</var>.</li>
+        </ol>
+      </section>
+      <section id="htmlmediaelement-new-attributes">
+        <h2>New Attributes and Behavior</h2>
+        <p>This section specifies new attributes and internal state that are being added to the <a def-id="htmlmediaelement"></a>.</p>
+
+        <p>Each <a def-id="htmlmediaelement"></a> will maintain a <dfn id="total-video-frame-count">total video frame count</dfn> variable that keeps
+          track of the total number of frames that have been displayed and dropped. This variable is initialized to 0 when the
+          element is created and whenever the <a def-id="media-element-load-algorithm"></a> is invoked. It is incremented when a video frame is displayed
+          or when the <a def-id="dropped-video-frame-count"></a> is incremented.</p>
+
+        <p>Each <a def-id="htmlmediaelement"></a> will maintain a <dfn id="dropped-video-frame-count">dropped video frame count</dfn> variable that keeps
+          track of the total number of frames that have been dropped. This variable is initialized to 0 when the
+          element is created and whenever the <a def-id="media-element-load-algorithm"></a> is invoked. It is incremented when a video frame is dropped
+          predecode or when a frame is decoded but dropped because it missed a display deadline.</p>
+
+        <dl title="partial interface HTMLMediaElement" class="idl">
+          <dt>readonly attribute MediaPlaybackQuality playbackQuality</dt>
+          <dd>
+            <p>Provides the current the playback quality metrics.</p>
+            <p>On getting, run the following steps:</p>
+            <ol>
+              <li>Let <var>playbackQuality</var> be a new instance of <a>MediaPlaybackQuality</a>.</li>
+              <li>Set <var>playbackQuality</var>.<a def-id="creationTime"></a> to a new Date object that reflects the current local time.</li>
+              <li>Set <var>playbackQuality</var>.<a def-id="totalVideoFrames"></a> to the current value of the <a def-id="total-video-frame-count"></a>.</li>
+              <li>Set <var>playbackQuality</var>.<a def-id="droppedVideoFrames"></a> to the current value of the <a def-id="dropped-video-frame-count"></a>.</li>
+              <li>Return <var>playbackQuality</var>.</li>
+            </ol>
+          </dd>
+        </dl>
+      </section>
     </section>
 
     <section id="audio-track-extensions">
@@ -2126,7 +2180,17 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
           </tr>
         </thead>
         <tbody>
-          <td>08 April 2013</a></td>
+          <td>24 April 2013</td>
+            <td>
+              <ul>
+                <li>Bug 21796 - Removed issue box from 'Append Error' algorithm.</li>
+                <li>Bug 21703 - Changed appendWindowEnd to 'unrestricted double'.</li>
+                <li>Bug 20760 - Adding MediaPlaybackQuality object.</li>
+                <li>Bug 21536 - Specify the origin of media data appended.</li>
+              </ul>
+            </td>
+          </tr>
+          <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/f7f2b7226543/media-source/media-source.html">08 April 2013</a></td>
             <td>
               <ul>
                 <li>Bug 21327 - Crossfade clarifications.</li>

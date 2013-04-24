@@ -93,6 +93,9 @@
     'appendWindowStart': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendWindowStart', link_text: 'appendWindowStart', },
     'appendWindowEnd': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendWindowEnd', link_text: 'appendWindowEnd', },
     'length': { func: idlref_helper, fragment: 'widl-SourceBufferList-length', link_text: 'length',  },
+    'creationTime': { func: idlref_helper, fragment: 'widl-MediaPlaybackQuality-creationTime', link_text: 'creationTime',  },
+    'totalVideoFrames': { func: idlref_helper, fragment: 'widl-MediaPlaybackQuality-totalVideoFrames', link_text: 'totalVideoFrames',  },
+    'droppedVideoFrames': { func: idlref_helper, fragment: 'widl-MediaPlaybackQuality-droppedVideoFrames', link_text: 'droppedVideoFrames',  },
     'createObjectURL': { func: idlref_helper, fragment: 'widl-URL-createObjectURL-DOMString-MediaSource-mediaSource', link_text: 'createObjectURL()',  },
     'open': { func: idlref_helper, fragment: 'idl-def-ReadyState.open', link_text: '"open"',  },
     'closed': { func: idlref_helper, fragment: 'idl-def-ReadyState.closed', link_text: '"closed"',  },
@@ -166,6 +169,7 @@
     'blob-origin': { func: fileapi_helper, fragment: 'originOfBlob', link_text: 'Origin of Blob URIs', },
     'File': { func: fileapi_helper, fragment: 'dfn-file', link_text: 'File', },
     'Blob': { func: fileapi_helper, fragment: 'dfn-Blob', link_text: 'Blob',  },
+    'URL': { func: fileapi_helper, fragment: 'URL-object', link_text: 'URL',  },
     'file-createObjectURL': { func: fileapi_helper, fragment: 'dfn-createObjectURL', link_text: 'createObjectURL()',  },
     'file-revokeObjectURL': { func: fileapi_helper, fragment: 'dfn-revokeObjectURL', link_text: 'revokeObjectURL()',  },
 
@@ -175,6 +179,7 @@
 
     'videoref': { func: videoref_helper, fragment: '', link_text: '', },
     'media-timeline': { func: videoref_helper, fragment: 'media-timeline', link_text: 'media timeline',  },
+    'media-element-load-algorithm': { func: videoref_helper, fragment: 'media-element-load-algorithm', link_text: 'media element load algorithm',  },
     'resource-fetch-algorithm': { func: videoref_helper, fragment: 'concept-media-load-resource', link_text: 'resource fetch algorithm',  },
     'intrinsic-width-and-height': { func: videoref_helper, fragment: 'concept-video-intrinsic-width', link_text: 'intrinsic width and height',  },
     'normalized-timeranges-object': { func: videoref_helper, fragment: 'normalized-timeranges-object', link_text: 'normalized TimeRanges object',  },
@@ -220,10 +225,14 @@
     'loadeddata': { func: code_videoref_helper, fragment: 'event-media-loadeddata', link_text: 'loadeddata',  },
     'canplay': { func: code_videoref_helper, fragment: 'event-media-canplay', link_text: 'canplay',  },
     'canplaythrough': { func: code_videoref_helper, fragment: 'event-media-canplaythrough', link_text: 'canplaythrough',  },
+    'htmlmediaelement': { func: code_videoref_helper, fragment: 'htmlmediaelement', link_text: 'HTMLMediaElement',  },
     'hme-duration': { func: code_videoref_helper, fragment: 'media-controller-duration', link_text: 'media controller duration',  },
     'hme-buffered': { func: code_videoref_helper, fragment: 'dom-media-buffered', link_text: 'HTMLMediaElement.buffered',  },
     'hme-seek-algorithm': { func: videoref_helper, fragment: 'dom-media-seek', link_text: 'seek algorithm',  },
     'hme-duration-change-algorithm': { func: videoref_helper, fragment: 'durationChange', link_text: 'HTMLMediaElement duration change algorithm',  },
+
+    'total-video-frame-count': { func: var_helper, fragment: '#total-video-frame-count', link_text: 'total video frame count', },
+    'dropped-video-frame-count': { func: var_helper, fragment: '#dropped-video-frame-count', link_text: 'dropped video frame count', },
 
     'invalid-access-err': { func: exception_helper, fragment: 'invalid_access_err', link_text: 'INVALID_ACCESS_ERR',  },
     'invalid-state-err': { func: exception_helper, fragment: 'invalid_state_err', link_text: 'INVALID_STATE_ERR',  },
