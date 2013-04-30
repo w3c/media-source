@@ -306,14 +306,14 @@
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="removesourcebuffer"></a> at <a def-id="activeSourceBuffers"></a>.</li>
                 <li>If the <a def-id="videoref" name="dom-videotrack-selected">selected video track</a> was removed from the <a def-id="videotracks"></a> 
                   attribute on the HTMLMediaElement in a step above, then <a def-id="queue-a-task-to-fire-an-event-named"></a> 
-                  <a def-id="tracklist-change"></a> at the <a def-id="videotracks"></a> attribute.</li>
+                  <a def-id="tracklist-change"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="videotracks"></a> attribute.</li>
                 <li>If an <a def-id="videoref" name="dom-audiotrack-enabled">enabled audio track</a> was removed from the <a def-id="audiotracks"></a> 
                   attribute on the HTMLMediaElement in a step above, then <a def-id="queue-a-task-to-fire-an-event-named"></a> 
-                  <a def-id="tracklist-change"></a> at the <a def-id="audiotracks"></a> attribute.</li>
+                  <a def-id="tracklist-change"></a> at the <a def-id="audio-track-list"></a> object referenced by the <a def-id="audiotracks"></a> attribute.</li>
                 <li>If a <a def-id="text-track"></a> with its <a def-id="texttrack-mode"></a> attribute set to 
                   <a def-id="videoref" name="dom-texttrack-showing">"showing"</a> or <a def-id="videoref" name="dom-texttrack-hidden">"hidden"</a> 
                   was removed from the <a def-id="texttracks"></a> attribute on the HTMLMediaElement in a step above, then 
-                  <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="texttracks"></a> attribute.</li>
+                  <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="text-track-list"></a> object referenced by the <a def-id="texttracks"></a> attribute.</li>
               </ol>
             </li>
             <li>Remove <var>sourceBuffer</var> from <a def-id="sourceBuffers"></a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="removesourcebuffer"></a> at <a def-id="sourceBuffers"></a>.</li>
@@ -1164,11 +1164,11 @@
                       </ol>
                     </li>
                     <li>Add <var>new audio track</var> to the <a def-id="sourcebuffer-audioTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at 
+                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at the <a def-id="audio-track-list"></a> object referenced by the
                       <a def-id="sourcebuffer-audioTracks"></a> attribute 
                       on this <a>SourceBuffer</a> object.</li>
                     <li>Add <var>new audio track</var> to the <a def-id="audiotracks"></a> attribute on the HTMLMediaElement.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at the <a def-id="audiotracks"></a> 
+                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at the <a def-id="audio-track-list"></a> object referenced by the <a def-id="audiotracks"></a> 
                       attribute on the HTMLMediaElement.</li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
                     <li>Add the <a def-id="track-description"></a> for this track to the <a def-id="track-buffer"></a>.</li>
@@ -1190,10 +1190,10 @@
                       </ol>
                     </li>
                     <li>Add <var>new video track</var> to the <a def-id="sourcebuffer-videoTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at <a def-id="sourcebuffer-videoTracks"></a> attribute 
+                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="sourcebuffer-videoTracks"></a> attribute 
                       on this <a>SourceBuffer</a> object.</li>
                     <li>Add <var>new video track</var> to the <a def-id="videotracks"></a> attribute on the HTMLMediaElement.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at the <a def-id="videotracks"></a> attribute on the 
+                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="videotracks"></a> attribute on the 
                       HTMLMediaElement.</li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
                     <li>Add the <a def-id="track-description"></a> for this track to the <a def-id="track-buffer"></a>.</li>
@@ -1213,7 +1213,7 @@
                     <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at <a def-id="sourcebuffer-textTracks"></a> attribute 
                       on this <a>SourceBuffer</a> object.</li>
                     <li>Add <var>new text track</var> to the <a def-id="texttracks"></a> attribute on the HTMLMediaElement.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at the <a def-id="texttracks"></a> attribute on the 
+                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at the <a def-id="text-track-list"></a> object referenced by the <a def-id="texttracks"></a> attribute on the 
                       HTMLMediaElement.</li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
                     <li>Add the <a def-id="track-description"></a> for this track to the <a def-id="track-buffer"></a>.</li>
@@ -1741,7 +1741,7 @@
               <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
               <a def-id="audiotrack-sourceBuffer"></a>.<a def-id="sourcebuffer-audioTracks"></a>.
             </li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="audiotracks"></a> attribute on the
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="audio-track-list"></a> object referenced by the <a def-id="audiotracks"></a> attribute on the
               HTMLMediaElement.
             </li>
           </ol>
@@ -1760,7 +1760,7 @@
               <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
               <a def-id="audiotrack-sourceBuffer"></a>.<a def-id="sourcebuffer-audioTracks"></a>.
             </li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="audiotracks"></a> attribute on the
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="audio-track-list"></a> object referenced by the <a def-id="audiotracks"></a> attribute on the
               HTMLMediaElement.
             </li>
           </ol>
@@ -1791,7 +1791,7 @@
               <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
               <a def-id="videotrack-sourceBuffer"></a>.<a def-id="sourcebuffer-videoTracks"></a>.
             </li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="videotracks"></a> attribute on the
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="videotracks"></a> attribute on the
               HTMLMediaElement.
             </li>
           </ol>
@@ -1810,7 +1810,7 @@
               <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
               <a def-id="videotrack-sourceBuffer"></a>.<a def-id="sourcebuffer-videoTracks"></a>.
             </li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="videotracks"></a> attribute on the
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="videotracks"></a> attribute on the
               HTMLMediaElement.
             </li>
           </ol>
@@ -1840,7 +1840,7 @@
               <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
               <a def-id="texttrack-sourceBuffer"></a>.<a def-id="sourcebuffer-textTracks"></a>.
             </li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="texttracks"></a> attribute on the
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="text-track-list"></a> object referenced by the <a def-id="texttracks"></a> attribute on the
               HTMLMediaElement.
             </li>
           </ol>
@@ -1860,7 +1860,7 @@
               <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
               <a def-id="texttrack-sourceBuffer"></a>.<a def-id="sourcebuffer-textTracks"></a>.
             </li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="texttracks"></a> attribute on the
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="text-track-list"></a> object referenced by the <a def-id="texttracks"></a> attribute on the
               HTMLMediaElement.
             </li>
           </ol>
