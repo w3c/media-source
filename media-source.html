@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -595,7 +595,7 @@ table.exceptions table {
           <dd><p>A byte stream format specific structure that provides the <a href="#track-id">Track ID</a>, codec configuration, and other metadata for a single track. Each track description inside a single <a href="#init-segment">initialization segment</a> must have a unique <a href="#track-id">Track ID</a>.</p></dd>
 
           <dt id="coded-frame">Coded Frame</dt>
-          <dd><p>A unit of compressed media data that has a presentation timestamp and  decode timestamp. The presentation timestamp indicates when the frame should be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp must be present in the bytestream. If frames cannot be decoded out of order and a decode timestamp is not present in the bytestream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
+          <dd><p>A unit of media data that has a presentation timestamp and decode timestamp. The presentation timestamp indicates when the frame should be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp must be present in the bytestream. If frames cannot be decoded out of order and a decode timestamp is not present in the bytestream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
 
           <dt id="parent-media-source">Parent Media Source</dt>
           <dd><p>The parent media source of a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object is the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object that created it.</p></dd>
@@ -2543,7 +2543,15 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
           </tr>
         </thead>
         <tbody>
-          <tr><td>24 April 2013</td>
+          <tr><td>30 April 2013</td>
+            <td>
+              <ul>
+                <li>Bug 21822 - Fix 'fire ... event ... at the X attribute' text.</li>
+                <li>Bug 21819 &amp; 21328 - Remove 'compressed' from coded frame definition.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr><td><a href="https://dvcs.w3.org/hg/html-media/raw-file/237133bfdd57/media-source/media-source.html">24 April 2013</a></td>
             <td>
               <ul>
                 <li>Bug 21796 - Removed issue box from 'Append Error' algorithm.</li>
