@@ -57,6 +57,7 @@
       definitionMap: {
           MediaSource: function() {},
           SourceBuffer: function() {},
+          SourceBufferList: function() {},
           AbortMode: function() {},
           MediaPlaybackQuality: function() {},
       },
@@ -296,27 +297,75 @@
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at <var>sourceBuffer</var>.</li>
               </ol>
             </li>
-            <li>Set the the sourceBuffer attribute in all tracks in <var>sourceBuffer</var>.<a def-id="sourcebuffer-audioTracks"></a>, <var>sourceBuffer</var>.<a def-id="sourcebuffer-videoTracks"></a>, and <var>sourceBuffer</var>.<a def-id="sourcebuffer-textTracks"></a> to null.</li>
-            <li>Remove all the tracks in <var>sourceBuffer</var>.<a def-id="sourcebuffer-audioTracks"></a>, <var>sourceBuffer</var>.<a def-id="sourcebuffer-videoTracks"></a>, and <var>sourceBuffer</var>.<a def-id="sourcebuffer-textTracks"></a> from the respective <a def-id="audiotracks"></a>, <a def-id="videotracks"></a>, and <a def-id="texttracks"></a> attributes on the HTMLMediaElement.</li>
-            <li>Remove all the tracks in <var>sourceBuffer</var>.<a def-id="sourcebuffer-audioTracks"></a>, <var>sourceBuffer</var>.<a def-id="sourcebuffer-videoTracks"></a>, and <var>sourceBuffer</var>.<a def-id="sourcebuffer-textTracks"></a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-removetrack"></a> at the modified lists.</li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-removetrack"></a> at the HTMLMediaElement track lists that were modified.</li>
-            <li>If <var>sourceBuffer</var> is in <a def-id="activeSourceBuffers"></a>, then run the following steps:
+
+            <li>Let <var>SourceBuffer audioTracks list</var> equal the <a def-id="audio-track-list"></a> object returned by <var>sourceBuffer</var>.<a def-id="sourcebuffer-audioTracks"></a>.</li>
+            <li>If the <var>SourceBuffer audioTracks list</var> is not empty, then run the following steps:
               <ol>
-                <li>Remove <var>sourceBuffer</var> from <a def-id="activeSourceBuffers"></a>.</li>
-                <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="removesourcebuffer"></a> at <a def-id="activeSourceBuffers"></a>.</li>
-                <li>If the <a def-id="videoref" name="dom-videotrack-selected">selected video track</a> was removed from the <a def-id="videotracks"></a> 
-                  attribute on the HTMLMediaElement in a step above, then <a def-id="queue-a-task-to-fire-an-event-named"></a> 
-                  <a def-id="tracklist-change"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="videotracks"></a> attribute.</li>
-                <li>If an <a def-id="videoref" name="dom-audiotrack-enabled">enabled audio track</a> was removed from the <a def-id="audiotracks"></a> 
-                  attribute on the HTMLMediaElement in a step above, then <a def-id="queue-a-task-to-fire-an-event-named"></a> 
-                  <a def-id="tracklist-change"></a> at the <a def-id="audio-track-list"></a> object referenced by the <a def-id="audiotracks"></a> attribute.</li>
-                <li>If a <a def-id="text-track"></a> with its <a def-id="texttrack-mode"></a> attribute set to 
-                  <a def-id="videoref" name="dom-texttrack-showing">"showing"</a> or <a def-id="videoref" name="dom-texttrack-hidden">"hidden"</a> 
-                  was removed from the <a def-id="texttracks"></a> attribute on the HTMLMediaElement in a step above, then 
-                  <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="text-track-list"></a> object referenced by the <a def-id="texttracks"></a> attribute.</li>
+                <li>Let <var>HTMLMediaElement audioTracks list</var> equal the <a def-id="audio-track-list"></a> object returned by the <a def-id="audiotracks"></a> attribute on the HTMLMediaElement.</li>
+                <li>Let the <var>removed enabled audio track flag</var> equal false.</li>
+                <li>For each <a def-id="audio-track"></a> object in the <var>SourceBuffer audioTracks list</var>, run the following steps:
+                  <ol>
+                    <li>Set the <a def-id="audiotrack-sourceBuffer"></a> attribute on the <a def-id="audio-track"></a> object to null.</li>
+                    <li>If the <a def-id="audiotrack-enabled"></a> attribute on the <a def-id="audio-track"></a> object is true, then
+                      set the <var>removed enabled audio track flag</var> to true.</li>
+                    <li>Remove the <a def-id="audio-track"></a> object from the <var>HTMLMediaElement audioTracks list</var>.</li>
+                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-removetrack"></a> at the <var>HTMLMediaElement audioTracks list</var>.</li>
+                    <li>Remove the <a def-id="audio-track"></a> object from the <var>SourceBuffer audioTracks list</var>.</li>
+                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-removetrack"></a> at the <var>SourceBuffer audioTracks list</var>.</li>
+                  </ol>
+                </li>
+                <li>If the <var>removed enabled audio track flag</var> equals true, then <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the
+                  <var>HTMLMediaElement audioTracks list</var>.</li>
               </ol>
             </li>
-            <li>Remove <var>sourceBuffer</var> from <a def-id="sourceBuffers"></a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="removesourcebuffer"></a> at <a def-id="sourceBuffers"></a>.</li>
+
+            <li>Let <var>SourceBuffer videoTracks list</var> equal the <a def-id="video-track-list"></a> object returned by <var>sourceBuffer</var>.<a def-id="sourcebuffer-videoTracks"></a>.</li>
+            <li>If the <var>SourceBuffer videoTracks list</var> is not empty, then run the following steps:
+              <ol>
+                <li>Let <var>HTMLMediaElement videoTracks list</var> equal the <a def-id="video-track-list"></a> object returned by the <a def-id="videotracks"></a> attribute on the HTMLMediaElement.</li>
+                <li>Let the <var>removed selected video track flag</var> equal false.</li>
+                <li>For each <a def-id="video-track"></a> object in the <var>SourceBuffer videoTracks list</var>, run the following steps:
+                  <ol>
+                    <li>Set the <a def-id="videotrack-sourceBuffer"></a> attribute on the <a def-id="video-track"></a> object to null.</li>
+                    <li>If the <a def-id="videotrack-selected"></a> attribute on the <a def-id="video-track"></a> object is true, then
+                      set the <var>removed selected video track flag</var> to true.</li>
+                    <li>Remove the <a def-id="video-track"></a> object from the <var>HTMLMediaElement videoTracks list</var>.</li>
+                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-removetrack"></a> at the <var>HTMLMediaElement videoTracks list</var>.</li>
+                    <li>Remove the <a def-id="video-track"></a> object from the <var>SourceBuffer videoTracks list</var>.</li>
+                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-removetrack"></a> at the <var>SourceBuffer videoTracks list</var>.</li>
+                  </ol>
+                </li>
+                <li>If the <var>removed selected video track flag</var> equals true, then <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the
+                  <var>HTMLMediaElement videoTracks list</var>.</li>
+              </ol>
+            </li>
+
+
+            <li>Let <var>SourceBuffer textTracks list</var> equal the <a def-id="text-track-list"></a> object returned by <var>sourceBuffer</var>.<a def-id="sourcebuffer-textTracks"></a>.</li>
+            <li>If the <var>SourceBuffer textTracks list</var> is not empty, then run the following steps:
+              <ol>
+                <li>Let <var>HTMLMediaElement textTracks list</var> equal the <a def-id="text-track-list"></a> object returned by the <a def-id="texttracks"></a> attribute on the HTMLMediaElement.</li>
+                <li>Let the <var>removed enabled text track flag</var> equal false.</li>
+                <li>For each <a def-id="text-track"></a> object in the <var>SourceBuffer textTracks list</var>, run the following steps:
+                  <ol>
+                    <li>Set the <a def-id="texttrack-sourceBuffer"></a> attribute on the <a def-id="text-track"></a> object to null.</li>
+                    <li>If the <a def-id="texttrack-mode"></a> attribute on the <a def-id="text-track"></a> object is set to  <a def-id="texttrack-showing"></a> or
+                      <a def-id="texttrack-hidden"></a> , then set the <var>removed enabled text track flag</var> to true.</li>
+                    <li>Remove the <a def-id="text-track"></a> object from the <var>HTMLMediaElement textTracks list</var>.</li>
+                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-removetrack"></a> at the <var>HTMLMediaElement textTracks list</var>.</li>
+                    <li>Remove the <a def-id="text-track"></a> object from the <var>SourceBuffer textTracks list</var>.</li>
+                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-removetrack"></a> at the <var>SourceBuffer textTracks list</var>.</li>
+                  </ol>
+                </li>
+                <li>If the <var>removed enabled text track flag</var> equals true, then <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the
+                  <var>HTMLMediaElement textTracks list</var>.</li>
+              </ol>
+            </li>
+
+            <li>If <var>sourceBuffer</var> is in <a def-id="activeSourceBuffers"></a>, then remove <var>sourceBuffer</var> from <a def-id="activeSourceBuffers"></a> and
+              <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="removesourcebuffer"></a> at the <a>SourceBufferList</a> returned by <a def-id="activeSourceBuffers"></a>.</li>
+            <li>Remove <var>sourceBuffer</var> from <a def-id="sourceBuffers"></a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="removesourcebuffer"></a> at 
+              the <a>SourceBufferList</a> returned by <a def-id="sourceBuffers"></a>.</li>
             <li>Destroy all resources for <var>sourceBuffer</var>.</li>
           </ol>
         </dd>
@@ -332,7 +381,7 @@
             <li>
               <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceended"></a> at the <a>MediaSource</a>.</li>
             <li><dl class="switch">
-                <dt>If <var>error</var> is not set, null, or an empty string</dt>
+                <dt>If <var>error</var> is not set, is null, or is an empty string</dt>
                 <dd>
 	          <ol>
 	            <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the highest end timestamp across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.<br>
@@ -429,8 +478,8 @@
         <section id="mediasource-attach">
           <h4>Attaching to a media element</h4>
           <p> A <a>MediaSource</a> object can be attached to a media element by assigning a <a def-id="MediaSource-object-URL"></a> to the media element <a def-id="media-src"></a> attribute or the src attribute of a &lt;source&gt; inside a media element. A <a def-id="MediaSource-object-URL"></a> is created by passing a MediaSource object to <a def-id="createObjectURL"></a>.</p>
-          <p>If the <a def-id="resource-fetch-algorithm"></a> absolute URL matches the MediaSource object URL, run the following steps right before the "Perform a potentially
-            CORS-enabled fetch" step in the <a def-id="resource-fetch-algorithm"></a>.</p>
+          <p>If the <a def-id="resource-fetch-algorithm"></a> absolute URL matches the MediaSource object URL, run the following steps right before the <a def-id="perform-potentially-cors-enabled-fetch"></a>
+            step in the <a def-id="resource-fetch-algorithm"></a>.</p>
 
           <dl class="switch">
             <dt>If <a def-id="readyState"></a> is NOT set to <a def-id="closed"></a></dt>
@@ -441,7 +490,9 @@
                 <li>Set the <a def-id="readyState"></a> attribute to <a def-id="open"></a>.</li>
                 <li>
                   <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a>MediaSource</a>.</li>
-                <li>Allow the <a def-id="resource-fetch-algorithm"></a> to progress based on data passed in via <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a>.</li>
+                <li>Continue the <a def-id="resource-fetch-algorithm"></a> by running the <a def-id="perform-potentially-cors-enabled-fetch"></a> step. Text in the <a def-id="resource-fetch-algorithm"></a>
+                  that refers to &quot;the download&quot; or &quot;bytes received&quot; refer to data passed in via <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a>. References to
+                  HTTP in the <a def-id="resource-fetch-algorithm"></a> do not apply because the HTMLMediaElement does not fetch media data via HTTP when a <a>MediaSource</a> is attached.</li>
               </ol>
             </dd>
           </dl>
@@ -624,13 +675,17 @@
           <h4>Duration change</h4>
           <p>Follow these steps when <a def-id="duration"></a> needs to change to a <var>new duration</var>.</p>
           <ol>
-            <li>If the current value of <a def-id="duration"></a> is equal to <var>new duration</var>, then abort these steps.</li>
+            <li>If the current value of <a def-id="duration"></a> is equal to <var>new duration</var>, then return.</li>
             <li>Set <var>old duration</var> to the current value of <a def-id="duration"></a>.
             <li>Update <a def-id="duration"></a> to <var>new duration</var>.</li>
             <li>If the <var>new duration</var> is less than <var>old duration</var>, then call <code><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove</a>(<var>new duration</var>, <var>old duration</var>)</code> on all objects in <a def-id="sourceBuffers"></a>.
-              <p class="note">This preserves audio frames that start before and end after the <a def-id="duration"></a>. The user agent must end playback at <a def-id="duration"></a> even if the audio frame extends beyond this time.</p>
+              <p class="note">This preserves audio frames and text cues that start before and end after the <a def-id="duration"></a>.</p></li>
+            <li>If a user agent is unable to partially render audio frames or text cues that start before and end after the <a def-id="duration"></a>, then run the following steps:
+              <ol>
+                <li>Update <var>new duration</var> to the highest end timestamp across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.</li>
+                <li>Update <a def-id="duration"></a> to <var>new duration</var>.</li>
+              </ol>
             </li>
-
             <li>Update the <a def-id="hme-duration"></a> to <var>new duration</var> and run the <a def-id="hme-duration-change-algorithm"></a>.</li>
           </ol>
         </section>
@@ -2170,6 +2225,11 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
       </div>
     </section>
 
+    <section id="acknowledgements">
+      <h2>Acknowledgments</h2>
+      The editors would like to thank <a def-id="contributors"></a> for their contributions to this specification.
+    </section>
+
     <section id="revision-history">
       <h2>Revision History</h2>
       <table class="old-table">
@@ -2180,7 +2240,17 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
           </tr>
         </thead>
         <tbody>
-          <td>30 April 2013</td>
+          <tr>
+            <td>02 May 2013</td>
+            <td>
+              <ul>
+                <li>Reworked ambiguous text in a variety of places.</li>
+                <li>Added Acknowledgements section.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/ffb76048861e/media-source/media-source.html">30 April 2013</a></td>
             <td>
               <ul>
                 <li>Bug 21822 - Fix 'fire ... event ... at the X attribute' text.</li>

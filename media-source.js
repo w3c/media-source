@@ -65,9 +65,46 @@
   }
 
   function fragment_helper(doc, df, id, text) {
-    var f = doc.createDocumentFragment()
+    var f = doc.createElement('span')
     f.innerHTML = text;
     df.appendChild(f);
+  }
+
+  function contributors_helper(doc, df, id, text) {
+    var contributors = [
+      "Bob Lund",
+      "Alex Giladi",
+      "Duncan Rowden",
+      "Mark Vickers",
+      "Glenn Adams",
+      "Frank Galligan",
+      "Steven Robertson",
+      "Matt Ward",
+      "David Dorwin",
+      "Kevin Streeter",
+      "Joe Steele",
+      "Michael Thornburgh",
+      "Philip Jägenstedt",
+      "John Simmons",
+      "Jerry Smith",
+      "Pierre Lemieux",
+      "Cyril Concolato",
+      "Ralph Giles",
+      "David Singer",
+    ];
+
+    contributors.sort();
+
+    var str = "";
+    for (var i = 0; i < contributors.length - 1; ++i) {
+      if (i > 0)
+	str += ", ";
+      str += contributors[i];
+    }
+    str += ", and ";
+    str += contributors[contributors.length - 1];
+
+    df.appendChild(doc.createTextNode(str));
   }
 
   var rep = {
@@ -268,6 +305,9 @@
 
 
     'media-data-cannot-be-fetched': { func: fragment_helper, fragment: '', link_text: '&quot;<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>&quot;', },
+    'perform-potentially-cors-enabled-fetch': { func: fragment_helper, fragment: '', link_text: '&quot;<i>Perform a potentially CORS-enabled fetch</i>&quot;', },
+
+    'contributors': { func: contributors_helper, fragment: '', link_text: '', },
   };
 
   function mediaSourcePreProcessor() {
