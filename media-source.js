@@ -29,6 +29,11 @@
       link_helper(doc, df, 'http://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm#' + id, text);
   }
 
+  function hrtime_helper(doc, df, id, text) {
+    link_helper(doc, df, 'http://www.w3.org/TR/hr-time/#' + id, text);
+  }
+
+
   function webappapis_helper(doc, df, id, text) {
     link_helper(doc, df, 'http://www.w3.org/TR/html5/webappapis.html#' + id, text);
   }
@@ -115,11 +120,10 @@
     'eos-decode': { func: idlref_helper, fragment: 'widl-MediaSource-endOfStream-void-EndOfStreamError-error', link_text: 'endOfStream("decode")',  },
     'readyState': { func: idlref_helper, fragment: 'widl-MediaSource-readyState', link_text: 'readyState',  },
     'duration': { func: idlref_helper, fragment: 'widl-MediaSource-duration', link_text: 'duration',  },
+
     'appendBuffer': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data', link_text: 'appendBuffer()',  },
     'appendStream': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize', link_text: 'appendStream()',  },
-    'abort': { func: idlref_helper, fragment: 'widl-SourceBuffer-abort-void-AbortMode-mode', link_text: 'abort()',  },
-    'AbortMode-continuation': { func: idlref_helper, fragment: 'idl-def-AbortMode.continuation', link_text: '"continuation"',  },
-    'AbortMode-timestampOffset': { func: idlref_helper, fragment: 'idl-def-AbortMode.timestampOffset', link_text: '"timestampOffset"',  },
+    'abort': { func: idlref_helper, fragment: 'widl-SourceBuffer-abort-void', link_text: 'abort()',  },
     'remove': { func: idlref_helper, fragment: 'widl-SourceBuffer-remove-void-double-start-double-end', link_text: 'remove()',  },
     'updating': { func: idlref_helper, fragment: 'widl-SourceBuffer-updating', link_text: 'updating',  },
     'sourcebuffer-audioTracks': { func: idlref_helper, fragment: 'widl-SourceBuffer-audioTracks', link_text: 'audioTracks',  },
@@ -129,6 +133,10 @@
     'timestampOffset': { func: idlref_helper, fragment: 'widl-SourceBuffer-timestampOffset', link_text: 'timestampOffset',  },
     'appendWindowStart': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendWindowStart', link_text: 'appendWindowStart', },
     'appendWindowEnd': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendWindowEnd', link_text: 'appendWindowEnd', },
+    'AppendMode-segments': { func: idlref_helper, fragment: 'idl-def-AppendMode.segments', link_text: '"segments"',  },
+    'AppendMode-sequence': { func: idlref_helper, fragment: 'idl-def-AppendMode.sequence', link_text: '"sequence"',  },
+    'mode': { func: idlref_helper, fragment: 'widl-SourceBuffer-mode', link_text: 'mode',  },
+
     'length': { func: idlref_helper, fragment: 'widl-SourceBufferList-length', link_text: 'length',  },
     'creationTime': { func: idlref_helper, fragment: 'widl-MediaPlaybackQuality-creationTime', link_text: 'creationTime',  },
     'totalVideoFrames': { func: idlref_helper, fragment: 'widl-MediaPlaybackQuality-totalVideoFrames', link_text: 'totalVideoFrames',  },
@@ -165,7 +173,7 @@
     'coded-frame': { func: term_helper, fragment: 'coded-frame', link_text: 'coded frame', },
     'coded-frames': { func: term_helper, fragment: 'coded-frame', link_text: 'coded frames', },
     'parent-media-source': { func: term_helper, fragment: 'parent-media-source', link_text: 'parent media source', },
-    'append-sequence': { func: term_helper, fragment: 'append-sequence', link_text: 'append sequence', },
+    'coded-frame-sequence': { func: term_helper, fragment: 'coded-frame-sequence', link_text: 'coded frame sequence', },
     'append-window': { func: term_helper, fragment: 'append-window', link_text: 'append window', },
     'enough-data': { func: term_helper, fragment: 'enough-data', link_text: 'enough data to ensure uninterrupted playback', },
     'active-track-buffers': { func: term_helper, fragment: 'active-track-buffers', link_text: 'active track buffers', },
@@ -189,8 +197,7 @@
     'audio-splice-rendering-algorithm': { func: link_helper, fragment: '#sourcebuffer-audio-splice-rendering-algorithm', link_text: 'audio splice rendering algorithm', },
     'input-buffer': { func: var_helper, fragment: '#sourcebuffer-input-buffer', link_text: 'input buffer', },
     'buffer-full-flag': { func: var_helper, fragment: '#sourcebuffer-buffer-full-flag', link_text: 'buffer full flag', },
-    'abort-mode': { func: var_helper, fragment: '#sourcebuffer-abort-mode', link_text: 'abort mode', },
-    'continuation-timestamp': { func: var_helper, fragment: '#sourcebuffer-continuation-timestamp', link_text: 'continuation timestamp', },
+    'sequence-start-timestamp': { func: var_helper, fragment: '#sourcebuffer-sequence-start-timestamp', link_text: 'sequence start timestamp', },
     'highest-presentation-end-timestamp': { func: var_helper, fragment: '#sourcebuffer-highest-presentation-end-timestamp', link_text: 'highest presentation end timestamp', },
     'MediaSource-object-URL': { func: link_helper, fragment: '#mediasource-object-url', link_text: 'MediaSource object URL', },
     'first-init-segment-flag': { func: var_helper, fragment: '#first-init-segment-flag', link_text: 'first initialization segment flag', },
@@ -308,6 +315,8 @@
     'perform-potentially-cors-enabled-fetch': { func: fragment_helper, fragment: '', link_text: '&quot;<i>Perform a potentially CORS-enabled fetch</i>&quot;', },
 
     'contributors': { func: contributors_helper, fragment: '', link_text: '', },
+
+    'performance-now': { func: hrtime_helper, fragment: 'dom-performance-now', link_text: 'Performance.now()',  },
   };
 
   function mediaSourcePreProcessor() {

@@ -52,13 +52,13 @@
 
       preProcess: [ mediaSourcePreProcessor ],
 
-      // Empty definitions for MediaSource, SourceBuffer, and AbortMode are here to
+      // Empty definitions for objects declared in the document are here to
       // prevent error messages from being displayed for references to these objects.
       definitionMap: {
           MediaSource: function() {},
           SourceBuffer: function() {},
           SourceBufferList: function() {},
-          AbortMode: function() {},
+          AppendMode: function() {},
           MediaPlaybackQuality: function() {},
       },
       postProcess: [ mediaSourcePostProcessor ]
@@ -163,15 +163,13 @@
           <dt id="coded-frame">Coded Frame</dt>
           <dd><p>A unit of media data that has a presentation timestamp and decode timestamp. The presentation timestamp indicates when the frame should be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp must be present in the bytestream. If frames cannot be decoded out of order and a decode timestamp is not present in the bytestream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
 
+          <dt id="coded-frame-sequence">Coded Frame Sequence</dt>
+          <dd><p>A sequence of <a def-id="coded-frames"></a> that are adjacent and monotonically increasing in decode time without any gaps. Discontinuities detected by the
+              <a def-id="coded-frame-processing-algorithm"></a> and <a def-id="abort"></a> calls trigger the start of a new coded frame sequence.</p>
+          </dd>
+
           <dt id="parent-media-source">Parent Media Source</dt>
           <dd><p>The parent media source of a <a>SourceBuffer</a> object is the <a>MediaSource</a> object that created it.</p></dd>
-
-          <dt id="append-sequence">Append Sequence</dt>
-          <dd><p>A series of <a def-id="appendBuffer"></a> or <a def-id="appendStream"></a> calls on a <a>SourceBuffer</a> without any intervening <a def-id="abort"></a> calls. The
-            <a def-id="media-segments"></a> in an append sequence must be adjacent and monotonically increasing in decode time without any gaps. An
-            <a def-id="abort"></a> call starts a new append sequence which allows <a def-id="media-segments"></a> to be appended in non-monotonically
-            increasing order.</p>
-          </dd>
 
           <dt id="append-window">Append Window</dt>
           <dd><p>A presentation timestamp range used to filter out <a def-id="coded-frames"></a> while appending. The append window represents a single
@@ -696,30 +694,52 @@
       <h2>SourceBuffer Object</h2>
 
 
-      <dl title="enum AbortMode" class="idl">
-        <dt>continuation</dt>
+      <dl title="enum AppendMode" class="idl">
+        <dt>segments</dt>
         <dd>
-          <p>The next <a def-id="append-sequence"></a> will be placed immediately after the <a def-id="append-sequence"></a> that was just aborted.</p>
+          <p>The timestamps in the media segment determine where the <a def-id="coded-frames"></a> are placed in the presentation. Coded frames within a media segment must be adjacent in time, but media
+            segments can be appended in any order.</p>
         </dd>
-        <dt>timestampOffset</dt>
+        <dt>sequence</dt>
         <dd>
-          <p>The next <a def-id="append-sequence"></a> will be inserted at the presentation time specified by the <a def-id="timestampOffset"></a>
-            attribute instead of the time computed from the <a def-id="timestampOffset"></a> attribute and coded frame timestamps.
+          <p>Media segments will be treated as adjacent in time independent of the timestamps in the media segment. Coded frames in a new media segment will be placed immediately after the coded
+            frames in the previous media segment. The <a def-id="timestampOffset"></a> attribute will be updated if a new offset is need to make the new media segments adjacent to the previous media segment.
+            Setting the <a def-id="timestampOffset"></a> attribute in <a def-id="AppendMode-sequence"></a> mode allows a media segment to be placed at a specific position in the timeline without any knowledge
+            of the timestamps in the media segment.
           </p>
         </dd>
       </dl>
-      <p class="note">
-        These abort modes cause the <a def-id="timestampOffset"></a> attribute to get updated when the first <a def-id="coded-frame"></a> of the new
-        <a def-id="append-sequence"></a> is appended. This allows the rest of the  <a def-id="coded-frames"></a> in the sequence to follow the normal
-        presentation &amp; decode timestamp computation rules and provides a way for the application to observe what offset is being applied to these
-        timestamps.
-      </p>
 
       <dl title="interface SourceBuffer : EventTarget" class="idl">
+        <dt>attribute AppendMode mode</dt>
+        <dd>
+          <p>Controls how a sequence of <a def-id="media-segments"></a> are handled.  This attribute is initially set to <a def-id="AppendMode-segments"></a> when the object is created.</p>
+          <p>On getting, Return the initial value or the last value that was successfully set.</p>
+          <p>On setting, run the following steps:</p>
+          <ol>
+            <li>Let <var>new mode</var> equal the new value being assigned to this attribute.</li>
+            <li>If <var>new mode</var> does not equal <a def-id="AppendMode-segments"></a> or <a def-id="AppendMode-sequence"></a>, then throw an <a def-id="invalid-access-err"></a> exception and abort these
+              steps.</li>
+            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an <a def-id="invalid-state-err"></a> exception and
+              abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>
+              <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run the following steps:</p>
+              <ol>
+	        <li>Set the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> to <a def-id="open"></a></li>
+	        <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a def-id="parent-media-source"></a>.</li>
+              </ol>
+            </li>
+            <li>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a>, then throw an <a def-id="invalid-state-err"></a> and abort these steps.</li>
+            <li>If the <var>new mode</var> equals <a def-id="AppendMode-sequence"></a>, then set the <a def-id="sequence-start-timestamp"></a> to the <a def-id="highest-presentation-end-timestamp"></a>.</li>
+            <li>Update the attribute to <var>new mode</var>.</li>
+          </ol>
+        </dd>
+
         <dt>readonly attribute boolean updating</dt>
         <dd>
           <p>Indicates whether an <a def-id="appendBuffer"></a>, <a def-id="appendStream"></a>, or <a def-id="remove"></a> operation is still being
-            processed.</p>
+            processed. This attribute is initially set to false when the object is created.</p>
         </dd>
 
         <dt>readonly attribute TimeRanges buffered</dt>
@@ -738,6 +758,7 @@
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
+            <li>Let <var>new timestamp offset</var> equal the new value being assigned to this attribute.</li>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>
@@ -747,8 +768,9 @@
 	        <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a def-id="parent-media-source"></a>.</li>
               </ol>
             </li>
-            <li>If this object is waiting for the end of a <a def-id="media-segment"></a> to be appended, then throw an <a def-id="invalid-state-err"></a> and abort these steps.</li>
-            <li>Update the attribute to the new value.</li>
+            <li>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a>, then throw an <a def-id="invalid-state-err"></a> and abort these steps.</li>
+            <li>If the <a def-id="mode"></a> attribute equals <a def-id="AppendMode-sequence"></a>, then set the <a def-id="sequence-start-timestamp"></a> to <var>new timestamp offset</var>.</li>
+            <li>Update the attribute to <var>new timestamp offset</var>.</li>
           </ol>
         </dd>
 
@@ -863,23 +885,13 @@
           </ol>
         </dd>
 
-        <dt>void abort(optional AbortMode mode)</dt>
+        <dt>void abort()</dt>
         <dd>
           <p>Aborts the current segment and resets the segment parser.</p>
 
           <ol class="method-algorithm">
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If <var>mode</var> is set and does not equal null, an empty string, or a valid <a>AbortMode</a>, then throw an 
-              <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="continuation-timestamp"></a> is unset, then run the following steps:
-              <ol>
-                <li>If <var>mode</var> equals <a def-id="AbortMode-continuation"></a> and the <a def-id="highest-presentation-end-timestamp"></a> is unset,
-                  then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-                <li>If the <a def-id="highest-presentation-end-timestamp"></a> is set, then update the <a def-id="continuation-timestamp"></a> to
-                  equal the <a def-id="highest-presentation-end-timestamp"></a>.</li>
-              </ol>
-            </li>
             <li>If the <a def-id="updating"></a> attribute equals true, then run the following steps:
               <ol>
                 <li>Abort the <a def-id="segment-parser-loop"></a>, <a def-id="buffer-append"></a>, and <a def-id="stream-append-loop"></a> algorithms if
@@ -890,14 +902,6 @@
               </ol>
             </li>
             <li>Run the <a def-id="reset-parser-state-algorithm"></a>.</li>
-            <li>
-              <dl class="switch">
-                <dt>If <var>mode</var> is not set, null, or an empty string:</dt>
-                <dd>Unset the <a def-id="abort-mode"></a>.</dd>
-                <dt>Otherwise:</dt>
-                <dd>Update the <a def-id="abort-mode"></a> to equal <var>mode</var>.</dd>
-              </dl>
-            </li>
             <li>Set <a def-id="appendWindowStart"></a> to 0.</li>
             <li>Set <a def-id="appendWindowEnd"></a> to positive Infinity.</li>
           </ol>
@@ -928,19 +932,19 @@
       <section id="track-buffers">
         <h3>Track Buffers</h3>
         <p>A <dfn id="track-buffer">track buffer</dfn> stores the <a def-id="track-descriptions"></a> and <a def-id="coded-frames"></a> for an individual
-          track. The track buffer is updated as <a def-id="init-segments"></a> and <a def-id="media-segments"></a> are appended to the 
+          track. The track buffer is updated as <a def-id="init-segments"></a> and <a def-id="media-segments"></a> are appended to the
           <a>SourceBuffer</a>.</p>
 
         <p>Each <a def-id="track-buffer"></a> has a <dfn id="last-decode-timestamp">last decode timestamp</dfn> variable that stores
-          the decode timestamp of the last <a def-id="coded-frame"></a> appended in the current <a def-id="append-sequence"></a>. The variable is initially
+          the decode timestamp of the last <a def-id="coded-frame"></a> appended in the current <a def-id="coded-frame-sequence"></a>. The variable is initially
           unset to indicate that no <a def-id="coded-frames"></a> have been appended yet.</p>
 
         <p>Each <a def-id="track-buffer"></a> has a <dfn id="last-frame-duration">last frame duration</dfn> variable that stores
-          the frame duration of the last <a def-id="coded-frame"></a> appended in the current <a def-id="append-sequence"></a>. The variable is initially
+          the frame duration of the last <a def-id="coded-frame"></a> appended in the current <a def-id="coded-frame-sequence"></a>. The variable is initially
           unset to indicate that no <a def-id="coded-frames"></a> have been appended yet.</p>
 
         <p>Each <a def-id="track-buffer"></a> has a <dfn id="highest-presentation-timestamp">highest presentation timestamp</dfn> variable that stores
-          the highest presentation timestamp encountered in a <a def-id="coded-frame"></a> appended in the current <a def-id="append-sequence"></a>.
+          the highest presentation timestamp encountered in a <a def-id="coded-frame"></a> appended in the current <a def-id="coded-frame-sequence"></a>.
           The variable is initially unset to indicate that no <a def-id="coded-frames"></a> have been appended yet.</p>
 
         <p>Each <a def-id="track-buffer"></a> has a <dfn id="need-RAP-flag">need random access point flag</dfn> variable that keeps track of whether
@@ -1024,20 +1028,16 @@
             <a def-id="appendStream"></a> is allowed to accept more bytes. It is set to false when the SourceBuffer object is created and gets updated
             as data is appended and removed.</p>
 
-          <p>The <dfn id="sourcebuffer-abort-mode">abort mode</dfn> variable keeps track of the <a>AbortMode</a> passed to the last <a def-id="abort"></a>
-            call. It is unset when the SourceBuffer object is created and gets updated by <a def-id="abort"></a> and the
-            <a def-id="coded-frame-processing-algorithm"></a>.
-          </p>
-
-          <p>The <dfn id="sourcebuffer-continuation-timestamp">continuation timestamp</dfn> variable keeps track of the start timestamp for the next
-            <a def-id="append-sequence"></a> if <a def-id="abort"></a> is called with <a def-id="AbortMode-continuation"></a>.
-            It is unset when the SourceBuffer object is created and gets updated by <a def-id="abort"></a> and the
-            <a def-id="coded-frame-processing-algorithm"></a>.
+          <p>The <dfn id="sourcebuffer-sequence-start-timestamp">sequence start timestamp</dfn> variable keeps track of the starting timestamp for a new <a def-id="coded-frame-sequence"></a> in the
+            <a def-id="AppendMode-sequence"></a> mode. It is use to handle discontinuities, placing media segments adjacent to  <a def-id="AppendMode-segments"></a> mode appends, and placing media segments in the
+            presentation via <a def-id="timestampOffset"></a>.
+            It is unset when the SourceBuffer object is created and gets updated when the <a def-id="mode"></a> attribute equals <a def-id="AppendMode-sequence"></a> and the
+            <a def-id="timestampOffset"></a> attribute is set, or the <a def-id="coded-frame-processing-algorithm"></a> runs.
           </p>
 
           <p>The <dfn id="sourcebuffer-highest-presentation-end-timestamp">highest presentation end timestamp</dfn> variable stores the highest presentation
-            end timestamp encountered in the current <a def-id="append-sequence"></a>. It is unset when the SourceBuffer object is created and gets updated
-            by the <a def-id="reset-parser-state-algorithm"></a> and the <a def-id="coded-frame-processing-algorithm"></a>.
+            end timestamp encountered in the current <a def-id="coded-frame-sequence"></a>. It is set to 0 when the SourceBuffer object is created and gets updated
+            by the <a def-id="coded-frame-processing-algorithm"></a>.
           </p>
 
           <p>When this algorithm is invoked, run the following steps:</p>
@@ -1100,7 +1100,6 @@
             <li>Unset the <a def-id="last-decode-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
             <li>Unset the <a def-id="last-frame-duration"></a> on all <a def-id="track-buffers"></a>.</li>
             <li>Unset the <a def-id="highest-presentation-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
-            <li>Unset the <a def-id="highest-presentation-end-timestamp"></a>.</li>
             <li>Set the <a def-id="need-RAP-flag"></a> on all <a def-id="track-buffers"></a> to true.</li>
             <li>Remove all bytes from the <a def-id="input-buffer"></a>.</li>
             <li>Set <a def-id="append-state"></a> to <a def-id="waiting-for-segment"></a>.</li>
@@ -1307,7 +1306,7 @@
             <li>
 	      <p>For each <a def-id="coded-frame"></a> in the <a def-id="media-segment"></a> run the following steps:</p>
 	      <ol>
-	        <li>Let <var>presentation timestamp</var> be a double precision floating point representation of the coded frame's presentation timestamp in seconds.</li>
+	        <li><i>Loop Top: </i>Let <var>presentation timestamp</var> be a double precision floating point representation of the coded frame's presentation timestamp in seconds.</li>
 	        <li>Let <var>decode timestamp</var> be a double precision floating point representation of the coded frame's decode timestamp in seconds.
                   <p class="note">Implementations don't have to internally store timestamps in a double precision floating point representation. This
                     representation is used here because it is the represention for timestamps in the HTML spec. The intention here is to make the
@@ -1318,41 +1317,52 @@
                   </p>
                 </li>
                 <li>Let <var>frame duration</var> be a double precision floating point representation of the coded frame's duration in seconds.</li>
-
-                <li> If <a def-id="abort-mode"></a> is set, then run the following steps:
+                <li>Let <var>discontinuity flag</var> equal false.</li>
+                <li>If <a def-id="mode"></a> equals <a def-id="AppendMode-sequence"></a> and <a def-id="sequence-start-timestamp"></a> is set, then run the following steps:
                   <ol>
-                    <li>
-                      <dl class="switch">
-                        <dt>If <a def-id="abort-mode"></a> equals <a def-id="AbortMode-continuation"></a>:</dt>
-                        <dd>Set <a def-id="timestampOffset"></a> equal to <a def-id="continuation-timestamp"></a> - <var>presentation timestamp</var>.</dd>
-                        <dt>If <a def-id="abort-mode"></a> equals <a def-id="AbortMode-timestampOffset"></a>:</dt>
-                        <dd>
-                          <ol>
-                            <li>Let <var>old timestampOffset</var> equal the current value of <a def-id="timestampOffset"></a>.</li>
-                            <li>Set <a def-id="timestampOffset"></a> equal to <var>old timestampOffset</var> - <var>presentation timestamp</var>.</li>
-                          </ol>
-                        </dd>
-                      </dl>
-                    </li>
-                    <li>Unset <a def-id="continuation-timestamp"></a>.</li>
-                    <li>Unset <a def-id="abort-mode"></a>.</li>
+                    <li>Set <a def-id="timestampOffset"></a> equal to <a def-id="sequence-start-timestamp"></a> - <var>presentation timestamp</var>.</li>
+                    <li>Set <a def-id="highest-presentation-end-timestamp"></a> equal to <a def-id="sequence-start-timestamp"></a>.</li>
+                    <li>Set the <var>discontinuity flag</var> to true.</li>
+                    <li>Unset <a def-id="sequence-start-timestamp"></a>.</li>
                   </ol>
                 </li>
-
 	        <li>
 	          <p>If <a def-id="timestampOffset"></a> is not 0, then run the following steps:</p>
 	          <ol>
 	            <li>Add <a def-id="timestampOffset"></a> to the <var>presentation timestamp</var>.</li>
 	            <li>Add <a def-id="timestampOffset"></a> to the <var>decode timestamp</var>.</li>
-	            <li>If the <var>presentation timestamp</var> or <var>decode timestamp</var> is less than the <a def-id="presentation-start-time"></a>, then call <a def-id="eos-decode"></a>, and abort these steps.</li>
+	            <li>If the <var>presentation timestamp</var> or <var>decode timestamp</var> is less than the <a def-id="presentation-start-time"></a>, then call <a def-id="eos-decode"></a>, and abort
+                      these steps.</li>
 	          </ol>
 	        </li>
                 <li>Let <var>track buffer</var> equal the <a def-id="track-buffer"></a> that the coded frame should be added to.</li>
-                <li>If <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> is set and <var>decode timestamp</var> is less than
-                  <a def-id="last-decode-timestamp"></a> or the difference between <var>decode timestamp</var> and <a def-id="last-decode-timestamp"></a>
-                  is greater than 2 times <a def-id="last-frame-duration"></a>, then call <a def-id="eos-decode"></a> and abort these steps.
-                  <p class="note">These checks trigger an error when the application attempts out-of-order appends without an intervening
-                    <a def-id="abort"></a>.</p>
+                <li>
+                  <dl class="switch">
+                    <dt>If <var>discontinuity flag</var> equals true:</dt>
+                    <dt>If <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> is set and <var>decode timestamp</var> is less than
+                      <a def-id="last-decode-timestamp"></a>:</dt>
+                    <dt>If <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> is set and the difference between <var>decode timestamp</var> and <a def-id="last-decode-timestamp"></a>
+                      is greater than 2 times <a def-id="last-frame-duration"></a>:</dt>
+                    <dd>
+                      <ol>
+                        <li>
+                          <dl class="switch">
+                            <dt>If <a def-id="mode"></a> equals <a def-id="AppendMode-segments"></a>:</dt>
+                            <dd>Set <a def-id="highest-presentation-end-timestamp"></a> to <var>presentation timestamp</var>.</dd>
+                            <dt>If <a def-id="mode"></a> equals <a def-id="AppendMode-sequence"></a>:</dt>
+                            <dd>Set <a def-id="sequence-start-timestamp"></a> equal to the <a def-id="highest-presentation-end-timestamp"></a>.</dd>
+                          </dl>
+                        </li>
+                        <li>Unset the <a def-id="last-decode-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
+                        <li>Unset the <a def-id="last-frame-duration"></a> on all <a def-id="track-buffers"></a>.</li>
+                        <li>Unset the <a def-id="highest-presentation-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
+                        <li>Set the <a def-id="need-RAP-flag"></a> on all <a def-id="track-buffers"></a> to true.</li>
+                        <li>Jump to the <i>Loop Top</i> step above to restart processing of the current <a def-id="coded-frame"></a>.</li>
+                      </ol>
+                    </dd>
+                    <dt>Otherwise:</dt>
+                    <dd>Continue.</dd>
+                  </dl>
                 </li>
                 <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
                 <li>If <var>presentation timestamp</var> is less than <a def-id="appendWindowStart"></a>, then set the <a def-id="need-RAP-flag"></a> to true, drop the
@@ -1674,9 +1684,9 @@
     <section id="mediaplaybackquality">
       <h2>MediaPlaybackQuality Object</h2>
       <dl title="interface MediaPlaybackQuality" class="idl">
-        <dt>readonly attribute Date creationTime</dt>
+        <dt>readonly attribute DOMHighResTimeStamp creationTime</dt>
         <dd>
-          <p>The local time when this object was created.(i.e. set to new Date()).</p>
+          <p>The timestamp returned by <a def-id="performance-now"></a> when this object was created.</p>
         </dd>
 
         <dt>readonly attribute unsigned long totalVideoFrames</dt>
@@ -1768,7 +1778,7 @@
             <p>On getting, run the following steps:</p>
             <ol>
               <li>Let <var>playbackQuality</var> be a new instance of <a>MediaPlaybackQuality</a>.</li>
-              <li>Set <var>playbackQuality</var>.<a def-id="creationTime"></a> to a new Date object that reflects the current local time.</li>
+              <li>Set <var>playbackQuality</var>.<a def-id="creationTime"></a> to the value returned by a call to <a def-id="performance-now"></a>.</li>
               <li>Set <var>playbackQuality</var>.<a def-id="totalVideoFrames"></a> to the current value of the <a def-id="total-video-frame-count"></a>.</li>
               <li>Set <var>playbackQuality</var>.<a def-id="droppedVideoFrames"></a> to the current value of the <a def-id="dropped-video-frame-count"></a>.</li>
               <li>Return <var>playbackQuality</var>.</li>
@@ -2241,7 +2251,16 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-            <td>02 May 2013</td>
+            <td>06 May 2013</td>
+            <td>
+              <ul>
+                <li>Bug 20901 - Remove AbortMode and add AppendMode.</li>
+                <li>Bug 21911 - Change MediaPlaybackQuality.creationTime to DOMHighResTimeStamp.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/b60bf8077d9c/media-source/media-source.html">02 May 2013</a></td>
             <td>
               <ul>
                 <li>Reworked ambiguous text in a variety of places.</li>
