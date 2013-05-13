@@ -1,5 +1,7 @@
 (function() {
-    var HTML_spec_url = "http://www.w3.org/TR/html5/embedded-content-0.html";
+  var HTML_spec_url = "http://www.w3.org/TR/html5/embedded-content-0.html";
+  var DOM_spec_url = "http://dom.spec.whatwg.org/";
+  var HRTIME_spec_url = "http://www.w3.org/TR/hr-time/";
 
   function eventdfn_helper(doc, df, id, text) {
     df.appendChild($("<dfn/>").attr({id: 'dom-evt-' + text.toLowerCase()}).wrapInner($("<code/>").text(text))[0]);
@@ -25,12 +27,8 @@
     link_helper(doc, df, 'http://www.w3.org/TR/FileAPI/#' + id, text);
   }
 
-  function streamapi_helper(doc, df, id, text) {
-      link_helper(doc, df, 'http://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm#' + id, text);
-  }
-
   function hrtime_helper(doc, df, id, text) {
-    link_helper(doc, df, 'http://www.w3.org/TR/hr-time/#' + id, text);
+    link_helper(doc, df, HRTIME_spec_url + '#' + id, text);
   }
 
 
@@ -55,7 +53,7 @@
   }
 
   function exception_helper(doc, df, id, text) {
-    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: 'http://dom.spec.whatwg.org/#dom-domexception-' + id}).text(text))[0]);
+    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: DOM_spec_url + '#dom-domexception-' + id}).text(text))[0]);
   }
 
   function webmref_helper(doc, df, id, text) {
@@ -112,12 +110,20 @@
     df.appendChild(doc.createTextNode(str));
   }
 
+  function eos_decode_helper(doc, df, id, text) {
+    link_helper(doc, df, '#end-of-stream-algorithm', 'end of stream algorithm');
+    df.appendChild(doc.createTextNode(' with the '));
+    df.appendChild($("<var/>").text('error')[0]);
+    df.appendChild(doc.createTextNode(' parameter set to '));
+    idlref_helper(doc, df, 'idl-def-EndOfStreamError.decode', '"decode"');
+  }
+
   var rep = {
     'sourceBuffers': { func: idlref_helper, fragment: 'widl-MediaSource-sourceBuffers', link_text: 'sourceBuffers',  },
     'activeSourceBuffers': { func: idlref_helper, fragment: 'widl-MediaSource-activeSourceBuffers', link_text: 'activeSourceBuffers',  },
     'addSourceBuffer': { func: idlref_helper, fragment: 'widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type', link_text: 'addSourceBuffer()',  },
     'endOfStream': { func: idlref_helper, fragment: 'widl-MediaSource-endOfStream-void-EndOfStreamError-error', link_text: 'endOfStream()',  },
-    'eos-decode': { func: idlref_helper, fragment: 'widl-MediaSource-endOfStream-void-EndOfStreamError-error', link_text: 'endOfStream("decode")',  },
+    'eos-decode': { func: eos_decode_helper, fragment: '#end-of-stream-algorithm', link_text: 'end of stream algorithm with <var>error</var> parameter set to "decode"',  },
     'readyState': { func: idlref_helper, fragment: 'widl-MediaSource-readyState', link_text: 'readyState',  },
     'duration': { func: idlref_helper, fragment: 'widl-MediaSource-duration', link_text: 'duration',  },
 
@@ -179,6 +185,7 @@
     'active-track-buffers': { func: term_helper, fragment: 'active-track-buffers', link_text: 'active track buffers', },
 
     'duration-change-algorithm': { func: link_helper, fragment: '#duration-change-algorithm', link_text: 'duration change algorithm', },
+    'end-of-stream-algorithm': { func: link_helper, fragment: '#end-of-stream-algorithm', link_text: 'end of stream algorithm', },
     'segment-parser-loop': { func: link_helper, fragment: '#sourcebuffer-segment-parser-loop', link_text: 'segment parser loop', },
     'append-state': { func: var_helper, fragment: '#sourcebuffer-append-state', link_text: 'append state', },
     'waiting-for-segment': { func: link_helper, fragment: '#sourcebuffer-waiting-for-segment', link_text: 'WAITING_FOR_SEGMENT', },
@@ -216,8 +223,6 @@
     'URL': { func: fileapi_helper, fragment: 'URL-object', link_text: 'URL',  },
     'file-createObjectURL': { func: fileapi_helper, fragment: 'dfn-createObjectURL', link_text: 'createObjectURL()',  },
     'file-revokeObjectURL': { func: fileapi_helper, fragment: 'dfn-revokeObjectURL', link_text: 'revokeObjectURL()',  },
-
-    'Stream': { func: streamapi_helper, fragment: 'idl-def-Stream', link_text: 'Stream', },
 
     'eventdfn': { func: eventdfn_helper, fragment: '', link_text: '', },
 
@@ -360,6 +365,54 @@
 
       } else {
         console.log("Found def-id '" + def_id + "' but it does not correspond to anything");
+      }
+    });
+
+    // Update links to external type definitions.
+    var externalClassInfo = {
+      'Stream': { spec: 'streams-api', fragment: 'idl-def-Stream' },
+      'AudioTrackList': {spec: 'html5', fragment: 'audiotracklist' },
+      'TextTrackList': {spec: 'html5', fragment: 'texttracklist' },
+      'TimeRanges': { spec: 'html5', fragment: 'timeranges' },
+      'VideoTrackList': {spec: 'html5', fragment: 'videotracklist' },
+      'EventTarget': { spec: 'dom', fragment: 'eventtarget' },
+      'DOMString': { spec: 'webidl', fragment: 'idl-DOMString' },
+      'boolean': { spec: 'webidl', fragment: 'idl-boolean' },
+      'double': { spec: 'webidl', fragment: 'idl-double' },
+      'unrestricted double': { spec: 'webidl', fragment: 'idl-unrestricted-double' },
+      'unsigned long': { spec: 'webidl', fragment: 'idl-unsigned-long' },
+      'unsigned long long': { spec: 'webidl', fragment: 'idl-unsigned-long-long' },
+      'void': { spec: 'webidl', fragment: 'idl-void' },
+      'ArrayBuffer': { spec: 'typed-array', fragment: 'ArrayBuffer' },
+      'ArrayBufferView': { spec: 'typed-array', fragment: 'ArrayBufferView' },
+      'DOMHighResTimeStamp': { spec: 'hr-time', fragment: 'sec-DOMHighResTimeStamp'},
+    };
+    $("a:not([href])").each(function () {
+      var $ant = $(this);
+      var className = this.innerHTML;
+      var info = externalClassInfo[className];
+      if (info) {
+	var id = info.fragment;
+	var df = doc.createDocumentFragment();
+	var baseURL = null;
+	if (info.spec == 'streams-api') {
+	  baseURL = "http://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm";
+        } else if (info.spec == 'html5') {
+	  baseURL = HTML_spec_url;
+	} else if (info.spec == 'dom') {
+	  baseURL = DOM_spec_url;
+        } else if (info.spec == 'webidl') {
+	  baseURL = "http://dev.w3.org/2006/webapi/WebIDL/";
+        } else if (info.spec == 'typed-array') {
+	  baseURL = "http://www.khronos.org/registry/typedarray/specs/latest/";
+        } else if (info.spec == 'hr-time') {
+	  baseURL = HRTIME_spec_url;
+	}
+
+	if (baseURL) {
+	  df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: baseURL + "#" + id, 'class': 'idlType'}).text(className))[0]);
+	  this.parentNode.replaceChild(df, this);
+	}
       }
     });
 
