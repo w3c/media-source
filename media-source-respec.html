@@ -59,7 +59,7 @@
           SourceBuffer: function() {},
           SourceBufferList: function() {},
           AppendMode: function() {},
-          MediaPlaybackQuality: function() {},
+          VideoPlaybackQuality: function() {},
           Stream: function() {},
           ArrayBuffer: function() {},
           ArrayBufferView: function() {},
@@ -67,6 +67,11 @@
       postProcess: [ mediaSourcePostProcessor ]
       };
     </script>
+    <!-- script to register bugs -->
+    <script src="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/assets/scripts/bug-assist.js"></script>
+    <meta name="bug.short_desc" content="[MSE] ">
+    <meta name="bug.product" content="HTML WG">
+    <meta name="bug.component" content="Media Source Extensions">
 
     <style type="text/css">
       .nonnormative { color: green; margin: 2em 0 2em 0em; padding: 0.5em 1em; border: none; background: #DDFFDD; }
@@ -89,28 +94,38 @@
       p + * > li, dd li { margin: 1em 0; }
 
       @media screen { code :link, code :visited { color: inherit; } }
+
+      /* fix bug entry form styling */
+      body > form {
+      padding: 4px;
+      border: 1px solid red;
+      background-color: white;
     </style>
   </head>
   <body>
-    
+
     <section id="sotd">
         <p>The working groups maintains <a href="http://w3.org/brief/Mjcw">a list of all bug reports that the editors have not yet tried to address</a>. This draft highlights some of the pending issues that are still to be discussed in the working group. No decision has been taken on the outcome of these issues including whether they are valid.</p>
         <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should join the mailing list mentioned below and take part in the discussions.</p>
     </section>
 
     <section id="abstract">
-      This specification extends HTMLMediaElement to allow 
-      JavaScript to generate media streams for playback. 
-      Allowing JavaScript to generate streams facilitates a variety of use 
+      This specification extends HTMLMediaElement to allow
+      JavaScript to generate media streams for playback.
+      Allowing JavaScript to generate streams facilitates a variety of use
       cases like adaptive streaming and time shifting live streams.
+
+      <p>If you wish to make comments or file bugs regarding this document in a manner that is tracked by the W3C, please submit them via
+        <a href="https://www.w3.org/Bugs/Public/enter_bug.cgi?product=HTML%20WG&component=Media%20Source%20Extensions&short_desc=%5BMSE%5D%20">our public bug database</a>.
+      </p>
     </section>
 
 
     <section id="introduction">
       <h2>Introduction</h2>
-      <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;. 
+      <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;.
         It defines objects that allow JavaScript to pass media segments to an <a def-id="videoref" name="htmlmediaelement">HTMLMediaElement</a> [[HTML5]].
-        A buffering model is also included to describe how the user agent should act when different media segments are 
+        A buffering model is also included to describe how the user agent acts when different media segments are
         appended at different times. Byte stream specifications for WebM, ISO Base Media File Format, and MPEG-2 Transport Streams are given to specify the
         expected format of byte streams used with these extensions.</p>
       <img src="pipeline_model.png" alt="Media Source Pipeline Model Diagram">
@@ -146,7 +161,7 @@
             the <a def-id="appendWindowStart"></a> and <a def-id="appendWindowEnd"></a> attributes respectively.</p></dd>
 
           <dt id="coded-frame">Coded Frame</dt>
-          <dd><p>A unit of media data that has a presentation timestamp and decode timestamp. The presentation timestamp indicates when the frame should be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp must be present in the bytestream. If frames cannot be decoded out of order and a decode timestamp is not present in the bytestream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
+          <dd><p>A unit of media data that has a presentation timestamp and decode timestamp. The presentation timestamp indicates when the frame must be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp must be present in the bytestream. If frames cannot be decoded out of order and a decode timestamp is not present in the bytestream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
 
           <dt id="coded-frame-sequence">Coded Frame Sequence</dt>
           <dd><p>A sequence of <a def-id="coded-frames"></a> that are adjacent and monotonically increasing in decode time without any gaps. Discontinuities detected by the
@@ -311,9 +326,9 @@
                     <li>If the <a def-id="audiotrack-enabled"></a> attribute on the <a def-id="audio-track"></a> object is true, then
                       set the <var>removed enabled audio track flag</var> to true.</li>
                     <li>Remove the <a def-id="audio-track"></a> object from the <var>HTMLMediaElement audioTracks list</var>.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-removetrack"></a> at the <var>HTMLMediaElement audioTracks list</var>.</li>
+                    <li><a def-id="Queue-and-fire-removetrack"></a> at the <var>HTMLMediaElement audioTracks list</var>.</li>
                     <li>Remove the <a def-id="audio-track"></a> object from the <var>SourceBuffer audioTracks list</var>.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-removetrack"></a> at the <var>SourceBuffer audioTracks list</var>.</li>
+                    <li><a def-id="Queue-and-fire-removetrack"></a> at the <var>SourceBuffer audioTracks list</var>.</li>
                   </ol>
                 </li>
                 <li>If the <var>removed enabled audio track flag</var> equals true, then <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the
@@ -332,9 +347,9 @@
                     <li>If the <a def-id="videotrack-selected"></a> attribute on the <a def-id="video-track"></a> object is true, then
                       set the <var>removed selected video track flag</var> to true.</li>
                     <li>Remove the <a def-id="video-track"></a> object from the <var>HTMLMediaElement videoTracks list</var>.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-removetrack"></a> at the <var>HTMLMediaElement videoTracks list</var>.</li>
+                    <li><a def-id="Queue-and-fire-removetrack"></a> at the <var>HTMLMediaElement videoTracks list</var>.</li>
                     <li>Remove the <a def-id="video-track"></a> object from the <var>SourceBuffer videoTracks list</var>.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-removetrack"></a> at the <var>SourceBuffer videoTracks list</var>.</li>
+                    <li><a def-id="Queue-and-fire-removetrack"></a> at the <var>SourceBuffer videoTracks list</var>.</li>
                   </ol>
                 </li>
                 <li>If the <var>removed selected video track flag</var> equals true, then <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the
@@ -354,9 +369,9 @@
                     <li>If the <a def-id="texttrack-mode"></a> attribute on the <a def-id="text-track"></a> object is set to  <a def-id="texttrack-showing"></a> or
                       <a def-id="texttrack-hidden"></a> , then set the <var>removed enabled text track flag</var> to true.</li>
                     <li>Remove the <a def-id="text-track"></a> object from the <var>HTMLMediaElement textTracks list</var>.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-removetrack"></a> at the <var>HTMLMediaElement textTracks list</var>.</li>
+                    <li><a def-id="Queue-and-fire-removetrack"></a> at the <var>HTMLMediaElement textTracks list</var>.</li>
                     <li>Remove the <a def-id="text-track"></a> object from the <var>SourceBuffer textTracks list</var>.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-removetrack"></a> at the <var>SourceBuffer textTracks list</var>.</li>
+                    <li><a def-id="Queue-and-fire-removetrack"></a> at the <var>SourceBuffer textTracks list</var>.</li>
                   </ol>
                 </li>
                 <li>If the <var>removed enabled text track flag</var> equals true, then <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the
@@ -462,7 +477,7 @@
 
         <section id="mediasource-detach">
           <h4>Detaching from a media element</h4>
-          <p>The following steps are run in any case where the media element is going to transition to <a def-id="videoref" name="dom-media-network_empty">NETWORK_EMPTY</a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="videoref" name="event-mediacontroller-emptied">emptied</a> at the media element. These steps should be run right before the transition.</p>
+          <p>The following steps are run in any case where the media element is going to transition to <a def-id="videoref" name="dom-media-network_empty">NETWORK_EMPTY</a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="videoref" name="event-mediacontroller-emptied">emptied</a> at the media element. These steps must be run right before the transition.</p>
           <ol>
             <li>Set the <a def-id="readyState"></a> attribute to <a def-id="closed"></a>.</li>
             <li>Set the <a def-id="duration"></a> attribute to NaN.</li>
@@ -517,7 +532,7 @@
             determine when it has enough data. The metrics used may change during playback so web applications should only rely on the value of
             <a def-id="ready-state"></a> to determine whether more data is needed or not.</p>
 
-          <p class="note">When the media element needs more data, it should transition from <a def-id="have-enough-data"></a> to
+          <p class="note">When the media element needs more data, it must transition from <a def-id="have-enough-data"></a> to
             <a def-id="have-future-data"></a> early enough for a web application to be able to respond without causing an interruption in playback.
             For example, transitioning when the current playback position is 500ms before the end of the buffered data gives the application roughly
             500ms to append more data before playback stalls.</p>
@@ -654,7 +669,7 @@
         <section id="end-of-stream-algorithm">
           <h4>End of stream algorithm</h4>
           <p>This algorithm gets called when the application signals the end of stream via an <a def-id="endOfStream"></a> call or an algorithm needs to
-            signal a decode error. This algorithm takes an <var>error</var> parameter that indicates whether an error should be signalled.</p>
+            signal a decode error. This algorithm takes an <var>error</var> parameter that indicates whether an error will be signalled.</p>
           <ol>
             <li>Change the <a def-id="readyState"></a> attribute value to <a def-id="ended"></a>.</li>
             <li>
@@ -666,7 +681,7 @@
 	            <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the highest end timestamp across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.<br>
 		      <p class="note">This allows the duration to properly reflect the end of the appended media segments. For example, if the duration was explicitly set to 10 seconds and only media segments for 0 to 5 seconds were appended before endOfStream() was called, then the duration will get updated to 5 seconds.</p>
 	            </li>
-	            <li>Notify the media element that it now has all of the media data. Playback should continue until all the media passed in via <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a> has been played.</li>
+	            <li>Notify the media element that it now has all of the media data.</li>
 	          </ol>
 	        </dd>
                 <dt>If <var>error</var> is set to <a def-id="network"></a>
@@ -929,7 +944,14 @@
             <li>If <var>end</var> is less than or equal to <var>start</var>, then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>
+              <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run
+                the following steps:</p>
+              <ol>
+	        <li>Set the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> to <a def-id="open"></a></li>
+	        <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a def-id="parent-media-source"></a> .</li>
+              </ol>
+            </li>
             <li>Set the <a def-id="updating"></a> attribute to true.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
             <li>Return control to the caller and run the rest of the steps asynchronously.</li>
@@ -1059,7 +1081,7 @@
             <li><i>Loop Top:</i> If the <a def-id="input-buffer"></a> is empty, then jump to the <i>need more data</i> step below.</li>
             <li>If the <a def-id="input-buffer"></a> starts with bytes that violate the <a def-id="byte-stream-format-specs"></a>, then run the
               <a def-id="eos-decode"></a> and abort this algorithm.</li>
-            <li>Remove any bytes that the <a def-id="byte-stream-format-specs"></a> say should be ignored from the start of the <a def-id="input-buffer"></a>.</li>
+            <li>Remove any bytes that the <a def-id="byte-stream-format-specs"></a> say must be ignored from the start of the <a def-id="input-buffer"></a>.</li>
             <li>
 	      <p>If the <a def-id="append-state"></a> equals <a def-id="waiting-for-segment"></a>, then run the following steps:</p>
 	      <ol>
@@ -1234,11 +1256,10 @@
                       </ol>
                     </li>
                     <li>Add <var>new audio track</var> to the <a def-id="sourcebuffer-audioTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at the <a def-id="audio-track-list"></a> object referenced by the
-                      <a def-id="sourcebuffer-audioTracks"></a> attribute 
-                      on this <a>SourceBuffer</a> object.</li>
+                    <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="audio-track-list"></a> object referenced by the
+                      <a def-id="sourcebuffer-audioTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
                     <li>Add <var>new audio track</var> to the <a def-id="audiotracks"></a> attribute on the HTMLMediaElement.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at the <a def-id="audio-track-list"></a> object referenced by the <a def-id="audiotracks"></a> 
+                    <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="audio-track-list"></a> object referenced by the <a def-id="audiotracks"></a>
                       attribute on the HTMLMediaElement.</li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
                     <li>Add the <a def-id="track-description"></a> for this track to the <a def-id="track-buffer"></a>.</li>
@@ -1260,10 +1281,10 @@
                       </ol>
                     </li>
                     <li>Add <var>new video track</var> to the <a def-id="sourcebuffer-videoTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="sourcebuffer-videoTracks"></a> attribute 
+                    <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="sourcebuffer-videoTracks"></a> attribute
                       on this <a>SourceBuffer</a> object.</li>
                     <li>Add <var>new video track</var> to the <a def-id="videotracks"></a> attribute on the HTMLMediaElement.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="videotracks"></a> attribute on the 
+                    <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="videotracks"></a> attribute on the
                       HTMLMediaElement.</li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
                     <li>Add the <a def-id="track-description"></a> for this track to the <a def-id="track-buffer"></a>.</li>
@@ -1280,10 +1301,10 @@
                       <a def-id="texttrack-hidden"></a>, then set <var>active track flag</var> to true.
                     </li>
                     <li>Add <var>new text track</var> to the <a def-id="sourcebuffer-textTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at <a def-id="sourcebuffer-textTracks"></a> attribute 
+                    <li><a def-id="Queue-and-fire-addtrack"></a> at <a def-id="sourcebuffer-textTracks"></a> attribute
                       on this <a>SourceBuffer</a> object.</li>
                     <li>Add <var>new text track</var> to the <a def-id="texttracks"></a> attribute on the HTMLMediaElement.</li>
-                    <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-addtrack"></a> at the <a def-id="text-track-list"></a> object referenced by the <a def-id="texttracks"></a> attribute on the 
+                    <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="text-track-list"></a> object referenced by the <a def-id="texttracks"></a> attribute on the
                       HTMLMediaElement.</li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
                     <li>Add the <a def-id="track-description"></a> for this track to the <a def-id="track-buffer"></a>.</li>
@@ -1322,7 +1343,11 @@
             <li>
 	      <p>For each <a def-id="coded-frame"></a> in the <a def-id="media-segment"></a> run the following steps:</p>
 	      <ol>
-	        <li><i>Loop Top: </i>Let <var>presentation timestamp</var> be a double precision floating point representation of the coded frame's presentation timestamp in seconds.</li>
+	        <li><i>Loop Top: </i>Let <var>presentation timestamp</var> be a double precision floating point representation of the coded frame's presentation timestamp in seconds.
+                  <p class="note">Special processing may be needed to determine the presentation and decode timestamps for timed text frames since this information may not be explicilty
+                    present in the underlying format or may be dependent on the order of the frames. Some metadata text tracks, like MPEG2-TS PSI data, may only have implied timestamps.
+                    Format specific rules for these situations should be in the <a def-id="byte-stream-format-specs"></a> or in separate extension specifications.</p>
+                </li>
 	        <li>Let <var>decode timestamp</var> be a double precision floating point representation of the coded frame's decode timestamp in seconds.
                   <p class="note">Implementations don't have to internally store timestamps in a double precision floating point representation. This
                     representation is used here because it is the represention for timestamps in the HTML spec. The intention here is to make the
@@ -1351,7 +1376,7 @@
                       then run the <a def-id="eos-decode"></a>, and abort these steps.</li>
 	          </ol>
 	        </li>
-                <li>Let <var>track buffer</var> equal the <a def-id="track-buffer"></a> that the coded frame should be added to.</li>
+                <li>Let <var>track buffer</var> equal the <a def-id="track-buffer"></a> that the coded frame will be added to.</li>
                 <li>
                   <dl class="switch">
                     <dt>If <var>discontinuity flag</var> equals true:</dt>
@@ -1398,25 +1423,36 @@
                     <li>Set the <a def-id="need-RAP-flag"></a> on <var>track buffer</var> to false.</li>
                   </ol>
                 </li>
-                <li>Let <var>spliced frame</var> be an unset variable for holding audio splice information</li>
+                <li>Let <var>spliced audio frame</var> be an unset variable for holding audio splice information</li>
+                <li>Let <var>spliced timed text frame</var> be an unset variable for holding timed text splice information</li>
                 <li>If <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> is unset and there is a <a def-id="coded-frame"></a> in
                   <var>track buffer</var> with a presentation timestamp less than or equal to <var>presentation timestamp</var> and
                   <var>presentation timestamp</var> is less than this coded frame's presentation timestamp plus its frame duration, then run the
                   following steps:
                   <ol>
                     <li>Let <var>overlapped frame</var> be the <a def-id="coded-frame"></a> in <var>track buffer</var> that matches the condition above.</li>
-                    <li>If <var>track buffer</var> contains audio <a def-id="coded-frames"></a>, then run the <a def-id="audio-splice-frame-algorithm"></a> and if a splice 
-                      frame is returned, assign it to <var>spliced frame</var>.</li>
-                    <li>Let <var>overlapped frame presentation timestamp</var> equal the presentation timestamp of <var>overlapped frame</var>.</li>
-                    <li>Let <var>remove window timestamp</var> equal <var>overlapped frame presentation timestamp</var> plus 1 microsecond.</li>
-                    <li>If <var>track buffer</var> contains video <a def-id="coded-frames"></a> and the <var>presentation timestamp</var> is less than the
-                      <var>remove window timestamp</var>, then remove <var>overlapped frame</var> and any <a def-id="coded-frames"></a> that depend on it
-                      from <var>track buffer</var>.
-                      <p class="note">
-                        This is to compensate for minor errors in frame timestamp computations that can appear when converting back and forth between double precision
-                        floating point numbers and rationals. This tolerance allows a frame to replace an existing one as long as it is within 1 microsecond of the existing
-                        frame's start time. Frames that come slightly before an existing frame are handled by the removal step below.
-                      </p>
+                    <li>
+                      <dl class="switch">
+                        <dt>If <var>track buffer</var> contains audio <a def-id="coded-frames"></a>:</dt>
+                        <dd>Run the <a def-id="audio-splice-frame-algorithm"></a> and if a splice frame is returned, assign it to <var>spliced audio frame</var>.</dd>
+                        <dt>If <var>track buffer</var> contains video <a def-id="coded-frames"></a>:</dt>
+                        <dd>
+                          <ol>
+                            <li>Let <var>overlapped frame presentation timestamp</var> equal the presentation timestamp of <var>overlapped frame</var>.</li>
+                            <li>Let <var>remove window timestamp</var> equal <var>overlapped frame presentation timestamp</var> plus 1 microsecond.</li>
+                            <li>If the <var>presentation timestamp</var> is less than the <var>remove window timestamp</var>, then remove <var>overlapped frame</var> and any
+                              <a def-id="coded-frames"></a> that depend on it from <var>track buffer</var>.
+                              <p class="note">
+                                This is to compensate for minor errors in frame timestamp computations that can appear when converting back and forth between double precision
+                                floating point numbers and rationals. This tolerance allows a frame to replace an existing one as long as it is within 1 microsecond of the existing
+                                frame's start time. Frames that come slightly before an existing frame are handled by the removal step below.
+                              </p>
+                            </li>
+                          </ol>
+                        </dd>
+                        <dt>If <var>track buffer</var> contains timed text <a def-id="coded-frames"></a>:</dt>
+                        <dd>Run the <a def-id="text-splice-frame-algorithm"></a> and if a splice frame is returned, assign it to <var>spliced timed text frame</var>.</dd>
+                      </dl>
                     </li>
                   </ol>
                 </li>
@@ -1450,8 +1486,10 @@
                 </li>
                 <li>
                   <dl class="switch">
-                    <dt>If <var>spliced frame</var> is set:</dt>
-                    <dd>Add <var>spliced frame</var> to the <var>track buffer</var>.</dd>
+                    <dt>If <var>spliced audio frame</var> is set:</dt>
+                    <dd>Add <var>spliced audio frame</var> to the <var>track buffer</var>.</dd>
+                    <dt>If <var>spliced timed text frame</var> is set:</dt>
+                    <dd>Add <var>spliced timed text frame</var> to the <var>track buffer</var>.</dd>
                     <dt>Otherwise:</dt>
                     <dd>Add the <a def-id="coded-frame"></a> with the <var>presentation timestamp</var>, <var>decode timestamp</var>, and <var>frame duration</var> to the
                       <var>track buffer</var>.</dd>
@@ -1617,7 +1655,7 @@
         </section>
         <section id="sourcebuffer-audio-splice-rendering-algorithm">
           <h4>Audio Splice Rendering Algorithm</h4>
-          <p>The following steps are run when a spliced frame, generated by the <a def-id="audio-splice-frame-algorithm"></a>, needs to be rendered by the 
+          <p>The following steps are run when a spliced frame, generated by the <a def-id="audio-splice-frame-algorithm"></a>, needs to be rendered by the
             media element:</p>
           <ol>
             <li>Let <var>fade out coded frames</var> be the <a def-id="coded-frames"></a> that are faded out during the splice.</li>
@@ -1647,6 +1685,32 @@
             <p>Here is a graphical representation of this algorithm.</p>
             <img src="audio_splice.png" alt="Audio splice diagram">
           </div>
+        </section>
+        <section id="sourcebuffer-text-splice-frame-algorithm">
+          <h4>Text Splice Frame Algorithm</h4>
+          <p>Follow these steps when the <a def-id="coded-frame-processing-algorithm"></a> needs to generate a splice frame for two overlapping timed text
+            <a def-id="coded-frames"></a>:</p>
+          <ol>
+            <li>Let <var>track buffer</var> be the <a def-id="track-buffer"></a> that will contain the splice.</li>
+            <li>Let <var>new coded frame</var> be the new <a def-id="coded-frame"></a>, that is being added to <var>track buffer</var>, which triggered the need for a splice.</li>
+            <li>Let <var>presentation timestamp</var> be the presentation timestamp for <var>new coded frame</var></li>
+            <li>Let <var>decode timestamp</var> be the decode timestamp for <var>new coded frame</var>.</li>
+            <li>Let <var>frame duration</var> be the duration of <var>new coded frame</var>.</li>
+            <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
+            <li>Let <var>first overlapped frame</var> be the <a def-id="coded-frame"></a> in <var>track buffer</var> with a presentation timestamp less than or equal to
+              <var>presentation timestamp</var> and <var>presentation timestamp</var> is less than this coded frame's presentation timestamp plus its frame duration.
+            </li>
+            <li>Let <var>overlapped presentation timestamp</var> be the presentation timestamp of the <var>first overlapped frame</var>.</li>
+            <li>Let <var>overlapped frames</var> equal <var>first overlapped frame</var> as well as any additional frames in <var>track buffer</var> that
+              have a presentation timestamp greater than <var>presentation timestamp</var> and less than <var>frame end timestamp</var>.</li>
+            <li>Remove all the frames included in <var>overlapped frames</var> from <var>track buffer</var>.
+            <li>Update the frame duration of the <var>first overlapped frame</var> to <var>presentation timestamp</var> - <var>overlapped presentation timestamp</var>.</li>
+            <li>Add <var>first overlapped frame</var> to the <var>track buffer</var>.
+            <li>Return to caller without providing a splice frame.
+              <p class="note">This is intended to allow <var>new coded frame</var> to be added to the <var>track buffer</var> as if
+                it hadn't overlapped any frames in <var>track buffer</var> to begin with.</p>
+            </li>
+          </ol>
         </section>
       </section>
     </section>
@@ -1697,9 +1761,9 @@
       </section>
     </section>
 
-    <section id="mediaplaybackquality">
-      <h2>MediaPlaybackQuality Object</h2>
-      <dl title="interface MediaPlaybackQuality" class="idl">
+    <section id="videoplaybackquality">
+      <h2>VideoPlaybackQuality Object</h2>
+      <dl title="interface VideoPlaybackQuality" class="idl">
         <dt>readonly attribute DOMHighResTimeStamp creationTime</dt>
         <dd>
           <p>The timestamp returned by <a def-id="performance-now"></a> when this object was created.</p>
@@ -1714,6 +1778,11 @@
         <dd>
           <p>The total number of frames dropped predecode or dropped because the frame missed
             its display deadline.</p>
+        </dd>
+
+        <dt>readonly attribute unsigned long corruptedVideoFrames</dt>
+        <dd>
+          <p>The total number of corrupted frames that have been detected.</p>
         </dd>
       </dl>
     </section>
@@ -1740,68 +1809,73 @@
 
     <section id="htmlmediaelement-extensions">
       <h2>HTMLMediaElement Extensions</h2>
+      <p>This section specifies what existing attributes on the <a def-id="htmlmediaelement"></a> must return when a <a>MediaSource</a> is attached to the element.</p>
 
-      <section id="htmlmediaelement-existing-attributes">
-        <h2>Modifications to Existing Attribute Behavior</h2>
-        <p>This section specifies what existing attributes on the <a def-id="htmlmediaelement"></a> should return when a <a>MediaSource</a> is attached to the element.</p>
+      <p>The <a def-id="videoref" name="dom-media-seekable">HTMLMediaElement.seekable</a> attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
+      <dl class="switch">
+        <dt>If <a def-id="duration"></a> equals NaN</dt>
+        <dd>Return an empty <a def-id="timeranges"></a> object.</dd>
+        <dt>If <a def-id="duration"></a> equals positive Infinity</dt>
+        <dd>Return a single range with a start time of 0 and an end time equal to the highest end time reported by the <a def-id="hme-buffered"></a> attribute.</dd>
+        <dt>Otherwise</dt>
+        <dd>Return a single range with a start time of 0 and an end time equal to <a def-id="duration"></a>.</dd>
+      </dl>
 
-        <p>The <a def-id="videoref" name="dom-media-seekable">HTMLMediaElement.seekable</a> attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
-        <dl class="switch">
-          <dt>If <a def-id="duration"></a> equals NaN</dt>
-          <dd>Return an empty <a def-id="timeranges"></a> object.</dd>
-          <dt>If <a def-id="duration"></a> equals positive Infinity</dt>
-          <dd>Return a single range with a start time of 0 and an end time equal to the highest end time reported by the <a def-id="hme-buffered"></a> attribute.</dd>
-          <dt>Otherwise</dt>
-          <dd>Return a single range with a start time of 0 and an end time equal to <a def-id="duration"></a>.</dd>
-        </dl>
+      <p id="dom-htmlmediaelement.buffered">The <a def-id="hme-buffered"></a> attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
+      <ol>
+        <li>If <a def-id="activeSourceBuffers"></a>.length equals 0 then return an empty <a def-id="timeranges"></a> object and abort these steps.</li>
+        <li>Let <var>active ranges</var> be the ranges returned by <a def-id="buffered"></a> for each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a>.</li>
+        <li>Let <var>highest end time</var> be the largest range end time in the <var>active ranges</var>.</li>
+        <li>Let <var>intersection ranges</var> equal a <a def-id="timerange"></a> object containing a single range from 0 to <var>highest end time</var>.</li>
+        <li>For each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a> run the following steps:
+          <ol>
+            <li>Let <var>source ranges</var> equal the ranges returned by the <a def-id="buffered"></a> attribute on the current <a>SourceBuffer</a>.</li>
+            <li>If <a def-id="readyState"></a> is <a def-id="ended"></a>, then set the end time on the last range in <var>source ranges</var> to
+              <var>highest end time</var>.</li>
+            <li>Let <var>new intersection ranges</var> equal the the intersection between the <var>intersection ranges</var> and the <var>source ranges</var>.</li>
+            <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
+          </ol>
+        </li>
+        <li>Return the <var>intersection ranges</var>.</li>
+      </ol>
+    </section>
 
-        <p id="dom-htmlmediaelement.buffered">The <a def-id="hme-buffered"></a> attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
-        <ol>
-          <li>If <a def-id="activeSourceBuffers"></a>.length equals 0 then return an empty <a def-id="timeranges"></a> object and abort these steps.</li>
-          <li>Let <var>active ranges</var> be the ranges returned by <a def-id="buffered"></a> for each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a>.</li>
-          <li>Let <var>highest end time</var> be the largest range end time in the <var>active ranges</var>.</li>
-          <li>Let <var>intersection ranges</var> equal a <a def-id="timerange"></a> object containing a single range from 0 to <var>highest end time</var>.</li>
-          <li>For each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a> run the following steps:
-            <ol>
-              <li>Let <var>source ranges</var> equal the ranges returned by the <a def-id="buffered"></a> attribute on the current <a>SourceBuffer</a>.</li>
-              <li>If <a def-id="readyState"></a> is <a def-id="ended"></a>, then set the end time on the last range in <var>source ranges</var> to
-                <var>highest end time</var>.</li>
-              <li>Let <var>new intersection ranges</var> equal the the intersection between the <var>intersection ranges</var> and the <var>source ranges</var>.</li>
-              <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
-            </ol>
-          </li>
-          <li>Return the <var>intersection ranges</var>.</li>
-        </ol>
-      </section>
-      <section id="htmlmediaelement-new-attributes">
-        <h2>New Attributes and Behavior</h2>
-        <p>This section specifies new attributes and internal state that are being added to the <a def-id="htmlmediaelement"></a>.</p>
+    <section id="htmlvideoelement-extensions">
+      <h2>HTMLVideoElement Extensions</h2>
+      <p>This section specifies new attributes and internal state that are being added to the <a def-id="htmlvideoelement"></a>.</p>
 
-        <p>Each <a def-id="htmlmediaelement"></a> will maintain a <dfn id="total-video-frame-count">total video frame count</dfn> variable that keeps
-          track of the total number of frames that have been displayed and dropped. This variable is initialized to 0 when the
-          element is created and whenever the <a def-id="media-element-load-algorithm"></a> is invoked. It is incremented when a video frame is displayed
-          or when the <a def-id="dropped-video-frame-count"></a> is incremented.</p>
+      <p>Each <a def-id="htmlvideoelement"></a> will maintain a <dfn id="total-video-frame-count">total video frame count</dfn> variable that keeps
+        track of the total number of frames that have been displayed and dropped. This variable is initialized to 0 when the
+        element is created and whenever the <a def-id="media-element-load-algorithm"></a> is invoked. It is incremented when a video frame is displayed
+        or when the <a def-id="dropped-video-frame-count"></a> is incremented.</p>
 
-        <p>Each <a def-id="htmlmediaelement"></a> will maintain a <dfn id="dropped-video-frame-count">dropped video frame count</dfn> variable that keeps
-          track of the total number of frames that have been dropped. This variable is initialized to 0 when the
-          element is created and whenever the <a def-id="media-element-load-algorithm"></a> is invoked. It is incremented when a video frame is dropped
-          predecode or when a frame is decoded but dropped because it missed a display deadline.</p>
+      <p>Each <a def-id="htmlvideoelement"></a> will maintain a <dfn id="dropped-video-frame-count">dropped video frame count</dfn> variable that keeps
+        track of the total number of frames that have been dropped. This variable is initialized to 0 when the
+        element is created and whenever the <a def-id="media-element-load-algorithm"></a> is invoked. It is incremented when a video frame is dropped
+        predecode or when a frame is decoded but dropped because it missed a display deadline.</p>
 
-        <dl title="partial interface HTMLMediaElement" class="idl">
-          <dt>readonly attribute MediaPlaybackQuality playbackQuality</dt>
-          <dd>
-            <p>Provides the current the playback quality metrics.</p>
-            <p>On getting, run the following steps:</p>
-            <ol>
-              <li>Let <var>playbackQuality</var> be a new instance of <a>MediaPlaybackQuality</a>.</li>
-              <li>Set <var>playbackQuality</var>.<a def-id="creationTime"></a> to the value returned by a call to <a def-id="performance-now"></a>.</li>
-              <li>Set <var>playbackQuality</var>.<a def-id="totalVideoFrames"></a> to the current value of the <a def-id="total-video-frame-count"></a>.</li>
-              <li>Set <var>playbackQuality</var>.<a def-id="droppedVideoFrames"></a> to the current value of the <a def-id="dropped-video-frame-count"></a>.</li>
-              <li>Return <var>playbackQuality</var>.</li>
-            </ol>
-          </dd>
-        </dl>
-      </section>
+      <p>Each <a def-id="htmlvideoelement"></a> will maintain a <dfn id="corrupted-video-frame-count">corrupted video frame count</dfn> variable that keeps
+        track of the total number of corrupted frames detected. This variable is initialized to 0 when the element is created and whenever the
+        <a def-id="media-element-load-algorithm"></a> is invoked. It is incremented when a corrupted video frame is detected by the decoder. It is up to
+        the implementation to determine whether to display or drop a corrupted frame. Whichever choice is made, the <a def-id="total-video-frame-count"></a>
+        and <a def-id="dropped-video-frame-count"></a> must be updated appropriately.
+      </p>
+
+      <dl title="partial interface HTMLVideoElement" class="idl">
+        <dt>readonly attribute VideoPlaybackQuality videoPlaybackQuality</dt>
+        <dd>
+          <p>Provides the current the playback quality metrics.</p>
+          <p>On getting, run the following steps:</p>
+          <ol>
+            <li>Let <var>playbackQuality</var> be a new instance of <a>VideoPlaybackQuality</a>.</li>
+            <li>Set <var>playbackQuality</var>.<a def-id="creationTime"></a> to the value returned by a call to <a def-id="performance-now"></a>.</li>
+            <li>Set <var>playbackQuality</var>.<a def-id="totalVideoFrames"></a> to the current value of the <a def-id="total-video-frame-count"></a>.</li>
+            <li>Set <var>playbackQuality</var>.<a def-id="droppedVideoFrames"></a> to the current value of the <a def-id="dropped-video-frame-count"></a>.</li>
+            <li>Set <var>playbackQuality</var>.<a def-id="corruptedVideoFrames"></a> to the current value of the <a def-id="corrupted-video-frame-count"></a>.</li>
+            <li>Return <var>playbackQuality</var>.</li>
+          </ol>
+        </dd>
+      </dl>
     </section>
 
     <section id="audio-track-extensions">
@@ -2267,7 +2341,21 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-            <td>13 May 2013</td>
+            <td>01 June 2013</td>
+            <td>
+              <ul>
+                <li>Bug 21431 - Updated coded frame processing algorithm for text splicing.</li>
+                <li>Bug 22035 - Update addtrack and removetrack event firing text to match HTML5 language.</li>
+                <li>Bug 22111 - Remove useless playback sentence from end of stream algorithm.</li>
+                <li>Bug 22052 - Add corrupted frame metric.</li>
+                <li>Bug 22062 - Added links for filing bugs.</li>
+                <li>Bug 22125 - Add "ended" to "open" transition to remove().</li>
+                <li>Bug 22143 - Move HTMLMediaElement.playbackQuality to HTMLVideoElement.videoPlaybackQuality.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/71968956733e/media-source/media-source.html">13 May 2013</a></td>
             <td>
               <ul>
                 <li>Bug 21954 - Add [EnforceRange] to appendStream's maxSize parameter.</li>

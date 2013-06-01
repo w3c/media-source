@@ -67,6 +67,17 @@
     df.appendChild(doc.createTextNode(' named'));
   }
 
+  function queue_and_fire_track_event_helper(doc, df, id, text) {
+    webappapis_helper(doc, df, 'queue-a-task', 'Queue a task');
+    df.appendChild(doc.createTextNode(' to fire a '));
+    webappapis_helper(doc, df, 'concept-events-trusted', 'trusted event');
+    df.appendChild(doc.createTextNode(' named '));
+    code_videoref_helper(doc, df, 'handler-tracklist-on' + text, text);
+    df.appendChild(doc.createTextNode(', that does not bubble and is not cancelable, and that uses the '));
+    code_videoref_helper(doc, df, 'trackevent', 'TrackEvent');
+    df.appendChild(doc.createTextNode(' interface,'));
+  }
+
   function fragment_helper(doc, df, id, text) {
     var f = doc.createElement('span')
     f.innerHTML = text;
@@ -144,9 +155,10 @@
     'mode': { func: idlref_helper, fragment: 'widl-SourceBuffer-mode', link_text: 'mode',  },
 
     'length': { func: idlref_helper, fragment: 'widl-SourceBufferList-length', link_text: 'length',  },
-    'creationTime': { func: idlref_helper, fragment: 'widl-MediaPlaybackQuality-creationTime', link_text: 'creationTime',  },
-    'totalVideoFrames': { func: idlref_helper, fragment: 'widl-MediaPlaybackQuality-totalVideoFrames', link_text: 'totalVideoFrames',  },
-    'droppedVideoFrames': { func: idlref_helper, fragment: 'widl-MediaPlaybackQuality-droppedVideoFrames', link_text: 'droppedVideoFrames',  },
+    'creationTime': { func: idlref_helper, fragment: 'widl-VideoPlaybackQuality-creationTime', link_text: 'creationTime',  },
+    'totalVideoFrames': { func: idlref_helper, fragment: 'widl-VideoPlaybackQuality-totalVideoFrames', link_text: 'totalVideoFrames',  },
+    'droppedVideoFrames': { func: idlref_helper, fragment: 'widl-VideoPlaybackQuality-droppedVideoFrames', link_text: 'droppedVideoFrames',  },
+    'corruptedVideoFrames': { func: idlref_helper, fragment: 'widl-VideoPlaybackQuality-corruptedVideoFrames', link_text: 'corruptedVideoFrames',  },
     'createObjectURL': { func: idlref_helper, fragment: 'widl-URL-createObjectURL-DOMString-MediaSource-mediaSource', link_text: 'createObjectURL()',  },
     'open': { func: idlref_helper, fragment: 'idl-def-ReadyState.open', link_text: '"open"',  },
     'closed': { func: idlref_helper, fragment: 'idl-def-ReadyState.closed', link_text: '"closed"',  },
@@ -202,6 +214,7 @@
     'coded-frame-eviction-algorithm': { func: link_helper, fragment: '#sourcebuffer-coded-frame-eviction', link_text: 'coded frame eviction algorithm', },
     'audio-splice-frame-algorithm': { func: link_helper, fragment: '#sourcebuffer-audio-splice-frame-algorithm', link_text: 'audio splice frame algorithm', },
     'audio-splice-rendering-algorithm': { func: link_helper, fragment: '#sourcebuffer-audio-splice-rendering-algorithm', link_text: 'audio splice rendering algorithm', },
+    'text-splice-frame-algorithm': { func: link_helper, fragment: '#sourcebuffer-text-splice-frame-algorithm', link_text: 'text splice frame algorithm', },
     'input-buffer': { func: var_helper, fragment: '#sourcebuffer-input-buffer', link_text: 'input buffer', },
     'buffer-full-flag': { func: var_helper, fragment: '#sourcebuffer-buffer-full-flag', link_text: 'buffer full flag', },
     'sequence-start-timestamp': { func: var_helper, fragment: '#sourcebuffer-sequence-start-timestamp', link_text: 'sequence start timestamp', },
@@ -238,8 +251,6 @@
     'timerange': { func: code_videoref_helper, fragment: 'timeranges', link_text: 'TimeRange',  },
     'timeranges': { func: code_videoref_helper, fragment: 'timeranges', link_text: 'TimeRanges',  },
     'tracklist-change': { func: code_videoref_helper, fragment: 'handler-tracklist-onchange', link_text: 'change',  },
-    'tracklist-addtrack': { func: code_videoref_helper, fragment: 'handler-tracklist-onaddtrack', link_text: 'addtrack',  },
-    'tracklist-removetrack': { func: code_videoref_helper, fragment: 'handler-tracklist-onremovetrack', link_text: 'removetrack',  },
     'video-track': { func: code_videoref_helper, fragment: 'videotrack', link_text: 'VideoTrack',  },
     'video-track-list': { func: code_videoref_helper, fragment: 'videotracklist', link_text: 'VideoTrackList', },
     'videotrack-id': { func: code_videoref_helper, fragment: 'dom-videotrack-id', link_text: 'id', },
@@ -282,9 +293,11 @@
     'hme-buffered': { func: code_videoref_helper, fragment: 'dom-media-buffered', link_text: 'HTMLMediaElement.buffered',  },
     'hme-seek-algorithm': { func: videoref_helper, fragment: 'dom-media-seek', link_text: 'seek algorithm',  },
     'hme-duration-change-algorithm': { func: videoref_helper, fragment: 'durationChange', link_text: 'HTMLMediaElement duration change algorithm',  },
+    'htmlvideoelement': { func: code_videoref_helper, fragment: 'htmlvideoelement', link_text: 'HTMLVideoElement',  },
 
     'total-video-frame-count': { func: var_helper, fragment: '#total-video-frame-count', link_text: 'total video frame count', },
     'dropped-video-frame-count': { func: var_helper, fragment: '#dropped-video-frame-count', link_text: 'dropped video frame count', },
+    'corrupted-video-frame-count': { func: var_helper, fragment: '#corrupted-video-frame-count', link_text: 'corrupted video frame count', },
 
     'invalid-access-err': { func: exception_helper, fragment: 'invalid_access_err', link_text: 'INVALID_ACCESS_ERR',  },
     'invalid-state-err': { func: exception_helper, fragment: 'invalid_state_err', link_text: 'INVALID_STATE_ERR',  },
@@ -294,6 +307,8 @@
 
     'queue-a-task-to-fire-an-event-named': { func: queue_and_fire_helper, fragment: '', link_text: 'queue a task',  },
     'Queue-a-task-to-fire-an-event-named': { func: queue_and_fire_helper, fragment: '', link_text: 'Queue a task',  },
+    'Queue-and-fire-addtrack': { func: queue_and_fire_track_event_helper, fragment: '', link_text: 'addtrack',  },
+    'Queue-and-fire-removetrack': { func: queue_and_fire_track_event_helper, fragment: '', link_text: 'removetrack',  },
     'provide-a-stable-state': { func: webappapis_helper, fragment: 'provide-a-stable-state', link_text: 'provide a stable state',  },
 
     'origin': { func: browsers_helper, fragment: 'origin-0', link_text: 'origin', },
