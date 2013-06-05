@@ -168,6 +168,15 @@
               <a def-id="coded-frame-processing-algorithm"></a> and <a def-id="abort"></a> calls trigger the start of a new coded frame sequence.</p>
           </dd>
 
+          <dt id="display-duration-error">Display Duration Error</dt>
+          <dd>
+            <p>The display duration error for a frame is computed using the following steps:</p>
+            <ol>
+              <li>Let <var>Ei</var> equal the desired duration frame i should spend on the screen (to nearest microsecond)</li>
+              <li>Let <var>Ai</var> equal the actual duration frame i spent on the screen (if the frame is never displayed to the user (i.e. dropped) , then let <var>Ai</var> equal 0).</li>
+              <li>Let <var>display duration error</var> equal the absolute value of (<var>Ei</var> - <var>Ai</var>).</li>
+            </ol>
+          </dd>
           <dt id="init-segment">Initialization Segment</dt>
           <dd>
 	    <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of <a def-id="media-segments"></a>. This includes codec initialization data, <a def-id="track-id"></a> mappings for multiplexed segments, and timestamp offsets (e.g. edit lists).</p>
@@ -282,7 +291,12 @@
         <dt>SourceBuffer addSourceBuffer(DOMString type)</dt>
         <dd>
           <p>Adds a new <a>SourceBuffer</a> to <a def-id="sourceBuffers"></a>.</p>
-
+          <p>Implementations must support at least 1 MediaSource object with the following <a>SourceBuffer</a> configurations. Anything beyond this is a quality of implementation issue.
+            <ul>
+              <li>A single SourceBuffer with 1 audio track and/or 1 video track.</li>
+              <li>Two SourceBuffers with one handling a single audio track and the other handling a single video track.</li>
+            </ul>
+          </p>
           <ol class="method-algorithm">
             <li>If <var>type</var> is null or an empty string then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw a <a def-id="not-supported-err"></a> exception and abort these steps.</li>
@@ -308,7 +322,7 @@
             <li>If <var>sourceBuffer</var> specifies an object that is not in <a def-id="sourceBuffers"></a> then throw a <a def-id="not-found-err"></a> exception and abort these steps.</li>
             <li>If the <var>sourceBuffer</var>.<a def-id="updating"></a> attribute equals true, then run the following steps:
               <ol>
-                <li>Abort the <a def-id="stream-append-loop"></a> algorithm if it is running.</li>
+                <li>Abort the <a def-id="buffer-append"></a> and <a def-id="stream-append-loop"></a> algorithms if they are running.</li>
                 <li>Set the <var>sourceBuffer</var>.<a def-id="updating"></a> attribute to false.</li>
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateabort"></a> at <var>sourceBuffer</var>.</li>
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at <var>sourceBuffer</var>.</li>
@@ -730,7 +744,7 @@
         <dt>sequence</dt>
         <dd>
           <p>Media segments will be treated as adjacent in time independent of the timestamps in the media segment. Coded frames in a new media segment will be placed immediately after the coded
-            frames in the previous media segment. The <a def-id="timestampOffset"></a> attribute will be updated if a new offset is need to make the new media segments adjacent to the previous media segment.
+            frames in the previous media segment. The <a def-id="timestampOffset"></a> attribute will be updated if a new offset is needed to make the new media segments adjacent to the previous media segment.
             Setting the <a def-id="timestampOffset"></a> attribute in <a def-id="AppendMode-sequence"></a> mode allows a media segment to be placed at a specific position in the timeline without any knowledge
             of the timestamps in the media segment.
           </p>
@@ -922,8 +936,7 @@
             <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then run the following steps:
               <ol>
-                <li>Abort the <a def-id="segment-parser-loop"></a>, <a def-id="buffer-append"></a>, and <a def-id="stream-append-loop"></a> algorithms if
-                  they are running.</li>
+                <li>Abort the <a def-id="buffer-append"></a> and <a def-id="stream-append-loop"></a> algorithms if they are running.</li>
                 <li>Set the <a def-id="updating"></a> attribute to false.</li>
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateabort"></a> at this <a>SourceBuffer</a> object.</li>
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
@@ -1064,8 +1077,7 @@
             as data is appended and removed.</p>
 
           <p>The <dfn id="sourcebuffer-sequence-start-timestamp">sequence start timestamp</dfn> variable keeps track of the starting timestamp for a new <a def-id="coded-frame-sequence"></a> in the
-            <a def-id="AppendMode-sequence"></a> mode. It is use to handle discontinuities, placing media segments adjacent to  <a def-id="AppendMode-segments"></a> mode appends, and placing media segments in the
-            presentation via <a def-id="timestampOffset"></a>.
+            <a def-id="AppendMode-sequence"></a> mode.
             It is unset when the SourceBuffer object is created and gets updated when the <a def-id="mode"></a> attribute equals <a def-id="AppendMode-sequence"></a> and the
             <a def-id="timestampOffset"></a> attribute is set, or the <a def-id="coded-frame-processing-algorithm"></a> runs.
           </p>
@@ -1145,15 +1157,12 @@
         </section>
 
         <section id="sourcebuffer-append-error">
-          <h4>Append Error</h4>
+          <h4>Append Error Algorithm</h4>
           <p>When an error occurs during an append, run the following steps:</p>
           <ol>
             <li>Run the <a def-id="reset-parser-state-algorithm"></a>.</li>
-            <li>Abort the <a def-id="stream-append-loop"></a> algorithm if it is running.</li>
             <li>Set the <a def-id="updating"></a> attribute to false.</li>
-            <li>
-              <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateerror"></a> at this <a>SourceBuffer</a> object.
-            </li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateerror"></a> at this <a>SourceBuffer</a> object.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
           </ol>
         </section>
@@ -1358,12 +1367,11 @@
                   </p>
                 </li>
                 <li>Let <var>frame duration</var> be a double precision floating point representation of the coded frame's duration in seconds.</li>
-                <li>Let <var>discontinuity flag</var> equal false.</li>
                 <li>If <a def-id="mode"></a> equals <a def-id="AppendMode-sequence"></a> and <a def-id="sequence-start-timestamp"></a> is set, then run the following steps:
                   <ol>
                     <li>Set <a def-id="timestampOffset"></a> equal to <a def-id="sequence-start-timestamp"></a> - <var>presentation timestamp</var>.</li>
                     <li>Set <a def-id="highest-presentation-end-timestamp"></a> equal to <a def-id="sequence-start-timestamp"></a>.</li>
-                    <li>Set the <var>discontinuity flag</var> to true.</li>
+                    <li>Set the <a def-id="need-RAP-flag"></a> on all <a def-id="track-buffers"></a> to true.</li>
                     <li>Unset <a def-id="sequence-start-timestamp"></a>.</li>
                   </ol>
                 </li>
@@ -1379,9 +1387,9 @@
                 <li>Let <var>track buffer</var> equal the <a def-id="track-buffer"></a> that the coded frame will be added to.</li>
                 <li>
                   <dl class="switch">
-                    <dt>If <var>discontinuity flag</var> equals true:</dt>
                     <dt>If <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> is set and <var>decode timestamp</var> is less than
                       <a def-id="last-decode-timestamp"></a>:</dt>
+                    <dd>OR</dd>
                     <dt>If <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> is set and the difference between <var>decode timestamp</var> and <a def-id="last-decode-timestamp"></a>
                       is greater than 2 times <a def-id="last-frame-duration"></a>:</dt>
                     <dd>
@@ -1784,6 +1792,11 @@
         <dd>
           <p>The total number of corrupted frames that have been detected.</p>
         </dd>
+
+        <dt>readonly attribute double playbackJitter;</dt>
+        <dd>
+          <p>The sum of all <a def-id="display-duration-errors"></a> for all frames included in the <a def-id="totalVideoFrames"></a> count.</p>
+        </dd>
       </dl>
     </section>
 
@@ -1861,6 +1874,12 @@
         and <a def-id="dropped-video-frame-count"></a> must be updated appropriately.
       </p>
 
+      <p>Each <a def-id="htmlvideoelement"></a> will maintain a <dfn id="display-duration-error-sum">display duration error sum</dfn> variable that keeps
+        track of the sum of all <a def-id="display-duration-errors"></a>. This variable is initialized to 0 when the element is created and whenever the
+        <a def-id="media-element-load-algorithm"></a> is invoked. When a frame causes the <a def-id="total-video-frame-count"></a> to increment, the
+        <a def-id="display-duration-error"></a> for that frame is computed and added to this variable.
+      </p>
+
       <dl title="partial interface HTMLVideoElement" class="idl">
         <dt>readonly attribute VideoPlaybackQuality videoPlaybackQuality</dt>
         <dd>
@@ -1872,6 +1891,7 @@
             <li>Set <var>playbackQuality</var>.<a def-id="totalVideoFrames"></a> to the current value of the <a def-id="total-video-frame-count"></a>.</li>
             <li>Set <var>playbackQuality</var>.<a def-id="droppedVideoFrames"></a> to the current value of the <a def-id="dropped-video-frame-count"></a>.</li>
             <li>Set <var>playbackQuality</var>.<a def-id="corruptedVideoFrames"></a> to the current value of the <a def-id="corrupted-video-frame-count"></a>.</li>
+            <li>Set <var>playbackQuality</var>.<a def-id="playbackJitter"></a> to the current value of the <a def-id="display-duration-error-sum"></a>.</li>
             <li>Return <var>playbackQuality</var>.</li>
           </ol>
         </dd>
@@ -2030,6 +2050,9 @@
     <section id="byte-stream-formats">
       <h2>Byte Stream Formats</h2>
       <p>The bytes provided through <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM , the ISO Base Media File Format, and MPEG-2 Transport Streams are provided below. These format specifications are intended to be the authoritative source for how data from these containers is formatted and passed to a <a>SourceBuffer</a>. If a <a>MediaSource</a> implementation claims to support any of these container formats, then it must implement the corresponding byte stream format specification described below.</p>
+      <p class="note">The byte stream format specifications below are not intended to define new storage formats. They simply outline the subset of
+        existing storage format structures that implementations of this specification will accept.</p>
+
       <p>This section provides general requirements for all byte stream formats:</p>
       <ul>
         <li>A byte stream format specification must define <a def-id="init-segments"></a> and <a def-id="media-segments"></a>.</li>
@@ -2341,7 +2364,20 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-            <td>01 June 2013</td>
+            <td>05 June 2013</td>
+            <td>
+              <ul>
+                <li>Bug 22139 - Added a note clarifying that byte stream specs aren't defining new storage formats.</li>
+                <li>Bug 22148 - Added playbackJitter metric.</li>
+                <li>Bug 22134 - Added minimal number of SourceBuffers requirements.</li>
+                <li>Bug 22115 - Make algorithm abort text consistent.</li>
+                <li>Bug 22113 - Address typos.</li>
+                <li>Bug 22065 - Fix infinite loop in coded frame processing algorithm.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/1ac9c2205a7b/media-source/media-source.html">01 June 2013</a></td>
             <td>
               <ul>
                 <li>Bug 21431 - Updated coded frame processing algorithm for text splicing.</li>
