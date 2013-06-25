@@ -1,4 +1,4 @@
-<!DOCTYPE html SYSTEM "about:legacy-compat">
+﻿<!DOCTYPE html SYSTEM "about:legacy-compat">
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -238,12 +238,12 @@
         <dt>network</dt>
         <dd>
           <p>Terminates playback and signals that a network error has occured.</p>
-          <p class="note">If the JavaScript fetching media data encounters a network error it should use this status code to terminate playback.</p>
+          <p class="note">JavaScript applications should use this status code to terminate playback with a network error. For example, if a network error occurs while fetching media data.</p>
         </dd>
         <dt>decode</dt>
         <dd>
           <p>Terminates playback and signals that a decoding error has occured.</p>
-          <p class="note">If the JavaScript code fetching media data has problems parsing the data it should use this status code to terminate playback.</p>
+          <p class="note">JavaScript applications should use this status code to terminate playback with a decode error. For example, if a parsing error occurs while processing out-of-band media data.</p>
         </dd>
       </dl>
 
