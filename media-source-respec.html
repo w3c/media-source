@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html SYSTEM "about:legacy-compat">
+<!DOCTYPE html SYSTEM "about:legacy-compat">
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -161,11 +161,11 @@
             the <a def-id="appendWindowStart"></a> and <a def-id="appendWindowEnd"></a> attributes respectively.</p></dd>
 
           <dt id="coded-frame">Coded Frame</dt>
-          <dd><p>A unit of media data that has a presentation timestamp and decode timestamp. The presentation timestamp indicates when the frame must be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp must be present in the bytestream. If frames cannot be decoded out of order and a decode timestamp is not present in the bytestream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
+          <dd><p>A unit of media data that has a presentation timestamp and decode timestamp. The presentation timestamp indicates when the frame must be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp must be present in the byte stream. If frames cannot be decoded out of order and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
 
-          <dt id="coded-frame-sequence">Coded Frame Sequence</dt>
-          <dd><p>A sequence of <a def-id="coded-frames"></a> that are adjacent and monotonically increasing in decode time without any gaps. Discontinuities detected by the
-              <a def-id="coded-frame-processing-algorithm"></a> and <a def-id="abort"></a> calls trigger the start of a new coded frame sequence.</p>
+          <dt id="coded-frame-group">Coded Frame Group</dt>
+          <dd><p>A group of <a def-id="coded-frames"></a> that are adjacent and monotonically increasing in decode time without any gaps. Discontinuities detected by the
+              <a def-id="coded-frame-processing-algorithm"></a> and <a def-id="abort"></a> calls trigger the start of a new coded frame group.</p>
           </dd>
 
           <dt id="display-duration-error">Display Duration Error</dt>
@@ -204,6 +204,11 @@
 
           <dt id="random-access-point">Random Access Point</dt>
           <dd><p>A position in a <a def-id="media-segment"></a> where decoding and continuous playback can begin without relying on any previous data in the segment. For video this tends to be the location of I-frames. In the case of audio, most audio frames can be treated as a random access point. Since video tracks tend to have a more sparse distribution of random access points, the location of these points are usually considered the random access points for multiplexed streams.</p></dd>
+
+          <dt id="sourcebuffer-byte-stream-format-spec">SourceBuffer byte stream format specification</dt>
+          <dd><p>The specific <a def-id="byte-stream-format-spec"></a> that describes the format of the byte stream accepted by a <a>SourceBuffer</a> instance. The
+              <a def-id="byte-stream-format-spec"></a>, for a <a>SourceBuffer</a> object, is selected based on the <var>type</var> passed to the
+              <a def-id="addSourceBuffer"></a> call that created the object.</p></dd>
 
           <dt id="track-description">Track Description</dt>
           <dd><p>A byte stream format specific structure that provides the <a def-id="track-id"></a>, codec configuration, and other metadata for a single track. Each track description inside a single <a def-id="init-segment"></a> must have a unique <a def-id="track-id"></a>.</p></dd>
@@ -420,7 +425,7 @@
             <li>If <var>type</var> is an empty string, then return false.</li>
             <li>If <var>type</var> does not contain a valid MIME type string, then return false.</li>
             <li>If <var>type</var> contains a media type or media subtype that the MediaSource does not support, then return false.</li>
-            <li>If <var>type</var> contains at a codec that the MediaSource does not support, then return false.</li>
+            <li>If <var>type</var> contains a codec that the MediaSource does not support, then return false.</li>
             <li>If the MediaSource does not support the specified combination of media type, media subtype, and codecs then return false.</li>
             <li>Return true.</li>
           </ol>
@@ -772,7 +777,7 @@
               </ol>
             </li>
             <li>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a>, then throw an <a def-id="invalid-state-err"></a> and abort these steps.</li>
-            <li>If the <var>new mode</var> equals <a def-id="AppendMode-sequence"></a>, then set the <a def-id="sequence-start-timestamp"></a> to the <a def-id="highest-presentation-end-timestamp"></a>.</li>
+            <li>If the <var>new mode</var> equals <a def-id="AppendMode-sequence"></a>, then set the <a def-id="group-start-timestamp"></a> to the <a def-id="highest-presentation-end-timestamp"></a>.</li>
             <li>Update the attribute to <var>new mode</var>.</li>
           </ol>
         </dd>
@@ -810,7 +815,7 @@
               </ol>
             </li>
             <li>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a>, then throw an <a def-id="invalid-state-err"></a> and abort these steps.</li>
-            <li>If the <a def-id="mode"></a> attribute equals <a def-id="AppendMode-sequence"></a>, then set the <a def-id="sequence-start-timestamp"></a> to <var>new timestamp offset</var>.</li>
+            <li>If the <a def-id="mode"></a> attribute equals <a def-id="AppendMode-sequence"></a>, then set the <a def-id="group-start-timestamp"></a> to <var>new timestamp offset</var>.</li>
             <li>Update the attribute to <var>new timestamp offset</var>.</li>
           </ol>
         </dd>
@@ -984,15 +989,15 @@
           <a>SourceBuffer</a>.</p>
 
         <p>Each <a def-id="track-buffer"></a> has a <dfn id="last-decode-timestamp">last decode timestamp</dfn> variable that stores
-          the decode timestamp of the last <a def-id="coded-frame"></a> appended in the current <a def-id="coded-frame-sequence"></a>. The variable is initially
+          the decode timestamp of the last <a def-id="coded-frame"></a> appended in the current <a def-id="coded-frame-group"></a>. The variable is initially
           unset to indicate that no <a def-id="coded-frames"></a> have been appended yet.</p>
 
         <p>Each <a def-id="track-buffer"></a> has a <dfn id="last-frame-duration">last frame duration</dfn> variable that stores
-          the frame duration of the last <a def-id="coded-frame"></a> appended in the current <a def-id="coded-frame-sequence"></a>. The variable is initially
+          the frame duration of the last <a def-id="coded-frame"></a> appended in the current <a def-id="coded-frame-group"></a>. The variable is initially
           unset to indicate that no <a def-id="coded-frames"></a> have been appended yet.</p>
 
         <p>Each <a def-id="track-buffer"></a> has a <dfn id="highest-presentation-timestamp">highest presentation timestamp</dfn> variable that stores
-          the highest presentation timestamp encountered in a <a def-id="coded-frame"></a> appended in the current <a def-id="coded-frame-sequence"></a>.
+          the highest presentation timestamp encountered in a <a def-id="coded-frame"></a> appended in the current <a def-id="coded-frame-group"></a>.
           The variable is initially unset to indicate that no <a def-id="coded-frames"></a> have been appended yet.</p>
 
         <p>Each <a def-id="track-buffer"></a> has a <dfn id="need-RAP-flag">need random access point flag</dfn> variable that keeps track of whether
@@ -1076,14 +1081,14 @@
             <a def-id="appendStream"></a> is allowed to accept more bytes. It is set to false when the SourceBuffer object is created and gets updated
             as data is appended and removed.</p>
 
-          <p>The <dfn id="sourcebuffer-sequence-start-timestamp">sequence start timestamp</dfn> variable keeps track of the starting timestamp for a new <a def-id="coded-frame-sequence"></a> in the
-            <a def-id="AppendMode-sequence"></a> mode.
+          <p>The <dfn id="sourcebuffer-group-start-timestamp">group start timestamp</dfn> variable keeps track of the starting timestamp for a new
+            <a def-id="coded-frame-group"></a> in the <a def-id="AppendMode-sequence"></a> mode.
             It is unset when the SourceBuffer object is created and gets updated when the <a def-id="mode"></a> attribute equals <a def-id="AppendMode-sequence"></a> and the
             <a def-id="timestampOffset"></a> attribute is set, or the <a def-id="coded-frame-processing-algorithm"></a> runs.
           </p>
 
           <p>The <dfn id="sourcebuffer-highest-presentation-end-timestamp">highest presentation end timestamp</dfn> variable stores the highest presentation
-            end timestamp encountered in the current <a def-id="coded-frame-sequence"></a>. It is set to 0 when the SourceBuffer object is created and gets updated
+            end timestamp encountered in the current <a def-id="coded-frame-group"></a>. It is set to 0 when the SourceBuffer object is created and gets updated
             by the <a def-id="coded-frame-processing-algorithm"></a>.
           </p>
 
@@ -1091,7 +1096,7 @@
 
           <ol>
             <li><i>Loop Top:</i> If the <a def-id="input-buffer"></a> is empty, then jump to the <i>need more data</i> step below.</li>
-            <li>If the <a def-id="input-buffer"></a> starts with bytes that violate the <a def-id="byte-stream-format-specs"></a>, then run the
+            <li>If the <a def-id="input-buffer"></a> contains bytes that violate the <a def-id="sourcebuffer-byte-stream-format-spec"></a>, then run the
               <a def-id="eos-decode"></a> and abort this algorithm.</li>
             <li>Remove any bytes that the <a def-id="byte-stream-format-specs"></a> say must be ignored from the start of the <a def-id="input-buffer"></a>.</li>
             <li>
@@ -1249,6 +1254,15 @@
             <li>
               <p>If the <a def-id="first-init-segment-flag"></a> is false, then run the following steps:</p>
               <ol>
+                <li>If the <a def-id="init-segment"></a> contains tracks with codecs the user agent does not support, then run the <a def-id="eos-decode"></a>
+                  and abort these steps.
+                  <p class="note">User agents may consider codecs, that would otherwise be supported, as &quot;not supported&quot; here if the codecs were not
+                    specified in the <var>type</var> parameter passed to <a def-id="addSourceBuffer"></a>. <br>
+                    For example, MediaSource.isTypeSupported('video/web;codecs=&quot;vp8,vorbis&quot;') may return true, but if
+                    <a def-id="addSourceBuffer"></a> was called with 'video/web;codecs=&quot;vp8&quot;' and a Vorbis track appears in the
+                    <a def-id="init-segment"></a>, then the user agent may use this step to trigger a decode error.
+                  </p>
+                </li>
                 <li>
                   <p>For each audio track in the <a def-id="init-segment"></a>, run following steps:</p>
                   <ol>
@@ -1361,18 +1375,18 @@
                   <p class="note">Implementations don't have to internally store timestamps in a double precision floating point representation. This
                     representation is used here because it is the represention for timestamps in the HTML spec. The intention here is to make the
                     behavior clear without adding unnecessary complexity to the algorithm to deal with the fact that adding a timestampOffset may
-                    cause a timestamp rollover in the underlying timestamp representation used by the bytestream format. Implementations can use any
+                    cause a timestamp rollover in the underlying timestamp representation used by the byte stream format. Implementations can use any
                     internal timestamp representation they wish, but the addition of timestampOffset should behave in a similar manner to what would happen
                     if a double precision floating point representation was used.
                   </p>
                 </li>
                 <li>Let <var>frame duration</var> be a double precision floating point representation of the coded frame's duration in seconds.</li>
-                <li>If <a def-id="mode"></a> equals <a def-id="AppendMode-sequence"></a> and <a def-id="sequence-start-timestamp"></a> is set, then run the following steps:
+                <li>If <a def-id="mode"></a> equals <a def-id="AppendMode-sequence"></a> and <a def-id="group-start-timestamp"></a> is set, then run the following steps:
                   <ol>
-                    <li>Set <a def-id="timestampOffset"></a> equal to <a def-id="sequence-start-timestamp"></a> - <var>presentation timestamp</var>.</li>
-                    <li>Set <a def-id="highest-presentation-end-timestamp"></a> equal to <a def-id="sequence-start-timestamp"></a>.</li>
+                    <li>Set <a def-id="timestampOffset"></a> equal to <a def-id="group-start-timestamp"></a> - <var>presentation timestamp</var>.</li>
+                    <li>Set <a def-id="highest-presentation-end-timestamp"></a> equal to <a def-id="group-start-timestamp"></a>.</li>
                     <li>Set the <a def-id="need-RAP-flag"></a> on all <a def-id="track-buffers"></a> to true.</li>
-                    <li>Unset <a def-id="sequence-start-timestamp"></a>.</li>
+                    <li>Unset <a def-id="group-start-timestamp"></a>.</li>
                   </ol>
                 </li>
 	        <li>
@@ -1399,7 +1413,7 @@
                             <dt>If <a def-id="mode"></a> equals <a def-id="AppendMode-segments"></a>:</dt>
                             <dd>Set <a def-id="highest-presentation-end-timestamp"></a> to <var>presentation timestamp</var>.</dd>
                             <dt>If <a def-id="mode"></a> equals <a def-id="AppendMode-sequence"></a>:</dt>
-                            <dd>Set <a def-id="sequence-start-timestamp"></a> equal to the <a def-id="highest-presentation-end-timestamp"></a>.</dd>
+                            <dd>Set <a def-id="group-start-timestamp"></a> equal to the <a def-id="highest-presentation-end-timestamp"></a>.</dd>
                           </dl>
                         </li>
                         <li>Unset the <a def-id="last-decode-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
@@ -1881,11 +1895,10 @@
       </p>
 
       <dl title="partial interface HTMLVideoElement" class="idl">
-        <dt>readonly attribute VideoPlaybackQuality videoPlaybackQuality</dt>
+        <dt>VideoPlaybackQuality getVideoPlaybackQuality()</dt>
         <dd>
           <p>Provides the current the playback quality metrics.</p>
-          <p>On getting, run the following steps:</p>
-          <ol>
+          <ol class="method-algorithm">
             <li>Let <var>playbackQuality</var> be a new instance of <a>VideoPlaybackQuality</a>.</li>
             <li>Set <var>playbackQuality</var>.<a def-id="creationTime"></a> to the value returned by a call to <a def-id="performance-now"></a>.</li>
             <li>Set <var>playbackQuality</var>.<a def-id="totalVideoFrames"></a> to the current value of the <a def-id="total-video-frame-count"></a>.</li>
@@ -2052,6 +2065,7 @@
       <p>The bytes provided through <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM , the ISO Base Media File Format, and MPEG-2 Transport Streams are provided below. These format specifications are intended to be the authoritative source for how data from these containers is formatted and passed to a <a>SourceBuffer</a>. If a <a>MediaSource</a> implementation claims to support any of these container formats, then it must implement the corresponding byte stream format specification described below.</p>
       <p class="note">The byte stream format specifications below are not intended to define new storage formats. They simply outline the subset of
         existing storage format structures that implementations of this specification will accept.</p>
+      <p class="note">Byte stream format parsing and validation is implemented in the <a def-id="segment-parser-loop"></a> algorithm.</p>
 
       <p>This section provides general requirements for all byte stream formats:</p>
       <ul>
@@ -2364,7 +2378,18 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-            <td>05 June 2013</td>
+            <td>02 July 2013</td>
+            <td>
+              <ul>
+                <li>Bug 22401 - Fix typo</li>
+                <li>Bug 22134 - Clarify byte stream format enforcement.</li>
+                <li>Bug 22431 - Convert videoPlaybackQuality attribute to getVideoPlaybackQuality() method.</li>
+                <li>Bug 22109 - Renamed 'coded frame sequence' to 'coded frame group' to avoid confusion around multiple 'sequence' concepts.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/63675668846c/media-source/media-source.html">05 June 2013</a></td>
             <td>
               <ul>
                 <li>Bug 22139 - Added a note clarifying that byte stream specs aren't defining new storage formats.</li>
