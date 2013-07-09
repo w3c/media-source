@@ -1,4 +1,4 @@
-<!DOCTYPE html SYSTEM "about:legacy-compat">
+﻿<!DOCTYPE html SYSTEM "about:legacy-compat">
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -878,23 +878,7 @@
 
           <ol class="method-algorithm">
             <li>If <var>data</var> is null then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
-            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>
-              <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run the following steps:</p>
-              <ol>
-	        <li>Set the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> to <a def-id="open"></a>
-                </li>
-	        <li>
-                  <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a def-id="parent-media-source"></a> .</li>
-              </ol>
-            </li>
-            <li>Run the <a def-id="coded-frame-eviction-algorithm"></a>.</li>
-            <li>
-              <p>If the <a def-id="buffer-full-flag"></a> equals true, then throw a <a def-id="quota-exceeded-err"></a> exception and abort these step.</p>
-              <p class="note">This is the signal that the implementation was unable to evict enough data to accomodate the append or the append is too big. The web
-                application must use <a def-id="remove"></a> to explicitly free up space and/or reduce the size of the append.</p>
-            </li>
+            <li>Run the <a def-id="prepare-append"></a> algorithm.</li>
             <li>Add <var>data</var> to the end of the <a def-id="input-buffer"></a>.</li>
             <li>Set the <a def-id="updating"></a> attribute to true.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
@@ -908,24 +892,7 @@
 
           <ol class="method-algorithm">
             <li>If <var>stream</var> is null then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
-            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw
-              an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these
-              steps.</li>
-            <li>
-              <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run
-                the following steps:</p>
-              <ol>
-	        <li>Set the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> to <a def-id="open"></a></li>
-	        <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a def-id="parent-media-source"></a> .</li>
-              </ol>
-            </li>
-            <li>Run the <a def-id="coded-frame-eviction-algorithm"></a>.</li>
-            <li>
-              <p>If the <a def-id="buffer-full-flag"></a> equals true, then throw a <a def-id="quota-exceeded-err"></a> exception and abort these step.</p>
-              <p class="note">This is the signal that the implementation was unable to evict enough data to accomodate the append or the append is too big. The web
-                application must use <a def-id="remove"></a> to explicitly free up space and/or reduce the size of the append.</p>
-            </li>
+            <li>Run the <a def-id="prepare-append"></a> algorithm.</li>
             <li>Set the <a def-id="updating"></a> attribute to true.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
             <li>Asynchronously run the <a def-id="stream-append-loop"></a> algorithm with <var>stream</var> and <var>maxSize</var>.</li>
@@ -1170,6 +1137,30 @@
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateerror"></a> at this <a>SourceBuffer</a> object.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
           </ol>
+        </section>
+
+        <section id="sourcebuffer-prepare-append">
+            <h4>Prepare Append Algorithm</h4>
+            <p>When an append operation begins, the follow steps are run to validate and prepare the <a>SourceBuffer</a>.</p>
+            <ol>
+            <li>If the <a>SourceBuffer</a> has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>
+              <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run the following steps:</p>
+              <ol>
+	        <li>Set the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> to <a def-id="open"></a>
+                </li>
+	        <li>
+                  <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a def-id="parent-media-source"></a> .</li>
+              </ol>
+            </li>
+            <li>Run the <a def-id="coded-frame-eviction-algorithm"></a>.</li>
+            <li>
+              <p>If the <a def-id="buffer-full-flag"></a> equals true, then throw a <a def-id="quota-exceeded-err"></a> exception and abort these step.</p>
+              <p class="note">This is the signal that the implementation was unable to evict enough data to accomodate the append or the append is too big. The web
+                application must use <a def-id="remove"></a> to explicitly free up space and/or reduce the size of the append.</p>
+            </li>
+            </ol>
         </section>
 
         <section id="sourcebuffer-buffer-append">
