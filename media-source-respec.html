@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html SYSTEM "about:legacy-compat">
+<!DOCTYPE html SYSTEM "about:legacy-compat">
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -141,6 +141,11 @@
           <li>Provide byte stream definitions for WebM, the ISO Base Media File Format, and MPEG-2 Transport Streams.</li>
           <li>Not require support for any particular media format or codec.</li>
         </ul>
+        <p>This specification defines:</p>
+        <ul>
+          <li>Normative behavior for user agents to enable interoperability between user agents and web applications when processing media data.</li>
+          <li>Normative requirements to enable other specifications to define media formats to be used within this specification.</li>
+        </ul>
       </section>
 
       <section id="definitions">
@@ -161,21 +166,17 @@
             the <a def-id="appendWindowStart"></a> and <a def-id="appendWindowEnd"></a> attributes respectively.</p></dd>
 
           <dt id="coded-frame">Coded Frame</dt>
-          <dd><p>A unit of media data that has a presentation timestamp and decode timestamp. The presentation timestamp indicates when the frame must be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp must be present in the byte stream. If frames cannot be decoded out of order and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
+          <dd><p>A unit of media data that has a presentation timestamp and decode timestamp. The presentation timestamp indicates when the frame must be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp are present in the byte stream. The user agent must run the <a def-id="eos-decode"></a> if this is not the case. If frames cannot be decoded out of order and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
 
           <dt id="coded-frame-group">Coded Frame Group</dt>
           <dd><p>A group of <a def-id="coded-frames"></a> that are adjacent and monotonically increasing in decode time without any gaps. Discontinuities detected by the
               <a def-id="coded-frame-processing-algorithm"></a> and <a def-id="abort"></a> calls trigger the start of a new coded frame group.</p>
           </dd>
 
-          <dt id="display-duration-error">Display Duration Error</dt>
+          <dt id="displayed-frame-delay">Displayed Frame Delay</dt>
           <dd>
-            <p>The display duration error for a frame is computed using the following steps:</p>
-            <ol>
-              <li>Let <var>Ei</var> equal the desired duration frame i should spend on the screen (to nearest microsecond)</li>
-              <li>Let <var>Ai</var> equal the actual duration frame i spent on the screen (if the frame is never displayed to the user (i.e. dropped) , then let <var>Ai</var> equal 0).</li>
-              <li>Let <var>display duration error</var> equal the absolute value of (<var>Ei</var> - <var>Ai</var>).</li>
-            </ol>
+            <p>The delay, to the nearest microsecond, between a frame's presentation time and the actual time it was displayed. This delay is always greater than or equal to zero since frames must
+              never be displayed before their presentation time. Non-zero delays are a sign of playback jitter and possible loss of A/V sync.</p>
           </dd>
           <dt id="init-segment">Initialization Segment</dt>
           <dd>
@@ -211,7 +212,7 @@
               <a def-id="addSourceBuffer"></a> call that created the object.</p></dd>
 
           <dt id="track-description">Track Description</dt>
-          <dd><p>A byte stream format specific structure that provides the <a def-id="track-id"></a>, codec configuration, and other metadata for a single track. Each track description inside a single <a def-id="init-segment"></a> must have a unique <a def-id="track-id"></a>.</p></dd>
+          <dd><p>A byte stream format specific structure that provides the <a def-id="track-id"></a>, codec configuration, and other metadata for a single track. Each track description inside a single <a def-id="init-segment"></a> has a unique <a def-id="track-id"></a>. The user agent must run the <a def-id="eos-decode"></a> if the <a def-id="track-id"></a> is not unique within the <a def-id="init-segment"></a> .</p></dd>
 
           <dt id="track-id">Track ID</dt>
           <dd><p>A Track ID is a byte stream format specific identifier that marks sections of the byte stream as being part of a specific track. The Track ID in a <a def-id="track-description"></a> identifies which sections of a <a def-id="media-segment"></a> belong to that track.</p></dd>
@@ -551,7 +552,7 @@
             determine when it has enough data. The metrics used may change during playback so web applications should only rely on the value of
             <a def-id="ready-state"></a> to determine whether more data is needed or not.</p>
 
-          <p class="note">When the media element needs more data, it must transition from <a def-id="have-enough-data"></a> to
+          <p class="note">When the media element needs more data, the user agent should transition it from <a def-id="have-enough-data"></a> to
             <a def-id="have-future-data"></a> early enough for a web application to be able to respond without causing an interruption in playback.
             For example, transitioning when the current playback position is 500ms before the end of the buffered data gives the application roughly
             500ms to append more data before playback stalls.</p>
@@ -743,8 +744,7 @@
       <dl title="enum AppendMode" class="idl">
         <dt>segments</dt>
         <dd>
-          <p>The timestamps in the media segment determine where the <a def-id="coded-frames"></a> are placed in the presentation. Coded frames within a media segment must be adjacent in time, but media
-            segments can be appended in any order.</p>
+          <p>The timestamps in the media segment determine where the <a def-id="coded-frames"></a> are placed in the presentation. Media segments can be appended in any order.</p>
         </dd>
         <dt>sequence</dt>
         <dd>
@@ -1158,7 +1158,7 @@
             <li>
               <p>If the <a def-id="buffer-full-flag"></a> equals true, then throw a <a def-id="quota-exceeded-err"></a> exception and abort these step.</p>
               <p class="note">This is the signal that the implementation was unable to evict enough data to accomodate the append or the append is too big. The web
-                application must use <a def-id="remove"></a> to explicitly free up space and/or reduce the size of the append.</p>
+                application should use <a def-id="remove"></a> to explicitly free up space and/or reduce the size of the append.</p>
             </li>
             </ol>
         </section>
@@ -1201,7 +1201,7 @@
             <li>Run the <a def-id="coded-frame-eviction-algorithm"></a>.</li>
             <li>
               <p>If the <a def-id="buffer-full-flag"></a> equals true, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</p>
-              <p class="note">The web application must use <a def-id="remove"></a> to free up space in the <a>SourceBuffer</a>.</p>
+              <p class="note">The web application should use <a def-id="remove"></a> to free up space in the <a>SourceBuffer</a>.</p>
             </li>
             <li>Add <var>data</var> to the end of the <a def-id="input-buffer"></a>.</li>
             <li>Run the <a def-id="segment-parser-loop"></a> algorithm.</li>
@@ -1586,7 +1586,7 @@
             <li>If the <a def-id="buffer-full-flag"></a> equals false, then abort these steps.</li>
             <li>Let <var>removal ranges</var> equal a list of presentation time ranges that can be evicted from the presentation to make room for the
               <var>new data</var>.
-              <p class="note">Implementations may use different methods for selecting <var>removal ranges</var> so web applications must not depend on a
+              <p class="note">Implementations may use different methods for selecting <var>removal ranges</var> so web applications should not depend on a
                 specific behavior. The web application can use the <a def-id="buffered"></a> attribute to observe whether portions of the buffered data have been evicted.
               </p>
             </li>
@@ -1798,9 +1798,10 @@
           <p>The total number of corrupted frames that have been detected.</p>
         </dd>
 
-        <dt>readonly attribute double playbackJitter;</dt>
+        <dt>readonly attribute double totalFrameDelay;</dt>
         <dd>
-          <p>The sum of all <a def-id="display-duration-errors"></a> for all frames included in the <a def-id="totalVideoFrames"></a> count.</p>
+          <p>The sum of all <a def-id="displayed-frame-delays"></a> for all displayed frames. (i.e., Frames included in the <a def-id="totalVideoFrames"></a> count, but not in the <a def-id="droppedVideoFrames"></a>
+            count.</p>
         </dd>
       </dl>
     </section>
@@ -1879,10 +1880,10 @@
         and <a def-id="dropped-video-frame-count"></a> must be updated appropriately.
       </p>
 
-      <p>Each <a def-id="htmlvideoelement"></a> will maintain a <dfn id="display-duration-error-sum">display duration error sum</dfn> variable that keeps
-        track of the sum of all <a def-id="display-duration-errors"></a>. This variable is initialized to 0 when the element is created and whenever the
-        <a def-id="media-element-load-algorithm"></a> is invoked. When a frame causes the <a def-id="total-video-frame-count"></a> to increment, the
-        <a def-id="display-duration-error"></a> for that frame is computed and added to this variable.
+      <p>Each <a def-id="htmlvideoelement"></a> will maintain a <dfn id="displayed-frame-delay-sum">displayed frame delay sum</dfn> variable that keeps
+        track of the sum of all <a def-id="displayed-frame-delays"></a>. This variable is initialized to 0 when the element is created and whenever the
+        <a def-id="media-element-load-algorithm"></a> is invoked. When a frame is displayed, its <a def-id="displayed-frame-delay"></a> is computed and added
+        to this variable.
       </p>
 
       <dl title="partial interface HTMLVideoElement" class="idl">
@@ -1895,7 +1896,7 @@
             <li>Set <var>playbackQuality</var>.<a def-id="totalVideoFrames"></a> to the current value of the <a def-id="total-video-frame-count"></a>.</li>
             <li>Set <var>playbackQuality</var>.<a def-id="droppedVideoFrames"></a> to the current value of the <a def-id="dropped-video-frame-count"></a>.</li>
             <li>Set <var>playbackQuality</var>.<a def-id="corruptedVideoFrames"></a> to the current value of the <a def-id="corrupted-video-frame-count"></a>.</li>
-            <li>Set <var>playbackQuality</var>.<a def-id="playbackJitter"></a> to the current value of the <a def-id="display-duration-error-sum"></a>.</li>
+            <li>Set <var>playbackQuality</var>.<a def-id="totalFrameDelay"></a> to the current value of the <a def-id="displayed-frame-delay-sum"></a>.</li>
             <li>Return <var>playbackQuality</var>.</li>
           </ol>
         </dd>
@@ -2062,51 +2063,55 @@
       <ul>
         <li>A byte stream format specification must define <a def-id="init-segments"></a> and <a def-id="media-segments"></a>.</li>
         <li>It must be possible to identify segment boundaries and segment type (initialization or media) by examining the byte stream alone.</li>
-        <li>The following rules apply to all <a def-id="init-segments"></a> within a byte stream:
+        <li>The user agent must run the <a def-id="eos-decode"></a> when any of the following conditions are met:
           <ol>
             <li>
-              <p>The number and type of tracks must be consistent.</p>
-              <p>For example, if the first <a def-id="init-segment"></a> has 2 audio tracks and 1 video track, then all <a def-id="init-segments"></a> that follow it in the byte stream must describe 2 audio tracks and 1 video track.</p>
+              <p>The number and type of tracks are not consistent.</p>
+              <p class="note">For example, if the first <a def-id="init-segment"></a> has 2 audio tracks and 1 video track, then all <a def-id="init-segments"></a> that follow it in the byte stream must describe 2 audio tracks and 1 video track.</p>
             </li>
+            <li><a def-id="track-ids"></a> are not the same across <a def-id="init-segments"></a>, for segments describing multiple tracks of a single type. (e.g. 2 audio tracks).</li>
 	    <li>
-              <p><a def-id="track-ids"></a> do not need to be the same across <a def-id="init-segments"></a> if the segment describes only one track of each type.</p>
-              <p>For example, if an <a def-id="init-segment"></a> describes a single audio track and a single video track, the internal <a def-id="track-ids"></a> do not need to be the same.</p>
+              <p>Codecs changes across <a def-id="init-segments"></a>.</p>
+              <p class="note">For example, a byte stream that starts with an <a def-id="init-segment"></a> that specifies a single AAC track and later contains an <a def-id="init-segment"></a> that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a>SourceBuffer</a> objects.</p>
             </li>
-            <li><a def-id="track-ids"></a> must be the same across <a def-id="init-segments"></a> if the segment describes multiple tracks of a single type. (e.g. 2 audio tracks).</li>
+          </ol>
+        </li>
+        <li>The user agent must support the following:
+          <ol>
+            <li><a def-id="track-ids"></a> changing across <a def-id="init-segments"></a> if the segments describes only one track of each type.</li>
 	    <li>
-              <p>Codecs changes are not allowed.</p>
-              <p>For example, a byte stream that starts with an <a def-id="init-segment"></a> that specifies a single AAC track and later contains an <a def-id="init-segment"></a> that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a>SourceBuffer</a> objects.</p>
-            </li>
-	    <li>
-              <p>Video frame size changes are allowed and must be supported seamlessly.</p>
+              <p>Video frame size changes. The user agent must support seamless playback.</p>
               <p class="note">This will cause the &lt;video&gt; display region to change size if the web application does not use CSS or HTML attributes (width/height) to constrain the element size.</p>
             </li>
 	    <li>
-              <p>Audio channel count changes are allowed, but they may not be seamless and could trigger downmixing.</p>
+              <p>Audio channel count changes. The user agent may support this seamlessly and could trigger downmixing.</p>
               <p class="note">This is a quality of implementation issue because changing the channel count may require reinitializing the audio device, resamplers, and channel mixers which tends to be audible.</p>
             </li>
           </ol>
         </li>
-        <li>The following rules apply to all <a def-id="media-segments"></a> within a byte stream:
+        <li>The following rules apply to all <a def-id="media-segments"></a> within a byte stream. A user agent must:
           <ol>
-            <li>All timestamps must be mapped to the same <a def-id="media-timeline"></a>.</li>
-	    <li>Gaps between <a def-id="media-segments"></a> that are smaller than the audio frame size are allowed and must not cause playback to stall. Such gaps must not be reflected by <a def-id="buffered"></a>.
+            <li>Map all timestamps to the same <a def-id="media-timeline"></a>.</li>
+            <li>Support seamless playback of <a def-id="media-segments"></a> having a timestamp gap smaller than the audio frame size. User agent must not reflect these gaps in the <a def-id="buffered"></a> attribute.
 	      <p class="note">This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g. Vorbis).</p>
             </li>
           </ol>
         </li>
-        <li>The combination of an <a def-id="init-segment"></a> and any contiguous sequence of <a def-id="media-segments"></a> associated with it must:
+        <li>The user agent must run the <a def-id="eos-decode"></a> when any combination of an <a def-id="init-segment"></a> and any contiguous sequence of <a def-id="media-segments"></a> satisfies the
+          following conditions:
 	  <ol>
-	    <li>Identify the number and type (audio, video, text, etc.) of tracks in the Segments</li>
-	    <li>Identify the decoding capabilities needed to decode each track (i.e. codec and codec parameters)</li>
-	    <li>If a track is encrypted, provide any encryption parameters necessary to decrypt the content (except the encryption key itself)</li>
-	    <li>For each track, provide all information necessary to decode and render the earliest <a def-id="random-access-point"></a> in the sequence of Media Segments and all subsequent samples in the sequence (in presentation time). This includes, in particular,
+            <li>The number and type (audio, video, text, etc.) of all tracks in the <a def-id="media-segments"></a> are not identified.</li>
+            <li>The decoding capabilities needed to decode each track (i.e. codec and codec parameters) are not provided.</li>
+            <li>Encryption parameters necessary to decrypt the content (except the encryption key itself) are not provided for all encrypted tracks.</li>
+            <li>All information necessary to decode and render the earliest <a def-id="random-access-point"></a> in the sequence of <a def-id="media-segments"></a> and all subsequence samples in the sequence
+              (in presentation time) are not provided. This includes in particular,
 	      <ul>
-	        <li>Information that determines the <a def-id="intrinsic-width-and-height"></a> of the video (specifically, this requires either the picture or pixel aspect ratio, together with the encoded resolution).</li>
+	        <li>Information that determines the <a def-id="intrinsic-width-and-height"></a> of the video (specifically, this requires either the picture or pixel aspect ratio, together with the encoded
+                  resolution).</li>
 	        <li>Information necessary to convert the video decoder output to a format suitable for display</li>
 	      </ul>
 	    </li>
-	    <li>Identify the global presentation timestamp of every sample in the sequence of Media Segments</li>
+	    <li>Information necessary to compute the global presentation timestamp of every sample in the sequence of <a def-id="media-segments"></a> is not provided.</li>
 	  </ol>
 	  <p>For example, if I1 is associated with M1, M2, M3 then the above must hold for all the combinations I1+M1, I1+M2, I1+M1+M2, I1+M2+M3, etc.</p>
         </li>
@@ -2120,73 +2125,87 @@
         <section id="webm-init-segments">
           <h4>Initialization Segments</h4>
           <p>A WebM <a def-id="init-segment"></a> must contain a subset of the elements at the start of a typical WebM file.</p>
-          <p>The following rules apply to WebM initialization segments:</p>
+
+          <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are not met:</p>
           <ol>
 	    <li>The <a def-id="init-segment"></a> must start with an <a def-id="webm-ebml-header"></a> element, followed by a <a def-id="webm-segment"></a> header.</li>
 	    <li>The size value in the <a def-id="webm-segment"></a> header must signal an "unknown size" or contain a value large enough to include the <a def-id="webm-info"></a> and <a def-id="webm-tracks"></a> elements that follow.</li>
-	    <li>A <a def-id="webm-info"></a> element and a <a def-id="webm-tracks"></a> element must appear, in that order, after the <a def-id="webm-segment"></a> header and before any further <a def-id="webm-ebml-header"></a> or <a def-id="webm-cluster"></a> elements.</li>
-	    <li>Any elements other than an <a def-id="webm-ebml-header"></a> or a <a def-id="webm-cluster"></a> that occur before, in between, or after the <a def-id="webm-info"></a> and <a def-id="webm-tracks"></a> elements are ignored.</li>
+	    <li>A <a def-id="webm-info"></a> element and a <a def-id="webm-tracks"></a> element must appear, in that order, after the <a def-id="webm-segment"></a> header and before any further <a def-id="webm-ebml-header"></a> or <a def-id="webm-cluster"></a> elements.
+            </li>
           </ol>
+          The user agent must accept and ignore any elements other than an <a def-id="webm-ebml-header"></a> or a <a def-id="webm-cluster"></a> that occur before, in between, or after the <a def-id="webm-info"></a> and
+          <a def-id="webm-tracks"></a> elements.
         </section>
 
         <section id="webm-media-segments">
           <h4>Media Segments</h4>
           <p>A WebM <a def-id="media-segment"></a> is a single <a def-id="webm-cluster"></a> element.</p>
-          <p>The following rules apply to WebM media segments:</p>
+
+          <p>The user agent uses the following rules when interpreting content in a <a def-id="webm-cluster"></a>:</p>
           <ol>
-	    <li>The Timecode element in the <a def-id="webm-cluster"></a> contains a presentation timestamp in TimecodeScale units.</li>
-	    <li>The TimecodeScale in the <a def-id="webm-init-segment"></a> most recently appended applies to all timestamps in the <a def-id="webm-cluster"></a>
-            </li>
-	    <li>The Cluster header may contain an "unknown" size value. If it does then the end of the cluster is reached when another <a def-id="webm-cluster"></a> header or an element header that indicates the start of an <a def-id="webm-init-segment"></a> is encountered.</li>
-	    <li>Block &amp; SimpleBlock elements must be in time increasing order consistent with the <a def-id="webm-spec"></a>.</li>
-	    <li>If the most recent <a def-id="webm-init-segment"></a> describes multiple tracks, then blocks from all the tracks must be interleaved in time increasing order. At least one block from all audio and video tracks must be present.</li>
-	    <li>
-              <a def-id="webm-cues"></a> or <a def-id="webm-chapters"></a> elements may follow a <a def-id="webm-cluster"></a> element. These elements must be accepted and ignored by the user agent.</li>
+            <li>The TimecodeScale in the <a def-id="webm-init-segment"></a> most recently appended applies to all timestamps in the <a def-id="webm-cluster"></a></li>
+            <li>The Timecode element in the <a def-id="webm-cluster"></a> contains a presentation timestamp in TimecodeScale units.</li>
+            <li>The Cluster header may contain an "unknown" size value. If it does then the end of the cluster is reached when another <a def-id="webm-cluster"></a> header or an element header that indicates the start
+              of an <a def-id="webm-init-segment"></a> is encountered.</li>
           </ol>
+
+          <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are not met:</p>
+          <ol>
+            <li>The Timecode element must appear before any Block &amp; SimpleBlock elements in a <a def-id="webm-cluster"></a>.</li>
+            <li>Block &amp; SimpleBlock elements are in time increasing order consistent with the <a def-id="webm-spec"></a>.</li>
+            <li>If the most recent <a def-id="webm-init-segment"></a> describes multiple tracks, then blocks from all the tracks must be interleaved in time increasing order. At least one block from all audio and video
+              tracks must be present.</li>
+          </ol>
+
+          The user agent must accept and ignore <a def-id="webm-cues"></a> or <a def-id="webm-chapters"></a> elements that follow a <a def-id="webm-cluster"></a> element.
         </section>
 
         <section id="webm-random-access-points">
           <h4>Random Access Points</h4>
-          <p>A SimpleBlock element with its Keyframe flag set signals the location of a <a def-id="random-access-point"></a> for that track. Media segments containing multiple tracks are only considered a random access point if the first SimpleBlock for each track has its Keyframe flag set. The order of the multiplexed blocks must conform to the <a def-id="webm-muxer-guidelines"></a>.</p>
+          <p>A SimpleBlock element with its Keyframe flag set signals the location of a <a def-id="random-access-point"></a> for that track. Media segments containing multiple tracks are only considered a random access
+            point if the first SimpleBlock for each track has its Keyframe flag set. The order of the multiplexed blocks must conform to the <a def-id="webm-muxer-guidelines"></a>.</p>
         </section>
       </section>
-      
+
       <section id="iso" class="nonnormative">
         <h3>ISO Base Media File Format Byte Streams</h3>
         <p>This section defines segment formats for implementations that choose to support the ISO Base Media File Format
-	  <a def-id="iso-14496-12"></a> (ISO BMFF).</p> 
+	  <a def-id="iso-14496-12"></a> (ISO BMFF).</p>
 
 	<section id="iso-init-segments">
           <h4>Initialization Segments</h4>
-          <p>An ISO BMFF <a def-id="init-segment"></a> is defined in this specification as a single Movie Header Box (<span class="iso-box">moov</span>).
-            The tracks in the  Movie Header Box must not contain any samples (i.e. the <span class="iso-var">entry_count</span> in the
-            <span class="iso-box">stts</span>, <span class="iso-box">stsc</span> and <span class="iso-box">stco</span> boxes must be set to zero). A Movie
-            Extends (<span class="iso-box">mvex</span>) box must be contained in the Movie Header Box to indicate that Movie Fragments are to be expected.
-          </p>
-          <p>The <a def-id="init-segment"></a> may contain Edit Boxes (<span class="iso-box">edts</span>) which provide a mapping of composition times for each track to the global presentation time.</p>
+          <p>An ISO BMFF <a def-id="init-segment"></a> is defined in this specification as a single Movie Header Box (<span class="iso-box">moov</span>).</p>
+
+          <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
+          <ol>
+            <li>The tracks in the Movie Header Box contain samples (i.e. the <span class="iso-var">entry_count</span> in the
+              <span class="iso-box">stts</span>, <span class="iso-box">stsc</span> or <span class="iso-box">stco</span> boxes are not set to zero).</li>
+            <li>A Movie Extends (<span class="iso-box">mvex</span>) box is contained in the Movie Header Box to indicate that Movie Fragments are to be expected.</li>
+          </ol>
+          <p>The user agent must handle Edit Boxes (<span class="iso-box">edts</span>), in <a def-id="init-segment"></a>, which provide a mapping of composition times for each track to the global presentation time.</p>
           <p>Valid top-level boxes such as <span class="iso-box">ftyp</span>, <span class="iso-box">styp</span>, and <span class="iso-box">sidx</span> are
             allowed to appear before the <span class="iso-box">moov</span> box. These boxes must be accepted and ignored by the user agent and are not
             considered part of the <a def-id="init-segment"></a> in this specification.</p>
 	</section>
-        
+
 	<section id="iso-media-segments">
           <h4>Media Segments</h4>
           <p>An ISO BMFF <a def-id="media-segment"></a> is defined in this specification as a single Movie Fragment Box
             (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>).</p>
-          <p>Valid top-level boxes defined in <a def-id="iso-14496-12"></a> other than <span class="iso-box">moov</span>, 
+          <p>Valid top-level boxes defined in <a def-id="iso-14496-12"></a> other than <span class="iso-box">moov</span>,
             <span class="iso-box">moof</span>, and <span class="iso-box">mdat</span> are allowed to appear between the end of an
             <a def-id="init-segment"></a> or <a def-id="media-segment"></a> and before the beginning of a new <a def-id="media-segment"></a>.
             These boxes must be accepted and ignored by the user agent and are not considered part of the <a def-id="media-segment"></a> in this
             specification.
           </p>
-          <p>The following rules apply to ISO BMFF media segments:</p>
+
+          <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
           <ol>
-	    <li>The Movie Fragment Box must contain at least one Track Fragment Box (<span class="iso-box">traf</span>).</li>
-	    <li>The Movie Fragment Box must use movie-fragment relative addressing and the flag <span class="iso-var">default-base-is-moof</span> must be set; absolute byte-offsets must not be used.</li>
-	    <li>External data references must not be used.</li>
-	    <li>If the Movie Fragment contains multiple tracks, the duration by which each track extends should be as close to equal as practical.</li>
-	    <li>Each Track Fragment Box must contain a Track Fragment Decode Time Box (<span class="iso-box">tfdt</span>)</li>
-	    <li>The Media Data Boxes must contain all the samples referenced by the Track Fragment Run Boxes (<span class="iso-box">trun</span>) of the Movie Fragment Box.</li>
+	    <li>The Movie Fragment Box does not contain at least one Track Fragment Box (<span class="iso-box">traf</span>).</li>
+	    <li>The Movie Fragment Box does not use movie-fragment relative addressing or the flag <span class="iso-var">default-base-is-moof</span> is not set.</li>
+	    <li>External data references are being used.</li>
+	    <li>At least one Track Fragment Box does not contain a Track Fragment Decode Time Box (<span class="iso-box">tfdt</span>)</li>
+	    <li>The Media Data Boxes do not contain all the samples referenced by the Track Fragment Run Boxes (<span class="iso-box">trun</span>) of the Movie Fragment Box.</li>
           </ol>
 	</section>
 
@@ -2200,40 +2219,46 @@
         <h3>MPEG-2 Transport Stream Byte Streams</h3>
         <p>This section defines segment formats for implementations that choose to support MPEG-2 Transport Streams
           (MPEG-2 TS) specified in <a def-id="iso-13818-1"></a>.</p>
-        
+
         <section id="mpeg2ts-general">
           <h4>General</h4>
           <p>MPEG-2 TS media and initialization segments must conform to the MPEG-2 TS Adaptive Profile (ISO/IEC 13818-1:2012 Amd. 2).</p>
-          <p>The following rules must apply to all MPEG-2 TS segments:</p>
+
+          <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
           <ol>
-            <li>Segments must contain complete MPEG-2 TS packets.</li>
-            <li>Segments must contain only complete PES packets and sections.</li>
-            <li>Segments must contain exactly one program.</li>
-            <li>All MPEG-2 TS packets must have the transport_error_indicator set to 0</li>
+            <li>Segments do not contain complete MPEG-2 TS packets.</li>
+            <li>Segments do not contain complete PES packets and sections.</li>
+            <li>Segments contain more than one program.</li>
+            <li>At least one MPEG-2 TS packet has a non-zero transport_error_indicator.</li>
           </ol>
         </section>
         <section id="mpeg2ts-init-segments">
           <h4>Initialization Segments</h4>
-          <p>An MPEG-2 TS initialization segment must contain a single PAT and a single PMT. Other SI, such as CAT, that are invariant for all subsequent
-            media segments, may be present.</p>
+          <p>An MPEG-2 TS initialization segment consists of a single PAT and a single PMT.</p>
+          <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
+          <ol>
+            <li>A PAT is not present in the <a def-id="init-segment"></a></li>
+            <li>A PMT is not present in the <a def-id="init-segment"></a></li>
+          </ol>
+          The user agent must accept and ignore other SI, such as CAT, that are invariant for all subsequent media segments.
         </section>
-  
+
         <section id="mpeg2ts-media-segments">
           <h4>Media Segments</h4>
-          <p>The following rules apply to all MPEG-2 TS media segments:</p>
+
+          <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
           <ol>
-            <li>PSI that is identical to the information in the initialization segment may appear repeatedly throughout the segment.</li>
-            <li>The media segment will not rely on initialization information in another media segment.</li>
-            <li>Media Segments must contain only complete PES packets and sections.</li>
-            <li>Each PES packet must have a PTS timestamp.</li>
-            <li>PCR must be present in the Segment prior to the first byte of a TS packet payload containing media data.</li>
-            <li>The presentation duration of each media component within the Media Segment should be as close to equal as practical.</li>
+            <li>A media segment relies on initialization information in another media segment.</li>
+            <li>At least one PES packet does not have a PTS timestamp.</li>
+            <li>PCR is not present in the Segment prior to the first byte of a TS packet payload containing media data.</li>
           </ol>
+
+          The user agent will accept and ignore PSI that is identical to the information in the last initialization segment which may appear repeatedly throughout the segment.
         </section>
 
         <section id="mpeg2ts-random-access-points">
           <h4>Random Access Points</h4>
-          <p>A random access point as defined in this specification corresponds to Elementary Stream Random Access Point as defined in 
+          <p>A random access point as defined in this specification corresponds to Elementary Stream Random Access Point as defined in
             <a def-id="iso-13818-1"></a>.</p>
         </section>
         <section id="mpeg2ts-discontinuities">
@@ -2369,7 +2394,16 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-            <td>02 July 2013</td>
+            <td>18 July 2013</td>
+            <td>
+              <ul>
+                <li>Bug 22117 - Reword byte stream specs in terms of UA behavior.</li>
+                <li>Bug 22148 - Replace VideoPlaybackQuality.playbackJitter with VideoPlaybackQuality.totalFrameDelay.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/b98190a4472c/media-source/media-source.html">02 July 2013</a></td>
             <td>
               <ul>
                 <li>Bug 22401 - Fix typo</li>

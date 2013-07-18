@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -432,7 +432,7 @@ table.exceptions table {
   </p>
   <h1 class="title" id="title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-09-july-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 09 July 2013</h2>
+  <h2 id="w3c-editor-s-draft-18-july-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 18 July 2013</h2>
   <dl>
     
       <dt>This version:</dt>
@@ -572,6 +572,11 @@ table.exceptions table {
           <li>Provide byte stream definitions for WebM, the ISO Base Media File Format, and MPEG-2 Transport Streams.</li>
           <li>Not require support for any particular media format or codec.</li>
         </ul>
+        <p>This specification defines:</p>
+        <ul>
+          <li>Normative behavior for user agents to enable interoperability between user agents and web applications when processing media data.</li>
+          <li>Normative requirements to enable other specifications to define media formats to be used within this specification.</li>
+        </ul>
       </section>
 
       <section id="definitions">
@@ -592,21 +597,17 @@ table.exceptions table {
             the <code><a href="#widl-SourceBuffer-appendWindowStart">appendWindowStart</a></code> and <code><a href="#widl-SourceBuffer-appendWindowEnd">appendWindowEnd</a></code> attributes respectively.</p></dd>
 
           <dt id="coded-frame">Coded Frame</dt>
-          <dd><p>A unit of media data that has a presentation timestamp and decode timestamp. The presentation timestamp indicates when the frame must be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp must be present in the byte stream. If frames cannot be decoded out of order and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
+          <dd><p>A unit of media data that has a presentation timestamp and decode timestamp. The presentation timestamp indicates when the frame must be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp are present in the byte stream. The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> if this is not the case. If frames cannot be decoded out of order and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
 
           <dt id="coded-frame-group">Coded Frame Group</dt>
           <dd><p>A group of <a href="#coded-frame">coded frames</a> that are adjacent and monotonically increasing in decode time without any gaps. Discontinuities detected by the
               <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> and <code><a href="#widl-SourceBuffer-abort-void">abort()</a></code> calls trigger the start of a new coded frame group.</p>
           </dd>
 
-          <dt id="display-duration-error">Display Duration Error</dt>
+          <dt id="displayed-frame-delay">Displayed Frame Delay</dt>
           <dd>
-            <p>The display duration error for a frame is computed using the following steps:</p>
-            <ol>
-              <li>Let <var>Ei</var> equal the desired duration frame i should spend on the screen (to nearest microsecond)</li>
-              <li>Let <var>Ai</var> equal the actual duration frame i spent on the screen (if the frame is never displayed to the user (i.e. dropped) , then let <var>Ai</var> equal 0).</li>
-              <li>Let <var>display duration error</var> equal the absolute value of (<var>Ei</var> - <var>Ai</var>).</li>
-            </ol>
+            <p>The delay, to the nearest microsecond, between a frame's presentation time and the actual time it was displayed. This delay is always greater than or equal to zero since frames must
+              never be displayed before their presentation time. Non-zero delays are a sign of playback jitter and possible loss of A/V sync.</p>
           </dd>
           <dt id="init-segment">Initialization Segment</dt>
           <dd>
@@ -642,7 +643,7 @@ table.exceptions table {
               <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> call that created the object.</p></dd>
 
           <dt id="track-description">Track Description</dt>
-          <dd><p>A byte stream format specific structure that provides the <a href="#track-id">Track ID</a>, codec configuration, and other metadata for a single track. Each track description inside a single <a href="#init-segment">initialization segment</a> must have a unique <a href="#track-id">Track ID</a>.</p></dd>
+          <dd><p>A byte stream format specific structure that provides the <a href="#track-id">Track ID</a>, codec configuration, and other metadata for a single track. Each track description inside a single <a href="#init-segment">initialization segment</a> has a unique <a href="#track-id">Track ID</a>. The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> if the <a href="#track-id">Track ID</a> is not unique within the <a href="#init-segment">initialization segment</a> .</p></dd>
 
           <dt id="track-id">Track ID</dt>
           <dd><p>A Track ID is a byte stream format specific identifier that marks sections of the byte stream as being part of a specific track. The Track ID in a <a href="#track-description">track description</a> identifies which sections of a <a href="#media-segment">media segment</a> belong to that track.</p></dd>
@@ -963,7 +964,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             determine when it has enough data. The metrics used may change during playback so web applications should only rely on the value of
             <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> to determine whether more data is needed or not.</p></div>
 
-          <div class="note"><div class="note-title"><span>Note</span></div><p class="">When the media element needs more data, it must transition from <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_enough_data">HAVE_ENOUGH_DATA</a></code> to
+          <div class="note"><div class="note-title"><span>Note</span></div><p class="">When the media element needs more data, the user agent should transition it from <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_enough_data">HAVE_ENOUGH_DATA</a></code> to
             <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_future_data">HAVE_FUTURE_DATA</a></code> early enough for a web application to be able to respond without causing an interruption in playback.
             For example, transitioning when the current playback position is 500ms before the end of the buffered data gives the application roughly
             500ms to append more data before playback stalls.</p></div>
@@ -1156,8 +1157,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
     "<a href="#idl-def-AppendMode.segments" class="idlEnumItem">segments</a>",
     "<a href="#idl-def-AppendMode.sequence" class="idlEnumItem">sequence</a>"
 };</span></pre><table class="simple"><tr><th colspan="2">Enumeration description</th></tr><tr><td><code id="idl-def-AppendMode.segments">segments</code></td><td>
-          <p>The timestamps in the media segment determine where the <a href="#coded-frame">coded frames</a> are placed in the presentation. Coded frames within a media segment must be adjacent in time, but media
-            segments can be appended in any order.</p>
+          <p>The timestamps in the media segment determine where the <a href="#coded-frame">coded frames</a> are placed in the presentation. Media segments can be appended in any order.</p>
         </td></tr><tr><td><code id="idl-def-AppendMode.sequence">sequence</code></td><td>
           <p>Media segments will be treated as adjacent in time independent of the timestamps in the media segment. Coded frames in a new media segment will be placed immediately after the coded
             frames in the previous media segment. The <code><a href="#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> attribute will be updated if a new offset is needed to make the new media segments adjacent to the previous media segment.
@@ -1541,7 +1541,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>
               <p>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true, then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception and abort these step.</p>
               <div class="note"><div class="note-title"><span>Note</span></div><p class="">This is the signal that the implementation was unable to evict enough data to accomodate the append or the append is too big. The web
-                application must use <code><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove()</a></code> to explicitly free up space and/or reduce the size of the append.</p></div>
+                application should use <code><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove()</a></code> to explicitly free up space and/or reduce the size of the append.</p></div>
             </li>
             </ol>
         </section>
@@ -1584,7 +1584,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Run the <a href="#sourcebuffer-coded-frame-eviction">coded frame eviction algorithm</a>.</li>
             <li>
               <p>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> and abort this algorithm.</p>
-              <div class="note"><div class="note-title"><span>Note</span></div><p class="">The web application must use <code><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove()</a></code> to free up space in the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</p></div>
+              <div class="note"><div class="note-title"><span>Note</span></div><p class="">The web application should use <code><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove()</a></code> to free up space in the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</p></div>
             </li>
             <li>Add <var>data</var> to the end of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
             <li>Run the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> algorithm.</li>
@@ -1969,7 +1969,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals false, then abort these steps.</li>
             <li>Let <var>removal ranges</var> equal a list of presentation time ranges that can be evicted from the presentation to make room for the
               <var>new data</var>.
-              <div class="note"><div class="note-title"><span>Note</span></div><p class="">Implementations may use different methods for selecting <var>removal ranges</var> so web applications must not depend on a
+              <div class="note"><div class="note-title"><span>Note</span></div><p class="">Implementations may use different methods for selecting <var>removal ranges</var> so web applications should not depend on a
                 specific behavior. The web application can use the <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> attribute to observe whether portions of the buffered data have been evicted.
               </p></div>
             </li>
@@ -2162,7 +2162,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 <span class="idlAttribute">    readonly    attribute <span class="idlAttrType"><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-unsigned-long" class="idlType">unsigned long</a></code></span>       <span class="idlAttrName"><a href="#widl-VideoPlaybackQuality-totalVideoFrames">totalVideoFrames</a></span>;</span>
 <span class="idlAttribute">    readonly    attribute <span class="idlAttrType"><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-unsigned-long" class="idlType">unsigned long</a></code></span>       <span class="idlAttrName"><a href="#widl-VideoPlaybackQuality-droppedVideoFrames">droppedVideoFrames</a></span>;</span>
 <span class="idlAttribute">    readonly    attribute <span class="idlAttrType"><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-unsigned-long" class="idlType">unsigned long</a></code></span>       <span class="idlAttrName"><a href="#widl-VideoPlaybackQuality-corruptedVideoFrames">corruptedVideoFrames</a></span>;</span>
-<span class="idlAttribute">    readonly    attribute <span class="idlAttrType"><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-double" class="idlType">double</a></code></span>              <span class="idlAttrName"><a href="#widl-VideoPlaybackQuality-playbackJitter">playbackJitter;</a></span>;</span>
+<span class="idlAttribute">    readonly    attribute <span class="idlAttrType"><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-double" class="idlType">double</a></code></span>              <span class="idlAttrName"><a href="#widl-VideoPlaybackQuality-totalFrameDelay">totalFrameDelay;</a></span>;</span>
 };</span></pre><section id="attributes-3"><h3><span class="secno">5.1 </span>Attributes</h3><dl class="attributes"><dt id="widl-VideoPlaybackQuality-corruptedVideoFrames"><code>corruptedVideoFrames</code> of type <span class="idlAttrType"><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-unsigned-long" class="idlType">unsigned long</a></code></span>, readonly   </dt><dd>
           <p>The total number of corrupted frames that have been detected.</p>
         </dd><dt id="widl-VideoPlaybackQuality-creationTime"><code>creationTime</code> of type <span class="idlAttrType"><code><a href="http://www.w3.org/TR/hr-time/#sec-DOMHighResTimeStamp" class="idlType">DOMHighResTimeStamp</a></code></span>, readonly   </dt><dd>
@@ -2170,8 +2170,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </dd><dt id="widl-VideoPlaybackQuality-droppedVideoFrames"><code>droppedVideoFrames</code> of type <span class="idlAttrType"><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-unsigned-long" class="idlType">unsigned long</a></code></span>, readonly   </dt><dd>
           <p>The total number of frames dropped predecode or dropped because the frame missed
             its display deadline.</p>
-        </dd><dt id="widl-VideoPlaybackQuality-playbackJitter"><code>playbackJitter;</code> of type <span class="idlAttrType"><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-double" class="idlType">double</a></code></span>, readonly   </dt><dd>
-          <p>The sum of all <a href="#display-duration-error">display duration errors</a> for all frames included in the <code><a href="#widl-VideoPlaybackQuality-totalVideoFrames">totalVideoFrames</a></code> count.</p>
+        </dd><dt id="widl-VideoPlaybackQuality-totalFrameDelay"><code>totalFrameDelay;</code> of type <span class="idlAttrType"><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-double" class="idlType">double</a></code></span>, readonly   </dt><dd>
+          <p>The sum of all <a href="#displayed-frame-delay">displayed frame delays</a> for all displayed frames. (i.e., Frames included in the <code><a href="#widl-VideoPlaybackQuality-totalVideoFrames">totalVideoFrames</a></code> count, but not in the <code><a href="#widl-VideoPlaybackQuality-droppedVideoFrames">droppedVideoFrames</a></code>
+            count.</p>
         </dd><dt id="widl-VideoPlaybackQuality-totalVideoFrames"><code>totalVideoFrames</code> of type <span class="idlAttrType"><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-unsigned-long" class="idlType">unsigned long</a></code></span>, readonly   </dt><dd>
           <p>The total number of frames that would have been displayed if no frames are dropped.</p>
         </dd></dl></section>
@@ -2250,10 +2251,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         and <var><a href="#dropped-video-frame-count">dropped video frame count</a></var> must be updated appropriately.
       </p>
 
-      <p>Each <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmlvideoelement">HTMLVideoElement</a></code> will maintain a <dfn id="display-duration-error-sum">display duration error sum</dfn> variable that keeps
-        track of the sum of all <a href="#display-duration-error">display duration errors</a>. This variable is initialized to 0 when the element is created and whenever the
-        <a href="http://www.w3.org/TR/html5/embedded-content-0.html#media-element-load-algorithm">media element load algorithm</a> is invoked. When a frame causes the <var><a href="#total-video-frame-count">total video frame count</a></var> to increment, the
-        <a href="#display-duration-error">display duration error</a> for that frame is computed and added to this variable.
+      <p>Each <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmlvideoelement">HTMLVideoElement</a></code> will maintain a <dfn id="displayed-frame-delay-sum">displayed frame delay sum</dfn> variable that keeps
+        track of the sum of all <a href="#displayed-frame-delay">displayed frame delays</a>. This variable is initialized to 0 when the element is created and whenever the
+        <a href="http://www.w3.org/TR/html5/embedded-content-0.html#media-element-load-algorithm">media element load algorithm</a> is invoked. When a frame is displayed, its <a href="#displayed-frame-delay">displayed frame delay</a> is computed and added
+        to this variable.
       </p>
 
       <pre class="idl"><span class="idlInterface" id="idl-def-HTMLVideoElement">partial interface <span class="idlInterfaceID">HTMLVideoElement</span> {
@@ -2267,7 +2268,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Set <var>playbackQuality</var>.<code><a href="#widl-VideoPlaybackQuality-totalVideoFrames">totalVideoFrames</a></code> to the current value of the <var><a href="#total-video-frame-count">total video frame count</a></var>.</li>
             <li>Set <var>playbackQuality</var>.<code><a href="#widl-VideoPlaybackQuality-droppedVideoFrames">droppedVideoFrames</a></code> to the current value of the <var><a href="#dropped-video-frame-count">dropped video frame count</a></var>.</li>
             <li>Set <var>playbackQuality</var>.<code><a href="#widl-VideoPlaybackQuality-corruptedVideoFrames">corruptedVideoFrames</a></code> to the current value of the <var><a href="#corrupted-video-frame-count">corrupted video frame count</a></var>.</li>
-            <li>Set <var>playbackQuality</var>.<code><a href="#widl-VideoPlaybackQuality-playbackJitter">playbackJitter</a></code> to the current value of the <var><a href="#display-duration-error-sum">display duration error sum</a></var>.</li>
+            <li>Set <var>playbackQuality</var>.<code><a href="#widl-VideoPlaybackQuality-totalFrameDelay">totalFrameDelay</a></code> to the current value of the <var><a href="#displayed-frame-delay-sum">displayed frame delay sum</a></var>.</li>
             <li>Return <var>playbackQuality</var>.</li>
           </ol></dd></dl></section>
     </section>
@@ -2417,51 +2418,55 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       <ul>
         <li>A byte stream format specification must define <a href="#init-segment">initialization segments</a> and <a href="#media-segment">media segments</a>.</li>
         <li>It must be possible to identify segment boundaries and segment type (initialization or media) by examining the byte stream alone.</li>
-        <li>The following rules apply to all <a href="#init-segment">initialization segments</a> within a byte stream:
+        <li>The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> when any of the following conditions are met:
           <ol>
             <li>
-              <p>The number and type of tracks must be consistent.</p>
-              <p>For example, if the first <a href="#init-segment">initialization segment</a> has 2 audio tracks and 1 video track, then all <a href="#init-segment">initialization segments</a> that follow it in the byte stream must describe 2 audio tracks and 1 video track.</p>
+              <p>The number and type of tracks are not consistent.</p>
+              <div class="note"><div class="note-title"><span>Note</span></div><p class="">For example, if the first <a href="#init-segment">initialization segment</a> has 2 audio tracks and 1 video track, then all <a href="#init-segment">initialization segments</a> that follow it in the byte stream must describe 2 audio tracks and 1 video track.</p></div>
             </li>
+            <li><a href="#track-id">Track IDs</a> are not the same across <a href="#init-segment">initialization segments</a>, for segments describing multiple tracks of a single type. (e.g. 2 audio tracks).</li>
 	    <li>
-              <p><a href="#track-id">Track IDs</a> do not need to be the same across <a href="#init-segment">initialization segments</a> if the segment describes only one track of each type.</p>
-              <p>For example, if an <a href="#init-segment">initialization segment</a> describes a single audio track and a single video track, the internal <a href="#track-id">Track IDs</a> do not need to be the same.</p>
+              <p>Codecs changes across <a href="#init-segment">initialization segments</a>.</p>
+              <div class="note"><div class="note-title"><span>Note</span></div><p class="">For example, a byte stream that starts with an <a href="#init-segment">initialization segment</a> that specifies a single AAC track and later contains an <a href="#init-segment">initialization segment</a> that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects.</p></div>
             </li>
-            <li><a href="#track-id">Track IDs</a> must be the same across <a href="#init-segment">initialization segments</a> if the segment describes multiple tracks of a single type. (e.g. 2 audio tracks).</li>
+          </ol>
+        </li>
+        <li>The user agent must support the following:
+          <ol>
+            <li><a href="#track-id">Track IDs</a> changing across <a href="#init-segment">initialization segments</a> if the segments describes only one track of each type.</li>
 	    <li>
-              <p>Codecs changes are not allowed.</p>
-              <p>For example, a byte stream that starts with an <a href="#init-segment">initialization segment</a> that specifies a single AAC track and later contains an <a href="#init-segment">initialization segment</a> that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects.</p>
-            </li>
-	    <li>
-              <p>Video frame size changes are allowed and must be supported seamlessly.</p>
+              <p>Video frame size changes. The user agent must support seamless playback.</p>
               <div class="note"><div class="note-title"><span>Note</span></div><p class="">This will cause the &lt;video&gt; display region to change size if the web application does not use CSS or HTML attributes (width/height) to constrain the element size.</p></div>
             </li>
 	    <li>
-              <p>Audio channel count changes are allowed, but they may not be seamless and could trigger downmixing.</p>
+              <p>Audio channel count changes. The user agent may support this seamlessly and could trigger downmixing.</p>
               <div class="note"><div class="note-title"><span>Note</span></div><p class="">This is a quality of implementation issue because changing the channel count may require reinitializing the audio device, resamplers, and channel mixers which tends to be audible.</p></div>
             </li>
           </ol>
         </li>
-        <li>The following rules apply to all <a href="#media-segment">media segments</a> within a byte stream:
+        <li>The following rules apply to all <a href="#media-segment">media segments</a> within a byte stream. A user agent must:
           <ol>
-            <li>All timestamps must be mapped to the same <a href="http://www.w3.org/TR/html5/embedded-content-0.html#media-timeline">media timeline</a>.</li>
-	    <li>Gaps between <a href="#media-segment">media segments</a> that are smaller than the audio frame size are allowed and must not cause playback to stall. Such gaps must not be reflected by <code><a href="#widl-SourceBuffer-buffered">buffered</a></code>.
+            <li>Map all timestamps to the same <a href="http://www.w3.org/TR/html5/embedded-content-0.html#media-timeline">media timeline</a>.</li>
+            <li>Support seamless playback of <a href="#media-segment">media segments</a> having a timestamp gap smaller than the audio frame size. User agent must not reflect these gaps in the <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> attribute.
 	      <div class="note"><div class="note-title"><span>Note</span></div><p class="">This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g. Vorbis).</p></div>
             </li>
           </ol>
         </li>
-        <li>The combination of an <a href="#init-segment">initialization segment</a> and any contiguous sequence of <a href="#media-segment">media segments</a> associated with it must:
+        <li>The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> when any combination of an <a href="#init-segment">initialization segment</a> and any contiguous sequence of <a href="#media-segment">media segments</a> satisfies the
+          following conditions:
 	  <ol>
-	    <li>Identify the number and type (audio, video, text, etc.) of tracks in the Segments</li>
-	    <li>Identify the decoding capabilities needed to decode each track (i.e. codec and codec parameters)</li>
-	    <li>If a track is encrypted, provide any encryption parameters necessary to decrypt the content (except the encryption key itself)</li>
-	    <li>For each track, provide all information necessary to decode and render the earliest <a href="#random-access-point">random access point</a> in the sequence of Media Segments and all subsequent samples in the sequence (in presentation time). This includes, in particular,
+            <li>The number and type (audio, video, text, etc.) of all tracks in the <a href="#media-segment">media segments</a> are not identified.</li>
+            <li>The decoding capabilities needed to decode each track (i.e. codec and codec parameters) are not provided.</li>
+            <li>Encryption parameters necessary to decrypt the content (except the encryption key itself) are not provided for all encrypted tracks.</li>
+            <li>All information necessary to decode and render the earliest <a href="#random-access-point">random access point</a> in the sequence of <a href="#media-segment">media segments</a> and all subsequence samples in the sequence
+              (in presentation time) are not provided. This includes in particular,
 	      <ul>
-	        <li>Information that determines the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#concept-video-intrinsic-width">intrinsic width and height</a> of the video (specifically, this requires either the picture or pixel aspect ratio, together with the encoded resolution).</li>
+	        <li>Information that determines the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#concept-video-intrinsic-width">intrinsic width and height</a> of the video (specifically, this requires either the picture or pixel aspect ratio, together with the encoded
+                  resolution).</li>
 	        <li>Information necessary to convert the video decoder output to a format suitable for display</li>
 	      </ul>
 	    </li>
-	    <li>Identify the global presentation timestamp of every sample in the sequence of Media Segments</li>
+	    <li>Information necessary to compute the global presentation timestamp of every sample in the sequence of <a href="#media-segment">media segments</a> is not provided.</li>
 	  </ol>
 	  <p>For example, if I1 is associated with M1, M2, M3 then the above must hold for all the combinations I1+M1, I1+M2, I1+M1+M2, I1+M2+M3, etc.</p>
         </li>
@@ -2475,73 +2480,87 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <section id="webm-init-segments">
           <h4><span class="secno">12.1.1 </span>Initialization Segments</h4>
           <p>A WebM <a href="#init-segment">initialization segment</a> must contain a subset of the elements at the start of a typical WebM file.</p>
-          <p>The following rules apply to WebM initialization segments:</p>
+
+          <p>The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are not met:</p>
           <ol>
 	    <li>The <a href="#init-segment">initialization segment</a> must start with an <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> element, followed by a <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header.</li>
 	    <li>The size value in the <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header must signal an "unknown size" or contain a value large enough to include the <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> and <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> elements that follow.</li>
-	    <li>A <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> element and a <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> element must appear, in that order, after the <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header and before any further <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> or <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> elements.</li>
-	    <li>Any elements other than an <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> or a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> that occur before, in between, or after the <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> and <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> elements are ignored.</li>
+	    <li>A <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> element and a <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> element must appear, in that order, after the <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header and before any further <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> or <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> elements.
+            </li>
           </ol>
+          The user agent must accept and ignore any elements other than an <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> or a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> that occur before, in between, or after the <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> and
+          <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> elements.
         </section>
 
         <section id="webm-media-segments">
           <h4><span class="secno">12.1.2 </span>Media Segments</h4>
           <p>A WebM <a href="#media-segment">media segment</a> is a single <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element.</p>
-          <p>The following rules apply to WebM media segments:</p>
+
+          <p>The user agent uses the following rules when interpreting content in a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a>:</p>
           <ol>
-	    <li>The Timecode element in the <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> contains a presentation timestamp in TimecodeScale units.</li>
-	    <li>The TimecodeScale in the <a href="#webm-init-segments">WebM initialization segment</a> most recently appended applies to all timestamps in the <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a>
-            </li>
-	    <li>The Cluster header may contain an "unknown" size value. If it does then the end of the cluster is reached when another <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> header or an element header that indicates the start of an <a href="#webm-init-segments">WebM initialization segment</a> is encountered.</li>
-	    <li>Block &amp; SimpleBlock elements must be in time increasing order consistent with the <a href="http://www.webmproject.org/code/specs/container/#webm-guidelines">WebM spec</a>.</li>
-	    <li>If the most recent <a href="#webm-init-segments">WebM initialization segment</a> describes multiple tracks, then blocks from all the tracks must be interleaved in time increasing order. At least one block from all audio and video tracks must be present.</li>
-	    <li>
-              <a href="http://www.webmproject.org/code/specs/container/#cueing-data">Cues</a> or <a href="http://www.webmproject.org/code/specs/container/#chapters">Chapters</a> elements may follow a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element. These elements must be accepted and ignored by the user agent.</li>
+            <li>The TimecodeScale in the <a href="#webm-init-segments">WebM initialization segment</a> most recently appended applies to all timestamps in the <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a></li>
+            <li>The Timecode element in the <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> contains a presentation timestamp in TimecodeScale units.</li>
+            <li>The Cluster header may contain an "unknown" size value. If it does then the end of the cluster is reached when another <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> header or an element header that indicates the start
+              of an <a href="#webm-init-segments">WebM initialization segment</a> is encountered.</li>
           </ol>
+
+          <p>The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are not met:</p>
+          <ol>
+            <li>The Timecode element must appear before any Block &amp; SimpleBlock elements in a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a>.</li>
+            <li>Block &amp; SimpleBlock elements are in time increasing order consistent with the <a href="http://www.webmproject.org/code/specs/container/#webm-guidelines">WebM spec</a>.</li>
+            <li>If the most recent <a href="#webm-init-segments">WebM initialization segment</a> describes multiple tracks, then blocks from all the tracks must be interleaved in time increasing order. At least one block from all audio and video
+              tracks must be present.</li>
+          </ol>
+
+          The user agent must accept and ignore <a href="http://www.webmproject.org/code/specs/container/#cueing-data">Cues</a> or <a href="http://www.webmproject.org/code/specs/container/#chapters">Chapters</a> elements that follow a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element.
         </section>
 
         <section id="webm-random-access-points">
           <h4><span class="secno">12.1.3 </span>Random Access Points</h4>
-          <p>A SimpleBlock element with its Keyframe flag set signals the location of a <a href="#random-access-point">random access point</a> for that track. Media segments containing multiple tracks are only considered a random access point if the first SimpleBlock for each track has its Keyframe flag set. The order of the multiplexed blocks must conform to the <a href="http://www.webmproject.org/code/specs/container/#muxer-guidelines">WebM Muxer Guidelines</a>.</p>
+          <p>A SimpleBlock element with its Keyframe flag set signals the location of a <a href="#random-access-point">random access point</a> for that track. Media segments containing multiple tracks are only considered a random access
+            point if the first SimpleBlock for each track has its Keyframe flag set. The order of the multiplexed blocks must conform to the <a href="http://www.webmproject.org/code/specs/container/#muxer-guidelines">WebM Muxer Guidelines</a>.</p>
         </section>
       </section>
-      
+
       <section id="iso" class="nonnormative">
         <h3><span class="secno">12.2 </span>ISO Base Media File Format Byte Streams</h3>
         <p>This section defines segment formats for implementations that choose to support the ISO Base Media File Format
-	  <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a> (ISO BMFF).</p> 
+	  <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a> (ISO BMFF).</p>
 
 	<section id="iso-init-segments">
           <h4><span class="secno">12.2.1 </span>Initialization Segments</h4>
-          <p>An ISO BMFF <a href="#init-segment">initialization segment</a> is defined in this specification as a single Movie Header Box (<span class="iso-box">moov</span>).
-            The tracks in the  Movie Header Box must not contain any samples (i.e. the <span class="iso-var">entry_count</span> in the
-            <span class="iso-box">stts</span>, <span class="iso-box">stsc</span> and <span class="iso-box">stco</span> boxes must be set to zero). A Movie
-            Extends (<span class="iso-box">mvex</span>) box must be contained in the Movie Header Box to indicate that Movie Fragments are to be expected.
-          </p>
-          <p>The <a href="#init-segment">initialization segment</a> may contain Edit Boxes (<span class="iso-box">edts</span>) which provide a mapping of composition times for each track to the global presentation time.</p>
+          <p>An ISO BMFF <a href="#init-segment">initialization segment</a> is defined in this specification as a single Movie Header Box (<span class="iso-box">moov</span>).</p>
+
+          <p>The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
+          <ol>
+            <li>The tracks in the Movie Header Box contain samples (i.e. the <span class="iso-var">entry_count</span> in the
+              <span class="iso-box">stts</span>, <span class="iso-box">stsc</span> or <span class="iso-box">stco</span> boxes are not set to zero).</li>
+            <li>A Movie Extends (<span class="iso-box">mvex</span>) box is contained in the Movie Header Box to indicate that Movie Fragments are to be expected.</li>
+          </ol>
+          <p>The user agent must handle Edit Boxes (<span class="iso-box">edts</span>), in <a href="#init-segment">initialization segment</a>, which provide a mapping of composition times for each track to the global presentation time.</p>
           <p>Valid top-level boxes such as <span class="iso-box">ftyp</span>, <span class="iso-box">styp</span>, and <span class="iso-box">sidx</span> are
             allowed to appear before the <span class="iso-box">moov</span> box. These boxes must be accepted and ignored by the user agent and are not
             considered part of the <a href="#init-segment">initialization segment</a> in this specification.</p>
 	</section>
-        
+
 	<section id="iso-media-segments">
           <h4><span class="secno">12.2.2 </span>Media Segments</h4>
           <p>An ISO BMFF <a href="#media-segment">media segment</a> is defined in this specification as a single Movie Fragment Box
             (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>).</p>
-          <p>Valid top-level boxes defined in <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a> other than <span class="iso-box">moov</span>, 
+          <p>Valid top-level boxes defined in <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a> other than <span class="iso-box">moov</span>,
             <span class="iso-box">moof</span>, and <span class="iso-box">mdat</span> are allowed to appear between the end of an
             <a href="#init-segment">initialization segment</a> or <a href="#media-segment">media segment</a> and before the beginning of a new <a href="#media-segment">media segment</a>.
             These boxes must be accepted and ignored by the user agent and are not considered part of the <a href="#media-segment">media segment</a> in this
             specification.
           </p>
-          <p>The following rules apply to ISO BMFF media segments:</p>
+
+          <p>The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
           <ol>
-	    <li>The Movie Fragment Box must contain at least one Track Fragment Box (<span class="iso-box">traf</span>).</li>
-	    <li>The Movie Fragment Box must use movie-fragment relative addressing and the flag <span class="iso-var">default-base-is-moof</span> must be set; absolute byte-offsets must not be used.</li>
-	    <li>External data references must not be used.</li>
-	    <li>If the Movie Fragment contains multiple tracks, the duration by which each track extends should be as close to equal as practical.</li>
-	    <li>Each Track Fragment Box must contain a Track Fragment Decode Time Box (<span class="iso-box">tfdt</span>)</li>
-	    <li>The Media Data Boxes must contain all the samples referenced by the Track Fragment Run Boxes (<span class="iso-box">trun</span>) of the Movie Fragment Box.</li>
+	    <li>The Movie Fragment Box does not contain at least one Track Fragment Box (<span class="iso-box">traf</span>).</li>
+	    <li>The Movie Fragment Box does not use movie-fragment relative addressing or the flag <span class="iso-var">default-base-is-moof</span> is not set.</li>
+	    <li>External data references are being used.</li>
+	    <li>At least one Track Fragment Box does not contain a Track Fragment Decode Time Box (<span class="iso-box">tfdt</span>)</li>
+	    <li>The Media Data Boxes do not contain all the samples referenced by the Track Fragment Run Boxes (<span class="iso-box">trun</span>) of the Movie Fragment Box.</li>
           </ol>
 	</section>
 
@@ -2555,40 +2574,46 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <h3><span class="secno">12.3 </span>MPEG-2 Transport Stream Byte Streams</h3>
         <p>This section defines segment formats for implementations that choose to support MPEG-2 Transport Streams
           (MPEG-2 TS) specified in <a href="http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=44169">ISO/IEC 13818-1</a>.</p>
-        
+
         <section id="mpeg2ts-general">
           <h4><span class="secno">12.3.1 </span>General</h4>
           <p>MPEG-2 TS media and initialization segments must conform to the MPEG-2 TS Adaptive Profile (ISO/IEC 13818-1:2012 Amd. 2).</p>
-          <p>The following rules must apply to all MPEG-2 TS segments:</p>
+
+          <p>The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
           <ol>
-            <li>Segments must contain complete MPEG-2 TS packets.</li>
-            <li>Segments must contain only complete PES packets and sections.</li>
-            <li>Segments must contain exactly one program.</li>
-            <li>All MPEG-2 TS packets must have the transport_error_indicator set to 0</li>
+            <li>Segments do not contain complete MPEG-2 TS packets.</li>
+            <li>Segments do not contain complete PES packets and sections.</li>
+            <li>Segments contain more than one program.</li>
+            <li>At least one MPEG-2 TS packet has a non-zero transport_error_indicator.</li>
           </ol>
         </section>
         <section id="mpeg2ts-init-segments">
           <h4><span class="secno">12.3.2 </span>Initialization Segments</h4>
-          <p>An MPEG-2 TS initialization segment must contain a single PAT and a single PMT. Other SI, such as CAT, that are invariant for all subsequent
-            media segments, may be present.</p>
+          <p>An MPEG-2 TS initialization segment consists of a single PAT and a single PMT.</p>
+          <p>The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
+          <ol>
+            <li>A PAT is not present in the <a href="#init-segment">initialization segment</a></li>
+            <li>A PMT is not present in the <a href="#init-segment">initialization segment</a></li>
+          </ol>
+          The user agent must accept and ignore other SI, such as CAT, that are invariant for all subsequent media segments.
         </section>
-  
+
         <section id="mpeg2ts-media-segments">
           <h4><span class="secno">12.3.3 </span>Media Segments</h4>
-          <p>The following rules apply to all MPEG-2 TS media segments:</p>
+
+          <p>The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
           <ol>
-            <li>PSI that is identical to the information in the initialization segment may appear repeatedly throughout the segment.</li>
-            <li>The media segment will not rely on initialization information in another media segment.</li>
-            <li>Media Segments must contain only complete PES packets and sections.</li>
-            <li>Each PES packet must have a PTS timestamp.</li>
-            <li>PCR must be present in the Segment prior to the first byte of a TS packet payload containing media data.</li>
-            <li>The presentation duration of each media component within the Media Segment should be as close to equal as practical.</li>
+            <li>A media segment relies on initialization information in another media segment.</li>
+            <li>At least one PES packet does not have a PTS timestamp.</li>
+            <li>PCR is not present in the Segment prior to the first byte of a TS packet payload containing media data.</li>
           </ol>
+
+          The user agent will accept and ignore PSI that is identical to the information in the last initialization segment which may appear repeatedly throughout the segment.
         </section>
 
         <section id="mpeg2ts-random-access-points">
           <h4><span class="secno">12.3.4 </span>Random Access Points</h4>
-          <p>A random access point as defined in this specification corresponds to Elementary Stream Random Access Point as defined in 
+          <p>A random access point as defined in this specification corresponds to Elementary Stream Random Access Point as defined in
             <a href="http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=44169">ISO/IEC 13818-1</a>.</p>
         </section>
         <section id="mpeg2ts-discontinuities">
@@ -2722,7 +2747,16 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-            <td>02 July 2013</td>
+            <td>18 July 2013</td>
+            <td>
+              <ul>
+                <li>Bug 22117 - Reword byte stream specs in terms of UA behavior.</li>
+                <li>Bug 22148 - Replace VideoPlaybackQuality.playbackJitter with VideoPlaybackQuality.totalFrameDelay.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/b98190a4472c/media-source/media-source.html">02 July 2013</a></td>
             <td>
               <ul>
                 <li>Bug 22401 - Fix typo</li>
@@ -3075,9 +3109,9 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
     </section>
   
 
-<section id="references" class="appendix"><!--OddPage--><h2><span class="secno">A. </span>References</h2><section id="informative-references"><h3><span class="secno">A.1 </span>Informative references</h3><dl class="bibliography"><dt id="bib-BCP47">[BCP47]</dt><dd>A. Phillips; M. Davis. <a href="http://tools.ietf.org/html/bcp47"><cite>Tags for Identifying Languages</cite></a>. September 2009. IETF Best Current Practice. URL: <a href="http://tools.ietf.org/html/bcp47">http://tools.ietf.org/html/bcp47</a>
+<form action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank" style="position: fixed; width: 10em; top: 1em; right: 1em; font-family: Tahoma, sans-serif; font-size: 11px; opacity: 0.8; text-align: right;">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form><section id="references" class="appendix"><!--OddPage--><h2><span class="secno">A. </span>References</h2><section id="informative-references"><h3><span class="secno">A.1 </span>Informative references</h3><dl class="bibliography"><dt id="bib-BCP47">[BCP47]</dt><dd>A. Phillips; M. Davis. <a href="http://tools.ietf.org/html/bcp47"><cite>Tags for Identifying Languages</cite></a>. September 2009. IETF Best Current Practice. URL: <a href="http://tools.ietf.org/html/bcp47">http://tools.ietf.org/html/bcp47</a>
 </dd><dt id="bib-FILE-API">[FILE-API]</dt><dd>Arun Ranganathan; Jonas Sicking. <a href="http://www.w3.org/TR/2012/WD-FileAPI-20121025"><cite>File API</cite></a>. 25 October 2012. W3C Working Draft. URL: <a href="http://www.w3.org/TR/2012/WD-FileAPI-20121025">http://www.w3.org/TR/2012/WD-FileAPI-20121025</a>
 </dd><dt id="bib-HTML5">[HTML5]</dt><dd>Robin Berjon et al. <a href="http://www.w3.org/TR/html5/"><cite>HTML5</cite></a>. 17 December 2012. W3C Candidate Recommendation. URL: <a href="http://www.w3.org/TR/html5/">http://www.w3.org/TR/html5/</a>
 </dd><dt id="bib-STREAMS-API">[STREAMS-API]</dt><dd>Feras Moussa. <a href="http://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm"><cite>Streams API</cite></a>. 25 October 2012. W3C Editor's Draft. URL: <a href="http://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm">http://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm</a>
 </dd><dt id="bib-TYPED-ARRAYS">[TYPED-ARRAYS]</dt><dd>David Herman, Kenneth Russell. <a href="https://www.khronos.org/registry/typedarray/specs/latest/"><cite>Typed Arrays</cite></a> Khronos Working Draft. (Work in progress.) URL: <a href="https://www.khronos.org/registry/typedarray/specs/latest/">https://www.khronos.org/registry/typedarray/specs/latest/</a> 
-</dd></dl></section></section><form action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank" style="position: fixed; width: 10em; top: 1em; right: 1em; font-family: Tahoma, sans-serif; font-size: 11px; opacity: 0.8; text-align: right;">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form></body></html>
+</dd></dl></section></section></body></html>
