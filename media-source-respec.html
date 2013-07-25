@@ -297,7 +297,9 @@
         <dt>SourceBuffer addSourceBuffer(DOMString type)</dt>
         <dd>
           <p>Adds a new <a>SourceBuffer</a> to <a def-id="sourceBuffers"></a>.</p>
-          <p>Implementations must support at least 1 MediaSource object with the following <a>SourceBuffer</a> configurations. Anything beyond this is a quality of implementation issue.
+          <p>Implementations must support at least 1 MediaSource object with the following <a>SourceBuffer</a> configurations. MediaSource objects must
+            support each of the configurations below, but they are only required to support one configuration at a time.
+            Supporting multiple configurations at once or additional configurations is a quality of implementation issue.
             <ul>
               <li>A single SourceBuffer with 1 audio track and/or 1 video track.</li>
               <li>Two SourceBuffers with one handling a single audio track and the other handling a single video track.</li>
@@ -2183,6 +2185,11 @@
             <li>A Movie Extends (<span class="iso-box">mvex</span>) box is contained in the Movie Header Box to indicate that Movie Fragments are to be expected.</li>
           </ol>
           <p>The user agent must handle Edit Boxes (<span class="iso-box">edts</span>), in <a def-id="init-segment"></a>, which provide a mapping of composition times for each track to the global presentation time.</p>
+
+	  <p>The user agent must support parameter sets (e.g., PPS/SPS) stored in the sample entry (as defined for avc1/avc2), and should support parameter
+            sets stored inband in the samples themselves (as defined for avc3/avc4).</p>
+            <p class="note">For maximum content interoperability user agents are strongly advised to support avc3/avc4 if possible.</p>
+
           <p>Valid top-level boxes such as <span class="iso-box">ftyp</span>, <span class="iso-box">styp</span>, and <span class="iso-box">sidx</span> are
             allowed to appear before the <span class="iso-box">moov</span> box. These boxes must be accepted and ignored by the user agent and are not
             considered part of the <a def-id="init-segment"></a> in this specification.</p>
@@ -2206,6 +2213,7 @@
 	    <li>External data references are being used.</li>
 	    <li>At least one Track Fragment Box does not contain a Track Fragment Decode Time Box (<span class="iso-box">tfdt</span>)</li>
 	    <li>The Media Data Boxes do not contain all the samples referenced by the Track Fragment Run Boxes (<span class="iso-box">trun</span>) of the Movie Fragment Box.</li>
+	    <li>Inband parameter sets are not present in the appropriate samples and parameter sets are not present in the last initialization segment appended.</li>
           </ol>
 	</section>
 
@@ -2394,7 +2402,16 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-            <td>18 July 2013</td>
+            <td>26 July 2013</td>
+            <td>
+              <ul>
+                <li>Bug 22136 - Added text for Inband SPS/PPS support.</li>
+                <li>Bug 22776 - Clarified that implementations are only required to support one SourceBuffer configuration at a time.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/2b2d8865de83/media-source/media-source.html">18 July 2013</a></td>
             <td>
               <ul>
                 <li>Bug 22117 - Reword byte stream specs in terms of UA behavior.</li>
