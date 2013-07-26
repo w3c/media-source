@@ -36,6 +36,10 @@
     link_helper(doc, df, 'http://www.w3.org/TR/html5/webappapis.html#' + id, text);
   }
 
+  function infrastructure_helper(doc, df, id, text) {
+    link_helper(doc, df, 'http://www.w3.org/TR/html5/infrastructure.html#' + id, text);
+  }
+
   function browsers_helper(doc, df, id, text) {
       link_helper(doc, df, 'http://www.w3.org/TR/html5/browsers.html#' + id, text);
   }
@@ -70,7 +74,7 @@
   function queue_and_fire_track_event_helper(doc, df, id, text) {
     webappapis_helper(doc, df, 'queue-a-task', 'Queue a task');
     df.appendChild(doc.createTextNode(' to fire a '));
-    webappapis_helper(doc, df, 'concept-events-trusted', 'trusted event');
+    infrastructure_helper(doc, df, 'concept-events-trusted', 'trusted event');
     df.appendChild(doc.createTextNode(' named '));
     code_videoref_helper(doc, df, 'handler-tracklist-on' + text, text);
     df.appendChild(doc.createTextNode(', that does not bubble and is not cancelable, and that uses the '));
@@ -418,7 +422,7 @@
 	var df = doc.createDocumentFragment();
 	var baseURL = null;
 	if (info.spec == 'streams-api') {
-	  baseURL = "http://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm";
+	  baseURL = "https://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm";
         } else if (info.spec == 'html5') {
 	  baseURL = HTML_spec_url;
 	} else if (info.spec == 'dom') {
