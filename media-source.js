@@ -109,6 +109,7 @@
       "Cyril Concolato",
       "Ralph Giles",
       "David Singer",
+      "Tatsuya Igarashi",
     ];
 
     contributors.sort();

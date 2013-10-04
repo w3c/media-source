@@ -2301,6 +2301,10 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
 &lt;script&gt;
   function onSourceOpen(videoTag, e) {
     var mediaSource = e.target;
+
+    if (mediaSource.sourceBuffers.length > 0)
+        return;
+
     var sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vorbis,vp8"');
 
     videoTag.addEventListener('seeking', onSeeking.bind(videoTag, mediaSource));
@@ -2327,7 +2331,7 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
   }
 
   function appendNextMediaSegment(mediaSource) {
-    if (mediaSource.readyState == "ended")
+    if (mediaSource.readyState == "closed")
       return;
 
     // If we have run out of stream data, then signal end of stream.
@@ -2348,14 +2352,19 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
       return;
     }
 
+    // NOTE: If mediaSource.readyState == “ended”, this appendBuffer() call will
+    // cause mediaSource.readyState to transition to "open". The web application
+    // should be prepared to handle multiple “sourceopen” events.
     mediaSource.sourceBuffers[0].appendBuffer(mediaSegment);
   }
 
   function onSeeking(mediaSource, e) {
     var video = e.target;
 
-    // Abort current segment append.
-    mediaSource.sourceBuffers[0].abort();
+    if (mediaSource.readyState == "open") {
+      // Abort current segment append.
+      mediaSource.sourceBuffers[0].abort();
+    }
 
     // Notify the media segment loading code to start fetching data at the
     // new playback position.
