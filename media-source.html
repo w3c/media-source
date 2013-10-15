@@ -1631,8 +1631,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   and abort these steps.
                   <div class="note"><div class="note-title"><span>Note</span></div><p class="">User agents may consider codecs, that would otherwise be supported, as "not supported" here if the codecs were not
                     specified in the <var>type</var> parameter passed to <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code>. <br>
-                    For example, MediaSource.isTypeSupported('video/web;codecs="vp8,vorbis"') may return true, but if
-                    <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> was called with 'video/web;codecs="vp8"' and a Vorbis track appears in the
+                    For example, MediaSource.isTypeSupported('video/webm;codecs="vp8,vorbis"') may return true, but if
+                    <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> was called with 'video/webm;codecs="vp8"' and a Vorbis track appears in the
                     <a href="#init-segment">initialization segment</a>, then the user agent may use this step to trigger a decode error.
                   </p></div>
                 </li>
@@ -2764,7 +2764,7 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
             <td>15 October 2013</td>
             <td>
               <ul>
-                <li>Bug 23525 - Fix mvex box behavior.</li>
+                <li>Bug 23525 - Fix mvex box error behavior.</li>
               </ul>
             </td>
           </tr>
