@@ -429,7 +429,7 @@ table.exceptions table {
   </p>
   <h1 class="title" id="title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-04-october-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 04 October 2013</h2>
+  <h2 id="w3c-editor-s-draft-15-october-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 15 October 2013</h2>
   <dl>
     
       <dt>This version:</dt>
@@ -2534,7 +2534,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <ol>
             <li>The tracks in the Movie Header Box contain samples (i.e. the <span class="iso-var">entry_count</span> in the
               <span class="iso-box">stts</span>, <span class="iso-box">stsc</span> or <span class="iso-box">stco</span> boxes are not set to zero).</li>
-            <li>A Movie Extends (<span class="iso-box">mvex</span>) box is contained in the Movie Header Box to indicate that Movie Fragments are to be expected.</li>
+            <li>A Movie Extends (<span class="iso-box">mvex</span>) box is not contained in the Movie (<span class="iso-box">moov</span>) box to indicate that Movie Fragments are to be expected.</li>
           </ol>
           <p>The user agent must handle Edit Boxes (<span class="iso-box">edts</span>), in <a href="#init-segment">initialization segment</a>, which provide a mapping of composition times for each track to the global presentation time.</p>
 
@@ -2760,6 +2760,22 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
           </tr>
         </thead>
         <tbody>
+          <tr>
+            <td>15 October 2013</td>
+            <td>
+              <ul>
+                <li>Bug 23525 - Fix mvex box behavior.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/56e209741937/media-source/media-source.html">04 October 2013</a></td>
+            <td>
+              <ul>
+                <li>Bug 23442 - Fix example to work when seeking in the 'ended' state.</li>
+              </ul>
+            </td>
+          </tr>
           <tr>
             <td>26 July 2013</td>
             <td>
