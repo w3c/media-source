@@ -429,7 +429,7 @@ table.exceptions table {
   </p>
   <h1 class="title" id="title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-15-october-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 15 October 2013</h2>
+  <h2 id="w3c-editor-s-draft-28-october-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 28 October 2013</h2>
   <dl>
     
       <dt>This version:</dt>
@@ -588,24 +588,36 @@ table.exceptions table {
           </dd>
 
           <dt id="append-window">Append Window</dt>
-          <dd><p>A presentation timestamp range used to filter out <a href="#coded-frame">coded frames</a> while appending. The append window represents a single
-            continuous time range with a single start time and end time. Coded frames with presentation timestamps within this range are allowed to be appended
+          <dd><p>A <a href="#presentation-timestamp">presentation timestamp</a> range used to filter out <a href="#coded-frame">coded frames</a> while appending. The append window represents a single
+            continuous time range with a single start time and end time. Coded frames with <a href="#presentation-timestamp">presentation timestamp</a> within this range are allowed to be appended
             to the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> while coded frames outside this range are filtered out. The append window start and end times are controlled by
             the <code><a href="#widl-SourceBuffer-appendWindowStart">appendWindowStart</a></code> and <code><a href="#widl-SourceBuffer-appendWindowEnd">appendWindowEnd</a></code> attributes respectively.</p></dd>
 
           <dt id="coded-frame">Coded Frame</dt>
-          <dd><p>A unit of media data that has a presentation timestamp and decode timestamp. The presentation timestamp indicates when the frame must be rendered. The decode timestamp indicates when the frame needs to be decoded. If frames can be decoded out of order, then the decode timestamp are present in the byte stream. The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> if this is not the case. If frames cannot be decoded out of order and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the presentation timestamp.</p></dd>
+          <dd><p>A unit of media data that has a <a href="#presentation-timestamp">presentation timestamp</a>, a <a href="#decode-timestamp">decode timestamp</a>, and a <a href="#coded-frame-duration">coded frame duration</a>.</p></dd>
+
+          <dt id="coded-frame-duration">Coded Frame Duration</dt>
+          <dd>
+            <p>The duration of a <a href="#coded-frame">coded frame</a>. For video and text, the duration indicates how long the video frame or text should be displayed. For audio, the duration represents the sum of all the samples contained within the coded frame. For example, if an audio frame contained 441 samples @44100Hz the frame duration would be 100 milliseconds.</p>
+          </dd>
+
 
           <dt id="coded-frame-group">Coded Frame Group</dt>
-          <dd><p>A group of <a href="#coded-frame">coded frames</a> that are adjacent and monotonically increasing in decode time without any gaps. Discontinuities detected by the
+          <dd><p>A group of <a href="#coded-frame">coded frames</a> that are adjacent and have monotonically increasing <a href="#decode-timestamp">decode timestamps</a> without any gaps. Discontinuities detected by the
               <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> and <code><a href="#widl-SourceBuffer-abort-void">abort()</a></code> calls trigger the start of a new coded frame group.</p>
           </dd>
+
+          <dt id="decode-timestamp">Decode Timestamp</dt>
+          <dd>
+            <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a href="#presentation-timestamp">presentation timestamp</a> of the earliest frame, in <a href="#presentation-order">presentation order</a>, that is dependant on this frame). If frames can be decoded out of <a href="#presentation-order">presentation order</a>, then the decode timestamp must be present in or derivable from the byte stream. The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> if this is not the case. If frames cannot be decoded out of  <a href="#presentation-order">presentation order</a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a href="#presentation-timestamp">presentation timestamp</a>.
+          </p></dd>
 
           <dt id="displayed-frame-delay">Displayed Frame Delay</dt>
           <dd>
             <p>The delay, to the nearest microsecond, between a frame's presentation time and the actual time it was displayed. This delay is always greater than or equal to zero since frames must
               never be displayed before their presentation time. Non-zero delays are a sign of playback jitter and possible loss of A/V sync.</p>
           </dd>
+
           <dt id="init-segment">Initialization Segment</dt>
           <dd>
 	    <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of <a href="#media-segment">media segments</a>. This includes codec initialization data, <a href="#track-id">Track ID</a> mappings for multiplexed segments, and timestamp offsets (e.g. edit lists).</p>
@@ -630,6 +642,21 @@ table.exceptions table {
 
           <dt id="presentation-start-time">Presentation Start Time</dt>
           <dd><p>The presentation start time is the earliest time point in the presentation and specifies the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#initial-playback-position">initial playback position</a> and <a href="http://www.w3.org/TR/html5/embedded-content-0.html#earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0.</p></dd>
+
+          <dt id="presentation-interval">Presentation Interval</dt>
+          <dd>
+            <p>The presentation interval of a <a href="#coded-frame">coded frame</a> is the time interval from its <a href="#presentation-timestamp">presentation timestamp</a> to the <a href="#presentation-timestamp">presentation timestamp</a> plus the <a href="#coded-frame-duration">coded frame's duration</a>. For example, if a coded frame has a presentation timestamp of 10 seconds and a <a href="#coded-frame-duration">coded frame duration</a> of 100 milliseconds, then the presentation interval would be [10-10.1). Note that the start of the range is inclusive, but the end of the range is exclusive.</p>
+          </dd>
+
+          <dt id="presentation-order">Presentation Order</dt>
+          <dd>
+            <p>The order that <a href="#coded-frame">coded frames</a> are rendered in the presentation. The presentation order is achieved by ordering <a href="#coded-frame">coded frames</a> in monotonically increasing order by their <a href="#presentation-timestamp">presentation timestamps</a>.</p>
+          </dd>
+
+          <dt id="presentation-timestamp">Presentation Timestamp</dt>
+          <dd>
+             <p>A reference to a specific time in the presentation. The presentation timestamp in a <a href="#coded-frame">coded frame</a> indicates when the frame must be rendered.</p>
+          </dd>
 
           <dt id="random-access-point">Random Access Point</dt>
           <dd><p>A position in a <a href="#media-segment">media segment</a> where decoding and continuous playback can begin without relying on any previous data in the segment. For video this tends to be the location of I-frames. In the case of audio, most audio frames can be treated as a random access point. Since video tracks tend to have a more sparse distribution of random access points, the location of these points are usually considered the random access points for multiplexed streams.</p></dd>
@@ -1181,7 +1208,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 <span class="idlMethod">    <span class="idlMethType"><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-void" class="idlType">void</a></code></span> <span class="idlMethName"><a href="#widl-SourceBuffer-abort-void">abort</a></span> ();</span>
 <span class="idlMethod">    <span class="idlMethType"><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-void" class="idlType">void</a></code></span> <span class="idlMethName"><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove</a></span> (<span class="idlParam"><span class="idlParamType"><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-double" class="idlType">double</a></code></span> <span class="idlParamName">start</span></span>, <span class="idlParam"><span class="idlParamType"><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-double" class="idlType">double</a></code></span> <span class="idlParamName">end</span></span>);</span>
 };</span></pre><section id="attributes-1"><h3><span class="secno">3.1 </span>Attributes</h3><dl class="attributes"><dt id="widl-SourceBuffer-appendWindowEnd"><code>appendWindowEnd</code> of type <span class="idlAttrType"><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-unrestricted-double" class="idlType">unrestricted double</a></code></span>,            </dt><dd>
-          <p>The presentation timestamp for the end of the <a href="#append-window">append window</a>. This attribute is initially set to positive Infinity.</p>
+          <p>The <a href="#presentation-timestamp">presentation timestamp</a> for the end of the <a href="#append-window">append window</a>. This attribute is initially set to positive Infinity.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
@@ -1194,7 +1221,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Update the attribute to the new value.</li>
           </ol>
         </dd><dt id="widl-SourceBuffer-appendWindowStart"><code>appendWindowStart</code> of type <span class="idlAttrType"><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-double" class="idlType">double</a></code></span>,            </dt><dd>
-          <p>The presentation timestamp for the start of the <a href="#append-window">append window</a>. This attribute is initially set to 0.</p>
+          <p>The <a href="#presentation-timestamp">presentation timestamp</a> for the start of the <a href="#append-window">append window</a>. This attribute is initially set to 0.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
@@ -1342,11 +1369,11 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           unset to indicate that no <a href="#coded-frame">coded frames</a> have been appended yet.</p>
 
         <p>Each <a href="#track-buffer">track buffer</a> has a <dfn id="last-frame-duration">last frame duration</dfn> variable that stores
-          the frame duration of the last <a href="#coded-frame">coded frame</a> appended in the current <a href="#coded-frame-group">coded frame group</a>. The variable is initially
+          the <a href="#coded-frame-duration">coded frame duration</a> of the last <a href="#coded-frame">coded frame</a> appended in the current <a href="#coded-frame-group">coded frame group</a>. The variable is initially
           unset to indicate that no <a href="#coded-frame">coded frames</a> have been appended yet.</p>
 
         <p>Each <a href="#track-buffer">track buffer</a> has a <dfn id="highest-presentation-timestamp">highest presentation timestamp</dfn> variable that stores
-          the highest presentation timestamp encountered in a <a href="#coded-frame">coded frame</a> appended in the current <a href="#coded-frame-group">coded frame group</a>.
+          the highest <a href="#presentation-timestamp">presentation timestamp</a> encountered in a <a href="#coded-frame">coded frame</a> appended in the current <a href="#coded-frame-group">coded frame group</a>.
           The variable is initially unset to indicate that no <a href="#coded-frame">coded frames</a> have been appended yet.</p>
 
         <p>Each <a href="#track-buffer">track buffer</a> has a <dfn id="need-RAP-flag">need random access point flag</dfn> variable that keeps track of whether
@@ -1441,7 +1468,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             by the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>.
           </p>
 
-          <p>When this algorithm is invoked, run the following steps:</p>
+          <p>When the segment parser loop algorithm is invoked, run the following steps:</p>
 
           <ol>
             <li><i>Loop Top:</i> If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> is empty, then jump to the <i>need more data</i> step below.</li>
@@ -1739,7 +1766,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>
 	      <p>For each <a href="#coded-frame">coded frame</a> in the <a href="#media-segment">media segment</a> run the following steps:</p>
 	      <ol>
-	        <li><i>Loop Top: </i>Let <var>presentation timestamp</var> be a double precision floating point representation of the coded frame's presentation timestamp in seconds.
+	        <li><i>Loop Top: </i>Let <var>presentation timestamp</var> be a double precision floating point representation of the coded frame's <a href="#presentation-timestamp">presentation timestamp</a> in seconds.
                   <div class="note"><div class="note-title"><span>Note</span></div><p class="">Special processing may be needed to determine the presentation and decode timestamps for timed text frames since this information may not be explicilty
                     present in the underlying format or may be dependent on the order of the frames. Some metadata text tracks, like MPEG2-TS PSI data, may only have implied timestamps.
                     Format specific rules for these situations should be in the <a href="#byte-stream-formats">byte stream format specifications</a> or in separate extension specifications.</p></div>
@@ -1753,7 +1780,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                     if a double precision floating point representation was used.
                   </p></div>
                 </li>
-                <li>Let <var>frame duration</var> be a double precision floating point representation of the coded frame's duration in seconds.</li>
+                <li>Let <var>frame duration</var> be a double precision floating point representation of the <a href="#coded-frame-duration">coded frame's duration</a> in seconds.</li>
                 <li>If <code><a href="#widl-SourceBuffer-mode">mode</a></code> equals <code><a href="#idl-def-AppendMode.sequence">"sequence"</a></code> and <var><a href="#sourcebuffer-group-start-timestamp">group start timestamp</a></var> is set, then run the following steps:
                   <ol>
                     <li>Set <code><a href="#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> equal to <var><a href="#sourcebuffer-group-start-timestamp">group start timestamp</a></var> - <var>presentation timestamp</var>.</li>
@@ -1804,7 +1831,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <li>If <var>presentation timestamp</var> is less than <code><a href="#widl-SourceBuffer-appendWindowStart">appendWindowStart</a></code>, then set the <var><a href="#need-RAP-flag">need random access point flag</a></var> to true, drop the
                   coded frame, and jump to the top of the loop to start processing the next coded frame.
                   <div class="note"><div class="note-title"><span>Note</span></div><p class="">Some implementations may choose to collect some of these coded frames that are outside the <a href="#append-window">append window</a> and use them
-                    to generate a splice at the first coded frame that has a presentation timestamp greater than or equal to <code><a href="#widl-SourceBuffer-appendWindowStart">appendWindowStart</a></code> even if
+                    to generate a splice at the first coded frame that has a <a href="#presentation-timestamp">presentation timestamp</a> greater than or equal to <code><a href="#widl-SourceBuffer-appendWindowStart">appendWindowStart</a></code> even if
                     that frame is not a <a href="#random-access-point">random access point</a>. Supporting this requires multiple decoders or faster than real-time decoding so for now
                     this behavior will not be a normative requirement.
                   </p></div>
@@ -1820,10 +1847,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 </li>
                 <li>Let <var>spliced audio frame</var> be an unset variable for holding audio splice information</li>
                 <li>Let <var>spliced timed text frame</var> be an unset variable for holding timed text splice information</li>
-                <li>If <var><a href="#last-decode-timestamp">last decode timestamp</a></var> for <var>track buffer</var> is unset and there is a <a href="#coded-frame">coded frame</a> in
-                  <var>track buffer</var> with a presentation timestamp less than or equal to <var>presentation timestamp</var> and
-                  <var>presentation timestamp</var> is less than this coded frame's presentation timestamp plus its frame duration, then run the
-                  following steps:
+                <li>If <var><a href="#last-decode-timestamp">last decode timestamp</a></var> for <var>track buffer</var> is unset and <var>presentation timestamp</var> falls within the <a href="#presentation-interval">presentation interval</a> of a <a href="#coded-frame">coded frame</a> in <var>track buffer</var>,then run the following steps:
                   <ol>
                     <li>Let <var>overlapped frame</var> be the <a href="#coded-frame">coded frame</a> in <var>track buffer</var> that matches the condition above.</li>
                     <li>
@@ -1833,7 +1857,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                         <dt>If <var>track buffer</var> contains video <a href="#coded-frame">coded frames</a>:</dt>
                         <dd>
                           <ol>
-                            <li>Let <var>overlapped frame presentation timestamp</var> equal the presentation timestamp of <var>overlapped frame</var>.</li>
+                            <li>Let <var>overlapped frame presentation timestamp</var> equal the <a href="#presentation-timestamp">presentation timestamp</a> of <var>overlapped frame</var>.</li>
                             <li>Let <var>remove window timestamp</var> equal <var>overlapped frame presentation timestamp</var> plus 1 microsecond.</li>
                             <li>If the <var>presentation timestamp</var> is less than the <var>remove window timestamp</var>, then remove <var>overlapped frame</var> and any
                               <a href="#coded-frame">coded frames</a> that depend on it from <var>track buffer</var>.
@@ -1854,10 +1878,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <li>Remove existing coded frames in <var>track buffer</var>:
                   <dl class="switch">
                     <dt>If <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> for <var>track buffer</var> is not set:</dt>
-                    <dd>Remove all <a href="#coded-frame">coded frames</a> from <var>track buffer</var> that have a presentation timestamp greater than or equal to
+                    <dd>Remove all <a href="#coded-frame">coded frames</a> from <var>track buffer</var> that have a <a href="#presentation-timestamp">presentation timestamp</a> greater than or equal to
                       <var>presentation timestamp</var> and less than <var>frame end timestamp</var>.</dd>
                     <dt>If <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> for <var>track buffer</var> is set and less than <var>presentation timestamp</var></dt>
-                    <dd>Remove all <a href="#coded-frame">coded frames</a> from <var>track buffer</var> that have a presentation timestamp greater than
+                    <dd>Remove all <a href="#coded-frame">coded frames</a> from <var>track buffer</var> that have a <a href="#presentation-timestamp">presentation timestamp</a> greater than
                       <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> and less than or equal to <var>frame end timestamp</var>.</dd>
                   </dl>
                 </li>
@@ -1933,8 +1957,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <h4><span class="secno">3.5.9 </span>Coded Frame Removal Algorithm</h4>
           <p>Follow these steps when <a href="#coded-frame">coded frames</a> for a specific time range need to be removed from the SourceBuffer:</p>
           <ol>
-            <li>Let <var>start</var> be the starting presentation timestamp for the removal range.</li>
-            <li>Let <var>end</var> be the end presentation timestamp for the removal range. </li>
+            <li>Let <var>start</var> be the starting <a href="#presentation-timestamp">presentation timestamp</a> for the removal range.</li>
+            <li>Let <var>end</var> be the end <a href="#presentation-timestamp">presentation timestamp</a> for the removal range. </li>
             <li><p>For each <a href="#track-buffer">track buffer</a> in this source buffer, run the following steps:</p>
               <ol>
 	        <li>Let <var>remove end timestamp</var> be the current value of <code><a href="#widl-MediaSource-duration">duration</a></code></li>
@@ -1984,11 +2008,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <ol>
             <li>Let <var>track buffer</var> be the <a href="#track-buffer">track buffer</a> that will contain the splice.</li>
             <li>Let <var>new coded frame</var> be the new <a href="#coded-frame">coded frame</a>, that is being added to <var>track buffer</var>, which triggered the need for a splice.</li>
-            <li>Let <var>presentation timestamp</var> be the presentation timestamp for <var>new coded frame</var></li>
+            <li>Let <var>presentation timestamp</var> be the <a href="#presentation-timestamp">presentation timestamp</a> for <var>new coded frame</var></li>
             <li>Let <var>decode timestamp</var> be the decode timestamp for <var>new coded frame</var>.</li>
-            <li>Let <var>frame duration</var> be the duration of <var>new coded frame</var>.</li>
-            <li>Let <var>overlapped frame</var> be the <a href="#coded-frame">coded frame</a> in <var>track buffer</var> with a presentation timestamp less than or equal to 
-              <var>presentation timestamp</var> and <var>presentation timestamp</var> is less than this coded frame's presentation timestamp plus its frame duration.
+            <li>Let <var>frame duration</var> be the <a href="#coded-frame-duration">coded frame duration</a> of <var>new coded frame</var>.</li>
+            <li>Let <var>overlapped frame</var> be the <a href="#coded-frame">coded frame</a> in <var>track buffer</var> with a <a href="#presentation-interval">presentation interval</a> that contains <var>presentation timestamp</var>.
             </li>
             <li>Update <var>presentation timestamp</var> and <var>decode timestamp</var> to the nearest audio sample timestamp based on sample rate of the 
               audio in <var>overlapped frame</var>. If a timestamp is equidistant from both audio sample timestamps, then use the higher timestamp. (eg.
@@ -1996,7 +2019,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <div class="note"><div class="note-title"><span>Note</span></div><div class="">
                 <p>For example, given the following values:</p>
                 <ul>
-                  <li>The presentation timestamp of <var>overlapped frame</var> equals 10.</li>
+                  <li>The <a href="#presentation-timestamp">presentation timestamp</a> of <var>overlapped frame</var> equals 10.</li>
                   <li>The sample rate of <var>overlapped frame</var> equals 8000 Hz</li>
                   <li><var>presentation timestamp</var> equals 10.01255</li>
                   <li><var>decode timestamp</var> equals 10.01255</li>
@@ -2010,9 +2033,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <li>Remove <var>overlapped frame</var> from <var>track buffer</var>.</li>
                 <li>Add a silence frame to <var>track buffer</var> with the following properties:
                   <ul>
-                    <li>The presentation time set to the <var>overlapped frame</var> presentation time.</li>
-                    <li>The decode time set to the <var>overlapped frame</var> decode time.</li>
-                    <li>The frame duration set to difference between <var>presentation timestamp</var> and the <var>overlapped frame</var> presentation time.</li>
+                    <li>The <a href="#presentation-timestamp">presentation timestamp</a> set to the <var>overlapped frame</var> <a href="#presentation-timestamp">presentation timestamp</a>.</li>
+                    <li>The <a href="#decode-timestamp">decode timestamp</a> set to the <var>overlapped frame</var> <a href="#decode-timestamp">decode timestamp</a>.</li>
+                    <li>The <a href="#coded-frame-duration">coded frame duration</a> set to difference between <var>presentation timestamp</var> and the <var>overlapped frame</var> <a href="#presentation-timestamp">presentation timestamp</a>.</li>
                   </ul>
                   <div class="note"><div class="note-title"><span>Note</span></div><p class="">
                     Some implementations may apply fades to/from silence to coded frames on either side of the inserted silence to make the transition less
@@ -2030,13 +2053,13 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
             <li>Let <var>splice end timestamp</var> equal the sum of <var>presentation timestamp</var> and the splice duration of 5 milliseconds.</li>
             <li>Let <var>fade out coded frames</var> equal <var>overlapped frame</var> as well as any additional frames in <var>track buffer</var> that
-              have a presentation timestamp greater than <var>presentation timestamp</var> and less than <var>splice end timestamp</var>.</li>
+              have a <a href="#presentation-timestamp">presentation timestamp</a> greater than <var>presentation timestamp</var> and less than <var>splice end timestamp</var>.</li>
             <li>Remove all the frames included in <var>fade out coded frames</var> from <var>track buffer</var>.
             </li><li>Return a splice frame with the following properties:
               <ul>
-                <li>The presentation time set to the <var>overlapped frame</var> presentation time.</li>
-                <li>The decode time set to the <var>overlapped frame</var> decode time.</li>
-                <li>The frame duration set to difference between <var>frame end timestamp</var> and the <var>overlapped frame</var> presentation time.</li>
+                <li>The <a href="#presentation-timestamp">presentation timestamp</a> set to the <var>overlapped frame</var> <a href="#presentation-timestamp">presentation timestamp</a>.</li>
+                <li>The <a href="#decode-timestamp">decode timestamp</a> set to the <var>overlapped frame</var> <a href="#decode-timestamp">decode timestamp</a>.</li>
+                <li>The <a href="#coded-frame-duration">coded frame duration</a> set to difference between <var>frame end timestamp</var> and the <var>overlapped frame</var> <a href="#presentation-timestamp">presentation timestamp</a>.</li>
                 <li>The fade out coded frames equals <var>fade-out coded frames</var>.</li>
                 <li>The fade in coded frame equal <var>new coded frame</var>.
                   <div class="note"><div class="note-title"><span>Note</span></div><p class="">If the <var>new coded frame</var> is less than 5 milliseconds in duration, then coded frames that are appended after the
@@ -2055,9 +2078,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <ol>
             <li>Let <var>fade out coded frames</var> be the <a href="#coded-frame">coded frames</a> that are faded out during the splice.</li>
             <li>Let <var>fade in coded frames</var> be the <a href="#coded-frame">coded frames</a> that are faded in during the splice.</li>
-            <li>Let <var>presentation timestamp</var> be the presentation timestamp of the first coded frame in <var>fade out coded frames</var>.</li>
-            <li>Let <var>end timestamp</var> be the sum of the presentation timestamp and frame duration in the last frame in <var>fade in coded frames</var>.</li>
-            <li>Let <var>splice timestamp</var> be the presentation timestamp where the splice starts. This corresponds with the presentation timestamp of the first frame in
+            <li>Let <var>presentation timestamp</var> be the <a href="#presentation-timestamp">presentation timestamp</a> of the first coded frame in <var>fade out coded frames</var>.</li>
+            <li>Let <var>end timestamp</var> be the sum of the <a href="#presentation-timestamp">presentation timestamp</a> and the <a href="#coded-frame-duration">coded frame duration</a> of the last frame in <var>fade in coded frames</var>.</li>
+            <li>Let <var>splice timestamp</var> be the <a href="#presentation-timestamp">presentation timestamp</a> where the splice starts. This corresponds with the <a href="#presentation-timestamp">presentation timestamp</a> of the first frame in
               <var>fade in coded frames</var>.</li>
             <li>Let <var>splice end timestamp</var> equal <var>splice timestamp</var> plus five milliseconds.</li>
             <li>Let <var>fade out samples</var> be the samples generated by decoding <var>fade out coded frames</var>.</li>
@@ -2088,18 +2111,17 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <ol>
             <li>Let <var>track buffer</var> be the <a href="#track-buffer">track buffer</a> that will contain the splice.</li>
             <li>Let <var>new coded frame</var> be the new <a href="#coded-frame">coded frame</a>, that is being added to <var>track buffer</var>, which triggered the need for a splice.</li>
-            <li>Let <var>presentation timestamp</var> be the presentation timestamp for <var>new coded frame</var></li>
+            <li>Let <var>presentation timestamp</var> be the <a href="#presentation-timestamp">presentation timestamp</a> for <var>new coded frame</var></li>
             <li>Let <var>decode timestamp</var> be the decode timestamp for <var>new coded frame</var>.</li>
-            <li>Let <var>frame duration</var> be the duration of <var>new coded frame</var>.</li>
+            <li>Let <var>frame duration</var> be the <a href="#coded-frame-duration">coded frame duration</a> of <var>new coded frame</var>.</li>
             <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
-            <li>Let <var>first overlapped frame</var> be the <a href="#coded-frame">coded frame</a> in <var>track buffer</var> with a presentation timestamp less than or equal to
-              <var>presentation timestamp</var> and <var>presentation timestamp</var> is less than this coded frame's presentation timestamp plus its frame duration.
+            <li>Let <var>first overlapped frame</var> be the <a href="#coded-frame">coded frame</a> in <var>track buffer</var> with a <a href="#presentation-interval">presentation interval</a> that contains <var>presentation timestamp</var>.
             </li>
-            <li>Let <var>overlapped presentation timestamp</var> be the presentation timestamp of the <var>first overlapped frame</var>.</li>
+            <li>Let <var>overlapped presentation timestamp</var> be the <a href="#presentation-timestamp">presentation timestamp</a> of the <var>first overlapped frame</var>.</li>
             <li>Let <var>overlapped frames</var> equal <var>first overlapped frame</var> as well as any additional frames in <var>track buffer</var> that
-              have a presentation timestamp greater than <var>presentation timestamp</var> and less than <var>frame end timestamp</var>.</li>
+              have a <a href="#presentation-timestamp">presentation timestamp</a> greater than <var>presentation timestamp</var> and less than <var>frame end timestamp</var>.</li>
             <li>Remove all the frames included in <var>overlapped frames</var> from <var>track buffer</var>.
-            </li><li>Update the frame duration of the <var>first overlapped frame</var> to <var>presentation timestamp</var> - <var>overlapped presentation timestamp</var>.</li>
+            </li><li>Update the <a href="#coded-frame-duration">coded frame duration</a> of the <var>first overlapped frame</var> to <var>presentation timestamp</var> - <var>overlapped presentation timestamp</var>.</li>
             <li>Add <var>first overlapped frame</var> to the <var>track buffer</var>.
             </li><li>Return to caller without providing a splice frame.
               <div class="note"><div class="note-title"><span>Note</span></div><p class="">This is intended to allow <var>new coded frame</var> to be added to the <var>track buffer</var> as if
@@ -2465,7 +2487,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	        <li>Information necessary to convert the video decoder output to a format suitable for display</li>
 	      </ul>
 	    </li>
-	    <li>Information necessary to compute the global presentation timestamp of every sample in the sequence of <a href="#media-segment">media segments</a> is not provided.</li>
+	    <li>Information necessary to compute the global <a href="#presentation-timestamp">presentation timestamp</a> of every sample in the sequence of <a href="#media-segment">media segments</a> is not provided.</li>
 	  </ol>
 	  <p>For example, if I1 is associated with M1, M2, M3 then the above must hold for all the combinations I1+M1, I1+M2, I1+M1+M2, I1+M2+M3, etc.</p>
         </li>
@@ -2498,7 +2520,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>The user agent uses the following rules when interpreting content in a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a>:</p>
           <ol>
             <li>The TimecodeScale in the <a href="#webm-init-segments">WebM initialization segment</a> most recently appended applies to all timestamps in the <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a></li>
-            <li>The Timecode element in the <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> contains a presentation timestamp in TimecodeScale units.</li>
+            <li>The Timecode element in the <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> contains a <a href="#presentation-timestamp">presentation timestamp</a> in TimecodeScale units.</li>
             <li>The Cluster header may contain an "unknown" size value. If it does then the end of the cluster is reached when another <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> header or an element header that indicates the start
               of an <a href="#webm-init-segments">WebM initialization segment</a> is encountered.</li>
           </ol>
@@ -2761,7 +2783,17 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-            <td>15 October 2013</td>
+            <td>28 October 2013</td>
+            <td>
+              <ul>
+                <li>Bug 23549 - Add definitions for decode timestamp, presentation timestamp, an presentation order.</li>
+                <li>Bug 23552 - Clarify 'this' in section 3.5.1</li>
+                <li>Bug 23554 - Introduced presentation interval and coded frame duration terms to clarify text.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/3fda61eb902f/media-source/media-source.html">15 October 2013</a></td>
             <td>
               <ul>
                 <li>Bug 23525 - Fix mvex box error behavior.</li>
@@ -2777,7 +2809,7 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
             </td>
           </tr>
           <tr>
-            <td>26 July 2013</td>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/9035359fe231/media-source/media-source.html">26 July 2013</a></td>
             <td>
               <ul>
                 <li>Bug 22136 - Added text for Inband SPS/PPS support.</li>
