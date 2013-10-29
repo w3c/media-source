@@ -1114,9 +1114,7 @@
 	      <p>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a>, then run the following steps:</p>
 	      <ol>
                 <li>If the <a def-id="first-init-segment-flag"></a> is false, then run the <a def-id="eos-decode"></a> and abort this algorithm.</li>
-	        <li>
-	          <p>If the <a def-id="input-buffer"></a> does not contain a complete <a def-id="media-segment"></a> header yet, then jump to the <i>need more data</i> step below.</p>
-	        </li>
+	        <li>If the <a def-id="input-buffer"></a> does not contain a complete <a def-id="media-segment"></a> header yet, then jump to the <i>need more data</i> step below.</li>
 	        <li>If the <a def-id="input-buffer"></a> contains one or more complete <a def-id="coded-frames"></a>, then run the
                   <a def-id="coded-frame-processing-algorithm"></a>.
                   <p class="note">
@@ -1125,12 +1123,10 @@
                     added to the input buffer.
                   </p>
                 </li>
+	        <li>If this <a>SourceBuffer</a> is full and cannot accept more media data, then set the <a def-id="buffer-full-flag"></a> to true.</li>
+	        <li>If the <a def-id="input-buffer"></a> does not contain a complete <a def-id="media-segment"></a>, then jump to the <i>need more data</i> step below.</p>
 	        <li>Remove the <a def-id="media-segment"></a> bytes from the beginning of the <a def-id="input-buffer"></a>.</li>
-                <li>If this <a>SourceBuffer</a> is full and cannot accept more media data, then set the <a def-id="buffer-full-flag"></a> to true.</li>
-	        <li>
-	          <p>Set <a def-id="append-state"></a> to <a def-id="waiting-for-segment"></a>.</p>
-	          <p class="note">Incremental parsers should only do this transition after the entire media segment has been received.</p>
-	        </li>
+	        <li>Set <a def-id="append-state"></a> to <a def-id="waiting-for-segment"></a>.</li>
 	        <li>Jump to the <i>loop top</i> step above.</li>
 	      </ol>
             </li>
@@ -2207,7 +2203,7 @@
 
 	  <p>The user agent must support parameter sets (e.g., PPS/SPS) stored in the sample entry (as defined for avc1/avc2), and should support parameter
             sets stored inband in the samples themselves (as defined for avc3/avc4).</p>
-            <p class="note">For maximum content interoperability user agents are strongly advised to support avc3/avc4.</p>
+            <p class="note">For maximum content interoperability, user agents are strongly advised to support both inband and out-of-band storage of the SPS and PPS.</p>
 
           <p>Valid top-level boxes such as <span class="iso-box">ftyp</span>, <span class="iso-box">styp</span>, and <span class="iso-box">sidx</span> are
             allowed to appear before the <span class="iso-box">moov</span> box. These boxes must be accepted and ignored by the user agent and are not
@@ -2430,7 +2426,16 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-            <td>28 October 2013</td>
+            <td>29 October 2013</td>
+            <td>
+              <ul>
+                <li>Bug 23553 - Fixed segment parser loop so it doesn't appear to prematurely remove the media segment header.</li>
+                <li>Bug 23557 - Update SPS/PPS note to not explicitly recommend specific avc versions.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/bed8606bd0a7/media-source/media-source.html">28 October 2013</a></td>
             <td>
               <ul>
                 <li>Bug 23549 - Add definitions for decode timestamp, presentation timestamp, an presentation order.</li>

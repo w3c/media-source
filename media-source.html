@@ -429,7 +429,7 @@ table.exceptions table {
   </p>
   <h1 class="title" id="title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-28-october-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 28 October 2013</h2>
+  <h2 id="w3c-editor-s-draft-29-october-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 29 October 2013</h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1497,9 +1497,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	      <p>If the <var><a href="#sourcebuffer-append-state">append state</a></var> equals <a href="#sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</a>, then run the following steps:</p>
 	      <ol>
                 <li>If the <var><a href="#first-init-segment-flag">first initialization segment flag</a></var> is false, then run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> and abort this algorithm.</li>
-	        <li>
-	          <p>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> does not contain a complete <a href="#media-segment">media segment</a> header yet, then jump to the <i>need more data</i> step below.</p>
-	        </li>
+	        <li>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> does not contain a complete <a href="#media-segment">media segment</a> header yet, then jump to the <i>need more data</i> step below.</li>
 	        <li>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> contains one or more complete <a href="#coded-frame">coded frames</a>, then run the
                   <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>.
                   <div class="note"><div class="note-title"><span>Note</span></div><p class="">
@@ -1508,12 +1506,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                     added to the input buffer.
                   </p></div>
                 </li>
-	        <li>Remove the <a href="#media-segment">media segment</a> bytes from the beginning of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
-                <li>If this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> is full and cannot accept more media data, then set the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> to true.</li>
-	        <li>
-	          <p>Set <var><a href="#sourcebuffer-append-state">append state</a></var> to <a href="#sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</a>.</p>
-	          <div class="note"><div class="note-title"><span>Note</span></div><p class="">Incremental parsers should only do this transition after the entire media segment has been received.</p></div>
-	        </li>
+	        <li>If this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> is full and cannot accept more media data, then set the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> to true.</li>
+	        <li>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> does not contain a complete <a href="#media-segment">media segment</a>, then jump to the <i>need more data</i> step below.<p></p>
+	        </li><li>Remove the <a href="#media-segment">media segment</a> bytes from the beginning of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
+	        <li>Set <var><a href="#sourcebuffer-append-state">append state</a></var> to <a href="#sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</a>.</li>
 	        <li>Jump to the <i>loop top</i> step above.</li>
 	      </ol>
             </li>
@@ -2562,7 +2558,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
 	  <p>The user agent must support parameter sets (e.g., PPS/SPS) stored in the sample entry (as defined for avc1/avc2), and should support parameter
             sets stored inband in the samples themselves (as defined for avc3/avc4).</p>
-            <div class="note"><div class="note-title"><span>Note</span></div><p class="">For maximum content interoperability user agents are strongly advised to support avc3/avc4.</p></div>
+            <div class="note"><div class="note-title"><span>Note</span></div><p class="">For maximum content interoperability, user agents are strongly advised to support both inband and out-of-band storage of the SPS and PPS.</p></div>
 
           <p>Valid top-level boxes such as <span class="iso-box">ftyp</span>, <span class="iso-box">styp</span>, and <span class="iso-box">sidx</span> are
             allowed to appear before the <span class="iso-box">moov</span> box. These boxes must be accepted and ignored by the user agent and are not
@@ -2783,7 +2779,16 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-            <td>28 October 2013</td>
+            <td>29 October 2013</td>
+            <td>
+              <ul>
+                <li>Bug 23553 - Fixed segment parser loop so it doesn't appear to prematurely remove the media segment header.</li>
+                <li>Bug 23557 - Update SPS/PPS note to not explicitly recommend specific avc versions.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/bed8606bd0a7/media-source/media-source.html">28 October 2013</a></td>
             <td>
               <ul>
                 <li>Bug 23549 - Add definitions for decode timestamp, presentation timestamp, an presentation order.</li>
@@ -3180,9 +3185,9 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
     </section>
   
 
-<section id="references" class="appendix"><!--OddPage--><h2><span class="secno">A. </span>References</h2><section id="informative-references"><h3><span class="secno">A.1 </span>Informative references</h3><dl class="bibliography"><dt id="bib-BCP47">[BCP47]</dt><dd>A. Phillips; M. Davis. <a href="http://tools.ietf.org/html/bcp47"><cite>Tags for Identifying Languages</cite></a>. September 2009. IETF Best Current Practice. URL: <a href="http://tools.ietf.org/html/bcp47">http://tools.ietf.org/html/bcp47</a>
+<form action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank" style="position: fixed; width: 10em; top: 1em; right: 1em; font-family: Tahoma, sans-serif; font-size: 11px; opacity: 0.8; text-align: right;">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form><section id="references" class="appendix"><!--OddPage--><h2><span class="secno">A. </span>References</h2><section id="informative-references"><h3><span class="secno">A.1 </span>Informative references</h3><dl class="bibliography"><dt id="bib-BCP47">[BCP47]</dt><dd>A. Phillips; M. Davis. <a href="http://tools.ietf.org/html/bcp47"><cite>Tags for Identifying Languages</cite></a>. September 2009. IETF Best Current Practice. URL: <a href="http://tools.ietf.org/html/bcp47">http://tools.ietf.org/html/bcp47</a>
 </dd><dt id="bib-FILE-API">[FILE-API]</dt><dd>Arun Ranganathan; Jonas Sicking. <a href="http://www.w3.org/TR/2012/WD-FileAPI-20121025"><cite>File API</cite></a>. 25 October 2012. W3C Working Draft. URL: <a href="http://www.w3.org/TR/2012/WD-FileAPI-20121025">http://www.w3.org/TR/2012/WD-FileAPI-20121025</a>
 </dd><dt id="bib-HTML5">[HTML5]</dt><dd>Robin Berjon et al. <a href="http://www.w3.org/TR/html5/"><cite>HTML5</cite></a>. 17 December 2012. W3C Candidate Recommendation. URL: <a href="http://www.w3.org/TR/html5/">http://www.w3.org/TR/html5/</a>
 </dd><dt id="bib-STREAMS-API">[STREAMS-API]</dt><dd>Feras Moussa. <a href="http://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm"><cite>Streams API</cite></a>. 25 October 2012. W3C Editor's Draft. URL: <a href="http://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm">http://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm</a>
 </dd><dt id="bib-TYPED-ARRAYS">[TYPED-ARRAYS]</dt><dd>David Herman, Kenneth Russell. <a href="https://www.khronos.org/registry/typedarray/specs/latest/"><cite>Typed Arrays</cite></a> Khronos Working Draft. (Work in progress.) URL: <a href="https://www.khronos.org/registry/typedarray/specs/latest/">https://www.khronos.org/registry/typedarray/specs/latest/</a> 
-</dd></dl></section></section><form action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank" style="position: fixed; width: 10em; top: 1em; right: 1em; font-family: Tahoma, sans-serif; font-size: 11px; opacity: 0.8; text-align: right;">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form></body></html>
+</dd></dl></section></section></body></html>
