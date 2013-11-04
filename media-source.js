@@ -3,16 +3,23 @@
   var DOM_spec_url = "http://dom.spec.whatwg.org/";
   var HRTIME_spec_url = "http://www.w3.org/TR/hr-time/";
 
+  function url_helper(doc, url) {
+    if (url[0] == "#" && doc.mseDefGroupName != window.respecConfig.mseDefGroupName) {
+        return groupBaseURLs[doc.mseDefGroupName] + url;
+    }
+    return url;
+  }
+
   function eventdfn_helper(doc, df, id, text) {
     df.appendChild($("<dfn/>").attr({id: 'dom-evt-' + text.toLowerCase()}).wrapInner($("<code/>").text(text))[0]);
   }
 
   function idlref_helper(doc, df, id, text) {
-    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: "#" + id}).text(text))[0]);
+    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: url_helper(doc, "#" + id)}).text(text))[0]);
   }
 
   function eventref_helper(doc, df, id, text) {
-    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: "#dom-evt-" + id}).text(text))[0]);
+    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: url_helper(doc, "#dom-evt-" + id)}).text(text))[0]);
   }
 
   function videoref_helper(doc, df, id, text) {
@@ -31,7 +38,6 @@
     link_helper(doc, df, HRTIME_spec_url + '#' + id, text);
   }
 
-
   function webappapis_helper(doc, df, id, text) {
     link_helper(doc, df, 'http://www.w3.org/TR/html5/webappapis.html#' + id, text);
   }
@@ -41,19 +47,19 @@
   }
 
   function browsers_helper(doc, df, id, text) {
-      link_helper(doc, df, 'http://www.w3.org/TR/html5/browsers.html#' + id, text);
+    link_helper(doc, df, 'http://www.w3.org/TR/html5/browsers.html#' + id, text);
   }
 
   function term_helper(doc, df, id, text) {
-    link_helper(doc, df, '#'+ id, text);
+    link_helper(doc, df, url_helper(doc, '#' + id), text);
   }
 
   function var_helper(doc, df, id, text) {
-    df.appendChild($("<var/>").wrapInner($("<a/>").attr({href: id}).text(text))[0]);
+    df.appendChild($("<var/>").wrapInner($("<a/>").attr({href: url_helper(doc, id)}).text(text))[0]);
   }
 
   function link_helper(doc, df, id, text) {
-    df.appendChild($("<a/>").attr({href: id}).text(text)[0]);
+    df.appendChild($("<a/>").attr({href: url_helper(doc, id)}).text(text)[0]);
   }
 
   function exception_helper(doc, df, id, text) {
@@ -89,29 +95,7 @@
   }
 
   function contributors_helper(doc, df, id, text) {
-    var contributors = [
-      "Bob Lund",
-      "Alex Giladi",
-      "Duncan Rowden",
-      "Mark Vickers",
-      "Glenn Adams",
-      "Frank Galligan",
-      "Steven Robertson",
-      "Matt Ward",
-      "David Dorwin",
-      "Kevin Streeter",
-      "Joe Steele",
-      "Michael Thornburgh",
-      "Philip Jägenstedt",
-      "John Simmons",
-      "Jerry Smith",
-      "Pierre Lemieux",
-      "Cyril Concolato",
-      "Ralph Giles",
-      "David Singer",
-      "Tatsuya Igarashi",
-    ];
-
+    var contributors = window.respecConfig.mseContributors;
     contributors.sort();
 
     var str = "";
@@ -134,7 +118,7 @@
     idlref_helper(doc, df, 'idl-def-EndOfStreamError.decode', '"decode"');
   }
 
-  var rep = {
+  var mseDefinitions = {
     'sourceBuffers': { func: idlref_helper, fragment: 'widl-MediaSource-sourceBuffers', link_text: 'sourceBuffers',  },
     'activeSourceBuffers': { func: idlref_helper, fragment: 'widl-MediaSource-activeSourceBuffers', link_text: 'activeSourceBuffers',  },
     'addSourceBuffer': { func: idlref_helper, fragment: 'widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type', link_text: 'addSourceBuffer()',  },
@@ -359,6 +343,24 @@
     'performance-now': { func: hrtime_helper, fragment: 'dom-performance-now', link_text: 'Performance.now()',  },
   };
 
+  var definitionInfo = {};
+  var groupBaseURLs = {};
+
+  function mediaSourceAddDefinitionInfo(groupName, groupBaseURL, definitions) {
+      groupBaseURLs[groupName] = groupBaseURL;
+      for (var def_id in definitions) {
+	  if (definitionInfo[def_id]) {
+	      console.log("Overriding previous definition of def-id '" + def_id + "'.");
+	  }
+          var info = definitions[def_id];
+          info.groupName = groupName;
+          if (!info.func) {
+              info.func = link_helper;
+	  }
+	  definitionInfo[def_id] = info;
+      }
+  }
+
   function mediaSourcePreProcessor() {
      $("a[def-id]").each(function () {
        $(this).addClass('externalDFN');
@@ -374,7 +376,7 @@
     $("a[def-id]").each(function () {
       var $ant = $(this);
       var def_id = $ant.attr('def-id');
-      var info = rep[def_id];
+      var info = definitionInfo[def_id];
       if (info) {
 	if (!usedMap[def_id]) {
 	  usedMap[def_id] = 1;
@@ -395,7 +397,9 @@
 	}
 
 	var df = doc.createDocumentFragment();
+        doc.mseDefGroupName = info.groupName;
         info.func(doc, df, id, text);
+        doc.mseDefGroupName = "";
 	this.parentNode.replaceChild(df, this);
 
       } else {
@@ -460,9 +464,11 @@
     });
 
     // Validate that all defined def-ids are actually used.
-    for (var k in rep) {
-      if (!usedMap[k]) {
-	console.log("def-id '" + k + "' never used.");
+    var excludeList = window.respecConfig.mseUnusedGroupNameExcludeList || [];
+    for (var k in definitionInfo) {
+      var defGroupName = definitionInfo[k].groupName;
+      if (!usedMap[k] && !(excludeList.indexOf(defGroupName) != -1)) {
+	console.log("def-id '" + k + "' from groupName '" + defGroupName + "' never used.");
       }
     }
 
@@ -481,6 +487,9 @@
     return;
   }
 
+  mediaSourceAddDefinitionInfo("media-source", "http://www.w3.org/TR/media-source/", mseDefinitions);
+
+  window.mediaSourceAddDefinitionInfo = mediaSourceAddDefinitionInfo;
   window.mediaSourcePreProcessor = mediaSourcePreProcessor;
   window.mediaSourcePostProcessor = mediaSourcePostProcessor;
 })();
