@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>ISO BMFF Byte Stream Format</title>
+
+
+
+
+
+    <!-- script to register bugs -->
+    <script src="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/assets/scripts/bug-assist.js"></script>
+    <meta name="bug.short_desc" content="[MSE] ">
+    <meta name="bug.product" content="HTML WG">
+    <meta name="bug.component" content="Media Source Extensions">
+
+    <style>/* --- ISSUES/NOTES --- */
+div.issue-title, div.note-title {
+    padding-right:  1em;
+    min-width: 7.5em;
+    color: #b9ab2d;
+}
+div.issue-title { color: #e05252; }
+div.note-title { color: #52e052; }
+div.issue-title span, div.note-title span {
+    text-transform: uppercase;
+}
+div.note, div.issue {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.note > p:first-child, .issue > p:first-child { margin-top: 0 }
+.issue, .note {
+    padding: .5em;
+    border-left-width: .5em;
+    border-left-style: solid;
+}
+div.issue, div.note {
+    padding: 0.5em;
+    margin: 1em 0;
+    position: relative;
+    clear: both;
+}
+span.note, span.issue { padding: .1em .5em .15em; }
+
+.issue {
+    border-color: #e05252;
+    background: #fbe9e9;
+}
+.note {
+    border-color: #52e052;
+    background: #e9fbe9;
+}
+
+
+</style><link rel="stylesheet" href="mse.css">
+    <style>
+      .iso-box { font-weight: bold; }
+      .iso-var { font-style: italic; }
+    </style>
+
+  <style>/*****************************************************************
+ * ReSpec 3 CSS
+ * Robin Berjon - http://berjon.com/
+ *****************************************************************/
+
+/* --- INLINES --- */
+em.rfc2119 {
+    text-transform:     lowercase;
+    font-variant:       small-caps;
+    font-style:         normal;
+    color:              #900;
+}
+
+h1 acronym, h2 acronym, h3 acronym, h4 acronym, h5 acronym, h6 acronym, a acronym,
+h1 abbr, h2 abbr, h3 abbr, h4 abbr, h5 abbr, h6 abbr, a abbr {
+    border: none;
+}
+
+dfn {
+    font-weight:    bold;
+}
+
+a.internalDFN {
+    color:  inherit;
+    border-bottom:  1px solid #99c;
+    text-decoration:    none;
+}
+
+a.externalDFN {
+    color:  inherit;
+    border-bottom:  1px dotted #ccc;
+    text-decoration:    none;
+}
+
+a.bibref {
+    text-decoration:    none;
+}
+
+cite .bibref {
+    font-style: normal;
+}
+
+code {
+    color:  #ff4500;
+}
+
+
+/* --- --- */
+ol.algorithm { counter-reset:numsection; list-style-type: none; }
+ol.algorithm li { margin: 0.5em 0; }
+ol.algorithm li:before { font-weight: bold; counter-increment: numsection; content: counters(numsection, ".") ") "; }
+
+/* --- TOC --- */
+.toc a, .tof a {
+    text-decoration:    none;
+}
+
+a .secno, a .figno {
+    color:  #000;
+}
+
+ul.tof, ol.tof {
+    list-style: none outside none;
+}
+
+.caption {
+    margin-top: 0.5em;
+    font-style:   italic;
+}
+
+/* --- TABLE --- */
+table.simple {
+    border-spacing: 0;
+    border-collapse:    collapse;
+    border-bottom:  3px solid #005a9c;
+}
+
+.simple th {
+    background: #005a9c;
+    color:  #fff;
+    padding:    3px 5px;
+    text-align: left;
+}
+
+.simple th[scope="row"] {
+    background: inherit;
+    color:  inherit;
+    border-top: 1px solid #ddd;
+}
+
+.simple td {
+    padding:    3px 10px;
+    border-top: 1px solid #ddd;
+}
+
+.simple tr:nth-child(even) {
+    background: #f0f6ff;
+}
+
+/* --- DL --- */
+.section dd > p:first-child {
+    margin-top: 0;
+}
+
+.section dd > p:last-child {
+    margin-bottom: 0;
+}
+
+.section dd {
+    margin-bottom:  1em;
+}
+
+.section dl.attrs dd, .section dl.eldef dd {
+    margin-bottom:  0;
+}
+</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
+  <body><div class="head">
+  <p>
+
+      <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
+
+  </p>
+  <h1 class="title" id="title">ISO BMFF Byte Stream Format</h1>
+
+  <h2 id="w3c-editor-s-draft-04-november-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 04 November 2013</h2>
+  <dl>
+
+      <dt>This version:</dt>
+      <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/isobmff-byte-stream-format.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/isobmff-byte-stream-format.html</a></dd>
+      <dt>Latest published version:</dt>
+      <dd><a href="http://www.w3.org/TR//">http://www.w3.org/TR//</a></dd>
+
+
+      <dt>Latest editor's draft:</dt>
+      <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/isobmff-byte-stream-format.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/isobmff-byte-stream-format.html</a></dd>
+
+
+
+
+
+
+
+
+    <dt>Editors:</dt>
+    <dd><span>Aaron Colwell</span>, <a href="http://www.google.com/">Google Inc.</a></dd>
+<dd><span>Adrian Bateman</span>, <a href="http://www.microsoft.com/">Microsoft Corporation</a></dd>
+<dd><span>Mark Watson</span>, <a href="http://www.netflix.com/">Netflix Inc.</a></dd>
+
+
+  </dl>
+
+
+
+
+
+      <p class="copyright">
+        <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
+        2013
+
+        <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
+        (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
+        <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>,
+        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), All Rights Reserved.
+        <abbr title="World Wide Web Consortium">W3C</abbr> <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
+        <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
+        <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.
+      </p>
+
+
+  <hr>
+</div>
+    <section id="abstract" class="introductory"><h2>Abstract</h2><p>
+      This specification defines a <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> byte stream format specification based on the ISO Base Media
+      File Format.
+    </p></section><section id="sotd" class="introductory"><h2>Status of This Document</h2>
+
+
+
+        <p>
+          <em>This section describes the status of this document at the time of its publication. Other
+          documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the latest revision
+          of this technical report can be found in the <a href="http://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports
+          index</a> at http://www.w3.org/TR/.</em>
+        </p>
+
+        <p>
+          This document was published by the <a href="http://www.w3.org/html/wg/">HTML Working Group</a> as an Editor's Draft.
+
+
+          If you wish to make comments regarding this document, please send them to
+          <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a>
+          (<a href="mailto:public-html-media-request@w3.org?subject=subscribe">subscribe</a>,
+          <a href="http://lists.w3.org/Archives/Public/public-html-media/">archives</a>).
+
+
+
+
+        All comments are welcome.
+
+
+          </p><p>
+            Publication as an Editor's Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr> Membership.
+            This is a draft document and may be updated, replaced or obsoleted by other documents at
+            any time. It is inappropriate to cite this document as other than work in progress.
+          </p>
+
+
+        <p>
+
+            This document was produced by a group operating under the
+            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+
+
+
+
+              <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="http://www.w3.org/2004/01/pp-impl/40318/status" rel="disclosure">public list of any patent disclosures</a>
+
+            made in connection with the deliverables of the group; that page also includes instructions for
+            disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains
+            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential Claim(s)</a> must disclose the
+            information in accordance with <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section
+            6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+
+
+        </p>
+
+
+
+
+</section><section id="toc"><h2 class="introductory">Table of Contents</h2><ul class="toc"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#iso-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#iso-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#iso-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">6. </span>Acknowledgments</a></li></ul></section>
+
+    <section id="introduction">
+      <!--OddPage--><h2><span class="secno">1. </span>Introduction</h2>
+      <p>This specification defines segment formats for implementations that choose to support the ISO Base Media File Format
+	<a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a> (ISO BMFF).</p> It defines the MIME-type parameters used to signal codecs, and provides
+      the necessary format specific definitions for <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segments</a>, <a href="http://www.w3.org/TR/media-source/#media-segment">media segments</a>, and <a href="http://www.w3.org/TR/media-source/#random-access-point">random access points</a> required by
+      the <a href="http://www.w3.org/TR/media-source/#byte-stream-formats">byte stream formats section</a> of the Media Source Extensions spec.<p></p>
+    </section>
+
+    <section id="mime-parameters">
+      <!--OddPage--><h2><span class="secno">2. </span>MIME-type parameters</h2>
+      <p>This section specifies the parameters that can be used in the MIME-type passed to <code><a href="http://www.w3.org/TR/media-source/#widl-MediaSource-isTypeSupported-boolean-DOMString-type">isTypeSupported()</a></code> or <code><a href="http://www.w3.org/TR/media-source/#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code>.</p>
+      <p>MIME-types for this specification must conform to the rules outlined for "audio/mp4" and "video/mp4" in <a href="http://tools.ietf.org/html/rfc6381">RFC 6381</a>.
+      </p>
+      <div class="note"><div class="note-title"><span>Note</span></div><div class="">Implementations may only implement a subset of the codecs and profiles mentioned in the RFC.</div></div>
+    </section>
+
+    <section id="iso-init-segments">
+      <!--OddPage--><h2><span class="secno">3. </span>Initialization Segments</h2>
+      <p>An ISO BMFF <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> is defined in this specification as a single Movie Header Box (<span class="iso-box">moov</span>).</p>
+
+      <p>The user agent must run the <a href="http://www.w3.org/TR/media-source/#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="http://www.w3.org/TR/media-source/#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
+      <ol>
+        <li>The tracks in the Movie Header Box contain samples (i.e. the <span class="iso-var">entry_count</span> in the
+          <span class="iso-box">stts</span>, <span class="iso-box">stsc</span> or <span class="iso-box">stco</span> boxes are not set to zero).</li>
+        <li>A Movie Extends (<span class="iso-box">mvex</span>) box is not contained in the Movie (<span class="iso-box">moov</span>) box to indicate that Movie Fragments are to be expected.</li>
+      </ol>
+      <p>The user agent must handle Edit Boxes (<span class="iso-box">edts</span>), in <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a>, which provide a mapping of composition times for each track to the global presentation time.</p>
+
+      <p>The user agent must support parameter sets (e.g., PPS/SPS) stored in the sample entry (as defined for avc1/avc2), and should support parameter
+        sets stored inband in the samples themselves (as defined for avc3/avc4).</p>
+      <div class="note"><div class="note-title"><span>Note</span></div><p class="">For maximum content interoperability, user agents are strongly advised to support both inband and out-of-band storage of the SPS and PPS.</p></div>
+
+      <p>Valid top-level boxes such as <span class="iso-box">ftyp</span>, <span class="iso-box">styp</span>, and <span class="iso-box">sidx</span> are
+        allowed to appear before the <span class="iso-box">moov</span> box. These boxes must be accepted and ignored by the user agent and are not
+        considered part of the <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> in this specification.</p>
+    </section>
+
+    <section id="iso-media-segments">
+      <!--OddPage--><h2><span class="secno">4. </span>Media Segments</h2>
+      <p>An ISO BMFF <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> is defined in this specification as a single Movie Fragment Box
+        (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>).</p>
+      <p>Valid top-level boxes defined in <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a> other than <span class="iso-box">moov</span>,
+        <span class="iso-box">moof</span>, and <span class="iso-box">mdat</span> are allowed to appear between the end of an
+        <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> or <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> and before the beginning of a new <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a>.
+        These boxes must be accepted and ignored by the user agent and are not considered part of the <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> in this
+        specification.
+      </p>
+
+      <p>The user agent must run the <a href="http://www.w3.org/TR/media-source/#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="http://www.w3.org/TR/media-source/#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
+      <ol>
+	<li>The Movie Fragment Box does not contain at least one Track Fragment Box (<span class="iso-box">traf</span>).</li>
+	<li>The Movie Fragment Box does not use movie-fragment relative addressing or the flag <span class="iso-var">default-base-is-moof</span> is not set.</li>
+	<li>External data references are being used.</li>
+	<li>At least one Track Fragment Box does not contain a Track Fragment Decode Time Box (<span class="iso-box">tfdt</span>)</li>
+	<li>The Media Data Boxes do not contain all the samples referenced by the Track Fragment Run Boxes (<span class="iso-box">trun</span>) of the Movie Fragment Box.</li>
+	<li>Inband parameter sets are not present in the appropriate samples and parameter sets are not present in the last initialization segment appended.</li>
+      </ol>
+    </section>
+
+    <section id="iso-random-access-points">
+      <!--OddPage--><h2><span class="secno">5. </span>Random Access Points</h2>
+      <p>A <a href="http://www.w3.org/TR/media-source/#random-access-point">random access point</a> as defined in this specification corresponds to a Stream Access Point of type 1 or 2 as defined in Annex I of <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a>.</p>
+    </section>
+
+    <section id="acknowledgements">
+      <!--OddPage--><h2><span class="secno">6. </span>Acknowledgments</h2>
+      The editors would like to thank Chris Poole, Cyril Concolato, David Singer, Jerry Smith, Joe Steele, John Simmons, Kevin Streeter, Michael Thornburgh, and Steven Robertson for their contributions to this specification.
+    </section>
+
+
+<form action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank" style="position: fixed; width: 10em; top: 1em; right: 1em; font-family: Tahoma, sans-serif; font-size: 11px; opacity: 0.8; text-align: right;">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form></body></html>

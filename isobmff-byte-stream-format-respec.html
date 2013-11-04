@@ -1,0 +1,172 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>ISO BMFF Byte Stream Format</title>
+    <script src="respec-w3c-common.js" class="remove"></script>
+    <script src="media-source.js" class="remove"></script>
+    <script class="remove">
+      (function() {
+        var isobmffContainerSpecDefinitions = {
+          'iso-14496-12': { fragment: 'http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip', link_text: 'ISO/IEC 14496-12', },
+        };
+
+        mediaSourceAddDefinitionInfo("isobmff-byte-stream-format", "", isobmffContainerSpecDefinitions);
+      })();
+    </script>
+
+    <script class="remove">
+      var respecConfig = {
+      // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use ED.
+      specStatus: "ED",
+
+      // the specification's short name, as in http://www.w3.org/TR/short-name/
+      shortName: "",
+
+      // if there a publicly available Editor's Draft, this is the link
+      edDraftURI:           "http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/isobmff-byte-stream-format.html",
+
+      // if this is a LCWD, uncomment and set the end of its review period
+      // lcEnd: "2009-08-05",
+
+      // editors, add as many as you like
+      // only "name" is required
+      editors:  [
+        { name: "Aaron Colwell",  url: "", company: "Google Inc.", companyURL: "http://www.google.com/" },
+        { name: "Adrian Bateman", url: "", company: "Microsoft Corporation", companyURL: "http://www.microsoft.com/" },
+        { name: "Mark Watson", url: "", company: "Netflix Inc.", companyURL: "http://www.netflix.com/" },
+      ],
+
+      mseDefGroupName: "isobmff-byte-stream-format",
+      mseUnusedGroupNameExcludeList: ["media-source"],
+      mseContributors: [
+        "Steven Robertson",
+        "Kevin Streeter",
+        "Joe Steele",
+        "Michael Thornburgh",
+        "John Simmons",
+        "Jerry Smith",
+        "Cyril Concolato",
+        "David Singer",
+        "Chris Poole"
+      ],
+
+      // name of the WG
+      wg:           "HTML Working Group",
+
+      // URI of the public WG page
+      wgURI:        "http://www.w3.org/html/wg/",
+
+      // name (without the @w3c.org) of the public mailing to which comments are due
+      wgPublicList: "public-html-media",
+
+      // URI of the patent status for this WG, for Rec-track documents
+      // !!!! IMPORTANT !!!!
+      // This is important for Rec-track documents, do not copy a patent URI from a random
+      // document unless you know what you're doing. If in doubt ask your friendly neighbourhood
+      // Team Contact.
+      wgPatentURI: "http://www.w3.org/2004/01/pp-impl/40318/status",
+
+      noIDLIn: true,
+
+      scheme: "https",
+
+      preProcess: [ mediaSourcePreProcessor ],
+
+      // Empty definitions for objects declared in the document are here to
+      // prevent error messages from being displayed for references to these objects.
+      definitionMap: {},
+
+      postProcess: [ mediaSourcePostProcessor ]
+
+      };
+    </script>
+    <!-- script to register bugs -->
+    <script src="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/assets/scripts/bug-assist.js"></script>
+    <meta name="bug.short_desc" content="[MSE] ">
+    <meta name="bug.product" content="HTML WG">
+    <meta name="bug.component" content="Media Source Extensions">
+
+    <link rel="stylesheet" href="mse.css">
+    <style>
+      .iso-box { font-weight: bold; }
+      .iso-var { font-style: italic; }
+    </style>
+
+  </head>
+  <body>
+    <section id="abstract">
+      This specification defines a <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> byte stream format specification based on the ISO Base Media
+      File Format.
+    </section>
+
+    <section id="introduction">
+      <h2>Introduction</h2>
+      <p>This specification defines segment formats for implementations that choose to support the ISO Base Media File Format
+	<a def-id="iso-14496-12"></a> (ISO BMFF).</p> It defines the MIME-type parameters used to signal codecs, and provides
+      the necessary format specific definitions for <a def-id="init-segments"></a>, <a def-id="media-segments"></a>, and <a def-id="random-access-points"></a> required by
+      the <a def-id="byte-stream-formats-section"></a> of the Media Source Extensions spec.</p>
+    </section>
+
+    <section id="mime-parameters">
+      <h2>MIME-type parameters</h2>
+      <p>This section specifies the parameters that can be used in the MIME-type passed to <a def-id="isTypeSupported"></a> or <a def-id="addSourceBuffer"></a>.</p>
+      <p>MIME-types for this specification must conform to the rules outlined for "audio/mp4" and "video/mp4" in <a href="http://tools.ietf.org/html/rfc6381">RFC 6381</a>.
+      </p>
+      <div class="note">Implementations may only implement a subset of the codecs and profiles mentioned in the RFC.</div>
+    </section>
+
+    <section id="iso-init-segments">
+      <h4>Initialization Segments</h4>
+      <p>An ISO BMFF <a def-id="init-segment"></a> is defined in this specification as a single Movie Header Box (<span class="iso-box">moov</span>).</p>
+
+      <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
+      <ol>
+        <li>The tracks in the Movie Header Box contain samples (i.e. the <span class="iso-var">entry_count</span> in the
+          <span class="iso-box">stts</span>, <span class="iso-box">stsc</span> or <span class="iso-box">stco</span> boxes are not set to zero).</li>
+        <li>A Movie Extends (<span class="iso-box">mvex</span>) box is not contained in the Movie (<span class="iso-box">moov</span>) box to indicate that Movie Fragments are to be expected.</li>
+      </ol>
+      <p>The user agent must handle Edit Boxes (<span class="iso-box">edts</span>), in <a def-id="init-segment"></a>, which provide a mapping of composition times for each track to the global presentation time.</p>
+
+      <p>The user agent must support parameter sets (e.g., PPS/SPS) stored in the sample entry (as defined for avc1/avc2), and should support parameter
+        sets stored inband in the samples themselves (as defined for avc3/avc4).</p>
+      <p class="note">For maximum content interoperability, user agents are strongly advised to support both inband and out-of-band storage of the SPS and PPS.</p>
+
+      <p>Valid top-level boxes such as <span class="iso-box">ftyp</span>, <span class="iso-box">styp</span>, and <span class="iso-box">sidx</span> are
+        allowed to appear before the <span class="iso-box">moov</span> box. These boxes must be accepted and ignored by the user agent and are not
+        considered part of the <a def-id="init-segment"></a> in this specification.</p>
+    </section>
+
+    <section id="iso-media-segments">
+      <h4>Media Segments</h4>
+      <p>An ISO BMFF <a def-id="media-segment"></a> is defined in this specification as a single Movie Fragment Box
+        (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>).</p>
+      <p>Valid top-level boxes defined in <a def-id="iso-14496-12"></a> other than <span class="iso-box">moov</span>,
+        <span class="iso-box">moof</span>, and <span class="iso-box">mdat</span> are allowed to appear between the end of an
+        <a def-id="init-segment"></a> or <a def-id="media-segment"></a> and before the beginning of a new <a def-id="media-segment"></a>.
+        These boxes must be accepted and ignored by the user agent and are not considered part of the <a def-id="media-segment"></a> in this
+        specification.
+      </p>
+
+      <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
+      <ol>
+	<li>The Movie Fragment Box does not contain at least one Track Fragment Box (<span class="iso-box">traf</span>).</li>
+	<li>The Movie Fragment Box does not use movie-fragment relative addressing or the flag <span class="iso-var">default-base-is-moof</span> is not set.</li>
+	<li>External data references are being used.</li>
+	<li>At least one Track Fragment Box does not contain a Track Fragment Decode Time Box (<span class="iso-box">tfdt</span>)</li>
+	<li>The Media Data Boxes do not contain all the samples referenced by the Track Fragment Run Boxes (<span class="iso-box">trun</span>) of the Movie Fragment Box.</li>
+	<li>Inband parameter sets are not present in the appropriate samples and parameter sets are not present in the last initialization segment appended.</li>
+      </ol>
+    </section>
+
+    <section id="iso-random-access-points">
+      <h4>Random Access Points</h4>
+      <p>A <a def-id="random-access-point"></a> as defined in this specification corresponds to a Stream Access Point of type 1 or 2 as defined in Annex I of <a def-id="iso-14496-12"></a>.</p>
+    </section>
+
+    <section id="acknowledgements">
+      <h2>Acknowledgments</h2>
+      The editors would like to thank <a def-id="contributors"></a> for their contributions to this specification.
+    </section>
+  </body>
+</html>

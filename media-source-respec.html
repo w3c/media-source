@@ -125,8 +125,7 @@
       <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;.
         It defines objects that allow JavaScript to pass media segments to an <a def-id="videoref" name="htmlmediaelement">HTMLMediaElement</a> [[HTML5]].
         A buffering model is also included to describe how the user agent acts when different media segments are
-        appended at different times. Byte stream specifications for WebM, ISO Base Media File Format, and MPEG-2 Transport Streams are given to specify the
-        expected format of byte streams used with these extensions.</p>
+        appended at different times. Byte stream specifications used with these extensions are available in the <a def-id="byte-stream-format-registry"></a>.</p>
       <img src="pipeline_model.png" alt="Media Source Pipeline Model Diagram">
 
       <section id="goals">
@@ -137,7 +136,7 @@
           <li>Define a splicing and buffering model that facilitates use cases like adaptive streaming, ad-insertion, time-shifting, and video editing.</li>
           <li>Minimize the need for media parsing in JavaScript.</li>
           <li>Leverage the browser cache as much as possible.</li>
-          <li>Provide byte stream definitions for WebM, the ISO Base Media File Format, and MPEG-2 Transport Streams.</li>
+          <li>Provide requirements for byte stream format specifications.</li>
           <li>Not require support for any particular media format or codec.</li>
         </ul>
         <p>This specification defines:</p>
@@ -192,12 +191,12 @@
           <dt id="init-segment">Initialization Segment</dt>
           <dd>
 	    <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of <a def-id="media-segments"></a>. This includes codec initialization data, <a def-id="track-id"></a> mappings for multiplexed segments, and timestamp offsets (e.g. edit lists).</p>
-            <p class="note">The <a def-id="byte-stream-format-specs"></a> contain format specific examples.</p>
+            <p class="note">The <a def-id="byte-stream-format-specs"></a> in the <a def-id="byte-stream-format-registry"></a> contain format specific examples.</p>
 
           <dt id="media-segment">Media Segment</dt>
           <dd>
 	    <p>A sequence of bytes that contain packetized &amp; timestamped media data for a portion of the <a def-id="media-timeline"></a>. Media segments are always associated with the most recently appended <a def-id="init-segment"></a>.</p>
-            <p class="note">The <a def-id="byte-stream-format-specs"></a> contain format specific examples.</p>
+            <p class="note">The <a def-id="byte-stream-format-specs"></a> in the <a def-id="byte-stream-format-registry"></a> contain format specific examples.</p>
           </dd>
 
           <dt id="mediasource-object-url">MediaSource object URL</dt>
@@ -2073,12 +2072,15 @@
 
     <section id="byte-stream-formats">
       <h2>Byte Stream Formats</h2>
-      <p>The bytes provided through <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format of this byte stream depends on the media container format in use and is defined in a byte stream format specification. Byte stream format specifications based on WebM , the ISO Base Media File Format, and MPEG-2 Transport Streams are provided below. These format specifications are intended to be the authoritative source for how data from these containers is formatted and passed to a <a>SourceBuffer</a>. If a <a>MediaSource</a> implementation claims to support any of these container formats, then it must implement the corresponding byte stream format specification described below.</p>
-      <p class="note">The byte stream format specifications below are not intended to define new storage formats. They simply outline the subset of
+      <p>The bytes provided through <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format and
+        semantics of these byte streams are defined in <dfn id="byte-stream-format-specs">byte stream format specifications</dfn>. The <a def-id="byte-stream-format-registry"></a> is the
+        authoritative source for <a def-id="byte-stream-format-specs"></a>  that can be accepted by a <a>SourceBuffer</a>. If a <a>MediaSource</a> implementation claims
+        to support any of the MIME types in the registry, then it must implement the corresponding byte stream format specification.</p>
+      <p class="note">The byte stream format specifications in the registry are not intended to define new storage formats. They simply outline the subset of
         existing storage format structures that implementations of this specification will accept.</p>
       <p class="note">Byte stream format parsing and validation is implemented in the <a def-id="segment-parser-loop"></a> algorithm.</p>
 
-      <p>This section provides general requirements for all byte stream formats:</p>
+      <p>This section provides general requirements for all byte stream format specifications:</p>
       <ul>
         <li>A byte stream format specification must define <a def-id="init-segments"></a> and <a def-id="media-segments"></a>.</li>
         <li>It must be possible to identify segment boundaries and segment type (initialization or media) by examining the byte stream alone.</li>
@@ -2137,180 +2139,7 @@
       </ul>
       <p>Byte stream specifications must at a minimum define constraints which ensure that the above requirements hold. Additional constraints may be defined, for example to simplify implementation.</p>
 
-      <section id="webm" class="nonnormative">
-        <h3>WebM Byte Streams</h3>
-        <p>This section defines segment formats for implementations that choose to support WebM.</p>
-
-        <section id="webm-init-segments">
-          <h4>Initialization Segments</h4>
-          <p>A WebM <a def-id="init-segment"></a> must contain a subset of the elements at the start of a typical WebM file.</p>
-
-          <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are not met:</p>
-          <ol>
-	    <li>The <a def-id="init-segment"></a> must start with an <a def-id="webm-ebml-header"></a> element, followed by a <a def-id="webm-segment"></a> header.</li>
-	    <li>The size value in the <a def-id="webm-segment"></a> header must signal an "unknown size" or contain a value large enough to include the <a def-id="webm-info"></a> and <a def-id="webm-tracks"></a> elements that follow.</li>
-	    <li>A <a def-id="webm-info"></a> element and a <a def-id="webm-tracks"></a> element must appear, in that order, after the <a def-id="webm-segment"></a> header and before any further <a def-id="webm-ebml-header"></a> or <a def-id="webm-cluster"></a> elements.
-            </li>
-          </ol>
-          The user agent must accept and ignore any elements other than an <a def-id="webm-ebml-header"></a> or a <a def-id="webm-cluster"></a> that occur before, in between, or after the <a def-id="webm-info"></a> and
-          <a def-id="webm-tracks"></a> elements.
-        </section>
-
-        <section id="webm-media-segments">
-          <h4>Media Segments</h4>
-          <p>A WebM <a def-id="media-segment"></a> is a single <a def-id="webm-cluster"></a> element.</p>
-
-          <p>The user agent uses the following rules when interpreting content in a <a def-id="webm-cluster"></a>:</p>
-          <ol>
-            <li>The TimecodeScale in the <a def-id="webm-init-segment"></a> most recently appended applies to all timestamps in the <a def-id="webm-cluster"></a></li>
-            <li>The Timecode element in the <a def-id="webm-cluster"></a> contains a <a def-id="presentation-timestamp"></a> in TimecodeScale units.</li>
-            <li>The Cluster header may contain an "unknown" size value. If it does then the end of the cluster is reached when another <a def-id="webm-cluster"></a> header or an element header that indicates the start
-              of an <a def-id="webm-init-segment"></a> is encountered.</li>
-          </ol>
-
-          <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are not met:</p>
-          <ol>
-            <li>The Timecode element must appear before any Block &amp; SimpleBlock elements in a <a def-id="webm-cluster"></a>.</li>
-            <li>Block &amp; SimpleBlock elements are in time increasing order consistent with the <a def-id="webm-spec"></a>.</li>
-            <li>If the most recent <a def-id="webm-init-segment"></a> describes multiple tracks, then blocks from all the tracks must be interleaved in time increasing order. At least one block from all audio and video
-              tracks must be present.</li>
-          </ol>
-
-          The user agent must accept and ignore <a def-id="webm-cues"></a> or <a def-id="webm-chapters"></a> elements that follow a <a def-id="webm-cluster"></a> element.
-        </section>
-
-        <section id="webm-random-access-points">
-          <h4>Random Access Points</h4>
-          <p>A SimpleBlock element with its Keyframe flag set signals the location of a <a def-id="random-access-point"></a> for that track. Media segments containing multiple tracks are only considered a random access
-            point if the first SimpleBlock for each track has its Keyframe flag set. The order of the multiplexed blocks must conform to the <a def-id="webm-muxer-guidelines"></a>.</p>
-        </section>
-      </section>
-
-      <section id="iso" class="nonnormative">
-        <h3>ISO Base Media File Format Byte Streams</h3>
-        <p>This section defines segment formats for implementations that choose to support the ISO Base Media File Format
-	  <a def-id="iso-14496-12"></a> (ISO BMFF).</p>
-
-	<section id="iso-init-segments">
-          <h4>Initialization Segments</h4>
-          <p>An ISO BMFF <a def-id="init-segment"></a> is defined in this specification as a single Movie Header Box (<span class="iso-box">moov</span>).</p>
-
-          <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
-          <ol>
-            <li>The tracks in the Movie Header Box contain samples (i.e. the <span class="iso-var">entry_count</span> in the
-              <span class="iso-box">stts</span>, <span class="iso-box">stsc</span> or <span class="iso-box">stco</span> boxes are not set to zero).</li>
-            <li>A Movie Extends (<span class="iso-box">mvex</span>) box is not contained in the Movie (<span class="iso-box">moov</span>) box to indicate that Movie Fragments are to be expected.</li>
-          </ol>
-          <p>The user agent must handle Edit Boxes (<span class="iso-box">edts</span>), in <a def-id="init-segment"></a>, which provide a mapping of composition times for each track to the global presentation time.</p>
-
-	  <p>The user agent must support parameter sets (e.g., PPS/SPS) stored in the sample entry (as defined for avc1/avc2), and should support parameter
-            sets stored inband in the samples themselves (as defined for avc3/avc4).</p>
-            <p class="note">For maximum content interoperability, user agents are strongly advised to support both inband and out-of-band storage of the SPS and PPS.</p>
-
-          <p>Valid top-level boxes such as <span class="iso-box">ftyp</span>, <span class="iso-box">styp</span>, and <span class="iso-box">sidx</span> are
-            allowed to appear before the <span class="iso-box">moov</span> box. These boxes must be accepted and ignored by the user agent and are not
-            considered part of the <a def-id="init-segment"></a> in this specification.</p>
-	</section>
-
-	<section id="iso-media-segments">
-          <h4>Media Segments</h4>
-          <p>An ISO BMFF <a def-id="media-segment"></a> is defined in this specification as a single Movie Fragment Box
-            (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>).</p>
-          <p>Valid top-level boxes defined in <a def-id="iso-14496-12"></a> other than <span class="iso-box">moov</span>,
-            <span class="iso-box">moof</span>, and <span class="iso-box">mdat</span> are allowed to appear between the end of an
-            <a def-id="init-segment"></a> or <a def-id="media-segment"></a> and before the beginning of a new <a def-id="media-segment"></a>.
-            These boxes must be accepted and ignored by the user agent and are not considered part of the <a def-id="media-segment"></a> in this
-            specification.
-          </p>
-
-          <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
-          <ol>
-	    <li>The Movie Fragment Box does not contain at least one Track Fragment Box (<span class="iso-box">traf</span>).</li>
-	    <li>The Movie Fragment Box does not use movie-fragment relative addressing or the flag <span class="iso-var">default-base-is-moof</span> is not set.</li>
-	    <li>External data references are being used.</li>
-	    <li>At least one Track Fragment Box does not contain a Track Fragment Decode Time Box (<span class="iso-box">tfdt</span>)</li>
-	    <li>The Media Data Boxes do not contain all the samples referenced by the Track Fragment Run Boxes (<span class="iso-box">trun</span>) of the Movie Fragment Box.</li>
-	    <li>Inband parameter sets are not present in the appropriate samples and parameter sets are not present in the last initialization segment appended.</li>
-          </ol>
-	</section>
-
-	<section id="iso-random-access-points">
-          <h4>Random Access Points</h4>
-          <p>A <a def-id="random-access-point"></a> as defined in this specification corresponds to a Stream Access Point of type 1 or 2 as defined in Annex I of <a def-id="iso-14496-12"></a>.</p>
-	</section>
-      </section>
-
-      <section id="mpeg2ts" class="nonnormative">
-        <h3>MPEG-2 Transport Stream Byte Streams</h3>
-        <p>This section defines segment formats for implementations that choose to support MPEG-2 Transport Streams
-          (MPEG-2 TS) specified in <a def-id="iso-13818-1"></a>.</p>
-
-        <section id="mpeg2ts-general">
-          <h4>General</h4>
-          <p>MPEG-2 TS media and initialization segments must conform to the MPEG-2 TS Adaptive Profile (ISO/IEC 13818-1:2012 Amd. 2).</p>
-
-          <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
-          <ol>
-            <li>Segments do not contain complete MPEG-2 TS packets.</li>
-            <li>Segments do not contain complete PES packets and sections.</li>
-            <li>Segments contain more than one program.</li>
-            <li>At least one MPEG-2 TS packet has a non-zero transport_error_indicator.</li>
-          </ol>
-        </section>
-        <section id="mpeg2ts-init-segments">
-          <h4>Initialization Segments</h4>
-          <p>An MPEG-2 TS initialization segment consists of a single PAT and a single PMT.</p>
-          <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
-          <ol>
-            <li>A PAT is not present in the <a def-id="init-segment"></a></li>
-            <li>A PMT is not present in the <a def-id="init-segment"></a></li>
-          </ol>
-          The user agent must accept and ignore other SI, such as CAT, that are invariant for all subsequent media segments.
-        </section>
-
-        <section id="mpeg2ts-media-segments">
-          <h4>Media Segments</h4>
-
-          <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
-          <ol>
-            <li>A media segment relies on initialization information in another media segment.</li>
-            <li>At least one PES packet does not have a PTS timestamp.</li>
-            <li>PCR is not present in the Segment prior to the first byte of a TS packet payload containing media data.</li>
-          </ol>
-
-          The user agent will accept and ignore PSI that is identical to the information in the last initialization segment which may appear repeatedly throughout the segment.
-        </section>
-
-        <section id="mpeg2ts-random-access-points">
-          <h4>Random Access Points</h4>
-          <p>A random access point as defined in this specification corresponds to Elementary Stream Random Access Point as defined in
-            <a def-id="iso-13818-1"></a>.</p>
-        </section>
-        <section id="mpeg2ts-discontinuities">
-          <h4>Timestamp Rollover &amp; Discontinuities</h4>
-          <p>Timestamp rollovers and discontinuities must be handled by the UA. The UA's MPEG-2 TS implementation must maintain an internal offset
-          variable, <dfn id="mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</dfn>, to keep track of the offset that needs to be applied to timestamps
-          that have rolled over or are part of a discontinuity. <var>MPEG2TS_timestampOffset</var> is initially set to 0 when the <a>SourceBuffer</a> is 
-          created.  This offset must be applied to the timestamps as part of the conversion process from MPEG-2 TS packets
-          into <a def-id="coded-frames"></a> for the <a def-id="coded-frame-processing-algorithm"></a>. This results in the coded frame timestamps 
-          for a packet being computed by the following equations:</p>
-          <pre>
-Coded Frame Presentation Timestamp = (MPEG-2 TS presentation timestamp) + <var>MPEG2TS_timestampOffset</var>
-Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_timestampOffset</var></pre>
-
-          <p><a def-id="mpeg2ts-timestampOffset"></a> is updated in the following ways:</p>
-          <ul>
-            <li>Each time a timestamp rollover is detected, 2^33 must be added to <var>MPEG2TS_timestampOffset</var>.</li>
-            <li>When a discontinuity is detected, <var>MPEG2TS_timestampOffset</var> must be adjusted to make the timestamps after the discontinuity appear
-              to come immediately after the timestamps before the discontinuity.</li>
-            <li>When <a def-id="abort"></a> is called, <var>MPEG2TS_timestampOffset</var> must be set to 0.</li>
-            <li>When <a def-id="timestampOffset"></a> is successfully set, <var>MPEG2TS_timestampOffset</var> must be set to 0.</li>
-          </ul>
-        </section>
-      </section>
     </section>
-
-
 
     <section id="examples">
       <h2>Examples</h2>
@@ -2428,7 +2257,15 @@ Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_times
         </thead>
         <tbody>
           <tr>
-            <td>29 October 2013</td>
+            <td>04 November 2013</td>
+            <td>
+              <ul>
+                <li>Bug 23441 - Established MSE byte stream format registry and extracted byte stream format text into separate documents.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/15e7e8f7eecd/media-source/media-source.html">29 October 2013</a></td>
             <td>
               <ul>
                 <li>Bug 23553 - Fixed segment parser loop so it doesn't appear to prematurely remove the media segment header.</li>

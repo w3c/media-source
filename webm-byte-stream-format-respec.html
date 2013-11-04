@@ -1,0 +1,211 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>WebM Byte Stream Format</title>
+    <script src="respec-w3c-common.js" class="remove"></script>
+    <script src="media-source.js" class="remove"></script>
+    <script class="remove">
+      (function() {
+        var webmContainerSpecDefinitions = {
+          'webm-spec': { fragment: '#webm-guidelines', link_text: 'WebM spec',  },
+          'webm-ebml-header': { fragment: '#ebml-basics', link_text: 'EBML Header',  },
+          'webm-segment': { fragment: '#segment', link_text: 'Segment',  },
+          'webm-info': { fragment: '#segment-information', link_text: 'Segment Information',  },
+          'webm-tracks': { fragment: '#track', link_text: 'Tracks',  },
+          'webm-cues': { fragment: '#cueing-data', link_text: 'Cues',  },
+          'webm-chapters': { fragment: '#chapters', link_text: 'Chapters',  },
+          'webm-cluster': { fragment: '#cluster', link_text: 'Cluster',  },
+          'webm-muxer-guidelines': { fragment: '#muxer-guidelines', link_text: 'WebM Muxer Guidelines',  },
+        };
+
+        var webmByteStreamFormatDefinitions = {
+          'webm-init-segment': { fragment: '#webm-init-segments', link_text: 'WebM initialization segment', },
+        };
+
+        mediaSourceAddDefinitionInfo("webm-container-spec", "http://www.webmproject.org/code/specs/container/", webmContainerSpecDefinitions);
+        mediaSourceAddDefinitionInfo("webm-byte-stream-format", "", webmByteStreamFormatDefinitions);
+      })();
+    </script>
+
+    <script class="remove">
+      var respecConfig = {
+      // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use ED.
+      specStatus: "ED",
+
+      // the specification's short name, as in http://www.w3.org/TR/short-name/
+      shortName: "",
+
+      // if there a publicly available Editor's Draft, this is the link
+      edDraftURI:           "http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/webm-byte-stream-format.html",
+
+      // if this is a LCWD, uncomment and set the end of its review period
+      // lcEnd: "2009-08-05",
+
+      // editors, add as many as you like
+      // only "name" is required
+      editors:  [
+      { name: "Aaron Colwell",  url: "", company: "Google Inc.", companyURL: "http://www.google.com/" },
+      ],
+
+      mseDefGroupName: "webm-byte-stream-format",
+      mseUnusedGroupNameExcludeList: ["media-source"],
+      mseContributors: [
+        "Frank Galligan",
+        "Philip Jägenstedt",
+      ],
+
+      // name of the WG
+      wg:           "HTML Working Group",
+
+      // URI of the public WG page
+      wgURI:        "http://www.w3.org/html/wg/",
+
+      // name (without the @w3c.org) of the public mailing to which comments are due
+      wgPublicList: "public-html-media",
+
+      // URI of the patent status for this WG, for Rec-track documents
+      // !!!! IMPORTANT !!!!
+      // This is important for Rec-track documents, do not copy a patent URI from a random
+      // document unless you know what you're doing. If in doubt ask your friendly neighbourhood
+      // Team Contact.
+      wgPatentURI: "http://www.w3.org/2004/01/pp-impl/40318/status",
+
+      noIDLIn: true,
+
+      scheme: "https",
+
+      preProcess: [ mediaSourcePreProcessor ],
+
+      // Empty definitions for objects declared in the document are here to
+      // prevent error messages from being displayed for references to these objects.
+      definitionMap: {},
+
+      postProcess: [ mediaSourcePostProcessor ]
+
+      };
+    </script>
+    <!-- script to register bugs -->
+    <script src="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/assets/scripts/bug-assist.js"></script>
+    <meta name="bug.short_desc" content="[MSE] ">
+    <meta name="bug.product" content="HTML WG">
+    <meta name="bug.component" content="Media Source Extensions">
+
+    <link rel="stylesheet" href="mse.css">
+  </head>
+  <body>
+    <section id="abstract">
+      This specification defines a <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> byte stream format specification based on the WebM container format.
+    </section>
+
+    <section id="introduction">
+      <h2>Introduction</h2>
+      <p>This specification describes a byte stream format based on the WebM container format. It defines the MIME-type parameters used to signal codecs, and provides
+      the necessary format specific definitions for <a def-id="init-segments"></a>, <a def-id="media-segments"></a>, and <a def-id="random-access-points"></a> required by
+      the <a def-id="byte-stream-formats-section"></a> of the Media Source Extensions spec.</p>
+    </section>
+
+    <section id="webm-mime-parameters">
+      <h2>MIME-type parameters</h2>
+      <p>This section specifies the parameters that can be used in the MIME-type passed to <a def-id="isTypeSupported"></a> or <a def-id="addSourceBuffer"></a>.</p>
+      <dl>
+        <dt>codecs</dt>
+        <dd>
+          A comma separated list of codec IDs used to specify what codecs will be used in the byte stream.
+          <table class="old-table">
+            <thead>
+              <tr>
+                <th>Codec ID</th>
+                <th>Valid with "audio/webm"</th>
+                <th>Valid with "video/webm"</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>vorbis</td>
+                <td>true</td>
+                <td>true</td>
+              </tr>
+              <tr>
+                <td>opus</td>
+                <td>true</td>
+                <td>true</td>
+              </tr>
+              <tr>
+                <td>vp8</td>
+                <td>false</td>
+                <td>true</td>
+              </tr>
+              <tr>
+                <td>vp9</td>
+                <td>false</td>
+                <td>true</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="note">
+            Implementations should support all of the codec IDs mentioned in the table above.
+          </div>
+
+          <p>Examples of valid MIME-types with a codecs parameter.</p>
+          <ul>
+            <li>audio/webm;codecs="vorbis"</li>
+            <li>video/webm;codecs="vorbis"</li>
+            <li>video/webm;codecs="vp8"</li>
+            <li>video/webm;codecs="vp8,vorbis"</li>
+            <li>video/webm;codecs="vp9,opus"</li>
+          </ul>
+        </dd>
+      </dl>
+    </section>
+
+    <section id="webm-init-segments">
+      <h2>Initialization Segments</h2>
+      <p>A WebM <a def-id="init-segment"></a> must contain a subset of the elements at the start of a typical WebM file.</p>
+
+      <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are not met:</p>
+      <ol>
+	<li>The <a def-id="init-segment"></a> must start with an <a def-id="webm-ebml-header"></a> element, followed by a <a def-id="webm-segment"></a> header.</li>
+	<li>The size value in the <a def-id="webm-segment"></a> header must signal an "unknown size" or contain a value large enough to include the <a def-id="webm-info"></a> and <a def-id="webm-tracks"></a> elements that follow.</li>
+	<li>A <a def-id="webm-info"></a> element and a <a def-id="webm-tracks"></a> element must appear, in that order, after the <a def-id="webm-segment"></a> header and before any further <a def-id="webm-ebml-header"></a> or <a def-id="webm-cluster"></a> elements.
+        </li>
+      </ol>
+      The user agent must accept and ignore any elements other than an <a def-id="webm-ebml-header"></a> or a <a def-id="webm-cluster"></a> that occur before, in between, or after the <a def-id="webm-info"></a> and
+      <a def-id="webm-tracks"></a> elements.
+    </section>
+
+    <section id="webm-media-segments">
+      <h2>Media Segments</h2>
+      <p>A WebM <a def-id="media-segment"></a> is a single <a def-id="webm-cluster"></a> element.</p>
+
+      <p>The user agent uses the following rules when interpreting content in a <a def-id="webm-cluster"></a>:</p>
+      <ol>
+        <li>The TimecodeScale in the <a def-id="webm-init-segment"></a> most recently appended applies to all timestamps in the <a def-id="webm-cluster"></a></li>
+        <li>The Timecode element in the <a def-id="webm-cluster"></a> contains a <a def-id="presentation-timestamp"></a> in TimecodeScale units.</li>
+        <li>The Cluster header may contain an "unknown" size value. If it does then the end of the cluster is reached when another <a def-id="webm-cluster"></a> header or an element header that indicates the start
+          of an <a def-id="webm-init-segment"></a> is encountered.</li>
+      </ol>
+
+      <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are not met:</p>
+      <ol>
+        <li>The Timecode element must appear before any Block &amp; SimpleBlock elements in a <a def-id="webm-cluster"></a>.</li>
+        <li>Block &amp; SimpleBlock elements are in time increasing order consistent with the <a def-id="webm-spec"></a>.</li>
+        <li>If the most recent <a def-id="webm-init-segment"></a> describes multiple tracks, then blocks from all the tracks must be interleaved in time increasing order. At least one block from all audio and video
+          tracks must be present.</li>
+      </ol>
+
+      The user agent must accept and ignore <a def-id="webm-cues"></a> or <a def-id="webm-chapters"></a> elements that follow a <a def-id="webm-cluster"></a> element.
+    </section>
+
+    <section id="webm-random-access-points">
+      <h2>Random Access Points</h2>
+      <p>A SimpleBlock element with its Keyframe flag set signals the location of a <a def-id="random-access-point"></a> for that track. Media segments containing multiple tracks are only considered a random access
+        point if the first SimpleBlock for each track has its Keyframe flag set. The order of the multiplexed blocks must conform to the <a def-id="webm-muxer-guidelines"></a>.</p>
+    </section>
+
+    <section id="acknowledgements">
+      <h2>Acknowledgments</h2>
+      The editors would like to thank <a def-id="contributors"></a> for their contributions to this specification.
+    </section>
+  </body>
+</html>

@@ -126,6 +126,7 @@
     'eos-decode': { func: eos_decode_helper, fragment: '#end-of-stream-algorithm', link_text: 'end of stream algorithm with <var>error</var> parameter set to "decode"',  },
     'readyState': { func: idlref_helper, fragment: 'widl-MediaSource-readyState', link_text: 'readyState',  },
     'duration': { func: idlref_helper, fragment: 'widl-MediaSource-duration', link_text: 'duration',  },
+    'isTypeSupported': { func: idlref_helper, fragment: 'widl-MediaSource-isTypeSupported-boolean-DOMString-type', link_text: 'isTypeSupported()',  },
 
     'appendBuffer': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data', link_text: 'appendBuffer()',  },
     'appendStream': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize', link_text: 'appendStream()',  },
@@ -174,6 +175,7 @@
     'media-segments': { func: term_helper, fragment: 'media-segment', link_text: 'media segments', },
     'presentation-start-time': { func: term_helper, fragment: 'presentation-start-time', link_text: 'presentation start time', },
     'random-access-point': { func: term_helper, fragment: 'random-access-point', link_text: 'random access point', },
+    'random-access-points': { func: term_helper, fragment: 'random-access-point', link_text: 'random access points', },
     'track-id': { func: term_helper, fragment: 'track-id', link_text: 'Track ID', },
     'track-ids': { func: term_helper, fragment: 'track-id', link_text: 'Track IDs', },
     'track-description': { func: term_helper, fragment: 'track-description', link_text: 'track description', },
@@ -203,8 +205,9 @@
     'waiting-for-segment': { func: link_helper, fragment: '#sourcebuffer-waiting-for-segment', link_text: 'WAITING_FOR_SEGMENT', },
     'parsing-init-segment': { func: link_helper, fragment: '#sourcebuffer-parsing-init-segment', link_text: 'PARSING_INIT_SEGMENT', },
     'parsing-media-segment': { func: link_helper, fragment: '#sourcebuffer-parsing-media-segment', link_text: 'PARSING_MEDIA_SEGMENT', },
-    'byte-stream-format-spec': { func: link_helper, fragment: '#byte-stream-formats', link_text: 'byte stream format specification', },
-    'byte-stream-format-specs': { func: link_helper, fragment: '#byte-stream-formats', link_text: 'byte stream format specifications', },
+    'byte-stream-formats-section': { func: link_helper, fragment: '#byte-stream-formats', link_text: 'byte stream formats section', },
+    'byte-stream-format-spec': { func: link_helper, fragment: '#byte-stream-format-specs', link_text: 'byte stream format specification', },
+    'byte-stream-format-specs': { func: link_helper, fragment: '#byte-stream-format-specs', link_text: 'byte stream format specifications', },
     'sourcebuffer-byte-stream-format-spec': { func: link_helper, fragment: '#sourcebuffer-byte-stream-format-spec', link_text: 'SourceBuffer byte stream format specification', },
     'append-error-algorithm': { func: link_helper, fragment: '#sourcebuffer-append-error', link_text: 'append error algorithm', },
     'reset-parser-state-algorithm': { func: link_helper, fragment: '#sourcebuffer-reset-parser-state', link_text: 'reset parser state algorithm', },
@@ -317,23 +320,6 @@
 
     'origin': { func: browsers_helper, fragment: 'origin-0', link_text: 'origin', },
 
-    'webm-spec': { func: webmref_helper, fragment: 'webm-guidelines', link_text: 'WebM spec',  },
-    'webm-ebml-header': { func: webmref_helper, fragment: 'ebml-basics', link_text: 'EBML Header',  },
-    'webm-segment': { func: webmref_helper, fragment: 'segment', link_text: 'Segment',  },
-    'webm-info': { func: webmref_helper, fragment: 'segment-information', link_text: 'Segment Information',  },
-    'webm-tracks': { func: webmref_helper, fragment: 'track', link_text: 'Tracks',  },
-    'webm-cues': { func: webmref_helper, fragment: 'cueing-data', link_text: 'Cues',  },
-    'webm-chapters': { func: webmref_helper, fragment: 'chapters', link_text: 'Chapters',  },
-    'webm-cluster': { func: webmref_helper, fragment: 'cluster', link_text: 'Cluster',  },
-    'webm-muxer-guidelines': { func: webmref_helper, fragment: 'muxer-guidelines', link_text: 'WebM Muxer Guidelines',  },
-    'webm-init-segment': { func: link_helper, fragment: '#webm-init-segments', link_text: 'WebM initialization segment', },
-
-    'iso-14496-12': { func: link_helper, fragment: 'http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip', link_text: 'ISO/IEC 14496-12', },
-
-    'iso-13818-1': { func: link_helper, fragment: 'http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=44169', link_text: 'ISO/IEC 13818-1', },
-
-    'mpeg2ts-timestampOffset': { func: var_helper, fragment: '#mpeg2ts-timestampOffset', link_text: 'MPEG2TS_timestampOffset', },
-
 
     'media-data-cannot-be-fetched': { func: fragment_helper, fragment: '', link_text: '&quot;<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>&quot;', },
     'perform-potentially-cors-enabled-fetch': { func: fragment_helper, fragment: '', link_text: '&quot;<i>Perform a potentially CORS-enabled fetch</i>&quot;', },
@@ -341,10 +327,16 @@
     'contributors': { func: contributors_helper, fragment: '', link_text: '', },
 
     'performance-now': { func: hrtime_helper, fragment: 'dom-performance-now', link_text: 'Performance.now()',  },
+
+    'byte-stream-format-registry': { func: link_helper, fragment: 'byte-stream-format-registry.html', link_text: 'byte stream format registry', },
   };
 
   var definitionInfo = {};
   var groupBaseURLs = {};
+  var helperTypes = {
+      'link' : link_helper,
+      'var' : var_helper,
+  };
 
   function mediaSourceAddDefinitionInfo(groupName, groupBaseURL, definitions) {
       groupBaseURLs[groupName] = groupBaseURL;
@@ -355,7 +347,8 @@
           var info = definitions[def_id];
           info.groupName = groupName;
           if (!info.func) {
-              info.func = link_helper;
+	      var helper_type = info.helper_type || "link";
+              info.func = helperTypes[helper_type];
 	  }
 	  definitionInfo[def_id] = info;
       }

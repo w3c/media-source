@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>WebM Byte Stream Format</title>
+
+
+
+
+
+    <!-- script to register bugs -->
+    <script src="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/assets/scripts/bug-assist.js"></script>
+    <meta name="bug.short_desc" content="[MSE] ">
+    <meta name="bug.product" content="HTML WG">
+    <meta name="bug.component" content="Media Source Extensions">
+
+    <style>/* --- ISSUES/NOTES --- */
+div.issue-title, div.note-title {
+    padding-right:  1em;
+    min-width: 7.5em;
+    color: #b9ab2d;
+}
+div.issue-title { color: #e05252; }
+div.note-title { color: #52e052; }
+div.issue-title span, div.note-title span {
+    text-transform: uppercase;
+}
+div.note, div.issue {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.note > p:first-child, .issue > p:first-child { margin-top: 0 }
+.issue, .note {
+    padding: .5em;
+    border-left-width: .5em;
+    border-left-style: solid;
+}
+div.issue, div.note {
+    padding: 0.5em;
+    margin: 1em 0;
+    position: relative;
+    clear: both;
+}
+span.note, span.issue { padding: .1em .5em .15em; }
+
+.issue {
+    border-color: #e05252;
+    background: #fbe9e9;
+}
+.note {
+    border-color: #52e052;
+    background: #e9fbe9;
+}
+
+
+</style><link rel="stylesheet" href="mse.css">
+  <style>/*****************************************************************
+ * ReSpec 3 CSS
+ * Robin Berjon - http://berjon.com/
+ *****************************************************************/
+
+/* --- INLINES --- */
+em.rfc2119 {
+    text-transform:     lowercase;
+    font-variant:       small-caps;
+    font-style:         normal;
+    color:              #900;
+}
+
+h1 acronym, h2 acronym, h3 acronym, h4 acronym, h5 acronym, h6 acronym, a acronym,
+h1 abbr, h2 abbr, h3 abbr, h4 abbr, h5 abbr, h6 abbr, a abbr {
+    border: none;
+}
+
+dfn {
+    font-weight:    bold;
+}
+
+a.internalDFN {
+    color:  inherit;
+    border-bottom:  1px solid #99c;
+    text-decoration:    none;
+}
+
+a.externalDFN {
+    color:  inherit;
+    border-bottom:  1px dotted #ccc;
+    text-decoration:    none;
+}
+
+a.bibref {
+    text-decoration:    none;
+}
+
+cite .bibref {
+    font-style: normal;
+}
+
+code {
+    color:  #ff4500;
+}
+
+
+/* --- --- */
+ol.algorithm { counter-reset:numsection; list-style-type: none; }
+ol.algorithm li { margin: 0.5em 0; }
+ol.algorithm li:before { font-weight: bold; counter-increment: numsection; content: counters(numsection, ".") ") "; }
+
+/* --- TOC --- */
+.toc a, .tof a {
+    text-decoration:    none;
+}
+
+a .secno, a .figno {
+    color:  #000;
+}
+
+ul.tof, ol.tof {
+    list-style: none outside none;
+}
+
+.caption {
+    margin-top: 0.5em;
+    font-style:   italic;
+}
+
+/* --- TABLE --- */
+table.simple {
+    border-spacing: 0;
+    border-collapse:    collapse;
+    border-bottom:  3px solid #005a9c;
+}
+
+.simple th {
+    background: #005a9c;
+    color:  #fff;
+    padding:    3px 5px;
+    text-align: left;
+}
+
+.simple th[scope="row"] {
+    background: inherit;
+    color:  inherit;
+    border-top: 1px solid #ddd;
+}
+
+.simple td {
+    padding:    3px 10px;
+    border-top: 1px solid #ddd;
+}
+
+.simple tr:nth-child(even) {
+    background: #f0f6ff;
+}
+
+/* --- DL --- */
+.section dd > p:first-child {
+    margin-top: 0;
+}
+
+.section dd > p:last-child {
+    margin-bottom: 0;
+}
+
+.section dd {
+    margin-bottom:  1em;
+}
+
+.section dl.attrs dd, .section dl.eldef dd {
+    margin-bottom:  0;
+}
+</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
+  <body><div class="head">
+  <p>
+
+      <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
+
+  </p>
+  <h1 class="title" id="title">WebM Byte Stream Format</h1>
+
+  <h2 id="w3c-editor-s-draft-04-november-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 04 November 2013</h2>
+  <dl>
+
+      <dt>This version:</dt>
+      <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/webm-byte-stream-format.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/webm-byte-stream-format.html</a></dd>
+      <dt>Latest published version:</dt>
+      <dd><a href="http://www.w3.org/TR//">http://www.w3.org/TR//</a></dd>
+
+
+      <dt>Latest editor's draft:</dt>
+      <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/webm-byte-stream-format.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/webm-byte-stream-format.html</a></dd>
+
+
+
+
+
+
+
+
+    <dt>Editor:</dt>
+    <dd><span>Aaron Colwell</span>, <a href="http://www.google.com/">Google Inc.</a></dd>
+
+
+  </dl>
+
+
+
+
+
+      <p class="copyright">
+        <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
+        2013
+
+        <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
+        (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
+        <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>,
+        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), All Rights Reserved.
+        <abbr title="World Wide Web Consortium">W3C</abbr> <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
+        <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
+        <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.
+      </p>
+
+
+  <hr>
+</div>
+    <section id="abstract" class="introductory"><h2>Abstract</h2><p>
+      This specification defines a <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> byte stream format specification based on the WebM container format.
+    </p></section><section id="sotd" class="introductory"><h2>Status of This Document</h2>
+
+
+
+        <p>
+          <em>This section describes the status of this document at the time of its publication. Other
+          documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the latest revision
+          of this technical report can be found in the <a href="http://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports
+          index</a> at http://www.w3.org/TR/.</em>
+        </p>
+
+        <p>
+          This document was published by the <a href="http://www.w3.org/html/wg/">HTML Working Group</a> as an Editor's Draft.
+
+
+          If you wish to make comments regarding this document, please send them to
+          <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a>
+          (<a href="mailto:public-html-media-request@w3.org?subject=subscribe">subscribe</a>,
+          <a href="http://lists.w3.org/Archives/Public/public-html-media/">archives</a>).
+
+
+
+
+        All comments are welcome.
+
+
+          </p><p>
+            Publication as an Editor's Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr> Membership.
+            This is a draft document and may be updated, replaced or obsoleted by other documents at
+            any time. It is inappropriate to cite this document as other than work in progress.
+          </p>
+
+
+        <p>
+
+            This document was produced by a group operating under the
+            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+
+
+
+
+              <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="http://www.w3.org/2004/01/pp-impl/40318/status" rel="disclosure">public list of any patent disclosures</a>
+
+            made in connection with the deliverables of the group; that page also includes instructions for
+            disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains
+            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential Claim(s)</a> must disclose the
+            information in accordance with <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section
+            6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+
+
+        </p>
+
+
+
+
+</section><section id="toc"><h2 class="introductory">Table of Contents</h2><ul class="toc"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#webm-mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#webm-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#webm-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#webm-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">6. </span>Acknowledgments</a></li></ul></section>
+
+    <section id="introduction">
+      <!--OddPage--><h2><span class="secno">1. </span>Introduction</h2>
+      <p>This specification describes a byte stream format based on the WebM container format. It defines the MIME-type parameters used to signal codecs, and provides
+      the necessary format specific definitions for <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segments</a>, <a href="http://www.w3.org/TR/media-source/#media-segment">media segments</a>, and <a href="http://www.w3.org/TR/media-source/#random-access-point">random access points</a> required by
+      the <a href="http://www.w3.org/TR/media-source/#byte-stream-formats">byte stream formats section</a> of the Media Source Extensions spec.</p>
+    </section>
+
+    <section id="webm-mime-parameters">
+      <!--OddPage--><h2><span class="secno">2. </span>MIME-type parameters</h2>
+      <p>This section specifies the parameters that can be used in the MIME-type passed to <code><a href="http://www.w3.org/TR/media-source/#widl-MediaSource-isTypeSupported-boolean-DOMString-type">isTypeSupported()</a></code> or <code><a href="http://www.w3.org/TR/media-source/#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code>.</p>
+      <dl>
+        <dt>codecs</dt>
+        <dd>
+          A comma separated list of codec IDs used to specify what codecs will be used in the byte stream.
+          <table class="old-table">
+            <thead>
+              <tr>
+                <th>Codec ID</th>
+                <th>Valid with "audio/webm"</th>
+                <th>Valid with "video/webm"</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>vorbis</td>
+                <td>true</td>
+                <td>true</td>
+              </tr>
+              <tr>
+                <td>opus</td>
+                <td>true</td>
+                <td>true</td>
+              </tr>
+              <tr>
+                <td>vp8</td>
+                <td>false</td>
+                <td>true</td>
+              </tr>
+              <tr>
+                <td>vp9</td>
+                <td>false</td>
+                <td>true</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="note"><div class="note-title"><span>Note</span></div><div class="">
+            Implementations should support all of the codec IDs mentioned in the table above.
+          </div></div>
+
+          <p>Examples of valid MIME-types with a codecs parameter.</p>
+          <ul>
+            <li>audio/webm;codecs="vorbis"</li>
+            <li>video/webm;codecs="vorbis"</li>
+            <li>video/webm;codecs="vp8"</li>
+            <li>video/webm;codecs="vp8,vorbis"</li>
+            <li>video/webm;codecs="vp9,opus"</li>
+          </ul>
+        </dd>
+      </dl>
+    </section>
+
+    <section id="webm-init-segments">
+      <!--OddPage--><h2><span class="secno">3. </span>Initialization Segments</h2>
+      <p>A WebM <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> must contain a subset of the elements at the start of a typical WebM file.</p>
+
+      <p>The user agent must run the <a href="http://www.w3.org/TR/media-source/#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="http://www.w3.org/TR/media-source/#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are not met:</p>
+      <ol>
+	<li>The <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> must start with an <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> element, followed by a <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header.</li>
+	<li>The size value in the <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header must signal an "unknown size" or contain a value large enough to include the <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> and <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> elements that follow.</li>
+	<li>A <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> element and a <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> element must appear, in that order, after the <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header and before any further <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> or <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> elements.
+        </li>
+      </ol>
+      The user agent must accept and ignore any elements other than an <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> or a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> that occur before, in between, or after the <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> and
+      <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> elements.
+    </section>
+
+    <section id="webm-media-segments">
+      <!--OddPage--><h2><span class="secno">4. </span>Media Segments</h2>
+      <p>A WebM <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> is a single <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element.</p>
+
+      <p>The user agent uses the following rules when interpreting content in a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a>:</p>
+      <ol>
+        <li>The TimecodeScale in the <a href="#webm-init-segments">WebM initialization segment</a> most recently appended applies to all timestamps in the <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a></li>
+        <li>The Timecode element in the <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> contains a <a href="http://www.w3.org/TR/media-source/#presentation-timestamp">presentation timestamp</a> in TimecodeScale units.</li>
+        <li>The Cluster header may contain an "unknown" size value. If it does then the end of the cluster is reached when another <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> header or an element header that indicates the start
+          of an <a href="#webm-init-segments">WebM initialization segment</a> is encountered.</li>
+      </ol>
+
+      <p>The user agent must run the <a href="http://www.w3.org/TR/media-source/#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="http://www.w3.org/TR/media-source/#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are not met:</p>
+      <ol>
+        <li>The Timecode element must appear before any Block &amp; SimpleBlock elements in a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a>.</li>
+        <li>Block &amp; SimpleBlock elements are in time increasing order consistent with the <a href="http://www.webmproject.org/code/specs/container/#webm-guidelines">WebM spec</a>.</li>
+        <li>If the most recent <a href="#webm-init-segments">WebM initialization segment</a> describes multiple tracks, then blocks from all the tracks must be interleaved in time increasing order. At least one block from all audio and video
+          tracks must be present.</li>
+      </ol>
+
+      The user agent must accept and ignore <a href="http://www.webmproject.org/code/specs/container/#cueing-data">Cues</a> or <a href="http://www.webmproject.org/code/specs/container/#chapters">Chapters</a> elements that follow a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element.
+    </section>
+
+    <section id="webm-random-access-points">
+      <!--OddPage--><h2><span class="secno">5. </span>Random Access Points</h2>
+      <p>A SimpleBlock element with its Keyframe flag set signals the location of a <a href="http://www.w3.org/TR/media-source/#random-access-point">random access point</a> for that track. Media segments containing multiple tracks are only considered a random access
+        point if the first SimpleBlock for each track has its Keyframe flag set. The order of the multiplexed blocks must conform to the <a href="http://www.webmproject.org/code/specs/container/#muxer-guidelines">WebM Muxer Guidelines</a>.</p>
+    </section>
+
+    <section id="acknowledgements">
+      <!--OddPage--><h2><span class="secno">6. </span>Acknowledgments</h2>
+      The editors would like to thank Frank Galligan, and Philip Jägenstedt for their contributions to this specification.
+    </section>
+
+
+<form action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank" style="position: fixed; width: 10em; top: 1em; right: 1em; font-family: Tahoma, sans-serif; font-size: 11px; opacity: 0.8; text-align: right;">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form></body></html>
