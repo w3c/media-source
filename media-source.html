@@ -406,7 +406,7 @@ table.simple {
   </p>
   <h1 class="title" id="title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-04-november-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 04 November 2013</h2>
+  <h2 id="w3c-editor-s-draft-14-november-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 14 November 2013</h2>
   <dl>
     
       <dt>This version:</dt>
@@ -937,7 +937,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	        <dd>
 	          <ol>
 	            <li>Set the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_metadata">HAVE_METADATA</a></code>.</li>
-	            <li>The media element waits for the necessary <a href="#media-segment">media segments</a> to be passed to <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code> or <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code>.
+	            <li>The media element waits until an <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code> or an <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> call causes the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> to set
+                      the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to a value greater than <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_metadata">HAVE_METADATA</a></code>.
                       <div class="note"><div class="note-title"><span>Note</span></div><p class="">The web application can use <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> to determine what the media element needs to resume playback.</p></div>
                     </li>
 	          </ol>
@@ -2586,7 +2587,15 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </thead>
         <tbody>
           <tr>
-            <td>04 November 2013</td>
+            <td>14 November 2013</td>
+            <td>
+              <ul>
+                <li>Bug 23663 - Clarify seeking behavior in Section 2.4.3.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/47e74f565722/media-source/media-source.html">04 November 2013</a></td>
             <td>
               <ul>
                 <li>Bug 23441 - Established MSE byte stream format registry and extracted byte stream format text into separate documents.</li>
@@ -3005,4 +3014,4 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 </dd><dt id="bib-HTML5">[HTML5]</dt><dd>Robin Berjon et al. <a href="http://www.w3.org/TR/html5/"><cite>HTML5</cite></a>. 17 December 2012. W3C Candidate Recommendation. URL: <a href="http://www.w3.org/TR/html5/">http://www.w3.org/TR/html5/</a>
 </dd><dt id="bib-STREAMS-API">[STREAMS-API]</dt><dd>Feras Moussa. <a href="http://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm"><cite>Streams API</cite></a>. 25 October 2012. W3C Editor's Draft. URL: <a href="http://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm">http://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm</a>
 </dd><dt id="bib-TYPED-ARRAYS">[TYPED-ARRAYS]</dt><dd>David Herman, Kenneth Russell. <a href="https://www.khronos.org/registry/typedarray/specs/latest/"><cite>Typed Arrays</cite></a> Khronos Working Draft. (Work in progress.) URL: <a href="https://www.khronos.org/registry/typedarray/specs/latest/">https://www.khronos.org/registry/typedarray/specs/latest/</a> 
-</dd></dl></section></section><form action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank" style="position: fixed; width: 10em; top: 1em; right: 1em; font-family: Tahoma, sans-serif; font-size: 11px; opacity: 0.8; text-align: right;">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form></body></html>
+</dd></dl></section></section><form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form></body></html>

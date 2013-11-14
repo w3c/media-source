@@ -550,7 +550,8 @@
 	        <dd>
 	          <ol>
 	            <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.</li>
-	            <li>The media element waits for the necessary <a def-id="media-segments"></a> to be passed to <a def-id="appendBuffer"></a> or <a def-id="appendStream"></a>.
+	            <li>The media element waits until an <a def-id="appendBuffer"></a> or an <a def-id="appendStream"></a> call causes the <a def-id="coded-frame-processing-algorithm"></a> to set
+                      the <a def-id="ready-state"></a> attribute to a value greater than <a def-id="have-metadata"></a>.
                       <p class="note">The web application can use <a def-id="buffered"></a> to determine what the media element needs to resume playback.</p>
                     </li>
 	          </ol>
@@ -2257,7 +2258,15 @@
         </thead>
         <tbody>
           <tr>
-            <td>04 November 2013</td>
+            <td>14 November 2013</a></td>
+            <td>
+              <ul>
+                <li>Bug 23663 - Clarify seeking behavior in Section 2.4.3.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/47e74f565722/media-source/media-source.html">04 November 2013</a></td>
             <td>
               <ul>
                 <li>Bug 23441 - Established MSE byte stream format registry and extracted byte stream format text into separate documents.</li>
