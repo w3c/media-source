@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" typeof="bibo:Document " about="" property="dcterms:language" content="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>WebM Byte Stream Format</title>
+    
+    
+    
 
-
-
-
-
+    
     <!-- script to register bugs -->
     <script src="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/assets/scripts/bug-assist.js"></script>
     <meta name="bug.short_desc" content="[MSE] ">
@@ -21,7 +21,7 @@ div.issue-title, div.note-title {
     color: #b9ab2d;
 }
 div.issue-title { color: #e05252; }
-div.note-title { color: #52e052; }
+div.note-title { color: #2b2; }
 div.issue-title span, div.note-title span {
     text-transform: uppercase;
 }
@@ -36,7 +36,7 @@ div.note, div.issue {
     border-left-style: solid;
 }
 div.issue, div.note {
-    padding: 0.5em;
+    padding: 1em 1.2em 0.5em;
     margin: 1em 0;
     position: relative;
     clear: both;
@@ -60,7 +60,7 @@ span.note, span.issue { padding: .1em .5em .15em; }
  *****************************************************************/
 
 /* --- INLINES --- */
-em.rfc2119 {
+em.rfc2119 { 
     text-transform:     lowercase;
     font-variant:       small-caps;
     font-style:         normal;
@@ -99,12 +99,6 @@ cite .bibref {
 code {
     color:  #ff4500;
 }
-
-
-/* --- --- */
-ol.algorithm { counter-reset:numsection; list-style-type: none; }
-ol.algorithm li { margin: 0.5em 0; }
-ol.algorithm li:before { font-weight: bold; counter-increment: numsection; content: counters(numsection, ".") ") "; }
 
 /* --- TOC --- */
 .toc a, .tof a {
@@ -170,127 +164,142 @@ table.simple {
     margin-bottom:  0;
 }
 </style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
-  <body><div class="head">
+  <body class="h-entry" style="" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
-
+    
       <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
-
+    
   </p>
-  <h1 class="title" id="title">WebM Byte Stream Format</h1>
-
-  <h2 id="w3c-editor-s-draft-04-november-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 04 November 2013</h2>
+  <h1 class="title p-name" id="title" property="dcterms:title">WebM Byte Stream Format</h1>
+  
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2013-12-03T02:35:25.000Z" id="w3c-editor-s-draft-02-december-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2013-12-02">02 December 2013</time></h2>
   <dl>
-
+    
       <dt>This version:</dt>
-      <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/webm-byte-stream-format.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/webm-byte-stream-format.html</a></dd>
+      <dd><a class="u-url" href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/webm-byte-stream-format.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/webm-byte-stream-format.html</a></dd>
       <dt>Latest published version:</dt>
       <dd><a href="http://www.w3.org/TR//">http://www.w3.org/TR//</a></dd>
-
-
+    
+    
       <dt>Latest editor's draft:</dt>
       <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/webm-byte-stream-format.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/webm-byte-stream-format.html</a></dd>
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+      
+    
+    
+    
     <dt>Editor:</dt>
-    <dd><span>Aaron Colwell</span>, <a href="http://www.google.com/">Google Inc.</a></dd>
+    <dd class="p-author h-card vcard" rel="bibo:editor" inlist=""><span typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Aaron Colwell</span>, <a rel="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.google.com/">Google Inc.</a></span>
+</dd>
 
-
+    
+    
   </dl>
-
-
-
-
-
+  
+  
+  
+  
+    
       <p class="copyright">
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
         2013
-
+        
         <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
         (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
         <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>,
-        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), All Rights Reserved.
+        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), 
+        
+        All Rights Reserved.
+        
         <abbr title="World Wide Web Consortium">W3C</abbr> <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
-        <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.
+        
+          <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a>
+        
+        rules apply.
       </p>
-
-
+    
+  
   <hr>
 </div>
-    <section id="abstract" class="introductory"><h2>Abstract</h2><p>
+    <section id="abstract" class="introductory" property="dcterms:abstract" datatype="" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_abstract">Abstract</h2><p>
       This specification defines a <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> byte stream format specification based on the WebM container format.
-    </p></section><section id="sotd" class="introductory"><h2>Status of This Document</h2>
-
-
-
+    </p></section><section id="sotd" class="introductory" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_sotd">Status of This Document</h2>
+  
+    
+      
         <p>
-          <em>This section describes the status of this document at the time of its publication. Other
-          documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the latest revision
-          of this technical report can be found in the <a href="http://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports
-          index</a> at http://www.w3.org/TR/.</em>
+          <em>This section describes the status of this document at the time of its publication.
+          Other documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the
+          latest revision of this technical report can be found in the <a href="http://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at
+          http://www.w3.org/TR/.</em>
         </p>
-
+        
         <p>
           This document was published by the <a href="http://www.w3.org/html/wg/">HTML Working Group</a> as an Editor's Draft.
-
-
-          If you wish to make comments regarding this document, please send them to
-          <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a>
-          (<a href="mailto:public-html-media-request@w3.org?subject=subscribe">subscribe</a>,
-          <a href="http://lists.w3.org/Archives/Public/public-html-media/">archives</a>).
-
-
-
-
-        All comments are welcome.
-
-
-          </p><p>
-            Publication as an Editor's Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr> Membership.
-            This is a draft document and may be updated, replaced or obsoleted by other documents at
-            any time. It is inappropriate to cite this document as other than work in progress.
-          </p>
-
-
-        <p>
-
-            This document was produced by a group operating under the
-            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
-
-
-
-
-              <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="http://www.w3.org/2004/01/pp-impl/40318/status" rel="disclosure">public list of any patent disclosures</a>
-
-            made in connection with the deliverables of the group; that page also includes instructions for
-            disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains
-            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential Claim(s)</a> must disclose the
-            information in accordance with <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section
-            6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
-
-
+          
+          
+            If you wish to make comments regarding this document, please send them to 
+            <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a> 
+            (<a href="mailto:public-html-media-request@w3.org?subject=subscribe">subscribe</a>,
+            <a href="http://lists.w3.org/Archives/Public/public-html-media/">archives</a>).
+          
+          
+          
+          
+            All comments are welcome.
+          
         </p>
+        
+        
+          <p>
+            Publication as an Editor's Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr>
+            Membership. This is a draft document and may be updated, replaced or obsoleted by other
+            documents at any time. It is inappropriate to cite this document as other than work in
+            progress.
+          </p>
+        
+        
+        <p>
+          
+            This document was produced by a group operating under the 
+            <a id="sotd_patent" about="" rel="w3p:patentRules" href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent
+            Policy</a>.
+          
+          
+          
+            
+              <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="http://www.w3.org/2004/01/pp-impl/40318/status" rel="disclosure">public list of any patent
+              disclosures</a> 
+            
+            made in connection with the deliverables of the group; that page also includes
+            instructions for disclosing a patent. An individual who has actual knowledge of a patent
+            which the individual believes contains
+            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential
+            Claim(s)</a> must disclose the information in accordance with
+            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section
+            6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+          
+          
+        </p>
+        
+      
+    
+  
+</section><section id="toc"><h2 class="introductory" aria-level="1" role="heading" id="h2_toc">Table of Contents</h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#webm-mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#webm-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#webm-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#webm-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">6. </span>Acknowledgments</a></li></ul></section>
 
-
-
-
-</section><section id="toc"><h2 class="introductory">Table of Contents</h2><ul class="toc"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#webm-mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#webm-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#webm-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#webm-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">6. </span>Acknowledgments</a></li></ul></section>
-
-    <section id="introduction">
-      <!--OddPage--><h2><span class="secno">1. </span>Introduction</h2>
+    <section id="introduction" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_introduction"><span class="secno">1. </span>Introduction</h2>
       <p>This specification describes a byte stream format based on the WebM container format. It defines the MIME-type parameters used to signal codecs, and provides
       the necessary format specific definitions for <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segments</a>, <a href="http://www.w3.org/TR/media-source/#media-segment">media segments</a>, and <a href="http://www.w3.org/TR/media-source/#random-access-point">random access points</a> required by
       the <a href="http://www.w3.org/TR/media-source/#byte-stream-formats">byte stream formats section</a> of the Media Source Extensions spec.</p>
     </section>
 
-    <section id="webm-mime-parameters">
-      <!--OddPage--><h2><span class="secno">2. </span>MIME-type parameters</h2>
+    <section id="webm-mime-parameters" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_webm-mime-parameters"><span class="secno">2. </span>MIME-type parameters</h2>
       <p>This section specifies the parameters that can be used in the MIME-type passed to <code><a href="http://www.w3.org/TR/media-source/#widl-MediaSource-isTypeSupported-boolean-DOMString-type">isTypeSupported()</a></code> or <code><a href="http://www.w3.org/TR/media-source/#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code>.</p>
       <dl>
         <dt>codecs</dt>
@@ -327,7 +336,7 @@ table.simple {
               </tr>
             </tbody>
           </table>
-          <div class="note"><div class="note-title"><span>Note</span></div><div class="">
+          <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_1"><span>Note</span></div><div class="">
             Implementations should support all of the codec IDs mentioned in the table above.
           </div></div>
 
@@ -343,8 +352,8 @@ table.simple {
       </dl>
     </section>
 
-    <section id="webm-init-segments">
-      <!--OddPage--><h2><span class="secno">3. </span>Initialization Segments</h2>
+    <section id="webm-init-segments" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_webm-init-segments"><span class="secno">3. </span>Initialization Segments</h2>
       <p>A WebM <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> must contain a subset of the elements at the start of a typical WebM file.</p>
 
       <p>The user agent must run the <a href="http://www.w3.org/TR/media-source/#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="http://www.w3.org/TR/media-source/#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are not met:</p>
@@ -358,8 +367,8 @@ table.simple {
       <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> elements.
     </section>
 
-    <section id="webm-media-segments">
-      <!--OddPage--><h2><span class="secno">4. </span>Media Segments</h2>
+    <section id="webm-media-segments" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_webm-media-segments"><span class="secno">4. </span>Media Segments</h2>
       <p>A WebM <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> is a single <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element.</p>
 
       <p>The user agent uses the following rules when interpreting content in a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a>:</p>
@@ -381,16 +390,16 @@ table.simple {
       The user agent must accept and ignore <a href="http://www.webmproject.org/code/specs/container/#cueing-data">Cues</a> or <a href="http://www.webmproject.org/code/specs/container/#chapters">Chapters</a> elements that follow a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element.
     </section>
 
-    <section id="webm-random-access-points">
-      <!--OddPage--><h2><span class="secno">5. </span>Random Access Points</h2>
+    <section id="webm-random-access-points" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_webm-random-access-points"><span class="secno">5. </span>Random Access Points</h2>
       <p>A SimpleBlock element with its Keyframe flag set signals the location of a <a href="http://www.w3.org/TR/media-source/#random-access-point">random access point</a> for that track. Media segments containing multiple tracks are only considered a random access
         point if the first SimpleBlock for each track has its Keyframe flag set. The order of the multiplexed blocks must conform to the <a href="http://www.webmproject.org/code/specs/container/#muxer-guidelines">WebM Muxer Guidelines</a>.</p>
     </section>
 
-    <section id="acknowledgements">
-      <!--OddPage--><h2><span class="secno">6. </span>Acknowledgments</h2>
+    <section id="acknowledgements" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_acknowledgements"><span class="secno">6. </span>Acknowledgments</h2>
       The editors would like to thank Frank Galligan, and Philip Jägenstedt for their contributions to this specification.
     </section>
+  
 
-
-<form action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank" style="position: fixed; width: 10em; top: 1em; right: 1em; font-family: Tahoma, sans-serif; font-size: 11px; opacity: 0.8; text-align: right;">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form></body></html>
+<form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form></body></html>

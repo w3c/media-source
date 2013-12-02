@@ -1,4 +1,5 @@
 (function() {
+  var MSE_spec_url = "http://www.w3.org/TR/media-source/";
   var HTML_spec_url = "http://www.w3.org/TR/html5/embedded-content-0.html";
   var DOM_spec_url = "http://dom.spec.whatwg.org/";
   var HRTIME_spec_url = "http://www.w3.org/TR/hr-time/";
@@ -403,6 +404,7 @@
     // Update links to external type definitions.
     var externalClassInfo = {
       'Stream': { spec: 'streams-api', fragment: 'idl-def-Stream' },
+      'SourceBuffer': { spec: 'mse', fragment: 'idl-def-SourceBuffer' },
       'AudioTrackList': {spec: 'html5', fragment: 'audiotracklist' },
       'TextTrackList': {spec: 'html5', fragment: 'texttracklist' },
       'TimeRanges': { spec: 'html5', fragment: 'timeranges' },
@@ -439,6 +441,8 @@
 	  baseURL = "http://www.khronos.org/registry/typedarray/specs/latest/";
         } else if (info.spec == 'hr-time') {
 	  baseURL = HRTIME_spec_url;
+	} else if (info.spec == 'mse') {
+	  baseURL = MSE_spec_url;
 	}
 
 	if (baseURL) {
@@ -480,7 +484,7 @@
     return;
   }
 
-  mediaSourceAddDefinitionInfo("media-source", "http://www.w3.org/TR/media-source/", mseDefinitions);
+  mediaSourceAddDefinitionInfo("media-source", MSE_spec_url, mseDefinitions);
 
   window.mediaSourceAddDefinitionInfo = mediaSourceAddDefinitionInfo;
   window.mediaSourcePreProcessor = mediaSourcePreProcessor;

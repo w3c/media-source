@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" typeof="bibo:Document " about="" property="dcterms:language" content="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>ISO BMFF Byte Stream Format</title>
+    
+    
+    
 
-
-
-
-
+    
     <!-- script to register bugs -->
     <script src="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/assets/scripts/bug-assist.js"></script>
     <meta name="bug.short_desc" content="[MSE] ">
@@ -21,7 +21,7 @@ div.issue-title, div.note-title {
     color: #b9ab2d;
 }
 div.issue-title { color: #e05252; }
-div.note-title { color: #52e052; }
+div.note-title { color: #2b2; }
 div.issue-title span, div.note-title span {
     text-transform: uppercase;
 }
@@ -36,7 +36,7 @@ div.note, div.issue {
     border-left-style: solid;
 }
 div.issue, div.note {
-    padding: 0.5em;
+    padding: 1em 1.2em 0.5em;
     margin: 1em 0;
     position: relative;
     clear: both;
@@ -65,7 +65,7 @@ span.note, span.issue { padding: .1em .5em .15em; }
  *****************************************************************/
 
 /* --- INLINES --- */
-em.rfc2119 {
+em.rfc2119 { 
     text-transform:     lowercase;
     font-variant:       small-caps;
     font-style:         normal;
@@ -104,12 +104,6 @@ cite .bibref {
 code {
     color:  #ff4500;
 }
-
-
-/* --- --- */
-ol.algorithm { counter-reset:numsection; list-style-type: none; }
-ol.algorithm li { margin: 0.5em 0; }
-ol.algorithm li:before { font-weight: bold; counter-increment: numsection; content: counters(numsection, ".") ") "; }
 
 /* --- TOC --- */
 .toc a, .tof a {
@@ -175,139 +169,156 @@ table.simple {
     margin-bottom:  0;
 }
 </style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
-  <body><div class="head">
+  <body class="h-entry" style="" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
-
+    
       <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
-
+    
   </p>
-  <h1 class="title" id="title">ISO BMFF Byte Stream Format</h1>
-
-  <h2 id="w3c-editor-s-draft-04-november-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 04 November 2013</h2>
+  <h1 class="title p-name" id="title" property="dcterms:title">ISO BMFF Byte Stream Format</h1>
+  
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2013-12-03T02:25:29.000Z" id="w3c-editor-s-draft-02-december-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2013-12-02">02 December 2013</time></h2>
   <dl>
-
+    
       <dt>This version:</dt>
-      <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/isobmff-byte-stream-format.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/isobmff-byte-stream-format.html</a></dd>
+      <dd><a class="u-url" href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/isobmff-byte-stream-format.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/isobmff-byte-stream-format.html</a></dd>
       <dt>Latest published version:</dt>
       <dd><a href="http://www.w3.org/TR//">http://www.w3.org/TR//</a></dd>
-
-
+    
+    
       <dt>Latest editor's draft:</dt>
       <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/isobmff-byte-stream-format.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/isobmff-byte-stream-format.html</a></dd>
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+      
+    
+    
+    
     <dt>Editors:</dt>
-    <dd><span>Aaron Colwell</span>, <a href="http://www.google.com/">Google Inc.</a></dd>
-<dd><span>Adrian Bateman</span>, <a href="http://www.microsoft.com/">Microsoft Corporation</a></dd>
-<dd><span>Mark Watson</span>, <a href="http://www.netflix.com/">Netflix Inc.</a></dd>
+    <dd class="p-author h-card vcard" rel="bibo:editor" inlist=""><span typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Aaron Colwell</span>, <a rel="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.google.com/">Google Inc.</a></span>
+</dd>
+<dd class="p-author h-card vcard" rel="bibo:editor" inlist=""><span typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Adrian Bateman</span>, <a rel="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.microsoft.com/">Microsoft Corporation</a></span>
+</dd>
+<dd class="p-author h-card vcard" rel="bibo:editor" inlist=""><span typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Mark Watson</span>, <a rel="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.netflix.com/">Netflix Inc.</a></span>
+</dd>
 
-
+    
+    
   </dl>
-
-
-
-
-
+  
+  
+  
+  
+    
       <p class="copyright">
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
         2013
-
+        
         <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
         (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
         <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>,
-        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), All Rights Reserved.
+        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), 
+        
+        All Rights Reserved.
+        
         <abbr title="World Wide Web Consortium">W3C</abbr> <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
-        <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.
+        
+          <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a>
+        
+        rules apply.
       </p>
-
-
+    
+  
   <hr>
 </div>
-    <section id="abstract" class="introductory"><h2>Abstract</h2><p>
+    <section id="abstract" class="introductory" property="dcterms:abstract" datatype="" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_abstract">Abstract</h2><p>
       This specification defines a <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> byte stream format specification based on the ISO Base Media
       File Format.
-    </p></section><section id="sotd" class="introductory"><h2>Status of This Document</h2>
-
-
-
+    </p></section><section id="sotd" class="introductory" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_sotd">Status of This Document</h2>
+  
+    
+      
         <p>
-          <em>This section describes the status of this document at the time of its publication. Other
-          documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the latest revision
-          of this technical report can be found in the <a href="http://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports
-          index</a> at http://www.w3.org/TR/.</em>
+          <em>This section describes the status of this document at the time of its publication.
+          Other documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the
+          latest revision of this technical report can be found in the <a href="http://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at
+          http://www.w3.org/TR/.</em>
         </p>
-
+        
         <p>
           This document was published by the <a href="http://www.w3.org/html/wg/">HTML Working Group</a> as an Editor's Draft.
-
-
-          If you wish to make comments regarding this document, please send them to
-          <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a>
-          (<a href="mailto:public-html-media-request@w3.org?subject=subscribe">subscribe</a>,
-          <a href="http://lists.w3.org/Archives/Public/public-html-media/">archives</a>).
-
-
-
-
-        All comments are welcome.
-
-
-          </p><p>
-            Publication as an Editor's Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr> Membership.
-            This is a draft document and may be updated, replaced or obsoleted by other documents at
-            any time. It is inappropriate to cite this document as other than work in progress.
-          </p>
-
-
-        <p>
-
-            This document was produced by a group operating under the
-            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
-
-
-
-
-              <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="http://www.w3.org/2004/01/pp-impl/40318/status" rel="disclosure">public list of any patent disclosures</a>
-
-            made in connection with the deliverables of the group; that page also includes instructions for
-            disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains
-            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential Claim(s)</a> must disclose the
-            information in accordance with <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section
-            6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
-
-
+          
+          
+            If you wish to make comments regarding this document, please send them to 
+            <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a> 
+            (<a href="mailto:public-html-media-request@w3.org?subject=subscribe">subscribe</a>,
+            <a href="http://lists.w3.org/Archives/Public/public-html-media/">archives</a>).
+          
+          
+          
+          
+            All comments are welcome.
+          
         </p>
+        
+        
+          <p>
+            Publication as an Editor's Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr>
+            Membership. This is a draft document and may be updated, replaced or obsoleted by other
+            documents at any time. It is inappropriate to cite this document as other than work in
+            progress.
+          </p>
+        
+        
+        <p>
+          
+            This document was produced by a group operating under the 
+            <a id="sotd_patent" about="" rel="w3p:patentRules" href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent
+            Policy</a>.
+          
+          
+          
+            
+              <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="http://www.w3.org/2004/01/pp-impl/40318/status" rel="disclosure">public list of any patent
+              disclosures</a> 
+            
+            made in connection with the deliverables of the group; that page also includes
+            instructions for disclosing a patent. An individual who has actual knowledge of a patent
+            which the individual believes contains
+            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential
+            Claim(s)</a> must disclose the information in accordance with
+            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section
+            6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+          
+          
+        </p>
+        
+      
+    
+  
+</section><section id="toc"><h2 class="introductory" aria-level="1" role="heading" id="h2_toc">Table of Contents</h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#iso-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#iso-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#iso-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">6. </span>Acknowledgments</a></li></ul></section>
 
-
-
-
-</section><section id="toc"><h2 class="introductory">Table of Contents</h2><ul class="toc"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#iso-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#iso-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#iso-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">6. </span>Acknowledgments</a></li></ul></section>
-
-    <section id="introduction">
-      <!--OddPage--><h2><span class="secno">1. </span>Introduction</h2>
+    <section id="introduction" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_introduction"><span class="secno">1. </span>Introduction</h2>
       <p>This specification defines segment formats for implementations that choose to support the ISO Base Media File Format
 	<a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a> (ISO BMFF).</p> It defines the MIME-type parameters used to signal codecs, and provides
       the necessary format specific definitions for <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segments</a>, <a href="http://www.w3.org/TR/media-source/#media-segment">media segments</a>, and <a href="http://www.w3.org/TR/media-source/#random-access-point">random access points</a> required by
       the <a href="http://www.w3.org/TR/media-source/#byte-stream-formats">byte stream formats section</a> of the Media Source Extensions spec.<p></p>
     </section>
 
-    <section id="mime-parameters">
-      <!--OddPage--><h2><span class="secno">2. </span>MIME-type parameters</h2>
+    <section id="mime-parameters" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mime-parameters"><span class="secno">2. </span>MIME-type parameters</h2>
       <p>This section specifies the parameters that can be used in the MIME-type passed to <code><a href="http://www.w3.org/TR/media-source/#widl-MediaSource-isTypeSupported-boolean-DOMString-type">isTypeSupported()</a></code> or <code><a href="http://www.w3.org/TR/media-source/#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code>.</p>
       <p>MIME-types for this specification must conform to the rules outlined for "audio/mp4" and "video/mp4" in <a href="http://tools.ietf.org/html/rfc6381">RFC 6381</a>.
       </p>
-      <div class="note"><div class="note-title"><span>Note</span></div><div class="">Implementations may only implement a subset of the codecs and profiles mentioned in the RFC.</div></div>
+      <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_1"><span>Note</span></div><div class="">Implementations may only implement a subset of the codecs and profiles mentioned in the RFC.</div></div>
     </section>
 
-    <section id="iso-init-segments">
-      <!--OddPage--><h2><span class="secno">3. </span>Initialization Segments</h2>
+    <section id="iso-init-segments" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_iso-init-segments"><span class="secno">3. </span>Initialization Segments</h2>
       <p>An ISO BMFF <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> is defined in this specification as a single Movie Header Box (<span class="iso-box">moov</span>).</p>
 
       <p>The user agent must run the <a href="http://www.w3.org/TR/media-source/#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="http://www.w3.org/TR/media-source/#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
@@ -320,15 +331,15 @@ table.simple {
 
       <p>The user agent must support parameter sets (e.g., PPS/SPS) stored in the sample entry (as defined for avc1/avc2), and should support parameter
         sets stored inband in the samples themselves (as defined for avc3/avc4).</p>
-      <div class="note"><div class="note-title"><span>Note</span></div><p class="">For maximum content interoperability, user agents are strongly advised to support both inband and out-of-band storage of the SPS and PPS.</p></div>
+      <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_2"><span>Note</span></div><p class="">For maximum content interoperability, user agents are strongly advised to support both inband and out-of-band storage of the SPS and PPS.</p></div>
 
       <p>Valid top-level boxes such as <span class="iso-box">ftyp</span>, <span class="iso-box">styp</span>, and <span class="iso-box">sidx</span> are
         allowed to appear before the <span class="iso-box">moov</span> box. These boxes must be accepted and ignored by the user agent and are not
         considered part of the <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> in this specification.</p>
     </section>
 
-    <section id="iso-media-segments">
-      <!--OddPage--><h2><span class="secno">4. </span>Media Segments</h2>
+    <section id="iso-media-segments" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_iso-media-segments"><span class="secno">4. </span>Media Segments</h2>
       <p>An ISO BMFF <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> is defined in this specification as a single Movie Fragment Box
         (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>).</p>
       <p>Valid top-level boxes defined in <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a> other than <span class="iso-box">moov</span>,
@@ -349,15 +360,15 @@ table.simple {
       </ol>
     </section>
 
-    <section id="iso-random-access-points">
-      <!--OddPage--><h2><span class="secno">5. </span>Random Access Points</h2>
+    <section id="iso-random-access-points" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_iso-random-access-points"><span class="secno">5. </span>Random Access Points</h2>
       <p>A <a href="http://www.w3.org/TR/media-source/#random-access-point">random access point</a> as defined in this specification corresponds to a Stream Access Point of type 1 or 2 as defined in Annex I of <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a>.</p>
     </section>
 
-    <section id="acknowledgements">
-      <!--OddPage--><h2><span class="secno">6. </span>Acknowledgments</h2>
+    <section id="acknowledgements" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_acknowledgements"><span class="secno">6. </span>Acknowledgments</h2>
       The editors would like to thank Chris Poole, Cyril Concolato, David Singer, Jerry Smith, Joe Steele, John Simmons, Kevin Streeter, Michael Thornburgh, and Steven Robertson for their contributions to this specification.
     </section>
+  
 
-
-<form action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank" style="position: fixed; width: 10em; top: 1em; right: 1em; font-family: Tahoma, sans-serif; font-size: 11px; opacity: 0.8; text-align: right;">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form></body></html>
+<form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form></body></html>

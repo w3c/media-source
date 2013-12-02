@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" typeof="bibo:Document " about="" property="dcterms:language" content="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Media Source Extensions Byte Stream Format Registry</title>
-
-
+    
+    
     <!-- script to register bugs -->
     <script src="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/assets/scripts/bug-assist.js"></script>
     <meta name="bug.short_desc" content="[MSE] ">
@@ -26,7 +26,7 @@
  *****************************************************************/
 
 /* --- INLINES --- */
-em.rfc2119 {
+em.rfc2119 { 
     text-transform:     lowercase;
     font-variant:       small-caps;
     font-style:         normal;
@@ -65,12 +65,6 @@ cite .bibref {
 code {
     color:  #ff4500;
 }
-
-
-/* --- --- */
-ol.algorithm { counter-reset:numsection; list-style-type: none; }
-ol.algorithm li { margin: 0.5em 0; }
-ol.algorithm li:before { font-weight: bold; counter-increment: numsection; content: counters(numsection, ".") ") "; }
 
 /* --- TOC --- */
 .toc a, .tof a {
@@ -136,62 +130,70 @@ table.simple {
     margin-bottom:  0;
 }
 </style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
-  <body><div class="head">
+  <body class="h-entry" style="" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
-
+    
       <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
-
+    
   </p>
-  <h1 class="title" id="title">Media Source Extensions Byte Stream Format Registry</h1>
-
-  <h2 id="w3c-editor-s-draft-04-november-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft 04 November 2013</h2>
+  <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions Byte Stream Format Registry</h1>
+  
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2013-12-03T02:22:47.000Z" id="w3c-editor-s-draft-02-december-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2013-12-02">02 December 2013</time></h2>
   <dl>
-
+    
       <dt>This version:</dt>
-      <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/byte-stream-format-registry.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/byte-stream-format-registry.html</a></dd>
+      <dd><a class="u-url" href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/byte-stream-format-registry.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/byte-stream-format-registry.html</a></dd>
       <dt>Latest published version:</dt>
       <dd><a href="http://www.w3.org/TR//">http://www.w3.org/TR//</a></dd>
-
-
+    
+    
       <dt>Latest editor's draft:</dt>
       <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/byte-stream-format-registry.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/byte-stream-format-registry.html</a></dd>
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+      
+    
+    
+    
     <dt>Editor:</dt>
-    <dd><span>Aaron Colwell</span>, <a href="http://www.google.com/">Google Inc.</a></dd>
+    <dd class="p-author h-card vcard" rel="bibo:editor" inlist=""><span typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Aaron Colwell</span>, <a rel="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.google.com/">Google Inc.</a></span>
+</dd>
 
-
+    
+    
   </dl>
-
-
-
-
-
+  
+  
+  
+  
+    
       <p class="copyright">
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
         2013
-
+        
         <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
         (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
         <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>,
-        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), All Rights Reserved.
+        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), 
+        
+        All Rights Reserved.
+        
         <abbr title="World Wide Web Consortium">W3C</abbr> <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
-        <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.
+        
+          <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a>
+        
+        rules apply.
       </p>
-
-
+    
+  
   <hr>
 </div>
 
-    <section id="purpose">
-      <!--OddPage--><h2><span class="secno">1. </span>Purpose</h2>
+    <section id="purpose" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_purpose"><span class="secno">1. </span>Purpose</h2>
       <p>This registry is intended to enhance interoperability among implementations and users of
         <a href="http://www.w3.org/TR/media-source/#idl-def-SourceBuffer"><code>SourceBuffer</code></a> objects described in the
         <a href="http://www.w3.org/TR/media-source/">Media Source Extensions(MSE)</a> specification. In particular, this registry provides the means (1) to identify
@@ -199,8 +201,8 @@ table.simple {
         implementations to promote interoperability.
     </p></section>
 
-    <section id="organization">
-      <!--OddPage--><h2><span class="secno">2. </span>Organization</h2>
+    <section id="organization" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_organization"><span class="secno">2. </span>Organization</h2>
       <p>The registry maintains a mapping between MIME-type/subtype pairs and byte stream format specifications. The byte stream format specifications describe the
         structure and semantics of byte streams accepted by <a href="http://www.w3.org/TR/media-source/#idl-def-SourceBuffer"><code>SourceBuffer</code></a> objects
         created with the associated MIME-type/subtype pair.</p>
@@ -208,8 +210,8 @@ table.simple {
         are advised to seek appropriate legal counsel in this matter if they intend to implement or use a specific byte stream format.</p>
     </section>
 
-    <section id="entry-requirements">
-      <!--OddPage--><h2><span class="secno">3. </span>Registration Entry Requirements</h2>
+    <section id="entry-requirements" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_entry-requirements"><span class="secno">3. </span>Registration Entry Requirements</h2>
       <ol>
         <li>Each entry must include a unique MIME-type/subtype pair. If the byte stream format is derived-from an existing file format, then it should use the
           MIME-type/subtype pairs typically used for the file format.</li>
@@ -224,8 +226,8 @@ table.simple {
       <p>If a registration fails to satisfy a mandatory requirement specified above, then it may be removed from the registry (without prejudice).
     </p></section>
 
-    <section id="registry">
-      <!--OddPage--><h2><span class="secno">4. </span>Registry</h2>
+    <section id="registry" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_registry"><span class="secno">4. </span>Registry</h2>
       <table>
         <thead>
           <tr>
@@ -258,6 +260,6 @@ table.simple {
         </tbody>
       </table>
     </section>
+  
 
-
-<form action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank" style="position: fixed; width: 10em; top: 1em; right: 1em; font-family: Tahoma, sans-serif; font-size: 11px; opacity: 0.8; text-align: right;">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form></body></html>
+<form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form></body></html>
