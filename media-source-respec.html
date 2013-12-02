@@ -123,7 +123,7 @@
     <section id="introduction">
       <h2>Introduction</h2>
       <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;.
-        It defines objects that allow JavaScript to pass media segments to an <a def-id="videoref" name="htmlmediaelement">HTMLMediaElement</a> [[HTML5]].
+        It defines objects that allow JavaScript to pass media segments to an <a def-id="videoref" name="htmlmediaelement">HTMLMediaElement</a> [[!HTML5]].
         A buffering model is also included to describe how the user agent acts when different media segments are
         appended at different times. Byte stream specifications used with these extensions are available in the <a def-id="byte-stream-format-registry"></a>.</p>
       <img src="pipeline_model.png" alt="Media Source Pipeline Model Diagram">
@@ -184,8 +184,9 @@
 
           <dt id="displayed-frame-delay">Displayed Frame Delay</dt>
           <dd>
-            <p>The delay, to the nearest microsecond, between a frame's presentation time and the actual time it was displayed. This delay is always greater than or equal to zero since frames must
-              never be displayed before their presentation time. Non-zero delays are a sign of playback jitter and possible loss of A/V sync.</p>
+            <p>The delay between a frame's presentation time and the actual time it was displayed, in microseconds & rounded to the nearest display refresh interval. This
+              delay is always greater than or equal to zero since frames must never be displayed before their presentation time. Non-zero delays are a sign of playback jitter
+              and possible loss of A/V sync.</p>
           </dd>
 
           <dt id="init-segment">Initialization Segment</dt>
@@ -201,9 +202,9 @@
 
           <dt id="mediasource-object-url">MediaSource object URL</dt>
           <dd>
-            <p>A MediaSource object URL is a unique <a def-id="blob-uri"></a> [[FILE-API]] created by <a def-id="createObjectURL"></a>. It is used to attach a <a>MediaSource</a> object to an HTMLMediaElement.</p>
+            <p>A MediaSource object URL is a unique <a def-id="blob-uri"></a> [[!FILE-API]] created by <a def-id="createObjectURL"></a>. It is used to attach a <a>MediaSource</a> object to an HTMLMediaElement.</p>
             <p>These URLs are the same as a <a def-id="blob-uri"></a>, except that anything in the definition of that feature that refers to <a def-id="File"></a> and <a def-id="Blob"></a> objects is hereby extended to also apply to <a>MediaSource</a> objects.</p>
-            <p>The <a def-id="origin">origin</a> of the MediaSource object URL is specified by the <a def-id="blob-origin"></a> [[FILE-API]].</p>
+            <p>The <a def-id="origin">origin</a> of the MediaSource object URL is specified by the <a def-id="blob-origin"></a> [[!FILE-API]].</p>
             <p class="note">For example, the <a def-id="origin"></a> of the MediaSource object URL affects the way that the media element is <a href="http://www.w3.org/TR/html5/embedded-content-0.html#security-with-canvas-elements">consumed by canvas</a>.</p>
           </dd>
 
@@ -896,13 +897,13 @@
 
         <dt>void appendBuffer(ArrayBuffer data)</dt>
         <dd>
-          <p>Appends the segment data in an <a>ArrayBuffer</a>[[TYPED-ARRAYS]] to the source buffer.</p>
+          <p>Appends the segment data in an <a>ArrayBuffer</a>[[!TYPED-ARRAYS]] to the source buffer.</p>
           <p>The steps for this method are the same as the ArrayBufferView version of <a def-id="appendBuffer"></a>.</p>
         </dd>
 
         <dt>void appendBuffer(ArrayBufferView data)</dt>
         <dd>
-          <p>Appends the segment data in an <a>ArrayBufferView</a>[[TYPED-ARRAYS]] to the source buffer.</p>
+          <p>Appends the segment data in an <a>ArrayBufferView</a>[[!TYPED-ARRAYS]] to the source buffer.</p>
 
           <ol class="method-algorithm">
             <li>If <var>data</var> is null then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
@@ -916,7 +917,7 @@
 
         <dt>void appendStream(Stream stream, [EnforceRange] optional unsigned long long maxSize)</dt>
         <dd>
-          <p>Appends segment data to the source buffer from a <a class="externalDFN">Stream</a>[[STREAMS-API]].</p>
+          <p>Appends segment data to the source buffer from a <a class="externalDFN">Stream</a>[[!STREAMS-API]].</p>
 
           <ol class="method-algorithm">
             <li>If <var>stream</var> is null then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
@@ -1201,7 +1202,7 @@
 
         <section id="sourcebuffer-stream-append-loop">
           <h4>Stream Append Loop</h4>
-          <p>When a <a class="externalDFN">Stream</a>[[STREAMS-API]] is passed to <a def-id="appendStream"></a>, the following steps are run to transfer data from the
+          <p>When a <a class="externalDFN">Stream</a>[[!STREAMS-API]] is passed to <a def-id="appendStream"></a>, the following steps are run to transfer data from the
             <a class="externalDFN">Stream</a> to the <a>SourceBuffer</a>. This algorithm is initialized with the  <var>stream</var> and <var>maxSize</var> parameters
             from the <a def-id="appendStream"></a> call.
           </p>
@@ -1827,7 +1828,7 @@
 
     <section id="url">
       <h2>URL Object Extensions</h2>
-      <p>This section specifies extensions to the <a def-id="URL"></a>[[FILE-API]] object definition.</p>
+      <p>This section specifies extensions to the <a def-id="URL"></a>[[!FILE-API]] object definition.</p>
 
       <dl title="partial interface URL" class="idl">
         <dt>static DOMString createObjectURL(MediaSource mediaSource)</dt>
@@ -1840,7 +1841,7 @@
             <li><a def-id="provide-a-stable-state"></a></li>
             <li>Revoke the <a def-id="MediaSource-object-URL"></a> by calling <a def-id="file-revokeObjectURL"></a> on it.</li>
           </ol>
-          <p class="note">This algorithm is intended to mirror the behavior of the <a def-id="file-createObjectURL"></a>[[FILE-API]] method with autoRevoke set to true.</p>
+          <p class="note">This algorithm is intended to mirror the behavior of the <a def-id="file-createObjectURL"></a>[[!FILE-API]] method with autoRevoke set to true.</p>
         </dd>
       </dl>
     </section>
@@ -1953,7 +1954,7 @@
             the last successful set operation.<p>
           <p>On setting, run the following steps:</p>
           <ol>
-            <li>If the value being assigned to this attribute is not an empty string or a BCP 47 language tag[[BCP47]], then abort these steps.</li>
+            <li>If the value being assigned to this attribute is not an empty string or a BCP 47 language tag[[!BCP47]], then abort these steps.</li>
             <li>Update this attribute to the new value.</li>
             <li>If the <a def-id="audiotrack-sourceBuffer"></a> attribute on this track is not null, then
               <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
@@ -2003,7 +2004,7 @@
             the last successful set operation.<p>
           <p>On setting, run the following steps:</p>
           <ol>
-            <li>If the value being assigned to this attribute is not an empty string or a BCP 47 language tag[[BCP47]], then abort these steps.</li>
+            <li>If the value being assigned to this attribute is not an empty string or a BCP 47 language tag[[!BCP47]], then abort these steps.</li>
             <li>Update this attribute to the new value.</li>
             <li>If the <a def-id="videotrack-sourceBuffer"></a> attribute on this track is not null, then
               <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
@@ -2074,9 +2075,12 @@
     <section id="byte-stream-formats">
       <h2>Byte Stream Formats</h2>
       <p>The bytes provided through <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format and
-        semantics of these byte streams are defined in <dfn id="byte-stream-format-specs">byte stream format specifications</dfn>. The <a def-id="byte-stream-format-registry"></a> is the
-        authoritative source for <a def-id="byte-stream-format-specs"></a>  that can be accepted by a <a>SourceBuffer</a>. If a <a>MediaSource</a> implementation claims
-        to support any of the MIME types in the registry, then it must implement the corresponding byte stream format specification.</p>
+        semantics of these byte streams are defined in <dfn id="byte-stream-format-specs">byte stream format specifications</dfn>. 
+        The <a def-id="byte-stream-format-registry"></a> provides mappings between a MIME type that may be passed to <a def-id="addSourceBuffer"></a> or
+        <a def-id="isTypeSupported"></a> and the byte stream format expected by a <a>SourceBuffer</a> created with that MIME type. Implementations are encouraged to register
+        mappings for byte stream formats they support to facilitate interoperability. The <a def-id="byte-stream-format-registry"></a> is the authoritative source for these
+        mappings. If an implementation claims to support a MIME type listed in the registry, its <a>SourceBuffer</a> implementation must conform to the
+        <a def-id="byte-stream-format-spec"></a> listed in the registry entry.</p>
       <p class="note">The byte stream format specifications in the registry are not intended to define new storage formats. They simply outline the subset of
         existing storage format structures that implementations of this specification will accept.</p>
       <p class="note">Byte stream format parsing and validation is implemented in the <a def-id="segment-parser-loop"></a> algorithm.</p>
@@ -2258,7 +2262,17 @@
         </thead>
         <tbody>
           <tr>
-            <td>14 November 2013</a></td>
+            <td>02 December 2013</td>
+            <td>
+              <ul>
+                <li>Bug 23818 - Make external spec references normative.</li>
+                <li>Bug 23441 - Update byte stream format registry text.</li>
+                <li>Bug 23169 - Update totalFrameDelay text.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/306bb395f94e/media-source/media-source.html">14 November 2013</a></td>
             <td>
               <ul>
                 <li>Bug 23663 - Clarify seeking behavior in Section 2.4.3.</li>
