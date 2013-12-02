@@ -3,6 +3,7 @@
   var HTML_spec_url = "http://www.w3.org/TR/html5/embedded-content-0.html";
   var DOM_spec_url = "http://dom.spec.whatwg.org/";
   var HRTIME_spec_url = "http://www.w3.org/TR/hr-time/";
+  var STREAMS_spec_url = "http://www.w3.org/TR/2013/WD-streams-api-20131105/"; // Make sure this matches the localBiblio entry.
 
   function url_helper(doc, url) {
     if (url[0] == "#" && doc.mseDefGroupName != window.respecConfig.mseDefGroupName) {
@@ -359,6 +360,11 @@
      $("a[def-id]").each(function () {
        $(this).addClass('externalDFN');
      });
+
+     var tmp = window.respecConfig.localBiblio["STREAMS-API"]
+     if (tmp && tmp.indexOf(STREAMS_spec_url) == -1) {
+       console.log("STREAMS_spec_url is out of sync with the localBiblio entry");
+     }
   }
 
   function mediaSourcePostProcessor() {
@@ -430,7 +436,7 @@
 	var df = doc.createDocumentFragment();
 	var baseURL = null;
 	if (info.spec == 'streams-api') {
-	  baseURL = "https://dvcs.w3.org/hg/streams-api/raw-file/tip/Overview.htm";
+	  baseURL = STREAMS_spec_url;
         } else if (info.spec == 'html5') {
 	  baseURL = HTML_spec_url;
 	} else if (info.spec == 'dom') {
