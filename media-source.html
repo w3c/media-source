@@ -400,7 +400,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2013-12-04T00:01:33.000Z" id="w3c-editor-s-draft-03-december-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2013-12-03">03 December 2013</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2013-12-11T00:34:26.000Z" id="w3c-editor-s-draft-10-december-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2013-12-10">10 December 2013</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -608,7 +608,7 @@ table.simple {
 
           <dt id="displayed-frame-delay">Displayed Frame Delay</dt>
           <dd>
-            <p>The delay between a frame's presentation time and the actual time it was displayed, in microseconds &amp; rounded to the nearest display refresh interval. This
+            <p>The delay between a frame's presentation time and the actual time it was displayed, in a double-precision value in seconds &amp; rounded to the nearest display refresh interval. This
               delay is always greater than or equal to zero since frames must never be displayed before their presentation time. Non-zero delays are a sign of playback jitter
               and possible loss of A/V sync.</p>
           </dd>
@@ -628,7 +628,7 @@ table.simple {
           <dd>
             <p>A MediaSource object URL is a unique <a href="http://www.w3.org/TR/FileAPI/#url">Blob URI</a> [<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] created by <code><a href="#widl-URL-createObjectURL-DOMString-MediaSource-mediaSource">createObjectURL()</a></code>. It is used to attach a <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object to an HTMLMediaElement.</p>
             <p>These URLs are the same as a <a href="http://www.w3.org/TR/FileAPI/#url">Blob URI</a>, except that anything in the definition of that feature that refers to <a href="http://www.w3.org/TR/FileAPI/#dfn-file">File</a> and <a href="http://www.w3.org/TR/FileAPI/#dfn-Blob">Blob</a> objects is hereby extended to also apply to <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> objects.</p>
-            <p>The <a href="http://www.w3.org/TR/html5/browsers.html#origin-0">origin</a> of the MediaSource object URL is specified by the <a href="http://www.w3.org/TR/FileAPI/#originOfBlob">Origin of Blob URIs</a> [<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>].</p>
+            <p>The <a href="http://www.w3.org/TR/html5/browsers.html#origin-0">origin</a> of the MediaSource object URL is the <a href="http://www.w3.org/TR/html5/browsers.html#effective-script-origin">effective script origin</a> of the document that called <code><a href="#widl-URL-createObjectURL-DOMString-MediaSource-mediaSource">createObjectURL()</a></code>.</p>
             <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_3"><span>Note</span></div><p class="">For example, the <a href="http://www.w3.org/TR/html5/browsers.html#origin-0">origin</a> of the MediaSource object URL affects the way that the media element is <a href="http://www.w3.org/TR/html5/embedded-content-0.html#security-with-canvas-elements">consumed by canvas</a>.</p></div>
           </dd>
 
@@ -1475,7 +1475,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	      <p>If the <var><a href="#sourcebuffer-append-state">append state</a></var> equals <a href="#sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</a>, then run the following steps:</p>
 	      <ol>
 	        <li>If the beginning of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> indicates the start of an <a href="#init-segment">initialization segment</a>, set the <var><a href="#sourcebuffer-append-state">append state</a></var> to <a href="#sourcebuffer-parsing-init-segment">PARSING_INIT_SEGMENT</a>.</li>
-	        <li>If the beginning of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> indicates the start of an <a href="#media-segment">media segment</a>, set <var><a href="#sourcebuffer-append-state">append state</a></var> to <a href="#sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</a>.</li>
+	        <li>If the beginning of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> indicates the start of a <a href="#media-segment">media segment</a>, set <var><a href="#sourcebuffer-append-state">append state</a></var> to <a href="#sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</a>.</li>
 	        <li>Jump to the <i>loop top</i> step above.</li>
 	      </ol>
             </li>
@@ -2609,7 +2609,16 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </thead>
         <tbody>
           <tr>
-            <td>02 December 2013</td>
+            <td>10 December 2013</td>
+            <td>
+              <ul>
+                <li>Bug 23169 - Restore totalFrameDelay units to seconds.</li>
+                <li>Bug 23989 - Update blob URL origin text to remove stale File API reference.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/7c96c97306ce/media-source/media-source.html">02 December 2013</a></td>
             <td>
               <ul>
                 <li>Bug 23818 - Make external spec references normative.</li>

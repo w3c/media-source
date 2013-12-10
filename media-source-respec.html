@@ -193,7 +193,7 @@
 
           <dt id="displayed-frame-delay">Displayed Frame Delay</dt>
           <dd>
-            <p>The delay between a frame's presentation time and the actual time it was displayed, in microseconds & rounded to the nearest display refresh interval. This
+            <p>The delay between a frame's presentation time and the actual time it was displayed, in a double-precision value in seconds & rounded to the nearest display refresh interval. This
               delay is always greater than or equal to zero since frames must never be displayed before their presentation time. Non-zero delays are a sign of playback jitter
               and possible loss of A/V sync.</p>
           </dd>
@@ -213,7 +213,7 @@
           <dd>
             <p>A MediaSource object URL is a unique <a def-id="blob-uri"></a> [[!FILE-API]] created by <a def-id="createObjectURL"></a>. It is used to attach a <a>MediaSource</a> object to an HTMLMediaElement.</p>
             <p>These URLs are the same as a <a def-id="blob-uri"></a>, except that anything in the definition of that feature that refers to <a def-id="File"></a> and <a def-id="Blob"></a> objects is hereby extended to also apply to <a>MediaSource</a> objects.</p>
-            <p>The <a def-id="origin">origin</a> of the MediaSource object URL is specified by the <a def-id="blob-origin"></a> [[!FILE-API]].</p>
+            <p>The <a def-id="origin">origin</a> of the MediaSource object URL is the <a def-id="effective-script-origin"></a> of the document that called <a def-id="createObjectURL"></a>.</p>
             <p class="note">For example, the <a def-id="origin"></a> of the MediaSource object URL affects the way that the media element is <a href="http://www.w3.org/TR/html5/embedded-content-0.html#security-with-canvas-elements">consumed by canvas</a>.</p>
           </dd>
 
@@ -1108,7 +1108,7 @@
 	      <p>If the <a def-id="append-state"></a> equals <a def-id="waiting-for-segment"></a>, then run the following steps:</p>
 	      <ol>
 	        <li>If the beginning of the <a def-id="input-buffer"></a> indicates the start of an <a def-id="init-segment"></a>, set the <a def-id="append-state"></a> to <a def-id="parsing-init-segment"></a>.</li>
-	        <li>If the beginning of the <a def-id="input-buffer"></a> indicates the start of an <a def-id="media-segment"></a>, set <a def-id="append-state"></a> to <a def-id="parsing-media-segment"></a>.</li>
+	        <li>If the beginning of the <a def-id="input-buffer"></a> indicates the start of a <a def-id="media-segment"></a>, set <a def-id="append-state"></a> to <a def-id="parsing-media-segment"></a>.</li>
 	        <li>Jump to the <i>loop top</i> step above.</li>
 	      </ol>
             </li>
@@ -2271,7 +2271,16 @@
         </thead>
         <tbody>
           <tr>
-            <td>02 December 2013</td>
+            <td>10 December 2013</td>
+            <td>
+              <ul>
+                <li>Bug 23169 - Restore totalFrameDelay units to seconds.</li>
+                <li>Bug 23989 - Update blob URL origin text to remove stale File API reference.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/7c96c97306ce/media-source/media-source.html">02 December 2013</a></td>
             <td>
               <ul>
                 <li>Bug 23818 - Make external spec references normative.</li>
