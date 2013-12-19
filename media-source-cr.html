@@ -557,7 +557,7 @@ table.simple {
       <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;.
         It defines objects that allow JavaScript to pass media segments to an <a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmlmediaelement">HTMLMediaElement</a> [<cite><a class="bibref" href="#bib-HTML5">HTML5</a></cite>].
         A buffering model is also included to describe how the user agent acts when different media segments are
-        appended at different times. Byte stream specifications used with these extensions are available in the <a href="byte-stream-format-registry.html">byte stream format registry</a>.</p>
+        appended at different times. Byte stream specifications used with these extensions are available in the byte stream format registry [<cite><a class="bibref" href="#bib-REGISTRY">REGISTRY</a></cite>].</p>
       <img src="pipeline_model.png" alt="Media Source Pipeline Model Diagram">
 
       <section id="goals" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
@@ -624,12 +624,12 @@ table.simple {
           <dt id="init-segment">Initialization Segment</dt>
           <dd>
 	    <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of <a href="#media-segment">media segments</a>. This includes codec initialization data, <a href="#track-id">Track ID</a> mappings for multiplexed segments, and timestamp offsets (e.g. edit lists).</p>
-            <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_1"><span>Note</span></div><p class="">The <a href="#byte-stream-format-specs">byte stream format specifications</a> in the <a href="byte-stream-format-registry.html">byte stream format registry</a> contain format specific examples.</p></div>
+            <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_1"><span>Note</span></div><p class="">The <a href="#byte-stream-format-specs">byte stream format specifications</a> in the byte stream format registry [<cite><a class="bibref" href="#bib-REGISTRY">REGISTRY</a></cite>] contain format specific examples.</p></div>
 
           </dd><dt id="media-segment">Media Segment</dt>
           <dd>
 	    <p>A sequence of bytes that contain packetized &amp; timestamped media data for a portion of the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#media-timeline">media timeline</a>. Media segments are always associated with the most recently appended <a href="#init-segment">initialization segment</a>.</p>
-            <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_2"><span>Note</span></div><p class="">The <a href="#byte-stream-format-specs">byte stream format specifications</a> in the <a href="byte-stream-format-registry.html">byte stream format registry</a> contain format specific examples.</p></div>
+            <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_2"><span>Note</span></div><p class="">The <a href="#byte-stream-format-specs">byte stream format specifications</a> in the byte stream format registry [<cite><a class="bibref" href="#bib-REGISTRY">REGISTRY</a></cite>] contain format specific examples.</p></div>
           </dd>
 
           <dt id="mediasource-object-url">MediaSource object URL</dt>
@@ -2432,9 +2432,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_byte-stream-formats"><span class="secno">12. </span>Byte Stream Formats</h2>
       <p>The bytes provided through <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code> and <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> for a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> form a logical byte stream. The format and
         semantics of these byte streams are defined in <dfn id="byte-stream-format-specs">byte stream format specifications</dfn>. 
-        The <a href="byte-stream-format-registry.html">byte stream format registry</a> provides mappings between a MIME type that may be passed to <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> or
+        The byte stream format registry [<cite><a class="bibref" href="#bib-REGISTRY">REGISTRY</a></cite>] provides mappings between a MIME type that may be passed to <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> or
         <code><a href="#widl-MediaSource-isTypeSupported-boolean-DOMString-type">isTypeSupported()</a></code> and the byte stream format expected by a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> created with that MIME type. Implementations are encouraged to register
-        mappings for byte stream formats they support to facilitate interoperability. The <a href="byte-stream-format-registry.html">byte stream format registry</a> is the authoritative source for these
+        mappings for byte stream formats they support to facilitate interoperability. The byte stream format registry [<cite><a class="bibref" href="#bib-REGISTRY">REGISTRY</a></cite>] is the authoritative source for these
         mappings. If an implementation claims to support a MIME type listed in the registry, its <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> implementation must conform to the
         <a href="#byte-stream-format-specs">byte stream format specification</a> listed in the registry entry.</p>
       <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_38"><span>Note</span></div><p class="">The byte stream format specifications in the registry are not intended to define new storage formats. They simply outline the subset of
@@ -3063,4 +3063,5 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 </dd><dt id="bib-HTML5">[HTML5]</dt><dd rel="dcterms:requires">Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Edward O'Connor; Silvia Pfeiffer. <a href="http://www.w3.org/TR/html5/"><cite>HTML5</cite></a>. 6 August 2013. W3C Candidate Recommendation. URL: <a href="http://www.w3.org/TR/html5/">http://www.w3.org/TR/html5/</a>
 </dd><dt id="bib-STREAMS-API">[STREAMS-API]</dt><dd rel="dcterms:requires">Feras Moussa, Takeshi Yoshino. <a href="http://www.w3.org/TR/2013/WD-streams-api-20131105/"><cite>Streams API</cite></a>. 05 November 2013. W3C Working Draft. URL: <a href="http://www.w3.org/TR/streams-api/">http://www.w3.org/TR/2013/WD-streams-api-20131105/</a>
 </dd><dt id="bib-TYPED-ARRAYS">[TYPED-ARRAYS]</dt><dd rel="dcterms:requires">David Herman; Kenneth Russell. <a href="https://www.khronos.org/registry/typedarray/specs/latest/"><cite>Typed Array Specification</cite></a>. 26 June 2013. Khronos Working Draft. URL: <a href="https://www.khronos.org/registry/typedarray/specs/latest/">https://www.khronos.org/registry/typedarray/specs/latest/</a>
+</dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><h3 aria-level="2" role="heading" id="h3_informative-references"><span class="secno">A.2 </span>Informative references</h3><dl class="bibliography" about=""><dt id="bib-REGISTRY">[REGISTRY]</dt><dd rel="dcterms:references">Aaron Colwell <a href="http://www.w3.org/2013/12/byte-stream-format-registry/"><cite>Media Source Extensions Byte Stream Format Registry</cite></a>. 02 December 2013 URL: <a href="http://www.w3.org/2013/12/byte-stream-format-registry/">http://www.w3.org/2013/12/byte-stream-format-registry/</a>
 </dd></dl></section></section></body></html>
