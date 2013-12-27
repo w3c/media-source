@@ -780,7 +780,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true on any <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>Run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <var>error</var>.</li>
           </ol></dd><dt id="widl-MediaSource-isTypeSupported-boolean-DOMString-type"><code>isTypeSupported</code>, static</dt><dd>
-          <p>Check to see whether the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> is capable of creating <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects for the the specified MIME type.</p>
+          <p>Check to see whether the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> is capable of creating <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects for the specified MIME type.</p>
 
           
           <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_9"><span>Note</span></div><p class="">
@@ -979,7 +979,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             </li>
             <li>The media element resets all decoders and initializes each one with data from the appropriate <a href="#init-segment">initialization segment</a>.</li>
             <li>The media element feeds <a href="#coded-frame">coded frames</a> from the <a href="#active-track-buffers">active track buffers</a> into the decoders starting with the
-              closest <a href="#random-access-point">random access point</a> before the the <var>new playback position</var>.</li>
+              closest <a href="#random-access-point">random access point</a> before the <var>new playback position</var>.</li>
             <li>Resume the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-seek">seek algorithm</a> at the "<i>Await a stable state</i>" step.</li>
           </ol>
         </section>
@@ -2246,7 +2246,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Let <var>source ranges</var> equal the ranges returned by the <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> attribute on the current <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</li>
             <li>If <code><a href="#widl-MediaSource-readyState">readyState</a></code> is <code><a href="#idl-def-ReadyState.ended">"ended"</a></code>, then set the end time on the last range in <var>source ranges</var> to
               <var>highest end time</var>.</li>
-            <li>Let <var>new intersection ranges</var> equal the the intersection between the <var>intersection ranges</var> and the <var>source ranges</var>.</li>
+            <li>Let <var>new intersection ranges</var> equal the intersection between the <var>intersection ranges</var> and the <var>source ranges</var>.</li>
             <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
           </ol>
         </li>
