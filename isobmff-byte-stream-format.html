@@ -177,7 +177,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">ISO BMFF Byte Stream Format</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2013-12-03T02:25:29.000Z" id="w3c-editor-s-draft-02-december-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2013-12-02">02 December 2013</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-03-04T07:28:14.000Z" id="w3c-editor-s-draft-03-march-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-03-03">03 March 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -214,7 +214,7 @@ table.simple {
     
       <p class="copyright">
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
-        2013
+        2014
         
         <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
         (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
@@ -299,7 +299,7 @@ table.simple {
       
     
   
-</section><section id="toc"><h2 class="introductory" aria-level="1" role="heading" id="h2_toc">Table of Contents</h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#iso-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#iso-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#iso-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">6. </span>Acknowledgments</a></li></ul></section>
+</section><section id="toc"><h2 class="introductory" aria-level="1" role="heading" id="h2_toc">Table of Contents</h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#iso-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#iso-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#iso-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">6. </span>Acknowledgments</a></li><li class="tocline"><a href="#revision-history" class="tocxref"><span class="secno">7. </span>Revision History</a></li></ul></section>
 
     <section id="introduction" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_introduction"><span class="secno">1. </span>Introduction</h2>
@@ -319,10 +319,14 @@ table.simple {
 
     <section id="iso-init-segments" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_iso-init-segments"><span class="secno">3. </span>Initialization Segments</h2>
-      <p>An ISO BMFF <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> is defined in this specification as a single Movie Header Box (<span class="iso-box">moov</span>).</p>
+      <p>An ISO BMFF <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> is defined in this specification as a single File Type Box (<span class="iso-box">ftyp</span>) followed by a single Movie Header Box (<span class="iso-box">moov</span>).</p>
 
       <p>The user agent must run the <a href="http://www.w3.org/TR/media-source/#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="http://www.w3.org/TR/media-source/#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
       <ol>
+        <li>A File Type Box contains a <span class="iso-var">major_brand</span> or <span class="iso-var">compatible_brand</span> that the user agent does not support.</li>
+        <li>A box or field in the Movie Header Box is encountered that violates the requirements mandated
+          by the <span class="iso-var">major_brand</span> or one of the 
+          <span class="iso-var">compatible_brands</span> in the File Type Box.</li>
         <li>The tracks in the Movie Header Box contain samples (i.e. the <span class="iso-var">entry_count</span> in the
           <span class="iso-box">stts</span>, <span class="iso-box">stsc</span> or <span class="iso-box">stco</span> boxes are not set to zero).</li>
         <li>A Movie Extends (<span class="iso-box">mvex</span>) box is not contained in the Movie (<span class="iso-box">moov</span>) box to indicate that Movie Fragments are to be expected.</li>
@@ -333,17 +337,20 @@ table.simple {
         sets stored inband in the samples themselves (as defined for avc3/avc4).</p>
       <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_2"><span>Note</span></div><p class="">For maximum content interoperability, user agents are strongly advised to support both inband and out-of-band storage of the SPS and PPS.</p></div>
 
-      <p>Valid top-level boxes such as <span class="iso-box">ftyp</span>, <span class="iso-box">styp</span>, and <span class="iso-box">sidx</span> are
+      <p>Valid top-level boxes such as <span class="iso-box">pdin</span>, <span class="iso-box">free</span>, and <span class="iso-box">sidx</span> are
         allowed to appear before the <span class="iso-box">moov</span> box. These boxes must be accepted and ignored by the user agent and are not
         considered part of the <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> in this specification.</p>
     </section>
 
     <section id="iso-media-segments" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_iso-media-segments"><span class="secno">4. </span>Media Segments</h2>
-      <p>An ISO BMFF <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> is defined in this specification as a single Movie Fragment Box
-        (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>).</p>
-      <p>Valid top-level boxes defined in <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a> other than <span class="iso-box">moov</span>,
-        <span class="iso-box">moof</span>, and <span class="iso-box">mdat</span> are allowed to appear between the end of an
+      <p>An ISO BMFF <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> is defined in this specification as one optional
+        Segment Type Box (<span class="iso-box">styp</span>) followed by a single Movie Fragment Box
+        (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>). 
+        If the Segment Type Box is not present, the segment must conform to the brands listed in the
+        File Type Box (<span class="iso-box">ftyp</span>) in the <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a>.</p>
+      <p>Valid top-level boxes defined in <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a> other than <span class="iso-box">ftyp</span>,
+        <span class="iso-box">moov</span>, <span class="iso-box">styp</span>, <span class="iso-box">moof</span>, and <span class="iso-box">mdat</span> are allowed to appear between the end of an
         <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> or <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> and before the beginning of a new <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a>.
         These boxes must be accepted and ignored by the user agent and are not considered part of the <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> in this
         specification.
@@ -351,13 +358,32 @@ table.simple {
 
       <p>The user agent must run the <a href="http://www.w3.org/TR/media-source/#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="http://www.w3.org/TR/media-source/#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
       <ol>
+        <li>A box or field in the Movie Fragment Box is encountered that violates the requirements mandated
+          by the <span class="iso-var">major_brand</span> or one of the
+          <span class="iso-var">compatible_brands</span> in the Segment Type Box in this
+          <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> or the File Type Box in the <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> if a
+          Segment Type Box is not present.</li>
+        <li>This <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> contains a Segment Type Box that is not compatible with the
+          File Type Box in the <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a>.</li>
 	<li>The Movie Fragment Box does not contain at least one Track Fragment Box (<span class="iso-box">traf</span>).</li>
-	<li>The Movie Fragment Box does not use movie-fragment relative addressing or the flag <span class="iso-var">default-base-is-moof</span> is not set.</li>
+	<li>The Movie Fragment Box does not use <a href="#movie-fragment-relative-addressing">movie-fragment relative addressing</a>.</li>
 	<li>External data references are being used.</li>
 	<li>At least one Track Fragment Box does not contain a Track Fragment Decode Time Box (<span class="iso-box">tfdt</span>)</li>
 	<li>The Media Data Boxes do not contain all the samples referenced by the Track Fragment Run Boxes (<span class="iso-box">trun</span>) of the Movie Fragment Box.</li>
 	<li>Inband parameter sets are not present in the appropriate samples and parameter sets are not present in the last initialization segment appended.</li>
       </ol>
+
+      <p>A Movie Fragment Box uses <dfn id="movie-fragment-relative-addressing">movie-fragment relative addressing</dfn> 
+        when the first Track Fragment Run(<span class="iso-box">trun</span>) box in each Track Fragment Box
+        has the <span class="iso-var">data-offset-present</span> flag set and either of the following
+        conditions are met:</p>
+      <ul>
+        <li>Every Track Fragment Box in a Movie Fragment Box has the <span class="iso-var">default-base-is-moof</span> flag set.
+          <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_3"><span>Note</span></div><p class="">This implies that the <span class="iso-var">base-data-offset-present</span> flag
+            is not set.</p></div>
+        </li>
+        <li>The Movie Fragment Box contains a single Track Fragment Box and that box does not have the <span class="iso-var">base-data-offset-present</span> flag set.</li>
+      </ul>
     </section>
 
     <section id="iso-random-access-points" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
@@ -369,6 +395,32 @@ table.simple {
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_acknowledgements"><span class="secno">6. </span>Acknowledgments</h2>
       The editors would like to thank Chris Poole, Cyril Concolato, David Singer, Jerry Smith, Joe Steele, John Simmons, Kevin Streeter, Michael Thornburgh, and Steven Robertson for their contributions to this specification.
     </section>
+
+        <section id="revision-history" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_revision-history"><span class="secno">7. </span>Revision History</h2>
+      <table class="old-table">
+        <thead>
+          <tr>
+            <th>Version</th>
+            <th>Comment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>03 March 2014</td>
+            <td>
+              <ul>
+                <li>Bug 24903 - Add ftyp &amp; styp validation text.</li>
+                <li>Bug 24345 - Loosen restrictions and clarify what relative addressing means.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/190b670254ff/media-source/isobmff-byte-stream-format.html">02 December 2013</a></td>
+            <td>Initial CR version.</td>
+          </tr>
+        </tbody>
+      </table>
   
 
-<form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form></body></html>
+</section><form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form></body></html>

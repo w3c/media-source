@@ -9,6 +9,7 @@
       (function() {
         var isobmffContainerSpecDefinitions = {
           'iso-14496-12': { fragment: 'http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip', link_text: 'ISO/IEC 14496-12', },
+          'movie-fragment-relative-addressing': { fragment: '#movie-fragment-relative-addressing', link_text: 'movie-fragment relative addressing'}
         };
 
         mediaSourceAddDefinitionInfo("isobmff-byte-stream-format", "", isobmffContainerSpecDefinitions);
@@ -118,10 +119,14 @@
 
     <section id="iso-init-segments">
       <h4>Initialization Segments</h4>
-      <p>An ISO BMFF <a def-id="init-segment"></a> is defined in this specification as a single Movie Header Box (<span class="iso-box">moov</span>).</p>
+      <p>An ISO BMFF <a def-id="init-segment"></a> is defined in this specification as a single File Type Box (<span class="iso-box">ftyp</span>) followed by a single Movie Header Box (<span class="iso-box">moov</span>).</p>
 
       <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
       <ol>
+        <li>A File Type Box contains a <span class="iso-var">major_brand</span> or <span class="iso-var">compatible_brand</span> that the user agent does not support.</li>
+        <li>A box or field in the Movie Header Box is encountered that violates the requirements mandated
+          by the <span class="iso-var">major_brand</span> or one of the 
+          <span class="iso-var">compatible_brands</span> in the File Type Box.</li>
         <li>The tracks in the Movie Header Box contain samples (i.e. the <span class="iso-var">entry_count</span> in the
           <span class="iso-box">stts</span>, <span class="iso-box">stsc</span> or <span class="iso-box">stco</span> boxes are not set to zero).</li>
         <li>A Movie Extends (<span class="iso-box">mvex</span>) box is not contained in the Movie (<span class="iso-box">moov</span>) box to indicate that Movie Fragments are to be expected.</li>
@@ -132,17 +137,20 @@
         sets stored inband in the samples themselves (as defined for avc3/avc4).</p>
       <p class="note">For maximum content interoperability, user agents are strongly advised to support both inband and out-of-band storage of the SPS and PPS.</p>
 
-      <p>Valid top-level boxes such as <span class="iso-box">ftyp</span>, <span class="iso-box">styp</span>, and <span class="iso-box">sidx</span> are
+      <p>Valid top-level boxes such as <span class="iso-box">pdin</span>, <span class="iso-box">free</span>, and <span class="iso-box">sidx</span> are
         allowed to appear before the <span class="iso-box">moov</span> box. These boxes must be accepted and ignored by the user agent and are not
         considered part of the <a def-id="init-segment"></a> in this specification.</p>
     </section>
 
     <section id="iso-media-segments">
       <h4>Media Segments</h4>
-      <p>An ISO BMFF <a def-id="media-segment"></a> is defined in this specification as a single Movie Fragment Box
-        (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>).</p>
-      <p>Valid top-level boxes defined in <a def-id="iso-14496-12"></a> other than <span class="iso-box">moov</span>,
-        <span class="iso-box">moof</span>, and <span class="iso-box">mdat</span> are allowed to appear between the end of an
+      <p>An ISO BMFF <a def-id="media-segment"></a> is defined in this specification as one optional
+        Segment Type Box (<span class="iso-box">styp</span>) followed by a single Movie Fragment Box
+        (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>). 
+        If the Segment Type Box is not present, the segment must conform to the brands listed in the
+        File Type Box (<span class="iso-box">ftyp</span>) in the <a def-id="init-segment"></a>.</p>
+      <p>Valid top-level boxes defined in <a def-id="iso-14496-12"></a> other than <span class="iso-box">ftyp</span>,
+        <span class="iso-box">moov</span>, <span class="iso-box">styp</span>, <span class="iso-box">moof</span>, and <span class="iso-box">mdat</span> are allowed to appear between the end of an
         <a def-id="init-segment"></a> or <a def-id="media-segment"></a> and before the beginning of a new <a def-id="media-segment"></a>.
         These boxes must be accepted and ignored by the user agent and are not considered part of the <a def-id="media-segment"></a> in this
         specification.
@@ -150,13 +158,32 @@
 
       <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
       <ol>
+        <li>A box or field in the Movie Fragment Box is encountered that violates the requirements mandated
+          by the <span class="iso-var">major_brand</span> or one of the
+          <span class="iso-var">compatible_brands</span> in the Segment Type Box in this
+          <a def-id="media-segment"></a> or the File Type Box in the <a def-id="init-segment"></a> if a
+          Segment Type Box is not present.</li>
+        <li>This <a def-id="media-segment"></a> contains a Segment Type Box that is not compatible with the
+          File Type Box in the <a def-id="init-segment"></a>.</li>
 	<li>The Movie Fragment Box does not contain at least one Track Fragment Box (<span class="iso-box">traf</span>).</li>
-	<li>The Movie Fragment Box does not use movie-fragment relative addressing or the flag <span class="iso-var">default-base-is-moof</span> is not set.</li>
+	<li>The Movie Fragment Box does not use <a def-id="movie-fragment-relative-addressing"></a>.</li>
 	<li>External data references are being used.</li>
 	<li>At least one Track Fragment Box does not contain a Track Fragment Decode Time Box (<span class="iso-box">tfdt</span>)</li>
 	<li>The Media Data Boxes do not contain all the samples referenced by the Track Fragment Run Boxes (<span class="iso-box">trun</span>) of the Movie Fragment Box.</li>
 	<li>Inband parameter sets are not present in the appropriate samples and parameter sets are not present in the last initialization segment appended.</li>
       </ol>
+
+      <p>A Movie Fragment Box uses <dfn id="movie-fragment-relative-addressing">movie-fragment relative addressing</dfn> 
+        when the first Track Fragment Run(<span class="iso-box">trun</span>) box in each Track Fragment Box
+        has the <span class="iso-var">data-offset-present</span> flag set and either of the following
+        conditions are met:</p>
+      <ul>
+        <li>Every Track Fragment Box in a Movie Fragment Box has the <span class="iso-var">default-base-is-moof</span> flag set.
+          <p class="note">This implies that the <span class="iso-var">base-data-offset-present</span> flag
+            is not set.</p>
+        </li>
+        <li>The Movie Fragment Box contains a single Track Fragment Box and that box does not have the <span class="iso-var">base-data-offset-present</span> flag set.</li>
+      </ul>
     </section>
 
     <section id="iso-random-access-points">
@@ -168,5 +195,31 @@
       <h2>Acknowledgments</h2>
       The editors would like to thank <a def-id="contributors"></a> for their contributions to this specification.
     </section>
+
+    <section id="revision-history">
+      <h2>Revision History</h2>
+      <table class="old-table">
+        <thead>
+          <tr>
+            <th>Version</th>
+            <th>Comment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>03 March 2014</td>
+            <td>
+              <ul>
+                <li>Bug 24903 - Add ftyp & styp validation text.</li>
+                <li>Bug 24345 - Loosen restrictions and clarify what relative addressing means.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/190b670254ff/media-source/isobmff-byte-stream-format.html">02 December 2013</a></td>
+            <td>Initial CR version.</td>
+          </tr>
+        </tbody>
+      </table>
   </body>
 </html>

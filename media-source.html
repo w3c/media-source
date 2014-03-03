@@ -400,7 +400,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2013-12-11T00:34:26.000Z" id="w3c-editor-s-draft-10-december-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2013-12-10">10 December 2013</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-03-04T07:31:32.000Z" id="w3c-editor-s-draft-03-march-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-03-03">03 March 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -437,7 +437,7 @@ table.simple {
     
       <p class="copyright">
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
-        2013
+        2014
         
         <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
         (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
@@ -711,8 +711,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 };</span></pre><section id="attributes"><h3 aria-level="2" role="heading" id="h3_attributes"><span class="secno">2.1 </span>Attributes</h3><dl class="attributes"><dt id="widl-MediaSource-activeSourceBuffers"><code>activeSourceBuffers</code> of type <span class="idlAttrType"><a href="#idl-def-SourceBufferList" class="idlType"><code>SourceBufferList</code></a></span>, readonly   </dt><dd>
           <p>Contains the subset of <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> that are providing the 
             <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-videotrack-selected">selected video track</a>,  the 
-            <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-audiotrack-enabled">enabled audio tracks</a>, and the 
-            <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-texttrack-showing">"showing"</a> or <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-texttrack-hidden">"hidden"</a> text tracks.
+            <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-audiotrack-enabled">enabled audio track(s)</a>, and the 
+            <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-texttrack-showing">"showing"</a> or <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-texttrack-hidden">"hidden"</a> text track(s).
           </p>
           <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_6"><span>Note</span></div><p class="">The <a href="#active-source-buffer-changes">Changes to selected/enabled track state</a> section describes how this attribute gets
             updated.</p></div>
@@ -1010,7 +1010,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	        <li>Abort these steps.</li>
 	      </ol>
             </dd>
-            <dt>If <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> for at least one object in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> contains a <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRange</a></code> that includes the current playback position but not <a href="#enough-data">enough data to ensure uninterrupted playback</a>:</dt>
+            <dt>If <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> for all objects in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> contain a <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRange</a></code> that includes the current playback position and some time beyond the current playback position, then run the following steps:</dt>
             <dd>
 	      <ol>
 	        <li>Set the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_future_data">HAVE_FUTURE_DATA</a></code>.</li>
@@ -1033,7 +1033,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
         <section id="active-source-buffer-changes" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_active-source-buffer-changes"><span class="secno">2.4.5 </span>Changes to selected/enabled track state</h4>
-          <p>During playback <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> needs to be updated if the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-videotrack-selected">selected video track</a>, the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-audiotrack-enabled">enabled audio tracks</a>, or a text track <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-texttrack-mode">mode</a> changes. When one or more of these changes occur the following steps need to be followed.</p>
+          <p>During playback <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> needs to be updated if the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-videotrack-selected">selected video track</a>, the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-audiotrack-enabled">enabled audio track(s)</a>, or a text track <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-texttrack-mode">mode</a> changes. When one or more of these changes occur the following steps need to be followed.</p>
           <dl class="switch">
             <dt>If the selected video track changes, then run the following steps:</dt>
             <dd>
@@ -2609,7 +2609,15 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </thead>
         <tbody>
           <tr>
-            <td>10 December 2013</td>
+            <td>03 March 2014</td>
+            <td>
+              <ul>
+                <li>Bug 24347 - Fix HAVE_FUTURE_DATA transition condition in SourceBuffer monitoring algorithm.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/d8ad50e85da3/media-source/media-source.html">10 December 2013</a></td>
             <td>
               <ul>
                 <li>Bug 23169 - Restore totalFrameDelay units to seconds.</li>
@@ -3052,7 +3060,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
 <form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form><section id="references" class="appendix" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><!--OddPage--><h2 aria-level="1" role="heading" id="h2_references"><span class="secno">A. </span>References</h2><section id="normative-references" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><h3 aria-level="2" role="heading" id="h3_normative-references"><span class="secno">A.1 </span>Normative references</h3><dl class="bibliography" about=""><dt id="bib-BCP47">[BCP47]</dt><dd rel="dcterms:requires">A. Phillips; M. Davis. <a href="http://tools.ietf.org/html/bcp47"><cite>Tags for Identifying Languages</cite></a>. September 2009. IETF Best Current Practice. URL: <a href="http://tools.ietf.org/html/bcp47">http://tools.ietf.org/html/bcp47</a>
 </dd><dt id="bib-FILE-API">[FILE-API]</dt><dd rel="dcterms:requires">Arun Ranganathan; Jonas Sicking. <a href="http://www.w3.org/TR/FileAPI/"><cite>File API</cite></a>. 12 September 2013. W3C Last Call Working Draft. URL: <a href="http://www.w3.org/TR/FileAPI/">http://www.w3.org/TR/FileAPI/</a>
-</dd><dt id="bib-HTML5">[HTML5]</dt><dd rel="dcterms:requires">Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Edward O'Connor; Silvia Pfeiffer. <a href="http://www.w3.org/TR/html5/"><cite>HTML5</cite></a>. 6 August 2013. W3C Candidate Recommendation. URL: <a href="http://www.w3.org/TR/html5/">http://www.w3.org/TR/html5/</a>
+</dd><dt id="bib-HTML5">[HTML5]</dt><dd rel="dcterms:requires">Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Edward O'Connor; Silvia Pfeiffer. <a href="http://www.w3.org/TR/html5/"><cite>HTML5</cite></a>. 4 February 2014. W3C Candidate Recommendation. URL: <a href="http://www.w3.org/TR/html5/">http://www.w3.org/TR/html5/</a>
 </dd><dt id="bib-STREAMS-API">[STREAMS-API]</dt><dd rel="dcterms:requires">Feras Moussa, Takeshi Yoshino. <a href="http://www.w3.org/TR/2013/WD-streams-api-20131105/"><cite>Streams API</cite></a>. 05 November 2013. W3C Working Draft. URL: <a href="http://www.w3.org/TR/streams-api/">http://www.w3.org/TR/2013/WD-streams-api-20131105/</a>
 </dd><dt id="bib-TYPED-ARRAYS">[TYPED-ARRAYS]</dt><dd rel="dcterms:requires">David Herman; Kenneth Russell. <a href="https://www.khronos.org/registry/typedarray/specs/latest/"><cite>Typed Array Specification</cite></a>. 26 June 2013. Khronos Working Draft. URL: <a href="https://www.khronos.org/registry/typedarray/specs/latest/">https://www.khronos.org/registry/typedarray/specs/latest/</a>
 </dd></dl></section></section></body></html>
