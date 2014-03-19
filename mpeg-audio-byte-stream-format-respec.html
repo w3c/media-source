@@ -1,0 +1,194 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>MPEG Audio Byte Stream Format</title>
+    <script src="respec-w3c-common.js" class="remove"></script>
+    <script src="media-source.js" class="remove"></script>
+    <script class="remove">
+      (function() {
+        var mpegContainerSpecDefinitions = {
+          'iso-11172-3': { fragment: 'http://www.iso.org/iso/catalogue_detail.htm?csnumber=22412', link_text: 'ISO/IEC 11172-3:1993', },
+          'iso-13818-3': { fragment: 'http://www.iso.org/iso/catalogue_detail.htm?csnumber=26797', link_text: 'ISO/IEC 13818-3:1998', },
+          'iso-14496-3': { fragment: 'http://www.iso.org/iso/catalogue_detail.htm?csnumber=53943', link_text: 'ISO/IEC 14496-3:2009', },
+          'id3v1': { fragment: 'http://id3.org/ID3v1', link_text: 'ID3v1', },
+          'id3v2': { fragment: 'http://id3.org/id3v2.3.0', link_text: 'ID3v2', },
+          'icecast-headers': { fragment: '#icecast-header', link_text: 'Icecast headers', },
+          'mpeg-mime-type': { fragment: '#mime-types', link_text: 'MIME-type', },
+          'mpeg-mime-types': { fragment: '#mime-types', link_text: 'MIME-types', },
+          'mpeg-audio-frame': { fragment: '#mpeg-audio-frame', link_text: 'MPEG Audio Frame', },
+          'mpeg-audio-frames': { fragment: '#mpeg-audio-frame', link_text: 'MPEG Audio Frames', },
+          'mpeg-audio-metadata-frames': { fragment: '#mpeg-metadata', link_text: 'Metadata Frames', },
+        };
+
+        mediaSourceAddDefinitionInfo("mpeg-byte-stream-format", "", mpegContainerSpecDefinitions);
+      })();
+    </script>
+
+    <script class="remove">
+      var respecConfig = {
+      // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use ED.
+      specStatus: "ED",
+
+      // the specification's short name, as in http://www.w3.org/TR/short-name/
+      shortName: "",
+
+      // if there a publicly available Editor's Draft, this is the link
+      edDraftURI: "http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/mpeg-byte-stream-format.html",
+
+      // if this is a LCWD, uncomment and set the end of its review period
+      // lcEnd: "2009-08-05",
+
+      // editors, add as many as you like
+      // only "name" is required
+      editors:  [
+        { name: "Aaron Colwell",  url: "", company: "Google Inc.", companyURL: "http://www.google.com/" },
+        { name: "Dale Curtis", url: "", company: "Google Inc.", companyURL: "http://www.google.com/" },
+      ],
+
+      mseDefGroupName: "mpeg-byte-stream-format",
+      mseUnusedGroupNameExcludeList: ["media-source"],
+      mseContributors: [
+      ],
+
+      // name of the WG
+      wg:           "HTML Working Group",
+
+      // URI of the public WG page
+      wgURI:        "http://www.w3.org/html/wg/",
+
+      // name (without the @w3c.org) of the public mailing to which comments are due
+      wgPublicList: "public-html-media",
+
+      // URI of the patent status for this WG, for Rec-track documents
+      // !!!! IMPORTANT !!!!
+      // This is important for Rec-track documents, do not copy a patent URI from a random
+      // document unless you know what you're doing. If in doubt ask your friendly neighbourhood
+      // Team Contact.
+      wgPatentURI: "http://www.w3.org/2004/01/pp-impl/40318/status",
+
+      noIDLIn: true,
+
+      scheme: "https",
+
+      preProcess: [ mediaSourcePreProcessor ],
+
+      // Empty definitions for objects declared in the document are here to
+      // prevent error messages from being displayed for references to these objects.
+      definitionMap: {
+        SourceBuffer: function() {},
+      },
+
+      postProcess: [ mediaSourcePostProcessor ]
+
+      };
+    </script>
+    <!-- script to register bugs -->
+    <script src="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/assets/scripts/bug-assist.js"></script>
+    <meta name="bug.short_desc" content="[MSE] ">
+    <meta name="bug.product" content="HTML WG">
+    <meta name="bug.component" content="Media Source Extensions">
+
+    <link rel="stylesheet" href="mse.css">
+
+  </head>
+  <body>
+    <section id="abstract">
+      This specification defines a <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> byte stream format specification based on MPEG audio streams.
+    </section>
+
+    <section id="introduction">
+      <h2>Introduction</h2>
+      <p>This specification defines segment formats for implementations that choose to support MPEG audio streams specified in <a def-id="iso-11172-3"></a>, <a def-id="iso-13818-3"></a>, and <a def-id="iso-14496-3"></a>.</p>
+      <p>It defines the <a def-id="mpeg-mime-types"></a> used to signal codecs, and provides the necessary format specific definitions for <a def-id="init-segments"></a>, <a def-id="media-segments"></a>, and <a def-id="random-access-points"></a> required by the <a def-id="byte-stream-formats-section"></a> of the Media Source Extensions spec. It also defines extra behaviors and state that only apply to this byte stream format.</p>
+    </section>
+
+    <section id="mime-types">
+      <h2>MIME-types</h2>
+      <p>This section specifies the MIME-types that may be passed to <a def-id="isTypeSupported"></a> or <a def-id="addSourceBuffer"></a> for byte streams that conform to this specification.</p>
+      <ul>
+        <li>"audio/aac" for sequences of ADTS frames, as specified in <a def-id="iso-14496-3"></a>.</li>
+        <li>"audio/mpeg" for MPEG-1/2/2.5 Layer I/II/III streams, as specified in <a href="http://tools.ietf.org/html/rfc3003">RFC 3003</a>.</li>
+      </ul>
+      <p>The "codecs" MIME-type parameter must not be used with these MIME-types.</p>
+    </section>
+
+    <section id="mpeg-audio-frames">
+      <h2>MPEG Audio Frames</h2>
+      <p>The format of an <dfn id="mpeg-audio-frame">MPEG Audio Frame</dfn> depends on the <a def-id="mpeg-mime-type"></a> used.</p>
+      <ul>
+        <li>If the "audio/aac" MIME-type is used, an MPEG Audio Frame is a sequence of bytes that conform to the adts_frame() syntax specified in Table 1.A.5 of <a def-id="iso-14496-3"></a>.</li>
+        <li>If the "audio/mpeg" MIME-type is used, an MPEG Audio Frame is a sequence of bytes that conform to the frame() syntax element specified in Section 2.4.1.2 of <a def-id="iso-11172-3"></a> or the corresponding definition in <a def-id="iso-13818-3"></a>.</li>
+      </ul>
+    </section>
+
+    <section id="mpeg-metadata">
+      <h4>Metadata Frames</h4>
+      <p>Since <a def-id="id3v1"></a>, <a def-id="id3v2"></a> metadata frames, and <a def-id="icecast-headers"></a> are common in existing MPEG audio streams, implementations should gracefully handle such frames. Zero or more of these metadata frames are allowed to occur before, after, or between <a def-id="mpeg-audio-frames"></a>. Minimal implementations must accept, consume, and ignore these frames. More advanced implementations may choose to expose the metadata information via an inband <a def-id="text-track"></a> or some other mechanism.</p>
+
+      <section id="icecast">
+        <h3>Icecast headers</h3>
+        <p>There is no normative spec for <a href="http://en.wikipedia.org/wiki/Icecast">Icecast</a>/<a href="http://en.wikipedia.org/wiki/SHOUTcast">SHOUTcast</a> headers, just <a href="http://forums.radiotoolbox.com/viewtopic.php?t=74">examples</a>. For the purpose of this specification, an <dfn id="icecast-header">Icecast header</dfn> is defined as beginning with the 4 character sequence "ICY&nbsp;"(U+0049 I, U+0043 C, U+0059 Y, U+0020 SPACE) and ending with a pair of carriage-return line-feed sequences (U+000D CARRIAGE RETURN, U+000A LINE FEED, U+000D CARRIAGE RETURN, U+000A LINE FEED).</p>
+        <p class="note">Icecast headers are allowed in the byte streams because some Icecast and SHOUTcast
+          servers return a status line that looks like "ICY OK 200" instead of a standard HTTP status line.
+          User-agent network stacks typically interpret this as an HTTP 0.9 response and include the
+          header in the response body. Allowing these headers to appear provides a simple way to
+          interoperate with these servers.</p>
+      </section>
+    </section>
+
+    <section id="mpeg-segments">
+      <h4>Segment Definitions</h4>
+      <p>The MPEG audio byte stream is a combination of one or more <a def-id="mpeg-audio-frames"></a> and zero or more <a def-id="mpeg-audio-metadata-frames"></a>.</p>
+      <ul>
+        <li>Every <a def-id="mpeg-audio-frame"></a> is a <a def-id="random-access-point"></a>.</li>
+        <li>Every <a def-id="mpeg-audio-frame"></a> header is an <a def-id="init-segment"></a>.</li>
+        <li>The coded audio in each <a def-id="mpeg-audio-frame"></a> is a <a def-id="media-segment"></a>.</li>
+      </ul>
+    </section>
+
+    <section id="mpeg-timestamp-generation">
+      <h4>Timestamp Generation</h4>
+      <p>An <a def-id="mpeg-audio-frame"></a> lacks timestamp information so a mechanism needs to be
+        defined to allow these <a def-id="coded-frames"></a> to be positioned anywhere in the timeline.
+        Since a
+        single <a def-id="mpeg-audio-frame"></a> is a <a def-id="media-segment"></a>, timestamp handling is
+        inserted before and after the step, in the <a def-id="segment-parser-loop"></a>, that calls the
+        <a def-id="coded-frame-processing-algorithm"></a>.
+        (i.e. Step 6.3) The intent is to make it easy for the web application to determine where the
+        <a def-id="mpeg-audio-frames"></a> will get inserted by ensuring that the
+        <a def-id="timestampOffset"></a> attribute always reflects the insertion point.</p>
+      <p>
+        The steps below must ONLY be applied to a
+        <a class="externalDFN">SourceBuffer</a> that is handling the byte stream format outlined in this
+        specification.
+        <p class="note">
+          We may want to move these steps into the <a def-id="segment-parser-loop"></a> if more
+          <a def-id="byte-stream-format-specs"></a> are created for media formats that don't contain
+          timestamps.
+        </p>
+      </p>
+      <p>The following steps must be run immediately before running the <a def-id="segment-parser-loop"></a>
+        step that invokes the <a def-id="coded-frame-processing-algorithm"></a>:</p>
+      <ol>
+        <li>Set the <a def-id="presentation-timestamp"></a> of the <a def-id="coded-frame"></a> to 0.</li>
+        <li>Set the <a def-id="decode-timestamp"></a> of the <a def-id="coded-frame"></a> to 0.</li>
+        <li>Let <var>frame duration</var> be the <a def-id="coded-frame-duration"></a> of the
+          <a def-id="coded-frame"></a>. (i.e. the duration of the <a def-id="mpeg-audio-frame"></a>)</li>
+        <li>Let <var>new timestamp offset</var> equal the sum of the current value of the
+          <a def-id="timestampOffset"></a> and <var>frame duration</var>.</li>
+      </ol>
+
+      <p>The following step must be run immediately after the <a def-id="segment-parser-loop"></a>
+        step that invokes the <a def-id="coded-frame-processing-algorithm"></a>:</p>
+      <ol>
+        <li>Assign <var>new timestamp offset<var> to the <a def-id="timestampOffset"></a> attribute.</li>
+      </ol>
+    </section>
+
+<!--     <section id="acknowledgements">
+      <h2>Acknowledgments</h2>
+      The editors would like to thank <a def-id="contributors"></a> for their contributions to this specification.
+    </section> -->
+  </body>
+</html>
