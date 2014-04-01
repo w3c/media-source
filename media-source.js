@@ -186,6 +186,7 @@
     'coded-frames': { func: term_helper, fragment: 'coded-frame', link_text: 'coded frames', },
     'coded-frame-duration': { func: term_helper, fragment: 'coded-frame-duration', link_text: 'coded frame duration', },
     'coded-frames-duration': { func: term_helper, fragment: 'coded-frame-duration', link_text: 'coded frame\'s duration', },
+    'coded-frame-end-timestamp': { func: term_helper, fragment: 'coded-frame-end-timestamp', link_text: 'coded frame end timestamp', },
     'parent-media-source': { func: term_helper, fragment: 'parent-media-source', link_text: 'parent media source', },
     'coded-frame-group': { func: term_helper, fragment: 'coded-frame-group', link_text: 'coded frame group', },
     'decode-timestamp': { func: term_helper, fragment: 'decode-timestamp', link_text: 'decode timestamp', },
@@ -226,7 +227,7 @@
     'input-buffer': { func: var_helper, fragment: '#sourcebuffer-input-buffer', link_text: 'input buffer', },
     'buffer-full-flag': { func: var_helper, fragment: '#sourcebuffer-buffer-full-flag', link_text: 'buffer full flag', },
     'group-start-timestamp': { func: var_helper, fragment: '#sourcebuffer-group-start-timestamp', link_text: 'group start timestamp', },
-    'highest-presentation-end-timestamp': { func: var_helper, fragment: '#sourcebuffer-highest-presentation-end-timestamp', link_text: 'highest presentation end timestamp', },
+    'group-end-timestamp': { func: var_helper, fragment: '#sourcebuffer-group-end-timestamp', link_text: 'group end timestamp', },
     'MediaSource-object-URL': { func: link_helper, fragment: '#mediasource-object-url', link_text: 'MediaSource object URL', },
     'first-init-segment-flag': { func: var_helper, fragment: '#first-init-segment-flag', link_text: 'first initialization segment flag', },
 

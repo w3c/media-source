@@ -177,9 +177,14 @@
 
           <dt id="coded-frame-duration">Coded Frame Duration</dt>
           <dd>
-            <p>The duration of a <a def-id="coded-frame"></a>. For video and text, the duration indicates how long the video frame or text should be displayed. For audio, the duration represents the sum of all the samples contained within the coded frame. For example, if an audio frame contained 441 samples @44100Hz the frame duration would be 100 milliseconds.</p>
+            <p>The duration of a <a def-id="coded-frame"></a>. For video and text, the duration indicates how long the video frame or text should be displayed. For audio, the duration represents the sum of all the samples contained within the coded frame. For example, if an audio frame contained 441 samples @44100Hz the frame duration would be 10 milliseconds.</p>
           </dd>
 
+          <dt id="coded-frame-end-timestamp">Coded Frame End Timestamp</dt>
+          <dd>
+            <p>The sum of a <a def-id="coded-frame"></a> <a def-id="presentation-timestamp"></a> and its
+                <a def-id="coded-frame-duration"></a>. It represents the <a def-id="presentation-timestamp"></a> that immediately follows the coded frame.</p>
+          </dd>
 
           <dt id="coded-frame-group">Coded Frame Group</dt>
           <dd><p>A group of <a def-id="coded-frames"></a> that are adjacent and have monotonically increasing <a def-id="decode-timestamps"></a> without any gaps. Discontinuities detected by the
@@ -716,7 +721,7 @@
               <p class="note">This preserves audio frames and text cues that start before and end after the <a def-id="duration"></a>.</p></li>
             <li>If a user agent is unable to partially render audio frames or text cues that start before and end after the <a def-id="duration"></a>, then run the following steps:
               <ol>
-                <li>Update <var>new duration</var> to the highest end timestamp across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.</li>
+                <li>Update <var>new duration</var> to the highest end time reported by the <a def-id="buffered"></a> attribute across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.</li>
                 <li>Update <a def-id="duration"></a> to <var>new duration</var>.</li>
               </ol>
             </li>
@@ -736,7 +741,7 @@
                 <dt>If <var>error</var> is not set, is null, or is an empty string</dt>
                 <dd>
 	          <ol>
-	            <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the highest end timestamp across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.<br>
+	            <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the highest end time reported by the <a def-id="buffered"></a> attribute across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.<br>
 		      <p class="note">This allows the duration to properly reflect the end of the appended media segments. For example, if the duration was explicitly set to 10 seconds and only media segments for 0 to 5 seconds were appended before endOfStream() was called, then the duration will get updated to 5 seconds.</p>
 	            </li>
 	            <li>Notify the media element that it now has all of the media data.</li>
@@ -815,7 +820,7 @@
               </ol>
             </li>
             <li>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a>, then throw an <a def-id="invalid-state-err"></a> and abort these steps.</li>
-            <li>If the <var>new mode</var> equals <a def-id="AppendMode-sequence"></a>, then set the <a def-id="group-start-timestamp"></a> to the <a def-id="highest-presentation-end-timestamp"></a>.</li>
+            <li>If the <var>new mode</var> equals <a def-id="AppendMode-sequence"></a>, then set the <a def-id="group-start-timestamp"></a> to the <a def-id="group-end-timestamp"></a>.</li>
             <li>Update the attribute to <var>new mode</var>.</li>
           </ol>
         </dd>
@@ -1092,9 +1097,12 @@
             <a def-id="timestampOffset"></a> attribute is set, or the <a def-id="coded-frame-processing-algorithm"></a> runs.
           </p>
 
-          <p>The <dfn id="sourcebuffer-highest-presentation-end-timestamp">highest presentation end timestamp</dfn> variable stores the highest presentation
-            end timestamp encountered in the current <a def-id="coded-frame-group"></a>. It is set to 0 when the SourceBuffer object is created and gets updated
+          <p>The <dfn id="sourcebuffer-group-end-timestamp">group end timestamp</dfn> variable stores the
+            highest <a def-id="coded-frame-end-timestamp"></a> across all <a def-id="coded-frames"></a> in
+            the current <a def-id="coded-frame-group"></a>. It is set to 0 when the SourceBuffer object is created and gets updated
             by the <a def-id="coded-frame-processing-algorithm"></a>.
+          </p>
+          <p class="note">The <a def-id="group-end-timestamp"></a> stores the highest <a def-id="coded-frame-end-timestamp"></a> across all <a def-id="track-buffers"></a> in a <a>SourceBuffer</a>. Therefore, care should be taken in setting the <a def-id="mode"></a> attribute when appending multiplexed segments in which the timestamps are not aligned across tracks.
           </p>
 
           <p>When the segment parser loop algorithm is invoked, run the following steps:</p>
@@ -1409,7 +1417,7 @@
                 <li>If <a def-id="mode"></a> equals <a def-id="AppendMode-sequence"></a> and <a def-id="group-start-timestamp"></a> is set, then run the following steps:
                   <ol>
                     <li>Set <a def-id="timestampOffset"></a> equal to <a def-id="group-start-timestamp"></a> - <var>presentation timestamp</var>.</li>
-                    <li>Set <a def-id="highest-presentation-end-timestamp"></a> equal to <a def-id="group-start-timestamp"></a>.</li>
+                    <li>Set <a def-id="group-end-timestamp"></a> equal to <a def-id="group-start-timestamp"></a>.</li>
                     <li>Set the <a def-id="need-RAP-flag"></a> on all <a def-id="track-buffers"></a> to true.</li>
                     <li>Unset <a def-id="group-start-timestamp"></a>.</li>
                   </ol>
@@ -1419,8 +1427,6 @@
 	          <ol>
 	            <li>Add <a def-id="timestampOffset"></a> to the <var>presentation timestamp</var>.</li>
 	            <li>Add <a def-id="timestampOffset"></a> to the <var>decode timestamp</var>.</li>
-	            <li>If the <var>presentation timestamp</var> or <var>decode timestamp</var> is less than the <a def-id="presentation-start-time"></a>, 
-                      then run the <a def-id="eos-decode"></a>, and abort these steps.</li>
 	          </ol>
 	        </li>
                 <li>Let <var>track buffer</var> equal the <a def-id="track-buffer"></a> that the coded frame will be added to.</li>
@@ -1436,9 +1442,9 @@
                         <li>
                           <dl class="switch">
                             <dt>If <a def-id="mode"></a> equals <a def-id="AppendMode-segments"></a>:</dt>
-                            <dd>Set <a def-id="highest-presentation-end-timestamp"></a> to <var>presentation timestamp</var>.</dd>
+                            <dd>Set <a def-id="group-end-timestamp"></a> to <var>presentation timestamp</var>.</dd>
                             <dt>If <a def-id="mode"></a> equals <a def-id="AppendMode-sequence"></a>:</dt>
-                            <dd>Set <a def-id="group-start-timestamp"></a> equal to the <a def-id="highest-presentation-end-timestamp"></a>.</dd>
+                            <dd>Set <a def-id="group-start-timestamp"></a> equal to the <a def-id="group-end-timestamp"></a>.</dd>
                           </dl>
                         </li>
                         <li>Unset the <a def-id="last-decode-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
@@ -1452,6 +1458,8 @@
                     <dd>Continue.</dd>
                   </dl>
                 </li>
+	        <li>If the <var>presentation timestamp</var> or <var>decode timestamp</var> is less than the <a def-id="presentation-start-time"></a>, 
+                  then run the <a def-id="eos-decode"></a>, and abort these steps.</li>
                 <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
                 <li>If <var>presentation timestamp</var> is less than <a def-id="appendWindowStart"></a>, then set the <a def-id="need-RAP-flag"></a> to true, drop the
                   coded frame, and jump to the top of the loop to start processing the next coded frame.
@@ -1546,9 +1554,8 @@
                   <p class="note">The greater than check is needed because bidirectional prediction between coded frames can cause
                     <var>presentation timestamp</var> to not be monotonically increasing eventhough the decode timestamps are monotonically increasing.</p>
                 </li>
-                <li>If <a def-id="highest-presentation-end-timestamp"></a> is unset or <var>frame end timestamp</var> is greater than
-                  <a def-id="highest-presentation-end-timestamp"></a>, then set <a def-id="highest-presentation-end-timestamp"></a> equal to
-                  <var>frame end timestamp</var>.</li>
+                <li>If <var>frame end timestamp</var> is greater than <a def-id="group-end-timestamp"></a>,
+                  then set <a def-id="group-end-timestamp"></a> equal to <var>frame end timestamp</var>.</li>
 	      </ol>
             </li>
             <li>
@@ -1574,7 +1581,7 @@
                   <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="canplaythrough"></a> at the media element.</li>
 	      </ol>
             </li>
-            <li>If the <a def-id="media-segment"></a> contains data beyond the current <a def-id="duration"></a>, then run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the maximum of the current duration and the highest end timestamp reported by <a def-id="hme-buffered"></a>.</li>
+            <li>If the <a def-id="media-segment"></a> contains data beyond the current <a def-id="duration"></a>, then run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the maximum of the current duration and the <a def-id="group-end-timestamp"></a>.</li>
           </ol>
         </section>
 
@@ -2271,7 +2278,19 @@
         </thead>
         <tbody>
           <tr>
-            <td>03 March 2014</td>
+            <td>01 April 2014</a></td>
+            <td>
+              <ul>
+                <li>Bug 25157 - Fix typo in coded frame duration example.</li>
+                <li>Bug 24854 - Moved negative timestamp checking to allow "sequence" mode to handle
+                  appending coded frames in reverse order</li>
+                <li>Bug 24820 - Renamed highest presentation end timestamp to group end timestamp and
+                  fixed a few related issues.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/cad94fce3b90/media-source/media-source.html">03 March 2014</a></td>
             <td>
               <ul>
                 <li>Bug 24347 - Fix HAVE_FUTURE_DATA transition condition in SourceBuffer monitoring algorithm.</li>
