@@ -392,7 +392,7 @@ table.simple {
     margin-bottom:  0;
 }
 </style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
-  <body class="h-entry" style="" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
+  <body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
     
       <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
@@ -400,7 +400,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-04-02T06:11:51.000Z" id="w3c-editor-s-draft-01-april-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-04-01">01 April 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-04-30T00:55:01.000Z" id="w3c-editor-s-draft-29-april-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-04-29">29 April 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -753,7 +753,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p></p>
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code><a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>If <var>type</var> is null or an empty string then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
+            <li>If <var>type</var> is an empty string then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-not_supported_err">NOT_SUPPORTED_ERR</a></code> exception and abort these steps.</li>
             <li>If the user agent can't handle any more SourceBuffer objects then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception and abort these steps.
               <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_8"><span>Note</span></div><p class="">For example, a user agent may throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception if the media element has reached the
@@ -795,7 +795,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">sourceBuffer</td><td class="prmType"><code><a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>void</code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>If <var>sourceBuffer</var> is null then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If <var>sourceBuffer</var> specifies an object that is not in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-not_found_err">NOT_FOUND_ERR</a></code> exception and abort these steps.</li>
             <li>If the <var>sourceBuffer</var>.<code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then run the following steps:
               <ol>
@@ -1134,7 +1133,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>
               <a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-sourceended">sourceended</a></code> at the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a>.</li>
             <li><dl class="switch">
-                <dt>If <var>error</var> is not set, is null, or is an empty string</dt>
+                <dt>If <var>error</var> is not set</dt>
                 <dd>
 	          <ol>
 	            <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the highest end time reported by the <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> attribute across all <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.<br>
@@ -1167,8 +1166,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	            <dd>Run the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#fatal-decode-error">media data is corrupted</a> steps of the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
 	          </dl>
 	        </dd>
-                <dt>Otherwise</dt>
-                <dd>Throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception.</dd>
               </dl>
             </li>
           </ol>
@@ -1248,8 +1245,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>On setting, run the following steps:</p>
           <ol>
             <li>Let <var>new mode</var> equal the new value being assigned to this attribute.</li>
-            <li>If <var>new mode</var> does not equal <code><a href="#idl-def-AppendMode.segments">"segments"</a></code> or <code><a href="#idl-def-AppendMode.sequence">"sequence"</a></code>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these
-              steps.</li>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and
               abort these steps.</li>
             <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
@@ -1316,7 +1311,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType"><code>ArrayBufferView</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>void</code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>If <var>data</var> is null then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>Run the <a href="#sourcebuffer-prepare-append">prepare append</a> algorithm.</li>
             <li>Add <var>data</var> to the end of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
             <li>Set the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute to true.</li>
@@ -1327,7 +1321,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">stream</td><td class="prmType"><code>Stream</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">maxSize</td><td class="prmType"><code>unsigned long long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>void</code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>If <var>stream</var> is null then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>Run the <a href="#sourcebuffer-prepare-append">prepare append</a> algorithm.</li>
             <li>Set the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute to true.</li>
             <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-updatestart">updatestart</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
@@ -2210,7 +2203,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           
           <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_38"><span>Note</span></div><p class="">This algorithm is intended to mirror the behavior of the <a href="http://www.w3.org/TR/FileAPI/#dfn-createObjectURL">createObjectURL()</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] method with autoRevoke set to true.</p></div>
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">mediaSource</td><td class="prmType"><code><a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>DOMString</code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>If <var>mediaSource</var> is NULL the return null.</li>
             <li>Return a unique <a href="#mediasource-object-url">MediaSource object URL</a> that can be used to dereference the <var>mediaSource</var> argument, and run the rest of the algorithm asynchronously.</li>
             <li><a href="http://www.w3.org/TR/html5/webappapis.html#provide-a-stable-state">provide a stable state</a></li>
             <li>Revoke the <a href="#mediasource-object-url">MediaSource object URL</a> by calling <a href="http://www.w3.org/TR/FileAPI/#dfn-revokeObjectURL">revokeObjectURL()</a> on it.</li>
@@ -2616,7 +2608,15 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </thead>
         <tbody>
           <tr>
-            <td>01 April 2014</td>
+            <td>29 April 2014</td>
+            <td>
+              <ul>
+                <li>Bug 25347 - Remove unnecessary null &amp; invalid enum value checks.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/d471a4412040/media-source/media-source.html">01 April 2014</a></td>
             <td>
               <ul>
                 <li>Bug 25157 - Fix typo in coded frame duration example.</li>

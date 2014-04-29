@@ -346,7 +346,7 @@
             </ul>
           </p>
           <ol class="method-algorithm">
-            <li>If <var>type</var> is null or an empty string then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
+            <li>If <var>type</var> is an empty string then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw a <a def-id="not-supported-err"></a> exception and abort these steps.</li>
             <li>If the user agent can't handle any more SourceBuffer objects then throw a <a def-id="quota-exceeded-err"></a> exception and abort these steps.
               <p class="note">For example, a user agent may throw a <a def-id="quota-exceeded-err"></a> exception if the media element has reached the
@@ -366,7 +366,6 @@
           <p>Removes a <a>SourceBuffer</a> from <a def-id="sourceBuffers"></a>.</p>
 
           <ol class="method-algorithm">
-            <li>If <var>sourceBuffer</var> is null then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If <var>sourceBuffer</var> specifies an object that is not in <a def-id="sourceBuffers"></a> then throw a <a def-id="not-found-err"></a> exception and abort these steps.</li>
             <li>If the <var>sourceBuffer</var>.<a def-id="updating"></a> attribute equals true, then run the following steps:
               <ol>
@@ -738,7 +737,7 @@
             <li>
               <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceended"></a> at the <a>MediaSource</a>.</li>
             <li><dl class="switch">
-                <dt>If <var>error</var> is not set, is null, or is an empty string</dt>
+                <dt>If <var>error</var> is not set</dt>
                 <dd>
 	          <ol>
 	            <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the highest end time reported by the <a def-id="buffered"></a> attribute across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.<br>
@@ -771,8 +770,6 @@
 	            <dd>Run the <a def-id="media-data-is-corrupted"></a> steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
 	          </dl>
 	        </dd>
-                <dt>Otherwise</dt>
-                <dd>Throw an <a def-id="invalid-access-err"></a> exception.</dd>
               </dl>
             </li>
           </ol>
@@ -807,8 +804,6 @@
           <p>On setting, run the following steps:</p>
           <ol>
             <li>Let <var>new mode</var> equal the new value being assigned to this attribute.</li>
-            <li>If <var>new mode</var> does not equal <a def-id="AppendMode-segments"></a> or <a def-id="AppendMode-sequence"></a>, then throw an <a def-id="invalid-access-err"></a> exception and abort these
-              steps.</li>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an <a def-id="invalid-state-err"></a> exception and
               abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
@@ -920,7 +915,6 @@
           <p>Appends the segment data in an <a>ArrayBufferView</a>[[!TYPED-ARRAYS]] to the source buffer.</p>
 
           <ol class="method-algorithm">
-            <li>If <var>data</var> is null then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>Run the <a def-id="prepare-append"></a> algorithm.</li>
             <li>Add <var>data</var> to the end of the <a def-id="input-buffer"></a>.</li>
             <li>Set the <a def-id="updating"></a> attribute to true.</li>
@@ -934,7 +928,6 @@
           <p>Appends segment data to the source buffer from a <a class="externalDFN">Stream</a>[[!STREAMS-API]].</p>
 
           <ol class="method-algorithm">
-            <li>If <var>stream</var> is null then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>Run the <a def-id="prepare-append"></a> algorithm.</li>
             <li>Set the <a def-id="updating"></a> attribute to true.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
@@ -1852,7 +1845,6 @@
           <p>Creates URLs for <a>MediaSource</a> objects.</p>
 
           <ol class="method-algorithm">
-            <li>If <var>mediaSource</var> is NULL the return null.</li>
             <li>Return a unique <a def-id="MediaSource-object-URL"></a> that can be used to dereference the <var>mediaSource</var> argument, and run the rest of the algorithm asynchronously.</li>
             <li><a def-id="provide-a-stable-state"></a></li>
             <li>Revoke the <a def-id="MediaSource-object-URL"></a> by calling <a def-id="file-revokeObjectURL"></a> on it.</li>
@@ -2278,7 +2270,15 @@
         </thead>
         <tbody>
           <tr>
-            <td>01 April 2014</a></td>
+            <td>29 April 2014</td>
+            <td>
+              <ul>
+                <li>Bug 25347 - Remove unnecessary null & invalid enum value checks.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/d471a4412040/media-source/media-source.html">01 April 2014</a></td>
             <td>
               <ul>
                 <li>Bug 25157 - Fix typo in coded frame duration example.</li>
