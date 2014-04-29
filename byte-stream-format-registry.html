@@ -5,6 +5,7 @@
     <title>Media Source Extensions Byte Stream Format Registry</title>
     
     
+    
     <!-- script to register bugs -->
     <script src="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/assets/scripts/bug-assist.js"></script>
     <meta name="bug.short_desc" content="[MSE] ">
@@ -130,7 +131,7 @@ table.simple {
     margin-bottom:  0;
 }
 </style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
-  <body class="h-entry" style="" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
+  <body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
     
       <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
@@ -138,7 +139,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions Byte Stream Format Registry</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2013-12-03T02:22:47.000Z" id="w3c-editor-s-draft-02-december-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2013-12-02">02 December 2013</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-04-30T03:32:56.000Z" id="w3c-editor-s-draft-29-april-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-04-29">29 April 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -171,7 +172,7 @@ table.simple {
     
       <p class="copyright">
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
-        2013
+        2014
         
         <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
         (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
@@ -195,8 +196,8 @@ table.simple {
     <section id="purpose" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_purpose"><span class="secno">1. </span>Purpose</h2>
       <p>This registry is intended to enhance interoperability among implementations and users of
-        <a href="http://www.w3.org/TR/media-source/#idl-def-SourceBuffer"><code>SourceBuffer</code></a> objects described in the
-        <a href="http://www.w3.org/TR/media-source/">Media Source Extensions(MSE)</a> specification. In particular, this registry provides the means (1) to identify
+        <code><a href="media-source.html#idl-def-SourceBuffer" class="idlType">SourceBuffer</a></code> objects described in the
+        <a href="media-source.html#">Media Source Extensions</a>(MSE) specification. In particular, this registry provides the means (1) to identify
         and avoid MIME-type collisions among byte stream formats, and (2) to disclose information about byte stream formats accepted by MSE
         implementations to promote interoperability.
     </p></section>
@@ -204,7 +205,7 @@ table.simple {
     <section id="organization" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_organization"><span class="secno">2. </span>Organization</h2>
       <p>The registry maintains a mapping between MIME-type/subtype pairs and byte stream format specifications. The byte stream format specifications describe the
-        structure and semantics of byte streams accepted by <a href="http://www.w3.org/TR/media-source/#idl-def-SourceBuffer"><code>SourceBuffer</code></a> objects
+        structure and semantics of byte streams accepted by <code><a href="media-source.html#idl-def-SourceBuffer" class="idlType">SourceBuffer</a></code> objects
         created with the associated MIME-type/subtype pair.</p>
       <p>This registry is not intended to include any information on whether a byte stream format is encumbered by intellectual property claims. Implementors and users
         are advised to seek appropriate legal counsel in this matter if they intend to implement or use a specific byte stream format.</p>
@@ -215,10 +216,12 @@ table.simple {
       <ol>
         <li>Each entry must include a unique MIME-type/subtype pair. If the byte stream format is derived-from an existing file format, then it should use the
           MIME-type/subtype pairs typically used for the file format.</li>
+        <li>Each entry must include a <var><a href="media-source.html#sourcebuffer-generate-timestamps-flag">generate timestamps flag</a></var> value that must be used by
+            <code><a href="media-source.html#idl-def-SourceBuffer" class="idlType">SourceBuffer</a></code> when handling the byte stream format.</li>
         <li>Each entry must include a link that references a publically available specification. It is recommended that such a specification be made available
           without cost (other than reasonable shipping and handling if not available by online means).</li>
-        <li>Each entry must comply with all requirements outlined in the <a href="http://www.w3.org/TR/media-source/#byte-stream-formats">byte stream formats section</a>
-          of the <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> specification.</li>
+        <li>Each entry must comply with all requirements outlined in the <a href="media-source.html#byte-stream-formats">byte stream formats section</a>
+          of the <a href="media-source.html#">Media Source Extensions</a> specification.</li>
         <li>Candidate entries must be announced on <a href="public-html-media@w3.org">public-html-media@w3.org</a>(<a href="public-html-media-request@w3.org">subscribe</a>,
           <a href="http://lists.w3.org/Archives/Public/public-html-media/">archives</a>) so they can be discussed and evaluated for compliance before being added to the
           registry.</li>
@@ -233,6 +236,7 @@ table.simple {
           <tr>
             <th>MIME type/subtype</th>
             <th>Public Specification(s)</th>
+            <th>Generate Timestamps Flag</th>
           </tr>
         </thead>
         <tbody>
@@ -242,6 +246,7 @@ table.simple {
               video/webm
             </td>
             <td><a href="webm-byte-stream-format.html">WebM Byte Stream Format</a></td>
+            <td>false</td>
           </tr>
           <tr>
             <td>
@@ -249,6 +254,7 @@ table.simple {
               video/mp4
             </td>
             <td><a href="isobmff-byte-stream-format.html">ISO BMFF Byte Stream Format</a></td>
+            <td>false</td>
           </tr>
           <tr>
             <td>
@@ -256,6 +262,15 @@ table.simple {
               video/mp2t
             </td>
             <td><a href="mp2t-byte-stream-format.html">MPEG-2 Transport Streams Byte Stream Format</a></td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>
+              audio/mpeg<br>
+              audio/aac
+            </td>
+            <td><a href="mpeg-audio-byte-stream-format.html">MPEG Audio Byte Stream Format</a></td>
+            <td>true</td>
           </tr>
         </tbody>
       </table>

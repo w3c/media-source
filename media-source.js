@@ -121,6 +121,7 @@
   }
 
   var mseDefinitions = {
+    'mse-spec': { func: link_helper, fragment: '#', link_text: 'Media Source Extensions', },
     'sourceBuffers': { func: idlref_helper, fragment: 'widl-MediaSource-sourceBuffers', link_text: 'sourceBuffers',  },
     'activeSourceBuffers': { func: idlref_helper, fragment: 'widl-MediaSource-activeSourceBuffers', link_text: 'activeSourceBuffers',  },
     'addSourceBuffer': { func: idlref_helper, fragment: 'widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type', link_text: 'addSourceBuffer()',  },
@@ -228,6 +229,7 @@
     'buffer-full-flag': { func: var_helper, fragment: '#sourcebuffer-buffer-full-flag', link_text: 'buffer full flag', },
     'group-start-timestamp': { func: var_helper, fragment: '#sourcebuffer-group-start-timestamp', link_text: 'group start timestamp', },
     'group-end-timestamp': { func: var_helper, fragment: '#sourcebuffer-group-end-timestamp', link_text: 'group end timestamp', },
+    'generate-timestamps-flag': { func: var_helper, fragment: '#sourcebuffer-generate-timestamps-flag', link_text: 'generate timestamps flag', },
     'MediaSource-object-URL': { func: link_helper, fragment: '#mediasource-object-url', link_text: 'MediaSource object URL', },
     'first-init-segment-flag': { func: var_helper, fragment: '#first-init-segment-flag', link_text: 'first initialization segment flag', },
 
@@ -359,7 +361,15 @@
   }
 
   function mediaSourcePreProcessor() {
-     $("a[def-id]").each(function () {
+    for (var x in groupBaseURLs) {
+      if (groupBaseURLs[x] == MSE_spec_url && window.respecConfig.specStatus == "ED") {
+	  MSE_spec_url = "media-source.html";
+	  groupBaseURLs[x] = MSE_spec_url;
+	  break;
+      }
+    }
+
+   $("a[def-id]").each(function () {
        $(this).addClass('externalDFN');
      });
 

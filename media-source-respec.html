@@ -356,6 +356,22 @@
             </li>
             <li>If the <a def-id="readyState"></a> attribute is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>Create a new <a>SourceBuffer</a> object and associated resources.</li>
+            <li>Set the <a def-id="generate-timestamps-flag"></a> on the new object to the value in the
+               "Generate Timestamps Flag" column of the <a def-id="byte-stream-format-registry"></a> entry 
+              that is associated with <var>type</var>.
+            <li>
+              <dl class="switch">
+                <dt>If the <a def-id="generate-timestamps-flag"></a> equals true:</dt>
+                <dd>
+                  Set the <a def-id="mode"></a> attribute on the new object to
+                  <a def-id="AppendMode-sequence"></a>.
+                </dd>
+                <dt>Otherwise:</dt>
+                <dd>
+                  Set the <a def-id="mode"></a> attribute on the new object to
+                  <a def-id="AppendMode-segments"></a>.
+                </dd>
+            </li>
             <li>Add the new object to <a def-id="sourceBuffers"></a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="addsourcebuffer"></a> at <a def-id="sourceBuffers"></a>.</li>
             <li>Return the new object.</li>
           </ol>
@@ -799,11 +815,14 @@
       <dl title="interface SourceBuffer : EventTarget" class="idl">
         <dt>attribute AppendMode mode</dt>
         <dd>
-          <p>Controls how a sequence of <a def-id="media-segments"></a> are handled.  This attribute is initially set to <a def-id="AppendMode-segments"></a> when the object is created.</p>
+          <p>Controls how a sequence of <a def-id="media-segments"></a> are handled.  This attribute is initially set by <a def-id="addSourceBuffer"></a> after the object is created.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
             <li>Let <var>new mode</var> equal the new value being assigned to this attribute.</li>
+            <li>If <a def-id="generate-timestamps-flag"></a> equals true and <var>new mode</var> equals
+              <a def-id="AppendMode-segments"></a>, then throw an <a def-id="invalid-access-err"></a>
+              exception and abort these steps.</li>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an <a def-id="invalid-state-err"></a> exception and
               abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
@@ -1098,6 +1117,11 @@
           <p class="note">The <a def-id="group-end-timestamp"></a> stores the highest <a def-id="coded-frame-end-timestamp"></a> across all <a def-id="track-buffers"></a> in a <a>SourceBuffer</a>. Therefore, care should be taken in setting the <a def-id="mode"></a> attribute when appending multiplexed segments in which the timestamps are not aligned across tracks.
           </p>
 
+          <p>The <dfn id="sourcebuffer-generate-timestamps-flag">generate timestamps flag</dfn> is a
+            boolean variable that keeps track of whether timestamps need to be generated for the
+            <a def-id="coded-frames"></a> passed to the <a def-id="coded-frame-processing-algorithm"></a>.
+            This flag is set by <a def-id="addSourceBuffer"></a> when the SourceBuffer object is created.
+          </p>
           <p>When the segment parser loop algorithm is invoked, run the following steps:</p>
 
           <ol>
@@ -1392,19 +1416,34 @@
             <li>
 	      <p>For each <a def-id="coded-frame"></a> in the <a def-id="media-segment"></a> run the following steps:</p>
 	      <ol>
-	        <li><i>Loop Top: </i>Let <var>presentation timestamp</var> be a double precision floating point representation of the coded frame's <a def-id="presentation-timestamp"></a> in seconds.
-                  <p class="note">Special processing may be needed to determine the presentation and decode timestamps for timed text frames since this information may not be explicilty
-                    present in the underlying format or may be dependent on the order of the frames. Some metadata text tracks, like MPEG2-TS PSI data, may only have implied timestamps.
-                    Format specific rules for these situations should be in the <a def-id="byte-stream-format-specs"></a> or in separate extension specifications.</p>
-                </li>
-	        <li>Let <var>decode timestamp</var> be a double precision floating point representation of the coded frame's decode timestamp in seconds.
-                  <p class="note">Implementations don't have to internally store timestamps in a double precision floating point representation. This
-                    representation is used here because it is the represention for timestamps in the HTML spec. The intention here is to make the
-                    behavior clear without adding unnecessary complexity to the algorithm to deal with the fact that adding a timestampOffset may
-                    cause a timestamp rollover in the underlying timestamp representation used by the byte stream format. Implementations can use any
-                    internal timestamp representation they wish, but the addition of timestampOffset should behave in a similar manner to what would happen
-                    if a double precision floating point representation was used.
-                  </p>
+	        <li><i>Loop Top: </i><dl class="switch">
+                    <dt>If <a def-id="generate-timestamps-flag"></a> equals true:</dt>
+                    <dd>
+                      <ol>
+                        <li>Let <var>presentation timestamp</var> equal 0.</li>
+                        <li>Let <var>decode timestamp</var> equal 0.</li>
+                      </ol>
+                    </dd>
+                    <dt>Otherwise:</dt>
+                    <dd>
+                      <ol>
+                        <li>Let <var>presentation timestamp</var> be a double precision floating point representation of the coded frame's <a def-id="presentation-timestamp"></a> in seconds.
+                          <p class="note">Special processing may be needed to determine the presentation and decode timestamps for timed text frames since this information may not be explicilty
+                            present in the underlying format or may be dependent on the order of the frames. Some metadata text tracks, like MPEG2-TS PSI data, may only have implied timestamps.
+                            Format specific rules for these situations should be in the <a def-id="byte-stream-format-specs"></a> or in separate extension specifications.</p>
+                        </li>
+	                <li>Let <var>decode timestamp</var> be a double precision floating point representation of the coded frame's decode timestamp in seconds.
+                          <p class="note">Implementations don't have to internally store timestamps in a double precision floating point representation. This
+                            representation is used here because it is the represention for timestamps in the HTML spec. The intention here is to make the
+                            behavior clear without adding unnecessary complexity to the algorithm to deal with the fact that adding a timestampOffset may
+                            cause a timestamp rollover in the underlying timestamp representation used by the byte stream format. Implementations can use any
+                            internal timestamp representation they wish, but the addition of timestampOffset should behave in a similar manner to what would happen
+                            if a double precision floating point representation was used.
+                          </p>
+                        </li>
+                    </ol>
+                    </dd>
+                  </dl>
                 </li>
                 <li>Let <var>frame duration</var> be a double precision floating point representation of the <a def-id="coded-frames-duration"></a> in seconds.</li>
                 <li>If <a def-id="mode"></a> equals <a def-id="AppendMode-sequence"></a> and <a def-id="group-start-timestamp"></a> is set, then run the following steps:
@@ -1549,6 +1588,8 @@
                 </li>
                 <li>If <var>frame end timestamp</var> is greater than <a def-id="group-end-timestamp"></a>,
                   then set <a def-id="group-end-timestamp"></a> equal to <var>frame end timestamp</var>.</li>
+                <li>If <a def-id="generate-timestamps-flag"></a> equals true, then set
+                  <a def-id="timestampOffset"></a> equal to <var>frame end timestamp</var>.</li>
 	      </ol>
             </li>
             <li>
@@ -2274,6 +2315,8 @@
             <td>
               <ul>
                 <li>Bug 25347 - Remove unnecessary null & invalid enum value checks.</li>
+                <li>Bug 25505 - Introduce "generate timestamps flag" to handle MPEG audio timestamp
+                  generation.</li>
               </ul>
             </td>
           </tr>

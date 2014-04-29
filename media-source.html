@@ -400,7 +400,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-04-30T00:55:01.000Z" id="w3c-editor-s-draft-29-april-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-04-29">29 April 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-04-30T04:10:29.000Z" id="w3c-editor-s-draft-29-april-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-04-29">29 April 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -763,6 +763,22 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             </li>
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not in the <code><a href="#idl-def-ReadyState.open">"open"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
             <li>Create a new <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object and associated resources.</li>
+            <li>Set the <var><a href="#sourcebuffer-generate-timestamps-flag">generate timestamps flag</a></var> on the new object to the value in the
+               "Generate Timestamps Flag" column of the <a href="byte-stream-format-registry.html">byte stream format registry</a> entry 
+              that is associated with <var>type</var>.
+            </li><li>
+              <dl class="switch">
+                <dt>If the <var><a href="#sourcebuffer-generate-timestamps-flag">generate timestamps flag</a></var> equals true:</dt>
+                <dd>
+                  Set the <code><a href="#widl-SourceBuffer-mode">mode</a></code> attribute on the new object to
+                  <code><a href="#idl-def-AppendMode.sequence">"sequence"</a></code>.
+                </dd>
+                <dt>Otherwise:</dt>
+                <dd>
+                  Set the <code><a href="#widl-SourceBuffer-mode">mode</a></code> attribute on the new object to
+                  <code><a href="#idl-def-AppendMode.segments">"segments"</a></code>.
+                </dd>
+            </dl></li>
             <li>Add the new object to <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> and <a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> at <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.</li>
             <li>Return the new object.</li>
           </ol></dd><dt id="widl-MediaSource-endOfStream-void-EndOfStreamError-error"><code>endOfStream</code></dt><dd>
@@ -1240,11 +1256,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Return a new static <a href="http://www.w3.org/TR/html5/embedded-content-0.html#normalized-timeranges-object">normalized TimeRanges object</a> for the <a href="#media-segment">media segments</a> buffered.</li>
           </ol>
         </dd><dt id="widl-SourceBuffer-mode"><code>mode</code> of type <span class="idlAttrType"><a href="#idl-def-AppendMode" class="idlType"><code>AppendMode</code></a></span>,            </dt><dd>
-          <p>Controls how a sequence of <a href="#media-segment">media segments</a> are handled.  This attribute is initially set to <code><a href="#idl-def-AppendMode.segments">"segments"</a></code> when the object is created.</p>
+          <p>Controls how a sequence of <a href="#media-segment">media segments</a> are handled.  This attribute is initially set by <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> after the object is created.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
             <li>Let <var>new mode</var> equal the new value being assigned to this attribute.</li>
+            <li>If <var><a href="#sourcebuffer-generate-timestamps-flag">generate timestamps flag</a></var> equals true and <var>new mode</var> equals
+              <code><a href="#idl-def-AppendMode.segments">"segments"</a></code>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code>
+              exception and abort these steps.</li>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and
               abort these steps.</li>
             <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
@@ -1465,6 +1484,11 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_16"><span>Note</span></div><p class="">The <var><a href="#sourcebuffer-group-end-timestamp">group end timestamp</a></var> stores the highest <a href="#coded-frame-end-timestamp">coded frame end timestamp</a> across all <a href="#track-buffer">track buffers</a> in a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>. Therefore, care should be taken in setting the <code><a href="#widl-SourceBuffer-mode">mode</a></code> attribute when appending multiplexed segments in which the timestamps are not aligned across tracks.
           </p></div>
 
+          <p>The <dfn id="sourcebuffer-generate-timestamps-flag">generate timestamps flag</dfn> is a
+            boolean variable that keeps track of whether timestamps need to be generated for the
+            <a href="#coded-frame">coded frames</a> passed to the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>.
+            This flag is set by <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> when the SourceBuffer object is created.
+          </p>
           <p>When the segment parser loop algorithm is invoked, run the following steps:</p>
 
           <ol>
@@ -1759,19 +1783,34 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>
 	      <p>For each <a href="#coded-frame">coded frame</a> in the <a href="#media-segment">media segment</a> run the following steps:</p>
 	      <ol>
-	        <li><i>Loop Top: </i>Let <var>presentation timestamp</var> be a double precision floating point representation of the coded frame's <a href="#presentation-timestamp">presentation timestamp</a> in seconds.
-                  <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_21"><span>Note</span></div><p class="">Special processing may be needed to determine the presentation and decode timestamps for timed text frames since this information may not be explicilty
-                    present in the underlying format or may be dependent on the order of the frames. Some metadata text tracks, like MPEG2-TS PSI data, may only have implied timestamps.
-                    Format specific rules for these situations should be in the <a href="#byte-stream-format-specs">byte stream format specifications</a> or in separate extension specifications.</p></div>
-                </li>
-	        <li>Let <var>decode timestamp</var> be a double precision floating point representation of the coded frame's decode timestamp in seconds.
-                  <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_22"><span>Note</span></div><p class="">Implementations don't have to internally store timestamps in a double precision floating point representation. This
-                    representation is used here because it is the represention for timestamps in the HTML spec. The intention here is to make the
-                    behavior clear without adding unnecessary complexity to the algorithm to deal with the fact that adding a timestampOffset may
-                    cause a timestamp rollover in the underlying timestamp representation used by the byte stream format. Implementations can use any
-                    internal timestamp representation they wish, but the addition of timestampOffset should behave in a similar manner to what would happen
-                    if a double precision floating point representation was used.
-                  </p></div>
+	        <li><i>Loop Top: </i><dl class="switch">
+                    <dt>If <var><a href="#sourcebuffer-generate-timestamps-flag">generate timestamps flag</a></var> equals true:</dt>
+                    <dd>
+                      <ol>
+                        <li>Let <var>presentation timestamp</var> equal 0.</li>
+                        <li>Let <var>decode timestamp</var> equal 0.</li>
+                      </ol>
+                    </dd>
+                    <dt>Otherwise:</dt>
+                    <dd>
+                      <ol>
+                        <li>Let <var>presentation timestamp</var> be a double precision floating point representation of the coded frame's <a href="#presentation-timestamp">presentation timestamp</a> in seconds.
+                          <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_21"><span>Note</span></div><p class="">Special processing may be needed to determine the presentation and decode timestamps for timed text frames since this information may not be explicilty
+                            present in the underlying format or may be dependent on the order of the frames. Some metadata text tracks, like MPEG2-TS PSI data, may only have implied timestamps.
+                            Format specific rules for these situations should be in the <a href="#byte-stream-format-specs">byte stream format specifications</a> or in separate extension specifications.</p></div>
+                        </li>
+	                <li>Let <var>decode timestamp</var> be a double precision floating point representation of the coded frame's decode timestamp in seconds.
+                          <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_22"><span>Note</span></div><p class="">Implementations don't have to internally store timestamps in a double precision floating point representation. This
+                            representation is used here because it is the represention for timestamps in the HTML spec. The intention here is to make the
+                            behavior clear without adding unnecessary complexity to the algorithm to deal with the fact that adding a timestampOffset may
+                            cause a timestamp rollover in the underlying timestamp representation used by the byte stream format. Implementations can use any
+                            internal timestamp representation they wish, but the addition of timestampOffset should behave in a similar manner to what would happen
+                            if a double precision floating point representation was used.
+                          </p></div>
+                        </li>
+                    </ol>
+                    </dd>
+                  </dl>
                 </li>
                 <li>Let <var>frame duration</var> be a double precision floating point representation of the <a href="#coded-frame-duration">coded frame's duration</a> in seconds.</li>
                 <li>If <code><a href="#widl-SourceBuffer-mode">mode</a></code> equals <code><a href="#idl-def-AppendMode.sequence">"sequence"</a></code> and <var><a href="#sourcebuffer-group-start-timestamp">group start timestamp</a></var> is set, then run the following steps:
@@ -1916,6 +1955,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 </li>
                 <li>If <var>frame end timestamp</var> is greater than <var><a href="#sourcebuffer-group-end-timestamp">group end timestamp</a></var>,
                   then set <var><a href="#sourcebuffer-group-end-timestamp">group end timestamp</a></var> equal to <var>frame end timestamp</var>.</li>
+                <li>If <var><a href="#sourcebuffer-generate-timestamps-flag">generate timestamps flag</a></var> equals true, then set
+                  <code><a href="#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> equal to <var>frame end timestamp</var>.</li>
 	      </ol>
             </li>
             <li>
@@ -2612,6 +2653,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <td>
               <ul>
                 <li>Bug 25347 - Remove unnecessary null &amp; invalid enum value checks.</li>
+                <li>Bug 25505 - Introduce "generate timestamps flag" to handle MPEG audio timestamp
+                  generation.</li>
               </ul>
             </td>
           </tr>

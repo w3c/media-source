@@ -165,7 +165,7 @@ table.simple {
     margin-bottom:  0;
 }
 </style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
-  <body class="h-entry" style="" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
+  <body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
     
       <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
@@ -173,7 +173,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">MPEG Audio Byte Stream Format</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-04-01T04:27:26.000Z" id="w3c-editor-s-draft-31-march-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-03-31">31 March 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-04-30T03:33:49.000Z" id="w3c-editor-s-draft-29-april-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-04-29">29 April 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -292,17 +292,17 @@ table.simple {
       
     
   
-</section><section id="toc"><h2 class="introductory" aria-level="1" role="heading" id="h2_toc">Table of Contents</h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-types" class="tocxref"><span class="secno">2. </span>MIME-types</a></li><li class="tocline"><a href="#mpeg-audio-frames" class="tocxref"><span class="secno">3. </span>MPEG Audio Frames</a></li><li class="tocline"><a href="#mpeg-metadata" class="tocxref"><span class="secno">4. </span>Metadata Frames</a><ul class="toc"><li class="tocline"><a href="#icecast" class="tocxref"><span class="secno">4.1 </span>Icecast headers</a></li></ul></li><li class="tocline"><a href="#mpeg-segments" class="tocxref"><span class="secno">5. </span>Segment Definitions</a></li><li class="tocline"><a href="#mpeg-timestamp-generation" class="tocxref"><span class="secno">6. </span>Timestamp Generation</a></li></ul></section>
+</section><section id="toc"><h2 class="introductory" aria-level="1" role="heading" id="h2_toc">Table of Contents</h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-types" class="tocxref"><span class="secno">2. </span>MIME-types</a></li><li class="tocline"><a href="#mpeg-audio-frames" class="tocxref"><span class="secno">3. </span>MPEG Audio Frames</a></li><li class="tocline"><a href="#mpeg-metadata" class="tocxref"><span class="secno">4. </span>Metadata Frames</a><ul class="toc"><li class="tocline"><a href="#icecast" class="tocxref"><span class="secno">4.1 </span>Icecast headers</a></li></ul></li><li class="tocline"><a href="#mpeg-segments" class="tocxref"><span class="secno">5. </span>Segment Definitions</a></li></ul></section>
 
     <section id="introduction" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_introduction"><span class="secno">1. </span>Introduction</h2>
       <p>This specification defines segment formats for implementations that choose to support MPEG audio streams specified in <a href="http://www.iso.org/iso/catalogue_detail.htm?csnumber=22412">ISO/IEC 11172-3:1993</a>, <a href="http://www.iso.org/iso/catalogue_detail.htm?csnumber=26797">ISO/IEC 13818-3:1998</a>, and <a href="http://www.iso.org/iso/catalogue_detail.htm?csnumber=53943">ISO/IEC 14496-3:2009</a>.</p>
-      <p>It defines the <a href="#mime-types">MIME-types</a> used to signal codecs, and provides the necessary format specific definitions for <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segments</a>, <a href="http://www.w3.org/TR/media-source/#media-segment">media segments</a>, and <a href="http://www.w3.org/TR/media-source/#random-access-point">random access points</a> required by the <a href="http://www.w3.org/TR/media-source/#byte-stream-formats">byte stream formats section</a> of the Media Source Extensions spec. It also defines extra behaviors and state that only apply to this byte stream format.</p>
+      <p>It defines the <a href="#mime-types">MIME-types</a> used to signal codecs, and provides the necessary format specific definitions for <a href="media-source.html#init-segment">initialization segments</a>, <a href="media-source.html#media-segment">media segments</a>, and <a href="media-source.html#random-access-point">random access points</a> required by the <a href="media-source.html#byte-stream-formats">byte stream formats section</a> of the Media Source Extensions spec. It also defines extra behaviors and state that only apply to this byte stream format.</p>
     </section>
 
     <section id="mime-types" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mime-types"><span class="secno">2. </span>MIME-types</h2>
-      <p>This section specifies the MIME-types that may be passed to <code><a href="http://www.w3.org/TR/media-source/#widl-MediaSource-isTypeSupported-boolean-DOMString-type">isTypeSupported()</a></code> or <code><a href="http://www.w3.org/TR/media-source/#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> for byte streams that conform to this specification.</p>
+      <p>This section specifies the MIME-types that may be passed to <code><a href="media-source.html#widl-MediaSource-isTypeSupported-boolean-DOMString-type">isTypeSupported()</a></code> or <code><a href="media-source.html#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> for byte streams that conform to this specification.</p>
       <ul>
         <li>"audio/aac" for sequences of ADTS frames, as specified in <a href="http://www.iso.org/iso/catalogue_detail.htm?csnumber=53943">ISO/IEC 14496-3:2009</a>.</li>
         <li>"audio/mpeg" for MPEG-1/2/2.5 Layer I/II/III streams, as specified in <a href="http://tools.ietf.org/html/rfc3003">RFC 3003</a>.</li>
@@ -338,49 +338,10 @@ table.simple {
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mpeg-segments"><span class="secno">5. </span>Segment Definitions</h2>
       <p>The MPEG audio byte stream is a combination of one or more <a href="#mpeg-audio-frame">MPEG Audio Frames</a> and zero or more <a href="#mpeg-metadata">Metadata Frames</a>.</p>
       <ul>
-        <li>Every <a href="#mpeg-audio-frame">MPEG Audio Frame</a> is a <a href="http://www.w3.org/TR/media-source/#random-access-point">random access point</a>.</li>
-        <li>Every <a href="#mpeg-audio-frame">MPEG Audio Frame</a> header is an <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a>.</li>
-        <li>The coded audio in each <a href="#mpeg-audio-frame">MPEG Audio Frame</a> is a <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a>.</li>
+        <li>Every <a href="#mpeg-audio-frame">MPEG Audio Frame</a> is a <a href="media-source.html#random-access-point">random access point</a>.</li>
+        <li>Every <a href="#mpeg-audio-frame">MPEG Audio Frame</a> header is an <a href="media-source.html#init-segment">initialization segment</a>.</li>
+        <li>The coded audio in each <a href="#mpeg-audio-frame">MPEG Audio Frame</a> is a <a href="media-source.html#media-segment">media segment</a>.</li>
       </ul>
-    </section>
-
-    <section id="mpeg-timestamp-generation" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
-      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mpeg-timestamp-generation"><span class="secno">6. </span>Timestamp Generation</h2>
-      <p>An <a href="#mpeg-audio-frame">MPEG Audio Frame</a> lacks timestamp information so a mechanism needs to be
-        defined to allow these <a href="http://www.w3.org/TR/media-source/#coded-frame">coded frames</a> to be positioned anywhere in the timeline.
-        Since a
-        single <a href="#mpeg-audio-frame">MPEG Audio Frame</a> is a <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a>, timestamp handling is
-        inserted before and after the step, in the <a href="http://www.w3.org/TR/media-source/#sourcebuffer-segment-parser-loop">segment parser loop</a>, that calls the
-        <a href="http://www.w3.org/TR/media-source/#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>.
-        (i.e. Step 6.3) The intent is to make it easy for the web application to determine where the
-        <a href="#mpeg-audio-frame">MPEG Audio Frames</a> will get inserted by ensuring that the
-        <code><a href="http://www.w3.org/TR/media-source/#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> attribute always reflects the insertion point.</p>
-      <p>
-        The steps below must ONLY be applied to a
-        <code><a href="http://www.w3.org/TR/media-source/#idl-def-SourceBuffer" class="idlType">SourceBuffer</a></code> that is handling the byte stream format outlined in this
-        specification.
-        </p><div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_2"><span>Note</span></div><p class="">
-          We may want to move these steps into the <a href="http://www.w3.org/TR/media-source/#sourcebuffer-segment-parser-loop">segment parser loop</a> if more
-          <a href="http://www.w3.org/TR/media-source/#byte-stream-format-specs">byte stream format specifications</a> are created for media formats that don't contain
-          timestamps.
-        </p></div>
-      <p></p>
-      <p>The following steps must be run immediately before running the <a href="http://www.w3.org/TR/media-source/#sourcebuffer-segment-parser-loop">segment parser loop</a>
-        step that invokes the <a href="http://www.w3.org/TR/media-source/#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>:</p>
-      <ol>
-        <li>Set the <a href="http://www.w3.org/TR/media-source/#presentation-timestamp">presentation timestamp</a> of the <a href="http://www.w3.org/TR/media-source/#coded-frame">coded frame</a> to 0.</li>
-        <li>Set the <a href="http://www.w3.org/TR/media-source/#decode-timestamp">decode timestamp</a> of the <a href="http://www.w3.org/TR/media-source/#coded-frame">coded frame</a> to 0.</li>
-        <li>Let <var>frame duration</var> be the <a href="http://www.w3.org/TR/media-source/#coded-frame-duration">coded frame duration</a> of the
-          <a href="http://www.w3.org/TR/media-source/#coded-frame">coded frame</a>. (i.e. the duration of the <a href="#mpeg-audio-frame">MPEG Audio Frame</a>)</li>
-        <li>Let <var>new timestamp offset</var> equal the sum of the current value of the
-          <code><a href="http://www.w3.org/TR/media-source/#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> and <var>frame duration</var>.</li>
-      </ol>
-
-      <p>The following step must be run immediately after the <a href="http://www.w3.org/TR/media-source/#sourcebuffer-segment-parser-loop">segment parser loop</a>
-        step that invokes the <a href="http://www.w3.org/TR/media-source/#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>:</p>
-      <ol>
-        <li>Assign <var>new timestamp offset<var> to the <code><a href="http://www.w3.org/TR/media-source/#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> attribute.</var></var></li>
-      </ol>
     </section>
 
 <!--     <section id="acknowledgements">

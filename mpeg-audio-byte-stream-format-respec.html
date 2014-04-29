@@ -147,45 +147,6 @@
       </ul>
     </section>
 
-    <section id="mpeg-timestamp-generation">
-      <h4>Timestamp Generation</h4>
-      <p>An <a def-id="mpeg-audio-frame"></a> lacks timestamp information so a mechanism needs to be
-        defined to allow these <a def-id="coded-frames"></a> to be positioned anywhere in the timeline.
-        Since a
-        single <a def-id="mpeg-audio-frame"></a> is a <a def-id="media-segment"></a>, timestamp handling is
-        inserted before and after the step, in the <a def-id="segment-parser-loop"></a>, that calls the
-        <a def-id="coded-frame-processing-algorithm"></a>.
-        (i.e. Step 6.3) The intent is to make it easy for the web application to determine where the
-        <a def-id="mpeg-audio-frames"></a> will get inserted by ensuring that the
-        <a def-id="timestampOffset"></a> attribute always reflects the insertion point.</p>
-      <p>
-        The steps below must ONLY be applied to a
-        <a class="externalDFN">SourceBuffer</a> that is handling the byte stream format outlined in this
-        specification.
-        <p class="note">
-          We may want to move these steps into the <a def-id="segment-parser-loop"></a> if more
-          <a def-id="byte-stream-format-specs"></a> are created for media formats that don't contain
-          timestamps.
-        </p>
-      </p>
-      <p>The following steps must be run immediately before running the <a def-id="segment-parser-loop"></a>
-        step that invokes the <a def-id="coded-frame-processing-algorithm"></a>:</p>
-      <ol>
-        <li>Set the <a def-id="presentation-timestamp"></a> of the <a def-id="coded-frame"></a> to 0.</li>
-        <li>Set the <a def-id="decode-timestamp"></a> of the <a def-id="coded-frame"></a> to 0.</li>
-        <li>Let <var>frame duration</var> be the <a def-id="coded-frame-duration"></a> of the
-          <a def-id="coded-frame"></a>. (i.e. the duration of the <a def-id="mpeg-audio-frame"></a>)</li>
-        <li>Let <var>new timestamp offset</var> equal the sum of the current value of the
-          <a def-id="timestampOffset"></a> and <var>frame duration</var>.</li>
-      </ol>
-
-      <p>The following step must be run immediately after the <a def-id="segment-parser-loop"></a>
-        step that invokes the <a def-id="coded-frame-processing-algorithm"></a>:</p>
-      <ol>
-        <li>Assign <var>new timestamp offset<var> to the <a def-id="timestampOffset"></a> attribute.</li>
-      </ol>
-    </section>
-
 <!--     <section id="acknowledgements">
       <h2>Acknowledgments</h2>
       The editors would like to thank <a def-id="contributors"></a> for their contributions to this specification.
