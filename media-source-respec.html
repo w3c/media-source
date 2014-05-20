@@ -91,7 +91,21 @@
       },
       postProcess: [ mediaSourcePostProcessor ],
 
-      localBiblio: { "STREAMS-API": "Feras Moussa, Takeshi Yoshino. <a href=\"http://www.w3.org/TR/2013/WD-streams-api-20131105/\"><cite>Streams API</cite></a>. 05 November 2013. W3C Working Draft. URL: <a href=\"http://www.w3.org/TR/streams-api/\">http://www.w3.org/TR/2013/WD-streams-api-20131105/</a>" }
+      localBiblio: {
+          "STREAMS-API": {
+            title: "Streams API",
+            href: "http://www.w3.org/TR/2013/WD-streams-api-20131105/",
+            authors: ["Feras Moussa", "Takeshi Yoshino"],
+            status: "WD",
+            publisher: "W3C",
+          },
+          "MSE-REGISTRY": {
+              title: "Media Source Extensions Byte Stream Format Registry",
+              href: "byte-stream-format-registry.html",
+              authors: ["Aaron Colwell"],
+              publisher: "W3C",
+          }
+       }
       };
     </script>
 
@@ -134,7 +148,7 @@
       <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;.
         It defines objects that allow JavaScript to pass media segments to an <a def-id="videoref" name="htmlmediaelement">HTMLMediaElement</a> [[!HTML5]].
         A buffering model is also included to describe how the user agent acts when different media segments are
-        appended at different times. Byte stream specifications used with these extensions are available in the <a def-id="byte-stream-format-registry"></a>.</p>
+        appended at different times. Byte stream specifications used with these extensions are available in the byte stream format registry [[MSE-REGISTRY]].</p>
       <img src="pipeline_model.png" alt="Media Source Pipeline Model Diagram">
 
       <section id="goals">
@@ -206,12 +220,12 @@
           <dt id="init-segment">Initialization Segment</dt>
           <dd>
 	    <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of <a def-id="media-segments"></a>. This includes codec initialization data, <a def-id="track-id"></a> mappings for multiplexed segments, and timestamp offsets (e.g. edit lists).</p>
-            <p class="note">The <a def-id="byte-stream-format-specs"></a> in the <a def-id="byte-stream-format-registry"></a> contain format specific examples.</p>
+            <p class="note">The <a def-id="byte-stream-format-specs"></a> in the byte stream format registry [[MSE-REGISTRY]] contain format specific examples.</p>
 
           <dt id="media-segment">Media Segment</dt>
           <dd>
 	    <p>A sequence of bytes that contain packetized &amp; timestamped media data for a portion of the <a def-id="media-timeline"></a>. Media segments are always associated with the most recently appended <a def-id="init-segment"></a>.</p>
-            <p class="note">The <a def-id="byte-stream-format-specs"></a> in the <a def-id="byte-stream-format-registry"></a> contain format specific examples.</p>
+            <p class="note">The <a def-id="byte-stream-format-specs"></a> in the byte stream format registry [[MSE-REGISTRY]] contain format specific examples.</p>
           </dd>
 
           <dt id="mediasource-object-url">MediaSource object URL</dt>
@@ -357,7 +371,7 @@
             <li>If the <a def-id="readyState"></a> attribute is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>Create a new <a>SourceBuffer</a> object and associated resources.</li>
             <li>Set the <a def-id="generate-timestamps-flag"></a> on the new object to the value in the
-               "Generate Timestamps Flag" column of the <a def-id="byte-stream-format-registry"></a> entry 
+               "Generate Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry 
               that is associated with <var>type</var>.
             <li>
               <dl class="switch">
@@ -732,7 +746,7 @@
             <li>If the current value of <a def-id="duration"></a> is equal to <var>new duration</var>, then return.</li>
             <li>Set <var>old duration</var> to the current value of <a def-id="duration"></a>.
             <li>Update <a def-id="duration"></a> to <var>new duration</var>.</li>
-            <li>If the <var>new duration</var> is less than <var>old duration</var>, then call <code><a href="#widl-SourceBuffer-remove-void-double-start-double-end">remove</a>(<var>new duration</var>, <var>old duration</var>)</code> on all objects in <a def-id="sourceBuffers"></a>.
+            <li>If the <var>new duration</var> is less than <var>old duration</var>, then call <a href="#widl-SourceBuffer-remove-void-double-start-unrestricted-double-end">remove</a>(<var>new duration</var>, <var>old duration</var>)</code> on all objects in <a def-id="sourceBuffers"></a>.
               <p class="note">This preserves audio frames and text cues that start before and end after the <a def-id="duration"></a>.</p></li>
             <li>If a user agent is unable to partially render audio frames or text cues that start before and end after the <a def-id="duration"></a>, then run the following steps:
               <ol>
@@ -975,13 +989,13 @@
           </ol>
         </dd>
 
-        <dt>void remove(double start, double end)</dt>
+        <dt>void remove(double start, unrestricted double end)</dt>
         <dd>
           <p>Removes media for a specific time range.</p>
 
           <ol class="method-algorithm">
             <li>If <var>start</var> is negative or greater than <a def-id="duration"></a>, then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
-            <li>If <var>end</var> is less than or equal to <var>start</var>, then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
+            <li>If <var>end</var> is less than or equal to <var>start</var> or <var>end</var> equals NaN, then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
             <li>
@@ -1428,7 +1442,7 @@
                     <dd>
                       <ol>
                         <li>Let <var>presentation timestamp</var> be a double precision floating point representation of the coded frame's <a def-id="presentation-timestamp"></a> in seconds.
-                          <p class="note">Special processing may be needed to determine the presentation and decode timestamps for timed text frames since this information may not be explicilty
+                          <p class="note">Special processing may be needed to determine the presentation and decode timestamps for timed text frames since this information may not be explicitly
                             present in the underlying format or may be dependent on the order of the frames. Some metadata text tracks, like MPEG2-TS PSI data, may only have implied timestamps.
                             Format specific rules for these situations should be in the <a def-id="byte-stream-format-specs"></a> or in separate extension specifications.</p>
                         </li>
@@ -2125,9 +2139,9 @@
       <h2>Byte Stream Formats</h2>
       <p>The bytes provided through <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format and
         semantics of these byte streams are defined in <dfn id="byte-stream-format-specs">byte stream format specifications</dfn>. 
-        The <a def-id="byte-stream-format-registry"></a> provides mappings between a MIME type that may be passed to <a def-id="addSourceBuffer"></a> or
+        The byte stream format registry [[MSE-REGISTRY]] provides mappings between a MIME type that may be passed to <a def-id="addSourceBuffer"></a> or
         <a def-id="isTypeSupported"></a> and the byte stream format expected by a <a>SourceBuffer</a> created with that MIME type. Implementations are encouraged to register
-        mappings for byte stream formats they support to facilitate interoperability. The <a def-id="byte-stream-format-registry"></a> is the authoritative source for these
+        mappings for byte stream formats they support to facilitate interoperability. The byte stream format registry [[MSE-REGISTRY]] is the authoritative source for these
         mappings. If an implementation claims to support a MIME type listed in the registry, its <a>SourceBuffer</a> implementation must conform to the
         <a def-id="byte-stream-format-spec"></a> listed in the registry entry.</p>
       <p class="note">The byte stream format specifications in the registry are not intended to define new storage formats. They simply outline the subset of
@@ -2311,7 +2325,16 @@
         </thead>
         <tbody>
           <tr>
-            <td>29 April 2014</td>
+            <td>20 May 2014</td>
+            <td>
+              <ul>
+                <li>Bug 25518 - Make remove() end parameter an unrestricted double.</li>
+                <li>Bug 25580 - Add informative reference to byte stream format registry.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/29f17705b5c2/media-source/media-source.html">29 April 2014</a></td>
             <td>
               <ul>
                 <li>Bug 25347 - Remove unnecessary null & invalid enum value checks.</li>

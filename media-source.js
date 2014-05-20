@@ -134,7 +134,7 @@
     'appendBuffer': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data', link_text: 'appendBuffer()',  },
     'appendStream': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize', link_text: 'appendStream()',  },
     'abort': { func: idlref_helper, fragment: 'widl-SourceBuffer-abort-void', link_text: 'abort()',  },
-    'remove': { func: idlref_helper, fragment: 'widl-SourceBuffer-remove-void-double-start-double-end', link_text: 'remove()',  },
+    'remove': { func: idlref_helper, fragment: 'widl-SourceBuffer-remove-void-double-start-unrestricted-double-end', link_text: 'remove()',  },
     'updating': { func: idlref_helper, fragment: 'widl-SourceBuffer-updating', link_text: 'updating',  },
     'sourcebuffer-audioTracks': { func: idlref_helper, fragment: 'widl-SourceBuffer-audioTracks', link_text: 'audioTracks',  },
     'sourcebuffer-videoTracks': { func: idlref_helper, fragment: 'widl-SourceBuffer-videoTracks', link_text: 'videoTracks',  },
@@ -241,7 +241,6 @@
     'need-RAP-flag': { func: var_helper, fragment: '#need-RAP-flag', link_text: 'need random access point flag', },
 
     'blob-uri': { func: fileapi_helper, fragment: 'url', link_text: 'Blob URI',  },
-    'blob-origin': { func: fileapi_helper, fragment: 'originOfBlob', link_text: 'Origin of Blob URIs', },
     'File': { func: fileapi_helper, fragment: 'dfn-file', link_text: 'File', },
     'Blob': { func: fileapi_helper, fragment: 'dfn-Blob', link_text: 'Blob',  },
     'URL': { func: fileapi_helper, fragment: 'URL-object', link_text: 'URL',  },
@@ -334,7 +333,6 @@
 
     'performance-now': { func: hrtime_helper, fragment: 'dom-performance-now', link_text: 'Performance.now()',  },
 
-    'byte-stream-format-registry': { func: link_helper, fragment: 'byte-stream-format-registry.html', link_text: 'byte stream format registry', },
   };
 
   var definitionInfo = {};
