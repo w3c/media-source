@@ -1016,6 +1016,12 @@
        </ol>
 
         </dd>
+        <dt>attribute TrackDefaultList trackDefaults</dt>
+        <dd>
+          <p>Specifies the default values to use if kind and/or language information is not available in the
+            <a def-id="init-segment"></a> when the <a def-id="init-segment-received-algorithm"></a> needs
+            to create track objects.</p>
+        </dd>
       </dl>
 
       <section id="track-buffers">
@@ -1330,24 +1336,52 @@
                 <li>
                   <p>For each audio track in the <a def-id="init-segment"></a>, run following steps:</p>
                   <ol>
-                    <li>Let <var>new audio track</var> be a new <a def-id="audio-track"></a> object.</li>
-                    <li>Generate a unique ID and assign it to the <a def-id="audiotrack-id"></a> property on <var>new audio track</var>.</li>
-                    <li>
-                      <p>
-                        If <a def-id="audiotracks"></a>.<a def-id="audiotracklist-length"></a> equals 0, then run
-                          the following steps:
-                      </p>
+                    <li>Let <var>audio byte stream track ID</var> be the
+                      <a def-id="track-id"></a> for the current track being processed.</li>
+                    <li>Let <var>audio language</var> be a BCP 47 language tag for the language
+                      specified in the <a def-id="init-segment"></a> for this track or an empty string if no
+                      language info is present.</li>
+                    <li>If <var>audio language</var> equals an empty string, then run the
+                      <a def-id="default-track-language-algorithm"></a> with <var>byteStreamTrackID</var>
+                      set to <var>audio byte stream track ID</var> and <var>type</var> set to
+                      <a def-id="TrackDefaultType-audio"></a> and assign the value returned by the
+                      algorithm to <var>audio language</var>.</li>
+                    <li>Let <var>audio kinds</var> be an array of kind strings specified in the
+                      <a def-id="init-segment"></a> for this track or an empty array if no kind information
+                      is provided.</li>
+                    <li>If <var>audio kinds</var> equals an empty array, then run the
+                      <a def-id="default-track-kinds-algorithm"></a> with <var>byteStreamTrackID</var>
+                      set to <var>audio byte stream track ID</var> and <var>type</var> set to
+                      <a def-id="TrackDefaultType-audio"></a> and assign the value returned by the
+                      algorithm to <var>audio kinds</var>.</li>
+                    <li>For each value in <var>audio kinds</var>, run the following steps:
                       <ol>
-                        <li>Set the <a def-id="audiotrack-enabled"></a> property on <var>new audio track</var> to true.</li>
-                        <li>Set <var>active track flag</var> to true.</li>
+                        <li>Let <var>current audio kind</var> equal the value from <var>audio kinds</var>
+                          for this iteration of the loop.</li>
+                        <li>Let <var>new audio track</var> be a new <a def-id="audio-track"></a> object.</li>
+                        <li>Generate a unique ID and assign it to the <a def-id="audiotrack-id"></a> property on <var>new audio track</var>.</li>
+                        <li>Assign <var>audio language</var> to the <a def-id="audiotrack-language"></a>
+                          property on <var>new audio track</var>.</li>
+                        <li>Assign <var>current audio kind</var> to the <a def-id="audiotrack-kind"></a>
+                          property on <var>new audio track</var>.</li>
+                        <li>
+                          <p>
+                            If <a def-id="audiotracks"></a>.<a def-id="audiotracklist-length"></a> equals 0, then run
+                            the following steps:
+                          </p>
+                          <ol>
+                            <li>Set the <a def-id="audiotrack-enabled"></a> property on <var>new audio track</var> to true.</li>
+                            <li>Set <var>active track flag</var> to true.</li>
+                          </ol>
+                        </li>
+                        <li>Add <var>new audio track</var> to the <a def-id="sourcebuffer-audioTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
+                        <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="audio-track-list"></a> object referenced by the
+                          <a def-id="sourcebuffer-audioTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
+                        <li>Add <var>new audio track</var> to the <a def-id="audiotracks"></a> attribute on the HTMLMediaElement.</li>
+                        <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="audio-track-list"></a> object referenced by the <a def-id="audiotracks"></a>
+                          attribute on the HTMLMediaElement.</li>
                       </ol>
                     </li>
-                    <li>Add <var>new audio track</var> to the <a def-id="sourcebuffer-audioTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
-                    <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="audio-track-list"></a> object referenced by the
-                      <a def-id="sourcebuffer-audioTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
-                    <li>Add <var>new audio track</var> to the <a def-id="audiotracks"></a> attribute on the HTMLMediaElement.</li>
-                    <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="audio-track-list"></a> object referenced by the <a def-id="audiotracks"></a>
-                      attribute on the HTMLMediaElement.</li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
                     <li>Add the <a def-id="track-description"></a> for this track to the <a def-id="track-buffer"></a>.</li>
                   </ol>
@@ -1355,24 +1389,52 @@
                 <li>
                   <p>For each video track in the <a def-id="init-segment"></a>, run following steps:</p>
                   <ol>
-                    <li>Let <var>new video track</var> be a new <a def-id="video-track"></a> object.</li>
-                    <li>Generate a unique ID and assign it to the <a def-id="videotrack-id"></a> property on <var>new video track</var>.</li>
-                    <li>
-                      <p>
-                        If <a def-id="videotracks"></a>.<a def-id="videotracklist-length"></a> equals 0, then run
-                          the following steps:
-                      </p>
+                    <li>Let <var>video byte stream track ID</var> be the
+                      <a def-id="track-id"></a> for the current track being processed.</li>
+                    <li>Let <var>video language</var> be a BCP 47 language tag for the language
+                      specified in the <a def-id="init-segment"></a> for this track or an empty string if no
+                      language info is present.</li>
+                    <li>If <var>video language</var> equals an empty string, then run the
+                      <a def-id="default-track-language-algorithm"></a> with <var>byteStreamTrackID</var>
+                      set to <var>video byte stream track ID</var> and <var>type</var> set to
+                      <a def-id="TrackDefaultType-video"></a> and assign the value returned by the
+                      algorithm to <var>video language</var>.</li>
+                    <li>Let <var>video kinds</var> be an array of kind strings specified in the
+                      <a def-id="init-segment"></a> for this track or an empty array if no kind information
+                      is provided.</li>
+                    <li>If <var>video kinds</var> equals an empty array, then run the
+                      <a def-id="default-track-kinds-algorithm"></a> with <var>byteStreamTrackID</var>
+                      set to <var>video byte stream track ID</var> and <var>type</var> set to
+                      <a def-id="TrackDefaultType-video"></a> and assign the value returned by the
+                      algorithm to <var>video kinds</var>.</li>
+                    <li>For each value in <var>video kinds</var>, run the following steps:
                       <ol>
-                        <li>Set the <a def-id="videotrack-selected"></a> property on <var>new video track</var> to true.</li>
-                        <li>Set <var>active track flag</var> to true.</li>
+                        <li>Let <var>current video kind</var> equal the value from <var>video kinds</var>
+                          for this iteration of the loop.</li>
+                        <li>Let <var>new video track</var> be a new <a def-id="video-track"></a> object.</li>
+                        <li>Generate a unique ID and assign it to the <a def-id="videotrack-id"></a> property on <var>new video track</var>.</li>
+                        <li>Assign <var>video language</var> to the <a def-id="videotrack-language"></a>
+                          property on <var>new video track</var>.</li>
+                        <li>Assign <var>current video kind</var> to the <a def-id="videotrack-kind"></a>
+                          property on <var>new video track</var>.</li>
+                        <li>
+                          <p>
+                            If <a def-id="videotracks"></a>.<a def-id="videotracklist-length"></a> equals 0, then run
+                            the following steps:
+                          </p>
+                          <ol>
+                            <li>Set the <a def-id="videotrack-selected"></a> property on <var>new video track</var> to true.</li>
+                            <li>Set <var>active track flag</var> to true.</li>
+                          </ol>
+                        </li>
+                        <li>Add <var>new video track</var> to the <a def-id="sourcebuffer-videoTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
+                        <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="sourcebuffer-videoTracks"></a> attribute
+                          on this <a>SourceBuffer</a> object.</li>
+                        <li>Add <var>new video track</var> to the <a def-id="videotracks"></a> attribute on the HTMLMediaElement.</li>
+                        <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="videotracks"></a> attribute on the
+                          HTMLMediaElement.</li>
                       </ol>
                     </li>
-                    <li>Add <var>new video track</var> to the <a def-id="sourcebuffer-videoTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
-                    <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="sourcebuffer-videoTracks"></a> attribute
-                      on this <a>SourceBuffer</a> object.</li>
-                    <li>Add <var>new video track</var> to the <a def-id="videotracks"></a> attribute on the HTMLMediaElement.</li>
-                    <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="videotracks"></a> attribute on the
-                      HTMLMediaElement.</li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
                     <li>Add the <a def-id="track-description"></a> for this track to the <a def-id="track-buffer"></a>.</li>
                   </ol>
@@ -1380,19 +1442,49 @@
                 <li>
                   <p>For each text track in the <a def-id="init-segment"></a>, run following steps:</p>
                   <ol>
-                    <li>
-                      Let <var>new text track</var> be a new <a def-id="text-track"></a> object with its properties populated with the appropriate
-                      information from the <a def-id="init-segment"></a>.</li>
-                    <li>
-                      If the <a def-id="texttrack-mode"></a> property on <var>new text track</var> equals <a def-id="texttrack-showing"></a> or
-                      <a def-id="texttrack-hidden"></a>, then set <var>active track flag</var> to true.
+                    <li>Let <var>text byte stream track ID</var> be the 
+                      <a def-id="track-id"></a> for the current track being processed.</li>
+                    <li>Let <var>text language</var> be a BCP 47 language tag for the language
+                      specified in the <a def-id="init-segment"></a> for this track or an empty string if no
+                      language info is present.</li>
+                    <li>If <var>text language</var> equals an empty string, then run the
+                      <a def-id="default-track-language-algorithm"></a> with <var>byteStreamTrackID</var>
+                      set to <var>text byte stream track ID</var> and <var>type</var> set to
+                      <a def-id="TrackDefaultType-text"></a> and assign the value returned by the
+                      algorithm to <var>text language</var>.</li>
+                    <li>Let <var>text kinds</var> be an array of kind strings specified in the
+                      <a def-id="init-segment"></a> for this track or an empty array if no kind information
+                      is provided.</li>
+                    <li>If <var>text kinds</var> equals an empty array, then run the
+                      <a def-id="default-track-kinds-algorithm"></a> with <var>byteStreamTrackID</var>
+                      set to <var>text byte stream track ID</var> and <var>type</var> set to
+                      <a def-id="TrackDefaultType-text"></a> and assign the value returned by the
+                      algorithm to <var>text kinds</var>.</li>
+                    <li>For each value in <var>text kinds</var>, run the following steps:
+                      <ol>
+                        <li>Let <var>current text kind</var> equal the value from <var>text kinds</var>
+                          for this iteration of the loop.</li>
+                        <li>
+                          Let <var>new text track</var> be a new <a def-id="text-track"></a> object.</li>
+                        <li>Generate a unique ID and assign it to the <a def-id="texttrack-id"></a> property on <var>new text track</var>.</li>
+                        <li>Assign <var>text language</var> to the <a def-id="texttrack-language"></a>
+                          property on <var>new text track</var>.</li>
+                        <li>Assign <var>current text kind</var> to the <a def-id="texttrack-kind"></a>
+                          property on <var>new text track</var>.</li>
+                        <li>Populate the remaining properties on <var>new text track</var> with the
+                          appropriate information from the <a def-id="init-segment"></a>.
+                        <li>
+                          If the <a def-id="texttrack-mode"></a> property on <var>new text track</var> equals <a def-id="texttrack-showing"></a> or
+                          <a def-id="texttrack-hidden"></a>, then set <var>active track flag</var> to true.
+                        </li>
+                        <li>Add <var>new text track</var> to the <a def-id="sourcebuffer-textTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
+                        <li><a def-id="Queue-and-fire-addtrack"></a> at <a def-id="sourcebuffer-textTracks"></a> attribute
+                          on this <a>SourceBuffer</a> object.</li>
+                        <li>Add <var>new text track</var> to the <a def-id="texttracks"></a> attribute on the HTMLMediaElement.</li>
+                        <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="text-track-list"></a> object referenced by the <a def-id="texttracks"></a> attribute on the
+                          HTMLMediaElement.</li>
+                      </ol>
                     </li>
-                    <li>Add <var>new text track</var> to the <a def-id="sourcebuffer-textTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
-                    <li><a def-id="Queue-and-fire-addtrack"></a> at <a def-id="sourcebuffer-textTracks"></a> attribute
-                      on this <a>SourceBuffer</a> object.</li>
-                    <li>Add <var>new text track</var> to the <a def-id="texttracks"></a> attribute on the HTMLMediaElement.</li>
-                    <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="text-track-list"></a> object referenced by the <a def-id="texttracks"></a> attribute on the
-                      HTMLMediaElement.</li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
                     <li>Add the <a def-id="track-description"></a> for this track to the <a def-id="track-buffer"></a>.</li>
                   </ol>
@@ -1420,6 +1512,57 @@
               If the <var>active track flag</var> equals true and the <a def-id="ready-state"></a> attribute is greater than
               <a def-id="have-current-data"></a>, then set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.
             </li>
+          </ol>
+        </section>
+
+        <section id="sourcebuffer-default-track-language">
+          <h4>Default track language</h4>
+          <p>The following steps are run when the <a def-id="init-segment-received-algorithm"></a> needs
+            to determine what the default language for a new track should be. This algorithm is initialized
+            with <var>byteStreamTrackID</var> and <var>type</var> parameters when invoked by the
+            <a def-id="init-segment-received-algorithm"></a>.</p>
+          <ol>
+            <li>If <a def-id="trackDefaults"></a> contains a <a>TrackDefault</a> object with a
+              <a def-id="TrackDefault-type"></a> attribute equal to <var>type</var> and a
+              <a def-id="TrackDefault-byteStreamTrackID"></a> attribute equal to
+              <var>byteStreamTrackID</var>, then return the value of the
+              <a def-id="TrackDefault-language"></a> attribute on this matching object and abort these
+              steps.</li>
+
+            <li>If <a def-id="trackDefaults"></a> contains a <a>TrackDefault</a> object with a
+              <a def-id="TrackDefault-type"></a> attribute equal to <var>type</var> and a
+              <a def-id="TrackDefault-byteStreamTrackID"></a> attribute equal to
+              an empty string, then return the value of the
+              <a def-id="TrackDefault-language"></a> attribute on this matching object and abort these
+              steps.</li>
+
+            <li>Return an empty string to the caller.</li>
+          </ol>
+        </section>
+
+        <section id="sourcebuffer-default-track-kinds">
+          <h4>Default track kinds</h4>
+          <p>The following steps are run when the <a def-id="init-segment-received-algorithm"></a> needs
+            to determine what the default kinds for a new track should be. This algorithm is initialized
+            with <var>byteStreamTrackID</var> and <var>type</var> parameters when invoked by the
+            <a def-id="init-segment-received-algorithm"></a>.</p>
+          <ol>
+            <ol>
+            <li>If <a def-id="trackDefaults"></a> contains a <a>TrackDefault</a> object with a
+              <a def-id="TrackDefault-type"></a> attribute equal to <var>type</var> and a
+              <a def-id="TrackDefault-byteStreamTrackID"></a> attribute equal to
+              <var>byteStreamTrackID</var>, then return the value of the
+              <a def-id="TrackDefault-kinds"></a> attribute on this matching object and abort these
+              steps.</li>
+
+            <li>If <a def-id="trackDefaults"></a> contains a <a>TrackDefault</a> object with a
+              <a def-id="TrackDefault-type"></a> attribute equal to <var>type</var> and a
+              <a def-id="TrackDefault-byteStreamTrackID"></a> attribute equal to
+              an empty string, then return the value of the
+              <a def-id="TrackDefault-kinds"></a> attribute on this matching object and abort these
+              steps.</li>
+
+            <li>Return an array with a single empty string element in it to the caller.</li>
           </ol>
         </section>
 
@@ -1890,6 +2033,127 @@
       </dl>
     </section>
 
+    <section id="trackdefault">
+      <h2>TrackDefault Object</h2>
+      <p>The TrackDefault object is used to provide kind and language information for tracks that do not
+        contain this information in the <a def-id="init-segments"></a>. This information is only consulted
+        when the <a def-id="init-segment-received-algorithm"></a> creates track objects.</p>
+
+      <dl title="enum TrackDefaultType" class="idl">
+        <dt>audio</dt>
+        <dd>
+          Indicates that the information in the <a>TrackDefault</a> object should only be used when
+          creating <a>AudioTrack</a> objects.
+        </dd>
+        <dt>video</dt>
+        <dd>
+          Indicates that the information in the  <a>TrackDefault</a> object should only be used when
+          creating <a>VideoTrack</a> objects.
+        </dd>
+        <dt>text</dt>
+        <dd>
+          Indicates that the  information in the <a>TrackDefault</a> object should only be used when
+          creating <a>TextTrack</a> objects.
+        </dd>
+      </dl>
+
+      <dl title="interface TrackDefault" class="idl">
+        <dt class="extended-attribute">
+          Constructor(TrackDefaultType type, DOMString language, sequence<DOMString> kinds, optional DOMString byteStreamTrackID = "")
+        </dt>
+        <dd>
+          <ol class="method-algorithm">
+            <li>if <var>language</var> is not an empty string or <var>language</var> is not a BCP 47
+              language tag, then throw an <a def-id="invalid-access-err"></a> and abort these steps.</li>
+            <li>
+              <dl class="switch">
+                <dt>If <var>type</var> equals <a def-id="TrackDefaultType-audio"></a>:</dt>
+                <dd>
+                  If any string in <var>kinds</var> contains a value that is not listed as applying to
+                  audio in the <a def-id="av-kind-categories-table"></a>, then throw an
+                  <a def-id="invalid-access-err"></a> and abort these steps.
+                </dd>
+                <dt>If <var>type</var> equals <a def-id="TrackDefaultType-video"></a>:</dt>
+                <dd>
+                  If any string in <var>kinds</var> contains a value that is not listed as applying to
+                  video in the <a def-id="av-kind-categories-table"></a>, then throw an
+                  <a def-id="invalid-access-err"></a> and abort these steps.
+                </dd>
+
+                <dt>If <var>type</var> equals <a def-id="TrackDefaultType-text"></a>:</dt>
+                <dd>
+                  If any string in <var>kinds</var> contains a value that is not listed in the
+                  <a def-id="text-track-kind-list"></a>, then throw an <a def-id="invalid-access-err"></a>
+                  and abort these steps.
+                </dd>
+              </dl>
+            </li>
+            <li>Set the <a def-id="TrackDefault-type"></a> attribute on this new object to <var>type</var>.</li>
+            <li>Set the <a def-id="TrackDefault-language"></a> attribute on this new object to <var>language</var>.</li>
+            <li>Set the <a def-id="TrackDefault-kinds"></a> attribute to on this new object <var>kinds</var>.</li>
+            <li>Set the <a def-id="TrackDefault-byteStreamTrackID"></a> attribute on this new object to <var>byteStreamTrackID</var>.</li>
+          </ol>
+        </dd>
+        <dt>readonly attribute TrackDefaultType type</dt>
+        <dd>
+          <p>The type of track that can be constructed using the information in this object.</p>
+        </dd>
+        <dt>readonly attribute DOMString byteStreamTrackID</dt>
+        <dd>
+          <p>The decimal string representation of the <a def-id="track-id"></a> that identifies the specific
+            track that this object should apply to. An empty string indicates that this object can be
+            used for any track of the appropriate type. (i.e. any <a>AudioTrack</a> if
+            <a def-id="TrackDefault-type"></a> equals <a def-id="TrackDefaultType-audio"></a>).</p>
+        </dd>
+        <dt>readonly attribute DOMString language</dt>
+        <dd>
+          <p>The default language to use when an <a def-id="init-segment"></a> does not contain language
+          information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
+        </dd>
+        <dt>readonly attribute DOMString[] kinds</dt>
+        <dd>
+          <p>The default kinds used when an <a def-id="init-segment"></a> does not contain kind
+          information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
+        </dd>
+      </dl>
+    </section>
+
+    <section id="trackdefaultlist">
+      <h2>TrackDefaultList Object</h2>
+      <p>TrackDefaultList is a simple container object for <a>TrackDefault</a> objects. It provides read-only array access.</p>
+
+      <dl title="interface TrackDefaultList" class="idl">
+        <dt class="extended-attribute">
+          Constructor(sequence&lt;TrackDefault&gt; trackDefaults)
+        </dt>
+        <dd>
+          <ol class="method-algorithm">
+            <li>If <var>trackDefaults</var> contains two or more <a>TrackDefault</a> objects with
+              the same <a def-id="TrackDefault-type"></a> and have
+              <a def-id="TrackDefault-byteStreamTrackID"></a> equal to an empty string, then throw an
+              <a def-id="invalid-access-err"></a> and abort these steps.
+              <p class="note">This ensures that there is only one "byteStreamTrackID independent"
+                default for each <a>TrackDefaultType</a> value.</p></li>
+            <li>Store a copy of <var>trackDefaults</var> in this new object so the values can be returned
+              by the accessor methods.</li>
+          </ol>
+        </dd>
+        <dt>readonly attribute unsigned long length</dt>
+        <dd>
+          <p>Indicates the number of <a>TrackDefault</a> objects in the list.</p>
+        </dd>
+        <dt>getter TrackDefault (unsigned long index)</dt>
+        <dd>
+          <p>Allows the TrackDefault objects in the list to be accessed with an array operator (i.e. []).</p>
+
+          <ol class="method-algorithm">
+            <li>If <var>index</var> is greater than or equal to the <a def-id="length"></a> attribute then return undefined and abort these steps.</li>
+            <li>Return the <var>index</var>'th <a>TrackDefault</a> object in the list.</li>
+          </ol>
+        </dd>
+      </dl>
+    </section>
+
     <section id="url">
       <h2>URL Object Extensions</h2>
       <p>This section specifies extensions to the <a def-id="URL"></a>[[!FILE-API]] object definition.</p>
@@ -1991,44 +2255,6 @@
       <p>This section specifies extensions to the HTML <a def-id="audio-track"></a> definition.</p>
 
       <dl title="partial interface AudioTrack" class="idl">
-        <dt>attribute DOMString kind</dt>
-        <dd>
-          <p>Allows the web application to get and update the track <a def-id="audiotrack-kind"></a>.</p>
-          <p>On getting, return the current value of the attribute. This is either the value provided when this object was created or the value provided on
-            the last successful set operation.<p>
-          <p>On setting, run the following steps:</p>
-          <ol>
-            <li>If the value being assigned to this attribute does not match one of the <a def-id="videoref" name="dom-TrackList-getKind-categories">kind categories</a>, then abort these steps.</li>
-            <li>Update this attribute to the new value.</li>
-            <li>If the <a def-id="audiotrack-sourceBuffer"></a> attribute on this track is not null, then
-              <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
-              <a def-id="audiotrack-sourceBuffer"></a>.<a def-id="sourcebuffer-audioTracks"></a>.
-            </li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="audio-track-list"></a> object referenced by the <a def-id="audiotracks"></a> attribute on the
-              HTMLMediaElement.
-            </li>
-          </ol>
-        </dd>
-
-        <dt>attribute DOMString language</dt>
-        <dd>
-          <p>Allows the web application to get and update the track <a def-id="audiotrack-language"></a>.</p>
-          <p>On getting, return the current value of the attribute. This is either the value provided when this object was created or the value provided on
-            the last successful set operation.<p>
-          <p>On setting, run the following steps:</p>
-          <ol>
-            <li>If the value being assigned to this attribute is not an empty string or a BCP 47 language tag[[!BCP47]], then abort these steps.</li>
-            <li>Update this attribute to the new value.</li>
-            <li>If the <a def-id="audiotrack-sourceBuffer"></a> attribute on this track is not null, then
-              <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
-              <a def-id="audiotrack-sourceBuffer"></a>.<a def-id="sourcebuffer-audioTracks"></a>.
-            </li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="audio-track-list"></a> object referenced by the <a def-id="audiotracks"></a> attribute on the
-              HTMLMediaElement.
-            </li>
-          </ol>
-        </dd>
-
         <dt>readonly attribute SourceBuffer? sourceBuffer</dt>
         <dd>
           <p>Returns the <a>SourceBuffer</a> that created this track. Returns null if this track was not created by a <a>SourceBuffer</a> or the <a>SourceBuffer</a> has been removed from the <a def-id="sourceBuffers"></a> attribute of its <a def-id="parent-media-source"></a>.</p>
@@ -2041,48 +2267,11 @@
       <p>This section specifies extensions to the HTML <a def-id="video-track"></a> definition.</p>
 
       <dl title="partial interface VideoTrack" class="idl">
-        <dt>attribute DOMString kind</dt>
-        <dd>
-          <p>Allows the web application to get and update the track <a def-id="videotrack-kind"></a>.</p>
-          <p>On getting, return the current value of the attribute. This is either the value provided when this object was created or the value provided on
-            the last successful set operation.<p>
-          <p>On setting, run the following steps:</p>
-          <ol>
-            <li>If the value being assigned to this attribute does not match one of the <a def-id="videoref" name="dom-TrackList-getKind-categories">kind categories</a>, then abort these steps.</li>
-            <li>Update this attribute to the new value.</li>
-            <li>If the <a def-id="videotrack-sourceBuffer"></a> attribute on this track is not null, then
-              <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
-              <a def-id="videotrack-sourceBuffer"></a>.<a def-id="sourcebuffer-videoTracks"></a>.
-            </li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="videotracks"></a> attribute on the
-              HTMLMediaElement.
-            </li>
-          </ol>
-        </dd>
-
-        <dt>attribute DOMString language</dt>
-        <dd>
-          <p>Allows the web application to get and update the track <a def-id="videotrack-language"></a>.</p>
-          <p>On getting, return the current value of the attribute. This is either the value provided when this object was created or the value provided on
-            the last successful set operation.<p>
-          <p>On setting, run the following steps:</p>
-          <ol>
-            <li>If the value being assigned to this attribute is not an empty string or a BCP 47 language tag[[!BCP47]], then abort these steps.</li>
-            <li>Update this attribute to the new value.</li>
-            <li>If the <a def-id="videotrack-sourceBuffer"></a> attribute on this track is not null, then
-              <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
-              <a def-id="videotrack-sourceBuffer"></a>.<a def-id="sourcebuffer-videoTracks"></a>.
-            </li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="videotracks"></a> attribute on the
-              HTMLMediaElement.
-            </li>
-          </ol>
-        </dd>
-
         <dt>readonly attribute SourceBuffer? sourceBuffer</dt>
         <dd>
           <p>Returns the <a>SourceBuffer</a> that created this track. Returns null if this track was not created by a <a>SourceBuffer</a> or the <a>SourceBuffer</a> has been removed from the <a def-id="sourceBuffers"></a> attribute of its <a def-id="parent-media-source"></a>.</p>
         </dd>
+      </dl>
     </section>
 
     <section id="text-track-extensions">
@@ -2090,49 +2279,11 @@
       <p>This section specifies extensions to the HTML <a def-id="text-track"></a> definition.</p>
 
       <dl title="partial interface TextTrack" class="idl">
-        <dt>attribute DOMString kind</dt>
-        <dd>
-          <p>Allows the web application to get and update the track <a def-id="texttrack-kind"></a>.</p>
-          <p>On getting, return the current value of the attribute. This is either the value provided when this object was created or the value provided on
-            the last successful set operation.<p>
-          <p>On setting, run the following steps:</p>
-          <ol>
-            <li>If the value being assigned to this attribute does not match one of the <a def-id="videoref" name="text-track-kind">text track kinds</a>, then abort these steps.</li>
-            <li>Update this attribute to the new value.</li>
-            <li>If the <a def-id="texttrack-sourceBuffer"></a> attribute on this track is not null, then
-              <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
-              <a def-id="texttrack-sourceBuffer"></a>.<a def-id="sourcebuffer-textTracks"></a>.
-            </li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="text-track-list"></a> object referenced by the <a def-id="texttracks"></a> attribute on the
-              HTMLMediaElement.
-            </li>
-          </ol>
-        </dd>
-
-        <dt>attribute DOMString language</dt>
-        <dd>
-          <p>Allows the web application to get and update the track <a def-id="texttrack-language"></a>.</p>
-          <p>On getting, return the current value of the attribute. This is either the value provided when this object was created or the value provided on
-            the last successful set operation.<p>
-          <p>On setting, run the following steps:</p>
-          <ol>
-            <li>If the value being assigned to this attribute is not an valid <a def-id="videoref" name="text-track-language">text track language</a>, 
-              then abort these steps.</li>
-            <li>Update this attribute to the new value.</li>
-            <li>If the <a def-id="texttrack-sourceBuffer"></a> attribute on this track is not null, then
-              <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at
-              <a def-id="texttrack-sourceBuffer"></a>.<a def-id="sourcebuffer-textTracks"></a>.
-            </li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the <a def-id="text-track-list"></a> object referenced by the <a def-id="texttracks"></a> attribute on the
-              HTMLMediaElement.
-            </li>
-          </ol>
-        </dd>
-
         <dt>readonly attribute SourceBuffer? sourceBuffer</dt>
         <dd>
           <p>Returns the <a>SourceBuffer</a> that created this track. Returns null if this track was not created by a <a>SourceBuffer</a> or the <a>SourceBuffer</a> has been removed from the <a def-id="sourceBuffers"></a> attribute of its <a def-id="parent-media-source"></a>.</p>
         </dd>
+      </dl>
     </section>
 
     <section id="byte-stream-formats">
@@ -2325,7 +2476,15 @@
         </thead>
         <tbody>
           <tr>
-            <td>20 May 2014</td>
+            <td>21 May 2014</td>
+            <td>
+              <ul>
+                <li>Bug 24370 - Add TrackDefault object and remove kind/language overloads.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/3e8dfccbfded/media-source/media-source.html">20 May 2014</a></td>
             <td>
               <ul>
                 <li>Bug 25518 - Make remove() end parameter an unrestricted double.</li>
