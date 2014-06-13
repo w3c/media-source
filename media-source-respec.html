@@ -1026,7 +1026,15 @@
         <dd>
           <p>Specifies the default values to use if kind and/or language information is not available in the
             <a def-id="init-segment"></a> when the <a def-id="init-segment-received-algorithm"></a> needs
-            to create track objects.</p>
+            to create track objects. This attribute is initially set to an empty <a>TrackDefaultList</a> object.</p>
+          <p>On getting, Return the initial value or the last value that was successfully set.</p>
+          <p>On setting, run the following steps:</p>
+          <ol>
+            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an
+              <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>Update the attribute to the new value.</li>
+          </ol>
         </dd>
       </dl>
 
@@ -2489,6 +2497,7 @@
                 <li>Bug 25999 - Change appendWindowStart assignments to reference presentation start time.</li>
                 <li>Bug 26000 - Make it explicit that SourceBuffer.remove() throws an exception if duration equals NaN.</li>
                 <li>Bug 25846 - Update end of stream algorithm to invoke the append error algorithm on decode errors.</li>
+                <li>Bug 25850 - Specify SourceBuffer.trackDefaults initial value and setter/getter behavior.</li>
               </ul>
             </td>
           </tr>
