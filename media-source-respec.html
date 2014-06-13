@@ -791,14 +791,19 @@
                 <dt>If <var>error</var> is set to <a def-id="decode"></a>
                 </dt>
                 <dd>
-	          <dl class="switch">
-	            <dt>If the <a def-id="ready-state"></a> attribute equals <a def-id="have-nothing"></a>
-                    </dt>
-	            <dd>Run the "<i>If the media data can be fetched but is found by inspection to be in an unsupported format, or can otherwise not be rendered at all</i>" steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
-	            <dt>If the <a def-id="ready-state"></a> attribute is greater than <a def-id="have-nothing"></a>
-                    </dt>
-	            <dd>Run the <a def-id="media-data-is-corrupted"></a> steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
-	          </dl>
+                  <ol>
+                    <li>If <a def-id="updating"></a> equals true, then run the <a def-id="append-error-algorithm"></a>.</li>
+                    <li>
+	              <dl class="switch">
+	                <dt>If the <a def-id="ready-state"></a> attribute equals <a def-id="have-nothing"></a>
+                        </dt>
+	                <dd>Run the "<i>If the media data can be fetched but is found by inspection to be in an unsupported format, or can otherwise not be rendered at all</i>" steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
+	                <dt>If the <a def-id="ready-state"></a> attribute is greater than <a def-id="have-nothing"></a>
+                        </dt>
+	                <dd>Run the <a def-id="media-data-is-corrupted"></a> steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
+	              </dl>
+                    </li>
+                  </ol>
 	        </dd>
               </dl>
             </li>
@@ -2482,7 +2487,8 @@
               <ul>
                 <li>Bug 25995 - Fix conditions in "remove existing coded frames" step.</li>
                 <li>Bug 25999 - Change appendWindowStart assignments to reference presentation start time.</li>
-                <li>Bug 26000 - Make it explicit that SourceBuffer.remove() throws an exception if duration equals NaN.</li> 
+                <li>Bug 26000 - Make it explicit that SourceBuffer.remove() throws an exception if duration equals NaN.</li>
+                <li>Bug 25846 - Update end of stream algorithm to invoke the append error algorithm on decode errors.</li>
               </ul>
             </td>
           </tr>

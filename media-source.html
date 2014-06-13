@@ -406,7 +406,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-06-14T02:36:20.000Z" id="w3c-editor-s-draft-13-june-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-06-13">13 June 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-06-14T02:45:20.000Z" id="w3c-editor-s-draft-13-june-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-06-13">13 June 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1181,14 +1181,19 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <dt>If <var>error</var> is set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code>
                 </dt>
                 <dd>
-	          <dl class="switch">
-	            <dt>If the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute equals <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
-                    </dt>
-	            <dd>Run the "<i>If the media data can be fetched but is found by inspection to be in an unsupported format, or can otherwise not be rendered at all</i>" steps of the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
-	            <dt>If the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute is greater than <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
-                    </dt>
-	            <dd>Run the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#fatal-decode-error">media data is corrupted</a> steps of the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
-	          </dl>
+                  <ol>
+                    <li>If <code><a href="#widl-SourceBuffer-updating">updating</a></code> equals true, then run the <a href="#sourcebuffer-append-error">append error algorithm</a>.</li>
+                    <li>
+	              <dl class="switch">
+	                <dt>If the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute equals <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
+                        </dt>
+	                <dd>Run the "<i>If the media data can be fetched but is found by inspection to be in an unsupported format, or can otherwise not be rendered at all</i>" steps of the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
+	                <dt>If the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute is greater than <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
+                        </dt>
+	                <dd>Run the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#fatal-decode-error">media data is corrupted</a> steps of the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
+	              </dl>
+                    </li>
+                  </ol>
 	        </dd>
               </dl>
             </li>
@@ -2810,7 +2815,8 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
               <ul>
                 <li>Bug 25995 - Fix conditions in "remove existing coded frames" step.</li>
                 <li>Bug 25999 - Change appendWindowStart assignments to reference presentation start time.</li>
-                <li>Bug 26000 - Make it explicit that SourceBuffer.remove() throws an exception if duration equals NaN.</li> 
+                <li>Bug 26000 - Make it explicit that SourceBuffer.remove() throws an exception if duration equals NaN.</li>
+                <li>Bug 25846 - Update end of stream algorithm to invoke the append error algorithm on decode errors.</li>
               </ul>
             </td>
           </tr>
