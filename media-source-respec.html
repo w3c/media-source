@@ -994,6 +994,7 @@
           <p>Removes media for a specific time range.</p>
 
           <ol class="method-algorithm">
+            <li>If <a def-id="duration"></a> equals NaN, then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If <var>start</var> is negative or greater than <a def-id="duration"></a>, then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If <var>end</var> is less than or equal to <var>start</var> or <var>end</var> equals NaN, then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
@@ -2481,6 +2482,7 @@
               <ul>
                 <li>Bug 25995 - Fix conditions in "remove existing coded frames" step.</li>
                 <li>Bug 25999 - Change appendWindowStart assignments to reference presentation start time.</li>
+                <li>Bug 26000 - Make it explicit that SourceBuffer.remove() throws an exception if duration equals NaN.</li> 
               </ul>
             </td>
           </tr>

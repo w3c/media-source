@@ -406,7 +406,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-06-14T02:31:02.000Z" id="w3c-editor-s-draft-13-june-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-06-13">13 June 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-06-14T02:36:20.000Z" id="w3c-editor-s-draft-13-june-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-06-13">13 June 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1363,6 +1363,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           
 
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">start</td><td class="prmType"><code>double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">end</td><td class="prmType"><code>unrestricted double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>void</code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
+            <li>If <code><a href="#widl-MediaSource-duration">duration</a></code> equals NaN, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If <var>start</var> is negative or greater than <code><a href="#widl-MediaSource-duration">duration</a></code>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If <var>end</var> is less than or equal to <var>start</var> or <var>end</var> equals NaN, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
@@ -2809,6 +2810,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
               <ul>
                 <li>Bug 25995 - Fix conditions in "remove existing coded frames" step.</li>
                 <li>Bug 25999 - Change appendWindowStart assignments to reference presentation start time.</li>
+                <li>Bug 26000 - Make it explicit that SourceBuffer.remove() throws an exception if duration equals NaN.</li> 
               </ul>
             </td>
           </tr>
