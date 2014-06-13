@@ -391,6 +391,12 @@ table.simple {
 .section dl.attrs dd, .section dl.eldef dd {
     margin-bottom:  0;
 }
+
+@media print {
+    .removeOnSave {
+        display: none;
+    }
+}
 </style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
   <body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
@@ -400,7 +406,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-05-21T07:19:37.000Z" id="w3c-editor-s-draft-21-may-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-05-21">21 May 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-06-14T02:24:22.000Z" id="w3c-editor-s-draft-13-june-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-06-13">13 June 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -411,6 +417,7 @@ table.simple {
     
       <dt>Latest editor's draft:</dt>
       <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/media-source.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/media-source.html</a></dd>
+    
     
     
     
@@ -460,7 +467,7 @@ table.simple {
 
     
 
-    <section id="abstract" class="introductory" property="dcterms:abstract" datatype="" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_abstract">Abstract</h2>
+    <section id="abstract" class="introductory" property="dcterms:abstract" datatype="" typeof="bibo:Chapter" resource="#abstract" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_abstract">Abstract</h2>
       This specification extends HTMLMediaElement to allow
       JavaScript to generate media streams for playback.
       Allowing JavaScript to generate streams facilitates a variety of use
@@ -469,7 +476,7 @@ table.simple {
       <p>If you wish to make comments or file bugs regarding this document in a manner that is tracked by the <abbr title="World Wide Web Consortium">W3C</abbr>, please submit them via
         <a href="https://www.w3.org/Bugs/Public/enter_bug.cgi?product=HTML%20WG&amp;component=Media%20Source%20Extensions&amp;short_desc=%5BMSE%5D%20">our public bug database</a>.
       </p>
-    </section><section id="sotd" class="introductory" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_sotd">Status of This Document</h2>
+    </section><section id="sotd" class="introductory" typeof="bibo:Chapter" resource="#sotd" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_sotd">Status of This Document</h2>
   
     
       
@@ -515,6 +522,7 @@ table.simple {
           </p>
         
         
+        
         <p>
           
             This document was produced by a group operating under the 
@@ -544,7 +552,7 @@ table.simple {
 </section><section id="toc"><h2 class="introductory" aria-level="1" role="heading" id="h2_toc">Table of Contents</h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a><ul class="toc"><li class="tocline"><a href="#goals" class="tocxref"><span class="secno">1.1 </span>Goals</a></li><li class="tocline"><a href="#definitions" class="tocxref"><span class="secno">1.2 </span>Definitions</a></li></ul></li><li class="tocline"><a href="#mediasource" class="tocxref"><span class="secno">2. </span>MediaSource Object</a><ul class="toc"><li class="tocline"><a href="#attributes" class="tocxref"><span class="secno">2.1 </span>Attributes</a></li><li class="tocline"><a href="#methods" class="tocxref"><span class="secno">2.2 </span>Methods</a></li><li class="tocline"><a href="#mediasource-events" class="tocxref"><span class="secno">2.3 </span>Event Summary</a></li><li class="tocline"><a href="#mediasource-algorithms" class="tocxref"><span class="secno">2.4 </span>Algorithms</a><ul class="toc"><li class="tocline"><a href="#mediasource-attach" class="tocxref"><span class="secno">2.4.1 </span>Attaching to a media element</a></li><li class="tocline"><a href="#mediasource-detach" class="tocxref"><span class="secno">2.4.2 </span>Detaching from a media element</a></li><li class="tocline"><a href="#mediasource-seeking" class="tocxref"><span class="secno">2.4.3 </span>Seeking</a></li><li class="tocline"><a href="#buffer-monitoring" class="tocxref"><span class="secno">2.4.4 </span>SourceBuffer Monitoring</a></li><li class="tocline"><a href="#active-source-buffer-changes" class="tocxref"><span class="secno">2.4.5 </span>Changes to selected/enabled track state</a></li><li class="tocline"><a href="#duration-change-algorithm" class="tocxref"><span class="secno">2.4.6 </span>Duration change</a></li><li class="tocline"><a href="#end-of-stream-algorithm" class="tocxref"><span class="secno">2.4.7 </span>End of stream algorithm</a></li></ul></li></ul></li><li class="tocline"><a href="#sourcebuffer" class="tocxref"><span class="secno">3. </span>SourceBuffer Object</a><ul class="toc"><li class="tocline"><a href="#attributes-1" class="tocxref"><span class="secno">3.1 </span>Attributes</a></li><li class="tocline"><a href="#methods-1" class="tocxref"><span class="secno">3.2 </span>Methods</a></li><li class="tocline"><a href="#track-buffers" class="tocxref"><span class="secno">3.3 </span>Track Buffers</a></li><li class="tocline"><a href="#sourcebuffer-events" class="tocxref"><span class="secno">3.4 </span>Event Summary</a></li><li class="tocline"><a href="#sourcebuffer-algorithms" class="tocxref"><span class="secno">3.5 </span>Algorithms</a><ul class="toc"><li class="tocline"><a href="#sourcebuffer-segment-parser-loop" class="tocxref"><span class="secno">3.5.1 </span>Segment Parser Loop</a></li><li class="tocline"><a href="#sourcebuffer-reset-parser-state" class="tocxref"><span class="secno">3.5.2 </span>Reset Parser State</a></li><li class="tocline"><a href="#sourcebuffer-append-error" class="tocxref"><span class="secno">3.5.3 </span>Append Error Algorithm</a></li><li class="tocline"><a href="#sourcebuffer-prepare-append" class="tocxref"><span class="secno">3.5.4 </span>Prepare Append Algorithm</a></li><li class="tocline"><a href="#sourcebuffer-buffer-append" class="tocxref"><span class="secno">3.5.5 </span>Buffer Append Algorithm</a></li><li class="tocline"><a href="#sourcebuffer-stream-append-loop" class="tocxref"><span class="secno">3.5.6 </span>Stream Append Loop</a></li><li class="tocline"><a href="#sourcebuffer-init-segment-received" class="tocxref"><span class="secno">3.5.7 </span>Initialization Segment Received</a></li><li class="tocline"><a href="#sourcebuffer-default-track-language" class="tocxref"><span class="secno">3.5.8 </span>Default track language</a></li><li class="tocline"><a href="#sourcebuffer-default-track-kinds" class="tocxref"><span class="secno">3.5.9 </span>Default track kinds</a></li><li class="tocline"><a href="#sourcebuffer-coded-frame-processing" class="tocxref"><span class="secno">3.5.10 </span>Coded Frame Processing</a></li><li class="tocline"><a href="#sourcebuffer-coded-frame-removal" class="tocxref"><span class="secno">3.5.11 </span>Coded Frame Removal Algorithm</a></li><li class="tocline"><a href="#sourcebuffer-coded-frame-eviction" class="tocxref"><span class="secno">3.5.12 </span>Coded Frame Eviction Algorithm</a></li><li class="tocline"><a href="#sourcebuffer-audio-splice-frame-algorithm" class="tocxref"><span class="secno">3.5.13 </span>Audio Splice Frame Algorithm</a></li><li class="tocline"><a href="#sourcebuffer-audio-splice-rendering-algorithm" class="tocxref"><span class="secno">3.5.14 </span>Audio Splice Rendering Algorithm</a></li><li class="tocline"><a href="#sourcebuffer-text-splice-frame-algorithm" class="tocxref"><span class="secno">3.5.15 </span>Text Splice Frame Algorithm</a></li></ul></li></ul></li><li class="tocline"><a href="#sourcebufferlist" class="tocxref"><span class="secno">4. </span>SourceBufferList Object</a><ul class="toc"><li class="tocline"><a href="#attributes-2" class="tocxref"><span class="secno">4.1 </span>Attributes</a></li><li class="tocline"><a href="#methods-2" class="tocxref"><span class="secno">4.2 </span>Methods</a></li><li class="tocline"><a href="#sourcebufferlist-events" class="tocxref"><span class="secno">4.3 </span>Event Summary</a></li></ul></li><li class="tocline"><a href="#videoplaybackquality" class="tocxref"><span class="secno">5. </span>VideoPlaybackQuality Object</a><ul class="toc"><li class="tocline"><a href="#attributes-3" class="tocxref"><span class="secno">5.1 </span>Attributes</a></li></ul></li><li class="tocline"><a href="#trackdefault" class="tocxref"><span class="secno">6. </span>TrackDefault Object</a><ul class="toc"><li class="tocline"><a href="#constructors" class="tocxref"><span class="secno">6.1 </span>Constructors</a></li><li class="tocline"><a href="#attributes-4" class="tocxref"><span class="secno">6.2 </span>Attributes</a></li></ul></li><li class="tocline"><a href="#trackdefaultlist" class="tocxref"><span class="secno">7. </span>TrackDefaultList Object</a><ul class="toc"><li class="tocline"><a href="#constructors-1" class="tocxref"><span class="secno">7.1 </span>Constructors</a></li><li class="tocline"><a href="#attributes-5" class="tocxref"><span class="secno">7.2 </span>Attributes</a></li><li class="tocline"><a href="#methods-3" class="tocxref"><span class="secno">7.3 </span>Methods</a></li></ul></li><li class="tocline"><a href="#url" class="tocxref"><span class="secno">8. </span>URL Object Extensions</a><ul class="toc"><li class="tocline"><a href="#methods-4" class="tocxref"><span class="secno">8.1 </span>Methods</a></li></ul></li><li class="tocline"><a href="#htmlmediaelement-extensions" class="tocxref"><span class="secno">9. </span>HTMLMediaElement Extensions</a></li><li class="tocline"><a href="#htmlvideoelement-extensions" class="tocxref"><span class="secno">10. </span>HTMLVideoElement Extensions</a><ul class="toc"><li class="tocline"><a href="#methods-5" class="tocxref"><span class="secno">10.1 </span>Methods</a></li></ul></li><li class="tocline"><a href="#audio-track-extensions" class="tocxref"><span class="secno">11. </span>AudioTrack Extensions</a><ul class="toc"><li class="tocline"><a href="#attributes-6" class="tocxref"><span class="secno">11.1 </span>Attributes</a></li></ul></li><li class="tocline"><a href="#video-track-extensions" class="tocxref"><span class="secno">12. </span>VideoTrack Extensions</a><ul class="toc"><li class="tocline"><a href="#attributes-7" class="tocxref"><span class="secno">12.1 </span>Attributes</a></li></ul></li><li class="tocline"><a href="#text-track-extensions" class="tocxref"><span class="secno">13. </span>TextTrack Extensions</a><ul class="toc"><li class="tocline"><a href="#attributes-8" class="tocxref"><span class="secno">13.1 </span>Attributes</a></li></ul></li><li class="tocline"><a href="#byte-stream-formats" class="tocxref"><span class="secno">14. </span>Byte Stream Formats</a></li><li class="tocline"><a href="#examples" class="tocxref"><span class="secno">15. </span>Examples</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">16. </span>Acknowledgments</a></li><li class="tocline"><a href="#revision-history" class="tocxref"><span class="secno">17. </span>Revision History</a></li><li class="tocline"><a href="#references" class="tocxref"><span class="secno">A. </span>References</a><ul class="toc"><li class="tocline"><a href="#normative-references" class="tocxref"><span class="secno">A.1 </span>Normative references</a></li><li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">A.2 </span>Informative references</a></li></ul></li></ul></section>
 
 
-    <section id="introduction" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="introduction" typeof="bibo:Chapter" resource="#introduction" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_introduction"><span class="secno">1. </span>Introduction</h2>
       <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;.
         It defines objects that allow JavaScript to pass media segments to an <a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmlmediaelement">HTMLMediaElement</a> [<cite><a class="bibref" href="#bib-HTML5">HTML5</a></cite>].
@@ -552,7 +560,7 @@ table.simple {
         appended at different times. Byte stream specifications used with these extensions are available in the byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>].</p>
       <img src="pipeline_model.png" alt="Media Source Pipeline Model Diagram">
 
-      <section id="goals" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <section id="goals" typeof="bibo:Chapter" resource="#goals" rel="bibo:Chapter">
         <h3 aria-level="2" role="heading" id="h3_goals"><span class="secno">1.1 </span>Goals</h3>
         <p>This specification was designed with the following goals in mind:</p>
         <ul>
@@ -570,7 +578,7 @@ table.simple {
         </ul>
       </section>
 
-      <section id="definitions" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <section id="definitions" typeof="bibo:Chapter" resource="#definitions" rel="bibo:Chapter">
         <h3 aria-level="2" role="heading" id="h3_definitions"><span class="secno">1.2 </span>Definitions</h3>
 
         <dl>
@@ -676,7 +684,7 @@ table.simple {
       </section>
     </section>
 
-    <section id="mediasource" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="mediasource" typeof="bibo:Chapter" resource="#mediasource" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mediasource"><span class="secno">2. </span>MediaSource Object</h2>
       <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the <code><a href="#widl-MediaSource-readyState">readyState</a></code> for this source as well as a list of <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> to add media data to this source. The HTMLMediaElement fetches this media data from the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object when it is needed during playback.</p>
 
@@ -892,7 +900,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Destroy all resources for <var>sourceBuffer</var>.</li>
           </ol></dd></dl></section>
 
-      <section id="mediasource-events" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <section id="mediasource-events" typeof="bibo:Chapter" resource="#mediasource-events" rel="bibo:Chapter">
         <h3 aria-level="2" role="heading" id="h3_mediasource-events"><span class="secno">2.3 </span>Event Summary</h3>
         <table class="old-table">
           <thead>
@@ -922,10 +930,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </table>
       </section>
 
-      <section id="mediasource-algorithms" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <section id="mediasource-algorithms" typeof="bibo:Chapter" resource="#mediasource-algorithms" rel="bibo:Chapter">
         <h3 aria-level="2" role="heading" id="h3_mediasource-algorithms"><span class="secno">2.4 </span>Algorithms</h3>
 
-        <section id="mediasource-attach" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="mediasource-attach" typeof="bibo:Chapter" resource="#mediasource-attach" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_mediasource-attach"><span class="secno">2.4.1 </span>Attaching to a media element</h4>
           <p> A <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object can be attached to a media element by assigning a <a href="#mediasource-object-url">MediaSource object URL</a> to the media element <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#attr-media-src">src</a></code> attribute or the src attribute of a &lt;source&gt; inside a media element. A <a href="#mediasource-object-url">MediaSource object URL</a> is created by passing a MediaSource object to <code><a href="#widl-URL-createObjectURL-DOMString-MediaSource-mediaSource">createObjectURL()</a></code>.</p>
           <p>If the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a> absolute URL matches the MediaSource object URL, run the following steps right before the <span>"<i>Perform a potentially CORS-enabled fetch</i>"</span>
@@ -948,7 +956,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </dl>
         </section>
 
-        <section id="mediasource-detach" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="mediasource-detach" typeof="bibo:Chapter" resource="#mediasource-detach" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_mediasource-detach"><span class="secno">2.4.2 </span>Detaching from a media element</h4>
           <p>The following steps are run in any case where the media element is going to transition to <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-network_empty">NETWORK_EMPTY</a> and <a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <a href="http://www.w3.org/TR/html5/embedded-content-0.html#event-mediacontroller-emptied">emptied</a> at the media element. These steps must be run right before the transition.</p>
           <ol>
@@ -965,7 +973,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
         </section>
 
-        <section id="mediasource-seeking" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="mediasource-seeking" typeof="bibo:Chapter" resource="#mediasource-seeking" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_mediasource-seeking"><span class="secno">2.4.3 </span>Seeking</h4>
           <p>Run the following steps as part of the "<i>Wait until the user agent has established whether or not the media data for the new playback position is available, and, if it is, until it has decoded enough data to play back that position"</i> step of the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-seek">seek algorithm</a>:</p>
           <ol>
@@ -993,7 +1001,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
         </section>
 
-        <section id="buffer-monitoring" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="buffer-monitoring" typeof="bibo:Chapter" resource="#buffer-monitoring" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_buffer-monitoring"><span class="secno">2.4.4 </span>SourceBuffer Monitoring</h4>
           <p>The following steps are periodically run during playback to make sure that all of the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> have <a href="#enough-data">enough data to ensure uninterrupted playback</a>. Appending new segments and changes to <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> also cause these steps to run because they affect the conditions that trigger state transitions.</p>
 
@@ -1051,7 +1059,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </dl>
         </section>
 
-        <section id="active-source-buffer-changes" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="active-source-buffer-changes" typeof="bibo:Chapter" resource="#active-source-buffer-changes" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_active-source-buffer-changes"><span class="secno">2.4.5 </span>Changes to selected/enabled track state</h4>
           <p>During playback <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> needs to be updated if the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-videotrack-selected">selected video track</a>, the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-audiotrack-enabled">enabled audio track(s)</a>, or a text track <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-texttrack-mode">mode</a> changes. When one or more of these changes occur the following steps need to be followed.</p>
           <dl class="switch">
@@ -1121,7 +1129,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </dl>
         </section>
 
-        <section id="duration-change-algorithm" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="duration-change-algorithm" typeof="bibo:Chapter" resource="#duration-change-algorithm" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_duration-change-algorithm"><span class="secno">2.4.6 </span>Duration change</h4>
           <p>Follow these steps when <code><a href="#widl-MediaSource-duration">duration</a></code> needs to change to a <var>new duration</var>.</p>
           <ol>
@@ -1140,7 +1148,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
         </section>
 
-        <section id="end-of-stream-algorithm" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="end-of-stream-algorithm" typeof="bibo:Chapter" resource="#end-of-stream-algorithm" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_end-of-stream-algorithm"><span class="secno">2.4.7 </span>End of stream algorithm</h4>
           <p>This algorithm gets called when the application signals the end of stream via an <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream()</a></code> call or an algorithm needs to
             signal a decode error. This algorithm takes an <var>error</var> parameter that indicates whether an error will be signalled.</p>
@@ -1189,7 +1197,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
     </section>
 
-    <section id="sourcebuffer" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="sourcebuffer" typeof="bibo:Chapter" resource="#sourcebuffer" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_sourcebuffer"><span class="secno">3. </span>SourceBuffer Object</h2>
 
 
@@ -1376,7 +1384,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
        </ol></dd></dl></section>
 
-      <section id="track-buffers" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <section id="track-buffers" typeof="bibo:Chapter" resource="#track-buffers" rel="bibo:Chapter">
         <h3 aria-level="2" role="heading" id="h3_track-buffers"><span class="secno">3.3 </span>Track Buffers</h3>
         <p>A <dfn id="track-buffer">track buffer</dfn> stores the <a href="#track-description">track descriptions</a> and <a href="#coded-frame">coded frames</a> for an individual
           track. The track buffer is updated as <a href="#init-segment">initialization segments</a> and <a href="#media-segment">media segments</a> are appended to the
@@ -1400,7 +1408,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <a href="#track-buffer">track buffer</a>.</p>
       </section>
 
-      <section id="sourcebuffer-events" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <section id="sourcebuffer-events" typeof="bibo:Chapter" resource="#sourcebuffer-events" rel="bibo:Chapter">
         <h3 aria-level="2" role="heading" id="h3_sourcebuffer-events"><span class="secno">3.4 </span>Event Summary</h3>
         <table class="old-table">
           <thead>
@@ -1440,10 +1448,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </table>
       </section>
 
-      <section id="sourcebuffer-algorithms" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <section id="sourcebuffer-algorithms" typeof="bibo:Chapter" resource="#sourcebuffer-algorithms" rel="bibo:Chapter">
         <h3 aria-level="2" role="heading" id="h3_sourcebuffer-algorithms"><span class="secno">3.5 </span>Algorithms</h3>
 
-        <section id="sourcebuffer-segment-parser-loop" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="sourcebuffer-segment-parser-loop" typeof="bibo:Chapter" resource="#sourcebuffer-segment-parser-loop" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_sourcebuffer-segment-parser-loop"><span class="secno">3.5.1 </span>Segment Parser Loop</h4>
           <p>All SourceBuffer objects have an internal <dfn id="sourcebuffer-append-state">append state</dfn> variable that keeps track of the high-level segment parsing state. It is initially set to <a href="#sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</a> and can transition to the following states as data is appended.</p>
           <table class="old-table">
@@ -1543,7 +1551,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
         </section>
 
-        <section id="sourcebuffer-reset-parser-state" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="sourcebuffer-reset-parser-state" typeof="bibo:Chapter" resource="#sourcebuffer-reset-parser-state" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_sourcebuffer-reset-parser-state"><span class="secno">3.5.2 </span>Reset Parser State</h4>
           <p>When the parser state needs to be reset, run the following steps:</p>
           <ol>
@@ -1559,7 +1567,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
         </section>
 
-        <section id="sourcebuffer-append-error" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="sourcebuffer-append-error" typeof="bibo:Chapter" resource="#sourcebuffer-append-error" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_sourcebuffer-append-error"><span class="secno">3.5.3 </span>Append Error Algorithm</h4>
           <p>When an error occurs during an append, run the following steps:</p>
           <ol>
@@ -1570,7 +1578,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
         </section>
 
-        <section id="sourcebuffer-prepare-append" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="sourcebuffer-prepare-append" typeof="bibo:Chapter" resource="#sourcebuffer-prepare-append" rel="bibo:Chapter">
             <h4 aria-level="3" role="heading" id="h4_sourcebuffer-prepare-append"><span class="secno">3.5.4 </span>Prepare Append Algorithm</h4>
             <p>When an append operation begins, the follow steps are run to validate and prepare the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</p>
             <ol>
@@ -1594,7 +1602,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             </ol>
         </section>
 
-        <section id="sourcebuffer-buffer-append" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="sourcebuffer-buffer-append" typeof="bibo:Chapter" resource="#sourcebuffer-buffer-append" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_sourcebuffer-buffer-append"><span class="secno">3.5.5 </span>Buffer Append Algorithm</h4>
           <p>When <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code> is called, the following steps are run to process the appended data.</p>
           <ol>
@@ -1606,7 +1614,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
         </section>
 
-        <section id="sourcebuffer-stream-append-loop" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="sourcebuffer-stream-append-loop" typeof="bibo:Chapter" resource="#sourcebuffer-stream-append-loop" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_sourcebuffer-stream-append-loop"><span class="secno">3.5.6 </span>Stream Append Loop</h4>
           <p>When a <code><a href="http://www.w3.org/TR/2013/WD-streams-api-20131105/#idl-def-Stream" class="idlType">Stream</a></code>[<cite><a class="bibref" href="#bib-STREAMS-API">STREAMS-API</a></cite>] is passed to <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code>, the following steps are run to transfer data from the
             <code><a href="http://www.w3.org/TR/2013/WD-streams-api-20131105/#idl-def-Stream" class="idlType">Stream</a></code> to the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>. This algorithm is initialized with the  <var>stream</var> and <var>maxSize</var> parameters
@@ -1644,7 +1652,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
         </section>
 
-        <section id="sourcebuffer-init-segment-received" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="sourcebuffer-init-segment-received" typeof="bibo:Chapter" resource="#sourcebuffer-init-segment-received" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_sourcebuffer-init-segment-received"><span class="secno">3.5.7 </span>Initialization Segment Received</h4>
           <p>The following steps are run when the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> successfully parses a complete <a href="#init-segment">initialization segment</a>:</p>
           <p>Each SourceBuffer object has an internal <dfn id="first-init-segment-flag">first initialization segment flag</dfn> that tracks whether the first <a href="#init-segment">initialization segment</a> has been appended. This flag is set to false when the SourceBuffer is created and updated by the algorithm below.</p>
@@ -1867,7 +1875,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
         </section>
 
-        <section id="sourcebuffer-default-track-language" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="sourcebuffer-default-track-language" typeof="bibo:Chapter" resource="#sourcebuffer-default-track-language" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_sourcebuffer-default-track-language"><span class="secno">3.5.8 </span>Default track language</h4>
           <p>The following steps are run when the <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> needs
             to determine what the default language for a new track should be. This algorithm is initialized
@@ -1892,7 +1900,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
         </section>
 
-        <section id="sourcebuffer-default-track-kinds" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="sourcebuffer-default-track-kinds" typeof="bibo:Chapter" resource="#sourcebuffer-default-track-kinds" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_sourcebuffer-default-track-kinds"><span class="secno">3.5.9 </span>Default track kinds</h4>
           <p>The following steps are run when the <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> needs
             to determine what the default kinds for a new track should be. This algorithm is initialized
@@ -1918,7 +1926,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
         </ol></section>
 
-        <section id="sourcebuffer-coded-frame-processing" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="sourcebuffer-coded-frame-processing" typeof="bibo:Chapter" resource="#sourcebuffer-coded-frame-processing" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_sourcebuffer-coded-frame-processing"><span class="secno">3.5.10 </span>Coded Frame Processing</h4>
           <p>When complete <a href="#coded-frame">coded frames</a> have been parsed by the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> then the following steps are run:</p>
           <ol>
@@ -2054,9 +2062,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                     <dt>If <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> for <var>track buffer</var> is not set:</dt>
                     <dd>Remove all <a href="#coded-frame">coded frames</a> from <var>track buffer</var> that have a <a href="#presentation-timestamp">presentation timestamp</a> greater than or equal to
                       <var>presentation timestamp</var> and less than <var>frame end timestamp</var>.</dd>
-                    <dt>If <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> for <var>track buffer</var> is set and less than <var>presentation timestamp</var></dt>
+                    <dt>If <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> for <var>track buffer</var> is set and less than or equal to <var>presentation timestamp</var>:</dt>
                     <dd>Remove all <a href="#coded-frame">coded frames</a> from <var>track buffer</var> that have a <a href="#presentation-timestamp">presentation timestamp</a> greater than
-                      <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> and less than or equal to <var>frame end timestamp</var>.</dd>
+                      or equal to <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> and less than <var>frame end timestamp</var></dd>
                   </dl>
                 </li>
                 <li>Remove decoding dependencies of the coded frames removed in the previous step:
@@ -2128,7 +2136,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
         </section>
 
-        <section id="sourcebuffer-coded-frame-removal" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="sourcebuffer-coded-frame-removal" typeof="bibo:Chapter" resource="#sourcebuffer-coded-frame-removal" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_sourcebuffer-coded-frame-removal"><span class="secno">3.5.11 </span>Coded Frame Removal Algorithm</h4>
           <p>Follow these steps when <a href="#coded-frame">coded frames</a> for a specific time range need to be removed from the SourceBuffer:</p>
           <ol>
@@ -2159,7 +2167,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
         </section>
 
-        <section id="sourcebuffer-coded-frame-eviction" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="sourcebuffer-coded-frame-eviction" typeof="bibo:Chapter" resource="#sourcebuffer-coded-frame-eviction" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_sourcebuffer-coded-frame-eviction"><span class="secno">3.5.12 </span>Coded Frame Eviction Algorithm</h4>
           <p>This algorithm is run to free up space in this source buffer when new data is appended.</p>
           <ol>
@@ -2176,7 +2184,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
         </section>
 
-        <section id="sourcebuffer-audio-splice-frame-algorithm" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="sourcebuffer-audio-splice-frame-algorithm" typeof="bibo:Chapter" resource="#sourcebuffer-audio-splice-frame-algorithm" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_sourcebuffer-audio-splice-frame-algorithm"><span class="secno">3.5.13 </span>Audio Splice Frame Algorithm</h4>
           <p>Follow these steps when the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> needs to generate a splice frame for two overlapping audio
             <a href="#coded-frame">coded frames</a>:</p>
@@ -2246,7 +2254,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             </li>
           </ol>
         </section>
-        <section id="sourcebuffer-audio-splice-rendering-algorithm" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="sourcebuffer-audio-splice-rendering-algorithm" typeof="bibo:Chapter" resource="#sourcebuffer-audio-splice-rendering-algorithm" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_sourcebuffer-audio-splice-rendering-algorithm"><span class="secno">3.5.14 </span>Audio Splice Rendering Algorithm</h4>
           <p>The following steps are run when a spliced frame, generated by the <a href="#sourcebuffer-audio-splice-frame-algorithm">audio splice frame algorithm</a>, needs to be rendered by the
             media element:</p>
@@ -2279,7 +2287,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <img src="audio_splice.png" alt="Audio splice diagram">
           </div></div>
         </section>
-        <section id="sourcebuffer-text-splice-frame-algorithm" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+        <section id="sourcebuffer-text-splice-frame-algorithm" typeof="bibo:Chapter" resource="#sourcebuffer-text-splice-frame-algorithm" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_sourcebuffer-text-splice-frame-algorithm"><span class="secno">3.5.15 </span>Text Splice Frame Algorithm</h4>
           <p>Follow these steps when the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> needs to generate a splice frame for two overlapping timed text
             <a href="#coded-frame">coded frames</a>:</p>
@@ -2307,7 +2315,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
     </section>
 
-    <section id="sourcebufferlist" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="sourcebufferlist" typeof="bibo:Chapter" resource="#sourcebufferlist" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_sourcebufferlist"><span class="secno">4. </span>SourceBufferList Object</h2>
       <p>SourceBufferList is a simple container object for <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects. It provides read-only array access and fires events when the list is modified.</p>
 
@@ -2325,7 +2333,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Return the <var>index</var>'th <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object in the list.</li>
           </ol></dd></dl></section>
 
-      <section id="sourcebufferlist-events" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <section id="sourcebufferlist-events" typeof="bibo:Chapter" resource="#sourcebufferlist-events" rel="bibo:Chapter">
         <h3 aria-level="2" role="heading" id="h3_sourcebufferlist-events"><span class="secno">4.3 </span>Event Summary</h3>
         <table class="old-table">
           <thead>
@@ -2351,7 +2359,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
     </section>
 
-    <section id="videoplaybackquality" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="videoplaybackquality" typeof="bibo:Chapter" resource="#videoplaybackquality" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_videoplaybackquality"><span class="secno">5. </span>VideoPlaybackQuality Object</h2>
       <pre class="idl"><span class="idlInterface" id="idl-def-VideoPlaybackQuality">interface <span class="idlInterfaceID">VideoPlaybackQuality</span> {
 <span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMHighResTimeStamp</span> <span class="idlAttrName"><a href="#widl-VideoPlaybackQuality-creationTime">creationTime</a></span>;</span>
@@ -2374,7 +2382,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </dd></dl></section>
     </section>
 
-    <section id="trackdefault" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="trackdefault" typeof="bibo:Chapter" resource="#trackdefault" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_trackdefault"><span class="secno">6. </span>TrackDefault Object</h2>
       <p>The TrackDefault object is used to provide kind and language information for tracks that do not
         contain this information in the <a href="#init-segment">initialization segments</a>. This information is only consulted
@@ -2449,7 +2457,7 @@ interface <span class="idlInterfaceID">TrackDefault</span> {
         </dd></dl></section>
     </section>
 
-    <section id="trackdefaultlist" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="trackdefaultlist" typeof="bibo:Chapter" resource="#trackdefaultlist" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_trackdefaultlist"><span class="secno">7. </span>TrackDefaultList Object</h2>
       <p>TrackDefaultList is a simple container object for <a href="#idl-def-TrackDefault" class="idlType"><code>TrackDefault</code></a> objects. It provides read-only array access.</p>
 
@@ -2480,7 +2488,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
           </ol></dd></dl></section>
     </section>
 
-    <section id="url" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="url" typeof="bibo:Chapter" resource="#url" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_url"><span class="secno">8. </span>URL Object Extensions</h2>
       <p>This section specifies extensions to the <a href="http://www.w3.org/TR/FileAPI/#URL-object">URL</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] object definition.</p>
 
@@ -2498,7 +2506,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
           </ol></dd></dl></section>
     </section>
 
-    <section id="htmlmediaelement-extensions" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="htmlmediaelement-extensions" typeof="bibo:Chapter" resource="#htmlmediaelement-extensions" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_htmlmediaelement-extensions"><span class="secno">9. </span>HTMLMediaElement Extensions</h2>
       <p>This section specifies what existing attributes on the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmlmediaelement">HTMLMediaElement</a></code> must return when a <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> is attached to the element.</p>
 
@@ -2531,7 +2539,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
       </ol>
     </section>
 
-    <section id="htmlvideoelement-extensions" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="htmlvideoelement-extensions" typeof="bibo:Chapter" resource="#htmlvideoelement-extensions" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_htmlvideoelement-extensions"><span class="secno">10. </span>HTMLVideoElement Extensions</h2>
       <p>This section specifies new attributes and internal state that are being added to the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmlvideoelement">HTMLVideoElement</a></code>.</p>
 
@@ -2574,7 +2582,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
           </ol></dd></dl></section>
     </section>
 
-    <section id="audio-track-extensions" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="audio-track-extensions" typeof="bibo:Chapter" resource="#audio-track-extensions" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_audio-track-extensions"><span class="secno">11. </span>AudioTrack Extensions</h2>
       <p>This section specifies extensions to the HTML <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#audiotrack">AudioTrack</a></code> definition.</p>
 
@@ -2585,7 +2593,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </dd></dl></section>
     </section>
 
-    <section id="video-track-extensions" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="video-track-extensions" typeof="bibo:Chapter" resource="#video-track-extensions" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_video-track-extensions"><span class="secno">12. </span>VideoTrack Extensions</h2>
       <p>This section specifies extensions to the HTML <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#videotrack">VideoTrack</a></code> definition.</p>
 
@@ -2596,7 +2604,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </dd></dl></section>
     </section>
 
-    <section id="text-track-extensions" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="text-track-extensions" typeof="bibo:Chapter" resource="#text-track-extensions" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_text-track-extensions"><span class="secno">13. </span>TextTrack Extensions</h2>
       <p>This section specifies extensions to the HTML <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#texttrack">TextTrack</a></code> definition.</p>
 
@@ -2607,7 +2615,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </dd></dl></section>
     </section>
 
-    <section id="byte-stream-formats" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="byte-stream-formats" typeof="bibo:Chapter" resource="#byte-stream-formats" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_byte-stream-formats"><span class="secno">14. </span>Byte Stream Formats</h2>
       <p>The bytes provided through <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code> and <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> for a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> form a logical byte stream. The format and
         semantics of these byte streams are defined in <dfn id="byte-stream-format-specs">byte stream format specifications</dfn>. 
@@ -2681,7 +2689,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
 
     </section>
 
-    <section id="examples" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="examples" typeof="bibo:Chapter" resource="#examples" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_examples"><span class="secno">15. </span>Examples</h2>
       <p>Example use of the Media Source Extensions</p>
       <div class="block">
@@ -2780,12 +2788,12 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
       </div>
     </section>
 
-    <section id="acknowledgements" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="acknowledgements" typeof="bibo:Chapter" resource="#acknowledgements" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_acknowledgements"><span class="secno">16. </span>Acknowledgments</h2>
       The editors would like to thank Alex Giladi, Bob Lund, Chris Poole, Cyril Concolato, David Dorwin, David Singer, Duncan Rowden, Frank Galligan, Glenn Adams, Jerry Smith, Joe Steele, John Simmons, Kevin Streeter, Mark Vickers, Matt Ward, Michael Thornburgh, Philip Jägenstedt, Pierre Lemieux, Ralph Giles, Steven Robertson, and Tatsuya Igarashi for their contributions to this specification.
     </section>
 
-    <section id="revision-history" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="revision-history" typeof="bibo:Chapter" resource="#revision-history" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_revision-history"><span class="secno">17. </span>Revision History</h2>
       <table class="old-table">
         <thead>
@@ -2796,7 +2804,15 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </thead>
         <tbody>
           <tr>
-            <td>21 May 2014</td>
+            <td>13 June 2014</td>
+            <td>
+              <ul>
+                <li>Bug 25995 - Fix conditions in "remove existing coded frames" step.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/01c9e30d71b0/media-source/media-source.html">21 May 2014</a></td>
             <td>
               <ul>
                 <li>Bug 24370 - Add TrackDefault object and remove kind/language overloads.</li>
@@ -3284,9 +3300,9 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
     </section>
   
 
-<form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form><section id="references" class="appendix" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><!--OddPage--><h2 aria-level="1" role="heading" id="h2_references"><span class="secno">A. </span>References</h2><section id="normative-references" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><h3 aria-level="2" role="heading" id="h3_normative-references"><span class="secno">A.1 </span>Normative references</h3><dl class="bibliography" about=""><dt id="bib-FILE-API">[FILE-API]</dt><dd rel="dcterms:requires">Arun Ranganathan; Jonas Sicking. <a href="http://www.w3.org/TR/FileAPI/"><cite>File API</cite></a>. 12 September 2013. W3C Last Call Working Draft. URL: <a href="http://www.w3.org/TR/FileAPI/">http://www.w3.org/TR/FileAPI/</a>
+<form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form><section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" rel="bibo:Chapter"><!--OddPage--><h2 aria-level="1" role="heading" id="h2_references"><span class="secno">A. </span>References</h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" rel="bibo:Chapter"><h3 aria-level="2" role="heading" id="h3_normative-references"><span class="secno">A.1 </span>Normative references</h3><dl class="bibliography" about=""><dt id="bib-FILE-API">[FILE-API]</dt><dd rel="dcterms:requires">Arun Ranganathan; Jonas Sicking. <a href="http://www.w3.org/TR/FileAPI/"><cite>File API</cite></a>. 12 September 2013. W3C Last Call Working Draft. URL: <a href="http://www.w3.org/TR/FileAPI/">http://www.w3.org/TR/FileAPI/</a>
 </dd><dt id="bib-HTML5">[HTML5]</dt><dd rel="dcterms:requires">Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Edward O'Connor; Silvia Pfeiffer. <a href="http://www.w3.org/TR/html5/"><cite>HTML5</cite></a>. 29 April 2014. W3C Candidate Recommendation. URL: <a href="http://www.w3.org/TR/html5/">http://www.w3.org/TR/html5/</a>
 </dd><dt id="bib-STREAMS-API">[STREAMS-API]</dt><dd rel="dcterms:requires">Feras Moussa; Takeshi Yoshino. <a href="http://www.w3.org/TR/2013/WD-streams-api-20131105/"><cite>Streams API</cite></a>. W3C Working Draft. URL: <a href="http://www.w3.org/TR/2013/WD-streams-api-20131105/">http://www.w3.org/TR/2013/WD-streams-api-20131105/</a>
 </dd><dt id="bib-TYPED-ARRAYS">[TYPED-ARRAYS]</dt><dd rel="dcterms:requires">David Herman; Kenneth Russell. <a href="https://www.khronos.org/registry/typedarray/specs/latest/"><cite>Typed Array Specification</cite></a>. 26 June 2013. Khronos Working Draft. URL: <a href="https://www.khronos.org/registry/typedarray/specs/latest/">https://www.khronos.org/registry/typedarray/specs/latest/</a>
-</dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><h3 aria-level="2" role="heading" id="h3_informative-references"><span class="secno">A.2 </span>Informative references</h3><dl class="bibliography" about=""><dt id="bib-MSE-REGISTRY">[MSE-REGISTRY]</dt><dd rel="dcterms:references">Aaron Colwell. <a href="byte-stream-format-registry.html"><cite>Media Source Extensions Byte Stream Format Registry</cite></a>. URL: <a href="byte-stream-format-registry.html">byte-stream-format-registry.html</a>
+</dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" rel="bibo:Chapter"><h3 aria-level="2" role="heading" id="h3_informative-references"><span class="secno">A.2 </span>Informative references</h3><dl class="bibliography" about=""><dt id="bib-MSE-REGISTRY">[MSE-REGISTRY]</dt><dd rel="dcterms:references">Aaron Colwell. <a href="byte-stream-format-registry.html"><cite>Media Source Extensions Byte Stream Format Registry</cite></a>. URL: <a href="byte-stream-format-registry.html">byte-stream-format-registry.html</a>
 </dd></dl></section></section></body></html>

@@ -1702,9 +1702,9 @@
                     <dt>If <a def-id="highest-presentation-timestamp"></a> for <var>track buffer</var> is not set:</dt>
                     <dd>Remove all <a def-id="coded-frames"></a> from <var>track buffer</var> that have a <a def-id="presentation-timestamp"></a> greater than or equal to
                       <var>presentation timestamp</var> and less than <var>frame end timestamp</var>.</dd>
-                    <dt>If <a def-id="highest-presentation-timestamp"></a> for <var>track buffer</var> is set and less than <var>presentation timestamp</var></dt>
+                    <dt>If <a def-id="highest-presentation-timestamp"></a> for <var>track buffer</var> is set and less than or equal to <var>presentation timestamp</var>:</dt>
                     <dd>Remove all <a def-id="coded-frames"></a> from <var>track buffer</var> that have a <a def-id="presentation-timestamp"></a> greater than
-                      <a def-id="highest-presentation-timestamp"></a> and less than or equal to <var>frame end timestamp</var>.</dd>
+                      or equal to <a def-id="highest-presentation-timestamp"></a> and less than <var>frame end timestamp</var></dd>
                   </dl>
                 </li>
                 <li>Remove decoding dependencies of the coded frames removed in the previous step:
@@ -2476,7 +2476,15 @@
         </thead>
         <tbody>
           <tr>
-            <td>21 May 2014</td>
+            <td>13 June 2014</td>
+            <td>
+              <ul>
+                <li>Bug 25995 - Fix conditions in "remove existing coded frames" step.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/01c9e30d71b0/media-source/media-source.html">21 May 2014</a></td>
             <td>
               <ul>
                 <li>Bug 24370 - Add TrackDefault object and remove kind/language overloads.</li>
