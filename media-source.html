@@ -406,7 +406,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-06-14T02:24:22.000Z" id="w3c-editor-s-draft-13-june-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-06-13">13 June 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-06-14T02:31:02.000Z" id="w3c-editor-s-draft-13-june-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-06-13">13 June 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1244,7 +1244,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Update the attribute to the new value.</li>
           </ol>
         </dd><dt id="widl-SourceBuffer-appendWindowStart"><code>appendWindowStart</code> of type <span class="idlAttrType">double</span>,            </dt><dd>
-          <p>The <a href="#presentation-timestamp">presentation timestamp</a> for the start of the <a href="#append-window">append window</a>. This attribute is initially set to 0.</p>
+          <p>The <a href="#presentation-timestamp">presentation timestamp</a> for the start of the <a href="#append-window">append window</a>. This attribute is initially set to the <a href="#presentation-start-time">presentation start time</a>.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
@@ -1333,7 +1333,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               </ol>
             </li>
             <li>Run the <a href="#sourcebuffer-reset-parser-state">reset parser state algorithm</a>.</li>
-            <li>Set <code><a href="#widl-SourceBuffer-appendWindowStart">appendWindowStart</a></code> to 0.</li>
+            <li>Set <code><a href="#widl-SourceBuffer-appendWindowStart">appendWindowStart</a></code> to the <a href="#presentation-start-time">presentation start time</a>.</li>
             <li>Set <code><a href="#widl-SourceBuffer-appendWindowEnd">appendWindowEnd</a></code> to positive Infinity.</li>
           </ol></dd><dt id="widl-SourceBuffer-appendBuffer-void-ArrayBuffer-data"><code>appendBuffer</code></dt><dd>
           <p>Appends the segment data in an ArrayBuffer[<cite><a class="bibref" href="#bib-TYPED-ARRAYS">TYPED-ARRAYS</a></cite>] to the source buffer.</p>
@@ -2808,6 +2808,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
             <td>
               <ul>
                 <li>Bug 25995 - Fix conditions in "remove existing coded frames" step.</li>
+                <li>Bug 25999 - Change appendWindowStart assignments to reference presentation start time.</li>
               </ul>
             </td>
           </tr>

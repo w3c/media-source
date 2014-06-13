@@ -908,7 +908,7 @@
 
         <dt>attribute double appendWindowStart</dt>
         <dd>
-          <p>The <a def-id="presentation-timestamp"></a> for the start of the <a def-id="append-window"></a>. This attribute is initially set to 0.</p>
+          <p>The <a def-id="presentation-timestamp"></a> for the start of the <a def-id="append-window"></a>. This attribute is initially set to the <a def-id="presentation-start-time"></a>.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
@@ -984,7 +984,7 @@
               </ol>
             </li>
             <li>Run the <a def-id="reset-parser-state-algorithm"></a>.</li>
-            <li>Set <a def-id="appendWindowStart"></a> to 0.</li>
+            <li>Set <a def-id="appendWindowStart"></a> to the <a def-id="presentation-start-time"></a>.</li>
             <li>Set <a def-id="appendWindowEnd"></a> to positive Infinity.</li>
           </ol>
         </dd>
@@ -2480,6 +2480,7 @@
             <td>
               <ul>
                 <li>Bug 25995 - Fix conditions in "remove existing coded frames" step.</li>
+                <li>Bug 25999 - Change appendWindowStart assignments to reference presentation start time.</li>
               </ul>
             </td>
           </tr>
