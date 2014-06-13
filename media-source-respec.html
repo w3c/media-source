@@ -1661,8 +1661,6 @@
                     <dd>Continue.</dd>
                   </dl>
                 </li>
-	        <li>If the <var>presentation timestamp</var> or <var>decode timestamp</var> is less than the <a def-id="presentation-start-time"></a>, 
-                  then run the <a def-id="eos-decode"></a>, and abort these steps.</li>
                 <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
                 <li>If <var>presentation timestamp</var> is less than <a def-id="appendWindowStart"></a>, then set the <a def-id="need-RAP-flag"></a> to true, drop the
                   coded frame, and jump to the top of the loop to start processing the next coded frame.
@@ -1674,6 +1672,8 @@
                 </li>
                 <li>If <var>frame end timestamp</var> is greater than <a def-id="appendWindowEnd"></a>, then set the <a def-id="need-RAP-flag"></a> to true, drop the
                   coded frame, and jump to the top of the loop to start processing the next coded frame.
+	        <li>If the <var>decode timestamp</var> is less than the <a def-id="presentation-start-time"></a>,
+                  then run the <a def-id="eos-decode"></a>, and abort these steps.</li>
                 <li>If the <a def-id="need-RAP-flag"></a> on <var>track buffer</var> equals true, then run the following steps:
                   <ol>
                     <li>If the coded frame is not a <a def-id="random-access-point"></a>, then drop the coded frame and jump to the top of the loop to start
@@ -2498,6 +2498,7 @@
                 <li>Bug 26000 - Make it explicit that SourceBuffer.remove() throws an exception if duration equals NaN.</li>
                 <li>Bug 25846 - Update end of stream algorithm to invoke the append error algorithm on decode errors.</li>
                 <li>Bug 25850 - Specify SourceBuffer.trackDefaults initial value and setter/getter behavior.</li>
+                <li>Bug 25998 - Move presentation & decode timestamp checks after append window filtering steps.</li>
               </ul>
             </td>
           </tr>

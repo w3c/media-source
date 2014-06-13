@@ -406,7 +406,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-06-14T02:52:59.000Z" id="w3c-editor-s-draft-13-june-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-06-13">13 June 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-06-14T03:06:42.000Z" id="w3c-editor-s-draft-13-june-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-06-13">13 June 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -2021,8 +2021,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                     <dd>Continue.</dd>
                   </dl>
                 </li>
-	        <li>If the <var>presentation timestamp</var> or <var>decode timestamp</var> is less than the <a href="#presentation-start-time">presentation start time</a>, 
-                  then run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code>, and abort these steps.</li>
                 <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
                 <li>If <var>presentation timestamp</var> is less than <code><a href="#widl-SourceBuffer-appendWindowStart">appendWindowStart</a></code>, then set the <var><a href="#need-RAP-flag">need random access point flag</a></var> to true, drop the
                   coded frame, and jump to the top of the loop to start processing the next coded frame.
@@ -2034,7 +2032,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 </li>
                 <li>If <var>frame end timestamp</var> is greater than <code><a href="#widl-SourceBuffer-appendWindowEnd">appendWindowEnd</a></code>, then set the <var><a href="#need-RAP-flag">need random access point flag</a></var> to true, drop the
                   coded frame, and jump to the top of the loop to start processing the next coded frame.
-                </li><li>If the <var><a href="#need-RAP-flag">need random access point flag</a></var> on <var>track buffer</var> equals true, then run the following steps:
+	        </li><li>If the <var>decode timestamp</var> is less than the <a href="#presentation-start-time">presentation start time</a>,
+                  then run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code>, and abort these steps.</li>
+                <li>If the <var><a href="#need-RAP-flag">need random access point flag</a></var> on <var>track buffer</var> equals true, then run the following steps:
                   <ol>
                     <li>If the coded frame is not a <a href="#random-access-point">random access point</a>, then drop the coded frame and jump to the top of the loop to start
                       processing the next coded frame.</li>
@@ -2826,6 +2826,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
                 <li>Bug 26000 - Make it explicit that SourceBuffer.remove() throws an exception if duration equals NaN.</li>
                 <li>Bug 25846 - Update end of stream algorithm to invoke the append error algorithm on decode errors.</li>
                 <li>Bug 25850 - Specify SourceBuffer.trackDefaults initial value and setter/getter behavior.</li>
+                <li>Bug 25998 - Move presentation &amp; decode timestamp checks after append window filtering steps.</li>
               </ul>
             </td>
           </tr>
