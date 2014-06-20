@@ -168,8 +168,14 @@ table.simple {
 .section dl.attrs dd, .section dl.eldef dd {
     margin-bottom:  0;
 }
+
+@media print {
+    .removeOnSave {
+        display: none;
+    }
+}
 </style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
-  <body class="h-entry" style="" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
+  <body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
     
       <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
@@ -177,7 +183,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">ISO BMFF Byte Stream Format</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-03-04T07:28:14.000Z" id="w3c-editor-s-draft-03-march-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-03-03">03 March 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-06-21T00:12:30.000Z" id="w3c-editor-s-draft-20-june-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-06-20">20 June 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -188,6 +194,7 @@ table.simple {
     
       <dt>Latest editor's draft:</dt>
       <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/isobmff-byte-stream-format.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/isobmff-byte-stream-format.html</a></dd>
+    
     
     
     
@@ -234,10 +241,10 @@ table.simple {
   
   <hr>
 </div>
-    <section id="abstract" class="introductory" property="dcterms:abstract" datatype="" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_abstract">Abstract</h2><p>
+    <section id="abstract" class="introductory" property="dcterms:abstract" datatype="" typeof="bibo:Chapter" resource="#abstract" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_abstract">Abstract</h2><p>
       This specification defines a <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> byte stream format specification based on the ISO Base Media
       File Format.
-    </p></section><section id="sotd" class="introductory" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_sotd">Status of This Document</h2>
+    </p></section><section id="sotd" class="introductory" typeof="bibo:Chapter" resource="#sotd" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_sotd">Status of This Document</h2>
   
     
       
@@ -273,6 +280,7 @@ table.simple {
           </p>
         
         
+        
         <p>
           
             This document was produced by a group operating under the 
@@ -301,27 +309,27 @@ table.simple {
   
 </section><section id="toc"><h2 class="introductory" aria-level="1" role="heading" id="h2_toc">Table of Contents</h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#iso-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#iso-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#iso-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">6. </span>Acknowledgments</a></li><li class="tocline"><a href="#revision-history" class="tocxref"><span class="secno">7. </span>Revision History</a></li></ul></section>
 
-    <section id="introduction" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="introduction" typeof="bibo:Chapter" resource="#introduction" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_introduction"><span class="secno">1. </span>Introduction</h2>
       <p>This specification defines segment formats for implementations that choose to support the ISO Base Media File Format
 	<a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a> (ISO BMFF).</p> It defines the MIME-type parameters used to signal codecs, and provides
-      the necessary format specific definitions for <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segments</a>, <a href="http://www.w3.org/TR/media-source/#media-segment">media segments</a>, and <a href="http://www.w3.org/TR/media-source/#random-access-point">random access points</a> required by
-      the <a href="http://www.w3.org/TR/media-source/#byte-stream-formats">byte stream formats section</a> of the Media Source Extensions spec.<p></p>
+      the necessary format specific definitions for <a href="media-source.html#init-segment">initialization segments</a>, <a href="media-source.html#media-segment">media segments</a>, and <a href="media-source.html#random-access-point">random access points</a> required by
+      the <a href="media-source.html#byte-stream-formats">byte stream formats section</a> of the Media Source Extensions spec.<p></p>
     </section>
 
-    <section id="mime-parameters" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="mime-parameters" typeof="bibo:Chapter" resource="#mime-parameters" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mime-parameters"><span class="secno">2. </span>MIME-type parameters</h2>
-      <p>This section specifies the parameters that can be used in the MIME-type passed to <code><a href="http://www.w3.org/TR/media-source/#widl-MediaSource-isTypeSupported-boolean-DOMString-type">isTypeSupported()</a></code> or <code><a href="http://www.w3.org/TR/media-source/#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code>.</p>
+      <p>This section specifies the parameters that can be used in the MIME-type passed to <code><a href="media-source.html#widl-MediaSource-isTypeSupported-boolean-DOMString-type">isTypeSupported()</a></code> or <code><a href="media-source.html#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code>.</p>
       <p>MIME-types for this specification must conform to the rules outlined for "audio/mp4" and "video/mp4" in <a href="http://tools.ietf.org/html/rfc6381">RFC 6381</a>.
       </p>
       <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_1"><span>Note</span></div><div class="">Implementations may only implement a subset of the codecs and profiles mentioned in the RFC.</div></div>
     </section>
 
-    <section id="iso-init-segments" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="iso-init-segments" typeof="bibo:Chapter" resource="#iso-init-segments" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_iso-init-segments"><span class="secno">3. </span>Initialization Segments</h2>
-      <p>An ISO BMFF <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> is defined in this specification as a single File Type Box (<span class="iso-box">ftyp</span>) followed by a single Movie Header Box (<span class="iso-box">moov</span>).</p>
+      <p>An ISO BMFF <a href="media-source.html#init-segment">initialization segment</a> is defined in this specification as a single File Type Box (<span class="iso-box">ftyp</span>) followed by a single Movie Header Box (<span class="iso-box">moov</span>).</p>
 
-      <p>The user agent must run the <a href="http://www.w3.org/TR/media-source/#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="http://www.w3.org/TR/media-source/#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
+      <p>The user agent must run the <a href="media-source.html#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="media-source.html#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
       <ol>
         <li>A File Type Box contains a <span class="iso-var">major_brand</span> or <span class="iso-var">compatible_brand</span> that the user agent does not support.</li>
         <li>A box or field in the Movie Header Box is encountered that violates the requirements mandated
@@ -331,7 +339,9 @@ table.simple {
           <span class="iso-box">stts</span>, <span class="iso-box">stsc</span> or <span class="iso-box">stco</span> boxes are not set to zero).</li>
         <li>A Movie Extends (<span class="iso-box">mvex</span>) box is not contained in the Movie (<span class="iso-box">moov</span>) box to indicate that Movie Fragments are to be expected.</li>
       </ol>
-      <p>The user agent must handle Edit Boxes (<span class="iso-box">edts</span>), in <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a>, which provide a mapping of composition times for each track to the global presentation time.</p>
+      <p>The user agent must support setting the offset from media composition time to movie presentation time by handling an Edit Box (<span class="iso-box">edts</span>) containing a single Edit List Box
+        (<span class="iso-box">elst</span>) that contains a single edit with media rate one. This edit may have a duration of 0 (indicating that it spans all subsequent media) or may have a non-zero duration
+        (indicating the total duration of the movie including fragments).</p>
 
       <p>The user agent must support parameter sets (e.g., PPS/SPS) stored in the sample entry (as defined for avc1/avc2), and should support parameter
         sets stored inband in the samples themselves (as defined for avc3/avc4).</p>
@@ -339,32 +349,32 @@ table.simple {
 
       <p>Valid top-level boxes such as <span class="iso-box">pdin</span>, <span class="iso-box">free</span>, and <span class="iso-box">sidx</span> are
         allowed to appear before the <span class="iso-box">moov</span> box. These boxes must be accepted and ignored by the user agent and are not
-        considered part of the <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> in this specification.</p>
+        considered part of the <a href="media-source.html#init-segment">initialization segment</a> in this specification.</p>
     </section>
 
-    <section id="iso-media-segments" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="iso-media-segments" typeof="bibo:Chapter" resource="#iso-media-segments" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_iso-media-segments"><span class="secno">4. </span>Media Segments</h2>
-      <p>An ISO BMFF <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> is defined in this specification as one optional
+      <p>An ISO BMFF <a href="media-source.html#media-segment">media segment</a> is defined in this specification as one optional
         Segment Type Box (<span class="iso-box">styp</span>) followed by a single Movie Fragment Box
         (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>). 
         If the Segment Type Box is not present, the segment must conform to the brands listed in the
-        File Type Box (<span class="iso-box">ftyp</span>) in the <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a>.</p>
+        File Type Box (<span class="iso-box">ftyp</span>) in the <a href="media-source.html#init-segment">initialization segment</a>.</p>
       <p>Valid top-level boxes defined in <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a> other than <span class="iso-box">ftyp</span>,
         <span class="iso-box">moov</span>, <span class="iso-box">styp</span>, <span class="iso-box">moof</span>, and <span class="iso-box">mdat</span> are allowed to appear between the end of an
-        <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> or <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> and before the beginning of a new <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a>.
-        These boxes must be accepted and ignored by the user agent and are not considered part of the <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> in this
+        <a href="media-source.html#init-segment">initialization segment</a> or <a href="media-source.html#media-segment">media segment</a> and before the beginning of a new <a href="media-source.html#media-segment">media segment</a>.
+        These boxes must be accepted and ignored by the user agent and are not considered part of the <a href="media-source.html#media-segment">media segment</a> in this
         specification.
       </p>
 
-      <p>The user agent must run the <a href="http://www.w3.org/TR/media-source/#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="http://www.w3.org/TR/media-source/#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
+      <p>The user agent must run the <a href="media-source.html#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="media-source.html#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
       <ol>
         <li>A box or field in the Movie Fragment Box is encountered that violates the requirements mandated
           by the <span class="iso-var">major_brand</span> or one of the
           <span class="iso-var">compatible_brands</span> in the Segment Type Box in this
-          <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> or the File Type Box in the <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a> if a
+          <a href="media-source.html#media-segment">media segment</a> or the File Type Box in the <a href="media-source.html#init-segment">initialization segment</a> if a
           Segment Type Box is not present.</li>
-        <li>This <a href="http://www.w3.org/TR/media-source/#media-segment">media segment</a> contains a Segment Type Box that is not compatible with the
-          File Type Box in the <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a>.</li>
+        <li>This <a href="media-source.html#media-segment">media segment</a> contains a Segment Type Box that is not compatible with the
+          File Type Box in the <a href="media-source.html#init-segment">initialization segment</a>.</li>
 	<li>The Movie Fragment Box does not contain at least one Track Fragment Box (<span class="iso-box">traf</span>).</li>
 	<li>The Movie Fragment Box does not use <a href="#movie-fragment-relative-addressing">movie-fragment relative addressing</a>.</li>
 	<li>External data references are being used.</li>
@@ -386,17 +396,17 @@ table.simple {
       </ul>
     </section>
 
-    <section id="iso-random-access-points" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="iso-random-access-points" typeof="bibo:Chapter" resource="#iso-random-access-points" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_iso-random-access-points"><span class="secno">5. </span>Random Access Points</h2>
-      <p>A <a href="http://www.w3.org/TR/media-source/#random-access-point">random access point</a> as defined in this specification corresponds to a Stream Access Point of type 1 or 2 as defined in Annex I of <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a>.</p>
+      <p>A <a href="media-source.html#random-access-point">random access point</a> as defined in this specification corresponds to a Stream Access Point of type 1 or 2 as defined in Annex I of <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a>.</p>
     </section>
 
-    <section id="acknowledgements" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="acknowledgements" typeof="bibo:Chapter" resource="#acknowledgements" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_acknowledgements"><span class="secno">6. </span>Acknowledgments</h2>
-      The editors would like to thank Chris Poole, Cyril Concolato, David Singer, Jerry Smith, Joe Steele, John Simmons, Kevin Streeter, Michael Thornburgh, and Steven Robertson for their contributions to this specification.
+      The editors would like to thank Chris Poole, Cyril Concolato, David Singer, Jer Noble, Jerry Smith, Joe Steele, John Simmons, Kevin Streeter, Michael Thornburgh, and Steven Robertson for their contributions to this specification.
     </section>
 
-        <section id="revision-history" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="revision-history" typeof="bibo:Chapter" resource="#revision-history" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_revision-history"><span class="secno">7. </span>Revision History</h2>
       <table class="old-table">
         <thead>
@@ -407,7 +417,15 @@ table.simple {
         </thead>
         <tbody>
           <tr>
-            <td>03 March 2014</td>
+            <td>20 June 2014</td>
+            <td>
+              <ul>
+                <li>Bug 26066 - Clarify edit list requirements.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/cad94fce3b90/media-source/isobmff-byte-stream-format.html">03 March 2014</a></td>
             <td>
               <ul>
                 <li>Bug 24903 - Add ftyp &amp; styp validation text.</li>

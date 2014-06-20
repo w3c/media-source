@@ -49,7 +49,8 @@
         "Jerry Smith",
         "Cyril Concolato",
         "David Singer",
-        "Chris Poole"
+        "Chris Poole",
+        "Jer Noble"
       ],
 
       // name of the WG
@@ -131,7 +132,9 @@
           <span class="iso-box">stts</span>, <span class="iso-box">stsc</span> or <span class="iso-box">stco</span> boxes are not set to zero).</li>
         <li>A Movie Extends (<span class="iso-box">mvex</span>) box is not contained in the Movie (<span class="iso-box">moov</span>) box to indicate that Movie Fragments are to be expected.</li>
       </ol>
-      <p>The user agent must handle Edit Boxes (<span class="iso-box">edts</span>), in <a def-id="init-segment"></a>, which provide a mapping of composition times for each track to the global presentation time.</p>
+      <p>The user agent must support setting the offset from media composition time to movie presentation time by handling an Edit Box (<span class="iso-box">edts</span>) containing a single Edit List Box
+        (<span class="iso-box">elst</span>) that contains a single edit with media rate one. This edit may have a duration of 0 (indicating that it spans all subsequent media) or may have a non-zero duration
+        (indicating the total duration of the movie including fragments).</p>
 
       <p>The user agent must support parameter sets (e.g., PPS/SPS) stored in the sample entry (as defined for avc1/avc2), and should support parameter
         sets stored inband in the samples themselves (as defined for avc3/avc4).</p>
@@ -207,7 +210,15 @@
         </thead>
         <tbody>
           <tr>
-            <td>03 March 2014</td>
+            <td>20 June 2014</td>
+            <td>
+              <ul>
+                <li>Bug 26066 - Clarify edit list requirements.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/cad94fce3b90/media-source/isobmff-byte-stream-format.html">03 March 2014</a></td>
             <td>
               <ul>
                 <li>Bug 24903 - Add ftyp & styp validation text.</li>
