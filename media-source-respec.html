@@ -872,7 +872,17 @@
           <p>When the attribute is read the following steps must occur:</p>
           <ol>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>Return a new static <a def-id="normalized-timeranges-object"></a> for the <a def-id="media-segments"></a> buffered.</li>
+            <li>Let <var>highest end time</var> be the largest <a def-id="track-buffer-ranges"></a> end time across all the <a def-id="track-buffers"></a> managed by this <a>SourceBuffer</a> object.</li>
+            <li>Let <var>intersection ranges</var> equal a <a def-id="timerange"></a> object containing a single range from 0 to <var>highest end time</var>.</li>
+            <li>For each <a def-id="track-buffer"></a> managed by this <a>SourceBuffer</a>, run the following steps:
+              <ol>
+                <li>Let <var>track ranges</var> equal the <a def-id="track-buffer-ranges"></a> for the current <a def-id="track-buffer"></a>.</li>
+                <li>If <a def-id="readyState"></a> is <a def-id="ended"></a>, then set the end time on the last range in <var>track ranges</var> to <var>highest end time</var>.</li>
+                <li>Let <var>new intersection ranges</var> equal the intersection between the <var>intersection ranges</var> and the <var>track ranges</var>.</li>
+                <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
+              </ol>
+            </li>
+            <li>Return the <var>intersection ranges</var>.</li>
           </ol>
         </dd>
 
@@ -1062,6 +1072,9 @@
           the track buffer is waiting for a <a def-id="random-access-point"></a> <a def-id="coded-frame"></a>. The variable is initially set to true to
           indicate that <a def-id="random-access-point"></a> <a def-id="coded-frame"></a> is needed before anything can be added to the
           <a def-id="track-buffer"></a>.</p>
+
+        <p>Each <a def-id="track-buffer"></a> has a <dfn id="track-buffer-ranges">track buffer ranges</dfn> variable that represents the presentation time ranges occupied by the <a def-id="coded-frames"></a>
+          currently stored in the track buffer. For specification purposes, this information is treated as if it were stored in a <a def-id="normalized-timeranges-object"></a>.</p>
       </section>
 
       <section id="sourcebuffer-events">
@@ -2498,6 +2511,7 @@
               <ul>
                 <li>Bug 26032 - Set need random access point flag on all track buffers when a new init
                   segment is received.</li>
+                <li>Bug 25845 - Clarify SourceBuffer.buffered getter behavior.</li>
               </ul>
             </td>
           </tr>

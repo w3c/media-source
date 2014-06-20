@@ -238,6 +238,7 @@
 
     'track-buffer': { func: term_helper, fragment: 'track-buffer', link_text: 'track buffer', },
     'track-buffers': { func: term_helper, fragment: 'track-buffer', link_text: 'track buffers', },
+    'track-buffer-ranges': { func: term_helper, fragment: 'track-buffer-ranges', link_text: 'track buffer ranges', },
     'last-decode-timestamp': { func: var_helper, fragment: '#last-decode-timestamp', link_text: 'last decode timestamp', },
     'last-frame-duration': { func: var_helper, fragment: '#last-frame-duration', link_text: 'last frame duration', },
     'highest-presentation-timestamp': { func: var_helper, fragment: '#highest-presentation-timestamp', link_text: 'highest presentation timestamp', },

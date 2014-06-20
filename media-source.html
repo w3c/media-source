@@ -406,7 +406,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-06-20T22:50:32.000Z" id="w3c-editor-s-draft-20-june-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-06-20">20 June 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-06-20T23:55:05.000Z" id="w3c-editor-s-draft-20-june-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-06-20">20 June 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1267,7 +1267,17 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>When the attribute is read the following steps must occur:</p>
           <ol>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>Return a new static <a href="http://www.w3.org/TR/html5/embedded-content-0.html#normalized-timeranges-object">normalized TimeRanges object</a> for the <a href="#media-segment">media segments</a> buffered.</li>
+            <li>Let <var>highest end time</var> be the largest <a href="#track-buffer-ranges">track buffer ranges</a> end time across all the <a href="#track-buffer">track buffers</a> managed by this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
+            <li>Let <var>intersection ranges</var> equal a <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRange</a></code> object containing a single range from 0 to <var>highest end time</var>.</li>
+            <li>For each <a href="#track-buffer">track buffer</a> managed by this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>, run the following steps:
+              <ol>
+                <li>Let <var>track ranges</var> equal the <a href="#track-buffer-ranges">track buffer ranges</a> for the current <a href="#track-buffer">track buffer</a>.</li>
+                <li>If <code><a href="#widl-MediaSource-readyState">readyState</a></code> is <code><a href="#idl-def-ReadyState.ended">"ended"</a></code>, then set the end time on the last range in <var>track ranges</var> to <var>highest end time</var>.</li>
+                <li>Let <var>new intersection ranges</var> equal the intersection between the <var>intersection ranges</var> and the <var>track ranges</var>.</li>
+                <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
+              </ol>
+            </li>
+            <li>Return the <var>intersection ranges</var>.</li>
           </ol>
         </dd><dt id="widl-SourceBuffer-mode"><code>mode</code> of type <span class="idlAttrType"><a href="#idl-def-AppendMode" class="idlType"><code>AppendMode</code></a></span>,            </dt><dd>
           <p>Controls how a sequence of <a href="#media-segment">media segments</a> are handled.  This attribute is initially set by <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> after the object is created.</p>
@@ -1420,6 +1430,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           the track buffer is waiting for a <a href="#random-access-point">random access point</a> <a href="#coded-frame">coded frame</a>. The variable is initially set to true to
           indicate that <a href="#random-access-point">random access point</a> <a href="#coded-frame">coded frame</a> is needed before anything can be added to the
           <a href="#track-buffer">track buffer</a>.</p>
+
+        <p>Each <a href="#track-buffer">track buffer</a> has a <dfn id="track-buffer-ranges">track buffer ranges</dfn> variable that represents the presentation time ranges occupied by the <a href="#coded-frame">coded frames</a>
+          currently stored in the track buffer. For specification purposes, this information is treated as if it were stored in a <a href="http://www.w3.org/TR/html5/embedded-content-0.html#normalized-timeranges-object">normalized TimeRanges object</a>.</p>
       </section>
 
       <section id="sourcebuffer-events" typeof="bibo:Chapter" resource="#sourcebuffer-events" rel="bibo:Chapter">
@@ -2824,6 +2837,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
               <ul>
                 <li>Bug 26032 - Set need random access point flag on all track buffers when a new init
                   segment is received.</li>
+                <li>Bug 25845 - Clarify SourceBuffer.buffered getter behavior.</li>
               </ul>
             </td>
           </tr>
@@ -3330,7 +3344,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
   
 
 <form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form><section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" rel="bibo:Chapter"><!--OddPage--><h2 aria-level="1" role="heading" id="h2_references"><span class="secno">A. </span>References</h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" rel="bibo:Chapter"><h3 aria-level="2" role="heading" id="h3_normative-references"><span class="secno">A.1 </span>Normative references</h3><dl class="bibliography" about=""><dt id="bib-FILE-API">[FILE-API]</dt><dd rel="dcterms:requires">Arun Ranganathan; Jonas Sicking. <a href="http://www.w3.org/TR/FileAPI/"><cite>File API</cite></a>. 12 September 2013. W3C Last Call Working Draft. URL: <a href="http://www.w3.org/TR/FileAPI/">http://www.w3.org/TR/FileAPI/</a>
-</dd><dt id="bib-HTML5">[HTML5]</dt><dd rel="dcterms:requires">Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Edward O'Connor; Silvia Pfeiffer. <a href="http://www.w3.org/TR/html5/"><cite>HTML5</cite></a>. 29 April 2014. W3C Candidate Recommendation. URL: <a href="http://www.w3.org/TR/html5/">http://www.w3.org/TR/html5/</a>
+</dd><dt id="bib-HTML5">[HTML5]</dt><dd rel="dcterms:requires">Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Edward O'Connor; Silvia Pfeiffer. <a href="http://www.w3.org/TR/html5/"><cite>HTML5</cite></a>. 17 June 2014. W3C Last Call Working Draft. URL: <a href="http://www.w3.org/TR/html5/">http://www.w3.org/TR/html5/</a>
 </dd><dt id="bib-STREAMS-API">[STREAMS-API]</dt><dd rel="dcterms:requires">Feras Moussa; Takeshi Yoshino. <a href="http://www.w3.org/TR/2013/WD-streams-api-20131105/"><cite>Streams API</cite></a>. W3C Working Draft. URL: <a href="http://www.w3.org/TR/2013/WD-streams-api-20131105/">http://www.w3.org/TR/2013/WD-streams-api-20131105/</a>
 </dd><dt id="bib-TYPED-ARRAYS">[TYPED-ARRAYS]</dt><dd rel="dcterms:requires">David Herman; Kenneth Russell. <a href="https://www.khronos.org/registry/typedarray/specs/latest/"><cite>Typed Array Specification</cite></a>. 26 June 2013. Khronos Working Draft. URL: <a href="https://www.khronos.org/registry/typedarray/specs/latest/">https://www.khronos.org/registry/typedarray/specs/latest/</a>
 </dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" rel="bibo:Chapter"><h3 aria-level="2" role="heading" id="h3_informative-references"><span class="secno">A.2 </span>Informative references</h3><dl class="bibliography" about=""><dt id="bib-MSE-REGISTRY">[MSE-REGISTRY]</dt><dd rel="dcterms:references">Aaron Colwell. <a href="byte-stream-format-registry.html"><cite>Media Source Extensions Byte Stream Format Registry</cite></a>. URL: <a href="byte-stream-format-registry.html">byte-stream-format-registry.html</a>
