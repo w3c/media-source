@@ -1334,6 +1334,7 @@
                 </li>
                 <li>Add the appropriate <a def-id="track-descriptions"></a> from this <a def-id="init-segment"></a> to each of the 
                   <a def-id="track-buffers"></a>.</li>
+                <li>Set the <a def-id="need-RAP-flag"></a> on all track buffers to true.</li>
               </ol>
             </li>
             <li>Let <var>active track flag</var> equal false.</li>
@@ -2492,7 +2493,16 @@
         </thead>
         <tbody>
           <tr>
-            <td>13 June 2014</td>
+            <td>20 June 2014</td>
+            <td>
+              <ul>
+                <li>Bug 26032 - Set need random access point flag on all track buffers when a new init
+                  segment is received.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/a38529a7910d/media-source/media-source.html">13 June 2014</a></td>
             <td>
               <ul>
                 <li>Bug 25995 - Fix conditions in "remove existing coded frames" step.</li>

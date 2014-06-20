@@ -406,7 +406,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-06-14T03:58:01.000Z" id="w3c-editor-s-draft-13-june-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-06-13">13 June 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-06-20T22:50:32.000Z" id="w3c-editor-s-draft-20-june-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-06-20">20 June 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1692,6 +1692,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 </li>
                 <li>Add the appropriate <a href="#track-description">track descriptions</a> from this <a href="#init-segment">initialization segment</a> to each of the 
                   <a href="#track-buffer">track buffers</a>.</li>
+                <li>Set the <var><a href="#need-RAP-flag">need random access point flag</a></var> on all track buffers to true.</li>
               </ol>
             </li>
             <li>Let <var>active track flag</var> equal false.</li>
@@ -2818,7 +2819,16 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </thead>
         <tbody>
           <tr>
-            <td>13 June 2014</td>
+            <td>20 June 2014</td>
+            <td>
+              <ul>
+                <li>Bug 26032 - Set need random access point flag on all track buffers when a new init
+                  segment is received.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/a38529a7910d/media-source/media-source.html">13 June 2014</a></td>
             <td>
               <ul>
                 <li>Bug 25995 - Fix conditions in "remove existing coded frames" step.</li>
