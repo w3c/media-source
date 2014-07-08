@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" typeof="bibo:Document " about="" property="dcterms:language" content="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Media Source Extensions Byte Stream Format Registry</title>
+    
+    
+    
+    <!-- script to register bugs -->
+    <script src="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/assets/scripts/bug-assist.js"></script>
+    <meta name="bug.short_desc" content="[MSE] ">
+    <meta name="bug.product" content="HTML WG">
+    <meta name="bug.component" content="Media Source Extensions">
+
+    <link href="mse.css" rel="stylesheet">
+
+    <style type="text/css">
+      #registry table { border-collapse: collapse; border-style: hidden hidden none hidden; }
+      #registry table thead, table tbody { border-bottom: solid; }
+      #registry table tbody th:first-child { border-left: solid; }
+      #registry table tbody th { text-align: left; }
+      #registry table td, table th { border-left: solid; border-right: solid; border-bottom: solid thin; vertical-align: top; padding: 0.2em; }
+    </style>
+  <style>/*****************************************************************
+ * ReSpec 3 CSS
+ * Robin Berjon - http://berjon.com/
+ *****************************************************************/
+
+/* --- INLINES --- */
+em.rfc2119 { 
+    text-transform:     lowercase;
+    font-variant:       small-caps;
+    font-style:         normal;
+    color:              #900;
+}
+
+h1 acronym, h2 acronym, h3 acronym, h4 acronym, h5 acronym, h6 acronym, a acronym,
+h1 abbr, h2 abbr, h3 abbr, h4 abbr, h5 abbr, h6 abbr, a abbr {
+    border: none;
+}
+
+dfn {
+    font-weight:    bold;
+}
+
+a.internalDFN {
+    color:  inherit;
+    border-bottom:  1px solid #99c;
+    text-decoration:    none;
+}
+
+a.externalDFN {
+    color:  inherit;
+    border-bottom:  1px dotted #ccc;
+    text-decoration:    none;
+}
+
+a.bibref {
+    text-decoration:    none;
+}
+
+cite .bibref {
+    font-style: normal;
+}
+
+code {
+    color:  #ff4500;
+}
+
+/* --- TOC --- */
+.toc a, .tof a {
+    text-decoration:    none;
+}
+
+a .secno, a .figno {
+    color:  #000;
+}
+
+ul.tof, ol.tof {
+    list-style: none outside none;
+}
+
+.caption {
+    margin-top: 0.5em;
+    font-style:   italic;
+}
+
+/* --- TABLE --- */
+table.simple {
+    border-spacing: 0;
+    border-collapse:    collapse;
+    border-bottom:  3px solid #005a9c;
+}
+
+.simple th {
+    background: #005a9c;
+    color:  #fff;
+    padding:    3px 5px;
+    text-align: left;
+}
+
+.simple th[scope="row"] {
+    background: inherit;
+    color:  inherit;
+    border-top: 1px solid #ddd;
+}
+
+.simple td {
+    padding:    3px 10px;
+    border-top: 1px solid #ddd;
+}
+
+.simple tr:nth-child(even) {
+    background: #f0f6ff;
+}
+
+/* --- DL --- */
+.section dd > p:first-child {
+    margin-top: 0;
+}
+
+.section dd > p:last-child {
+    margin-bottom: 0;
+}
+
+.section dd {
+    margin-bottom:  1em;
+}
+
+.section dl.attrs dd, .section dl.eldef dd {
+    margin-bottom:  0;
+}
+
+@media print {
+    .removeOnSave {
+        display: none;
+    }
+}
+</style><link href="https://www.w3.org/StyleSheets/TR/base" rel="stylesheet"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
+  <body class="h-entry" id="respecDocument" role="document"><div class="head" id="respecHeader" role="contentinfo">
+  <p>
+    
+      <a href="http://www.w3.org/"><img width="72" height="48" alt="W3C" src="https://www.w3.org/Icons/w3c_home"></a>
+    
+  </p>
+  <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions Byte Stream Format Registry</h1>
+  
+  <h2 id="w3c-document-17-july-2014" property="dcterms:issued" content="2014-07-17T07:00:00.000Z" datatype="xsd:dateTime"><time class="dt-published" datetime="2014-07-17">17 July 2014</time></h2>
+  <dl>
+    
+    
+      <dt>This version:</dt>
+      <dd><a href="http://www.w3.org/2013/12/byte-stream-format-registry/">http://www.w3.org/2013/12/byte-stream-format-registry/</a></dd>      <dt>Latest editor's draft:</dt>
+      <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/byte-stream-format-registry.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/byte-stream-format-registry.html</a></dd>
+    
+    
+    
+    
+    
+    
+    
+    <dt>Editor:</dt>
+    <dd class="p-author h-card vcard" inlist="" rel="bibo:editor"><span typeof="foaf:Person"><span class="p-name fn" property="foaf:name">Aaron Colwell</span>, <a class="p-org org h-org h-card" href="http://www.google.com/" rel="foaf:workplaceHomepage">Google Inc.</a></span>
+</dd>
+
+    
+    
+  </dl>
+  
+  
+  
+  
+    
+      <p class="copyright">
+        <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
+        2014
+        
+        <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
+        (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
+        <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>,
+        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), 
+        
+        All Rights Reserved.
+        
+        <abbr title="World Wide Web Consortium">W3C</abbr> <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
+        <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
+        
+          <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a>
+        
+        rules apply.
+      </p>
+    
+  
+  <hr>
+</div>
+
+    <section id="purpose" typeof="bibo:Chapter" rel="bibo:Chapter" resource="#purpose">
+      <!--OddPage--><h2 id="h2_purpose" role="heading" aria-level="1"><span class="secno">1. </span>Purpose</h2>
+      <p>This registry is intended to enhance interoperability among implementations and users of
+        <code><a class="idlType" href="http://www.w3.org/TR/media-source/#idl-def-SourceBuffer">SourceBuffer</a></code> objects described in the
+        <a href="http://www.w3.org/TR/media-source/#">Media Source Extensions</a>(MSE) specification. In particular, this registry provides the means (1) to identify
+        and avoid MIME-type collisions among byte stream formats, and (2) to disclose information about byte stream formats accepted by MSE
+        implementations to promote interoperability.
+    </p></section>
+
+    <section id="organization" typeof="bibo:Chapter" rel="bibo:Chapter" resource="#organization">
+      <!--OddPage--><h2 id="h2_organization" role="heading" aria-level="1"><span class="secno">2. </span>Organization</h2>
+      <p>The registry maintains a mapping between MIME-type/subtype pairs and byte stream format specifications. The byte stream format specifications describe the
+        structure and semantics of byte streams accepted by <code><a class="idlType" href="http://www.w3.org/TR/media-source/#idl-def-SourceBuffer">SourceBuffer</a></code> objects
+        created with the associated MIME-type/subtype pair.</p>
+      <p>This registry is not intended to include any information on whether a byte stream format is encumbered by intellectual property claims. Implementors and users
+        are advised to seek appropriate legal counsel in this matter if they intend to implement or use a specific byte stream format.</p>
+    </section>
+
+    <section id="entry-requirements" typeof="bibo:Chapter" rel="bibo:Chapter" resource="#entry-requirements">
+      <!--OddPage--><h2 id="h2_entry-requirements" role="heading" aria-level="1"><span class="secno">3. </span>Registration Entry Requirements</h2>
+      <ol>
+        <li>Each entry must include a unique MIME-type/subtype pair. If the byte stream format is derived-from an existing file format, then it should use the
+          MIME-type/subtype pairs typically used for the file format.</li>
+        <li>Each entry must include a <var><a href="http://www.w3.org/TR/media-source/#sourcebuffer-generate-timestamps-flag">generate timestamps flag</a></var> value that must be used by
+            <code><a class="idlType" href="http://www.w3.org/TR/media-source/#idl-def-SourceBuffer">SourceBuffer</a></code> when handling the byte stream format.</li>
+        <li>Each entry must include a link that references a publically available specification. It is recommended that such a specification be made available
+          without cost (other than reasonable shipping and handling if not available by online means).</li>
+        <li>Each entry must comply with all requirements outlined in the <a href="http://www.w3.org/TR/media-source/#byte-stream-formats">byte stream formats section</a>
+          of the <a href="http://www.w3.org/TR/media-source/#">Media Source Extensions</a> specification.</li>
+        <li>Candidate entries must be announced on <a href="public-html-media@w3.org">public-html-media@w3.org</a>(<a href="public-html-media-request@w3.org">subscribe</a>,
+          <a href="http://lists.w3.org/Archives/Public/public-html-media/">archives</a>) so they can be discussed and evaluated for compliance before being added to the
+          registry.</li>
+      </ol>
+      <p>If a registration fails to satisfy a mandatory requirement specified above, then it may be removed from the registry (without prejudice).
+    </p></section>
+
+    <section id="registry" typeof="bibo:Chapter" rel="bibo:Chapter" resource="#registry">
+      <!--OddPage--><h2 id="h2_registry" role="heading" aria-level="1"><span class="secno">4. </span>Registry</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>MIME type/subtype</th>
+            <th>Public Specification(s)</th>
+            <th>Generate Timestamps Flag</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              audio/webm<br>
+              video/webm
+            </td>
+            <td><a href="webm-byte-stream-format.html">WebM Byte Stream Format</a></td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>
+              audio/mp4<br>
+              video/mp4
+            </td>
+            <td><a href="isobmff-byte-stream-format.html">ISO BMFF Byte Stream Format</a></td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>
+              audio/mp2t<br>
+              video/mp2t
+            </td>
+            <td><a href="mp2t-byte-stream-format.html">MPEG-2 Transport Streams Byte Stream Format</a></td>
+            <td>false</td>
+          </tr>
+          <tr>
+            <td>
+              audio/mpeg<br>
+              audio/aac
+            </td>
+            <td><a href="mpeg-audio-byte-stream-format.html">MPEG Audio Byte Stream Format</a></td>
+            <td>true</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  
+
+<form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input accesskey="f" style="font-family: Tahoma,sans-serif; font-size: 10px;" type="submit" value="file a bug"><input name="comment" type="hidden" value=""><input name="short_desc" type="hidden" value="[MSE] "><input name="product" type="hidden" value="HTML WG"><input name="component" type="hidden" value="Media Source Extensions">.</form></body></html>
