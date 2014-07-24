@@ -406,7 +406,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-07-25T03:58:45.000Z" id="w3c-editor-s-draft-24-july-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-07-24">24 July 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-07-25T04:18:55.000Z" id="w3c-editor-s-draft-24-july-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-07-24">24 July 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -2197,11 +2197,29 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 </li>
 	        <li>Remove all media data, from this <a href="#track-buffer">track buffer</a>, that contain starting timestamps greater than or equal to
                   <var>start</var> and less than the <var>remove end timestamp</var>.</li>
+                <li>Remove decoding dependencies of the coded frames removed in the previous step:
+                  <dl class="switch">
+                    <dt>If detailed information about decoding dependencies is available:</dt>
+                    <dd>Remove all <a href="#coded-frame">coded frames</a> from this <a href="#track-buffer">track buffer</a> that have decoding dependencies on the coded frames removed in
+                      the previous step.
+                      <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_29"><span>Note</span></div><p class="">For example if an I-frame is removed in the previous step, then all P-frames &amp; B-frames that depend on that I-frame
+                        should be removed from this <a href="#track-buffer">track buffer</a>.
+                      </p></div>
+                    </dd>
+                    <dt>Otherwise:</dt>
+                    <dd>Remove all <a href="#coded-frame">coded frames</a> between the coded frames removed in the previous step and the next
+                      <a href="#random-access-point">random access point</a> after those removed frames.
+                      <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_30"><span>Note</span></div><p class="">Removing all <a href="#coded-frame">coded frames</a> until the next <a href="#random-access-point">random access point</a> is a conservative
+                        estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point
+                        depended on the frames that were removed.
+                      </p></div>
+                    </dd>
+                </dl></li>
                 <li>
                   <p>If this object is in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>, the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#current-playback-position">current playback position</a> is greater than or equal to
                     <var>start</var> and less than the <var>remove end timestamp</var>, and <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> is greater than
                     <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_metadata">HAVE_METADATA</a></code>, then set the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_metadata">HAVE_METADATA</a></code> and stall playback.</p>
-                  <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_29"><span>Note</span></div><p class="">This transition occurs because media data for the current position has been removed. Playback cannot progress until media for the
+                  <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_31"><span>Note</span></div><p class="">This transition occurs because media data for the current position has been removed. Playback cannot progress until media for the
                     <a href="http://www.w3.org/TR/html5/embedded-content-0.html#current-playback-position">current playback position</a> is appended or the <a href="#active-source-buffer-changes">selected/enabled tracks change</a>.</p></div>
                 </li>
 	      </ol>
@@ -2219,7 +2237,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals false, then abort these steps.</li>
             <li>Let <var>removal ranges</var> equal a list of presentation time ranges that can be evicted from the presentation to make room for the
               <var>new data</var>.
-              <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_30"><span>Note</span></div><p class="">Implementations may use different methods for selecting <var>removal ranges</var> so web applications should not depend on a
+              <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_32"><span>Note</span></div><p class="">Implementations may use different methods for selecting <var>removal ranges</var> so web applications should not depend on a
                 specific behavior. The web application can use the <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> attribute to observe whether portions of the buffered data have been evicted.
               </p></div>
             </li>
@@ -2243,7 +2261,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Update <var>presentation timestamp</var> and <var>decode timestamp</var> to the nearest audio sample timestamp based on sample rate of the 
               audio in <var>overlapped frame</var>. If a timestamp is equidistant from both audio sample timestamps, then use the higher timestamp. (eg.
               floor(x * sample_rate + 0.5) / sample_rate).
-              <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_31"><span>Note</span></div><div class="">
+              <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_33"><span>Note</span></div><div class="">
                 <p>For example, given the following values:</p>
                 <ul>
                   <li>The <a href="#presentation-timestamp">presentation timestamp</a> of <var>overlapped frame</var> equals 10.</li>
@@ -2264,13 +2282,13 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                     <li>The <a href="#decode-timestamp">decode timestamp</a> set to the <var>overlapped frame</var> <a href="#decode-timestamp">decode timestamp</a>.</li>
                     <li>The <a href="#coded-frame-duration">coded frame duration</a> set to difference between <var>presentation timestamp</var> and the <var>overlapped frame</var> <a href="#presentation-timestamp">presentation timestamp</a>.</li>
                   </ul>
-                  <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_32"><span>Note</span></div><p class="">
+                  <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_34"><span>Note</span></div><p class="">
                     Some implementations may apply fades to/from silence to coded frames on either side of the inserted silence to make the transition less
                     jarring.
                   </p></div>
                 </li>
                 <li>Return to caller without providing a splice frame.
-                  <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_33"><span>Note</span></div><p class="">
+                  <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_35"><span>Note</span></div><p class="">
                     This is intended to allow <var>new coded frame</var> to be added to the <var>track buffer</var> as if
                     <var>overlapped frame</var> had not been in the <var>track buffer</var> to begin with.
                   </p></div>
@@ -2289,12 +2307,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <li>The <a href="#coded-frame-duration">coded frame duration</a> set to difference between <var>frame end timestamp</var> and the <var>overlapped frame</var> <a href="#presentation-timestamp">presentation timestamp</a>.</li>
                 <li>The fade out coded frames equals <var>fade-out coded frames</var>.</li>
                 <li>The fade in coded frame equal <var>new coded frame</var>.
-                  <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_34"><span>Note</span></div><p class="">If the <var>new coded frame</var> is less than 5 milliseconds in duration, then coded frames that are appended after the
+                  <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_36"><span>Note</span></div><p class="">If the <var>new coded frame</var> is less than 5 milliseconds in duration, then coded frames that are appended after the
                     <var>new coded frame</var> will be needed to properly render the splice.</p></div>
                 </li>
                 <li>The splice timestamp equals <var>presentation timestamp</var>.</li>
               </ul>
-              <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_35"><span>Note</span></div><p class="">See the <a href="#sourcebuffer-audio-splice-rendering-algorithm">audio splice rendering algorithm</a> for details on how this splice frame is rendered.</p></div>
+              <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_37"><span>Note</span></div><p class="">See the <a href="#sourcebuffer-audio-splice-rendering-algorithm">audio splice rendering algorithm</a> for details on how this splice frame is rendered.</p></div>
             </li>
           </ol>
         </section>
@@ -2326,7 +2344,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Copy samples between <var>splice end timestamp</var> to <var>end timestamp</var> from <var>fade in samples</var> into <var>output samples</var>.</li>
             <li>Render <var>output samples</var>.</li>
           </ol>
-          <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_36"><span>Note</span></div><div class="">
+          <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_38"><span>Note</span></div><div class="">
             <p>Here is a graphical representation of this algorithm.</p>
             <img src="audio_splice.png" alt="Audio splice diagram">
           </div></div>
@@ -2351,7 +2369,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             </li><li>Update the <a href="#coded-frame-duration">coded frame duration</a> of the <var>first overlapped frame</var> to <var>presentation timestamp</var> - <var>overlapped presentation timestamp</var>.</li>
             <li>Add <var>first overlapped frame</var> to the <var>track buffer</var>.
             </li><li>Return to caller without providing a splice frame.
-              <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_37"><span>Note</span></div><p class="">This is intended to allow <var>new coded frame</var> to be added to the <var>track buffer</var> as if
+              <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_39"><span>Note</span></div><p class="">This is intended to allow <var>new coded frame</var> to be added to the <var>track buffer</var> as if
                 it hadn't overlapped any frames in <var>track buffer</var> to begin with.</p></div>
             </li>
           </ol>
@@ -2516,7 +2534,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
               the same <code><a href="#widl-TrackDefault-type">type</a></code> and have
               <code><a href="#widl-TrackDefault-byteStreamTrackID">byteStreamTrackID</a></code> equal to an empty string, then throw an
               <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> and abort these steps.
-              <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_38"><span>Note</span></div><p class="">This ensures that there is only one "byteStreamTrackID independent"
+              <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_40"><span>Note</span></div><p class="">This ensures that there is only one "byteStreamTrackID independent"
                 default for each <a href="#idl-def-TrackDefaultType" class="idlType"><code>TrackDefaultType</code></a> value.</p></div></li>
             <li>Store a copy of <var>trackDefaults</var> in this new object so the values can be returned
               by the accessor methods.</li>
@@ -2542,7 +2560,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
           <p>Creates URLs for <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> objects.</p>
 
           
-          <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_39"><span>Note</span></div><p class="">This algorithm is intended to mirror the behavior of the <a href="http://www.w3.org/TR/FileAPI/#dfn-createObjectURL">createObjectURL()</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] method with autoRevoke set to true.</p></div>
+          <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_41"><span>Note</span></div><p class="">This algorithm is intended to mirror the behavior of the <a href="http://www.w3.org/TR/FileAPI/#dfn-createObjectURL">createObjectURL()</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] method with autoRevoke set to true.</p></div>
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">mediaSource</td><td class="prmType"><code><a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>DOMString</code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>Return a unique <a href="#mediasource-object-url">MediaSource object URL</a> that can be used to dereference the <var>mediaSource</var> argument, and run the rest of the algorithm asynchronously.</li>
             <li><a href="http://www.w3.org/TR/html5/webappapis.html#provide-a-stable-state">provide a stable state</a></li>
@@ -2668,9 +2686,9 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         mappings for byte stream formats they support to facilitate interoperability. The byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>] is the authoritative source for these
         mappings. If an implementation claims to support a MIME type listed in the registry, its <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> implementation must conform to the
         <a href="#byte-stream-format-specs">byte stream format specification</a> listed in the registry entry.</p>
-      <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_40"><span>Note</span></div><p class="">The byte stream format specifications in the registry are not intended to define new storage formats. They simply outline the subset of
+      <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_42"><span>Note</span></div><p class="">The byte stream format specifications in the registry are not intended to define new storage formats. They simply outline the subset of
         existing storage format structures that implementations of this specification will accept.</p></div>
-      <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_41"><span>Note</span></div><p class="">Byte stream format parsing and validation is implemented in the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> algorithm.</p></div>
+      <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_43"><span>Note</span></div><p class="">Byte stream format parsing and validation is implemented in the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> algorithm.</p></div>
 
       <p>This section provides general requirements for all byte stream format specifications:</p>
       <ul>
@@ -2680,12 +2698,12 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
           <ol>
             <li>
               <p>The number and type of tracks are not consistent.</p>
-              <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_42"><span>Note</span></div><p class="">For example, if the first <a href="#init-segment">initialization segment</a> has 2 audio tracks and 1 video track, then all <a href="#init-segment">initialization segments</a> that follow it in the byte stream must describe 2 audio tracks and 1 video track.</p></div>
+              <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_44"><span>Note</span></div><p class="">For example, if the first <a href="#init-segment">initialization segment</a> has 2 audio tracks and 1 video track, then all <a href="#init-segment">initialization segments</a> that follow it in the byte stream must describe 2 audio tracks and 1 video track.</p></div>
             </li>
             <li><a href="#track-id">Track IDs</a> are not the same across <a href="#init-segment">initialization segments</a>, for segments describing multiple tracks of a single type. (e.g. 2 audio tracks).</li>
 	    <li>
               <p>Codecs changes across <a href="#init-segment">initialization segments</a>.</p>
-              <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_43"><span>Note</span></div><p class="">For example, a byte stream that starts with an <a href="#init-segment">initialization segment</a> that specifies a single AAC track and later contains an <a href="#init-segment">initialization segment</a> that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects.</p></div>
+              <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_45"><span>Note</span></div><p class="">For example, a byte stream that starts with an <a href="#init-segment">initialization segment</a> that specifies a single AAC track and later contains an <a href="#init-segment">initialization segment</a> that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects.</p></div>
             </li>
           </ol>
         </li>
@@ -2694,11 +2712,11 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
             <li><a href="#track-id">Track IDs</a> changing across <a href="#init-segment">initialization segments</a> if the segments describes only one track of each type.</li>
 	    <li>
               <p>Video frame size changes. The user agent must support seamless playback.</p>
-              <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_44"><span>Note</span></div><p class="">This will cause the &lt;video&gt; display region to change size if the web application does not use CSS or HTML attributes (width/height) to constrain the element size.</p></div>
+              <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_46"><span>Note</span></div><p class="">This will cause the &lt;video&gt; display region to change size if the web application does not use CSS or HTML attributes (width/height) to constrain the element size.</p></div>
             </li>
 	    <li>
               <p>Audio channel count changes. The user agent may support this seamlessly and could trigger downmixing.</p>
-              <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_45"><span>Note</span></div><p class="">This is a quality of implementation issue because changing the channel count may require reinitializing the audio device, resamplers, and channel mixers which tends to be audible.</p></div>
+              <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_47"><span>Note</span></div><p class="">This is a quality of implementation issue because changing the channel count may require reinitializing the audio device, resamplers, and channel mixers which tends to be audible.</p></div>
             </li>
           </ol>
         </li>
@@ -2706,7 +2724,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
           <ol>
             <li>Map all timestamps to the same <a href="http://www.w3.org/TR/html5/embedded-content-0.html#media-timeline">media timeline</a>.</li>
             <li>Support seamless playback of <a href="#media-segment">media segments</a> having a timestamp gap smaller than the audio frame size. User agent must not reflect these gaps in the <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> attribute.
-	      <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_46"><span>Note</span></div><p class="">This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g. Vorbis).</p></div>
+	      <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_48"><span>Note</span></div><p class="">This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g. Vorbis).</p></div>
             </li>
           </ol>
         </li>
@@ -2852,8 +2870,8 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
             <td>
               <ul>
                 <li>Bug 26345 - Make activeSourceBuffers order match sourceBuffers order.</li>
-                <li>Bug 26316 - Changed "duration change" algorithm to avoid "open" transition on
-                  endOfStream().</li>
+                <li>Bug 26316 - Changed duration change algorithm to avoid open transition on endOfStream().</li>
+                <li>Bug 26314 - Fixed coded frame removal algorithm to remove dependencies that may lie outside the removal range.</li>
               </ul>
             </td>
           </tr>

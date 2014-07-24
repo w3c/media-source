@@ -1844,6 +1844,24 @@
                 </li>
 	        <li>Remove all media data, from this <a def-id="track-buffer"></a>, that contain starting timestamps greater than or equal to
                   <var>start</var> and less than the <var>remove end timestamp</var>.</li>
+                <li>Remove decoding dependencies of the coded frames removed in the previous step:
+                  <dl class="switch">
+                    <dt>If detailed information about decoding dependencies is available:</dt>
+                    <dd>Remove all <a def-id="coded-frames"></a> from this <a def-id="track-buffer"></a> that have decoding dependencies on the coded frames removed in
+                      the previous step.
+                      <p class="note">For example if an I-frame is removed in the previous step, then all P-frames & B-frames that depend on that I-frame
+                        should be removed from this <a def-id="track-buffer"></a>.
+                      </p>
+                    </dd>
+                    <dt>Otherwise:</dt>
+                    <dd>Remove all <a def-id="coded-frames"></a> between the coded frames removed in the previous step and the next
+                      <a def-id="random-access-point"></a> after those removed frames.
+                      <p class="note">Removing all <a def-id="coded-frames"></a> until the next <a def-id="random-access-point"></a> is a conservative
+                        estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point
+                        depended on the frames that were removed.
+                      </p>
+                    </dd>
+                </li>
                 <li>
                   <p>If this object is in <a def-id="activeSourceBuffers"></a>, the <a def-id="current-playback-position"></a> is greater than or equal to
                     <var>start</var> and less than the <var>remove end timestamp</var>, and <a def-id="ready-state"></a> is greater than
@@ -2531,8 +2549,8 @@
             <td>
               <ul>
                 <li>Bug 26345 - Make activeSourceBuffers order match sourceBuffers order.</li>
-                <li>Bug 26316 - Changed duration change algorithm to avoid open transition on
-                  endOfStream().</li>
+                <li>Bug 26316 - Changed duration change algorithm to avoid open transition on endOfStream().</li>
+                <li>Bug 26314 - Fixed coded frame removal algorithm to remove dependencies that may lie outside the removal range.</li>
               </ul>
             </td>
           </tr>
