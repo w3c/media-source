@@ -322,10 +322,15 @@
 
         <dt>readonly attribute SourceBufferList activeSourceBuffers</dt>
         <dd>
-          <p>Contains the subset of <a def-id="sourceBuffers"></a> that are providing the 
-            <a def-id="videoref" name="dom-videotrack-selected">selected video track</a>,  the 
-            <a def-id="videoref" name="dom-audiotrack-enabled">enabled audio track(s)</a>, and the 
+          <p>Contains the subset of <a def-id="sourceBuffers"></a> that are providing the
+            <a def-id="videoref" name="dom-videotrack-selected">selected video track</a>, the
+            <a def-id="videoref" name="dom-audiotrack-enabled">enabled audio track(s)</a>, and the
             <a def-id="videoref" name="dom-texttrack-showing">"showing"</a> or <a def-id="videoref" name="dom-texttrack-hidden">"hidden"</a> text track(s).
+          </p>
+          <p><a>SourceBuffer</a> objects in this list must appear in the same order as they appear in
+            the <a def-id="sourceBuffers"></a> attribute. (e.g., If only sourceBuffers[0] and
+            sourceBuffers[3] are in <a def-id="activeSourceBuffers"></a>, then activeSourceBuffers[0] must
+            equal sourceBuffers[0] and activeSourceBuffers[1] must equal sourceBuffers[3].)
           </p>
           <p class="note">The <a href="#active-source-buffer-changes">Changes to selected/enabled track state</a> section describes how this attribute gets
             updated.</p>
@@ -2510,7 +2515,15 @@
         </thead>
         <tbody>
           <tr>
-            <td>20 June 2014</td>
+            <td>24 July 2014</td>
+            <td>
+              <ul>
+                <li>Bug 26345 - Make activeSourceBuffers order match sourceBuffers order.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/9b4db0f089bf/media-source/media-source.html">20 June 2014</a></td>
             <td>
               <ul>
                 <li>Bug 26032 - Set need random access point flag on all track buffers when a new init
