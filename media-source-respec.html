@@ -758,7 +758,9 @@
             <li>If the current value of <a def-id="duration"></a> is equal to <var>new duration</var>, then return.</li>
             <li>Set <var>old duration</var> to the current value of <a def-id="duration"></a>.
             <li>Update <a def-id="duration"></a> to <var>new duration</var>.</li>
-            <li>If the <var>new duration</var> is less than <var>old duration</var>, then call <a href="#widl-SourceBuffer-remove-void-double-start-unrestricted-double-end">remove</a>(<var>new duration</var>, <var>old duration</var>)</code> on all objects in <a def-id="sourceBuffers"></a>.
+            <li>If the <var>new duration</var> is less than <var>old duration</var>, then run the
+              <a def-id="range-removal"></a> algorithm with <var>new duration</var> and
+              <var>old duration</var> as the start and end of the removal range.</li>
               <p class="note">This preserves audio frames and text cues that start before and end after the <a def-id="duration"></a>.</p></li>
             <li>If a user agent is unable to partially render audio frames or text cues that start before and end after the <a def-id="duration"></a>, then run the following steps:
               <ol>
@@ -1034,13 +1036,7 @@
 	        <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a def-id="parent-media-source"></a> .</li>
               </ol>
             </li>
-            <li>Set the <a def-id="updating"></a> attribute to true.</li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
-            <li>Return control to the caller and run the rest of the steps asynchronously.</li>
-            <li>Run the <a def-id="coded-frame-removal-algorithm"></a> with <var>start</var> and <var>end</var> as the start and end of the removal range.</li>
-            <li>Set the <a def-id="updating"></a> attribute to false.</li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="update"></a> at this <a>SourceBuffer</a> object.</li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
+            <li>Run the <a def-id="range-removal"></a> algorithm with <var>start</var> and <var>end</var> as the start and end of the removal range.</li>
        </ol>
 
         </dd>
@@ -1331,6 +1327,22 @@
           </ol>
         </section>
 
+        <section  id="sourcebuffer-range-removal">
+          <h4>Range Removal</h4>
+          <p>Follow these steps when a caller needs to initiate a JavaScript visible range removal
+            operation that blocks other SourceBuffer updates:</p>
+          <ol>
+            <li>Let <var>start</var> equal the starting <a def-id="presentation-timestamp"></a> for the removal range.</li>
+            <li>Let <var>end</var> equal the end <a def-id="presentation-timestamp"></a> for the removal range.</li>
+            <li>Set the <a def-id="updating"></a> attribute to true.</li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
+            <li>Return control to the caller and run the rest of the steps asynchronously.</li>
+            <li>Run the <a def-id="coded-frame-removal-algorithm"></a> with <var>start</var> and <var>end</var> as the start and end of the removal range.</li>
+            <li>Set the <a def-id="updating"></a> attribute to false.</li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="update"></a> at this <a>SourceBuffer</a> object.</li>
+            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
+          </ol>
+        </section>
         <section id="sourcebuffer-init-segment-received">
           <h4>Initialization Segment Received</h4>
           <p>The following steps are run when the <a def-id="segment-parser-loop"></a> successfully parses a complete <a def-id="init-segment"></a>:</p>
@@ -2519,6 +2531,8 @@
             <td>
               <ul>
                 <li>Bug 26345 - Make activeSourceBuffers order match sourceBuffers order.</li>
+                <li>Bug 26316 - Changed duration change algorithm to avoid open transition on
+                  endOfStream().</li>
               </ul>
             </td>
           </tr>
