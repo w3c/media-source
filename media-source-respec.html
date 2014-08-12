@@ -642,7 +642,7 @@
             500ms to append more data before playback stalls.</p>
 
           <dl class="switch">
-            <dt>If <a def-id="buffered"></a> for all objects in <a def-id="activeSourceBuffers"></a> do not contain <a def-id="timeranges"></a> for the current playback position:</dt>
+            <dt>If <a def-id="hme-buffered"></a> does not contain a <a def-id="timerange"></a> for the current playback position:</dt>
             <dd>
 	      <ol>
 	        <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.</li>
@@ -650,7 +650,7 @@
 	        <li>Abort these steps.</li>
 	      </ol>
             </dd>
-            <dt>If <a def-id="buffered"></a> for all objects in <a def-id="activeSourceBuffers"></a> contain <a def-id="timeranges"></a> that include the current playback position and <a def-id="enough-data"></a>:</dt>
+            <dt>If <a def-id="hme-buffered"></a> contains a <a def-id="timerange"></a> that includes the current playback position and <a def-id="enough-data"></a>:</dt>
             <dd>
 	      <ol>
 	        <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-enough-data"></a>.</li>
@@ -660,7 +660,7 @@
 	        <li>Abort these steps.</li>
 	      </ol>
             </dd>
-            <dt>If <a def-id="buffered"></a> for all objects in <a def-id="activeSourceBuffers"></a> contain a <a def-id="timerange"></a> that includes the current playback position and some time beyond the current playback position, then run the following steps:</dt>
+            <dt>If <a def-id="hme-buffered"></a> contains a <a def-id="timerange"></a> that includes the current playback position and some time beyond the current playback position, then run the following steps:</dt>
             <dd>
 	      <ol>
 	        <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-future-data"></a>.</li>
@@ -669,7 +669,7 @@
 	        <li>Abort these steps.</li>
 	      </ol>
             </dd>
-            <dt>If <a def-id="buffered"></a> for at least one object in <a def-id="activeSourceBuffers"></a> contains a <a def-id="timerange"></a> that ends at the current playback position and does not have a range covering the time immediately after the current position:</dt>
+            <dt>If <a def-id="hme-buffered"></a> contains a <a def-id="timerange"></a> that ends at the current playback position and does not have a range covering the time immediately after the current position:</dt>
             <dd>
 	      <ol>
 	        <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-current-data"></a>.</li>
@@ -1801,14 +1801,14 @@
 	      </ol>
             </li>
             <li>
-              <p>If the <a def-id="ready-state"></a> attribute is <a def-id="have-metadata"></a> and the new <a def-id="coded-frames"></a> cause all objects in <a def-id="activeSourceBuffers"></a> to have media data for the current playback position, then run the following steps:</p>
+              <p>If the <a def-id="ready-state"></a> attribute is <a def-id="have-metadata"></a> and the new <a def-id="coded-frames"></a> cause <a def-id="hme-buffered"></a> to have a <a def-id="timerange"></a> for the current playback position, then run the following steps:</p>
 	      <ol>
 	        <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-current-data"></a>.</li>
 	        <li>If this is the first transition to <a def-id="have-current-data"></a>, then <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="loadeddata"></a> at the media element.</li>
 	      </ol>
             </li>
             <li>
-	      <p>If the <a def-id="ready-state"></a> attribute is <a def-id="have-current-data"></a> and the new <a def-id="coded-frames"></a> cause all objects in <a def-id="activeSourceBuffers"></a> to have media data beyond the current playback position, then run the following steps:</p>
+	      <p>If the <a def-id="ready-state"></a> attribute is <a def-id="have-current-data"></a> and the new <a def-id="coded-frames"></a> cause <a def-id="hme-buffered"></a> to have a <a def-id="timerange"></a> that includes the current playback position and some time beyond the current playback position, then run the following steps:</p>
 	      <ol>
 	        <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-future-data"></a>.</li>
 	        <li>
@@ -1816,7 +1816,7 @@
 	      </ol>
             </li>
             <li>
-	      <p>If the <a def-id="ready-state"></a> attribute is <a def-id="have-future-data"></a> and the new <a def-id="coded-frames"></a> cause all objects in <a def-id="activeSourceBuffers"></a> to have <a def-id="enough-data"></a>, then run the following steps:</p>
+	      <p>If the <a def-id="ready-state"></a> attribute is <a def-id="have-future-data"></a> and the new <a def-id="coded-frames"></a> cause <a def-id="hme-buffered"></a> to have a <a def-id="timerange"></a> that includes the current playback position and <a def-id="enough-data"></a>, then run the following steps:</p>
 	      <ol>
 	        <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-enough-data"></a>.</li>
 	        <li>
@@ -2545,7 +2545,15 @@
         </thead>
         <tbody>
           <tr>
-            <td>24 July 2014</td>
+            <td>12 August 2014</td>
+            <td>
+              <ul>
+                <li>Bug 26436 - Use HTMLMediaElement.buffered for HTMLMediaElement.readyState transitions instead of individual SourceBuffer.buffered attributes.
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/c63fe313d13a/media-source/media-source.html">24 July 2014</a></td>
             <td>
               <ul>
                 <li>Bug 26345 - Make activeSourceBuffers order match sourceBuffers order.</li>
