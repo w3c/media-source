@@ -1042,7 +1042,7 @@
         </dd>
         <dt>attribute TrackDefaultList trackDefaults</dt>
         <dd>
-          <p>Specifies the default values to use if kind and/or language information is not available in the
+          <p>Specifies the default values to use if kind, label, and/or language information is not available in the
             <a def-id="init-segment"></a> when the <a def-id="init-segment-received-algorithm"></a> needs
             to create track objects. This attribute is initially set to an empty <a>TrackDefaultList</a> object.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
@@ -1398,6 +1398,13 @@
                       set to <var>audio byte stream track ID</var> and <var>type</var> set to
                       <a def-id="TrackDefaultType-audio"></a> and assign the value returned by the
                       algorithm to <var>audio language</var>.</li>
+                    <li>Let <var>audio label</var> be a label specified in the <a def-id="init-segment"></a> for this track or an empty string if no
+                      label info is present.</li>
+                    <li>If <var>audio label</var> equals an empty string, then run the
+                      <a def-id="default-track-label-algorithm"></a> with <var>byteStreamTrackID</var>
+                      set to <var>audio byte stream track ID</var> and <var>type</var> set to
+                      <a def-id="TrackDefaultType-audio"></a> and assign the value returned by the
+                      algorithm to <var>audio label</var>.</li>
                     <li>Let <var>audio kinds</var> be an array of kind strings specified in the
                       <a def-id="init-segment"></a> for this track or an empty array if no kind information
                       is provided.</li>
@@ -1413,6 +1420,8 @@
                         <li>Let <var>new audio track</var> be a new <a def-id="audio-track"></a> object.</li>
                         <li>Generate a unique ID and assign it to the <a def-id="audiotrack-id"></a> property on <var>new audio track</var>.</li>
                         <li>Assign <var>audio language</var> to the <a def-id="audiotrack-language"></a>
+                          property on <var>new audio track</var>.</li>
+                        <li>Assign <var>audio label</var> to the <a def-id="audiotrack-label"></a>
                           property on <var>new audio track</var>.</li>
                         <li>Assign <var>current audio kind</var> to the <a def-id="audiotrack-kind"></a>
                           property on <var>new audio track</var>.</li>
@@ -1451,6 +1460,13 @@
                       set to <var>video byte stream track ID</var> and <var>type</var> set to
                       <a def-id="TrackDefaultType-video"></a> and assign the value returned by the
                       algorithm to <var>video language</var>.</li>
+                    <li>Let <var>video label</var> be a label specified in the <a def-id="init-segment"></a> for this track or an empty string if no
+                      label info is present.</li>
+                    <li>If <var>video label</var> equals an empty string, then run the
+                      <a def-id="default-track-label-algorithm"></a> with <var>byteStreamTrackID</var>
+                      set to <var>video byte stream track ID</var> and <var>type</var> set to
+                      <a def-id="TrackDefaultType-video"></a> and assign the value returned by the
+                      algorithm to <var>video label</var>.</li>
                     <li>Let <var>video kinds</var> be an array of kind strings specified in the
                       <a def-id="init-segment"></a> for this track or an empty array if no kind information
                       is provided.</li>
@@ -1466,6 +1482,8 @@
                         <li>Let <var>new video track</var> be a new <a def-id="video-track"></a> object.</li>
                         <li>Generate a unique ID and assign it to the <a def-id="videotrack-id"></a> property on <var>new video track</var>.</li>
                         <li>Assign <var>video language</var> to the <a def-id="videotrack-language"></a>
+                          property on <var>new video track</var>.</li>
+                        <li>Assign <var>video label</var> to the <a def-id="videotrack-label"></a>
                           property on <var>new video track</var>.</li>
                         <li>Assign <var>current video kind</var> to the <a def-id="videotrack-kind"></a>
                           property on <var>new video track</var>.</li>
@@ -1504,6 +1522,13 @@
                       set to <var>text byte stream track ID</var> and <var>type</var> set to
                       <a def-id="TrackDefaultType-text"></a> and assign the value returned by the
                       algorithm to <var>text language</var>.</li>
+                    <li>Let <var>text label</var> be a label specified in the <a def-id="init-segment"></a> for this track or an empty string if no
+                      label info is present.</li>
+                    <li>If <var>text label</var> equals an empty string, then run the
+                      <a def-id="default-track-label-algorithm"></a> with <var>byteStreamTrackID</var>
+                      set to <var>text byte stream track ID</var> and <var>type</var> set to
+                      <a def-id="TrackDefaultType-text"></a> and assign the value returned by the
+                      algorithm to <var>text label</var>.</li>
                     <li>Let <var>text kinds</var> be an array of kind strings specified in the
                       <a def-id="init-segment"></a> for this track or an empty array if no kind information
                       is provided.</li>
@@ -1520,6 +1545,8 @@
                           Let <var>new text track</var> be a new <a def-id="text-track"></a> object.</li>
                         <li>Generate a unique ID and assign it to the <a def-id="texttrack-id"></a> property on <var>new text track</var>.</li>
                         <li>Assign <var>text language</var> to the <a def-id="texttrack-language"></a>
+                          property on <var>new text track</var>.</li>
+                        <li>Assign <var>text label</var> to the <a def-id="texttrack-label"></a>
                           property on <var>new text track</var>.</li>
                         <li>Assign <var>current text kind</var> to the <a def-id="texttrack-kind"></a>
                           property on <var>new text track</var>.</li>
@@ -1586,6 +1613,31 @@
               <a def-id="TrackDefault-byteStreamTrackID"></a> attribute equal to
               an empty string, then return the value of the
               <a def-id="TrackDefault-language"></a> attribute on this matching object and abort these
+              steps.</li>
+
+            <li>Return an empty string to the caller.</li>
+          </ol>
+        </section>
+
+        <section id="sourcebuffer-default-track-label">
+          <h4>Default track label</h4>
+          <p>The following steps are run when the <a def-id="init-segment-received-algorithm"></a> needs
+            to determine what the default label for a new track should be. This algorithm is initialized
+            with <var>byteStreamTrackID</var> and <var>type</var> parameters when invoked by the
+            <a def-id="init-segment-received-algorithm"></a>.</p>
+          <ol>
+            <li>If <a def-id="trackDefaults"></a> contains a <a>TrackDefault</a> object with a
+              <a def-id="TrackDefault-type"></a> attribute equal to <var>type</var> and a
+              <a def-id="TrackDefault-byteStreamTrackID"></a> attribute equal to
+              <var>byteStreamTrackID</var>, then return the value of the
+              <a def-id="TrackDefault-label"></a> attribute on this matching object and abort these
+              steps.</li>
+
+            <li>If <a def-id="trackDefaults"></a> contains a <a>TrackDefault</a> object with a
+              <a def-id="TrackDefault-type"></a> attribute equal to <var>type</var> and a
+              <a def-id="TrackDefault-byteStreamTrackID"></a> attribute equal to
+              an empty string, then return the value of the
+              <a def-id="TrackDefault-label"></a> attribute on this matching object and abort these
               steps.</li>
 
             <li>Return an empty string to the caller.</li>
@@ -2104,7 +2156,7 @@
 
     <section id="trackdefault">
       <h2>TrackDefault Object</h2>
-      <p>The TrackDefault object is used to provide kind and language information for tracks that do not
+      <p>The TrackDefault object is used to provide kind, label, and language information for tracks that do not
         contain this information in the <a def-id="init-segments"></a>. This information is only consulted
         when the <a def-id="init-segment-received-algorithm"></a> creates track objects.</p>
 
@@ -2128,7 +2180,7 @@
 
       <dl title="interface TrackDefault" class="idl">
         <dt class="extended-attribute">
-          Constructor(TrackDefaultType type, DOMString language, sequence<DOMString> kinds, optional DOMString byteStreamTrackID = "")
+          Constructor(TrackDefaultType type, DOMString language, DOMString label, sequence<DOMString> kinds, optional DOMString byteStreamTrackID = "")
         </dt>
         <dd>
           <ol class="method-algorithm">
@@ -2159,6 +2211,7 @@
             </li>
             <li>Set the <a def-id="TrackDefault-type"></a> attribute on this new object to <var>type</var>.</li>
             <li>Set the <a def-id="TrackDefault-language"></a> attribute on this new object to <var>language</var>.</li>
+            <li>Set the <a def-id="TrackDefault-label"></a> attribute on this new object to <var>label</var>.</li>
             <li>Set the <a def-id="TrackDefault-kinds"></a> attribute to on this new object <var>kinds</var>.</li>
             <li>Set the <a def-id="TrackDefault-byteStreamTrackID"></a> attribute on this new object to <var>byteStreamTrackID</var>.</li>
           </ol>
@@ -2177,6 +2230,11 @@
         <dt>readonly attribute DOMString language</dt>
         <dd>
           <p>The default language to use when an <a def-id="init-segment"></a> does not contain language
+          information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
+        </dd>
+        <dt>readonly attribute DOMString label</dt>
+        <dd>
+          <p>The default label to use when an <a def-id="init-segment"></a> does not contain label
           information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
         </dd>
         <dt>readonly attribute DOMString[] kinds</dt>
@@ -2545,10 +2603,18 @@
         </thead>
         <tbody>
           <tr>
-            <td>12 August 2014</td>
+            <td>09 September 2014</td>
             <td>
               <ul>
-                <li>Bug 26436 - Use HTMLMediaElement.buffered for HTMLMediaElement.readyState transitions instead of individual SourceBuffer.buffered attributes.
+                <li>Bug 26721 - Add label attribute to TrackDefault object.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/856c321c7a6b/media-source/media-source.html">12 August 2014</a></td>
+            <td>
+              <ul>
+                <li>Bug 26436 - Use HTMLMediaElement.buffered for HTMLMediaElement.readyState transitions instead of individual SourceBuffer.buffered attributes.</li>
               </ul>
             </td>
           </tr>
