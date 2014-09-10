@@ -406,7 +406,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-09-09T16:45:31.000Z" id="w3c-editor-s-draft-09-september-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-09-09">09 September 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-09-10T19:03:56.000Z" id="w3c-editor-s-draft-10-september-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-09-10">10 September 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1558,7 +1558,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>
 	      <p>If the <var><a href="#sourcebuffer-append-state">append state</a></var> equals <a href="#sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</a>, then run the following steps:</p>
 	      <ol>
-                <li>If the <var><a href="#first-init-segment-flag">first initialization segment flag</a></var> is false, then run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> and abort this algorithm.</li>
+                <li>If the <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> is false, then run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> and abort this algorithm.</li>
 	        <li>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> does not contain a complete <a href="#media-segment">media segment</a> header yet, then jump to the <i>need more data</i> step below.</li>
 	        <li>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> contains one or more complete <a href="#coded-frame">coded frames</a>, then run the
                   <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>.
@@ -1699,7 +1699,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <section id="sourcebuffer-init-segment-received" typeof="bibo:Chapter" resource="#sourcebuffer-init-segment-received" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_sourcebuffer-init-segment-received"><span class="secno">3.5.8 </span>Initialization Segment Received</h4>
           <p>The following steps are run when the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> successfully parses a complete <a href="#init-segment">initialization segment</a>:</p>
-          <p>Each SourceBuffer object has an internal <dfn id="first-init-segment-flag">first initialization segment flag</dfn> that tracks whether the first <a href="#init-segment">initialization segment</a> has been appended. This flag is set to false when the SourceBuffer is created and updated by the algorithm below.</p>
+          <p>Each SourceBuffer object has an internal <dfn id="first-init-segment-received-flag">first initialization segment received flag</dfn> that tracks whether the first <a href="#init-segment">initialization segment</a> has been appended and received by this algorithm. This flag is set to false when the SourceBuffer is created and updated by the algorithm below.</p>
           <ol>
             <li>Update the <code><a href="#widl-MediaSource-duration">duration</a></code> attribute if it currently equals NaN:
               <dl class="switch">
@@ -1710,7 +1710,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               </dl>
             </li>
             <li>If the <a href="#init-segment">initialization segment</a> has no audio, video, or text tracks, then run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> and abort these steps.</li>
-            <li>If the <var><a href="#first-init-segment-flag">first initialization segment flag</a></var> is true, then run the following steps:
+            <li>If the <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> is true, then run the following steps:
               <ol>
                 <li>Verify the following properties. If any of the checks fail then run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> and abort these steps.
                   <ul>
@@ -1727,7 +1727,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             </li>
             <li>Let <var>active track flag</var> equal false.</li>
             <li>
-              <p>If the <var><a href="#first-init-segment-flag">first initialization segment flag</a></var> is false, then run the following steps:</p>
+              <p>If the <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> is false, then run the following steps:</p>
               <ol>
                 <li>If the <a href="#init-segment">initialization segment</a> contains tracks with codecs the user agent does not support, then run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code>
                   and abort these steps.
@@ -1927,14 +1927,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                     <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> at <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code></li>
                   </ol>
                 </li>
-                <li>Set <var><a href="#first-init-segment-flag">first initialization segment flag</a></var> to true.</li>
+                <li>Set <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> to true.</li>
               </ol>
             </li>
             <li>
               <p>If the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute is <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_nothing">HAVE_NOTHING</a></code>, then run the following steps:</p>
               <ol>
                 <li>
-                  If one or more objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> have <var><a href="#first-init-segment-flag">first initialization segment flag</a></var> set to false, then abort
+                  If one or more objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> have <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> set to false, then abort
                   these steps.</li>
                 <li>Set the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_metadata">HAVE_METADATA</a></code>.</li>
 	        <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named  <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#event-media-loadedmetadata">loadedmetadata</a></code> at the media element.</li>
@@ -2923,7 +2923,15 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </thead>
         <tbody>
           <tr>
-            <td>09 September 2014</td>
+            <td>10 September 2014</td>
+            <td>
+              <ul>
+                <li>Bug 26777 - Rename 'first initialization segment flag' to 'first initialization segment received flag'.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/9066cfb5ad1d/media-source/media-source.html">09 September 2014</a></td>
             <td>
               <ul>
                 <li>Bug 26721 - Add label attribute to TrackDefault object.</li>
@@ -3461,7 +3469,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
   
 
 <form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form><section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" rel="bibo:Chapter"><!--OddPage--><h2 aria-level="1" role="heading" id="h2_references"><span class="secno">A. </span>References</h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" rel="bibo:Chapter"><h3 aria-level="2" role="heading" id="h3_normative-references"><span class="secno">A.1 </span>Normative references</h3><dl class="bibliography" about=""><dt id="bib-FILE-API">[FILE-API]</dt><dd rel="dcterms:requires">Arun Ranganathan; Jonas Sicking. <a href="http://www.w3.org/TR/FileAPI/"><cite>File API</cite></a>. 12 September 2013. W3C Last Call Working Draft. URL: <a href="http://www.w3.org/TR/FileAPI/">http://www.w3.org/TR/FileAPI/</a>
-</dd><dt id="bib-HTML5">[HTML5]</dt><dd rel="dcterms:requires">Ian Hickson; Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Edward O'Connor; Silvia Pfeiffer. <a href="http://www.w3.org/TR/html5/"><cite>HTML5</cite></a>. 31 July 2014. W3C Candidate Recommendation. URL: <a href="http://www.w3.org/TR/html5/">http://www.w3.org/TR/html5/</a>
+</dd><dt id="bib-HTML5">[HTML5]</dt><dd rel="dcterms:requires">Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Edward O'Connor; Silvia Pfeiffer. <a href="http://www.w3.org/TR/html5/"><cite>HTML5</cite></a>. 31 July 2014. W3C Candidate Recommendation. URL: <a href="http://www.w3.org/TR/html5/">http://www.w3.org/TR/html5/</a>
 </dd><dt id="bib-STREAMS-API">[STREAMS-API]</dt><dd rel="dcterms:requires">Feras Moussa; Takeshi Yoshino. <a href="http://www.w3.org/TR/2013/WD-streams-api-20131105/"><cite>Streams API</cite></a>. W3C Working Draft. URL: <a href="http://www.w3.org/TR/2013/WD-streams-api-20131105/">http://www.w3.org/TR/2013/WD-streams-api-20131105/</a>
 </dd><dt id="bib-TYPED-ARRAYS">[TYPED-ARRAYS]</dt><dd rel="dcterms:requires">David Herman; Kenneth Russell. <a href="https://www.khronos.org/registry/typedarray/specs/latest/"><cite>Typed Array Specification</cite></a>. 26 June 2013. Khronos Working Draft. URL: <a href="https://www.khronos.org/registry/typedarray/specs/latest/">https://www.khronos.org/registry/typedarray/specs/latest/</a>
 </dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" rel="bibo:Chapter"><h3 aria-level="2" role="heading" id="h3_informative-references"><span class="secno">A.2 </span>Informative references</h3><dl class="bibliography" about=""><dt id="bib-MSE-REGISTRY">[MSE-REGISTRY]</dt><dd rel="dcterms:references">Aaron Colwell. <a href="byte-stream-format-registry.html"><cite>Media Source Extensions Byte Stream Format Registry</cite></a>. URL: <a href="byte-stream-format-registry.html">byte-stream-format-registry.html</a>

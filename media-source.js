@@ -236,7 +236,7 @@
     'group-end-timestamp': { func: var_helper, fragment: '#sourcebuffer-group-end-timestamp', link_text: 'group end timestamp', },
     'generate-timestamps-flag': { func: var_helper, fragment: '#sourcebuffer-generate-timestamps-flag', link_text: 'generate timestamps flag', },
     'MediaSource-object-URL': { func: link_helper, fragment: '#mediasource-object-url', link_text: 'MediaSource object URL', },
-    'first-init-segment-flag': { func: var_helper, fragment: '#first-init-segment-flag', link_text: 'first initialization segment flag', },
+    'first-init-segment-received-flag': { func: var_helper, fragment: '#first-init-segment-received-flag', link_text: 'first initialization segment received flag', },
 
     'track-buffer': { func: term_helper, fragment: 'track-buffer', link_text: 'track buffer', },
     'track-buffers': { func: term_helper, fragment: 'track-buffer', link_text: 'track buffers', },
