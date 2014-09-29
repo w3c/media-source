@@ -325,7 +325,7 @@ cite .bibref {
 }
 
 code {
-    color:  #ff4500;
+    color:  #C83500;
 }
 
 /* --- TOC --- */
@@ -400,13 +400,15 @@ table.simple {
 </style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
   <body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
-    
-      <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
-    
+      
+        
+            <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
+        
+      
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-09-10T19:03:56.000Z" id="w3c-editor-s-draft-10-september-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-09-10">10 September 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-09-29T21:35:31.000Z" id="w3c-editor-s-draft-29-september-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-09-29">29 September 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -545,6 +547,10 @@ table.simple {
           
           
         </p>
+        
+          <p>This document is governed by the <a id="w3c_process_revision" href="http://www.w3.org/2014/Process-20140801/">1 August 2014 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
+          </p>
+        
         
       
     
@@ -2517,16 +2523,16 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           creating <a href="#idl-def-TextTrack" class="idlType"><code>TextTrack</code></a> objects.
         </td></tr></tbody></table>
 
-      <pre class="idl"><span class="idlInterface" id="idl-def-TrackDefault">[<span class="idlCtor"> <span class="idlCtorKeyword"></span><span class="idlCtorName"><a href="#widl-ctor-TrackDefault--TrackDefaultType-type-DOMString-language-DOMString-label-sequence-kinds-DOMString-byteStreamTrackID">Constructor</a></span> (<span class="idlParam"><span class="idlParamType"><a href="#idl-def-TrackDefaultType" class="idlType"><code>TrackDefaultType</code></a></span> <span class="idlParamName">type</span></span>, <span class="idlParam"><span class="idlParamType">DOMString</span> <span class="idlParamName">language</span></span>, <span class="idlParam"><span class="idlParamType">DOMString</span> <span class="idlParamName">label</span></span>, <span class="idlParam"><span class="idlParamType">sequence</span> <span class="idlParamName">kinds</span></span>, <span class="idlParam">optional <span class="idlParamType">DOMString</span> <span class="idlParamName">byteStreamTrackID</span> = <span class="idlDefaultValue">""</span></span>)</span>]
+      <pre class="idl"><span class="idlInterface" id="idl-def-TrackDefault">[<span class="idlCtor"> <span class="idlCtorKeyword"></span><span class="idlCtorName"><a href="#widl-ctor-TrackDefault--TrackDefaultType-type-DOMString-language-DOMString-label-sequence-DOMString--kinds-DOMString-byteStreamTrackID">Constructor</a></span> (<span class="idlParam"><span class="idlParamType"><a href="#idl-def-TrackDefaultType" class="idlType"><code>TrackDefaultType</code></a></span> <span class="idlParamName">type</span></span>, <span class="idlParam"><span class="idlParamType">DOMString</span> <span class="idlParamName">language</span></span>, <span class="idlParam"><span class="idlParamType">DOMString</span> <span class="idlParamName">label</span></span>, <span class="idlParam"><span class="idlParamType">sequence&lt;DOMString&gt;</span> <span class="idlParamName">kinds</span></span>, <span class="idlParam">optional <span class="idlParamType">DOMString</span> <span class="idlParamName">byteStreamTrackID</span> = <span class="idlDefaultValue">""</span></span>)</span>]
 interface <span class="idlInterfaceID">TrackDefault</span> {
 <span class="idlAttribute">    readonly    attribute <span class="idlAttrType"><a href="#idl-def-TrackDefaultType" class="idlType"><code>TrackDefaultType</code></a></span> <span class="idlAttrName"><a href="#widl-TrackDefault-type">type</a></span>;</span>
 <span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMString</span>        <span class="idlAttrName"><a href="#widl-TrackDefault-byteStreamTrackID">byteStreamTrackID</a></span>;</span>
 <span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMString</span>        <span class="idlAttrName"><a href="#widl-TrackDefault-language">language</a></span>;</span>
 <span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMString</span>        <span class="idlAttrName"><a href="#widl-TrackDefault-label">label</a></span>;</span>
 <span class="idlAttribute">    readonly    attribute <span class="idlAttrType">DOMString[]</span>      <span class="idlAttrName"><a href="#widl-TrackDefault-kinds">kinds</a></span>;</span>
-};</span></pre><section id="constructors"><h3 aria-level="2" role="heading" id="h3_constructors"><span class="secno">6.1 </span>Constructors</h3><dl class="constructors"><dt id="widl-ctor-TrackDefault--TrackDefaultType-type-DOMString-language-DOMString-label-sequence-kinds-DOMString-byteStreamTrackID"><code>TrackDefault</code></dt><dd>
+};</span></pre><section id="constructors"><h3 aria-level="2" role="heading" id="h3_constructors"><span class="secno">6.1 </span>Constructors</h3><dl class="constructors"><dt id="widl-ctor-TrackDefault--TrackDefaultType-type-DOMString-language-DOMString-label-sequence-DOMString--kinds-DOMString-byteStreamTrackID"><code>TrackDefault</code></dt><dd>
           
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code><a href="#idl-def-TrackDefaultType" class="idlType"><code>TrackDefaultType</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">language</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">label</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">kinds</td><td class="prmType"><code>sequence</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">byteStreamTrackID</td><td class="prmType"><code>DOMString = ""</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code><a href="#idl-def-TrackDefaultType" class="idlType"><code>TrackDefaultType</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">language</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">label</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">kinds</td><td class="prmType"><code>sequence&lt;DOMString&gt;</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">byteStreamTrackID</td><td class="prmType"><code>DOMString = ""</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>if <var>language</var> is not an empty string or <var>language</var> is not a BCP 47
               language tag, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> and abort these steps.</li>
             <li>
@@ -2923,7 +2929,16 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </thead>
         <tbody>
           <tr>
-            <td>10 September 2014</td>
+            <td>29 September 2014</td>
+            <td>
+              <ul>
+                <li>Bug 26932 - Fix TrackDefault constructor kinds parameter type.</li>
+                <li>Update to ReSpec 3.2.20.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/df74aa427173/media-source/media-source.html">10 September 2014</a></td>
             <td>
               <ul>
                 <li>Bug 26777 - Rename 'first initialization segment flag' to 'first initialization segment received flag'.</li>
@@ -3469,7 +3484,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
   
 
 <form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form><section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" rel="bibo:Chapter"><!--OddPage--><h2 aria-level="1" role="heading" id="h2_references"><span class="secno">A. </span>References</h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" rel="bibo:Chapter"><h3 aria-level="2" role="heading" id="h3_normative-references"><span class="secno">A.1 </span>Normative references</h3><dl class="bibliography" about=""><dt id="bib-FILE-API">[FILE-API]</dt><dd rel="dcterms:requires">Arun Ranganathan; Jonas Sicking. <a href="http://www.w3.org/TR/FileAPI/"><cite>File API</cite></a>. 12 September 2013. W3C Last Call Working Draft. URL: <a href="http://www.w3.org/TR/FileAPI/">http://www.w3.org/TR/FileAPI/</a>
-</dd><dt id="bib-HTML5">[HTML5]</dt><dd rel="dcterms:requires">Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Edward O'Connor; Silvia Pfeiffer. <a href="http://www.w3.org/TR/html5/"><cite>HTML5</cite></a>. 31 July 2014. W3C Candidate Recommendation. URL: <a href="http://www.w3.org/TR/html5/">http://www.w3.org/TR/html5/</a>
+</dd><dt id="bib-HTML5">[HTML5]</dt><dd rel="dcterms:requires">Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Edward O'Connor; Silvia Pfeiffer. <a href="http://www.w3.org/TR/html5/"><cite>HTML5</cite></a>. 16 September 2014. W3C Proposed Recommendation. URL: <a href="http://www.w3.org/TR/html5/">http://www.w3.org/TR/html5/</a>
 </dd><dt id="bib-STREAMS-API">[STREAMS-API]</dt><dd rel="dcterms:requires">Feras Moussa; Takeshi Yoshino. <a href="http://www.w3.org/TR/2013/WD-streams-api-20131105/"><cite>Streams API</cite></a>. W3C Working Draft. URL: <a href="http://www.w3.org/TR/2013/WD-streams-api-20131105/">http://www.w3.org/TR/2013/WD-streams-api-20131105/</a>
 </dd><dt id="bib-TYPED-ARRAYS">[TYPED-ARRAYS]</dt><dd rel="dcterms:requires">David Herman; Kenneth Russell. <a href="https://www.khronos.org/registry/typedarray/specs/latest/"><cite>Typed Array Specification</cite></a>. 26 June 2013. Khronos Working Draft. URL: <a href="https://www.khronos.org/registry/typedarray/specs/latest/">https://www.khronos.org/registry/typedarray/specs/latest/</a>
 </dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" rel="bibo:Chapter"><h3 aria-level="2" role="heading" id="h3_informative-references"><span class="secno">A.2 </span>Informative references</h3><dl class="bibliography" about=""><dt id="bib-MSE-REGISTRY">[MSE-REGISTRY]</dt><dd rel="dcterms:references">Aaron Colwell. <a href="byte-stream-format-registry.html"><cite>Media Source Extensions Byte Stream Format Registry</cite></a>. URL: <a href="byte-stream-format-registry.html">byte-stream-format-registry.html</a>
