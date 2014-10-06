@@ -1393,7 +1393,7 @@
                     <li>Let <var>audio language</var> be a BCP 47 language tag for the language
                       specified in the <a def-id="init-segment"></a> for this track or an empty string if no
                       language info is present.</li>
-                    <li>If <var>audio language</var> equals an empty string, then run the
+                    <li>If <var>audio language</var> equals an empty string or the 'und' BCP 47 value, then run the
                       <a def-id="default-track-language-algorithm"></a> with <var>byteStreamTrackID</var>
                       set to <var>audio byte stream track ID</var> and <var>type</var> set to
                       <a def-id="TrackDefaultType-audio"></a> and assign the value returned by the
@@ -1455,7 +1455,7 @@
                     <li>Let <var>video language</var> be a BCP 47 language tag for the language
                       specified in the <a def-id="init-segment"></a> for this track or an empty string if no
                       language info is present.</li>
-                    <li>If <var>video language</var> equals an empty string, then run the
+                    <li>If <var>video language</var> equals an empty string or the 'und' BCP 47 value, then run the
                       <a def-id="default-track-language-algorithm"></a> with <var>byteStreamTrackID</var>
                       set to <var>video byte stream track ID</var> and <var>type</var> set to
                       <a def-id="TrackDefaultType-video"></a> and assign the value returned by the
@@ -1517,7 +1517,7 @@
                     <li>Let <var>text language</var> be a BCP 47 language tag for the language
                       specified in the <a def-id="init-segment"></a> for this track or an empty string if no
                       language info is present.</li>
-                    <li>If <var>text language</var> equals an empty string, then run the
+                    <li>If <var>text language</var> equals an empty string or the 'und' BCP 47 value, then run the
                       <a def-id="default-track-language-algorithm"></a> with <var>byteStreamTrackID</var>
                       set to <var>text byte stream track ID</var> and <var>type</var> set to
                       <a def-id="TrackDefaultType-text"></a> and assign the value returned by the
@@ -2602,8 +2602,17 @@
           </tr>
         </thead>
         <tbody>
+        <tbody>
           <tr>
-            <td>29 September 2014</td>
+            <td>06 October 2014</td>
+            <td>
+              <ul>
+                <li>Bug 26924 - Run default language algorithm if 'und' BCP 47 value is present in the init segment.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/567b8e0764f8/media-source/media-source.html">29 September 2014</a></td>
             <td>
               <ul>
                 <li>Bug 26932 - Fix TrackDefault constructor kinds parameter type.</li>

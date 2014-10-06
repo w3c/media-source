@@ -408,7 +408,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-09-29T21:35:31.000Z" id="w3c-editor-s-draft-29-september-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-09-29">29 September 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-10-06T16:29:04.000Z" id="w3c-editor-s-draft-06-october-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-10-06">06 October 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1752,7 +1752,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                     <li>Let <var>audio language</var> be a BCP 47 language tag for the language
                       specified in the <a href="#init-segment">initialization segment</a> for this track or an empty string if no
                       language info is present.</li>
-                    <li>If <var>audio language</var> equals an empty string, then run the
+                    <li>If <var>audio language</var> equals an empty string or the 'und' BCP 47 value, then run the
                       <a href="#sourcebuffer-default-track-language">default track language algorithm</a> with <var>byteStreamTrackID</var>
                       set to <var>audio byte stream track ID</var> and <var>type</var> set to
                       <code><a href="#idl-def-TrackDefaultType.audio">"audio"</a></code> and assign the value returned by the
@@ -1814,7 +1814,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                     <li>Let <var>video language</var> be a BCP 47 language tag for the language
                       specified in the <a href="#init-segment">initialization segment</a> for this track or an empty string if no
                       language info is present.</li>
-                    <li>If <var>video language</var> equals an empty string, then run the
+                    <li>If <var>video language</var> equals an empty string or the 'und' BCP 47 value, then run the
                       <a href="#sourcebuffer-default-track-language">default track language algorithm</a> with <var>byteStreamTrackID</var>
                       set to <var>video byte stream track ID</var> and <var>type</var> set to
                       <code><a href="#idl-def-TrackDefaultType.video">"video"</a></code> and assign the value returned by the
@@ -1876,7 +1876,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                     <li>Let <var>text language</var> be a BCP 47 language tag for the language
                       specified in the <a href="#init-segment">initialization segment</a> for this track or an empty string if no
                       language info is present.</li>
-                    <li>If <var>text language</var> equals an empty string, then run the
+                    <li>If <var>text language</var> equals an empty string or the 'und' BCP 47 value, then run the
                       <a href="#sourcebuffer-default-track-language">default track language algorithm</a> with <var>byteStreamTrackID</var>
                       set to <var>text byte stream track ID</var> and <var>type</var> set to
                       <code><a href="#idl-def-TrackDefaultType.text">"text"</a></code> and assign the value returned by the
@@ -2928,8 +2928,17 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
           </tr>
         </thead>
         <tbody>
+        </tbody><tbody>
           <tr>
-            <td>29 September 2014</td>
+            <td>06 October 2014</td>
+            <td>
+              <ul>
+                <li>Bug 26924 - Run default language algorithm if 'und' BCP 47 value is present in the init segment.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/567b8e0764f8/media-source/media-source.html">29 September 2014</a></td>
             <td>
               <ul>
                 <li>Bug 26932 - Fix TrackDefault constructor kinds parameter type.</li>
