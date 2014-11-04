@@ -2256,11 +2256,12 @@
         <dd>
           <ol class="method-algorithm">
             <li>If <var>trackDefaults</var> contains two or more <a>TrackDefault</a> objects with
-              the same <a def-id="TrackDefault-type"></a> and have
-              <a def-id="TrackDefault-byteStreamTrackID"></a> equal to an empty string, then throw an
+              the same <a def-id="TrackDefault-type"></a> and the same
+              <a def-id="TrackDefault-byteStreamTrackID"></a>, then throw an
               <a def-id="invalid-access-err"></a> and abort these steps.
-              <p class="note">This ensures that there is only one "byteStreamTrackID independent"
-                default for each <a>TrackDefaultType</a> value.</p></li>
+              <p class="note">This also applies when <a def-id="TrackDefault-byteStreamTrackID"></a> contains
+                an empty string and ensures that there is only one "byteStreamTrackID independent" default
+                for each <a>TrackDefaultType</a> value.</p></li>
             <li>Store a copy of <var>trackDefaults</var> in this new object so the values can be returned
               by the accessor methods.</li>
           </ol>
@@ -2608,6 +2609,7 @@
             <td>
               <ul>
                 <li>Bug 27241 - Fixed step 1 of the TrackDefault constructor so it doesn't always throw an exception.</li>
+                <li>Bug 27240 - Make TrackDefaultList contructor throw an exception on any duplicate (type, byteStreamTrackID) pair.</li>
               </ul>
             </td>
           </tr>

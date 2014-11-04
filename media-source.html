@@ -408,7 +408,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-11-04T23:05:11.000Z" id="w3c-editor-s-draft-04-november-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-11-04">04 November 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-11-04T23:14:08.000Z" id="w3c-editor-s-draft-04-november-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-11-04">04 November 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -2594,11 +2594,12 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">trackDefaults</td><td class="prmType"><code>sequence&lt;<a href="#idl-def-TrackDefault" class="idlType"><code>TrackDefault</code></a>&gt;</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If <var>trackDefaults</var> contains two or more <a href="#idl-def-TrackDefault" class="idlType"><code>TrackDefault</code></a> objects with
-              the same <code><a href="#widl-TrackDefault-type">type</a></code> and have
-              <code><a href="#widl-TrackDefault-byteStreamTrackID">byteStreamTrackID</a></code> equal to an empty string, then throw an
+              the same <code><a href="#widl-TrackDefault-type">type</a></code> and the same
+              <code><a href="#widl-TrackDefault-byteStreamTrackID">byteStreamTrackID</a></code>, then throw an
               <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> and abort these steps.
-              <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_40"><span>Note</span></div><p class="">This ensures that there is only one "byteStreamTrackID independent"
-                default for each <a href="#idl-def-TrackDefaultType" class="idlType"><code>TrackDefaultType</code></a> value.</p></div></li>
+              <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_40"><span>Note</span></div><p class="">This also applies when <code><a href="#widl-TrackDefault-byteStreamTrackID">byteStreamTrackID</a></code> contains
+                an empty string and ensures that there is only one "byteStreamTrackID independent" default
+                for each <a href="#idl-def-TrackDefaultType" class="idlType"><code>TrackDefaultType</code></a> value.</p></div></li>
             <li>Store a copy of <var>trackDefaults</var> in this new object so the values can be returned
               by the accessor methods.</li>
           </ol></dd></dl></section><section id="attributes-5"><h3 aria-level="2" role="heading" id="h3_attributes-5"><span class="secno">7.2 </span>Attributes</h3><dl class="attributes"><dt id="widl-TrackDefaultList-length"><code>length</code> of type <span class="idlAttrType">unsigned long</span>, readonly   </dt><dd>
@@ -2934,6 +2935,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
             <td>
               <ul>
                 <li>Bug 27241 - Fixed step 1 of the TrackDefault constructor so it doesn't always throw an exception.</li>
+                <li>Bug 27240 - Make TrackDefaultList contructor throw an exception on any duplicate (type, byteStreamTrackID) pair.</li>
               </ul>
             </td>
           </tr>
