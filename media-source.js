@@ -214,6 +214,7 @@
     'byte-stream-format-spec': { func: link_helper, fragment: '#byte-stream-format-specs', link_text: 'byte stream format specification', },
     'byte-stream-format-specs': { func: link_helper, fragment: '#byte-stream-format-specs', link_text: 'byte stream format specifications', },
     'sourcebuffer-byte-stream-format-spec': { func: link_helper, fragment: '#sourcebuffer-byte-stream-format-spec', link_text: 'SourceBuffer byte stream format specification', },
+    'sourcebuffer-configuration': { func: link_helper, fragment: '#sourcebuffer-configuration', link_text: 'SourceBuffer configuration', },
     'append-error-algorithm': { func: link_helper, fragment: '#sourcebuffer-append-error', link_text: 'append error algorithm', },
     'reset-parser-state-algorithm': { func: link_helper, fragment: '#sourcebuffer-reset-parser-state', link_text: 'reset parser state algorithm', },
     'stream-append-loop': { func: link_helper, fragment: '#sourcebuffer-stream-append-loop', link_text: 'stream append loop', },

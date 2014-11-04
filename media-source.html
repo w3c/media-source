@@ -408,7 +408,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-11-04T23:14:08.000Z" id="w3c-editor-s-draft-04-november-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-11-04">04 November 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-11-04T23:41:24.000Z" id="w3c-editor-s-draft-04-november-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-11-04">04 November 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -680,6 +680,20 @@ table.simple {
               <a href="#byte-stream-format-specs">byte stream format specification</a>, for a <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object, is selected based on the <var>type</var> passed to the
               <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> call that created the object.</p></dd>
 
+          <dt id="sourcebuffer-configuration">SourceBuffer configuration</dt>
+          <dd><p>A specific set of tracks distributed across one or more <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>
+              objects owned by a single <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> instance.</p>
+            <p>Implementations must support at least 1 <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object with the following
+            configurations:</p>
+            <ul>
+              <li>A single SourceBuffer with 1 audio track and/or 1 video track.</li>
+              <li>Two SourceBuffers with one handling a single audio track and the other handling a single video track.</li>
+            </ul>
+            <p>MediaSource objects must support each of the configurations above, but they are only
+              required to support one configuration at a time. Supporting multiple configurations at once
+              or additional configurations is a quality of implementation issue.</p>
+          </dd>
+
           <dt id="track-description">Track Description</dt>
           <dd><p>A byte stream format specific structure that provides the <a href="#track-id">Track ID</a>, codec configuration, and other metadata for a single track. Each track description inside a single <a href="#init-segment">initialization segment</a> has a unique <a href="#track-id">Track ID</a>. The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> if the <a href="#track-id">Track ID</a> is not unique within the <a href="#init-segment">initialization segment</a> .</p></dd>
 
@@ -762,19 +776,13 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           Contains the list of <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects associated with this <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a>. When <code><a href="#widl-MediaSource-readyState">readyState</a></code> equals <code><a href="#idl-def-ReadyState.closed">"closed"</a></code> this list will be empty. Once <code><a href="#widl-MediaSource-readyState">readyState</a></code> transitions to <code><a href="#idl-def-ReadyState.open">"open"</a></code> SourceBuffer objects can be added to this list by using <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code>.
         </dd></dl></section><section id="methods"><h3 aria-level="2" role="heading" id="h3_methods"><span class="secno">2.2 </span>Methods</h3><dl class="methods"><dt id="widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type"><code>addSourceBuffer</code></dt><dd>
           <p>Adds a new <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> to <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.</p>
-          <p>Implementations must support at least 1 MediaSource object with the following <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> configurations. MediaSource objects must
-            support each of the configurations below, but they are only required to support one configuration at a time.
-            Supporting multiple configurations at once or additional configurations is a quality of implementation issue.
-            </p><ul>
-              <li>A single SourceBuffer with 1 audio track and/or 1 video track.</li>
-              <li>Two SourceBuffers with one handling a single audio track and the other handling a single video track.</li>
-            </ul>
-          <p></p>
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code><a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If <var>type</var> is an empty string then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
             <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-not_supported_err">NOT_SUPPORTED_ERR</a></code> exception and abort these steps.</li>
-            <li>If the user agent can't handle any more SourceBuffer objects then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception and abort these steps.
+            <li>If the user agent can't handle any more SourceBuffer objects or if creating a SourceBuffer
+              based on <var>type</var> would result in an unsupported <a href="#sourcebuffer-configuration">SourceBuffer configuration</a>,
+              then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception and abort these steps.
               <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_8"><span>Note</span></div><p class="">For example, a user agent may throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception if the media element has reached the
                 <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_metadata">HAVE_METADATA</a></code> readyState. This can occur if the user agent's media engine does not support adding more tracks during
                 playback.
@@ -2936,6 +2944,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
               <ul>
                 <li>Bug 27241 - Fixed step 1 of the TrackDefault constructor so it doesn't always throw an exception.</li>
                 <li>Bug 27240 - Make TrackDefaultList contructor throw an exception on any duplicate (type, byteStreamTrackID) pair.</li>
+                <li>Bug 27174 - Added SourceBuffer configuration definition to clarify addSourceBuffer() behavior.</li>
               </ul>
             </td>
           </tr>

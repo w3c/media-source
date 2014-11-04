@@ -272,6 +272,20 @@
               <a def-id="byte-stream-format-spec"></a>, for a <a>SourceBuffer</a> object, is selected based on the <var>type</var> passed to the
               <a def-id="addSourceBuffer"></a> call that created the object.</p></dd>
 
+          <dt id="sourcebuffer-configuration">SourceBuffer configuration</dt>
+          <dd><p>A specific set of tracks distributed across one or more <a>SourceBuffer</a>
+              objects owned by a single <a>MediaSource</a> instance.</p>
+            <p>Implementations must support at least 1 <a>MediaSource</a> object with the following
+            configurations:</p>
+            <ul>
+              <li>A single SourceBuffer with 1 audio track and/or 1 video track.</li>
+              <li>Two SourceBuffers with one handling a single audio track and the other handling a single video track.</li>
+            </ul>
+            <p>MediaSource objects must support each of the configurations above, but they are only
+              required to support one configuration at a time. Supporting multiple configurations at once
+              or additional configurations is a quality of implementation issue.</p>
+          </dd>
+
           <dt id="track-description">Track Description</dt>
           <dd><p>A byte stream format specific structure that provides the <a def-id="track-id"></a>, codec configuration, and other metadata for a single track. Each track description inside a single <a def-id="init-segment"></a> has a unique <a def-id="track-id"></a>. The user agent must run the <a def-id="eos-decode"></a> if the <a def-id="track-id"></a> is not unique within the <a def-id="init-segment"></a> .</p></dd>
 
@@ -363,18 +377,12 @@
         <dt>SourceBuffer addSourceBuffer(DOMString type)</dt>
         <dd>
           <p>Adds a new <a>SourceBuffer</a> to <a def-id="sourceBuffers"></a>.</p>
-          <p>Implementations must support at least 1 MediaSource object with the following <a>SourceBuffer</a> configurations. MediaSource objects must
-            support each of the configurations below, but they are only required to support one configuration at a time.
-            Supporting multiple configurations at once or additional configurations is a quality of implementation issue.
-            <ul>
-              <li>A single SourceBuffer with 1 audio track and/or 1 video track.</li>
-              <li>Two SourceBuffers with one handling a single audio track and the other handling a single video track.</li>
-            </ul>
-          </p>
           <ol class="method-algorithm">
             <li>If <var>type</var> is an empty string then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
             <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw a <a def-id="not-supported-err"></a> exception and abort these steps.</li>
-            <li>If the user agent can't handle any more SourceBuffer objects then throw a <a def-id="quota-exceeded-err"></a> exception and abort these steps.
+            <li>If the user agent can't handle any more SourceBuffer objects or if creating a SourceBuffer
+              based on <var>type</var> would result in an unsupported <a def-id="sourcebuffer-configuration"></a>,
+              then throw a <a def-id="quota-exceeded-err"></a> exception and abort these steps.
               <p class="note">For example, a user agent may throw a <a def-id="quota-exceeded-err"></a> exception if the media element has reached the
                 <a def-id="have-metadata"></a> readyState. This can occur if the user agent's media engine does not support adding more tracks during
                 playback.
@@ -2610,6 +2618,7 @@
               <ul>
                 <li>Bug 27241 - Fixed step 1 of the TrackDefault constructor so it doesn't always throw an exception.</li>
                 <li>Bug 27240 - Make TrackDefaultList contructor throw an exception on any duplicate (type, byteStreamTrackID) pair.</li>
+                <li>Bug 27174 - Added SourceBuffer configuration definition to clarify addSourceBuffer() behavior.</li>
               </ul>
             </td>
           </tr>
