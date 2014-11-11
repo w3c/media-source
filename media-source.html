@@ -408,7 +408,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-11-04T23:41:24.000Z" id="w3c-editor-s-draft-04-november-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-11-04">04 November 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-11-11T16:52:00.000Z" id="w3c-editor-s-draft-11-november-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-11-11">11 November 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -2646,11 +2646,16 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
 
       <p>The <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-seekable">HTMLMediaElement.seekable</a> attribute returns a new static <a href="http://www.w3.org/TR/html5/embedded-content-0.html#normalized-timeranges-object">normalized TimeRanges object</a> created based on the following steps:</p>
       <dl class="switch">
-        <dt>If <code><a href="#widl-MediaSource-duration">duration</a></code> equals NaN</dt>
+        <dt>If <code><a href="#widl-MediaSource-duration">duration</a></code> equals NaN:</dt>
         <dd>Return an empty <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRanges</a></code> object.</dd>
-        <dt>If <code><a href="#widl-MediaSource-duration">duration</a></code> equals positive Infinity</dt>
-        <dd>Return a single range with a start time of 0 and an end time equal to the highest end time reported by the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-buffered">HTMLMediaElement.buffered</a></code> attribute.</dd>
-        <dt>Otherwise</dt>
+        <dt>If <code><a href="#widl-MediaSource-duration">duration</a></code> equals positive Infinity:</dt>
+        <dd>
+          <ol>
+            <li>If the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-buffered">HTMLMediaElement.buffered</a></code> attribute returns an empty <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRanges</a></code>
+              object, then return an empty <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRanges</a></code> object and abort these steps.</li>
+            <li>Return a single range with a start time of 0 and an end time equal to the highest end time reported by the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-buffered">HTMLMediaElement.buffered</a></code> attribute.
+        </li></ol></dd>
+        <dt>Otherwise:</dt>
         <dd>Return a single range with a start time of 0 and an end time equal to <code><a href="#widl-MediaSource-duration">duration</a></code>.</dd>
       </dl>
 
@@ -2924,7 +2929,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
 
     <section id="acknowledgements" typeof="bibo:Chapter" resource="#acknowledgements" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_acknowledgements"><span class="secno">16. </span>Acknowledgments</h2>
-      The editors would like to thank Alex Giladi, Bob Lund, Chris Poole, Cyril Concolato, David Dorwin, David Singer, Duncan Rowden, Frank Galligan, Glenn Adams, Jer Noble, Jerry Smith, Joe Steele, John Simmons, Kevin Streeter, Mark Vickers, Matt Ward, Matthew Gregan, Michael Thornburgh, Philip Jägenstedt, Pierre Lemieux, Ralph Giles, Steven Robertson, and Tatsuya Igarashi for their contributions to this specification.
+      The editors would like to thank Alex Giladi, Bob Lund, Chris Poole, Cyril Concolato, David Dorwin, David Singer, Duncan Rowden, Frank Galligan, Glenn Adams, Jer Noble, Jerry Smith, Joe Steele, John Simmons, Kevin Streeter, Mark Vickers, Matt Ward, Matt Wolenetz, Matthew Gregan, Michael Thornburgh, Philip Jägenstedt, Pierre Lemieux, Ralph Giles, Steven Robertson, and Tatsuya Igarashi for their contributions to this specification.
     </section>
 
     <section id="revision-history" typeof="bibo:Chapter" resource="#revision-history" rel="bibo:Chapter">
@@ -2939,7 +2944,15 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         <tbody>
         </tbody><tbody>
           <tr>
-            <td>04 November 2014</td>
+            <td>11 November 2014</td>
+            <td>
+              <ul>
+                <li>Bug 27296 - Clarify .seekable when duration is Infinity and .buffered is empty.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/af052af0dd5f/media-source/media-source.html">04 November 2014</a></td>
             <td>
               <ul>
                 <li>Bug 27241 - Fixed step 1 of the TrackDefault constructor so it doesn't always throw an exception.</li>

@@ -58,7 +58,8 @@
         "Tatsuya Igarashi",
         "Chris Poole",
         "Jer Noble",
-        "Matthew Gregan"
+        "Matthew Gregan",
+        "Matt Wolenetz"
       ],
 
       // name of the WG
@@ -2315,11 +2316,16 @@
 
       <p>The <a def-id="videoref" name="dom-media-seekable">HTMLMediaElement.seekable</a> attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
       <dl class="switch">
-        <dt>If <a def-id="duration"></a> equals NaN</dt>
+        <dt>If <a def-id="duration"></a> equals NaN:</dt>
         <dd>Return an empty <a def-id="timeranges"></a> object.</dd>
-        <dt>If <a def-id="duration"></a> equals positive Infinity</dt>
-        <dd>Return a single range with a start time of 0 and an end time equal to the highest end time reported by the <a def-id="hme-buffered"></a> attribute.</dd>
-        <dt>Otherwise</dt>
+        <dt>If <a def-id="duration"></a> equals positive Infinity:</dt>
+        <dd>
+          <ol>
+            <li>If the <a def-id="hme-buffered"></a> attribute returns an empty <a def-id="timeranges"></a>
+              object, then return an empty <a def-id="timeranges"></a> object and abort these steps.</li>
+            <li>Return a single range with a start time of 0 and an end time equal to the highest end time reported by the <a def-id="hme-buffered"></a> attribute.
+        </ol></dd>
+        <dt>Otherwise:</dt>
         <dd>Return a single range with a start time of 0 and an end time equal to <a def-id="duration"></a>.</dd>
       </dl>
 
@@ -2613,7 +2619,15 @@
         <tbody>
         <tbody>
           <tr>
-            <td>04 November 2014</td>
+            <td>11 November 2014</td>
+            <td>
+              <ul>
+                <li>Bug 27296 - Clarify .seekable when duration is Infinity and .buffered is empty.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/af052af0dd5f/media-source/media-source.html">04 November 2014</a></td>
             <td>
               <ul>
                 <li>Bug 27241 - Fixed step 1 of the TrackDefault constructor so it doesn't always throw an exception.</li>
