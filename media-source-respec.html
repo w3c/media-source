@@ -2099,7 +2099,7 @@ re<!DOCTYPE html SYSTEM "about:legacy-compat">
           <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e. []).</p>
 
           <ol class="method-algorithm">
-            <li>If <var>index</var> is greater than or equal to the <a def-id="length"></a> attribute then return undefined and abort these steps.</li>
+            <li>If <var>index</var> is greater than or equal to the <a def-id="SourceBufferList-length"></a> attribute then return undefined and abort these steps.</li>
             <li>Return the <var>index</var>'th <a>SourceBuffer</a> object in the list.</li>
           </ol>
         </dd>
@@ -2284,7 +2284,7 @@ re<!DOCTYPE html SYSTEM "about:legacy-compat">
           <p>Allows the TrackDefault objects in the list to be accessed with an array operator (i.e. []).</p>
 
           <ol class="method-algorithm">
-            <li>If <var>index</var> is greater than or equal to the <a def-id="length"></a> attribute then return undefined and abort these steps.</li>
+            <li>If <var>index</var> is greater than or equal to the <a def-id="TrackDefaultList-length"></a> attribute then return undefined and abort these steps.</li>
             <li>Return the <var>index</var>'th <a>TrackDefault</a> object in the list.</li>
           </ol>
         </dd>
@@ -2625,6 +2625,7 @@ re<!DOCTYPE html SYSTEM "about:legacy-compat">
                 <li>Changed Editor's draft link to point to GitHub.</li>
                 <li>Bug 27353 - Convert exceptions from xxx_ERR to xxxError form. Changed broken exception links to point to HTML5 instead of WHATWG DOM.</li>
                 <li>Bug 27352 - Changed TrackDefault constructor to throw a TypeError instead of an InvalidAccessError for invalid kinds.</li>
+                <li>Bug 27318 - Fix length attribute link in TrackBufferList getter method.</li>
               </ul>
             </td>
           </tr>

@@ -156,8 +156,9 @@
     'AppendMode-sequence': { func: idlref_helper, fragment: 'idl-def-AppendMode.sequence', link_text: '"sequence"',  },
     'mode': { func: idlref_helper, fragment: 'widl-SourceBuffer-mode', link_text: 'mode',  },
     'trackDefaults': { func: idlref_helper, fragment: 'widl-SourceBuffer-trackDefaults', link_text: 'trackDefaults',  },
+    'TrackDefaultList-length': { func: idlref_helper, fragment: 'widl-TrackDefaultList-length', link_text: 'length',  },
 
-    'length': { func: idlref_helper, fragment: 'widl-SourceBufferList-length', link_text: 'length',  },
+    'SourceBufferList-length': { func: idlref_helper, fragment: 'widl-SourceBufferList-length', link_text: 'length',  },
     'creationTime': { func: idlref_helper, fragment: 'widl-VideoPlaybackQuality-creationTime', link_text: 'creationTime',  },
     'totalVideoFrames': { func: idlref_helper, fragment: 'widl-VideoPlaybackQuality-totalVideoFrames', link_text: 'totalVideoFrames',  },
     'droppedVideoFrames': { func: idlref_helper, fragment: 'widl-VideoPlaybackQuality-droppedVideoFrames', link_text: 'droppedVideoFrames',  },

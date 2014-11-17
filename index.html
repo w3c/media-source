@@ -393,7 +393,7 @@ table.exceptions table {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-11-17T21:37:41.000Z" id="w3c-editor-s-draft-17-november-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-11-17">17 November 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-11-17T21:53:36.000Z" id="w3c-editor-s-draft-17-november-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-11-17">17 November 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -2619,7 +2619,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
 
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">index</td><td class="prmType"><code>unsigned long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>getter</code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>If <var>index</var> is greater than or equal to the <code><a href="#widl-SourceBufferList-length">length</a></code> attribute then return undefined and abort these steps.</li>
+            <li>If <var>index</var> is greater than or equal to the <code><a href="#widl-TrackDefaultList-length">length</a></code> attribute then return undefined and abort these steps.</li>
             <li>Return the <var>index</var>'th <a href="#idl-def-TrackDefault" class="idlType"><code>TrackDefault</code></a> object in the list.</li>
           </ol></dd></dl></section>
     </section>
@@ -2952,6 +2952,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
                 <li>Changed Editor's draft link to point to GitHub.</li>
                 <li>Bug 27353 - Convert exceptions from xxx_ERR to xxxError form. Changed broken exception links to point to HTML5 instead of WHATWG DOM.</li>
                 <li>Bug 27352 - Changed TrackDefault constructor to throw a TypeError instead of an InvalidAccessError for invalid kinds.</li>
+                <li>Bug 27318 - Fix length attribute link in TrackBufferList getter method.</li>
               </ul>
             </td>
           </tr>
