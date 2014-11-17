@@ -2200,20 +2200,20 @@ re<!DOCTYPE html SYSTEM "about:legacy-compat">
                 <dt>If <var>type</var> equals <a def-id="TrackDefaultType-audio"></a>:</dt>
                 <dd>
                   If any string in <var>kinds</var> contains a value that is not listed as applying to
-                  audio in the <a def-id="av-kind-categories-table"></a>, then throw an
-                  <a def-id="invalid-access-error"></a> and abort these steps.
+                  audio in the <a def-id="av-kind-categories-table"></a>, then throw a
+                  <a def-id="type-error"></a> and abort these steps.
                 </dd>
                 <dt>If <var>type</var> equals <a def-id="TrackDefaultType-video"></a>:</dt>
                 <dd>
                   If any string in <var>kinds</var> contains a value that is not listed as applying to
-                  video in the <a def-id="av-kind-categories-table"></a>, then throw an
-                  <a def-id="invalid-access-error"></a> and abort these steps.
+                  video in the <a def-id="av-kind-categories-table"></a>, then throw a
+                  <a def-id="type-error"></a> and abort these steps.
                 </dd>
 
                 <dt>If <var>type</var> equals <a def-id="TrackDefaultType-text"></a>:</dt>
                 <dd>
                   If any string in <var>kinds</var> contains a value that is not listed in the
-                  <a def-id="text-track-kind-list"></a>, then throw an <a def-id="invalid-access-error"></a>
+                  <a def-id="text-track-kind-list"></a>, then throw a <a def-id="type-error"></a>
                   and abort these steps.
                 </dd>
               </dl>
@@ -2622,7 +2622,9 @@ re<!DOCTYPE html SYSTEM "about:legacy-compat">
             <td>17 November 2014</td>
             <td>
               <ul>
+                <li>Changed Editor's draft link to point to GitHub.</li>
                 <li>Bug 27353 - Convert exceptions from xxx_ERR to xxxError form. Changed broken exception links to point to HTML5 instead of WHATWG DOM.</li>
+                <li>Bug 27352 - Changed TrackDefault constructor to throw a TypeError instead of an InvalidAccessError for invalid kinds.</li>
               </ul>
             </td>
           </tr>

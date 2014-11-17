@@ -7,7 +7,8 @@
   var DOM_spec_url = "http://dom.spec.whatwg.org/";
   var HRTIME_spec_url = "http://www.w3.org/TR/hr-time/";
   var STREAMS_spec_url = "http://www.w3.org/TR/2013/WD-streams-api-20131105/"; // Make sure this matches the localBiblio entry.
-  var FILE_spec_url = "http://www.w3.org/TR/FileAPI/"
+  var FILE_spec_url = "http://www.w3.org/TR/FileAPI/";
+  var WEBIDL_spec_url = "http://dev.w3.org/2006/webapi/WebIDL/";
 
   function url_helper(doc, url) {
     if (url[0] == "#" && doc.mseDefGroupName != window.respecConfig.mseDefGroupName) {
@@ -70,6 +71,10 @@
 
   function exception_helper(doc, df, id, text) {
     df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: HTML5_infrastructure_spec_url + '#' + id}).text(text))[0]);
+  }
+
+  function typeerror_helper(doc, df, id, text) {
+    df.appendChild($("<code/>").text(text)[0]);
   }
 
   function webmref_helper(doc, df, id, text) {
@@ -341,6 +346,7 @@
     'not-found-error': { func: exception_helper, fragment: 'notfounderror', link_text: 'NotFoundError',  },
     'not-supported-error': { func: exception_helper, fragment: 'notsupportederror', link_text: 'NotSupportedError',  },
     'quota-exceeded-error': { func: exception_helper, fragment: 'quotaexceedederror', link_text: 'QuotaExceededError',  },
+    'type-error': { func: typeerror_helper, fragment: '', link_text: 'TypeError',  },
 
     'queue-a-task-to-fire-an-event-named': { func: queue_and_fire_helper, fragment: '', link_text: 'queue a task',  },
     'Queue-a-task-to-fire-an-event-named': { func: queue_and_fire_helper, fragment: '', link_text: 'Queue a task',  },
@@ -478,7 +484,7 @@
 	} else if (info.spec == 'dom') {
 	  baseURL = DOM_spec_url;
         } else if (info.spec == 'webidl') {
-	  baseURL = "http://dev.w3.org/2006/webapi/WebIDL/";
+	  baseURL = WEBIDL_spec_url;
         } else if (info.spec == 'typed-array') {
 	  baseURL = "http://www.khronos.org/registry/typedarray/specs/latest/";
         } else if (info.spec == 'hr-time') {

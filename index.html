@@ -393,7 +393,7 @@ table.exceptions table {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-11-17T21:18:07.000Z" id="w3c-editor-s-draft-17-november-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-11-17">17 November 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-11-17T21:37:41.000Z" id="w3c-editor-s-draft-17-november-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-11-17">17 November 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -2550,20 +2550,20 @@ interface <span class="idlInterfaceID">TrackDefault</span> {
                 <dt>If <var>type</var> equals <code><a href="#idl-def-TrackDefaultType.audio">"audio"</a></code>:</dt>
                 <dd>
                   If any string in <var>kinds</var> contains a value that is not listed as applying to
-                  audio in the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-TrackList-getKind-categories">kind categories table</a></code>, then throw an
-                  <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> and abort these steps.
+                  audio in the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-TrackList-getKind-categories">kind categories table</a></code>, then throw a
+                  <code>TypeError</code> and abort these steps.
                 </dd>
                 <dt>If <var>type</var> equals <code><a href="#idl-def-TrackDefaultType.video">"video"</a></code>:</dt>
                 <dd>
                   If any string in <var>kinds</var> contains a value that is not listed as applying to
-                  video in the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-TrackList-getKind-categories">kind categories table</a></code>, then throw an
-                  <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> and abort these steps.
+                  video in the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-TrackList-getKind-categories">kind categories table</a></code>, then throw a
+                  <code>TypeError</code> and abort these steps.
                 </dd>
 
                 <dt>If <var>type</var> equals <code><a href="#idl-def-TrackDefaultType.text">"text"</a></code>:</dt>
                 <dd>
                   If any string in <var>kinds</var> contains a value that is not listed in the
-                  <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#text-track-kind">text track kind list</a></code>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code>
+                  <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#text-track-kind">text track kind list</a></code>, then throw a <code>TypeError</code>
                   and abort these steps.
                 </dd>
               </dl>
@@ -2949,7 +2949,9 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
             <td>17 November 2014</td>
             <td>
               <ul>
+                <li>Changed Editor's draft link to point to GitHub.</li>
                 <li>Bug 27353 - Convert exceptions from xxx_ERR to xxxError form. Changed broken exception links to point to HTML5 instead of WHATWG DOM.</li>
+                <li>Bug 27352 - Changed TrackDefault constructor to throw a TypeError instead of an InvalidAccessError for invalid kinds.</li>
               </ul>
             </td>
           </tr>
