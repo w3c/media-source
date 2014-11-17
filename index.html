@@ -1,19 +1,121 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr" typeof="bibo:Document " about="" property="dcterms:language" content="en">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Media Source Extensions</title>
-    
-    
-    
+<head><style>/*****************************************************************
+ * ReSpec 3 CSS
+ * Robin Berjon - http://berjon.com/
+ *****************************************************************/
 
-    <!-- script to register bugs -->
-    <script src="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/assets/scripts/bug-assist.js"></script>
-    <meta name="bug.short_desc" content="[MSE] ">
-    <meta name="bug.product" content="HTML WG">
-    <meta name="bug.component" content="Media Source Extensions">
+/* --- INLINES --- */
+em.rfc2119 { 
+    text-transform:     lowercase;
+    font-variant:       small-caps;
+    font-style:         normal;
+    color:              #900;
+}
 
-    <style>/* --- ISSUES/NOTES --- */
+h1 acronym, h2 acronym, h3 acronym, h4 acronym, h5 acronym, h6 acronym, a acronym,
+h1 abbr, h2 abbr, h3 abbr, h4 abbr, h5 abbr, h6 abbr, a abbr {
+    border: none;
+}
+
+dfn {
+    font-weight:    bold;
+}
+
+a.internalDFN {
+    color:  inherit;
+    border-bottom:  1px solid #99c;
+    text-decoration:    none;
+}
+
+a.externalDFN {
+    color:  inherit;
+    border-bottom:  1px dotted #ccc;
+    text-decoration:    none;
+}
+
+a.bibref {
+    text-decoration:    none;
+}
+
+cite .bibref {
+    font-style: normal;
+}
+
+code {
+    color:  #C83500;
+}
+
+/* --- TOC --- */
+.toc a, .tof a {
+    text-decoration:    none;
+}
+
+a .secno, a .figno {
+    color:  #000;
+}
+
+ul.tof, ol.tof {
+    list-style: none outside none;
+}
+
+.caption {
+    margin-top: 0.5em;
+    font-style:   italic;
+}
+
+/* --- TABLE --- */
+table.simple {
+    border-spacing: 0;
+    border-collapse:    collapse;
+    border-bottom:  3px solid #005a9c;
+}
+
+.simple th {
+    background: #005a9c;
+    color:  #fff;
+    padding:    3px 5px;
+    text-align: left;
+}
+
+.simple th[scope="row"] {
+    background: inherit;
+    color:  inherit;
+    border-top: 1px solid #ddd;
+}
+
+.simple td {
+    padding:    3px 10px;
+    border-top: 1px solid #ddd;
+}
+
+.simple tr:nth-child(even) {
+    background: #f0f6ff;
+}
+
+/* --- DL --- */
+.section dd > p:first-child {
+    margin-top: 0;
+}
+
+.section dd > p:last-child {
+    margin-bottom: 0;
+}
+
+.section dd {
+    margin-bottom:  1em;
+}
+
+.section dl.attrs dd, .section dl.eldef dd {
+    margin-bottom:  0;
+}
+
+@media print {
+    .removeOnSave {
+        display: none;
+    }
+}
+</style><style>/* --- ISSUES/NOTES --- */
 div.issue-title, div.note-title {
     padding-right:  1em;
     min-width: 7.5em;
@@ -281,124 +383,7 @@ table.exceptions table {
     border-collapse:    collapse;
     width:  100%;
 }
-</style><link rel="stylesheet" href="mse.css">
-  <style>/*****************************************************************
- * ReSpec 3 CSS
- * Robin Berjon - http://berjon.com/
- *****************************************************************/
-
-/* --- INLINES --- */
-em.rfc2119 { 
-    text-transform:     lowercase;
-    font-variant:       small-caps;
-    font-style:         normal;
-    color:              #900;
-}
-
-h1 acronym, h2 acronym, h3 acronym, h4 acronym, h5 acronym, h6 acronym, a acronym,
-h1 abbr, h2 abbr, h3 abbr, h4 abbr, h5 abbr, h6 abbr, a abbr {
-    border: none;
-}
-
-dfn {
-    font-weight:    bold;
-}
-
-a.internalDFN {
-    color:  inherit;
-    border-bottom:  1px solid #99c;
-    text-decoration:    none;
-}
-
-a.externalDFN {
-    color:  inherit;
-    border-bottom:  1px dotted #ccc;
-    text-decoration:    none;
-}
-
-a.bibref {
-    text-decoration:    none;
-}
-
-cite .bibref {
-    font-style: normal;
-}
-
-code {
-    color:  #C83500;
-}
-
-/* --- TOC --- */
-.toc a, .tof a {
-    text-decoration:    none;
-}
-
-a .secno, a .figno {
-    color:  #000;
-}
-
-ul.tof, ol.tof {
-    list-style: none outside none;
-}
-
-.caption {
-    margin-top: 0.5em;
-    font-style:   italic;
-}
-
-/* --- TABLE --- */
-table.simple {
-    border-spacing: 0;
-    border-collapse:    collapse;
-    border-bottom:  3px solid #005a9c;
-}
-
-.simple th {
-    background: #005a9c;
-    color:  #fff;
-    padding:    3px 5px;
-    text-align: left;
-}
-
-.simple th[scope="row"] {
-    background: inherit;
-    color:  inherit;
-    border-top: 1px solid #ddd;
-}
-
-.simple td {
-    padding:    3px 10px;
-    border-top: 1px solid #ddd;
-}
-
-.simple tr:nth-child(even) {
-    background: #f0f6ff;
-}
-
-/* --- DL --- */
-.section dd > p:first-child {
-    margin-top: 0;
-}
-
-.section dd > p:last-child {
-    margin-bottom: 0;
-}
-
-.section dd {
-    margin-bottom:  1em;
-}
-
-.section dl.attrs dd, .section dl.eldef dd {
-    margin-bottom:  0;
-}
-
-@media print {
-    .removeOnSave {
-        display: none;
-    }
-}
-</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
-  <body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
+</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head><body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
       
         
@@ -408,17 +393,17 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-11-11T16:52:00.000Z" id="w3c-editor-s-draft-11-november-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-11-11">11 November 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-11-17T21:18:07.000Z" id="w3c-editor-s-draft-17-november-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-11-17">17 November 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
-      <dd><a class="u-url" href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/media-source.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/media-source.html</a></dd>
+      <dd><a class="u-url" href="http://w3c.github.io/media-source/">http://w3c.github.io/media-source/</a></dd>
       <dt>Latest published version:</dt>
       <dd><a href="http://www.w3.org/TR/media-source/">http://www.w3.org/TR/media-source/</a></dd>
     
     
       <dt>Latest editor's draft:</dt>
-      <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/media-source.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/media-source.html</a></dd>
+      <dd><a href="http://w3c.github.io/media-source/">http://w3c.github.io/media-source/</a></dd>
     
     
     
@@ -465,7 +450,24 @@ table.simple {
     
   
   <hr>
-</div>
+</div>re
+
+  
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Media Source Extensions</title>
+    
+    
+    
+
+    <!-- script to register bugs -->
+    <script src="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/assets/scripts/bug-assist.js"></script>
+    <meta name="bug.short_desc" content="[MSE] ">
+    <meta name="bug.product" content="HTML WG">
+    <meta name="bug.component" content="Media Source Extensions">
+
+    <link rel="stylesheet" href="mse.css">
+  
+  
 
     
 
@@ -763,9 +765,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
           <p>On setting, run the following steps:</p>
           <ol>
-            <li>If the value being set is negative or NaN then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not <code><a href="#idl-def-ReadyState.open">"open"</a></code> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true on any <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+            <li>If the value being set is negative or NaN then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not <code><a href="#idl-def-ReadyState.open">"open"</a></code> then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true on any <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the value being assigned to this attribute.
 	      <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_7"><span>Note</span></div><p class=""><code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code>, <code><a href="#widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize">appendStream()</a></code> and <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream()</a></code> can update the duration under certain circumstances.</p></div>
             </li>
@@ -778,17 +780,17 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>Adds a new <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> to <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.</p>
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code><a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>If <var>type</var> is an empty string then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
-            <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-not_supported_err">NOT_SUPPORTED_ERR</a></code> exception and abort these steps.</li>
+            <li>If <var>type</var> is an empty string then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception and abort these steps.</li>
+            <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw a <code><a href="http://www.w3.org/TR/html5/infrastructure.html#notsupportederror">NotSupportedError</a></code> exception and abort these steps.</li>
             <li>If the user agent can't handle any more SourceBuffer objects or if creating a SourceBuffer
               based on <var>type</var> would result in an unsupported <a href="#sourcebuffer-configuration">SourceBuffer configuration</a>,
-              then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception and abort these steps.
-              <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_8"><span>Note</span></div><p class="">For example, a user agent may throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception if the media element has reached the
+              then throw a <code><a href="http://www.w3.org/TR/html5/infrastructure.html#quotaexceedederror">QuotaExceededError</a></code> exception and abort these steps.
+              <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_8"><span>Note</span></div><p class="">For example, a user agent may throw a <code><a href="http://www.w3.org/TR/html5/infrastructure.html#quotaexceedederror">QuotaExceededError</a></code> exception if the media element has reached the
                 <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_metadata">HAVE_METADATA</a></code> readyState. This can occur if the user agent's media engine does not support adding more tracks during
                 playback.
               </p></div>
             </li>
-            <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not in the <code><a href="#idl-def-ReadyState.open">"open"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not in the <code><a href="#idl-def-ReadyState.open">"open"</a></code> state then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>Create a new <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object and associated resources.</li>
             <li>Set the <var><a href="#sourcebuffer-generate-timestamps-flag">generate timestamps flag</a></var> on the new object to the value in the
                "Generate Timestamps Flag" column of the byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>] entry 
@@ -813,8 +815,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">error</td><td class="prmType"><code><a href="#idl-def-EndOfStreamError" class="idlType"><code>EndOfStreamError</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>void</code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not in the <code><a href="#idl-def-ReadyState.open">"open"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true on any <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not in the <code><a href="#idl-def-ReadyState.open">"open"</a></code> state then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true on any <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>Run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <var>error</var>.</li>
           </ol></dd><dt id="widl-MediaSource-isTypeSupported-boolean-DOMString-type"><code>isTypeSupported</code>, static</dt><dd>
           <p>Check to see whether the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> is capable of creating <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects for the specified MIME type.</p>
@@ -838,7 +840,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">sourceBuffer</td><td class="prmType"><code><a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>void</code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>If <var>sourceBuffer</var> specifies an object that is not in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-not_found_err">NOT_FOUND_ERR</a></code> exception and abort these steps.</li>
+            <li>If <var>sourceBuffer</var> specifies an object that is not in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> then throw a <code><a href="http://www.w3.org/TR/html5/infrastructure.html#notfounderror">NotFoundError</a></code> exception and abort these steps.</li>
             <li>If the <var>sourceBuffer</var>.<code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then run the following steps:
               <ol>
                 <li>Abort the <a href="#sourcebuffer-buffer-append">buffer append</a> and <a href="#sourcebuffer-stream-append-loop">stream append loop</a> algorithms if they are running.</li>
@@ -1262,10 +1264,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>On setting, run the following steps:</p>
           <ol>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an
-              <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>If the new value equals NaN, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> and abort these steps.</li>
-            <li>If the new value is less than or equal to <code><a href="#widl-SourceBuffer-appendWindowStart">appendWindowStart</a></code> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these
+              <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the new value equals NaN, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> and abort these steps.</li>
+            <li>If the new value is less than or equal to <code><a href="#widl-SourceBuffer-appendWindowStart">appendWindowStart</a></code> then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception and abort these
               steps.</li>
             <li>Update the attribute to the new value.</li>
           </ol>
@@ -1275,9 +1277,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>On setting, run the following steps:</p>
           <ol>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an
-              <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>If the new value is less than 0 or greater than or equal to <code><a href="#widl-SourceBuffer-appendWindowEnd">appendWindowEnd</a></code> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception
+              <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the new value is less than 0 or greater than or equal to <code><a href="#widl-SourceBuffer-appendWindowEnd">appendWindowEnd</a></code> then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception
               and abort these steps.</li>
             <li>Update the attribute to the new value.</li>
           </ol>
@@ -1287,7 +1289,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>Indicates what <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRanges</a></code> are buffered in the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</p>
           <p>When the attribute is read the following steps must occur:</p>
           <ol>
-            <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+            <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>Let <var>highest end time</var> be the largest <a href="#track-buffer-ranges">track buffer ranges</a> end time across all the <a href="#track-buffer">track buffers</a> managed by this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
             <li>Let <var>intersection ranges</var> equal a <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRange</a></code> object containing a single range from 0 to <var>highest end time</var>.</li>
             <li>For each <a href="#track-buffer">track buffer</a> managed by this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>, run the following steps:
@@ -1307,11 +1309,11 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <ol>
             <li>Let <var>new mode</var> equal the new value being assigned to this attribute.</li>
             <li>If <var><a href="#sourcebuffer-generate-timestamps-flag">generate timestamps flag</a></var> equals true and <var>new mode</var> equals
-              <code><a href="#idl-def-AppendMode.segments">"segments"</a></code>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code>
+              <code><a href="#idl-def-AppendMode.segments">"segments"</a></code>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code>
               exception and abort these steps.</li>
-            <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and
+            <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and
               abort these steps.</li>
-            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>
               <p>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState.ended">"ended"</a></code> state then run the following steps:</p>
               <ol>
@@ -1319,7 +1321,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	        <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-sourceopen">sourceopen</a></code> at the <a href="#parent-media-source">parent media source</a>.</li>
               </ol>
             </li>
-            <li>If the <var><a href="#sourcebuffer-append-state">append state</a></var> equals <a href="#sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</a>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> and abort these steps.</li>
+            <li>If the <var><a href="#sourcebuffer-append-state">append state</a></var> equals <a href="#sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</a>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> and abort these steps.</li>
             <li>If the <var>new mode</var> equals <code><a href="#idl-def-AppendMode.sequence">"sequence"</a></code>, then set the <var><a href="#sourcebuffer-group-start-timestamp">group start timestamp</a></var> to the <var><a href="#sourcebuffer-group-end-timestamp">group end timestamp</a></var>.</li>
             <li>Update the attribute to <var>new mode</var>.</li>
           </ol>
@@ -1331,8 +1333,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>On setting, run the following steps:</p>
           <ol>
             <li>Let <var>new timestamp offset</var> equal the new value being assigned to this attribute.</li>
-            <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+            <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>
               <p>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState.ended">"ended"</a></code> state then run the following steps:</p>
               <ol>
@@ -1340,7 +1342,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	        <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-sourceopen">sourceopen</a></code> at the <a href="#parent-media-source">parent media source</a>.</li>
               </ol>
             </li>
-            <li>If the <var><a href="#sourcebuffer-append-state">append state</a></var> equals <a href="#sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</a>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> and abort these steps.</li>
+            <li>If the <var><a href="#sourcebuffer-append-state">append state</a></var> equals <a href="#sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</a>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> and abort these steps.</li>
             <li>If the <code><a href="#widl-SourceBuffer-mode">mode</a></code> attribute equals <code><a href="#idl-def-AppendMode.sequence">"sequence"</a></code>, then set the <var><a href="#sourcebuffer-group-start-timestamp">group start timestamp</a></var> to <var>new timestamp offset</var>.</li>
             <li>Update the attribute to <var>new timestamp offset</var>.</li>
           </ol>
@@ -1352,8 +1354,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>On setting, run the following steps:</p>
           <ol>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an
-              <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+              <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>Update the attribute to the new value.</li>
           </ol>
         </dd><dt id="widl-SourceBuffer-updating"><code>updating</code> of type <span class="idlAttrType">boolean</span>, readonly   </dt><dd>
@@ -1366,8 +1368,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
           
         <div><em>No parameters.</em></div><div><em>Return type: </em><code>void</code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is not in the <code><a href="#idl-def-ReadyState.open">"open"</a></code> state then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+            <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is not in the <code><a href="#idl-def-ReadyState.open">"open"</a></code> state then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then run the following steps:
               <ol>
                 <li>Abort the <a href="#sourcebuffer-buffer-append">buffer append</a> and <a href="#sourcebuffer-stream-append-loop">stream append loop</a> algorithms if they are running.</li>
@@ -1407,11 +1409,11 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           
 
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">start</td><td class="prmType"><code>double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">end</td><td class="prmType"><code>unrestricted double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>void</code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>If <code><a href="#widl-MediaSource-duration">duration</a></code> equals NaN, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
-            <li>If <var>start</var> is negative or greater than <code><a href="#widl-MediaSource-duration">duration</a></code>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
-            <li>If <var>end</var> is less than or equal to <var>start</var> or <var>end</var> equals NaN, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> exception and abort these steps.</li>
-            <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+            <li>If <code><a href="#widl-MediaSource-duration">duration</a></code> equals NaN, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception and abort these steps.</li>
+            <li>If <var>start</var> is negative or greater than <code><a href="#widl-MediaSource-duration">duration</a></code>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception and abort these steps.</li>
+            <li>If <var>end</var> is less than or equal to <var>start</var> or <var>end</var> equals NaN, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception and abort these steps.</li>
+            <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>
               <p>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState.ended">"ended"</a></code> state then run
                 the following steps:</p>
@@ -1624,8 +1626,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <h4 aria-level="3" role="heading" id="h4_sourcebuffer-prepare-append"><span class="secno">3.5.4 </span>Prepare Append Algorithm</h4>
             <p>When an append operation begins, the follow steps are run to validate and prepare the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</p>
             <ol>
-            <li>If the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_state_err">INVALID_STATE_ERR</a></code> exception and abort these steps.</li>
+            <li>If the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>
               <p>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState.ended">"ended"</a></code> state then run the following steps:</p>
               <ol>
@@ -1637,7 +1639,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             </li>
             <li>Run the <a href="#sourcebuffer-coded-frame-eviction">coded frame eviction algorithm</a>.</li>
             <li>
-              <p>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true, then throw a <code><a href="http://dom.spec.whatwg.org/#dom-domexception-quota_exceeded_err">QUOTA_EXCEEDED_ERR</a></code> exception and abort these step.</p>
+              <p>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true, then throw a <code><a href="http://www.w3.org/TR/html5/infrastructure.html#quotaexceedederror">QuotaExceededError</a></code> exception and abort these step.</p>
               <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_18"><span>Note</span></div><p class="">This is the signal that the implementation was unable to evict enough data to accomodate the append or the append is too big. The web
                 application should use <code><a href="#widl-SourceBuffer-remove-void-double-start-unrestricted-double-end">remove()</a></code> to explicitly free up space and/or reduce the size of the append.</p></div>
             </li>
@@ -2542,26 +2544,26 @@ interface <span class="idlInterfaceID">TrackDefault</span> {
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code><a href="#idl-def-TrackDefaultType" class="idlType"><code>TrackDefaultType</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">language</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">label</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">kinds</td><td class="prmType"><code>sequence&lt;DOMString&gt;</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">byteStreamTrackID</td><td class="prmType"><code>DOMString = ""</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If <var>language</var> is not an empty string and <var>language</var> is not a BCP 47
-              language tag, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> and abort these steps.</li>
+              language tag, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> and abort these steps.</li>
             <li>
               <dl class="switch">
                 <dt>If <var>type</var> equals <code><a href="#idl-def-TrackDefaultType.audio">"audio"</a></code>:</dt>
                 <dd>
                   If any string in <var>kinds</var> contains a value that is not listed as applying to
                   audio in the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-TrackList-getKind-categories">kind categories table</a></code>, then throw an
-                  <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> and abort these steps.
+                  <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> and abort these steps.
                 </dd>
                 <dt>If <var>type</var> equals <code><a href="#idl-def-TrackDefaultType.video">"video"</a></code>:</dt>
                 <dd>
                   If any string in <var>kinds</var> contains a value that is not listed as applying to
                   video in the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-TrackList-getKind-categories">kind categories table</a></code>, then throw an
-                  <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> and abort these steps.
+                  <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> and abort these steps.
                 </dd>
 
                 <dt>If <var>type</var> equals <code><a href="#idl-def-TrackDefaultType.text">"text"</a></code>:</dt>
                 <dd>
                   If any string in <var>kinds</var> contains a value that is not listed in the
-                  <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#text-track-kind">text track kind list</a></code>, then throw an <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code>
+                  <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#text-track-kind">text track kind list</a></code>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code>
                   and abort these steps.
                 </dd>
               </dl>
@@ -2604,7 +2606,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
             <li>If <var>trackDefaults</var> contains two or more <a href="#idl-def-TrackDefault" class="idlType"><code>TrackDefault</code></a> objects with
               the same <code><a href="#widl-TrackDefault-type">type</a></code> and the same
               <code><a href="#widl-TrackDefault-byteStreamTrackID">byteStreamTrackID</a></code>, then throw an
-              <code><a href="http://dom.spec.whatwg.org/#dom-domexception-invalid_access_err">INVALID_ACCESS_ERR</a></code> and abort these steps.
+              <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> and abort these steps.
               <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_40"><span>Note</span></div><p class="">This also applies when <code><a href="#widl-TrackDefault-byteStreamTrackID">byteStreamTrackID</a></code> contains
                 an empty string and ensures that there is only one "byteStreamTrackID independent" default
                 for each <a href="#idl-def-TrackDefaultType" class="idlType"><code>TrackDefaultType</code></a> value.</p></div></li>
@@ -2944,7 +2946,15 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         <tbody>
         </tbody><tbody>
           <tr>
-            <td>11 November 2014</td>
+            <td>17 November 2014</td>
+            <td>
+              <ul>
+                <li>Bug 27353 - Convert exceptions from xxx_ERR to xxxError form. Changed broken exception links to point to HTML5 instead of WHATWG DOM.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/9d9e8d48c852/media-source/media-source.html">11 November 2014</a></td>
             <td>
               <ul>
                 <li>Bug 27296 - Clarify .seekable when duration is Infinity and .buffered is empty.</li>

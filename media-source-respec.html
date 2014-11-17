@@ -1,4 +1,4 @@
-<!DOCTYPE html SYSTEM "about:legacy-compat">
+re<!DOCTYPE html SYSTEM "about:legacy-compat">
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -14,7 +14,7 @@
       shortName: "media-source",
 
       // if there a publicly available Editor's Draft, this is the link
-      edDraftURI:           "http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/media-source.html",
+      edDraftURI:           "http://w3c.github.io/media-source/",
 
       // if this is a LCWD, uncomment and set the end of its review period
       // lcEnd: "2009-08-05",
@@ -366,9 +366,9 @@
           </ol>
           <p>On setting, run the following steps:</p>
           <ol>
-            <li>If the value being set is negative or NaN then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If the value being set is negative or NaN then throw an <a def-id="invalid-access-error"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the value being assigned to this attribute.
 	      <p class="note"><a def-id="appendBuffer"></a>, <a def-id="appendStream"></a> and <a def-id="endOfStream"></a> can update the duration under certain circumstances.</p>
             </li>
@@ -379,17 +379,17 @@
         <dd>
           <p>Adds a new <a>SourceBuffer</a> to <a def-id="sourceBuffers"></a>.</p>
           <ol class="method-algorithm">
-            <li>If <var>type</var> is an empty string then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
-            <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw a <a def-id="not-supported-err"></a> exception and abort these steps.</li>
+            <li>If <var>type</var> is an empty string then throw an <a def-id="invalid-access-error"></a> exception and abort these steps.</li>
+            <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw a <a def-id="not-supported-error"></a> exception and abort these steps.</li>
             <li>If the user agent can't handle any more SourceBuffer objects or if creating a SourceBuffer
               based on <var>type</var> would result in an unsupported <a def-id="sourcebuffer-configuration"></a>,
-              then throw a <a def-id="quota-exceeded-err"></a> exception and abort these steps.
-              <p class="note">For example, a user agent may throw a <a def-id="quota-exceeded-err"></a> exception if the media element has reached the
+              then throw a <a def-id="quota-exceeded-error"></a> exception and abort these steps.
+              <p class="note">For example, a user agent may throw a <a def-id="quota-exceeded-error"></a> exception if the media element has reached the
                 <a def-id="have-metadata"></a> readyState. This can occur if the user agent's media engine does not support adding more tracks during
                 playback.
               </p>
             </li>
-            <li>If the <a def-id="readyState"></a> attribute is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="readyState"></a> attribute is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Create a new <a>SourceBuffer</a> object and associated resources.</li>
             <li>Set the <a def-id="generate-timestamps-flag"></a> on the new object to the value in the
                "Generate Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry 
@@ -417,7 +417,7 @@
           <p>Removes a <a>SourceBuffer</a> from <a def-id="sourceBuffers"></a>.</p>
 
           <ol class="method-algorithm">
-            <li>If <var>sourceBuffer</var> specifies an object that is not in <a def-id="sourceBuffers"></a> then throw a <a def-id="not-found-err"></a> exception and abort these steps.</li>
+            <li>If <var>sourceBuffer</var> specifies an object that is not in <a def-id="sourceBuffers"></a> then throw a <a def-id="not-found-error"></a> exception and abort these steps.</li>
             <li>If the <var>sourceBuffer</var>.<a def-id="updating"></a> attribute equals true, then run the following steps:
               <ol>
                 <li>Abort the <a def-id="buffer-append"></a> and <a def-id="stream-append-loop"></a> algorithms if they are running.</li>
@@ -504,8 +504,8 @@
           <p>Signals the end of the stream.</p>
 
           <ol class="method-algorithm">
-            <li>If the <a def-id="readyState"></a> attribute is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="readyState"></a> attribute is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Run the <a def-id="end-of-stream-algorithm"></a> with the <var>error</var> parameter set to <var>error</var>.</li>
           </ol>
         </dd>
@@ -863,11 +863,11 @@
           <ol>
             <li>Let <var>new mode</var> equal the new value being assigned to this attribute.</li>
             <li>If <a def-id="generate-timestamps-flag"></a> equals true and <var>new mode</var> equals
-              <a def-id="AppendMode-segments"></a>, then throw an <a def-id="invalid-access-err"></a>
+              <a def-id="AppendMode-segments"></a>, then throw an <a def-id="invalid-access-error"></a>
               exception and abort these steps.</li>
-            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an <a def-id="invalid-state-err"></a> exception and
+            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an <a def-id="invalid-state-error"></a> exception and
               abort these steps.</li>
-            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>
               <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run the following steps:</p>
               <ol>
@@ -875,7 +875,7 @@
 	        <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a def-id="parent-media-source"></a>.</li>
               </ol>
             </li>
-            <li>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a>, then throw an <a def-id="invalid-state-err"></a> and abort these steps.</li>
+            <li>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a>, then throw an <a def-id="invalid-state-error"></a> and abort these steps.</li>
             <li>If the <var>new mode</var> equals <a def-id="AppendMode-sequence"></a>, then set the <a def-id="group-start-timestamp"></a> to the <a def-id="group-end-timestamp"></a>.</li>
             <li>Update the attribute to <var>new mode</var>.</li>
           </ol>
@@ -892,7 +892,7 @@
           <p>Indicates what <a def-id="timeranges"></a> are buffered in the <a>SourceBuffer</a>.</p>
           <p>When the attribute is read the following steps must occur:</p>
           <ol>
-            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Let <var>highest end time</var> be the largest <a def-id="track-buffer-ranges"></a> end time across all the <a def-id="track-buffers"></a> managed by this <a>SourceBuffer</a> object.</li>
             <li>Let <var>intersection ranges</var> equal a <a def-id="timerange"></a> object containing a single range from 0 to <var>highest end time</var>.</li>
             <li>For each <a def-id="track-buffer"></a> managed by this <a>SourceBuffer</a>, run the following steps:
@@ -914,8 +914,8 @@
           <p>On setting, run the following steps:</p>
           <ol>
             <li>Let <var>new timestamp offset</var> equal the new value being assigned to this attribute.</li>
-            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>
               <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run the following steps:</p>
               <ol>
@@ -923,7 +923,7 @@
 	        <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a def-id="parent-media-source"></a>.</li>
               </ol>
             </li>
-            <li>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a>, then throw an <a def-id="invalid-state-err"></a> and abort these steps.</li>
+            <li>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a>, then throw an <a def-id="invalid-state-error"></a> and abort these steps.</li>
             <li>If the <a def-id="mode"></a> attribute equals <a def-id="AppendMode-sequence"></a>, then set the <a def-id="group-start-timestamp"></a> to <var>new timestamp offset</var>.</li>
             <li>Update the attribute to <var>new timestamp offset</var>.</li>
           </ol>
@@ -951,9 +951,9 @@
           <p>On setting, run the following steps:</p>
           <ol>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an
-              <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the new value is less than 0 or greater than or equal to <a def-id="appendWindowEnd"></a> then throw an <a def-id="invalid-access-err"></a> exception
+              <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If the new value is less than 0 or greater than or equal to <a def-id="appendWindowEnd"></a> then throw an <a def-id="invalid-access-error"></a> exception
               and abort these steps.</li>
             <li>Update the attribute to the new value.</li>
           </ol>
@@ -966,10 +966,10 @@
           <p>On setting, run the following steps:</p>
           <ol>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an
-              <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the new value equals NaN, then throw an <a def-id="invalid-access-err"></a> and abort these steps.</li>
-            <li>If the new value is less than or equal to <a def-id="appendWindowStart"></a> then throw an <a def-id="invalid-access-err"></a> exception and abort these
+              <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If the new value equals NaN, then throw an <a def-id="invalid-access-error"></a> and abort these steps.</li>
+            <li>If the new value is less than or equal to <a def-id="appendWindowStart"></a> then throw an <a def-id="invalid-access-error"></a> exception and abort these
               steps.</li>
             <li>Update the attribute to the new value.</li>
           </ol>
@@ -1011,8 +1011,8 @@
           <p>Aborts the current segment and resets the segment parser.</p>
 
           <ol class="method-algorithm">
-            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then run the following steps:
               <ol>
                 <li>Abort the <a def-id="buffer-append"></a> and <a def-id="stream-append-loop"></a> algorithms if they are running.</li>
@@ -1032,11 +1032,11 @@
           <p>Removes media for a specific time range.</p>
 
           <ol class="method-algorithm">
-            <li>If <a def-id="duration"></a> equals NaN, then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
-            <li>If <var>start</var> is negative or greater than <a def-id="duration"></a>, then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
-            <li>If <var>end</var> is less than or equal to <var>start</var> or <var>end</var> equals NaN, then throw an <a def-id="invalid-access-err"></a> exception and abort these steps.</li>
-            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If <a def-id="duration"></a> equals NaN, then throw an <a def-id="invalid-access-error"></a> exception and abort these steps.</li>
+            <li>If <var>start</var> is negative or greater than <a def-id="duration"></a>, then throw an <a def-id="invalid-access-error"></a> exception and abort these steps.</li>
+            <li>If <var>end</var> is less than or equal to <var>start</var> or <var>end</var> equals NaN, then throw an <a def-id="invalid-access-error"></a> exception and abort these steps.</li>
+            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>
               <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run
                 the following steps:</p>
@@ -1058,8 +1058,8 @@
           <p>On setting, run the following steps:</p>
           <ol>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an
-              <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+              <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Update the attribute to the new value.</li>
           </ol>
         </dd>
@@ -1266,8 +1266,8 @@
             <h4>Prepare Append Algorithm</h4>
             <p>When an append operation begins, the follow steps are run to validate and prepare the <a>SourceBuffer</a>.</p>
             <ol>
-            <li>If the <a>SourceBuffer</a> has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-err"></a> exception and abort these steps.</li>
+            <li>If the <a>SourceBuffer</a> has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>
               <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run the following steps:</p>
               <ol>
@@ -1279,7 +1279,7 @@
             </li>
             <li>Run the <a def-id="coded-frame-eviction-algorithm"></a>.</li>
             <li>
-              <p>If the <a def-id="buffer-full-flag"></a> equals true, then throw a <a def-id="quota-exceeded-err"></a> exception and abort these step.</p>
+              <p>If the <a def-id="buffer-full-flag"></a> equals true, then throw a <a def-id="quota-exceeded-error"></a> exception and abort these step.</p>
               <p class="note">This is the signal that the implementation was unable to evict enough data to accomodate the append or the append is too big. The web
                 application should use <a def-id="remove"></a> to explicitly free up space and/or reduce the size of the append.</p>
             </li>
@@ -2194,26 +2194,26 @@
         <dd>
           <ol class="method-algorithm">
             <li>If <var>language</var> is not an empty string and <var>language</var> is not a BCP 47
-              language tag, then throw an <a def-id="invalid-access-err"></a> and abort these steps.</li>
+              language tag, then throw an <a def-id="invalid-access-error"></a> and abort these steps.</li>
             <li>
               <dl class="switch">
                 <dt>If <var>type</var> equals <a def-id="TrackDefaultType-audio"></a>:</dt>
                 <dd>
                   If any string in <var>kinds</var> contains a value that is not listed as applying to
                   audio in the <a def-id="av-kind-categories-table"></a>, then throw an
-                  <a def-id="invalid-access-err"></a> and abort these steps.
+                  <a def-id="invalid-access-error"></a> and abort these steps.
                 </dd>
                 <dt>If <var>type</var> equals <a def-id="TrackDefaultType-video"></a>:</dt>
                 <dd>
                   If any string in <var>kinds</var> contains a value that is not listed as applying to
                   video in the <a def-id="av-kind-categories-table"></a>, then throw an
-                  <a def-id="invalid-access-err"></a> and abort these steps.
+                  <a def-id="invalid-access-error"></a> and abort these steps.
                 </dd>
 
                 <dt>If <var>type</var> equals <a def-id="TrackDefaultType-text"></a>:</dt>
                 <dd>
                   If any string in <var>kinds</var> contains a value that is not listed in the
-                  <a def-id="text-track-kind-list"></a>, then throw an <a def-id="invalid-access-err"></a>
+                  <a def-id="text-track-kind-list"></a>, then throw an <a def-id="invalid-access-error"></a>
                   and abort these steps.
                 </dd>
               </dl>
@@ -2267,7 +2267,7 @@
             <li>If <var>trackDefaults</var> contains two or more <a>TrackDefault</a> objects with
               the same <a def-id="TrackDefault-type"></a> and the same
               <a def-id="TrackDefault-byteStreamTrackID"></a>, then throw an
-              <a def-id="invalid-access-err"></a> and abort these steps.
+              <a def-id="invalid-access-error"></a> and abort these steps.
               <p class="note">This also applies when <a def-id="TrackDefault-byteStreamTrackID"></a> contains
                 an empty string and ensures that there is only one "byteStreamTrackID independent" default
                 for each <a>TrackDefaultType</a> value.</p></li>
@@ -2619,7 +2619,15 @@
         <tbody>
         <tbody>
           <tr>
-            <td>11 November 2014</td>
+            <td>17 November 2014</td>
+            <td>
+              <ul>
+                <li>Bug 27353 - Convert exceptions from xxx_ERR to xxxError form. Changed broken exception links to point to HTML5 instead of WHATWG DOM.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://dvcs.w3.org/hg/html-media/raw-file/9d9e8d48c852/media-source/media-source.html">11 November 2014</a></td>
             <td>
               <ul>
                 <li>Bug 27296 - Clarify .seekable when duration is Infinity and .buffered is empty.</li>

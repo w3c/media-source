@@ -1,9 +1,13 @@
 (function() {
   var MSE_spec_url = "http://www.w3.org/TR/media-source/";
-  var HTML_spec_url = "http://www.w3.org/TR/html5/embedded-content-0.html";
+  var HTML5_spec_url = "http://www.w3.org/TR/html5/embedded-content-0.html";
+  var HTML5_infrastructure_spec_url = "http://www.w3.org/TR/html5/infrastructure.html";
+  var HTML5_browsers_spec_url = "http://www.w3.org/TR/html5/browsers.html";
+  var HTML5_webappapis_spec_url = "http://www.w3.org/TR/html5/webappapis.html";
   var DOM_spec_url = "http://dom.spec.whatwg.org/";
   var HRTIME_spec_url = "http://www.w3.org/TR/hr-time/";
   var STREAMS_spec_url = "http://www.w3.org/TR/2013/WD-streams-api-20131105/"; // Make sure this matches the localBiblio entry.
+  var FILE_spec_url = "http://www.w3.org/TR/FileAPI/"
 
   function url_helper(doc, url) {
     if (url[0] == "#" && doc.mseDefGroupName != window.respecConfig.mseDefGroupName) {
@@ -25,15 +29,15 @@
   }
 
   function videoref_helper(doc, df, id, text) {
-    link_helper(doc, df, HTML_spec_url + '#' + id, text);
+    link_helper(doc, df, HTML5_spec_url + '#' + id, text);
   }
 
   function code_videoref_helper(doc, df, id, text) {
-    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: HTML_spec_url + "#" + id}).text(text))[0]);
+    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: HTML5_spec_url + "#" + id}).text(text))[0]);
   }
 
   function fileapi_helper(doc, df, id, text) {
-    link_helper(doc, df, 'http://www.w3.org/TR/FileAPI/#' + id, text);
+    link_helper(doc, df, FILE_spec_url + '#' + id, text);
   }
 
   function hrtime_helper(doc, df, id, text) {
@@ -41,15 +45,15 @@
   }
 
   function webappapis_helper(doc, df, id, text) {
-    link_helper(doc, df, 'http://www.w3.org/TR/html5/webappapis.html#' + id, text);
+    link_helper(doc, df, HTML5_webappapis_spec_url + '#' + id, text);
   }
 
   function infrastructure_helper(doc, df, id, text) {
-    link_helper(doc, df, 'http://www.w3.org/TR/html5/infrastructure.html#' + id, text);
+    link_helper(doc, df, HTML5_infrastructure_spec_url + '#' + id, text);
   }
 
   function browsers_helper(doc, df, id, text) {
-    link_helper(doc, df, 'http://www.w3.org/TR/html5/browsers.html#' + id, text);
+    link_helper(doc, df, HTML5_browsers_spec_url + '#' + id, text);
   }
 
   function term_helper(doc, df, id, text) {
@@ -65,7 +69,7 @@
   }
 
   function exception_helper(doc, df, id, text) {
-    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: DOM_spec_url + '#dom-domexception-' + id}).text(text))[0]);
+    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: HTML5_infrastructure_spec_url + '#' + id}).text(text))[0]);
   }
 
   function webmref_helper(doc, df, id, text) {
@@ -332,11 +336,11 @@
     'corrupted-video-frame-count': { func: var_helper, fragment: '#corrupted-video-frame-count', link_text: 'corrupted video frame count', },
     'displayed-frame-delay-sum': { func: var_helper, fragment: '#displayed-frame-delay-sum', link_text: 'displayed frame delay sum', },
 
-    'invalid-access-err': { func: exception_helper, fragment: 'invalid_access_err', link_text: 'INVALID_ACCESS_ERR',  },
-    'invalid-state-err': { func: exception_helper, fragment: 'invalid_state_err', link_text: 'INVALID_STATE_ERR',  },
-    'not-found-err': { func: exception_helper, fragment: 'not_found_err', link_text: 'NOT_FOUND_ERR',  },
-    'not-supported-err': { func: exception_helper, fragment: 'not_supported_err', link_text: 'NOT_SUPPORTED_ERR',  },
-    'quota-exceeded-err': { func: exception_helper, fragment: 'quota_exceeded_err', link_text: 'QUOTA_EXCEEDED_ERR',  },
+    'invalid-access-error': { func: exception_helper, fragment: 'invalidaccesserror', link_text: 'InvalidAccessError',  },
+    'invalid-state-error': { func: exception_helper, fragment: 'invalidstateerror', link_text: 'InvalidStateError',  },
+    'not-found-error': { func: exception_helper, fragment: 'notfounderror', link_text: 'NotFoundError',  },
+    'not-supported-error': { func: exception_helper, fragment: 'notsupportederror', link_text: 'NotSupportedError',  },
+    'quota-exceeded-error': { func: exception_helper, fragment: 'quotaexceedederror', link_text: 'QuotaExceededError',  },
 
     'queue-a-task-to-fire-an-event-named': { func: queue_and_fire_helper, fragment: '', link_text: 'queue a task',  },
     'Queue-a-task-to-fire-an-event-named': { func: queue_and_fire_helper, fragment: '', link_text: 'Queue a task',  },
@@ -470,7 +474,7 @@
 	if (info.spec == 'streams-api') {
 	  baseURL = STREAMS_spec_url;
         } else if (info.spec == 'html5') {
-	  baseURL = HTML_spec_url;
+	  baseURL = HTML5_spec_url;
 	} else if (info.spec == 'dom') {
 	  baseURL = DOM_spec_url;
         } else if (info.spec == 'webidl') {
