@@ -394,7 +394,7 @@
   function mediaSourcePreProcessor() {
     for (var x in groupBaseURLs) {
       if (groupBaseURLs[x] == MSE_spec_url && window.respecConfig.specStatus == "ED") {
-	  MSE_spec_url = "media-source.html";
+	  MSE_spec_url = "index.html";
 	  groupBaseURLs[x] = MSE_spec_url;
 	  break;
       }

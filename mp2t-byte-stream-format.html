@@ -98,7 +98,7 @@ cite .bibref {
 }
 
 code {
-    color:  #ff4500;
+    color:  #C83500;
 }
 
 /* --- TOC --- */
@@ -164,26 +164,35 @@ table.simple {
 .section dl.attrs dd, .section dl.eldef dd {
     margin-bottom:  0;
 }
+
+@media print {
+    .removeOnSave {
+        display: none;
+    }
+}
 </style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
-  <body class="h-entry" style="" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
+  <body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
-    
-      <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
-    
+      
+        
+            <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
+        
+      
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">MPEG-2 TS Byte Stream Format</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2013-12-03T02:26:55.000Z" id="w3c-editor-s-draft-02-december-2013"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2013-12-02">02 December 2013</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-11-18T19:28:31.000Z" id="w3c-editor-s-draft-18-november-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-11-18">18 November 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
-      <dd><a class="u-url" href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/mp2t-byte-stream-format.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/mp2t-byte-stream-format.html</a></dd>
+      <dd><a class="u-url" href="https://w3c.github.io/media-source/mp2t-byte-stream-format.html">https://w3c.github.io/media-source/mp2t-byte-stream-format.html</a></dd>
       <dt>Latest published version:</dt>
       <dd><a href="http://www.w3.org/TR//">http://www.w3.org/TR//</a></dd>
     
     
       <dt>Latest editor's draft:</dt>
-      <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/mp2t-byte-stream-format.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/mp2t-byte-stream-format.html</a></dd>
+      <dd><a href="https://w3c.github.io/media-source/mp2t-byte-stream-format.html">https://w3c.github.io/media-source/mp2t-byte-stream-format.html</a></dd>
+    
     
     
     
@@ -210,7 +219,7 @@ table.simple {
     
       <p class="copyright">
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
-        2013
+        2014
         
         <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
         (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
@@ -230,9 +239,9 @@ table.simple {
   
   <hr>
 </div>
-    <section id="abstract" class="introductory" property="dcterms:abstract" datatype="" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_abstract">Abstract</h2><p>
+    <section id="abstract" class="introductory" property="dcterms:abstract" datatype="" typeof="bibo:Chapter" resource="#abstract" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_abstract">Abstract</h2><p>
       This specification defines a <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> byte stream format specification based on MPEG-2 Transport Streams.
-    </p></section><section id="sotd" class="introductory" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_sotd">Status of This Document</h2>
+    </p></section><section id="sotd" class="introductory" typeof="bibo:Chapter" resource="#sotd" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_sotd">Status of This Document</h2>
   
     
       
@@ -268,6 +277,7 @@ table.simple {
           </p>
         
         
+        
         <p>
           
             This document was produced by a group operating under the 
@@ -291,26 +301,30 @@ table.simple {
           
         </p>
         
+          <p>This document is governed by the <a id="w3c_process_revision" href="http://www.w3.org/2014/Process-20140801/">1 August 2014 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
+          </p>
+        
+        
       
     
   
 </section><section id="toc"><h2 class="introductory" aria-level="1" role="heading" id="h2_toc">Table of Contents</h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type info</a></li><li class="tocline"><a href="#mpeg2ts-general" class="tocxref"><span class="secno">3. </span>General Transport Stream Requirements</a></li><li class="tocline"><a href="#mpeg2ts-init-segments" class="tocxref"><span class="secno">4. </span>Initialization Segments</a></li><li class="tocline"><a href="#mpeg2ts-media-segments" class="tocxref"><span class="secno">5. </span>Media Segments</a></li><li class="tocline"><a href="#mpeg2ts-random-access-points" class="tocxref"><span class="secno">6. </span>Random Access Points</a></li><li class="tocline"><a href="#mpeg2ts-discontinuities" class="tocxref"><span class="secno">7. </span>Timestamp Rollover &amp; Discontinuities</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">8. </span>Acknowledgments</a></li></ul></section>
 
-    <section id="introduction" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="introduction" typeof="bibo:Chapter" resource="#introduction" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_introduction"><span class="secno">1. </span>Introduction</h2>
       <p>This specification defines segment formats for implementations that choose to support MPEG-2 Transport Streams
         (MPEG-2 TS) specified in <a href="http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=44169">ISO/IEC 13818-1</a>.</p> It defines the MIME-type parameters used to signal codecs, and provides
-        the necessary format specific definitions for <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segments</a>, <a href="http://www.w3.org/TR/media-source/#media-segment">media segments</a>, and <a href="http://www.w3.org/TR/media-source/#random-access-point">random access points</a> required by
-        the <a href="http://www.w3.org/TR/media-source/#byte-stream-formats">byte stream formats section</a> of the Media Source Extensions spec. This document also defines extra behaviors and state that only apply to this
+        the necessary format specific definitions for <a href="index.html#init-segment">initialization segments</a>, <a href="index.html#media-segment">media segments</a>, and <a href="index.html#random-access-point">random access points</a> required by
+        the <a href="index.html#byte-stream-formats">byte stream formats section</a> of the Media Source Extensions spec. This document also defines extra behaviors and state that only apply to this
         byte stream format.<p></p>
     </section>
 
-    <section id="mime-parameters" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="mime-parameters" typeof="bibo:Chapter" resource="#mime-parameters" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mime-parameters"><span class="secno">2. </span>MIME-type info</h2>
       <p>The MIME-type/subtype pair of "video/MP2T", as specified in <a href="http://tools.ietf.org/html/rfc3551">RFC 3551</a>, must be used for byte streams that conform
         to this specification.</p>
 
-      <p>This following parameters can be used in the MIME-type passed to <code><a href="http://www.w3.org/TR/media-source/#widl-MediaSource-isTypeSupported-boolean-DOMString-type">isTypeSupported()</a></code> or <code><a href="http://www.w3.org/TR/media-source/#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code>.</p>
+      <p>This following parameters can be used in the MIME-type passed to <code><a href="index.html#widl-MediaSource-isTypeSupported-boolean-DOMString-type">isTypeSupported()</a></code> or <code><a href="index.html#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code>.</p>
       <dl>
         <dt>codecs</dt>
         <dd>
@@ -321,11 +335,11 @@ table.simple {
       </dl>
     </section>
 
-    <section id="mpeg2ts-general" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="mpeg2ts-general" typeof="bibo:Chapter" resource="#mpeg2ts-general" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mpeg2ts-general"><span class="secno">3. </span>General Transport Stream Requirements</h2>
       <p>MPEG-2 TS media and initialization segments must conform to the MPEG-2 TS Adaptive Profile (ISO/IEC 13818-1:2012 Amd. 2).</p>
 
-      <p>The user agent must run the <a href="http://www.w3.org/TR/media-source/#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="http://www.w3.org/TR/media-source/#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
+      <p>The user agent must run the <a href="index.html#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="index.html#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
       <ol>
         <li>Segments do not contain complete MPEG-2 TS packets.</li>
         <li>Segments do not contain complete PES packets and sections.</li>
@@ -333,21 +347,21 @@ table.simple {
         <li>At least one MPEG-2 TS packet has a non-zero transport_error_indicator.</li>
       </ol>
     </section>
-    <section id="mpeg2ts-init-segments" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="mpeg2ts-init-segments" typeof="bibo:Chapter" resource="#mpeg2ts-init-segments" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mpeg2ts-init-segments"><span class="secno">4. </span>Initialization Segments</h2>
       <p>An MPEG-2 TS initialization segment consists of a single PAT and a single PMT.</p>
-      <p>The user agent must run the <a href="http://www.w3.org/TR/media-source/#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="http://www.w3.org/TR/media-source/#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
+      <p>The user agent must run the <a href="index.html#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="index.html#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
       <ol>
-        <li>A PAT is not present in the <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a></li>
-        <li>A PMT is not present in the <a href="http://www.w3.org/TR/media-source/#init-segment">initialization segment</a></li>
+        <li>A PAT is not present in the <a href="index.html#init-segment">initialization segment</a></li>
+        <li>A PMT is not present in the <a href="index.html#init-segment">initialization segment</a></li>
       </ol>
       The user agent must accept and ignore other SI, such as CAT, that are invariant for all subsequent media segments.
     </section>
 
-    <section id="mpeg2ts-media-segments" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="mpeg2ts-media-segments" typeof="bibo:Chapter" resource="#mpeg2ts-media-segments" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mpeg2ts-media-segments"><span class="secno">5. </span>Media Segments</h2>
 
-      <p>The user agent must run the <a href="http://www.w3.org/TR/media-source/#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="http://www.w3.org/TR/media-source/#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
+      <p>The user agent must run the <a href="index.html#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="index.html#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
       <ol>
         <li>A media segment relies on initialization information in another media segment.</li>
         <li>At least one PES packet does not have a PTS timestamp.</li>
@@ -357,18 +371,18 @@ table.simple {
       The user agent will accept and ignore PSI that is identical to the information in the last initialization segment which may appear repeatedly throughout the segment.
     </section>
 
-    <section id="mpeg2ts-random-access-points" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="mpeg2ts-random-access-points" typeof="bibo:Chapter" resource="#mpeg2ts-random-access-points" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mpeg2ts-random-access-points"><span class="secno">6. </span>Random Access Points</h2>
       <p>A random access point as defined in this specification corresponds to Elementary Stream Random Access Point as defined in
         <a href="http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=44169">ISO/IEC 13818-1</a>.</p>
     </section>
-    <section id="mpeg2ts-discontinuities" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="mpeg2ts-discontinuities" typeof="bibo:Chapter" resource="#mpeg2ts-discontinuities" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mpeg2ts-discontinuities"><span class="secno">7. </span>Timestamp Rollover &amp; Discontinuities</h2>
       <p>Timestamp rollovers and discontinuities must be handled by the UA. The UA's MPEG-2 TS implementation must maintain an internal offset
         variable, <dfn id="mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</dfn>, to keep track of the offset that needs to be applied to timestamps
-        that have rolled over or are part of a discontinuity. <var>MPEG2TS_timestampOffset</var> is initially set to 0 when the <code><a href="http://www.w3.org/TR/media-source/#idl-def-SourceBuffer" class="idlType">SourceBuffer</a></code> is
+        that have rolled over or are part of a discontinuity. <var>MPEG2TS_timestampOffset</var> is initially set to 0 when the <code><a href="index.html#idl-def-SourceBuffer" class="idlType">SourceBuffer</a></code> is
         created.  This offset must be applied to the timestamps as part of the conversion process from MPEG-2 TS packets
-        into <a href="http://www.w3.org/TR/media-source/#coded-frame">coded frames</a> for the <a href="http://www.w3.org/TR/media-source/#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>. This results in the coded frame timestamps
+        into <a href="index.html#coded-frame">coded frames</a> for the <a href="index.html#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>. This results in the coded frame timestamps
         for a packet being computed by the following equations:</p>
       <pre>        Coded Frame Presentation Timestamp = (MPEG-2 TS presentation timestamp) + <var>MPEG2TS_timestampOffset</var>
         Coded Frame Decode Timestamp = (MPEG-2 TS decode timestamp) + <var>MPEG2TS_timestampOffset</var></pre>
@@ -378,12 +392,12 @@ table.simple {
         <li>Each time a timestamp rollover is detected, 2^33 must be added to <var><a href="#mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</a></var>.</li>
         <li>When a discontinuity is detected, <var><a href="#mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</a></var> must be adjusted to make the timestamps after the discontinuity appear
           to come immediately after the timestamps before the discontinuity.</li>
-        <li>When <code><a href="http://www.w3.org/TR/media-source/#widl-SourceBuffer-abort-void">abort()</a></code> is called, <var><a href="#mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</a></var> must be set to 0.</li>
-        <li>When <code><a href="http://www.w3.org/TR/media-source/#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> is successfully set, <var><a href="#mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</a></var> must be set to 0.</li>
+        <li>When <code><a href="index.html#widl-SourceBuffer-abort-void">abort()</a></code> is called, <var><a href="#mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</a></var> must be set to 0.</li>
+        <li>When <code><a href="index.html#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> is successfully set, <var><a href="#mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</a></var> must be set to 0.</li>
       </ul>
     </section>
 
-    <section id="acknowledgements" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="acknowledgements" typeof="bibo:Chapter" resource="#acknowledgements" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_acknowledgements"><span class="secno">8. </span>Acknowledgments</h2>
       The editors would like to thank Alex Giladi, Bob Lund, David Singer, Duncan Rowden, Glenn Adams, Mark Vickers, and Michael Thornburgh for their contributions to this specification.
     </section>

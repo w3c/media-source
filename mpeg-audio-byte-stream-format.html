@@ -98,7 +98,7 @@ cite .bibref {
 }
 
 code {
-    color:  #ff4500;
+    color:  #C83500;
 }
 
 /* --- TOC --- */
@@ -164,26 +164,35 @@ table.simple {
 .section dl.attrs dd, .section dl.eldef dd {
     margin-bottom:  0;
 }
+
+@media print {
+    .removeOnSave {
+        display: none;
+    }
+}
 </style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
   <body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
-    
-      <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
-    
+      
+        
+            <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
+        
+      
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">MPEG Audio Byte Stream Format</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-04-30T03:33:49.000Z" id="w3c-editor-s-draft-29-april-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-04-29">29 April 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-11-18T19:29:53.000Z" id="w3c-editor-s-draft-18-november-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-11-18">18 November 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
-      <dd><a class="u-url" href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/mpeg-audio-byte-stream-format.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-audio-source/mpeg-byte-stream-format.html</a></dd>
+      <dd><a class="u-url" href="https://w3c.github.io/media-source/mpeg-audio-byte-stream-format.html">https://w3c.github.io/media-source/mpeg-audio-byte-stream-format.html</a></dd>
       <dt>Latest published version:</dt>
       <dd><a href="http://www.w3.org/TR//">http://www.w3.org/TR//</a></dd>
     
     
       <dt>Latest editor's draft:</dt>
-      <dd><a href="http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/mpeg-audio-byte-stream-format.html">http://dvcs.w3.org/hg/html-media/raw-file/default/media-source/mpeg-audio-byte-stream-format.html</a></dd>
+      <dd><a href="https://w3c.github.io/media-source/mpeg-audio-byte-stream-format.html">https://w3c.github.io/media-source/mpeg-audio-byte-stream-format.html</a></dd>
+    
     
     
     
@@ -228,9 +237,9 @@ table.simple {
   
   <hr>
 </div>
-    <section id="abstract" class="introductory" property="dcterms:abstract" datatype="" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_abstract">Abstract</h2><p>
+    <section id="abstract" class="introductory" property="dcterms:abstract" datatype="" typeof="bibo:Chapter" resource="#abstract" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_abstract">Abstract</h2><p>
       This specification defines a <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> byte stream format specification based on MPEG audio streams.
-    </p></section><section id="sotd" class="introductory" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_sotd">Status of This Document</h2>
+    </p></section><section id="sotd" class="introductory" typeof="bibo:Chapter" resource="#sotd" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_sotd">Status of This Document</h2>
   
     
       
@@ -266,6 +275,7 @@ table.simple {
           </p>
         
         
+        
         <p>
           
             This document was produced by a group operating under the 
@@ -289,20 +299,24 @@ table.simple {
           
         </p>
         
+          <p>This document is governed by the <a id="w3c_process_revision" href="http://www.w3.org/2014/Process-20140801/">1 August 2014 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
+          </p>
+        
+        
       
     
   
 </section><section id="toc"><h2 class="introductory" aria-level="1" role="heading" id="h2_toc">Table of Contents</h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-types" class="tocxref"><span class="secno">2. </span>MIME-types</a></li><li class="tocline"><a href="#mpeg-audio-frames" class="tocxref"><span class="secno">3. </span>MPEG Audio Frames</a></li><li class="tocline"><a href="#mpeg-metadata" class="tocxref"><span class="secno">4. </span>Metadata Frames</a><ul class="toc"><li class="tocline"><a href="#icecast" class="tocxref"><span class="secno">4.1 </span>Icecast headers</a></li></ul></li><li class="tocline"><a href="#mpeg-segments" class="tocxref"><span class="secno">5. </span>Segment Definitions</a></li></ul></section>
 
-    <section id="introduction" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="introduction" typeof="bibo:Chapter" resource="#introduction" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_introduction"><span class="secno">1. </span>Introduction</h2>
       <p>This specification defines segment formats for implementations that choose to support MPEG audio streams specified in <a href="http://www.iso.org/iso/catalogue_detail.htm?csnumber=22412">ISO/IEC 11172-3:1993</a>, <a href="http://www.iso.org/iso/catalogue_detail.htm?csnumber=26797">ISO/IEC 13818-3:1998</a>, and <a href="http://www.iso.org/iso/catalogue_detail.htm?csnumber=53943">ISO/IEC 14496-3:2009</a>.</p>
-      <p>It defines the <a href="#mime-types">MIME-types</a> used to signal codecs, and provides the necessary format specific definitions for <a href="media-source.html#init-segment">initialization segments</a>, <a href="media-source.html#media-segment">media segments</a>, and <a href="media-source.html#random-access-point">random access points</a> required by the <a href="media-source.html#byte-stream-formats">byte stream formats section</a> of the Media Source Extensions spec. It also defines extra behaviors and state that only apply to this byte stream format.</p>
+      <p>It defines the <a href="#mime-types">MIME-types</a> used to signal codecs, and provides the necessary format specific definitions for <a href="index.html#init-segment">initialization segments</a>, <a href="index.html#media-segment">media segments</a>, and <a href="index.html#random-access-point">random access points</a> required by the <a href="index.html#byte-stream-formats">byte stream formats section</a> of the Media Source Extensions spec. It also defines extra behaviors and state that only apply to this byte stream format.</p>
     </section>
 
-    <section id="mime-types" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="mime-types" typeof="bibo:Chapter" resource="#mime-types" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mime-types"><span class="secno">2. </span>MIME-types</h2>
-      <p>This section specifies the MIME-types that may be passed to <code><a href="media-source.html#widl-MediaSource-isTypeSupported-boolean-DOMString-type">isTypeSupported()</a></code> or <code><a href="media-source.html#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> for byte streams that conform to this specification.</p>
+      <p>This section specifies the MIME-types that may be passed to <code><a href="index.html#widl-MediaSource-isTypeSupported-boolean-DOMString-type">isTypeSupported()</a></code> or <code><a href="index.html#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> for byte streams that conform to this specification.</p>
       <ul>
         <li>"audio/aac" for sequences of ADTS frames, as specified in <a href="http://www.iso.org/iso/catalogue_detail.htm?csnumber=53943">ISO/IEC 14496-3:2009</a>.</li>
         <li>"audio/mpeg" for MPEG-1/2/2.5 Layer I/II/III streams, as specified in <a href="http://tools.ietf.org/html/rfc3003">RFC 3003</a>.</li>
@@ -310,7 +324,7 @@ table.simple {
       <p>The "codecs" MIME-type parameter must not be used with these MIME-types.</p>
     </section>
 
-    <section id="mpeg-audio-frames" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="mpeg-audio-frames" typeof="bibo:Chapter" resource="#mpeg-audio-frames" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mpeg-audio-frames"><span class="secno">3. </span>MPEG Audio Frames</h2>
       <p>The format of an <dfn id="mpeg-audio-frame">MPEG Audio Frame</dfn> depends on the <a href="#mime-types">MIME-type</a> used.</p>
       <ul>
@@ -319,11 +333,11 @@ table.simple {
       </ul>
     </section>
 
-    <section id="mpeg-metadata" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="mpeg-metadata" typeof="bibo:Chapter" resource="#mpeg-metadata" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mpeg-metadata"><span class="secno">4. </span>Metadata Frames</h2>
       <p>Since <a href="http://id3.org/ID3v1">ID3v1</a>, <a href="http://id3.org/id3v2.3.0">ID3v2</a> metadata frames, and <a href="#icecast-header">Icecast headers</a> are common in existing MPEG audio streams, implementations should gracefully handle such frames. Zero or more of these metadata frames are allowed to occur before, after, or between <a href="#mpeg-audio-frame">MPEG Audio Frames</a>. Minimal implementations must accept, consume, and ignore these frames. More advanced implementations may choose to expose the metadata information via an inband <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#texttrack">TextTrack</a></code> or some other mechanism.</p>
 
-      <section id="icecast" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+      <section id="icecast" typeof="bibo:Chapter" resource="#icecast" rel="bibo:Chapter">
         <h3 aria-level="2" role="heading" id="h3_icecast"><span class="secno">4.1 </span>Icecast headers</h3>
         <p>There is no normative spec for <a href="http://en.wikipedia.org/wiki/Icecast">Icecast</a>/<a href="http://en.wikipedia.org/wiki/SHOUTcast">SHOUTcast</a> headers, just <a href="http://forums.radiotoolbox.com/viewtopic.php?t=74">examples</a>. For the purpose of this specification, an <dfn id="icecast-header">Icecast header</dfn> is defined as beginning with the 4 character sequence "ICY&nbsp;"(U+0049 I, U+0043 C, U+0059 Y, U+0020 SPACE) and ending with a pair of carriage-return line-feed sequences (U+000D CARRIAGE RETURN, U+000A LINE FEED, U+000D CARRIAGE RETURN, U+000A LINE FEED).</p>
         <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_1"><span>Note</span></div><p class="">Icecast headers are allowed in the byte streams because some Icecast and SHOUTcast
@@ -334,13 +348,13 @@ table.simple {
       </section>
     </section>
 
-    <section id="mpeg-segments" typeof="bibo:Chapter" resource="#ref" rel="bibo:Chapter">
+    <section id="mpeg-segments" typeof="bibo:Chapter" resource="#mpeg-segments" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mpeg-segments"><span class="secno">5. </span>Segment Definitions</h2>
       <p>The MPEG audio byte stream is a combination of one or more <a href="#mpeg-audio-frame">MPEG Audio Frames</a> and zero or more <a href="#mpeg-metadata">Metadata Frames</a>.</p>
       <ul>
-        <li>Every <a href="#mpeg-audio-frame">MPEG Audio Frame</a> is a <a href="media-source.html#random-access-point">random access point</a>.</li>
-        <li>Every <a href="#mpeg-audio-frame">MPEG Audio Frame</a> header is an <a href="media-source.html#init-segment">initialization segment</a>.</li>
-        <li>The coded audio in each <a href="#mpeg-audio-frame">MPEG Audio Frame</a> is a <a href="media-source.html#media-segment">media segment</a>.</li>
+        <li>Every <a href="#mpeg-audio-frame">MPEG Audio Frame</a> is a <a href="index.html#random-access-point">random access point</a>.</li>
+        <li>Every <a href="#mpeg-audio-frame">MPEG Audio Frame</a> header is an <a href="index.html#init-segment">initialization segment</a>.</li>
+        <li>The coded audio in each <a href="#mpeg-audio-frame">MPEG Audio Frame</a> is a <a href="index.html#media-segment">media segment</a>.</li>
       </ul>
     </section>
 
