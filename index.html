@@ -408,7 +408,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-12-03T06:22:52.000Z" id="w3c-editor-s-draft-02-december-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-12-02">02 December 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-12-03T06:33:17.000Z" id="w3c-editor-s-draft-02-december-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-12-02">02 December 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1626,6 +1626,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <ol>
             <li>If the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-error">HTMLMediaElement.error</a></code> attribute is not null. then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>
               <p>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState.ended">"ended"</a></code> state then run the following steps:</p>
               <ol>
@@ -2979,6 +2980,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
               <ul>
                 <li>Bug 27239 - Updated appendStream() to use the new Streams API.</li>
                 <li>Bug 27478 - Removed negative decode timestamp check from coded frame processing algorithm.</li>
+                <li>Bug 27342 - Changed prepare append algorithm to throw an exception if HTMLMediaElement.error is not null.</li>
               </ul>
             </td>
           </tr>

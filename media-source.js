@@ -338,6 +338,7 @@
     'htmlmediaelement': { func: code_videoref_helper, fragment: 'htmlmediaelement', link_text: 'HTMLMediaElement',  },
     'hme-duration': { func: code_videoref_helper, fragment: 'media-controller-duration', link_text: 'media controller duration',  },
     'hme-buffered': { func: code_videoref_helper, fragment: 'dom-media-buffered', link_text: 'HTMLMediaElement.buffered',  },
+    'hme-error': { func: code_videoref_helper, fragment: 'dom-media-error', link_text: 'HTMLMediaElement.error',  },
     'hme-seek-algorithm': { func: videoref_helper, fragment: 'dom-media-seek', link_text: 'seek algorithm',  },
     'hme-duration-change-algorithm': { func: videoref_helper, fragment: 'durationChange', link_text: 'HTMLMediaElement duration change algorithm',  },
     'htmlvideoelement': { func: code_videoref_helper, fragment: 'htmlvideoelement', link_text: 'HTMLVideoElement',  },
