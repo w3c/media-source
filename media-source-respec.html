@@ -1808,9 +1808,7 @@
                   </p>
                 </li>
                 <li>If <var>frame end timestamp</var> is greater than <a def-id="appendWindowEnd"></a>, then set the <a def-id="need-RAP-flag"></a> to true, drop the
-                  coded frame, and jump to the top of the loop to start processing the next coded frame.
-	        <li>If the <var>decode timestamp</var> is less than the <a def-id="presentation-start-time"></a>,
-                  then run the <a def-id="eos-decode"></a>, and abort these steps.</li>
+                  coded frame, and jump to the top of the loop to start processing the next coded frame.</li>
                 <li>If the <a def-id="need-RAP-flag"></a> on <var>track buffer</var> equals true, then run the following steps:
                   <ol>
                     <li>If the coded frame is not a <a def-id="random-access-point"></a>, then drop the coded frame and jump to the top of the loop to start
@@ -2662,6 +2660,7 @@
             <td>
               <ul>
                 <li>Bug 27239 - Updated appendStream() to use the new Streams API.</li>
+                <li>Bug 27478 - Removed negative decode timestamp check from coded frame processing algorithm.</li>
               </ul>
             </td>
           </tr>

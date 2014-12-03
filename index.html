@@ -408,7 +408,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-12-03T05:42:42.000Z" id="w3c-editor-s-draft-02-december-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-12-02">02 December 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-12-03T06:22:52.000Z" id="w3c-editor-s-draft-02-december-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-12-02">02 December 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -2159,9 +2159,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   </p></div>
                 </li>
                 <li>If <var>frame end timestamp</var> is greater than <code><a href="#widl-SourceBuffer-appendWindowEnd">appendWindowEnd</a></code>, then set the <var><a href="#need-RAP-flag">need random access point flag</a></var> to true, drop the
-                  coded frame, and jump to the top of the loop to start processing the next coded frame.
-	        </li><li>If the <var>decode timestamp</var> is less than the <a href="#presentation-start-time">presentation start time</a>,
-                  then run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code>, and abort these steps.</li>
+                  coded frame, and jump to the top of the loop to start processing the next coded frame.</li>
                 <li>If the <var><a href="#need-RAP-flag">need random access point flag</a></var> on <var>track buffer</var> equals true, then run the following steps:
                   <ol>
                     <li>If the coded frame is not a <a href="#random-access-point">random access point</a>, then drop the coded frame and jump to the top of the loop to start
@@ -2980,6 +2978,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
             <td>
               <ul>
                 <li>Bug 27239 - Updated appendStream() to use the new Streams API.</li>
+                <li>Bug 27478 - Removed negative decode timestamp check from coded frame processing algorithm.</li>
               </ul>
             </td>
           </tr>
