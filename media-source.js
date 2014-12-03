@@ -6,7 +6,8 @@
   var HTML5_webappapis_spec_url = "http://www.w3.org/TR/html5/webappapis.html";
   var DOM_spec_url = "http://dom.spec.whatwg.org/";
   var HRTIME_spec_url = "http://www.w3.org/TR/hr-time/";
-  var STREAMS_spec_url = "http://www.w3.org/TR/2013/WD-streams-api-20131105/"; // Make sure this matches the localBiblio entry.
+  var W3C_STREAMS_spec_url = "http://www.w3.org/TR/streams-api/"; // Make sure this matches the localBiblio entry.
+  var WHATWG_STREAMS_spec_url = "https://streams.spec.whatwg.org/"; // Make sure this matches the localBiblio entry.
   var FILE_spec_url = "http://www.w3.org/TR/FileAPI/";
   var WEBIDL_spec_url = "http://dev.w3.org/2006/webapi/WebIDL/";
 
@@ -81,6 +82,10 @@
     link_helper(doc, df, 'http://www.webmproject.org/code/specs/container/#' + id, text);
   }
 
+  function whatwg_streams_helper(doc, df, id, text) {
+    link_helper(doc, df, WHATWG_STREAMS_spec_url + '#' + id, text);
+  }
+
   function queue_and_fire_helper(doc, df, id, text) {
     webappapis_helper(doc, df, 'queue-a-task', text);
     df.appendChild(doc.createTextNode(' to '));
@@ -141,7 +146,7 @@
     'isTypeSupported': { func: idlref_helper, fragment: 'widl-MediaSource-isTypeSupported-boolean-DOMString-type', link_text: 'isTypeSupported()',  },
 
     'appendBuffer': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data', link_text: 'appendBuffer()',  },
-    'appendStream': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendStream-void-Stream-stream-unsigned-long-long-maxSize', link_text: 'appendStream()',  },
+    'appendStream': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendStream-void-ReadableStream-stream-unsigned-long-long-maxSize', link_text: 'appendStream()',  },
     'abort': { func: idlref_helper, fragment: 'widl-SourceBuffer-abort-void', link_text: 'abort()',  },
     'remove': { func: idlref_helper, fragment: 'widl-SourceBuffer-remove-void-double-start-unrestricted-double-end', link_text: 'remove()',  },
     'updating': { func: idlref_helper, fragment: 'widl-SourceBuffer-updating', link_text: 'updating',  },
@@ -366,6 +371,13 @@
 
     'performance-now': { func: hrtime_helper, fragment: 'dom-performance-now', link_text: 'Performance.now()',  },
 
+    'ReadableStream-read': { func: whatwg_streams_helper, fragment: 'rs-read', link_text:'read()', },
+    'ReadableStream-ready': { func: whatwg_streams_helper, fragment: 'rs-ready', link_text:'ready', },
+    'ReadableStream-closed': { func: whatwg_streams_helper, fragment: 'rs-closed', link_text:'closed', },
+    'ReadableStream-state-waiting': { func: whatwg_streams_helper, fragment: 'rs-state', link_text:'"waiting"', },
+    'ReadableStream-state-readable': { func: whatwg_streams_helper, fragment: 'rs-state', link_text:'"readable"', },
+    'ReadableStream-state-closed': { func: whatwg_streams_helper, fragment: 'rs-state', link_text:'"closed"', },
+    'ReadableStream-state-errored': { func: whatwg_streams_helper, fragment: 'rs-state', link_text:'"errored"', },
   };
 
   var definitionInfo = {};
@@ -404,9 +416,14 @@
        $(this).addClass('externalDFN');
      });
 
-     var tmp = window.respecConfig.localBiblio["STREAMS-API"]
-     if (tmp && tmp.indexOf(STREAMS_spec_url) == -1) {
-       console.log("STREAMS_spec_url is out of sync with the localBiblio entry");
+     var tmp = window.respecConfig.localBiblio["W3C-STREAMS-API"]
+     if (tmp && tmp.indexOf(W3C_STREAMS_spec_url) == -1) {
+       console.log("W3C_STREAMS_spec_url is out of sync with the localBiblio entry");
+     }
+
+     var tmp = window.respecConfig.localBiblio["WHATWG-STREAMS-API"]
+     if (tmp && tmp.indexOf(WHATWG_STREAMS_spec_url) == -1) {
+       console.log("WHATWG_STREAMS_spec_url is out of sync with the localBiblio entry");
      }
   }
 
@@ -452,7 +469,7 @@
 
     // Update links to external type definitions.
     var externalClassInfo = {
-      'Stream': { spec: 'streams-api', fragment: 'idl-def-Stream' },
+      'ReadableStream': { spec: 'whatwg-streams-api', fragment: 'rs-class-definition' },
       'SourceBuffer': { spec: 'mse', fragment: 'idl-def-SourceBuffer' },
       'AudioTrackList': {spec: 'html5', fragment: 'audiotracklist' },
       'TextTrackList': {spec: 'html5', fragment: 'texttracklist' },
@@ -478,8 +495,10 @@
 	var id = info.fragment;
 	var df = doc.createDocumentFragment();
 	var baseURL = null;
-	if (info.spec == 'streams-api') {
-	  baseURL = STREAMS_spec_url;
+	if (info.spec == 'w3c-streams-api') {
+	  baseURL = W3C_STREAMS_spec_url;
+	} else if (info.spec == 'whatwg-streams-api') {
+	  baseURL = WHATWG_STREAMS_spec_url;
         } else if (info.spec == 'html5') {
 	  baseURL = HTML5_spec_url;
 	} else if (info.spec == 'dom') {

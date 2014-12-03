@@ -92,17 +92,24 @@
           SourceBufferList: function() {},
           AppendMode: function() {},
           VideoPlaybackQuality: function() {},
-          Stream: function() {},
+          ReadableStream: function() {},
           ArrayBuffer: function() {},
           ArrayBufferView: function() {},
       },
       postProcess: [ mediaSourcePostProcessor ],
 
       localBiblio: {
-          "STREAMS-API": {
-            title: "Streams API",
-            href: "http://www.w3.org/TR/2013/WD-streams-api-20131105/",
+          "W3C-STREAMS-API": {
+            title: "W3C Streams API",
+            href: "http://www.w3.org/TR/streams-api/",
             authors: ["Feras Moussa", "Takeshi Yoshino"],
+            status: "WD",
+            publisher: "W3C",
+          },
+          "WHATWG-STREAMS-API": {
+            title: "WHATWG Streams API",
+            href: "https://streams.spec.whatwg.org/",
+            authors: ["Domenic Denicola", "Takeshi Yoshino"],
             status: "WD",
             publisher: "W3C",
           },
@@ -977,13 +984,13 @@
 
         <dt>void appendBuffer(ArrayBuffer data)</dt>
         <dd>
-          <p>Appends the segment data in an <a>ArrayBuffer</a>[[!TYPED-ARRAYS]] to the source buffer.</p>
+          <p>Appends the segment data in an <a class="externalDFN">ArrayBuffer</a>[[!TYPED-ARRAYS]] to the source buffer.</p>
           <p>The steps for this method are the same as the ArrayBufferView version of <a def-id="appendBuffer"></a>.</p>
         </dd>
 
         <dt>void appendBuffer(ArrayBufferView data)</dt>
         <dd>
-          <p>Appends the segment data in an <a>ArrayBufferView</a>[[!TYPED-ARRAYS]] to the source buffer.</p>
+          <p>Appends the segment data in an <a class="externalDFN">ArrayBufferView</a>[[!TYPED-ARRAYS]] to the source buffer.</p>
 
           <ol class="method-algorithm">
             <li>Run the <a def-id="prepare-append"></a> algorithm.</li>
@@ -994,9 +1001,9 @@
           </ol>
         </dd>
 
-        <dt>void appendStream(Stream stream, [EnforceRange] optional unsigned long long maxSize)</dt>
+        <dt>void appendStream(ReadableStream stream, [EnforceRange] optional unsigned long long maxSize)</dt>
         <dd>
-          <p>Appends segment data to the source buffer from a <a class="externalDFN">Stream</a>[[!STREAMS-API]].</p>
+          <p>Appends segment data to the source buffer from a <a class="externalDFN">ReadableStream</a>[[!WHATWG-STREAMS-API]].</p>
 
           <ol class="method-algorithm">
             <li>Run the <a def-id="prepare-append"></a> algorithm.</li>
@@ -1300,27 +1307,59 @@
 
         <section id="sourcebuffer-stream-append-loop">
           <h4>Stream Append Loop</h4>
-          <p>When a <a class="externalDFN">Stream</a>[[!STREAMS-API]] is passed to <a def-id="appendStream"></a>, the following steps are run to transfer data from the
-            <a class="externalDFN">Stream</a> to the <a>SourceBuffer</a>. This algorithm is initialized with the  <var>stream</var> and <var>maxSize</var> parameters
-            from the <a def-id="appendStream"></a> call.
+          <p>This algorithm is invoked by <a def-id="appendStream"></a>to transfer data from a
+            <a class="externalDFN">ReadableStream</a> to the <a>SourceBuffer</a>. This algorithm is
+            initialized with the  <var>stream</var> and <var>maxSize</var> parameters from the
+            <a def-id="appendStream"></a> call.
           </p>
           <ol>
             <li>If <var>maxSize</var> is set, then let <var>bytesLeft</var> equal <var>maxSize</var>.</li>
             <li><i>Loop Top: </i>If <var>maxSize</var> is set and <var>bytesLeft</var> equals 0, then jump to the <i>loop done</i> step below.</li>
-            <li>If <var>stream</var> has been closed, then jump to the <i>loop done</i> step below.</li>
-            <li>Read data from <var>stream</var> into <var>data</var>:
-              <dl class="switch">
-                <dt>If <var>maxSize</var> is set:</dt>
-                <dd>
-                  <ol>
-                    <li>Read up to <var>bytesLeft</var> bytes from <var>stream</var> into <var>data</var>.</li>
-                    <li>Subtract the number of bytes in <var>data</var> from <var>bytesLeft</var>.</li>
-                </dd>
-                <dt>Otherwise:</dt>
-                <dd>Read all available bytes in <var>stream</var> into <var>data</var>.</dd>
-              </dl>
+            <li>If <var>stream.state</var> equals <a def-id="ReadableStream-state-waiting"></a>, then run
+              the following steps:
+              <ol>
+                <li>Wait for either the <var>stream</var>.<a def-id="ReadableStream-ready"></a> promise or
+                  the <var>stream</var>.<a def-id="ReadableStream-closed"></a> promise to be resolved or
+                  rejected.
+                  <p class="note">This is intended to be similar to <code>Promise.race([<var>stream.ready</var>, <var>stream.closed</var>], continueAppendLoop, continueAppendLoop)</code>,
+                    where the <code>continueAppendLoop</code> function returns control to this algorithm and
+                    starts executing the step that follows this one. If the
+                    <a def-id="stream-append-loop"></a> algorithm is aborted while waiting for the promises,
+                    continueAppendLoop must not continue the algorithm when it is eventually called.
+                  </p>
+                  <p class="note">This step is only represented as a blocking wait to make it easier to
+                    describe the intended behavior. It should not block other JavaScript from executing.
+                  </p></li>
+                <li>Continue onto the next step.</li>
+            </ol>
             </li>
-            <li>If an error occured while reading from <var>stream</var>, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</li>
+            <li>If <var>stream.state</var> equals <a def-id="ReadableStream-state-closed"></a>, then jump to the <i>loop done</i> step below.</li>
+            <li>If <var>stream.state</var> equals <a def-id="ReadableStream-state-errored"></a>, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</li>
+            <li>If <var>stream.state</var> does not equal <a def-id="ReadableStream-state-readable"></a>, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</li>
+            <li>Let <var>data</var> be the value returned by a call to
+              <var>stream</var>.<a def-id="ReadableStream-read"></a>.</li>
+            <li>If <var>data</var> is not an <a class="externalDFN">ArrayBuffer</a> or an
+              <a class="externalDFN">ArrayBufferView</a> then, run the
+              <a def-id="append-error-algorithm"></a> and abort this algorithm.</li>
+            <li>If <var>maxSize</var> is set, then run the following steps:
+              <ol>
+                <li>If <var>data.byteLength</var> is greater than <var>bytesLeft</var>, then run the
+                  following steps:
+                  <ol>
+                    <li>Let <var>new data</var> equal the value returned by calling <var>data</var>.slice(0, <var>bytesLeft<var>).
+                    <p class="note">This step and the next one are assuming <var>data</var> is an
+                      <a class="externalDFN">ArrayBuffer</a>. If <var>data</var> is an
+                      <a class="externalDFN">ArrayBufferView</a> subarray() should be called instead.</li>
+                    <li>Let <var>remaining data</var> equal the value returned by calling
+                      <var>data</var>.slice(<var>bytesLeft<var>).</li>
+                    <li>Push <var>remaining data</var> back onto the front of <var>stream</var> so it
+                      will be returned by the next <var>stream</var>.<a def-id="ReadableStream-read"></a> call.</li>
+                    <li>Assign <var>new data</var> to <var>data</var>.</li>
+                  </ol>
+                </li>
+                <li>Subtract <var>data.byteLength</var> from <var>bytesLeft</var>.</li>
+              </ol>
+            </li>
             <li>Run the <a def-id="coded-frame-eviction-algorithm"></a>.</li>
             <li>
               <p>If the <a def-id="buffer-full-flag"></a> equals true, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</p>
@@ -2619,7 +2658,15 @@
         <tbody>
         <tbody>
           <tr>
-            <td>18 November 2014</a></td>
+            <td>02 December 2014</td>
+            <td>
+              <ul>
+                <li>Bug 27239 - Updated appendStream() to use the new Streams API.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/75ea13bcfb19c3756ade0354e88a463a784727f1/index.html">18 November 2014</a></td>
             <td>
               <ul>
                 <li>Update all links in the revision history to point to GitHub.</li>
