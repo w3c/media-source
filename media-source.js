@@ -126,12 +126,11 @@
     df.appendChild(doc.createTextNode(str));
   }
 
-  function eos_decode_helper(doc, df, id, text) {
-    link_helper(doc, df, '#end-of-stream-algorithm', 'end of stream algorithm');
+  function append_error_helper(doc, df, id, text) {
+    link_helper(doc, df, id, 'append error algorithm');
     df.appendChild(doc.createTextNode(' with the '));
-    df.appendChild($("<var/>").text('error')[0]);
-    df.appendChild(doc.createTextNode(' parameter set to '));
-    idlref_helper(doc, df, 'idl-def-EndOfStreamError.decode', '"decode"');
+    df.appendChild($("<var/>").text('decode error')[0]);
+    df.appendChild(doc.createTextNode(' parameter set to ' + text));
   }
 
   var mseDefinitions = {
@@ -140,7 +139,6 @@
     'activeSourceBuffers': { func: idlref_helper, fragment: 'widl-MediaSource-activeSourceBuffers', link_text: 'activeSourceBuffers',  },
     'addSourceBuffer': { func: idlref_helper, fragment: 'widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type', link_text: 'addSourceBuffer()',  },
     'endOfStream': { func: idlref_helper, fragment: 'widl-MediaSource-endOfStream-void-EndOfStreamError-error', link_text: 'endOfStream()',  },
-    'eos-decode': { func: eos_decode_helper, fragment: '#end-of-stream-algorithm', link_text: 'end of stream algorithm with <var>error</var> parameter set to "decode"',  },
     'readyState': { func: idlref_helper, fragment: 'widl-MediaSource-readyState', link_text: 'readyState',  },
     'duration': { func: idlref_helper, fragment: 'widl-MediaSource-duration', link_text: 'duration',  },
     'isTypeSupported': { func: idlref_helper, fragment: 'widl-MediaSource-isTypeSupported-boolean-DOMString-type', link_text: 'isTypeSupported()',  },
@@ -230,7 +228,8 @@
     'byte-stream-format-specs': { func: link_helper, fragment: '#byte-stream-format-specs', link_text: 'byte stream format specifications', },
     'sourcebuffer-byte-stream-format-spec': { func: link_helper, fragment: '#sourcebuffer-byte-stream-format-spec', link_text: 'SourceBuffer byte stream format specification', },
     'sourcebuffer-configuration': { func: link_helper, fragment: '#sourcebuffer-configuration', link_text: 'SourceBuffer configuration', },
-    'append-error-algorithm': { func: link_helper, fragment: '#sourcebuffer-append-error', link_text: 'append error algorithm', },
+    'append-error-algorithm': { func: append_error_helper, fragment: '#sourcebuffer-append-error', link_text: 'false', },
+    'append-decode-error-algorithm': { func: append_error_helper, fragment: '#sourcebuffer-append-error', link_text: 'true', },
     'reset-parser-state-algorithm': { func: link_helper, fragment: '#sourcebuffer-reset-parser-state', link_text: 'reset parser state algorithm', },
     'stream-append-loop': { func: link_helper, fragment: '#sourcebuffer-stream-append-loop', link_text: 'stream append loop', },
     'prepare-append': { func: link_helper, fragment: '#sourcebuffer-prepare-append', link_text: 'prepare append', },

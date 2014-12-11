@@ -408,7 +408,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-12-11T17:38:09.000Z" id="w3c-editor-s-draft-11-december-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-12-11">11 December 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-12-11T18:27:26.000Z" id="w3c-editor-s-draft-11-december-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-12-11">11 December 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -622,7 +622,7 @@ table.simple {
 
           <dt id="decode-timestamp">Decode Timestamp</dt>
           <dd>
-            <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a href="#presentation-timestamp">presentation timestamp</a> of the earliest frame, in <a href="#presentation-order">presentation order</a>, that is dependant on this frame). If frames can be decoded out of <a href="#presentation-order">presentation order</a>, then the decode timestamp must be present in or derivable from the byte stream. The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> if this is not the case. If frames cannot be decoded out of  <a href="#presentation-order">presentation order</a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a href="#presentation-timestamp">presentation timestamp</a>.
+            <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a href="#presentation-timestamp">presentation timestamp</a> of the earliest frame, in <a href="#presentation-order">presentation order</a>, that is dependant on this frame). If frames can be decoded out of <a href="#presentation-order">presentation order</a>, then the decode timestamp must be present in or derivable from the byte stream. The user agent must run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if this is not the case. If frames cannot be decoded out of  <a href="#presentation-order">presentation order</a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a href="#presentation-timestamp">presentation timestamp</a>.
           </p></dd>
 
           <dt id="displayed-frame-delay">Displayed Frame Delay</dt>
@@ -695,7 +695,7 @@ table.simple {
           </dd>
 
           <dt id="track-description">Track Description</dt>
-          <dd><p>A byte stream format specific structure that provides the <a href="#track-id">Track ID</a>, codec configuration, and other metadata for a single track. Each track description inside a single <a href="#init-segment">initialization segment</a> has a unique <a href="#track-id">Track ID</a>. The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> if the <a href="#track-id">Track ID</a> is not unique within the <a href="#init-segment">initialization segment</a> .</p></dd>
+          <dd><p>A byte stream format specific structure that provides the <a href="#track-id">Track ID</a>, codec configuration, and other metadata for a single track. Each track description inside a single <a href="#init-segment">initialization segment</a> has a unique <a href="#track-id">Track ID</a>. The user agent must run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if the <a href="#track-id">Track ID</a> is not unique within the <a href="#init-segment">initialization segment</a> .</p></dd>
 
           <dt id="track-id">Track ID</dt>
           <dd><p>A Track ID is a byte stream format specific identifier that marks sections of the byte stream as being part of a specific track. The Track ID in a <a href="#track-description">track description</a> identifies which sections of a <a href="#media-segment">media segment</a> belong to that track.</p></dd>
@@ -1202,19 +1202,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <dt>If <var>error</var> is set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code>
                 </dt>
                 <dd>
-                  <ol>
-                    <li>If <code><a href="#widl-SourceBuffer-updating">updating</a></code> equals true, then run the <a href="#sourcebuffer-append-error">append error algorithm</a>.</li>
-                    <li>
-	              <dl class="switch">
-	                <dt>If the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute equals <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
-                        </dt>
-	                <dd>Run the "<i>If the media data can be fetched but is found by inspection to be in an unsupported format, or can otherwise not be rendered at all</i>" steps of the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
-	                <dt>If the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute is greater than <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
-                        </dt>
-	                <dd>Run the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#fatal-decode-error">media data is corrupted</a> steps of the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
-	              </dl>
-                    </li>
-                  </ol>
+	          <dl class="switch">
+	            <dt>If the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute equals <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
+                    </dt>
+	            <dd>Run the "<i>If the media data can be fetched but is found by inspection to be in an unsupported format, or can otherwise not be rendered at all</i>" steps of the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
+	            <dt>If the <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> attribute is greater than <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-have_nothing">HAVE_NOTHING</a></code>
+                    </dt>
+	            <dd>Run the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#fatal-decode-error">media data is corrupted</a> steps of the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a>.</dd>
+	          </dl>
 	        </dd>
               </dl>
             </li>
@@ -1549,7 +1544,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <ol>
             <li><i>Loop Top:</i> If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> is empty, then jump to the <i>need more data</i> step below.</li>
             <li>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> contains bytes that violate the <a href="#sourcebuffer-byte-stream-format-spec">SourceBuffer byte stream format specification</a>, then run the
-              <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> and abort this algorithm.</li>
+              <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true and abort this algorithm.</li>
             <li>Remove any bytes that the <a href="#byte-stream-format-specs">byte stream format specifications</a> say must be ignored from the start of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
             <li>
 	      <p>If the <var><a href="#sourcebuffer-append-state">append state</a></var> equals <a href="#sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</a>, then run the following steps:</p>
@@ -1572,7 +1567,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>
 	      <p>If the <var><a href="#sourcebuffer-append-state">append state</a></var> equals <a href="#sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</a>, then run the following steps:</p>
 	      <ol>
-                <li>If the <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> is false, then run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> and abort this algorithm.</li>
+                <li>If the <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> is false, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true and abort this algorithm.</li>
 	        <li>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> does not contain a complete <a href="#media-segment">media segment</a> header yet, then jump to the <i>need more data</i> step below.</li>
 	        <li>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> contains one or more complete <a href="#coded-frame">coded frames</a>, then run the
                   <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>.
@@ -1611,12 +1606,16 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
         <section id="sourcebuffer-append-error" typeof="bibo:Chapter" resource="#sourcebuffer-append-error" rel="bibo:Chapter">
           <h4 aria-level="3" role="heading" id="h4_sourcebuffer-append-error"><span class="secno">3.5.3 </span>Append Error Algorithm</h4>
-          <p>When an error occurs during an append, run the following steps:</p>
+          <p>This algorithm is called an error occurs during an append. This algorithm takes a
+            <var>decode error</var> parameter that indicates whether <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream()</a></code>
+            should be called.</p>
           <ol>
             <li>Run the <a href="#sourcebuffer-reset-parser-state">reset parser state algorithm</a>.</li>
             <li>Set the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute to false.</li>
             <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-error">error</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
             <li><a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object.</li>
+            <li>If <var>decode error</var> is true, then run the <a href="#end-of-stream-algorithm">end of stream algorithm</a>
+              with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code>.</li>
           </ol>
         </section>
 
@@ -1686,13 +1685,13 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             </ol>
             </li>
             <li>If <var>stream.state</var> equals <a href="https://streams.spec.whatwg.org/#rs-state">"closed"</a>, then jump to the <i>loop done</i> step below.</li>
-            <li>If <var>stream.state</var> equals <a href="https://streams.spec.whatwg.org/#rs-state">"errored"</a>, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> and abort this algorithm.</li>
-            <li>If <var>stream.state</var> does not equal <a href="https://streams.spec.whatwg.org/#rs-state">"readable"</a>, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> and abort this algorithm.</li>
+            <li>If <var>stream.state</var> equals <a href="https://streams.spec.whatwg.org/#rs-state">"errored"</a>, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to false and abort this algorithm.</li>
+            <li>If <var>stream.state</var> does not equal <a href="https://streams.spec.whatwg.org/#rs-state">"readable"</a>, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to false and abort this algorithm.</li>
             <li>Let <var>data</var> be the value returned by a call to
               <var>stream</var>.<a href="https://streams.spec.whatwg.org/#rs-read">read()</a>.</li>
             <li>If <var>data</var> is not an <code><a href="http://www.khronos.org/registry/typedarray/specs/latest/#ArrayBuffer" class="idlType">ArrayBuffer</a></code> or an
               <code><a href="http://www.khronos.org/registry/typedarray/specs/latest/#ArrayBufferView" class="idlType">ArrayBufferView</a></code> then, run the
-              <a href="#sourcebuffer-append-error">append error algorithm</a> and abort this algorithm.</li>
+              <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to false and abort this algorithm.</li>
             <li>If <var>maxSize</var> is set, then run the following steps:
               <ol>
                 <li>If <var>data.byteLength</var> is greater than <var>bytesLeft</var>, then run the
@@ -1714,7 +1713,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             </li>
             <li>Run the <a href="#sourcebuffer-coded-frame-eviction">coded frame eviction algorithm</a>.</li>
             <li>
-              <p>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> and abort this algorithm.</p>
+              <p>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to false and abort this algorithm.</p>
               <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_22"><span>Note</span></div><p class="">The web application should use <code><a href="#widl-SourceBuffer-remove-void-double-start-unrestricted-double-end">remove()</a></code> to free up space in the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</p></div>
             </li>
             <li>Add <var>data</var> to the end of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
@@ -1756,10 +1755,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 	        <dd>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to positive Infinity.</dd>
               </dl>
             </li>
-            <li>If the <a href="#init-segment">initialization segment</a> has no audio, video, or text tracks, then run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> and abort these steps.</li>
+            <li>If the <a href="#init-segment">initialization segment</a> has no audio, video, or text tracks, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true  and abort these steps.</li>
             <li>If the <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> is true, then run the following steps:
               <ol>
-                <li>Verify the following properties. If any of the checks fail then run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> and abort these steps.
+                <li>Verify the following properties. If any of the checks fail then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true and abort these steps.
                   <ul>
                     <li>The number of audio, video, and text tracks match what was in the first <a href="#init-segment">initialization segment</a>.</li>
                     <li>The codecs for each track, match what was specified in the first <a href="#init-segment">initialization segment</a>.</li>
@@ -1776,8 +1775,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>
               <p>If the <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> is false, then run the following steps:</p>
               <ol>
-                <li>If the <a href="#init-segment">initialization segment</a> contains tracks with codecs the user agent does not support, then run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code>
-                  and abort these steps.
+                <li>If the <a href="#init-segment">initialization segment</a> contains tracks with codecs the user agent does not support, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true and abort these steps.
                   <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_23"><span>Note</span></div><p class="">User agents may consider codecs, that would otherwise be supported, as "not supported" here if the codecs were not
                     specified in the <var>type</var> parameter passed to <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code>. <br>
                     For example, MediaSource.isTypeSupported('video/webm;codecs="vp8,vorbis"') may return true, but if
@@ -2802,7 +2800,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
       <ul>
         <li>A byte stream format specification must define <a href="#init-segment">initialization segments</a> and <a href="#media-segment">media segments</a>.</li>
         <li>It must be possible to identify segment boundaries and segment type (initialization or media) by examining the byte stream alone.</li>
-        <li>The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> when any of the following conditions are met:
+        <li>The user agent must run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true when any of the following conditions are met:
           <ol>
             <li>
               <p>The number and type of tracks are not consistent.</p>
@@ -2836,7 +2834,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
             </li>
           </ol>
         </li>
-        <li>The user agent must run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code> when any combination of an <a href="#init-segment">initialization segment</a> and any contiguous sequence of <a href="#media-segment">media segments</a> satisfies the
+        <li>The user agent must run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true when any combination of an <a href="#init-segment">initialization segment</a> and any contiguous sequence of <a href="#media-segment">media segments</a> satisfies the
           following conditions:
 	  <ol>
             <li>The number and type (audio, video, text, etc.) of all tracks in the <a href="#media-segment">media segments</a> are not identified.</li>
@@ -2978,6 +2976,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
             <td>
               <ul>
                 <li>Bug 27559 - Clarify that the TrackDefaultList constructor does a shallow copy.</li>
+                <li>Bug 27548 - Reroute decode errors through the append error algorithm.</li>
               </ul>
             </td>
           </tr>

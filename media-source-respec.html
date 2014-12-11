@@ -222,7 +222,7 @@
 
           <dt id="decode-timestamp">Decode Timestamp</dt>
           <dd>
-            <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a def-id="presentation-timestamp"></a> of the earliest frame, in <a def-id="presentation-order"></a>, that is dependant on this frame). If frames can be decoded out of <a def-id="presentation-order"></a>, then the decode timestamp must be present in or derivable from the byte stream. The user agent must run the <a def-id="eos-decode"></a> if this is not the case. If frames cannot be decoded out of  <a def-id="presentation-order"></a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a def-id="presentation-timestamp"></a>.</dt>
+            <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a def-id="presentation-timestamp"></a> of the earliest frame, in <a def-id="presentation-order"></a>, that is dependant on this frame). If frames can be decoded out of <a def-id="presentation-order"></a>, then the decode timestamp must be present in or derivable from the byte stream. The user agent must run the <a def-id="append-decode-error-algorithm"></a> if this is not the case. If frames cannot be decoded out of  <a def-id="presentation-order"></a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a def-id="presentation-timestamp"></a>.</dt>
           </dd>
 
           <dt id="displayed-frame-delay">Displayed Frame Delay</dt>
@@ -295,7 +295,7 @@
           </dd>
 
           <dt id="track-description">Track Description</dt>
-          <dd><p>A byte stream format specific structure that provides the <a def-id="track-id"></a>, codec configuration, and other metadata for a single track. Each track description inside a single <a def-id="init-segment"></a> has a unique <a def-id="track-id"></a>. The user agent must run the <a def-id="eos-decode"></a> if the <a def-id="track-id"></a> is not unique within the <a def-id="init-segment"></a> .</p></dd>
+          <dd><p>A byte stream format specific structure that provides the <a def-id="track-id"></a>, codec configuration, and other metadata for a single track. Each track description inside a single <a def-id="init-segment"></a> has a unique <a def-id="track-id"></a>. The user agent must run the <a def-id="append-decode-error-algorithm"></a> if the <a def-id="track-id"></a> is not unique within the <a def-id="init-segment"></a> .</p></dd>
 
           <dt id="track-id">Track ID</dt>
           <dd><p>A Track ID is a byte stream format specific identifier that marks sections of the byte stream as being part of a specific track. The Track ID in a <a def-id="track-description"></a> identifies which sections of a <a def-id="media-segment"></a> belong to that track.</p></dd>
@@ -821,19 +821,14 @@
                 <dt>If <var>error</var> is set to <a def-id="decode"></a>
                 </dt>
                 <dd>
-                  <ol>
-                    <li>If <a def-id="updating"></a> equals true, then run the <a def-id="append-error-algorithm"></a>.</li>
-                    <li>
-	              <dl class="switch">
-	                <dt>If the <a def-id="ready-state"></a> attribute equals <a def-id="have-nothing"></a>
-                        </dt>
-	                <dd>Run the "<i>If the media data can be fetched but is found by inspection to be in an unsupported format, or can otherwise not be rendered at all</i>" steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
-	                <dt>If the <a def-id="ready-state"></a> attribute is greater than <a def-id="have-nothing"></a>
-                        </dt>
-	                <dd>Run the <a def-id="media-data-is-corrupted"></a> steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
-	              </dl>
-                    </li>
-                  </ol>
+	          <dl class="switch">
+	            <dt>If the <a def-id="ready-state"></a> attribute equals <a def-id="have-nothing"></a>
+                    </dt>
+	            <dd>Run the "<i>If the media data can be fetched but is found by inspection to be in an unsupported format, or can otherwise not be rendered at all</i>" steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
+	            <dt>If the <a def-id="ready-state"></a> attribute is greater than <a def-id="have-nothing"></a>
+                    </dt>
+	            <dd>Run the <a def-id="media-data-is-corrupted"></a> steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
+	          </dl>
 	        </dd>
               </dl>
             </li>
@@ -1198,7 +1193,7 @@
           <ol>
             <li><i>Loop Top:</i> If the <a def-id="input-buffer"></a> is empty, then jump to the <i>need more data</i> step below.</li>
             <li>If the <a def-id="input-buffer"></a> contains bytes that violate the <a def-id="sourcebuffer-byte-stream-format-spec"></a>, then run the
-              <a def-id="eos-decode"></a> and abort this algorithm.</li>
+              <a def-id="append-decode-error-algorithm"></a> and abort this algorithm.</li>
             <li>Remove any bytes that the <a def-id="byte-stream-format-specs"></a> say must be ignored from the start of the <a def-id="input-buffer"></a>.</li>
             <li>
 	      <p>If the <a def-id="append-state"></a> equals <a def-id="waiting-for-segment"></a>, then run the following steps:</p>
@@ -1221,7 +1216,7 @@
             <li>
 	      <p>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a>, then run the following steps:</p>
 	      <ol>
-                <li>If the <a def-id="first-init-segment-received-flag"></a> is false, then run the <a def-id="eos-decode"></a> and abort this algorithm.</li>
+                <li>If the <a def-id="first-init-segment-received-flag"></a> is false, then run the <a def-id="append-decode-error-algorithm"></a> and abort this algorithm.</li>
 	        <li>If the <a def-id="input-buffer"></a> does not contain a complete <a def-id="media-segment"></a> header yet, then jump to the <i>need more data</i> step below.</li>
 	        <li>If the <a def-id="input-buffer"></a> contains one or more complete <a def-id="coded-frames"></a>, then run the
                   <a def-id="coded-frame-processing-algorithm"></a>.
@@ -1260,12 +1255,16 @@
 
         <section id="sourcebuffer-append-error">
           <h4>Append Error Algorithm</h4>
-          <p>When an error occurs during an append, run the following steps:</p>
+          <p>This algorithm is called an error occurs during an append. This algorithm takes a
+            <var>decode error</var> parameter that indicates whether <a def-id="endOfStream"></a>
+            should be called.</p>
           <ol>
             <li>Run the <a def-id="reset-parser-state-algorithm"></a>.</li>
             <li>Set the <a def-id="updating"></a> attribute to false.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateerror"></a> at this <a>SourceBuffer</a> object.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
+            <li>If <var>decode error</var> is true, then run the <a def-id="end-of-stream-algorithm"></a>
+              with the <var>error</var> parameter set to <a def-id="decode"></a>.</li>
           </ol>
         </section>
 
@@ -1405,10 +1404,10 @@
 	        <dd>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to positive Infinity.</dd>
               </dl>
             </li>
-            <li>If the <a def-id="init-segment"></a> has no audio, video, or text tracks, then run the <a def-id="eos-decode"></a> and abort these steps.</li>
+            <li>If the <a def-id="init-segment"></a> has no audio, video, or text tracks, then run the <a def-id="append-decode-error-algorithm"></a>  and abort these steps.</li>
             <li>If the <a def-id="first-init-segment-received-flag"></a> is true, then run the following steps:
               <ol>
-                <li>Verify the following properties. If any of the checks fail then run the <a def-id="eos-decode"></a> and abort these steps.
+                <li>Verify the following properties. If any of the checks fail then run the <a def-id="append-decode-error-algorithm"></a> and abort these steps.
                   <ul>
                     <li>The number of audio, video, and text tracks match what was in the first <a def-id="init-segment"></a>.</li>
                     <li>The codecs for each track, match what was specified in the first <a def-id="init-segment"></a>.</li>
@@ -1425,8 +1424,7 @@
             <li>
               <p>If the <a def-id="first-init-segment-received-flag"></a> is false, then run the following steps:</p>
               <ol>
-                <li>If the <a def-id="init-segment"></a> contains tracks with codecs the user agent does not support, then run the <a def-id="eos-decode"></a>
-                  and abort these steps.
+                <li>If the <a def-id="init-segment"></a> contains tracks with codecs the user agent does not support, then run the <a def-id="append-decode-error-algorithm"></a> and abort these steps.
                   <p class="note">User agents may consider codecs, that would otherwise be supported, as &quot;not supported&quot; here if the codecs were not
                     specified in the <var>type</var> parameter passed to <a def-id="addSourceBuffer"></a>. <br>
                     For example, MediaSource.isTypeSupported('video/webm;codecs=&quot;vp8,vorbis&quot;') may return true, but if
@@ -2483,7 +2481,7 @@
       <ul>
         <li>A byte stream format specification must define <a def-id="init-segments"></a> and <a def-id="media-segments"></a>.</li>
         <li>It must be possible to identify segment boundaries and segment type (initialization or media) by examining the byte stream alone.</li>
-        <li>The user agent must run the <a def-id="eos-decode"></a> when any of the following conditions are met:
+        <li>The user agent must run the <a def-id="append-decode-error-algorithm"></a> when any of the following conditions are met:
           <ol>
             <li>
               <p>The number and type of tracks are not consistent.</p>
@@ -2517,7 +2515,7 @@
             </li>
           </ol>
         </li>
-        <li>The user agent must run the <a def-id="eos-decode"></a> when any combination of an <a def-id="init-segment"></a> and any contiguous sequence of <a def-id="media-segments"></a> satisfies the
+        <li>The user agent must run the <a def-id="append-decode-error-algorithm"></a> when any combination of an <a def-id="init-segment"></a> and any contiguous sequence of <a def-id="media-segments"></a> satisfies the
           following conditions:
 	  <ol>
             <li>The number and type (audio, video, text, etc.) of all tracks in the <a def-id="media-segments"></a> are not identified.</li>
@@ -2660,6 +2658,7 @@
             <td>
               <ul>
                 <li>Bug 27559 - Clarify that the TrackDefaultList constructor does a shallow copy.</li>
+                <li>Bug 27548 - Reroute decode errors through the append error algorithm.</li>
               </ul>
             </td>
           </tr>
