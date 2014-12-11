@@ -621,7 +621,9 @@
                 </dt>
 	        <dd>
 	          <ol>
-	            <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.</li>
+	            <li>If the <a def-id="ready-state"></a> attribute is greater than
+                      <a def-id="have-metadata"></a>, then set the <a def-id="ready-state"></a> attribute
+                      to <a def-id="have-metadata"></a>.</li>
 	            <li>The media element waits until an <a def-id="appendBuffer"></a> or an <a def-id="appendStream"></a> call causes the <a def-id="coded-frame-processing-algorithm"></a> to set
                       the <a def-id="ready-state"></a> attribute to a value greater than <a def-id="have-metadata"></a>.
                       <p class="note">The web application can use <a def-id="buffered"></a> to determine what the media element needs to resume playback.</p>
@@ -641,7 +643,7 @@
 
         <section id="buffer-monitoring">
           <h4>SourceBuffer Monitoring</h4>
-          <p>The following steps are periodically run during playback to make sure that all of the <a>SourceBuffer</a> objects in <a def-id="activeSourceBuffers"></a> have <a def-id="enough-data"></a>. Appending new segments and changes to <a def-id="activeSourceBuffers"></a> also cause these steps to run because they affect the conditions that trigger state transitions.</p>
+          <p>The following steps are periodically run during playback to make sure that all of the <a>SourceBuffer</a> objects in <a def-id="activeSourceBuffers"></a> have <a def-id="enough-data"></a>. Changes to <a def-id="activeSourceBuffers"></a> also cause these steps to run because they affect the conditions that trigger state transitions.</p>
 
           <p>Having <dfn id="enough-data">enough data to ensure uninterrupted playback</dfn> is an implementation specific condition where the user agent
           determines that it currently has enough data to play the presentation without stalling for a meaningful period of time. This condition is
@@ -658,11 +660,16 @@
             500ms to append more data before playback stalls.</p>
 
           <dl class="switch">
+            <dt>If the the <a def-id="ready-state"></a> attribute equals <a def-id="have-nothing"></a>:</dt>
+            <dd>
+              <ol>
+	        <li>Abort these steps.</li>
+              </ol>
+            </dd>
             <dt>If <a def-id="hme-buffered"></a> does not contain a <a def-id="timerange"></a> for the current playback position:</dt>
             <dd>
 	      <ol>
 	        <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.</li>
-	        <li>If this is the first transition to <a def-id="have-metadata"></a>, then <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="loadedmetadata"></a> at the media element.</li>
 	        <li>Abort these steps.</li>
 	      </ol>
             </dd>
@@ -2659,6 +2666,8 @@
               <ul>
                 <li>Bug 27559 - Clarify that the TrackDefaultList constructor does a shallow copy.</li>
                 <li>Bug 27548 - Reroute decode errors through the append error algorithm.</li>
+                <li>Bug 27542 - Prevent SourceBuffer monitoring algorithm from triggering a HAVE_NOTHING to
+                  HAVE_METADATA transition.</li>
               </ul>
             </td>
           </tr>
