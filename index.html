@@ -408,7 +408,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-12-03T06:33:17.000Z" id="w3c-editor-s-draft-02-december-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-12-02">02 December 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-12-11T17:38:09.000Z" id="w3c-editor-s-draft-11-december-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-12-11">11 December 2014</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -2639,7 +2639,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
               <div class="note"><div class="note-title" aria-level="3" role="heading" id="h_note_43"><span>Note</span></div><p class="">This also applies when <code><a href="#widl-TrackDefault-byteStreamTrackID">byteStreamTrackID</a></code> contains
                 an empty string and ensures that there is only one "byteStreamTrackID independent" default
                 for each <a href="#idl-def-TrackDefaultType" class="idlType"><code>TrackDefaultType</code></a> value.</p></div></li>
-            <li>Store a copy of <var>trackDefaults</var> in this new object so the values can be returned
+            <li>Store a shallow copy of <var>trackDefaults</var> in this new object so the values can be returned
               by the accessor methods.</li>
           </ol></dd></dl></section><section id="attributes-5"><h3 aria-level="2" role="heading" id="h3_attributes-5"><span class="secno">7.2 </span>Attributes</h3><dl class="attributes"><dt id="widl-TrackDefaultList-length"><code>length</code> of type <span class="idlAttrType">unsigned long</span>, readonly   </dt><dd>
           <p>Indicates the number of <a href="#idl-def-TrackDefault" class="idlType"><code>TrackDefault</code></a> objects in the list.</p>
@@ -2974,8 +2974,15 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </thead>
         <tbody>
         </tbody><tbody>
+          <tr><td>11 December 2014</td>
+            <td>
+              <ul>
+                <li>Bug 27559 - Clarify that the TrackDefaultList constructor does a shallow copy.</li>
+              </ul>
+            </td>
+          </tr>
           <tr>
-            <td>02 December 2014</td>
+            <td><a href="https://rawgit.com/w3c/media-source/d77ec3993a42c2a692a3518a1a9aeecd50f2c72e/index.html">02 December 2014</a></td>
             <td>
               <ul>
                 <li>Bug 27239 - Updated appendStream() to use the new Streams API.</li>

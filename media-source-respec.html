@@ -2309,7 +2309,7 @@
               <p class="note">This also applies when <a def-id="TrackDefault-byteStreamTrackID"></a> contains
                 an empty string and ensures that there is only one "byteStreamTrackID independent" default
                 for each <a>TrackDefaultType</a> value.</p></li>
-            <li>Store a copy of <var>trackDefaults</var> in this new object so the values can be returned
+            <li>Store a shallow copy of <var>trackDefaults</var> in this new object so the values can be returned
               by the accessor methods.</li>
           </ol>
         </dd>
@@ -2656,8 +2656,15 @@
         </thead>
         <tbody>
         <tbody>
+          <td>11 December 2014</td>
+            <td>
+              <ul>
+                <li>Bug 27559 - Clarify that the TrackDefaultList constructor does a shallow copy.</li>
+              </ul>
+            </td>
+          </tr>
           <tr>
-            <td>02 December 2014</td>
+            <td><a href="https://rawgit.com/w3c/media-source/d77ec3993a42c2a692a3518a1a9aeecd50f2c72e/index.html">02 December 2014</a></td>
             <td>
               <ul>
                 <li>Bug 27239 - Updated appendStream() to use the new Streams API.</li>
