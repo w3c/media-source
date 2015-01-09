@@ -599,7 +599,7 @@
           <p>The following steps are run in any case where the media element is going to transition to <a def-id="videoref" name="dom-media-network_empty">NETWORK_EMPTY</a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="videoref" name="event-mediacontroller-emptied">emptied</a> at the media element. These steps must be run right before the transition.</p>
           <ol>
             <li>Set the <a def-id="readyState"></a> attribute to <a def-id="closed"></a>.</li>
-            <li>Set the <a def-id="duration"></a> attribute to NaN.</li>
+            <li>Update <a def-id="duration"></a> to NaN.</li>
             <li>Remove all the <a>SourceBuffer</a> objects from <a def-id="activeSourceBuffers"></a>.</li>
             <li>
               <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="removesourcebuffer"></a> at <a def-id="activeSourceBuffers"></a>.</li>
@@ -2661,7 +2661,14 @@
         </thead>
         <tbody>
         <tbody>
-          <td>11 December 2014</td>
+          <td>09 January 2015</td>
+            <td>
+              <ul>
+                <li>Bug 27649 - Clarify that setting the duration in the detach algorithm does not run the attribute set algorithm.</li>
+              </ul>
+            </td>
+          </tr>
+          <td><a href="https://rawgit.com/w3c/media-source/13d9a1125c590d1cab6e78fa6bf4119426da5eb6/index.html">11 December 2014</a></td>
             <td>
               <ul>
                 <li>Bug 27559 - Clarify that the TrackDefaultList constructor does a shallow copy.</li>

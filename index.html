@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" typeof="bibo:Document " about="" property="dcterms:language" content="en">
+<html lang="en" dir="ltr" typeof="bibo:Document " about="" property="dcterms:language" content="en" prefix="bibo: http://purl.org/ontology/bibo/ w3p: http://www.w3.org/2001/02pd/rec54#">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Media Source Extensions</title>
@@ -408,7 +408,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-12-12T16:29:57.000Z" id="w3c-editor-s-draft-12-december-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-12-12">12 December 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2015-01-09T18:14:06.000Z" id="w3c-editor-s-draft-09-january-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2015-01-09">09 January 2015</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -446,7 +446,7 @@ table.simple {
     
       <p class="copyright">
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
-        2014
+        2015
         
         <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
         (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
@@ -980,7 +980,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>The following steps are run in any case where the media element is going to transition to <a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-network_empty">NETWORK_EMPTY</a> and <a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <a href="http://www.w3.org/TR/html5/embedded-content-0.html#event-mediacontroller-emptied">emptied</a> at the media element. These steps must be run right before the transition.</p>
           <ol>
             <li>Set the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute to <code><a href="#idl-def-ReadyState.closed">"closed"</a></code>.</li>
-            <li>Set the <code><a href="#widl-MediaSource-duration">duration</a></code> attribute to NaN.</li>
+            <li>Update <code><a href="#widl-MediaSource-duration">duration</a></code> to NaN.</li>
             <li>Remove all the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects from <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>.</li>
             <li>
               <a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>.</li>
@@ -2979,7 +2979,14 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </thead>
         <tbody>
         </tbody><tbody>
-          <tr><td>11 December 2014</td>
+          <tr><td>09 January 2015</td>
+            <td>
+              <ul>
+                <li>Bug 27649 - Clarify that setting the duration in the detach algorithm does not run the attribute set algorithm.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr><td><a href="https://rawgit.com/w3c/media-source/13d9a1125c590d1cab6e78fa6bf4119426da5eb6/index.html">11 December 2014</a></td>
             <td>
               <ul>
                 <li>Bug 27559 - Clarify that the TrackDefaultList constructor does a shallow copy.</li>
