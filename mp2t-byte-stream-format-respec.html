@@ -79,7 +79,16 @@
         SourceBuffer: function() {},
       },
 
-      postProcess: [ mediaSourcePostProcessor ]
+      postProcess: [ mediaSourcePostProcessor ],
+
+      localBiblio: {
+          "INBANDTRACKS": {
+              title: "Sourcing In-band Media Resource Tracks from Media Containers into HTML",
+              href: "http://dev.w3.org/html5/html-sourcing-inband-tracks/",
+              authors: ["Bob Lund", "Silvia Pfeiffer"],
+              publisher: "W3C",
+          }
+       }
 
       };
     </script>
@@ -126,7 +135,7 @@
       <h4>General Transport Stream Requirements</h4>
       <p>MPEG-2 TS media and initialization segments must conform to the MPEG-2 TS Adaptive Profile (ISO/IEC 13818-1:2012 Amd. 2).</p>
 
-      <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
+      <p>The user agent must run the <a def-id="append-decode-error-algorithm"></a> if any of the following conditions are met:</p>
       <ol>
         <li>Segments do not contain complete MPEG-2 TS packets.</li>
         <li>Segments do not contain complete PES packets and sections.</li>
@@ -137,18 +146,21 @@
     <section id="mpeg2ts-init-segments">
       <h4>Initialization Segments</h4>
       <p>An MPEG-2 TS initialization segment consists of a single PAT and a single PMT.</p>
-      <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
+      <p>The user agent must run the <a def-id="append-decode-error-algorithm"></a> if any of the following conditions are met:</p>
       <ol>
         <li>A PAT is not present in the <a def-id="init-segment"></a></li>
         <li>A PMT is not present in the <a def-id="init-segment"></a></li>
       </ol>
-      The user agent must accept and ignore other SI, such as CAT, that are invariant for all subsequent media segments.
+
+      <p>The user agent must accept and ignore other SI, such as CAT, that are invariant for all subsequent media segments.</p>
+      <p>The user agent must source attribute values for id, kind, label and language for <a def-id="audio-track"></a>, <a def-id="video-track"></a> and
+        <a def-id="text-track"></a> objects as described for MPEG-2 Transport Streams in the in-band tracks spec [[INBANDTRACKS]].</p>
     </section>
 
     <section id="mpeg2ts-media-segments">
       <h4>Media Segments</h4>
 
-      <p>The user agent must run the <a def-id="eos-decode"></a> if any of the following conditions are met:</p>
+      <p>The user agent must run the <a def-id="append-decode-error-algorithm"></a> if any of the following conditions are met:</p>
       <ol>
         <li>A media segment relies on initialization information in another media segment.</li>
         <li>At least one PES packet does not have a PTS timestamp.</li>

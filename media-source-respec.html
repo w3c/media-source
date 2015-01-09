@@ -119,6 +119,12 @@
               //href: "http://www.w3.org/2013/12/byte-stream-format-registry/",
               authors: ["Aaron Colwell"],
               publisher: "W3C",
+          },
+          "INBANDTRACKS": {
+              title: "Sourcing In-band Media Resource Tracks from Media Containers into HTML",
+              href: "http://dev.w3.org/html5/html-sourcing-inband-tracks/",
+              authors: ["Bob Lund", "Silvia Pfeiffer"],
+              publisher: "W3C",
           }
        }
       };
@@ -2487,6 +2493,12 @@
       <p>This section provides general requirements for all byte stream format specifications:</p>
       <ul>
         <li>A byte stream format specification must define <a def-id="init-segments"></a> and <a def-id="media-segments"></a>.</li>
+        <li>A byte stream format should provide references for sourcing <a>AudioTrack</a>, <a>VideoTrack</a>, and <a>TextTrack</a> attribute values
+          from data in <a def-id="init-segments"></a>.
+          <p class="note">If the byte stream format covers a format similar to one covered in the in-band tracks spec [[INBANDTRACKS]], then
+            it should try to use the same attribute mappings so that Media Source Extensions playback and non-Media Source Extensions playback provide the
+            same track information.</p>
+        </li>
         <li>It must be possible to identify segment boundaries and segment type (initialization or media) by examining the byte stream alone.</li>
         <li>The user agent must run the <a def-id="append-decode-error-algorithm"></a> when any of the following conditions are met:
           <ol>
@@ -2666,6 +2678,7 @@
               <ul>
                 <li>Bug 27649 - Clarify that setting the duration in the detach algorithm does not run the attribute set algorithm.</li>
                 <li>Bug 27599 - Make TrackDefaultList constructor parameter optional and have a default value of [].</li>
+                <li>Bug 27758 - Add informative reference to INBANDTRACKS and track attribute sourcing requirements.</li>
               </ul>
             </td>
           </tr>

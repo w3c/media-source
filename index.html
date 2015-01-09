@@ -408,7 +408,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2015-01-09T18:20:42.000Z" id="w3c-editor-s-draft-09-january-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2015-01-09">09 January 2015</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2015-01-09T19:20:10.000Z" id="w3c-editor-s-draft-09-january-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2015-01-09">09 January 2015</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -2806,17 +2806,23 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
       <p>This section provides general requirements for all byte stream format specifications:</p>
       <ul>
         <li>A byte stream format specification must define <a href="#init-segment">initialization segments</a> and <a href="#media-segment">media segments</a>.</li>
+        <li>A byte stream format should provide references for sourcing <a href="#idl-def-AudioTrack" class="idlType"><code>AudioTrack</code></a>, <a href="#idl-def-VideoTrack" class="idlType"><code>VideoTrack</code></a>, and <a href="#idl-def-TextTrack" class="idlType"><code>TextTrack</code></a> attribute values
+          from data in <a href="#init-segment">initialization segments</a>.
+          <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_47"><span>Note</span></div><p class="">If the byte stream format covers a format similar to one covered in the in-band tracks spec [<cite><a class="bibref" href="#bib-INBANDTRACKS">INBANDTRACKS</a></cite>], then
+            it should try to use the same attribute mappings so that Media Source Extensions playback and non-Media Source Extensions playback provide the
+            same track information.</p></div>
+        </li>
         <li>It must be possible to identify segment boundaries and segment type (initialization or media) by examining the byte stream alone.</li>
         <li>The user agent must run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true when any of the following conditions are met:
           <ol>
             <li>
               <p>The number and type of tracks are not consistent.</p>
-              <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_47"><span>Note</span></div><p class="">For example, if the first <a href="#init-segment">initialization segment</a> has 2 audio tracks and 1 video track, then all <a href="#init-segment">initialization segments</a> that follow it in the byte stream must describe 2 audio tracks and 1 video track.</p></div>
+              <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_48"><span>Note</span></div><p class="">For example, if the first <a href="#init-segment">initialization segment</a> has 2 audio tracks and 1 video track, then all <a href="#init-segment">initialization segments</a> that follow it in the byte stream must describe 2 audio tracks and 1 video track.</p></div>
             </li>
             <li><a href="#track-id">Track IDs</a> are not the same across <a href="#init-segment">initialization segments</a>, for segments describing multiple tracks of a single type. (e.g. 2 audio tracks).</li>
 	    <li>
               <p>Codecs changes across <a href="#init-segment">initialization segments</a>.</p>
-              <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_48"><span>Note</span></div><p class="">For example, a byte stream that starts with an <a href="#init-segment">initialization segment</a> that specifies a single AAC track and later contains an <a href="#init-segment">initialization segment</a> that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects.</p></div>
+              <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_49"><span>Note</span></div><p class="">For example, a byte stream that starts with an <a href="#init-segment">initialization segment</a> that specifies a single AAC track and later contains an <a href="#init-segment">initialization segment</a> that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects.</p></div>
             </li>
           </ol>
         </li>
@@ -2825,11 +2831,11 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
             <li><a href="#track-id">Track IDs</a> changing across <a href="#init-segment">initialization segments</a> if the segments describes only one track of each type.</li>
 	    <li>
               <p>Video frame size changes. The user agent must support seamless playback.</p>
-              <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_49"><span>Note</span></div><p class="">This will cause the &lt;video&gt; display region to change size if the web application does not use CSS or HTML attributes (width/height) to constrain the element size.</p></div>
+              <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_50"><span>Note</span></div><p class="">This will cause the &lt;video&gt; display region to change size if the web application does not use CSS or HTML attributes (width/height) to constrain the element size.</p></div>
             </li>
 	    <li>
               <p>Audio channel count changes. The user agent may support this seamlessly and could trigger downmixing.</p>
-              <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_50"><span>Note</span></div><p class="">This is a quality of implementation issue because changing the channel count may require reinitializing the audio device, resamplers, and channel mixers which tends to be audible.</p></div>
+              <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_51"><span>Note</span></div><p class="">This is a quality of implementation issue because changing the channel count may require reinitializing the audio device, resamplers, and channel mixers which tends to be audible.</p></div>
             </li>
           </ol>
         </li>
@@ -2837,7 +2843,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
           <ol>
             <li>Map all timestamps to the same <a href="http://www.w3.org/TR/html5/embedded-content-0.html#media-timeline">media timeline</a>.</li>
             <li>Support seamless playback of <a href="#media-segment">media segments</a> having a timestamp gap smaller than the audio frame size. User agent must not reflect these gaps in the <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> attribute.
-	      <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_51"><span>Note</span></div><p class="">This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g. Vorbis).</p></div>
+	      <div class="note"><div class="note-title" aria-level="2" role="heading" id="h_note_52"><span>Note</span></div><p class="">This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g. Vorbis).</p></div>
             </li>
           </ol>
         </li>
@@ -3611,5 +3617,6 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
 </dd><dt id="bib-HTML5">[HTML5]</dt><dd rel="dcterms:requires">Ian Hickson; Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Edward O'Connor; Silvia Pfeiffer. <a href="http://www.w3.org/TR/html5/"><cite>HTML5</cite></a>. 28 October 2014. W3C Recommendation. URL: <a href="http://www.w3.org/TR/html5/">http://www.w3.org/TR/html5/</a>
 </dd><dt id="bib-TYPED-ARRAYS">[TYPED-ARRAYS]</dt><dd rel="dcterms:requires">David Herman; Kenneth Russell. <a href="https://www.khronos.org/registry/typedarray/specs/latest/"><cite>Typed Array Specification</cite></a>. 26 June 2013. Khronos Working Draft. URL: <a href="https://www.khronos.org/registry/typedarray/specs/latest/">https://www.khronos.org/registry/typedarray/specs/latest/</a>
 </dd><dt id="bib-WHATWG-STREAMS-API">[WHATWG-STREAMS-API]</dt><dd rel="dcterms:requires">Domenic Denicola; Takeshi Yoshino. <a href="https://streams.spec.whatwg.org/"><cite>WHATWG Streams API</cite></a>. W3C Working Draft. URL: <a href="https://streams.spec.whatwg.org/">https://streams.spec.whatwg.org/</a>
-</dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" rel="bibo:Chapter"><h3 aria-level="2" role="heading" id="h3_informative-references"><span class="secno">A.2 </span>Informative references</h3><dl class="bibliography" about=""><dt id="bib-MSE-REGISTRY">[MSE-REGISTRY]</dt><dd rel="dcterms:references">Aaron Colwell. <a href="byte-stream-format-registry.html"><cite>Media Source Extensions Byte Stream Format Registry</cite></a>. URL: <a href="byte-stream-format-registry.html">byte-stream-format-registry.html</a>
+</dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" rel="bibo:Chapter"><h3 aria-level="2" role="heading" id="h3_informative-references"><span class="secno">A.2 </span>Informative references</h3><dl class="bibliography" about=""><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt><dd rel="dcterms:references">Bob Lund; Silvia Pfeiffer. <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. URL: <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/">http://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
+</dd><dt id="bib-MSE-REGISTRY">[MSE-REGISTRY]</dt><dd rel="dcterms:references">Aaron Colwell. <a href="byte-stream-format-registry.html"><cite>Media Source Extensions Byte Stream Format Registry</cite></a>. URL: <a href="byte-stream-format-registry.html">byte-stream-format-registry.html</a>
 </dd></dl></section></section></body></html>

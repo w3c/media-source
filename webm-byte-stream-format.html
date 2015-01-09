@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" typeof="bibo:Document " about="" property="dcterms:language" content="en">
+<html lang="en" dir="ltr" typeof="bibo:Document " about="" property="dcterms:language" content="en" prefix="bibo: http://purl.org/ontology/bibo/ w3p: http://www.w3.org/2001/02pd/rec54#">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>WebM Byte Stream Format</title>
@@ -180,7 +180,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">WebM Byte Stream Format</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-11-18T19:30:46.000Z" id="w3c-editor-s-draft-18-november-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-11-18">18 November 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2015-01-09T19:04:21.000Z" id="w3c-editor-s-draft-09-january-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2015-01-09">09 January 2015</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -214,7 +214,7 @@ table.simple {
     
       <p class="copyright">
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
-        2014
+        2015
         
         <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
         (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
@@ -303,7 +303,7 @@ table.simple {
       
     
   
-</section><section id="toc"><h2 class="introductory" aria-level="1" role="heading" id="h2_toc">Table of Contents</h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#webm-mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#webm-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#webm-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#webm-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">6. </span>Acknowledgments</a></li></ul></section>
+</section><section id="toc"><h2 class="introductory" aria-level="1" role="heading" id="h2_toc">Table of Contents</h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#webm-mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#webm-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#webm-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#webm-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">6. </span>Acknowledgments</a></li><li class="tocline"><a href="#references" class="tocxref"><span class="secno">A. </span>References</a><ul class="toc"><li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">A.1 </span>Informative references</a></li></ul></li></ul></section>
 
     <section id="introduction" typeof="bibo:Chapter" resource="#introduction" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_introduction"><span class="secno">1. </span>Introduction</h2>
@@ -370,15 +370,18 @@ table.simple {
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_webm-init-segments"><span class="secno">3. </span>Initialization Segments</h2>
       <p>A WebM <a href="index.html#init-segment">initialization segment</a> must contain a subset of the elements at the start of a typical WebM file.</p>
 
-      <p>The user agent must run the <a href="index.html#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="index.html#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are not met:</p>
+      <p>The user agent must run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if any of the following conditions are not met:</p>
       <ol>
 	<li>The <a href="index.html#init-segment">initialization segment</a> must start with an <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> element, followed by a <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header.</li>
 	<li>The size value in the <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header must signal an "unknown size" or contain a value large enough to include the <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> and <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> elements that follow.</li>
 	<li>A <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> element and a <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> element must appear, in that order, after the <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header and before any further <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> or <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> elements.
         </li>
       </ol>
-      The user agent must accept and ignore any elements other than an <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> or a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> that occur before, in between, or after the <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> and
-      <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> elements.
+      <p>The user agent must accept and ignore any elements other than an <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> or a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> that occur before, in between, or after the <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> and
+      <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> elements.</p>
+
+      <p>The user agent must source attribute values for id, kind, label and language for <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#audiotrack">AudioTrack</a></code>, <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#videotrack">VideoTrack</a></code> and
+        <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#texttrack">TextTrack</a></code> objects as described for WebM in the in-band tracks spec [<cite><a class="bibref" href="#bib-INBANDTRACKS">INBANDTRACKS</a></cite>].</p>
     </section>
 
     <section id="webm-media-segments" typeof="bibo:Chapter" resource="#webm-media-segments" rel="bibo:Chapter">
@@ -393,7 +396,7 @@ table.simple {
           of an <a href="#webm-init-segments">WebM initialization segment</a> is encountered.</li>
       </ol>
 
-      <p>The user agent must run the <a href="index.html#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="index.html#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are not met:</p>
+      <p>The user agent must run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if any of the following conditions are not met:</p>
       <ol>
         <li>The Timecode element must appear before any Block &amp; SimpleBlock elements in a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a>.</li>
         <li>Block &amp; SimpleBlock elements are in time increasing order consistent with the <a href="http://www.webmproject.org/code/specs/container/#webm-guidelines">WebM spec</a>.</li>
@@ -401,7 +404,7 @@ table.simple {
           tracks must be present.</li>
       </ol>
 
-      The user agent must accept and ignore <a href="http://www.webmproject.org/code/specs/container/#cueing-data">Cues</a> or <a href="http://www.webmproject.org/code/specs/container/#chapters">Chapters</a> elements that follow a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element.
+      <p>The user agent must accept and ignore <a href="http://www.webmproject.org/code/specs/container/#cueing-data">Cues</a> or <a href="http://www.webmproject.org/code/specs/container/#chapters">Chapters</a> elements that follow a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element.</p>
     </section>
 
     <section id="webm-random-access-points" typeof="bibo:Chapter" resource="#webm-random-access-points" rel="bibo:Chapter">
@@ -416,4 +419,5 @@ table.simple {
     </section>
   
 
-<form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form></body></html>
+<form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form><section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" rel="bibo:Chapter"><!--OddPage--><h2 aria-level="1" role="heading" id="h2_references"><span class="secno">A. </span>References</h2><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" rel="bibo:Chapter"><h3 aria-level="2" role="heading" id="h3_informative-references"><span class="secno">A.1 </span>Informative references</h3><dl class="bibliography" about=""><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt><dd rel="dcterms:references">Bob Lund; Silvia Pfeiffer. <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. URL: <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/">http://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
+</dd></dl></section></section></body></html>

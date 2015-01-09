@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" typeof="bibo:Document " about="" property="dcterms:language" content="en">
+<html lang="en" dir="ltr" typeof="bibo:Document " about="" property="dcterms:language" content="en" prefix="bibo: http://purl.org/ontology/bibo/ w3p: http://www.w3.org/2001/02pd/rec54#">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>MPEG-2 TS Byte Stream Format</title>
@@ -181,7 +181,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">MPEG-2 TS Byte Stream Format</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-11-18T19:28:31.000Z" id="w3c-editor-s-draft-18-november-2014"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2014-11-18">18 November 2014</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2015-01-09T19:15:21.000Z" id="w3c-editor-s-draft-09-january-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2015-01-09">09 January 2015</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -219,7 +219,7 @@ table.simple {
     
       <p class="copyright">
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
-        2014
+        2015
         
         <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
         (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
@@ -308,7 +308,7 @@ table.simple {
       
     
   
-</section><section id="toc"><h2 class="introductory" aria-level="1" role="heading" id="h2_toc">Table of Contents</h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type info</a></li><li class="tocline"><a href="#mpeg2ts-general" class="tocxref"><span class="secno">3. </span>General Transport Stream Requirements</a></li><li class="tocline"><a href="#mpeg2ts-init-segments" class="tocxref"><span class="secno">4. </span>Initialization Segments</a></li><li class="tocline"><a href="#mpeg2ts-media-segments" class="tocxref"><span class="secno">5. </span>Media Segments</a></li><li class="tocline"><a href="#mpeg2ts-random-access-points" class="tocxref"><span class="secno">6. </span>Random Access Points</a></li><li class="tocline"><a href="#mpeg2ts-discontinuities" class="tocxref"><span class="secno">7. </span>Timestamp Rollover &amp; Discontinuities</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">8. </span>Acknowledgments</a></li></ul></section>
+</section><section id="toc"><h2 class="introductory" aria-level="1" role="heading" id="h2_toc">Table of Contents</h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type info</a></li><li class="tocline"><a href="#mpeg2ts-general" class="tocxref"><span class="secno">3. </span>General Transport Stream Requirements</a></li><li class="tocline"><a href="#mpeg2ts-init-segments" class="tocxref"><span class="secno">4. </span>Initialization Segments</a></li><li class="tocline"><a href="#mpeg2ts-media-segments" class="tocxref"><span class="secno">5. </span>Media Segments</a></li><li class="tocline"><a href="#mpeg2ts-random-access-points" class="tocxref"><span class="secno">6. </span>Random Access Points</a></li><li class="tocline"><a href="#mpeg2ts-discontinuities" class="tocxref"><span class="secno">7. </span>Timestamp Rollover &amp; Discontinuities</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">8. </span>Acknowledgments</a></li><li class="tocline"><a href="#references" class="tocxref"><span class="secno">A. </span>References</a><ul class="toc"><li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">A.1 </span>Informative references</a></li></ul></li></ul></section>
 
     <section id="introduction" typeof="bibo:Chapter" resource="#introduction" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_introduction"><span class="secno">1. </span>Introduction</h2>
@@ -339,7 +339,7 @@ table.simple {
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mpeg2ts-general"><span class="secno">3. </span>General Transport Stream Requirements</h2>
       <p>MPEG-2 TS media and initialization segments must conform to the MPEG-2 TS Adaptive Profile (ISO/IEC 13818-1:2012 Amd. 2).</p>
 
-      <p>The user agent must run the <a href="index.html#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="index.html#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
+      <p>The user agent must run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if any of the following conditions are met:</p>
       <ol>
         <li>Segments do not contain complete MPEG-2 TS packets.</li>
         <li>Segments do not contain complete PES packets and sections.</li>
@@ -350,18 +350,21 @@ table.simple {
     <section id="mpeg2ts-init-segments" typeof="bibo:Chapter" resource="#mpeg2ts-init-segments" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mpeg2ts-init-segments"><span class="secno">4. </span>Initialization Segments</h2>
       <p>An MPEG-2 TS initialization segment consists of a single PAT and a single PMT.</p>
-      <p>The user agent must run the <a href="index.html#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="index.html#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
+      <p>The user agent must run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if any of the following conditions are met:</p>
       <ol>
         <li>A PAT is not present in the <a href="index.html#init-segment">initialization segment</a></li>
         <li>A PMT is not present in the <a href="index.html#init-segment">initialization segment</a></li>
       </ol>
-      The user agent must accept and ignore other SI, such as CAT, that are invariant for all subsequent media segments.
+
+      <p>The user agent must accept and ignore other SI, such as CAT, that are invariant for all subsequent media segments.</p>
+      <p>The user agent must source attribute values for id, kind, label and language for <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#audiotrack">AudioTrack</a></code>, <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#videotrack">VideoTrack</a></code> and
+        <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#texttrack">TextTrack</a></code> objects as described for MPEG-2 Transport Streams in the in-band tracks spec [<cite><a class="bibref" href="#bib-INBANDTRACKS">INBANDTRACKS</a></cite>].</p>
     </section>
 
     <section id="mpeg2ts-media-segments" typeof="bibo:Chapter" resource="#mpeg2ts-media-segments" rel="bibo:Chapter">
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_mpeg2ts-media-segments"><span class="secno">5. </span>Media Segments</h2>
 
-      <p>The user agent must run the <a href="index.html#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="index.html#idl-def-EndOfStreamError.decode">"decode"</a></code> if any of the following conditions are met:</p>
+      <p>The user agent must run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if any of the following conditions are met:</p>
       <ol>
         <li>A media segment relies on initialization information in another media segment.</li>
         <li>At least one PES packet does not have a PTS timestamp.</li>
@@ -403,4 +406,5 @@ table.simple {
     </section>
   
 
-<form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form></body></html>
+<form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form><section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" rel="bibo:Chapter"><!--OddPage--><h2 aria-level="1" role="heading" id="h2_references"><span class="secno">A. </span>References</h2><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" rel="bibo:Chapter"><h3 aria-level="2" role="heading" id="h3_informative-references"><span class="secno">A.1 </span>Informative references</h3><dl class="bibliography" about=""><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt><dd rel="dcterms:references">Bob Lund; Silvia Pfeiffer. <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. URL: <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/">http://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
+</dd></dl></section></section></body></html>
