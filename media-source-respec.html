@@ -2303,7 +2303,7 @@
 
       <dl title="interface TrackDefaultList" class="idl">
         <dt class="extended-attribute">
-          Constructor(sequence&lt;TrackDefault&gt; trackDefaults)
+          Constructor(optional sequence&lt;TrackDefault&gt; trackDefaults = [])
         </dt>
         <dd>
           <ol class="method-algorithm">
@@ -2665,6 +2665,7 @@
             <td>
               <ul>
                 <li>Bug 27649 - Clarify that setting the duration in the detach algorithm does not run the attribute set algorithm.</li>
+                <li>Bug 27599 - Make TrackDefaultList constructor parameter optional and have a default value of [].</li>
               </ul>
             </td>
           </tr>

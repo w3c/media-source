@@ -408,7 +408,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2015-01-09T18:14:06.000Z" id="w3c-editor-s-draft-09-january-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2015-01-09">09 January 2015</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2015-01-09T18:20:42.000Z" id="w3c-editor-s-draft-09-january-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2015-01-09">09 January 2015</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -2630,13 +2630,13 @@ interface <span class="idlInterfaceID">TrackDefault</span> {
       <!--OddPage--><h2 aria-level="1" role="heading" id="h2_trackdefaultlist"><span class="secno">7. </span>TrackDefaultList Object</h2>
       <p>TrackDefaultList is a simple container object for <a href="#idl-def-TrackDefault" class="idlType"><code>TrackDefault</code></a> objects. It provides read-only array access.</p>
 
-      <pre class="idl"><span class="idlInterface" id="idl-def-TrackDefaultList">[<span class="idlCtor"> <span class="idlCtorKeyword"></span><span class="idlCtorName"><a href="#widl-ctor-TrackDefaultList--sequence-TrackDefault--trackDefaults">Constructor</a></span> (<span class="idlParam"><span class="idlParamType">sequence&lt;<a href="#idl-def-TrackDefault" class="idlType"><code>TrackDefault</code></a>&gt;</span> <span class="idlParamName">trackDefaults</span></span>)</span>]
+      <pre class="idl"><span class="idlInterface" id="idl-def-TrackDefaultList">[<span class="idlCtor"> <span class="idlCtorKeyword"></span><span class="idlCtorName"><a href="#widl-ctor-TrackDefaultList--sequence-TrackDefault--trackDefaults">Constructor</a></span> (<span class="idlParam">optional <span class="idlParamType">sequence&lt;<a href="#idl-def-TrackDefault" class="idlType"><code>TrackDefault</code></a>&gt;</span> <span class="idlParamName">trackDefaults</span> = <span class="idlDefaultValue">[]</span></span>)</span>]
 interface <span class="idlInterfaceID">TrackDefaultList</span> {
 <span class="idlAttribute">    readonly    attribute <span class="idlAttrType">unsigned long</span> <span class="idlAttrName"><a href="#widl-TrackDefaultList-length">length</a></span>;</span>
 <span class="idlMethod">    <span class="idlMethType">getter</span> <span class="idlMethName"><a href="#widl-TrackDefaultList-TrackDefault-getter-unsigned-long-index">TrackDefault</a></span> (<span class="idlParam"><span class="idlParamType">unsigned long</span> <span class="idlParamName">index</span></span>);</span>
 };</span></pre><section id="constructors-1"><h3 aria-level="2" role="heading" id="h3_constructors-1"><span class="secno">7.1 </span>Constructors</h3><dl class="constructors"><dt id="widl-ctor-TrackDefaultList--sequence-TrackDefault--trackDefaults"><code>TrackDefaultList</code></dt><dd>
           
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">trackDefaults</td><td class="prmType"><code>sequence&lt;<a href="#idl-def-TrackDefault" class="idlType"><code>TrackDefault</code></a>&gt;</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">trackDefaults</td><td class="prmType"><code>sequence&lt;<a href="#idl-def-TrackDefault" class="idlType"><code>TrackDefault</code></a>&gt; = []</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If <var>trackDefaults</var> contains two or more <a href="#idl-def-TrackDefault" class="idlType"><code>TrackDefault</code></a> objects with
               the same <code><a href="#widl-TrackDefault-type">type</a></code> and the same
               <code><a href="#widl-TrackDefault-byteStreamTrackID">byteStreamTrackID</a></code>, then throw an
@@ -2983,6 +2983,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
             <td>
               <ul>
                 <li>Bug 27649 - Clarify that setting the duration in the detach algorithm does not run the attribute set algorithm.</li>
+                <li>Bug 27599 - Make TrackDefaultList constructor parameter optional and have a default value of [].</li>
               </ul>
             </td>
           </tr>
