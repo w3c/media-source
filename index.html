@@ -408,7 +408,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2015-02-03T18:31:37.000Z" id="w3c-editor-s-draft-03-february-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2015-02-03">03 February 2015</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2015-02-03T18:43:10.000Z" id="w3c-editor-s-draft-03-february-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2015-02-03">03 February 2015</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1312,13 +1312,13 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
+            <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and
+              abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>Let <var>new mode</var> equal the new value being assigned to this attribute.</li>
             <li>If <var><a href="#sourcebuffer-generate-timestamps-flag">generate timestamps flag</a></var> equals true and <var>new mode</var> equals
               <code><a href="#idl-def-AppendMode.segments">"segments"</a></code>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code>
               exception and abort these steps.</li>
-            <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and
-              abort these steps.</li>
-            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>
               <p>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState.ended">"ended"</a></code> state then run the following steps:</p>
               <ol>
@@ -1414,11 +1414,11 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           
 
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">start</td><td class="prmType"><code>double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">end</td><td class="prmType"><code>unrestricted double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>void</code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
+            <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If <code><a href="#widl-MediaSource-duration">duration</a></code> equals NaN, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception and abort these steps.</li>
             <li>If <var>start</var> is negative or greater than <code><a href="#widl-MediaSource-duration">duration</a></code>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception and abort these steps.</li>
             <li>If <var>end</var> is less than or equal to <var>start</var> or <var>end</var> equals NaN, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception and abort these steps.</li>
-            <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>
               <p>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState.ended">"ended"</a></code> state then run
                 the following steps:</p>
@@ -3002,6 +3002,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
             <td>
               <ul>
                 <li>Bug 27790 - Make .buffered attributes return the same object if nothing has changed.</li>
+                <li>Bug 27857 - Make the 'removed from the sourceBuffers' checks in remove() and .mode setter consistent with other algorithms.</li>
               </ul>
             </td>
           </tr>

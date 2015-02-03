@@ -876,13 +876,13 @@
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
+            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an <a def-id="invalid-state-error"></a> exception and
+              abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Let <var>new mode</var> equal the new value being assigned to this attribute.</li>
             <li>If <a def-id="generate-timestamps-flag"></a> equals true and <var>new mode</var> equals
               <a def-id="AppendMode-segments"></a>, then throw an <a def-id="invalid-access-error"></a>
               exception and abort these steps.</li>
-            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an <a def-id="invalid-state-error"></a> exception and
-              abort these steps.</li>
-            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>
               <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run the following steps:</p>
               <ol>
@@ -1052,11 +1052,11 @@
           <p>Removes media for a specific time range.</p>
 
           <ol class="method-algorithm">
+            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If <a def-id="duration"></a> equals NaN, then throw an <a def-id="invalid-access-error"></a> exception and abort these steps.</li>
             <li>If <var>start</var> is negative or greater than <a def-id="duration"></a>, then throw an <a def-id="invalid-access-error"></a> exception and abort these steps.</li>
             <li>If <var>end</var> is less than or equal to <var>start</var> or <var>end</var> equals NaN, then throw an <a def-id="invalid-access-error"></a> exception and abort these steps.</li>
-            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>
               <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run
                 the following steps:</p>
@@ -2690,6 +2690,7 @@
             <td>
               <ul>
                 <li>Bug 27790 - Make .buffered attributes return the same object if nothing has changed.</li>
+                <li>Bug 27857 - Make the 'removed from the sourceBuffers' checks in remove() and .mode setter consistent with other algorithms.</li>
               </ul>
             </td>
           </tr>
