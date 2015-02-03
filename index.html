@@ -408,7 +408,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2015-01-09T19:20:10.000Z" id="w3c-editor-s-draft-09-january-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2015-01-09">09 January 2015</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2015-02-03T18:31:37.000Z" id="w3c-editor-s-draft-03-february-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2015-02-03">03 February 2015</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1286,7 +1286,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </dd><dt id="widl-SourceBuffer-audioTracks"><code>audioTracks</code> of type <span class="idlAttrType">AudioTrackList</span>, readonly   </dt><dd>
           The list of <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#audiotrack">AudioTrack</a></code> objects created by this object.
         </dd><dt id="widl-SourceBuffer-buffered"><code>buffered</code> of type <span class="idlAttrType">TimeRanges</span>, readonly   </dt><dd>
-          <p>Indicates what <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRanges</a></code> are buffered in the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</p>
+          <p>Indicates what <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRanges</a></code> are buffered in the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>. This
+          attribute is initially set to an empty <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRanges</a></code> object when the object is
+          created.</p>
           <p>When the attribute is read the following steps must occur:</p>
           <ol>
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
@@ -1300,10 +1302,13 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
               </ol>
             </li>
-            <li>Return the <var>intersection ranges</var>.</li>
+            <li>If <var>intersection ranges</var> does not contain the exact same range information as the
+              current value of this attribute, then update the current value of this attribute to
+              <var>intersection ranges</var>.</li>
+            <li>Return the current value of this attribute.</li>
           </ol>
         </dd><dt id="widl-SourceBuffer-mode"><code>mode</code> of type <span class="idlAttrType"><a href="#idl-def-AppendMode" class="idlType"><code>AppendMode</code></a></span>,            </dt><dd>
-          <p>Controls how a sequence of <a href="#media-segment">media segments</a> are handled.  This attribute is initially set by <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> after the object is created.</p>
+          <p>Controls how a sequence of <a href="#media-segment">media segments</a> are handled. This attribute is initially set by <code><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code> after the object is created.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
@@ -2695,22 +2700,30 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         <dd>Return a single range with a start time of 0 and an end time equal to <code><a href="#widl-MediaSource-duration">duration</a></code>.</dd>
       </dl>
 
-      <p id="dom-htmlmediaelement.buffered">The <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-buffered">HTMLMediaElement.buffered</a></code> attribute returns a new static <a href="http://www.w3.org/TR/html5/embedded-content-0.html#normalized-timeranges-object">normalized TimeRanges object</a> created based on the following steps:</p>
+      <p id="dom-htmlmediaelement.buffered">The <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-buffered">HTMLMediaElement.buffered</a></code> attribute returns a static <a href="http://www.w3.org/TR/html5/embedded-content-0.html#normalized-timeranges-object">normalized TimeRanges object</a> based on the following steps.</p>
       <ol>
-        <li>If <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>.length equals 0 then return an empty <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRanges</a></code> object and abort these steps.</li>
-        <li>Let <var>active ranges</var> be the ranges returned by <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> for each <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>.</li>
-        <li>Let <var>highest end time</var> be the largest range end time in the <var>active ranges</var>.</li>
-        <li>Let <var>intersection ranges</var> equal a <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRange</a></code> object containing a single range from 0 to <var>highest end time</var>.</li>
-        <li>For each <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> run the following steps:
+        <li>Let <var>intersection ranges</var> equal an empty <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRanges</a></code> object.</li>
+        <li>If <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>.length does not equal 0 then run the following steps:
           <ol>
-            <li>Let <var>source ranges</var> equal the ranges returned by the <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> attribute on the current <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</li>
-            <li>If <code><a href="#widl-MediaSource-readyState">readyState</a></code> is <code><a href="#idl-def-ReadyState.ended">"ended"</a></code>, then set the end time on the last range in <var>source ranges</var> to
-              <var>highest end time</var>.</li>
-            <li>Let <var>new intersection ranges</var> equal the intersection between the <var>intersection ranges</var> and the <var>source ranges</var>.</li>
-            <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
+            <li>Let <var>active ranges</var> be the ranges returned by <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> for each <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>.</li>
+            <li>Let <var>highest end time</var> be the largest range end time in the <var>active ranges</var>.</li>
+            <li>Let <var>intersection ranges</var> equal a <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#timeranges">TimeRange</a></code> object containing a single range from 0 to <var>highest end time</var>.</li>
+            <li>For each <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> object in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code> run the following steps:
+              <ol>
+                <li>Let <var>source ranges</var> equal the ranges returned by the <code><a href="#widl-SourceBuffer-buffered">buffered</a></code> attribute on the current <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</li>
+                <li>If <code><a href="#widl-MediaSource-readyState">readyState</a></code> is <code><a href="#idl-def-ReadyState.ended">"ended"</a></code>, then set the end time on the last range in <var>source ranges</var> to
+                  <var>highest end time</var>.</li>
+                <li>Let <var>new intersection ranges</var> equal the intersection between the <var>intersection ranges</var> and the <var>source ranges</var>.</li>
+                <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
+              </ol>
+            </li>
           </ol>
         </li>
-        <li>Return the <var>intersection ranges</var>.</li>
+        <li>If the current value of this attribute has not been set by this algorithm or
+          <var>intersection ranges</var> does not contain the exact same range information as the
+          current value of this attribute, then update the current value of this attribute to
+          <var>intersection ranges</var>.
+        </li><li>Return the current value of this attribute.</li>
       </ol>
     </section>
 
@@ -2985,11 +2998,19 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </thead>
         <tbody>
         </tbody><tbody>
-          <tr><td>09 January 2015</td>
+          <tr><td>03 February 2015</td>
+            <td>
+              <ul>
+                <li>Bug 27790 - Make .buffered attributes return the same object if nothing has changed.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr><td><a href="https://rawgit.com/w3c/media-source/c3ad59c7a370d04430969ba73d18dc9bcde57a33/index.html">09 January 2015</a></td>
             <td>
               <ul>
                 <li>Bug 27649 - Clarify that setting the duration in the detach algorithm does not run the attribute set algorithm.</li>
                 <li>Bug 27599 - Make TrackDefaultList constructor parameter optional and have a default value of [].</li>
+                <li>Bug 27758 - Add informative reference to INBANDTRACKS and track attribute sourcing requirements.</li>
               </ul>
             </td>
           </tr>

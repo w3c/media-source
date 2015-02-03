@@ -872,7 +872,7 @@
       <dl title="interface SourceBuffer : EventTarget" class="idl">
         <dt>attribute AppendMode mode</dt>
         <dd>
-          <p>Controls how a sequence of <a def-id="media-segments"></a> are handled.  This attribute is initially set by <a def-id="addSourceBuffer"></a> after the object is created.</p>
+          <p>Controls how a sequence of <a def-id="media-segments"></a> are handled. This attribute is initially set by <a def-id="addSourceBuffer"></a> after the object is created.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
@@ -904,7 +904,9 @@
 
         <dt>readonly attribute TimeRanges buffered</dt>
         <dd>
-          <p>Indicates what <a def-id="timeranges"></a> are buffered in the <a>SourceBuffer</a>.</p>
+          <p>Indicates what <a def-id="timeranges"></a> are buffered in the <a>SourceBuffer</a>. This
+          attribute is initially set to an empty <a def-id="timeranges"></a> object when the object is
+          created.</p>
           <p>When the attribute is read the following steps must occur:</p>
           <ol>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
@@ -918,7 +920,10 @@
                 <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
               </ol>
             </li>
-            <li>Return the <var>intersection ranges</var>.</li>
+            <li>If <var>intersection ranges</var> does not contain the exact same range information as the
+              current value of this attribute, then update the current value of this attribute to
+              <var>intersection ranges</var>.</li>
+            <li>Return the current value of this attribute.</li>
           </ol>
         </dd>
 
@@ -2378,22 +2383,30 @@
         <dd>Return a single range with a start time of 0 and an end time equal to <a def-id="duration"></a>.</dd>
       </dl>
 
-      <p id="dom-htmlmediaelement.buffered">The <a def-id="hme-buffered"></a> attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
+      <p id="dom-htmlmediaelement.buffered">The <a def-id="hme-buffered"></a> attribute returns a static <a def-id="normalized-timeranges-object"></a> based on the following steps.</p>
       <ol>
-        <li>If <a def-id="activeSourceBuffers"></a>.length equals 0 then return an empty <a def-id="timeranges"></a> object and abort these steps.</li>
-        <li>Let <var>active ranges</var> be the ranges returned by <a def-id="buffered"></a> for each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a>.</li>
-        <li>Let <var>highest end time</var> be the largest range end time in the <var>active ranges</var>.</li>
-        <li>Let <var>intersection ranges</var> equal a <a def-id="timerange"></a> object containing a single range from 0 to <var>highest end time</var>.</li>
-        <li>For each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a> run the following steps:
+        <li>Let <var>intersection ranges</var> equal an empty <a def-id="timeranges"></a> object.</li>
+        <li>If <a def-id="activeSourceBuffers"></a>.length does not equal 0 then run the following steps:
           <ol>
-            <li>Let <var>source ranges</var> equal the ranges returned by the <a def-id="buffered"></a> attribute on the current <a>SourceBuffer</a>.</li>
-            <li>If <a def-id="readyState"></a> is <a def-id="ended"></a>, then set the end time on the last range in <var>source ranges</var> to
-              <var>highest end time</var>.</li>
-            <li>Let <var>new intersection ranges</var> equal the intersection between the <var>intersection ranges</var> and the <var>source ranges</var>.</li>
-            <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
+            <li>Let <var>active ranges</var> be the ranges returned by <a def-id="buffered"></a> for each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a>.</li>
+            <li>Let <var>highest end time</var> be the largest range end time in the <var>active ranges</var>.</li>
+            <li>Let <var>intersection ranges</var> equal a <a def-id="timerange"></a> object containing a single range from 0 to <var>highest end time</var>.</li>
+            <li>For each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a> run the following steps:
+              <ol>
+                <li>Let <var>source ranges</var> equal the ranges returned by the <a def-id="buffered"></a> attribute on the current <a>SourceBuffer</a>.</li>
+                <li>If <a def-id="readyState"></a> is <a def-id="ended"></a>, then set the end time on the last range in <var>source ranges</var> to
+                  <var>highest end time</var>.</li>
+                <li>Let <var>new intersection ranges</var> equal the intersection between the <var>intersection ranges</var> and the <var>source ranges</var>.</li>
+                <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
+              </ol>
+            </li>
           </ol>
         </li>
-        <li>Return the <var>intersection ranges</var>.</li>
+        <li>If the current value of this attribute has not been set by this algorithm or
+          <var>intersection ranges</var> does not contain the exact same range information as the
+          current value of this attribute, then update the current value of this attribute to
+          <var>intersection ranges</var>.
+        <li>Return the current value of this attribute.</li>
       </ol>
     </section>
 
@@ -2673,7 +2686,14 @@
         </thead>
         <tbody>
         <tbody>
-          <td>09 January 2015</td>
+          <td>03 February 2015</td>
+            <td>
+              <ul>
+                <li>Bug 27790 - Make .buffered attributes return the same object if nothing has changed.</li>
+              </ul>
+            </td>
+          </tr>
+          <td><a href="https://rawgit.com/w3c/media-source/c3ad59c7a370d04430969ba73d18dc9bcde57a33/index.html">09 January 2015</a></td>
             <td>
               <ul>
                 <li>Bug 27649 - Clarify that setting the duration in the detach algorithm does not run the attribute set algorithm.</li>
