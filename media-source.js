@@ -416,15 +416,17 @@
        $(this).addClass('externalDFN');
      });
 
-     var tmp = window.respecConfig.localBiblio["W3C-STREAMS-API"]
-     if (tmp && tmp.indexOf(W3C_STREAMS_spec_url) == -1) {
-       console.log("W3C_STREAMS_spec_url is out of sync with the localBiblio entry");
-     }
+    if (window.respecConfig.localBiblio) {
+      var tmp = window.respecConfig.localBiblio["W3C-STREAMS-API"]
+      if (tmp && tmp.indexOf(W3C_STREAMS_spec_url) == -1) {
+	console.log("W3C_STREAMS_spec_url is out of sync with the localBiblio entry");
+      }
 
-     var tmp = window.respecConfig.localBiblio["WHATWG-STREAMS-API"]
-     if (tmp && tmp.indexOf(WHATWG_STREAMS_spec_url) == -1) {
-       console.log("WHATWG_STREAMS_spec_url is out of sync with the localBiblio entry");
-     }
+      var tmp = window.respecConfig.localBiblio["WHATWG-STREAMS-API"]
+      if (tmp && tmp.indexOf(WHATWG_STREAMS_spec_url) == -1) {
+	console.log("WHATWG_STREAMS_spec_url is out of sync with the localBiblio entry");
+      }
+    }
   }
 
   function mediaSourcePostProcessor() {

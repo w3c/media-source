@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" typeof="bibo:Document " about="" property="dcterms:language" content="en" prefix="bibo: http://purl.org/ontology/bibo/ w3p: http://www.w3.org/2001/02pd/rec54#">
-<head>
+<html lang="en" dir="ltr" typeof="bibo:Document " prefix="bibo: http://purl.org/ontology/bibo/ w3p: http://www.w3.org/2001/02pd/rec54#">
+<head><meta lang="" property="dc:language" content="en">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Media Source Extensions Byte Stream Format Registry</title>
     
@@ -147,13 +147,13 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions Byte Stream Format Registry</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2015-03-09T19:17:58.000Z" id="w3c-editor-s-draft-09-march-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2015-03-09">09 March 2015</time></h2>
+  <h2 id="w3c-editor-s-draft-09-march-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2015-03-09">09 March 2015</time></h2>
   <dl>
     
       <dt>This version:</dt>
       <dd><a class="u-url" href="https://w3c.github.io/media-source/byte-stream-format-registry.html">https://w3c.github.io/media-source/byte-stream-format-registry.html</a></dd>
       <dt>Latest published version:</dt>
-      <dd><a href="http://www.w3.org/TR/">http://www.w3.org/TR/</a></dd>
+      <dd><a href="http://www.w3.org/TR//">http://www.w3.org/TR//</a></dd>
     
     
       <dt>Latest editor's draft:</dt>
@@ -168,7 +168,8 @@ table.simple {
     
     
     <dt>Editor:</dt>
-    <dd class="p-author h-card vcard" rel="bibo:editor" inlist=""><span typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Aaron Colwell</span>, <a rel="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.google.com/">Google Inc.</a></span>
+    <dd class="p-author h-card vcard" property="bibo:editor" resource="_:editor0"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Aaron Colwell</span>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.google.com/">Google Inc.</a></span>
+<span property="rdf:rest" resource="rdf:nil"></span>
 </dd>
 
     
@@ -186,9 +187,7 @@ table.simple {
         <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
         (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
         <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>,
-        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>), 
-        
-        All Rights Reserved.
+        <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>). 
         
         <abbr title="World Wide Web Consortium">W3C</abbr> <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
@@ -202,8 +201,8 @@ table.simple {
   <hr>
 </div>
 
-    <section id="purpose" typeof="bibo:Chapter" resource="#purpose" rel="bibo:Chapter">
-      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_purpose"><span class="secno">1. </span>Purpose</h2>
+    <section id="purpose" typeof="bibo:Chapter" resource="#purpose" property="bibo:hasPart">
+      <!--OddPage--><h2 id="h-purpose" resource="#h-purpose"><span property="xhv:role" resource="xhv:heading"><span class="secno">1. </span>Purpose</span></h2>
       <p>This registry is intended to enhance interoperability among implementations and users of
         <code><a href="index.html#idl-def-SourceBuffer" class="idlType">SourceBuffer</a></code> objects described in the
         <a href="index.html#">Media Source Extensions</a>(MSE) specification. In particular, this registry provides the means (1) to identify
@@ -211,8 +210,8 @@ table.simple {
         implementations to promote interoperability.
     </p></section>
 
-    <section id="organization" typeof="bibo:Chapter" resource="#organization" rel="bibo:Chapter">
-      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_organization"><span class="secno">2. </span>Organization</h2>
+    <section id="organization" typeof="bibo:Chapter" resource="#organization" property="bibo:hasPart">
+      <!--OddPage--><h2 id="h-organization" resource="#h-organization"><span property="xhv:role" resource="xhv:heading"><span class="secno">2. </span>Organization</span></h2>
       <p>The registry maintains a mapping between MIME-type/subtype pairs and byte stream format specifications. The byte stream format specifications describe the
         structure and semantics of byte streams accepted by <code><a href="index.html#idl-def-SourceBuffer" class="idlType">SourceBuffer</a></code> objects
         created with the associated MIME-type/subtype pair.</p>
@@ -220,8 +219,8 @@ table.simple {
         are advised to seek appropriate legal counsel in this matter if they intend to implement or use a specific byte stream format.</p>
     </section>
 
-    <section id="entry-requirements" typeof="bibo:Chapter" resource="#entry-requirements" rel="bibo:Chapter">
-      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_entry-requirements"><span class="secno">3. </span>Registration Entry Requirements</h2>
+    <section id="entry-requirements" typeof="bibo:Chapter" resource="#entry-requirements" property="bibo:hasPart">
+      <!--OddPage--><h2 id="h-entry-requirements" resource="#h-entry-requirements"><span property="xhv:role" resource="xhv:heading"><span class="secno">3. </span>Registration Entry Requirements</span></h2>
       <ol>
         <li>Each entry must include a unique MIME-type/subtype pair. If the byte stream format is derived-from an existing file format, then it should use the
           MIME-type/subtype pairs typically used for the file format.</li>
@@ -238,8 +237,8 @@ table.simple {
       <p>If a registration fails to satisfy a mandatory requirement specified above, then it may be removed from the registry (without prejudice).
     </p></section>
 
-    <section id="registry" typeof="bibo:Chapter" resource="#registry" rel="bibo:Chapter">
-      <!--OddPage--><h2 aria-level="1" role="heading" id="h2_registry"><span class="secno">4. </span>Registry</h2>
+    <section id="registry" typeof="bibo:Chapter" resource="#registry" property="bibo:hasPart">
+      <!--OddPage--><h2 id="h-registry" resource="#h-registry"><span property="xhv:role" resource="xhv:heading"><span class="secno">4. </span>Registry</span></h2>
       <table>
         <thead>
           <tr>
