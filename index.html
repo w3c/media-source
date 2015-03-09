@@ -408,7 +408,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2015-03-09T17:58:54.000Z" id="w3c-editor-s-draft-09-march-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2015-03-09">09 March 2015</time></h2>
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2015-03-09T18:11:55.000Z" id="w3c-editor-s-draft-09-march-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2015-03-09">09 March 2015</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1710,12 +1710,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <li>If <var>data.byteLength</var> is greater than <var>bytesLeft</var>, then run the
                   following steps:
                   <ol>
-                    <li>Let <var>new data</var> equal the value returned by calling <var>data</var>.slice(0, <var>bytesLeft<var>).
+                    <li>Let <var>new data</var> equal the value returned by calling <var>data</var>.slice(0, <var>bytesLeft</var>).
                     <div class="note"><div class="note-title" aria-level="4" role="heading" id="h_note_21"><span>Note</span></div><p class="">This step and the next one are assuming <var>data</var> is an
                       <code><a href="http://www.khronos.org/registry/typedarray/specs/latest/#ArrayBuffer" class="idlType">ArrayBuffer</a></code>. If <var>data</var> is an
-                      <code><a href="http://www.khronos.org/registry/typedarray/specs/latest/#ArrayBufferView" class="idlType">ArrayBufferView</a></code> subarray() should be called instead.</p></div></var></var></li>
+                      <code><a href="http://www.khronos.org/registry/typedarray/specs/latest/#ArrayBufferView" class="idlType">ArrayBufferView</a></code> subarray() should be called instead.</p></div></li>
                     <li>Let <var>remaining data</var> equal the value returned by calling
-                      <var>data</var>.slice(<var>bytesLeft<var>).</var></var></li>
+                      <var>data</var>.slice(<var>bytesLeft</var>).</li>
                     <li>Push <var>remaining data</var> back onto the front of <var>stream</var> so it
                       will be returned by the next <var>stream</var>.<a href="https://streams.spec.whatwg.org/#rs-read">read()</a> call.</li>
                     <li>Assign <var>new data</var> to <var>data</var>.</li>

@@ -1365,12 +1365,12 @@
                 <li>If <var>data.byteLength</var> is greater than <var>bytesLeft</var>, then run the
                   following steps:
                   <ol>
-                    <li>Let <var>new data</var> equal the value returned by calling <var>data</var>.slice(0, <var>bytesLeft<var>).
+                    <li>Let <var>new data</var> equal the value returned by calling <var>data</var>.slice(0, <var>bytesLeft</var>).
                     <p class="note">This step and the next one are assuming <var>data</var> is an
                       <a class="externalDFN">ArrayBuffer</a>. If <var>data</var> is an
                       <a class="externalDFN">ArrayBufferView</a> subarray() should be called instead.</li>
                     <li>Let <var>remaining data</var> equal the value returned by calling
-                      <var>data</var>.slice(<var>bytesLeft<var>).</li>
+                      <var>data</var>.slice(<var>bytesLeft</var>).</li>
                     <li>Push <var>remaining data</var> back onto the front of <var>stream</var> so it
                       will be returned by the next <var>stream</var>.<a def-id="ReadableStream-read"></a> call.</li>
                     <li>Assign <var>new data</var> to <var>data</var>.</li>
