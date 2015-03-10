@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" typeof="bibo:Document w3p:CR" prefix="bibo: http://purl.org/ontology/bibo/ w3p: http://www.w3.org/2001/02pd/rec54#">
+<html lang="en" dir="ltr" typeof="bibo:Document " prefix="bibo: http://purl.org/ontology/bibo/ w3p: http://www.w3.org/2001/02pd/rec54#">
 <head><meta lang="" property="dc:language" content="en">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>ISO BMFF Byte Stream Format</title>
@@ -192,7 +192,7 @@ table.simple {
         display: none;
     }
 }
-</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-CR"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
+</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/base"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
   <body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
       
@@ -203,13 +203,8 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">ISO BMFF Byte Stream Format</h1>
   
-  <h2 id="w3c-candidate-recommendation-09-march-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Candidate Recommendation <time property="dcterms:issued" class="dt-published" datetime="2015-03-09">09 March 2015</time></h2>
+  <h2 id="w3c-document-09-march-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Document <time property="dcterms:issued" class="dt-published" datetime="2015-03-09">09 March 2015</time></h2>
   <dl>
-    
-      <dt>This version:</dt>
-      <dd><a class="u-url" href="http://www.w3.org/TR/2015/CR--20150309/">http://www.w3.org/TR/2015/CR--20150309/</a></dd>
-      <dt>Latest published version:</dt>
-      <dd><a href="http://www.w3.org/TR//">http://www.w3.org/TR//</a></dd>
     
     
       <dt>Latest editor's draft:</dt>
@@ -219,9 +214,6 @@ table.simple {
     
     
     
-    
-      <dt>Previous version:</dt>
-      <dd><a rel="dcterms:replaces" href="http://www.w3.org/2013/12/byte-stream-format-registry/isobmff-byte-stream-format.html">http://www.w3.org/2013/12/byte-stream-format-registry/isobmff-byte-stream-format.html</a></dd>
     
     
     <dt>Editors:</dt>
@@ -271,77 +263,10 @@ table.simple {
     
       
         <p>
-          <em>This section describes the status of this document at the time of its publication.
-          Other documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the
-          latest revision of this technical report can be found in the <a href="http://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at
-          http://www.w3.org/TR/.</em>
+          This document is merely a <abbr title="World Wide Web Consortium">W3C</abbr>-internal  document. It
+          has no official standing of any kind and does not represent consensus of the <abbr title="World Wide Web Consortium">W3C</abbr>
+          Membership.
         </p>
-        
-        
-        
-        <p>
-          This document was published by the <a href="http://www.w3.org/html/wg/">HTML Working Group</a> as a Candidate Recommendation.
-          
-            This document is intended to become a <abbr title="World Wide Web Consortium">W3C</abbr> Recommendation.
-          
-          
-            If you wish to make comments regarding this document, please send them to 
-            <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a> 
-            (<a href="mailto:public-html-media-request@w3.org?subject=subscribe">subscribe</a>,
-            <a href="http://lists.w3.org/Archives/Public/public-html-media/">archives</a>).
-          
-          
-          
-            <abbr title="World Wide Web Consortium">W3C</abbr> publishes a Candidate Recommendation to indicate that the document is believed to be
-            stable and to encourage implementation by the developer community. This Candidate
-            Recommendation is expected to advance to Proposed Recommendation no earlier than
-            30 November 1899.
-          
-          
-          
-            
-            All comments are welcome.
-            
-          
-        </p>
-        
-        
-        
-          <p>
-            Publication as a Candidate Recommendation does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr>
-            Membership. This is a draft document and may be updated, replaced or obsoleted by other
-            documents at any time. It is inappropriate to cite this document as other than work in
-            progress.
-          </p>
-        
-        
-        
-        <p>
-          
-            This document was produced by a group operating under the 
-            <a id="sotd_patent" property="w3p:patentRules" href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent
-            Policy</a>.
-          
-          
-          
-            
-              <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="http://www.w3.org/2004/01/pp-impl/40318/status" rel="disclosure">public list of any patent
-              disclosures</a> 
-            
-            made in connection with the deliverables of the group; that page also includes
-            instructions for disclosing a patent. An individual who has actual knowledge of a patent
-            which the individual believes contains
-            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential
-            Claim(s)</a> must disclose the information in accordance with
-            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section
-            6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
-          
-          
-        </p>
-        
-          <p>This document is governed by the <a id="w3c_process_revision" href="http://www.w3.org/2014/Process-20140801/">1 August 2014 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
-          </p>
-        
         
       
     
