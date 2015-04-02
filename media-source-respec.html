@@ -1846,8 +1846,7 @@
                         <dt>If <var>track buffer</var> contains video <a def-id="coded-frames"></a>:</dt>
                         <dd>
                           <ol>
-                            <li>Let <var>overlapped frame presentation timestamp</var> equal the <a def-id="presentation-timestamp"></a> of <var>overlapped frame</var>.</li>
-                            <li>Let <var>remove window timestamp</var> equal <var>overlapped frame presentation timestamp</var> plus 1 microsecond.</li>
+                            <li>Let <var>remove window timestamp</var> equal the <var>overlapped frame</var> <a def-id="presentation-timestamp"></a> plus 1 microsecond.</li>
                             <li>If the <var>presentation timestamp</var> is less than the <var>remove window timestamp</var>, then remove <var>overlapped frame</var> and any
                               <a def-id="coded-frames"></a> that depend on it from <var>track buffer</var>.
                               <p class="note">
@@ -2687,7 +2686,14 @@
         </thead>
         <tbody>
         <tbody>
-          <td>03 February 2015</td>
+          <td>02 April 2015</td>
+            <td>
+              <ul>
+                <li>Bug 28209 - Remove redundant definition of overlapped frame presentation timestamp.</li>
+              </ul>
+            </td>
+          </tr>
+          <td><a href="https://rawgit.com/w3c/media-source/ee9ae4ba1681e34b6e90d172759f984ee64ab4c1/index.html">03 February 2015</td>
             <td>
               <ul>
                 <li>Bug 27790 - Make .buffered attributes return the same object if nothing has changed.</li>
