@@ -1102,9 +1102,10 @@
           the <a def-id="coded-frame-duration"></a> of the last <a def-id="coded-frame"></a> appended in the current <a def-id="coded-frame-group"></a>. The variable is initially
           unset to indicate that no <a def-id="coded-frames"></a> have been appended yet.</p>
 
-        <p>Each <a def-id="track-buffer"></a> has a <dfn id="highest-presentation-timestamp">highest presentation timestamp</dfn> variable that stores
-          the highest <a def-id="presentation-timestamp"></a> encountered in a <a def-id="coded-frame"></a> appended in the current <a def-id="coded-frame-group"></a>.
-          The variable is initially unset to indicate that no <a def-id="coded-frames"></a> have been appended yet.</p>
+        <p>Each <a def-id="track-buffer"></a> has a <dfn id="highest-end-timestamp">highest end timestamp</dfn> variable that stores
+            the highest <a def-id="coded-frame-end-timestamp"></a> across all <a def-id="coded-frames"></a> in
+            the current <a def-id="coded-frame-group"></a> that were appended to this track buffer.
+            The variable is initially unset to indicate that no <a def-id="coded-frames"></a> have been appended yet.</p>
 
         <p>Each <a def-id="track-buffer"></a> has a <dfn id="need-RAP-flag">need random access point flag</dfn> variable that keeps track of whether
           the track buffer is waiting for a <a def-id="random-access-point"></a> <a def-id="coded-frame"></a>. The variable is initially set to true to
@@ -1267,7 +1268,7 @@
               <a def-id="coded-frames"></a> have been processed.</li>
             <li>Unset the <a def-id="last-decode-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
             <li>Unset the <a def-id="last-frame-duration"></a> on all <a def-id="track-buffers"></a>.</li>
-            <li>Unset the <a def-id="highest-presentation-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
+            <li>Unset the <a def-id="highest-end-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
             <li>Set the <a def-id="need-RAP-flag"></a> on all <a def-id="track-buffers"></a> to true.</li>
             <li>Remove all bytes from the <a def-id="input-buffer"></a>.</li>
             <li>Set <a def-id="append-state"></a> to <a def-id="waiting-for-segment"></a>.</li>
@@ -1809,7 +1810,7 @@
                         </li>
                         <li>Unset the <a def-id="last-decode-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
                         <li>Unset the <a def-id="last-frame-duration"></a> on all <a def-id="track-buffers"></a>.</li>
-                        <li>Unset the <a def-id="highest-presentation-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
+                        <li>Unset the <a def-id="highest-end-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
                         <li>Set the <a def-id="need-RAP-flag"></a> on all <a def-id="track-buffers"></a> to true.</li>
                         <li>Jump to the <i>Loop Top</i> step above to restart processing of the current <a def-id="coded-frame"></a>.</li>
                       </ol>
@@ -1867,12 +1868,12 @@
                 </li>
                 <li>Remove existing coded frames in <var>track buffer</var>:
                   <dl class="switch">
-                    <dt>If <a def-id="highest-presentation-timestamp"></a> for <var>track buffer</var> is not set:</dt>
+                    <dt>If <a def-id="highest-end-timestamp"></a> for <var>track buffer</var> is not set:</dt>
                     <dd>Remove all <a def-id="coded-frames"></a> from <var>track buffer</var> that have a <a def-id="presentation-timestamp"></a> greater than or equal to
                       <var>presentation timestamp</var> and less than <var>frame end timestamp</var>.</dd>
-                    <dt>If <a def-id="highest-presentation-timestamp"></a> for <var>track buffer</var> is set and less than or equal to <var>presentation timestamp</var>:</dt>
+                    <dt>If <a def-id="highest-end-timestamp"></a> for <var>track buffer</var> is set and less than or equal to <var>presentation timestamp</var>:</dt>
                     <dd>Remove all <a def-id="coded-frames"></a> from <var>track buffer</var> that have a <a def-id="presentation-timestamp"></a> greater than
-                      or equal to <a def-id="highest-presentation-timestamp"></a> and less than <var>frame end timestamp</var></dd>
+                      or equal to <a def-id="highest-end-timestamp"></a> and less than <var>frame end timestamp</var></dd>
                   </dl>
                 </li>
                 <li>Remove decoding dependencies of the coded frames removed in the previous step:
@@ -1905,8 +1906,8 @@
                   </dl>
                 <li>Set <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> to <var>decode timestamp</var>.</li>
                 <li>Set <a def-id="last-frame-duration"></a> for <var>track buffer</var> to <var>frame duration</var>.</li>
-                <li>If <a def-id="highest-presentation-timestamp"></a> for <var>track buffer</var> is unset or <var>frame end timestamp</var> is greater
-                  than <a def-id="highest-presentation-timestamp"></a>, then set <a def-id="highest-presentation-timestamp"></a> for <var>track buffer</var>
+                <li>If <a def-id="highest-end-timestamp"></a> for <var>track buffer</var> is unset or <var>frame end timestamp</var> is greater
+                  than <a def-id="highest-end-timestamp"></a>, then set <a def-id="highest-end-timestamp"></a> for <var>track buffer</var>
                   to <var>frame end timestamp</var>.
                   <p class="note">The greater than check is needed because bidirectional prediction between coded frames can cause
                     <var>presentation timestamp</var> to not be monotonically increasing eventhough the decode timestamps are monotonically increasing.</p>
@@ -2688,7 +2689,14 @@
         </thead>
         <tbody>
         <tbody>
-          <td>03 April 2015</td>
+          <td>07 April 2015</td>
+            <td>
+              <ul>
+                <li>Bug 28234 - Rename highest presentation timestamp to highest end timestamp and clarify definition.</li>
+              </ul>
+            </td>
+          </tr>
+          <td><a href="https://rawgit.com/w3c/media-source/da0f7290b64626bf5cf97fb6cb5ad0d7d78c2a6a/index.html">03 April 2015</a></td>
             <td>
               <ul>
                 <li>Update editors.</li>

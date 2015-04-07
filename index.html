@@ -431,7 +431,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-03-april-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2015-04-03">03 April 2015</time></h2>
+  <h2 id="w3c-editor-s-draft-07-april-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2015-04-07">07 April 2015</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1481,9 +1481,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           the <a href="#coded-frame-duration">coded frame duration</a> of the last <a href="#coded-frame">coded frame</a> appended in the current <a href="#coded-frame-group">coded frame group</a>. The variable is initially
           unset to indicate that no <a href="#coded-frame">coded frames</a> have been appended yet.</p>
 
-        <p>Each <a href="#track-buffer">track buffer</a> has a <dfn id="highest-presentation-timestamp" data-dfn-for="">highest presentation timestamp</dfn> variable that stores
-          the highest <a href="#presentation-timestamp">presentation timestamp</a> encountered in a <a href="#coded-frame">coded frame</a> appended in the current <a href="#coded-frame-group">coded frame group</a>.
-          The variable is initially unset to indicate that no <a href="#coded-frame">coded frames</a> have been appended yet.</p>
+        <p>Each <a href="#track-buffer">track buffer</a> has a <dfn id="highest-end-timestamp" data-dfn-for="">highest end timestamp</dfn> variable that stores
+            the highest <a href="#coded-frame-end-timestamp">coded frame end timestamp</a> across all <a href="#coded-frame">coded frames</a> in
+            the current <a href="#coded-frame-group">coded frame group</a> that were appended to this track buffer.
+            The variable is initially unset to indicate that no <a href="#coded-frame">coded frames</a> have been appended yet.</p>
 
         <p>Each <a href="#track-buffer">track buffer</a> has a <dfn id="need-RAP-flag" data-dfn-for="">need random access point flag</dfn> variable that keeps track of whether
           the track buffer is waiting for a <a href="#random-access-point">random access point</a> <a href="#coded-frame">coded frame</a>. The variable is initially set to true to
@@ -1646,7 +1647,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <a href="#coded-frame">coded frames</a> have been processed.</li>
             <li>Unset the <var><a href="#last-decode-timestamp">last decode timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
             <li>Unset the <var><a href="#last-frame-duration">last frame duration</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
-            <li>Unset the <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
+            <li>Unset the <var><a href="#highest-end-timestamp">highest end timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
             <li>Set the <var><a href="#need-RAP-flag">need random access point flag</a></var> on all <a href="#track-buffer">track buffers</a> to true.</li>
             <li>Remove all bytes from the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
             <li>Set <var><a href="#sourcebuffer-append-state">append state</a></var> to <a href="#sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</a>.</li>
@@ -2188,7 +2189,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                         </li>
                         <li>Unset the <var><a href="#last-decode-timestamp">last decode timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
                         <li>Unset the <var><a href="#last-frame-duration">last frame duration</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
-                        <li>Unset the <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
+                        <li>Unset the <var><a href="#highest-end-timestamp">highest end timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
                         <li>Set the <var><a href="#need-RAP-flag">need random access point flag</a></var> on all <a href="#track-buffer">track buffers</a> to true.</li>
                         <li>Jump to the <i>Loop Top</i> step above to restart processing of the current <a href="#coded-frame">coded frame</a>.</li>
                       </ol>
@@ -2246,12 +2247,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 </li>
                 <li>Remove existing coded frames in <var>track buffer</var>:
                   <dl class="switch">
-                    <dt>If <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> for <var>track buffer</var> is not set:</dt>
+                    <dt>If <var><a href="#highest-end-timestamp">highest end timestamp</a></var> for <var>track buffer</var> is not set:</dt>
                     <dd>Remove all <a href="#coded-frame">coded frames</a> from <var>track buffer</var> that have a <a href="#presentation-timestamp">presentation timestamp</a> greater than or equal to
                       <var>presentation timestamp</var> and less than <var>frame end timestamp</var>.</dd>
-                    <dt>If <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> for <var>track buffer</var> is set and less than or equal to <var>presentation timestamp</var>:</dt>
+                    <dt>If <var><a href="#highest-end-timestamp">highest end timestamp</a></var> for <var>track buffer</var> is set and less than or equal to <var>presentation timestamp</var>:</dt>
                     <dd>Remove all <a href="#coded-frame">coded frames</a> from <var>track buffer</var> that have a <a href="#presentation-timestamp">presentation timestamp</a> greater than
-                      or equal to <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> and less than <var>frame end timestamp</var></dd>
+                      or equal to <var><a href="#highest-end-timestamp">highest end timestamp</a></var> and less than <var>frame end timestamp</var></dd>
                   </dl>
                 </li>
                 <li>Remove decoding dependencies of the coded frames removed in the previous step:
@@ -2284,8 +2285,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   </dl>
                 </li><li>Set <var><a href="#last-decode-timestamp">last decode timestamp</a></var> for <var>track buffer</var> to <var>decode timestamp</var>.</li>
                 <li>Set <var><a href="#last-frame-duration">last frame duration</a></var> for <var>track buffer</var> to <var>frame duration</var>.</li>
-                <li>If <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> for <var>track buffer</var> is unset or <var>frame end timestamp</var> is greater
-                  than <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var>, then set <var><a href="#highest-presentation-timestamp">highest presentation timestamp</a></var> for <var>track buffer</var>
+                <li>If <var><a href="#highest-end-timestamp">highest end timestamp</a></var> for <var>track buffer</var> is unset or <var>frame end timestamp</var> is greater
+                  than <var><a href="#highest-end-timestamp">highest end timestamp</a></var>, then set <var><a href="#highest-end-timestamp">highest end timestamp</a></var> for <var>track buffer</var>
                   to <var>frame end timestamp</var>.
                   <div class="note"><div class="note-title" aria-level="5" role="heading" id="h-note30"><span>Note</span></div><p class="">The greater than check is needed because bidirectional prediction between coded frames can cause
                     <var>presentation timestamp</var> to not be monotonically increasing eventhough the decode timestamps are monotonically increasing.</p></div>
@@ -3034,7 +3035,14 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </thead>
         <tbody>
         </tbody><tbody>
-          <tr><td>03 April 2015</td>
+          <tr><td>07 April 2015</td>
+            <td>
+              <ul>
+                <li>Bug 28234 - Rename highest presentation timestamp to highest end timestamp and clarify definition.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr><td><a href="https://rawgit.com/w3c/media-source/da0f7290b64626bf5cf97fb6cb5ad0d7d78c2a6a/index.html">03 April 2015</a></td>
             <td>
               <ul>
                 <li>Update editors.</li>
