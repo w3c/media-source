@@ -258,7 +258,7 @@
     'track-buffer-ranges': { func: term_helper, fragment: 'track-buffer-ranges', link_text: 'track buffer ranges', },
     'last-decode-timestamp': { func: var_helper, fragment: '#last-decode-timestamp', link_text: 'last decode timestamp', },
     'last-frame-duration': { func: var_helper, fragment: '#last-frame-duration', link_text: 'last frame duration', },
-    'highest-presentation-timestamp': { func: var_helper, fragment: '#highest-presentation-timestamp', link_text: 'highest presentation timestamp', },
+    'highest-end-timestamp': { func: var_helper, fragment: '#highest-end-timestamp', link_text: 'highest end timestamp', },
     'need-RAP-flag': { func: var_helper, fragment: '#need-RAP-flag', link_text: 'need random access point flag', },
 
     'TrackDefaultType-audio': { func: idlref_helper, fragment: 'idl-def-TrackDefaultType.audio', link_text: '"audio"',  },
