@@ -203,7 +203,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">ISO BMFF Byte Stream Format</h1>
   
-  <h2 id="w3c-editor-s-draft-20-march-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2015-03-20">20 March 2015</time></h2>
+  <h2 id="w3c-editor-s-draft-10-september-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2015-09-10">10 September 2015</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -389,7 +389,9 @@ table.simple {
     <section id="iso-media-segments" typeof="bibo:Chapter" resource="#iso-media-segments" property="bibo:hasPart">
       <!--OddPage--><h2 id="h-iso-media-segments" resource="#h-iso-media-segments"><span property="xhv:role" resource="xhv:heading"><span class="secno">4. </span>Media Segments</span></h2>
       <p>An ISO BMFF <a href="index.html#media-segment">media segment</a> is defined in this specification as one optional
-        Segment Type Box (<span class="iso-box">styp</span>) followed by a single Movie Fragment Box
+        Segment Type Box (<span class="iso-box">styp</span>) followed by a sequence of
+        one or more Movie Fragments each containing data for distinct tracks and all spanning the same time range.
+        A Movie Fragment is defined a single Movie Fragment Box
         (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>). 
         If the Segment Type Box is not present, the segment must conform to the brands listed in the
         File Type Box (<span class="iso-box">ftyp</span>) in the <a href="index.html#init-segment">initialization segment</a>.</p>
@@ -399,6 +401,12 @@ table.simple {
         These boxes must be accepted and ignored by the user agent and are not considered part of the <a href="index.html#media-segment">media segment</a> in this
         specification.
       </p>
+      <div class="note"><div class="note-title" aria-level="3" role="heading" id="h-note3"><span>Note</span></div><p class="">Typically each Media Segment consists of a single Movie Fragment. The possibility to
+      include multiple Movie Fragments is included for support of layered encoding schemes where fragments
+      subsequent to the first provide enhancement information, stored in separate tracks, for the same time span as the first movie fragment
+      in the media segment. The end of a media segment is detected when a movie fragment is encountered containing
+      further information for a track already referenced within the media segment.
+      </p></div>
 
       <p>The user agent must run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if any of the following conditions are met:</p>
       <ol>
@@ -409,11 +417,12 @@ table.simple {
           Segment Type Box is not present.</li>
         <li>This <a href="index.html#media-segment">media segment</a> contains a Segment Type Box that is not compatible with the
           File Type Box in the <a href="index.html#init-segment">initialization segment</a>.</li>
-	<li>The Movie Fragment Box does not contain at least one Track Fragment Box (<span class="iso-box">traf</span>).</li>
-	<li>The Movie Fragment Box does not use <a href="#movie-fragment-relative-addressing">movie-fragment relative addressing</a>.</li>
+	<li>A Movie Fragment Box does not contain at least one Track Fragment Box (<span class="iso-box">traf</span>).</li>
+	<li>A Movie Fragment Box does not use <a href="#movie-fragment-relative-addressing">movie-fragment relative addressing</a>.</li>
 	<li>External data references are being used.</li>
 	<li>At least one Track Fragment Box does not contain a Track Fragment Decode Time Box (<span class="iso-box">tfdt</span>)</li>
-	<li>The Media Data Boxes do not contain all the samples referenced by the Track Fragment Run Boxes (<span class="iso-box">trun</span>) of the Movie Fragment Box.</li>
+	<li>The Media Data Boxes do not contain all the samples referenced by the Track Fragment Run Boxes (<span class="iso-box">trun</span>) of the Movie Fragment Boxes.</li>
+  <li>A Movie Fragment Box contains data for a track not yet seen in this media segment, but for a different time range than other tracks in the media segment.</li>
 	<li>Inband parameter sets are not present in the appropriate samples and parameter sets are not present in the last initialization segment appended.</li>
       </ol>
 
@@ -423,7 +432,7 @@ table.simple {
         conditions are met:</p>
       <ul>
         <li>Every Track Fragment Box in a Movie Fragment Box has the <span class="iso-var">default-base-is-moof</span> flag set.
-          <div class="note"><div class="note-title" aria-level="3" role="heading" id="h-note3"><span>Note</span></div><p class="">This implies that the <span class="iso-var">base-data-offset-present</span> flag
+          <div class="note"><div class="note-title" aria-level="3" role="heading" id="h-note4"><span>Note</span></div><p class="">This implies that the <span class="iso-var">base-data-offset-present</span> flag
             is not set.</p></div>
         </li>
         <li>The Movie Fragment Box contains a single Track Fragment Box and that box does not have the <span class="iso-var">base-data-offset-present</span> flag set.</li>

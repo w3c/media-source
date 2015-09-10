@@ -163,7 +163,9 @@
     <section id="iso-media-segments">
       <h4>Media Segments</h4>
       <p>An ISO BMFF <a def-id="media-segment"></a> is defined in this specification as one optional
-        Segment Type Box (<span class="iso-box">styp</span>) followed by a single Movie Fragment Box
+        Segment Type Box (<span class="iso-box">styp</span>) followed by a sequence of
+        one or more Movie Fragments each containing data for distinct tracks and all spanning the same time range.
+        A Movie Fragment is defined a single Movie Fragment Box
         (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>). 
         If the Segment Type Box is not present, the segment must conform to the brands listed in the
         File Type Box (<span class="iso-box">ftyp</span>) in the <a def-id="init-segment"></a>.</p>
@@ -172,6 +174,12 @@
         <a def-id="init-segment"></a> or <a def-id="media-segment"></a> and before the beginning of a new <a def-id="media-segment"></a>.
         These boxes must be accepted and ignored by the user agent and are not considered part of the <a def-id="media-segment"></a> in this
         specification.
+      </p>
+      <p class="note">Typically each Media Segment consists of a single Movie Fragment. The possibility to
+      include multiple Movie Fragments is included for support of layered encoding schemes where fragments
+      subsequent to the first provide enhancement information, stored in separate tracks, for the same time span as the first movie fragment
+      in the media segment. The end of a media segment is detected when a movie fragment is encountered containing
+      further information for a track already referenced within the media segment.
       </p>
 
       <p>The user agent must run the <a def-id="append-decode-error-algorithm"></a> if any of the following conditions are met:</p>
@@ -183,11 +191,12 @@
           Segment Type Box is not present.</li>
         <li>This <a def-id="media-segment"></a> contains a Segment Type Box that is not compatible with the
           File Type Box in the <a def-id="init-segment"></a>.</li>
-	<li>The Movie Fragment Box does not contain at least one Track Fragment Box (<span class="iso-box">traf</span>).</li>
-	<li>The Movie Fragment Box does not use <a def-id="movie-fragment-relative-addressing"></a>.</li>
+	<li>A Movie Fragment Box does not contain at least one Track Fragment Box (<span class="iso-box">traf</span>).</li>
+	<li>A Movie Fragment Box does not use <a def-id="movie-fragment-relative-addressing"></a>.</li>
 	<li>External data references are being used.</li>
 	<li>At least one Track Fragment Box does not contain a Track Fragment Decode Time Box (<span class="iso-box">tfdt</span>)</li>
-	<li>The Media Data Boxes do not contain all the samples referenced by the Track Fragment Run Boxes (<span class="iso-box">trun</span>) of the Movie Fragment Box.</li>
+	<li>The Media Data Boxes do not contain all the samples referenced by the Track Fragment Run Boxes (<span class="iso-box">trun</span>) of the Movie Fragment Boxes.</li>
+  <li>A Movie Fragment Box contains data for a track not yet seen in this media segment, but for a different time range than other tracks in the media segment.</li>
 	<li>Inband parameter sets are not present in the appropriate samples and parameter sets are not present in the last initialization segment appended.</li>
       </ol>
 
