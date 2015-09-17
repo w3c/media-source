@@ -1270,6 +1270,7 @@
             <li>Unset the <a def-id="last-frame-duration"></a> on all <a def-id="track-buffers"></a>.</li>
             <li>Unset the <a def-id="highest-end-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
             <li>Set the <a def-id="need-RAP-flag"></a> on all <a def-id="track-buffers"></a> to true.</li>
+            <li>If the <a def-id="mode"></a> attribute equals <a def-id="AppendMode-sequence"></a>, then set the <a def-id="group-start-timestamp"></a> to the <a def-id="group-end-timestamp"></li>
             <li>Remove all bytes from the <a def-id="input-buffer"></a>.</li>
             <li>Set <a def-id="append-state"></a> to <a def-id="waiting-for-segment"></a>.</li>
           </ol>
@@ -2689,7 +2690,14 @@
         </thead>
         <tbody>
         <tbody>
-          <td>14 July 2015</td>
+          <td>17 September 2015</td>
+            <td>
+              <ul>
+                <li>Bug 29133 - Maintain coded group continuity in sequence append mode when resetting parser state.</li>
+              </ul>
+            </td>
+          </tr>
+          <td><a href="https://rawgit.com/w3c/media-source/3105f930039965dddbc8201f928e2c6f175509e6/index.html">14 July 2015</td>
             <td>
               <ul>
                 <li>Bugs 28881 and 28882 - Editorial punctuation and whitespace fixes.</li>
