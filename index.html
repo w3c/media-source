@@ -431,7 +431,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-14-july-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2015-07-14">14 July 2015</time></h2>
+  <h2 id="w3c-editor-s-draft-17-september-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2015-09-17">17 September 2015</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1649,7 +1649,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Unset the <var><a href="#last-frame-duration">last frame duration</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
             <li>Unset the <var><a href="#highest-end-timestamp">highest end timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
             <li>Set the <var><a href="#need-RAP-flag">need random access point flag</a></var> on all <a href="#track-buffer">track buffers</a> to true.</li>
-            <li>Remove all bytes from the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-mode">mode</a></code> attribute equals <code><a href="#idl-def-AppendMode.sequence">"sequence"</a></code>, then set the <var><a href="#sourcebuffer-group-start-timestamp">group start timestamp</a></var> to the <var><a href="#sourcebuffer-group-end-timestamp">group end timestamp</a></var></li><var><a href="#sourcebuffer-group-end-timestamp">
+            </a></var><li><var><a href="#sourcebuffer-group-end-timestamp">Remove all bytes from the </a></var><var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
             <li>Set <var><a href="#sourcebuffer-append-state">append state</a></var> to <a href="#sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</a>.</li>
           </ol>
         </section>
@@ -3035,7 +3036,14 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </thead>
         <tbody>
         </tbody><tbody>
-          <tr><td>14 July 2015</td>
+          <tr><td>17 September 2015</td>
+            <td>
+              <ul>
+                <li>Bug 29133 - Maintain coded group continuity in sequence append mode when resetting parser state.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr><td><a href="https://rawgit.com/w3c/media-source/3105f930039965dddbc8201f928e2c6f175509e6/index.html">14 July 2015</a></td>
             <td>
               <ul>
                 <li>Bugs 28881 and 28882 - Editorial punctuation and whitespace fixes.</li>
