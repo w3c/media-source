@@ -8,10 +8,12 @@
     
 
     <!-- script to register bugs -->
+    <!-- Disabled unless/until it supports GitHub issues.
     <script src="https://w3c.github.io/webcomponents/assets/scripts/bug-assist.js"></script>
     <meta name="bug.short_desc" content="[MSE] ">
     <meta name="bug.product" content="HTML WG">
     <meta name="bug.component" content="Media Source Extensions">
+    -->
 
     <style>/* --- ISSUES/NOTES --- */
 div.issue-title, div.note-title , div.warning-title {
@@ -431,7 +433,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-17-september-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2015-09-17">17 September 2015</time></h2>
+  <h2 id="w3c-editor-s-draft-13-october-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2015-10-13">13 October 2015</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -505,8 +507,8 @@ table.simple {
       Allowing JavaScript to generate streams facilitates a variety of use
       cases like adaptive streaming and time shifting live streams.
 
-      <p>If you wish to make comments or file bugs regarding this document in a manner that is tracked by the <abbr title="World Wide Web Consortium">W3C</abbr>, please submit them via
-        <a href="https://www.w3.org/Bugs/Public/enter_bug.cgi?product=HTML%20WG&amp;component=Media%20Source%20Extensions&amp;short_desc=%5BMSE%5D%20">our public bug database</a>.
+      <p>If you wish to make comments or file bugs regarding this document in a manner that is tracked by the editors, please submit them via
+        <a href="https://github.com/w3c/media-source/issues/new">our public bug database</a>.
       </p>
     </section><section id="sotd" class="introductory"><h2 id="h-sotd" resource="#h-sotd"><span property="xhv:role" resource="xhv:heading">Status of This Document</span></h2>
   
@@ -520,7 +522,7 @@ table.simple {
         </p>
         
         
-        <p>The working groups maintains <a href="http://w3.org/brief/Mjcw">a list of all bug reports that the editors have not yet tried to address</a>. This draft highlights some of the pending issues that are still to be discussed in the working group. No decision has been taken on the outcome of these issues including whether they are valid.</p>
+      <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>; there may also be open bugs in the <a href="http://w3.org/brief/Mjcw">previous bug tracker</a>. This draft highlights some of the pending issues that are still to be discussed in the working group. No decision has been taken on the outcome of these issues including whether they are valid.</p>
         <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should join the mailing list mentioned below and take part in the discussions.</p>
 
         <p>The following features are <strong>at risk</strong> and may be removed due to lack of implementation.
@@ -3036,7 +3038,14 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </thead>
         <tbody>
         </tbody><tbody>
-          <tr><td>17 September 2015</td>
+          <tr><td>13 October 2015</td>
+            <td>
+              <ul>
+                <li>Issue 12 - Update bug tracker links to use github.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr><td><a href="https://rawgit.com/w3c/media-source/d69d93d482a208f38eba43e34b366a75a8570901/index.html">17 September 2015</a></td>
             <td>
               <ul>
                 <li>Bug 29133 - Maintain coded group continuity in sequence append mode when resetting parser state.</li>
@@ -3709,7 +3718,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
     </section>
   
 
-<form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form><section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart"><!--OddPage--><h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>References</span></h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart"><h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.1 </span>Normative references</span></h3><dl class="bibliography" resource=""><dt id="bib-FILE-API">[FILE-API]</dt><dd>Arun Ranganathan; Jonas Sicking. <a href="http://www.w3.org/TR/FileAPI/" property="dc:requires"><cite>File API</cite></a>. 21 April 2015. W3C Working Draft. URL: <a href="http://www.w3.org/TR/FileAPI/" property="dc:requires">http://www.w3.org/TR/FileAPI/</a>
+<section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart"><!--OddPage--><h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>References</span></h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart"><h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.1 </span>Normative references</span></h3><dl class="bibliography" resource=""><dt id="bib-FILE-API">[FILE-API]</dt><dd>Arun Ranganathan; Jonas Sicking. <a href="http://www.w3.org/TR/FileAPI/" property="dc:requires"><cite>File API</cite></a>. 21 April 2015. W3C Working Draft. URL: <a href="http://www.w3.org/TR/FileAPI/" property="dc:requires">http://www.w3.org/TR/FileAPI/</a>
 </dd><dt id="bib-HTML5">[HTML5]</dt><dd>Ian Hickson; Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Edward O'Connor; Silvia Pfeiffer. <a href="http://www.w3.org/TR/html5/" property="dc:requires"><cite>HTML5</cite></a>. 28 October 2014. W3C Recommendation. URL: <a href="http://www.w3.org/TR/html5/" property="dc:requires">http://www.w3.org/TR/html5/</a>
 </dd><dt id="bib-TYPED-ARRAYS">[TYPED-ARRAYS]</dt><dd>David Herman; Kenneth Russell. <a href="https://www.khronos.org/registry/typedarray/specs/latest/" property="dc:requires"><cite>Typed Array Specification</cite></a>. 26 June 2013. Khronos Working Draft. URL: <a href="https://www.khronos.org/registry/typedarray/specs/latest/" property="dc:requires">https://www.khronos.org/registry/typedarray/specs/latest/</a>
 </dd><dt id="bib-WHATWG-STREAMS-API">[WHATWG-STREAMS-API]</dt><dd>Domenic Denicola; Takeshi Yoshino. <a href="https://streams.spec.whatwg.org/" property="dc:requires"><cite>WHATWG Streams API</cite></a>. W3C Working Draft. URL: <a href="https://streams.spec.whatwg.org/" property="dc:requires">https://streams.spec.whatwg.org/</a>
