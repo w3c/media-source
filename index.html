@@ -433,7 +433,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-13-october-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2015-10-13">13 October 2015</time></h2>
+  <h2 id="w3c-editor-s-draft-15-october-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2015-10-15">15 October 2015</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1620,7 +1620,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <p>If the <var><a href="#sourcebuffer-append-state">append state</a></var> equals <a href="#sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</a>, then run the following steps:</p>
               <ol>
                 <li>If the <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> is false, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true and abort this algorithm.</li>
-                <li>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> does not contain a complete <a href="#media-segment">media segment</a> header yet, then jump to the <i>need more data</i> step below.</li>
                 <li>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> contains one or more complete <a href="#coded-frame">coded frames</a>, then run the
                   <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>.
                   <div class="note"><div class="note-title" aria-level="5" role="heading" id="h-note17"><span>Note</span></div><p class="">
@@ -3038,7 +3037,14 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </thead>
         <tbody>
         </tbody><tbody>
-          <tr><td>13 October 2015</td>
+          <tr><td>15 October 2015</td>
+            <td>
+              <ul>
+                <li>Issue 30 - Remove unnecessary segment parser loop step referencing undefined media segment header.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr><td><a href="https://rawgit.com/w3c/media-source/37fbc93c1b0fb11c2238cae25d206f5e766ad1ac/index.html">13 October 2015</a></td>
             <td>
               <ul>
                 <li>Issue 12 - Update bug tracker links to use github.</li>

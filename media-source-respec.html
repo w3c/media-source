@@ -1241,7 +1241,6 @@
               <p>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a>, then run the following steps:</p>
               <ol>
                 <li>If the <a def-id="first-init-segment-received-flag"></a> is false, then run the <a def-id="append-decode-error-algorithm"></a> and abort this algorithm.</li>
-                <li>If the <a def-id="input-buffer"></a> does not contain a complete <a def-id="media-segment"></a> header yet, then jump to the <i>need more data</i> step below.</li>
                 <li>If the <a def-id="input-buffer"></a> contains one or more complete <a def-id="coded-frames"></a>, then run the
                   <a def-id="coded-frame-processing-algorithm"></a>.
                   <p class="note">
@@ -2692,7 +2691,14 @@
         </thead>
         <tbody>
         <tbody>
-          <td>13 October 2015</td>
+          <td>15 October 2015</td>
+            <td>
+              <ul>
+                <li>Issue 30 - Remove unnecessary segment parser loop step referencing undefined media segment header.</li>
+              </ul>
+            </td>
+          </tr>
+          <td><a href="https://rawgit.com/w3c/media-source/37fbc93c1b0fb11c2238cae25d206f5e766ad1ac/index.html">13 October 2015</a></td>
             <td>
               <ul>
                 <li>Issue 12 - Update bug tracker links to use github.</li>
