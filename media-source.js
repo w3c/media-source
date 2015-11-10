@@ -371,13 +371,13 @@
 
     'performance-now': { func: hrtime_helper, fragment: 'dom-performance-now', link_text: 'Performance.now()',  },
 
-    'ReadableStream-read': { func: whatwg_streams_helper, fragment: 'rs-read', link_text:'read()', },
-    'ReadableStream-ready': { func: whatwg_streams_helper, fragment: 'rs-ready', link_text:'ready', },
-    'ReadableStream-closed': { func: whatwg_streams_helper, fragment: 'rs-closed', link_text:'closed', },
-    'ReadableStream-state-waiting': { func: whatwg_streams_helper, fragment: 'rs-state', link_text:'"waiting"', },
-    'ReadableStream-state-readable': { func: whatwg_streams_helper, fragment: 'rs-state', link_text:'"readable"', },
-    'ReadableStream-state-closed': { func: whatwg_streams_helper, fragment: 'rs-state', link_text:'"closed"', },
-    'ReadableStream-state-errored': { func: whatwg_streams_helper, fragment: 'rs-state', link_text:'"errored"', },
+    'ReadableStream-read': { func: whatwg_streams_helper, fragment: 'reader-read', link_text:'read()', },
+    'ReadableStream-ready': { func: whatwg_streams_helper, fragment: 'ws-ready', link_text:'ready', },
+    'ReadableStream-closed': { func: whatwg_streams_helper, fragment: 'ws-closed', link_text:'closed', },
+    'ReadableStream-state-waiting': { func: whatwg_streams_helper, fragment: 'ws-state', link_text:'"waiting"', },
+    'ReadableStream-state-readable': { func: whatwg_streams_helper, fragment: 'ws-state', link_text:'"readable"', },
+    'ReadableStream-state-closed': { func: whatwg_streams_helper, fragment: 'ws-state', link_text:'"closed"', },
+    'ReadableStream-state-errored': { func: whatwg_streams_helper, fragment: 'ws-state', link_text:'"errored"', },
   };
 
   var definitionInfo = {};
