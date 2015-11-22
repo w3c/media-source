@@ -520,6 +520,19 @@
           </ol>
         </dd>
 
+        <dt>void addSeekableRange(double start, double end)</dt>
+        <dd>
+          <p>Adds a new time range to the media element's <a def-id="videoref" name="dom-media-seekable">seekable</a> ranges.</p>
+          <ol class="method-algorithm">
+            <li>If <a def-id="duration"></a> is not positive Infinity, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If <var>start</var> or <var>end</var> is negative or NaN, then throw an <a def-id="invalid-access-error"></a> exception and abort these steps.</li>
+            <li>If <var>start</var> is not strictly less than <var>end</var>, then throw an <a def-id="invalid-access-error"></a> exception and abort these steps.</li>
+            <li>
+              If <var>seekableUpdates</var> is unset, let it be a new <a def-id="timeranges"></a> consisting of a single range with a start time of <var>start</var> and end time equal to <var>end</var>. Otherwise, let the new value of <var>seekableUpdates</var> be the <a def-id="normalized-timeranges-object"></a> formed by adding the single time range between <var>start</var> and <var>end</var> to its current value.
+            </li>
+          </ol>
+        </dd>
+
         <dt>void endOfStream(optional EndOfStreamError error)</dt>
         <dd>
           <p>Signals the end of the stream.</p>
@@ -2384,9 +2397,8 @@
         <dt>If <a def-id="duration"></a> equals positive Infinity:</dt>
         <dd>
           <ol>
-            <li>If the <a def-id="hme-buffered"></a> attribute returns an empty <a def-id="timeranges"></a>
-              object, then return an empty <a def-id="timeranges"></a> object and abort these steps.</li>
-            <li>Return a single range with a start time of 0 and an end time equal to the highest end time reported by the <a def-id="hme-buffered"></a> attribute.
+            <li>If <var>seekableUpdates</var> is unset, let it be an empty <a def-id="timeranges"></a> object.</li>
+            <li>Return a static <a def-id="normalized-timeranges-object"></a> consisting of the time ranges in <a def-id="hme-buffered"></a> and <var>seekableUpdates</var>.</li>
         </ol></dd>
         <dt>Otherwise:</dt>
         <dd>Return a single range with a start time of 0 and an end time equal to <a def-id="duration"></a>.</dd>
