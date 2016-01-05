@@ -19,7 +19,7 @@
       // if this is a LCWD, uncomment and set the end of its review period
       // lcEnd: "2009-08-05",
 
-      publishDate: "2015-11-12",
+      publishDate: "2016-01-05",
       previousMaturity: "CR",
       previousPublishDate: "2015-11-12",
 
@@ -1254,7 +1254,11 @@
                   </p>
                 </li>
                 <li>If this <a>SourceBuffer</a> is full and cannot accept more media data, then set the <a def-id="buffer-full-flag"></a> to true.</li>
-                <li>If the <a def-id="input-buffer"></a> does not contain a complete <a def-id="media-segment"></a>, then jump to the <i>need more data</i> step below.</p>
+                <li>If the <a def-id="input-buffer"></a> does not contain a complete <a def-id="media-segment"></a>, then jump to the <i>need more data</i> step below.</li>
+                <li>If the <a def-id="media-segment"></a> does not contain at least one coded frame for each audio and video track in the most recent <a def-id="init-segment"></a>, then run the <a def-id="append-decode-error-algorithm"></a> and abort this algorithm.</li>
+                <p class="note">
+                  The intent is to ensure a multiplexed audio/video <a>SourceBuffer</a> can reliably detect discontinuities within the <a def-id="coded-frame-processing-algorithm"></a> which could otherwise be missed.
+                </p>
                 <li>Remove the <a def-id="media-segment"></a> bytes from the beginning of the <a def-id="input-buffer"></a>.</li>
                 <li>Set <a def-id="append-state"></a> to <a def-id="waiting-for-segment"></a>.</li>
                 <li>Jump to the <i>loop top</i> step above.</li>
@@ -2695,7 +2699,21 @@
         </thead>
         <tbody>
         <tbody>
-          <td>15 October 2015</td>
+          <td>05 January 2016</td>
+            <td>
+              <ul>
+                <li>Issue 31 - Require coded frame from each A/V track in each media segment to improve discontinuity detection.</li>
+              </ul>
+            </td>
+          </tr>
+          <td><a href="https://rawgit.com/w3c/media-source/1ecce91ab2a8146e7ff93f574925bf70f28cb495/index.html">16 November 2015</a></td>
+            <td>
+              <ul>
+                <li>SOTD process fix, WHATWG-STREAMS reference fix, and minor edits related to 12 November 2015 heartbeat publication.</li>
+              </ul>
+            </td>
+          </tr>
+          <td><a href="https://rawgit.com/w3c/media-source/cb6f9cc68031871f9b8980b7f9e0c56badf7105f/index.html">15 October 2015</a></td>
             <td>
               <ul>
                 <li>Issue 30 - Remove unnecessary segment parser loop step referencing undefined media segment header.</li>

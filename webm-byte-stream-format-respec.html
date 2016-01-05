@@ -48,6 +48,7 @@
       // editors, add as many as you like
       // only "name" is required
       editors:  [
+      { name: "Matthew Wolenetz",  url: "", company: "Google Inc.", companyURL: "http://www.google.com/" },
       { name: "Aaron Colwell",  url: "", company: "Google Inc.", companyURL: "http://www.google.com/" },
       ],
 
@@ -205,8 +206,10 @@
       <ol>
         <li>The Timecode element must appear before any Block &amp; SimpleBlock elements in a <a def-id="webm-cluster"></a>.</li>
         <li>Block &amp; SimpleBlock elements are in time increasing order consistent with the <a def-id="webm-spec"></a>.</li>
-        <li>If the most recent <a def-id="webm-init-segment"></a> describes multiple tracks, then blocks from all the tracks must be interleaved in time increasing order. At least one block from all audio and video
-          tracks must be present.</li>
+        <li>If the most recent <a def-id="webm-init-segment"></a> describes multiple tracks, then blocks from all the tracks must be interleaved in time increasing order.</li>
+        <div class="note">
+          At least one block from all audio and video tracks must be present, as required for all byte streams by the Media Source Extensions spec.</li>
+        </div>
       </ol>
 
       <p>The user agent must accept and ignore <a def-id="webm-cues"></a> or <a def-id="webm-chapters"></a> elements that follow a <a def-id="webm-cluster"></a> element.</p>
