@@ -1966,8 +1966,21 @@
                   <p class="note">Random access point timestamps can be different across tracks because the dependencies between <a def-id="coded-frames"></a> within a
                     track are usually different than the dependencies in another track.</p>
                 </li>
-                <li>Remove all media data, from this <a def-id="track-buffer"></a>, that contain starting timestamps greater than or equal to
-                  <var>start</var> and less than the <var>remove end timestamp</var>.</li>
+                <li>Remove all media data, from this <a def-id="track-buffer"></a>, that contain starting timestamps greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>.</li>
+				  <ol>
+				    <li><p>For each removed frame, if the frame has a <a def-id="decode-timestamp"></a> equal to the <a def-id="last-decode-timestamp"></a> for the frame's track, run the following steps:</p>
+                        <dl class="switch">
+                          <dt>If <a def-id="mode"></a> equals <a def-id="AppendMode-segments"></a>:</dt>
+                          <dd>Set <a def-id="group-end-timestamp"></a> to <a def-id="presentation-timestamp"></a>.</dd>
+                          <dt>If <a def-id="mode"></a> equals <a def-id="AppendMode-sequence"></a>:</dt>
+                          <dd>Set <a def-id="group-start-timestamp"></a> equal to the <a def-id="group-end-timestamp"></a>.</dd>
+                        </dl>
+                      <li>Unset the <a def-id="last-decode-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
+                      <li>Unset the <a def-id="last-frame-duration"></a> on all <a def-id="track-buffers"></a>.</li>
+                      <li>Unset the <a def-id="highest-end-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
+                      <li>Set the <a def-id="need-RAP-flag"></a> on all <a def-id="track-buffers"></a> to true.</li>               
+                    </li>
+			      </ol> 
                 <li>Remove decoding dependencies of the coded frames removed in the previous step:
                   <dl class="switch">
                     <dt>If detailed information about decoding dependencies is available:</dt>
@@ -2695,7 +2708,14 @@
         </thead>
         <tbody>
         <tbody>
-          <td>15 October 2015</td>
+          <td>29 January 2016</td>
+            <td>
+              <ul>
+                <li>Issue 23 - Require setting a random access point to prevent the coded frame removal algorithm from introducing a discontinuity at end of current coded frame group.</li>
+              </ul>
+            </td>
+          </tr>
+          <td><a href="https://rawgit.com/w3c/media-source/cb6f9cc68031871f9b8980b7f9e0c56badf7105f/index.html">15 October 2015</a></td>
             <td>
               <ul>
                 <li>Issue 30 - Remove unnecessary segment parser loop step referencing undefined media segment header.</li>
