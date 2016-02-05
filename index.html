@@ -669,8 +669,8 @@ table.simple {
 
           <dt id="decode-timestamp">Decode Timestamp</dt>
           <dd>
-            <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a href="#presentation-timestamp">presentation timestamp</a> of the earliest frame, in <a href="#presentation-order">presentation order</a>, that is dependant on this frame). If frames can be decoded out of <a href="#presentation-order">presentation order</a>, then the decode timestamp must be present in or derivable from the byte stream. The user agent must run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if this is not the case. If frames cannot be decoded out of  <a href="#presentation-order">presentation order</a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a href="#presentation-timestamp">presentation timestamp</a>.
-          </p></dd>
+            <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a href="#presentation-timestamp">presentation timestamp</a> of the earliest frame, in <a href="#presentation-order">presentation order</a>, that is dependant on this frame). If frames can be decoded out of <a href="#presentation-order">presentation order</a>, then the decode timestamp must be present in or derivable from the byte stream. The user agent must run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if this is not the case. If frames cannot be decoded out of  <a href="#presentation-order">presentation order</a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a href="#presentation-timestamp">presentation timestamp</a>.</p>
+          </dd>
 
           <dt id="displayed-frame-delay">Displayed Frame Delay</dt>
           <dd>
@@ -810,7 +810,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
           <p>On setting, run the following steps:</p>
           <ol>
-            <li>If the value being set is negative or NaN then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception and abort these steps.</li>
+            <li>If the value being set is negative or NaN then throw a <code>TypeError</code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not <code><a href="#idl-def-ReadyState.open">"open"</a></code> then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true on any <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the value being assigned to this attribute.
@@ -825,7 +825,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>Adds a new <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> to <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.</p>
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-DOMString" class="idlType">DOMString</a></code></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code><a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>If <var>type</var> is an empty string then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception and abort these steps.</li>
+            <li>If <var>type</var> is an empty string then throw a <code>TypeError</code> exception and abort these steps.</li>
             <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw a <code><a href="http://www.w3.org/TR/html5/infrastructure.html#notsupportederror">NotSupportedError</a></code> exception and abort these steps.</li>
             <li>If the user agent can't handle any more SourceBuffer objects or if creating a SourceBuffer
               based on <var>type</var> would result in an unsupported <a href="#sourcebuffer-configuration">SourceBuffer configuration</a>,
@@ -852,7 +852,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   Set the <code><a href="#widl-SourceBuffer-mode">mode</a></code> attribute on the new object to
                   <code><a href="#idl-def-AppendMode.segments">"segments"</a></code>.
                 </dd>
-            </dl></li>
+			  </dl>	
+            </li>
             <li>Add the new object to <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> and <a href="http://www.w3.org/TR/html5/webappapis.html#queue-a-task">queue a task</a> to <a href="http://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> at <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.</li>
             <li>Return the new object.</li>
           </ol></dd><dt id="widl-MediaSource-endOfStream-void-EndOfStreamError-error"><code>endOfStream</code></dt><dd>
@@ -1314,8 +1315,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an
               <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
-            <li>If the new value equals NaN, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> and abort these steps.</li>
-            <li>If the new value is less than or equal to <code><a href="#widl-SourceBuffer-appendWindowStart">appendWindowStart</a></code> then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception and abort these
+            <li>If the new value equals NaN, then throw a <code>TypeError</code> and abort these steps.</li>
+            <li>If the new value is less than or equal to <code><a href="#widl-SourceBuffer-appendWindowStart">appendWindowStart</a></code> then throw a <code>TypeError</code> exception and abort these
               steps.</li>
             <li>Update the attribute to the new value.</li>
           </ol>
@@ -1327,7 +1328,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an
               <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
-            <li>If the new value is less than 0 or greater than or equal to <code><a href="#widl-SourceBuffer-appendWindowEnd">appendWindowEnd</a></code> then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception
+            <li>If the new value is less than 0 or greater than or equal to <code><a href="#widl-SourceBuffer-appendWindowEnd">appendWindowEnd</a></code> then throw a <code>TypeError</code> exception
               and abort these steps.</li>
             <li>Update the attribute to the new value.</li>
           </ol>
@@ -1365,7 +1366,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>Let <var>new mode</var> equal the new value being assigned to this attribute.</li>
             <li>If <var><a href="#sourcebuffer-generate-timestamps-flag">generate timestamps flag</a></var> equals true and <var>new mode</var> equals
-              <code><a href="#idl-def-AppendMode.segments">"segments"</a></code>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code>
+              <code><a href="#idl-def-AppendMode.segments">"segments"</a></code>, then throw a <code>TypeError</code>
               exception and abort these steps.</li>
             <li>
               <p>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState.ended">"ended"</a></code> state then run the following steps:</p>
@@ -1464,9 +1465,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">start</td><td class="prmType"><code><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-double" class="idlType">double</a></code></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">end</td><td class="prmType"><code><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-unrestricted-double" class="idlType">unrestricted double</a></code></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-void" class="idlType">void</a></code></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If this object has been removed from the <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
-            <li>If <code><a href="#widl-MediaSource-duration">duration</a></code> equals NaN, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception and abort these steps.</li>
-            <li>If <var>start</var> is negative or greater than <code><a href="#widl-MediaSource-duration">duration</a></code>, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception and abort these steps.</li>
-            <li>If <var>end</var> is less than or equal to <var>start</var> or <var>end</var> equals NaN, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> exception and abort these steps.</li>
+            <li>If <code><a href="#widl-MediaSource-duration">duration</a></code> equals NaN, then throw a <code>TypeError</code> exception and abort these steps.</li>
+            <li>If <var>start</var> is negative or greater than <code><a href="#widl-MediaSource-duration">duration</a></code>, then throw a <code>TypeError</code> exception and abort these steps.</li>
+            <li>If <var>end</var> is less than or equal to <var>start</var> or <var>end</var> equals NaN, then throw a <code>TypeError</code> exception and abort these steps.</li>
             <li>
               <p>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#idl-def-ReadyState.ended">"ended"</a></code> state then run
                 the following steps:</p>
@@ -1638,8 +1639,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   </p></div>
                 </li>
                 <li>If this <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> is full and cannot accept more media data, then set the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> to true.</li>
-                <li>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> does not contain a complete <a href="#media-segment">media segment</a>, then jump to the <i>need more data</i> step below.<p></p>
-                </li><li>Remove the <a href="#media-segment">media segment</a> bytes from the beginning of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
+                <li>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> does not contain a complete <a href="#media-segment">media segment</a>, then jump to the <i>need more data</i> step below.</li>
+                <li>Remove the <a href="#media-segment">media segment</a> bytes from the beginning of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
                 <li>Set <var><a href="#sourcebuffer-append-state">append state</a></var> to <a href="#sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</a>.</li>
                 <li>Jump to the <i>loop top</i> step above.</li>
               </ol>
@@ -2283,7 +2284,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                         depended on the frames that were removed.
                       </p></div>
                     </dd>
-                </dl></li>
+				  </dl>
+                </li>
                 <li>
                   <dl class="switch">
                     <dt>If <var>spliced audio frame</var> is set:</dt>
@@ -2359,30 +2361,30 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                           <dt>If <code><a href="#widl-SourceBuffer-mode">mode</a></code> equals <code><a href="#idl-def-AppendMode.sequence">"sequence"</a></code>:</dt>
                           <dd>Set <var><a href="#sourcebuffer-group-start-timestamp">group start timestamp</a></var> equal to the <var><a href="#sourcebuffer-group-end-timestamp">group end timestamp</a></var>.</dd>
                         </dl>
-                      </li><li>Unset the <var><a href="#last-decode-timestamp">last decode timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
+                      </li>
+					  <li>Unset the <var><a href="#last-decode-timestamp">last decode timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
                       <li>Unset the <var><a href="#last-frame-duration">last frame duration</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
                       <li>Unset the <var><a href="#highest-end-timestamp">highest end timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
                       <li>Set the <var><a href="#need-RAP-flag">need random access point flag</a></var> on all <a href="#track-buffer">track buffers</a> to true.</li>               
-                    
 			      </ol> 
-                <li>Remove decoding dependencies of the coded frames removed in the previous step:
-                  <dl class="switch">
-                    <dt>If detailed information about decoding dependencies is available:</dt>
-                    <dd>Remove all <a href="#coded-frame">coded frames</a> from this <a href="#track-buffer">track buffer</a> that have decoding dependencies on the coded frames removed in
-                      the previous step.
-                      <div class="note"><div class="note-title" aria-level="5" role="heading" id="h-note32"><span>Note</span></div><p class="">For example if an I-frame is removed in the previous step, then all P-frames &amp; B-frames that depend on that I-frame
-                        should be removed from this <a href="#track-buffer">track buffer</a>.
-                      </p></div>
-                    </dd>
-                    <dt>Otherwise:</dt>
-                    <dd>Remove all <a href="#coded-frame">coded frames</a> between the coded frames removed in the previous step and the next
-                      <a href="#random-access-point">random access point</a> after those removed frames.
-                      <div class="note"><div class="note-title" aria-level="5" role="heading" id="h-note33"><span>Note</span></div><p class="">Removing all <a href="#coded-frame">coded frames</a> until the next <a href="#random-access-point">random access point</a> is a conservative
-                        estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point
-                        depended on the frames that were removed.
-                      </p></div>
-                    </dd>
-                </dl></li>
+                <li>Remove decoding dependencies of the coded frames removed in the previous step:</li>
+                <dl class="switch">
+                  <dt>If detailed information about decoding dependencies is available:</dt>
+                  <dd>Remove all <a href="#coded-frame">coded frames</a> from this <a href="#track-buffer">track buffer</a> that have decoding dependencies on the coded frames removed in
+                    the previous step.
+                    <div class="note"><div class="note-title" aria-level="5" role="heading" id="h-note32"><span>Note</span></div><p class="">For example if an I-frame is removed in the previous step, then all P-frames &amp; B-frames that depend on that I-frame
+                      should be removed from this <a href="#track-buffer">track buffer</a>.
+                    </p></div>
+                  </dd>
+                  <dt>Otherwise:</dt>
+                  <dd>Remove all <a href="#coded-frame">coded frames</a> between the coded frames removed in the previous step and the next
+                    <a href="#random-access-point">random access point</a> after those removed frames.
+                    <div class="note"><div class="note-title" aria-level="5" role="heading" id="h-note33"><span>Note</span></div><p class="">Removing all <a href="#coded-frame">coded frames</a> until the next <a href="#random-access-point">random access point</a> is a conservative
+                      estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point
+                      depended on the frames that were removed.
+                    </p></div>
+                  </dd>
+				</dl>
                 <li>
                   <p>If this object is in <code><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></code>, the <a href="http://www.w3.org/TR/html5/embedded-content-0.html#current-playback-position">current playback position</a> is greater than or equal to
                     <var>start</var> and less than the <var>remove end timestamp</var>, and <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#dom-media-readystate">HTMLMediaElement.readyState</a></code> is greater than
@@ -2644,7 +2646,7 @@ interface <span class="idlInterfaceID">TrackDefault</span> {
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code><a href="#idl-def-TrackDefaultType" class="idlType"><code>TrackDefaultType</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">language</td><td class="prmType"><code><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-DOMString" class="idlType">DOMString</a></code></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">label</td><td class="prmType"><code><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-DOMString" class="idlType">DOMString</a></code></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">kinds</td><td class="prmType"><code>sequence&lt;<a></a><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-DOMString" class="idlType">DOMString</a></code>&gt;</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">byteStreamTrackID</td><td class="prmType"><code><code><a href="http://dev.w3.org/2006/webapi/WebIDL/#idl-DOMString" class="idlType">DOMString</a></code> = ""</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If <var>language</var> is not an empty string and <var>language</var> is not a BCP 47
-              language tag, then throw an <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> and abort these steps.</li>
+              language tag, then throw a <code>TypeError</code> and abort these steps.</li>
             <li>
               <dl class="switch">
                 <dt>If <var>type</var> equals <code><a href="#idl-def-TrackDefaultType.audio">"audio"</a></code>:</dt>
@@ -2705,8 +2707,8 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">trackDefaults</td><td class="prmType"><code>sequence&lt;<a></a><a href="#idl-def-TrackDefault" class="idlType"><code>TrackDefault</code></a>&gt; = []</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If <var>trackDefaults</var> contains two or more <a href="#idl-def-TrackDefault" class="idlType"><code>TrackDefault</code></a> objects with
               the same <code><a href="#widl-TrackDefault-type">type</a></code> and the same
-              <code><a href="#widl-TrackDefault-byteStreamTrackID">byteStreamTrackID</a></code>, then throw an
-              <code><a href="http://www.w3.org/TR/html5/infrastructure.html#invalidaccesserror">InvalidAccessError</a></code> and abort these steps.
+              <code><a href="#widl-TrackDefault-byteStreamTrackID">byteStreamTrackID</a></code>, then throw a
+              <code>TypeError</code> and abort these steps.
               <div class="note"><div class="note-title" aria-level="4" role="heading" id="h-note43"><span>Note</span></div><p class="">This also applies when <code><a href="#widl-TrackDefault-byteStreamTrackID">byteStreamTrackID</a></code> contains
                 an empty string and ensures that there is only one "byteStreamTrackID independent" default
                 for each <a href="#idl-def-TrackDefaultType" class="idlType"><code>TrackDefaultType</code></a> value.</p></div></li>
@@ -3057,37 +3059,49 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
             <th>Comment</th>
           </tr>
         </thead>
-        <tbody>
-        </tbody><tbody>
-          <tr><td>29 January 2016</td>
+        <tbody>          <tr>
+		    <td>5 February 2016</td>
+            <td>
+              <ul>
+                <li>Issue 34 - Replace InvalidAccessError usage with TypeError.</li>
+                <li>Fixed unexpected tag errors from previous changes.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+		    <td>29 January 2016</td>
             <td>
               <ul>
                 <li>Issue 23 - Require setting a random access point to prevent the coded frame removal algorithm from introducing a discontinuity at end of current coded frame group.</li>
               </ul>
             </td>
           </tr>
-          <tr><td><a href="https://rawgit.com/w3c/media-source/cb6f9cc68031871f9b8980b7f9e0c56badf7105f/index.html">15 October 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/cb6f9cc68031871f9b8980b7f9e0c56badf7105f/index.html">15 October 2015</a></td>
             <td>
               <ul>
                 <li>Issue 30 - Remove unnecessary segment parser loop step referencing undefined media segment header.</li>
               </ul>
             </td>
           </tr>
-          <tr><td><a href="https://rawgit.com/w3c/media-source/37fbc93c1b0fb11c2238cae25d206f5e766ad1ac/index.html">13 October 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/37fbc93c1b0fb11c2238cae25d206f5e766ad1ac/index.html">13 October 2015</a></td>
             <td>
               <ul>
                 <li>Issue 12 - Update bug tracker links to use github.</li>
               </ul>
             </td>
           </tr>
-          <tr><td><a href="https://rawgit.com/w3c/media-source/d69d93d482a208f38eba43e34b366a75a8570901/index.html">17 September 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/d69d93d482a208f38eba43e34b366a75a8570901/index.html">17 September 2015</a></td>
             <td>
               <ul>
                 <li>Bug 29133 - Maintain coded group continuity in sequence append mode when resetting parser state.</li>
               </ul>
             </td>
           </tr>
-          <tr><td><a href="https://rawgit.com/w3c/media-source/3105f930039965dddbc8201f928e2c6f175509e6/index.html">14 July 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/3105f930039965dddbc8201f928e2c6f175509e6/index.html">14 July 2015</a></td>
             <td>
               <ul>
                 <li>Bugs 28881 and 28882 - Editorial punctuation and whitespace fixes.</li>
@@ -3095,28 +3109,32 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
               </ul>
             </td>
           </tr>
-          <tr><td><a href="https://rawgit.com/w3c/media-source/3ea5e00384f132dc02df04a2c0d806cdb15cfde1/index.html">07 April 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/3ea5e00384f132dc02df04a2c0d806cdb15cfde1/index.html">07 April 2015</a></td>
             <td>
               <ul>
                 <li>Bug 28234 - Rename highest presentation timestamp to highest end timestamp and clarify definition.</li>
               </ul>
             </td>
           </tr>
-          <tr><td><a href="https://rawgit.com/w3c/media-source/da0f7290b64626bf5cf97fb6cb5ad0d7d78c2a6a/index.html">03 April 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/da0f7290b64626bf5cf97fb6cb5ad0d7d78c2a6a/index.html">03 April 2015</a></td>
             <td>
               <ul>
                 <li>Update editors.</li>
               </ul>
             </td>
           </tr>
-          <tr><td><a href="https://rawgit.com/w3c/media-source/7088a45f9b3a992d415cbfd320b8aac99577fea2/index.html">02 April 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/7088a45f9b3a992d415cbfd320b8aac99577fea2/index.html">02 April 2015</a></td>
             <td>
               <ul>
                 <li>Bug 28209 - Remove redundant definition of overlapped frame presentation timestamp.</li>
               </ul>
             </td>
           </tr>
-          <tr><td><a href="https://rawgit.com/w3c/media-source/ee9ae4ba1681e34b6e90d172759f984ee64ab4c1/index.html">03 February 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/ee9ae4ba1681e34b6e90d172759f984ee64ab4c1/index.html">03 February 2015</a></td>
             <td>
               <ul>
                 <li>Bug 27790 - Make .buffered attributes return the same object if nothing has changed.</li>
@@ -3124,7 +3142,8 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
               </ul>
             </td>
           </tr>
-          <tr><td><a href="https://rawgit.com/w3c/media-source/c3ad59c7a370d04430969ba73d18dc9bcde57a33/index.html">09 January 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/c3ad59c7a370d04430969ba73d18dc9bcde57a33/index.html">09 January 2015</a></td>
             <td>
               <ul>
                 <li>Bug 27649 - Clarify that setting the duration in the detach algorithm does not run the attribute set algorithm.</li>
@@ -3133,7 +3152,8 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
               </ul>
             </td>
           </tr>
-          <tr><td><a href="https://rawgit.com/w3c/media-source/13d9a1125c590d1cab6e78fa6bf4119426da5eb6/index.html">11 December 2014</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/13d9a1125c590d1cab6e78fa6bf4119426da5eb6/index.html">11 December 2014</a></td>
             <td>
               <ul>
                 <li>Bug 27559 - Clarify that the TrackDefaultList constructor does a shallow copy.</li>
@@ -3475,7 +3495,8 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
               </ul>
             </td>
           </tr>
-          <tr><td><a href="https://rawgit.com/w3c/media-source/e48bad78c421745a3a31c734140b370013391167/media-source.html">24 April 2013</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/e48bad78c421745a3a31c734140b370013391167/media-source.html">24 April 2013</a></td>
             <td>
               <ul>
                 <li>Bug 21796 - Removed issue box from 'Append Error' algorithm.</li>
@@ -3485,7 +3506,8 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
               </ul>
             </td>
           </tr>
-          <tr><td><a href="https://rawgit.com/w3c/media-source/7b8e1f70b3a517336735f442b90b4cfe8b8089f5/media-source.html">08 April 2013</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/7b8e1f70b3a517336735f442b90b4cfe8b8089f5/media-source.html">08 April 2013</a></td>
             <td>
               <ul>
                 <li>Bug 21327 - Crossfade clarifications.</li>

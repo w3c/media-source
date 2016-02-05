@@ -236,7 +236,7 @@
 
           <dt id="decode-timestamp">Decode Timestamp</dt>
           <dd>
-            <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a def-id="presentation-timestamp"></a> of the earliest frame, in <a def-id="presentation-order"></a>, that is dependant on this frame). If frames can be decoded out of <a def-id="presentation-order"></a>, then the decode timestamp must be present in or derivable from the byte stream. The user agent must run the <a def-id="append-decode-error-algorithm"></a> if this is not the case. If frames cannot be decoded out of  <a def-id="presentation-order"></a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a def-id="presentation-timestamp"></a>.</dt>
+            <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a def-id="presentation-timestamp"></a> of the earliest frame, in <a def-id="presentation-order"></a>, that is dependant on this frame). If frames can be decoded out of <a def-id="presentation-order"></a>, then the decode timestamp must be present in or derivable from the byte stream. The user agent must run the <a def-id="append-decode-error-algorithm"></a> if this is not the case. If frames cannot be decoded out of  <a def-id="presentation-order"></a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a def-id="presentation-timestamp"></a>.</p>
           </dd>
 
           <dt id="displayed-frame-delay">Displayed Frame Delay</dt>
@@ -387,7 +387,7 @@
           </ol>
           <p>On setting, run the following steps:</p>
           <ol>
-            <li>If the value being set is negative or NaN then throw an <a def-id="invalid-access-error"></a> exception and abort these steps.</li>
+            <li>If the value being set is negative or NaN then throw a <a def-id="type-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the value being assigned to this attribute.
@@ -400,7 +400,7 @@
         <dd>
           <p>Adds a new <a>SourceBuffer</a> to <a def-id="sourceBuffers"></a>.</p>
           <ol class="method-algorithm">
-            <li>If <var>type</var> is an empty string then throw an <a def-id="invalid-access-error"></a> exception and abort these steps.</li>
+            <li>If <var>type</var> is an empty string then throw a <a def-id="type-error"></a> exception and abort these steps.</li>
             <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw a <a def-id="not-supported-error"></a> exception and abort these steps.</li>
             <li>If the user agent can't handle any more SourceBuffer objects or if creating a SourceBuffer
               based on <var>type</var> would result in an unsupported <a def-id="sourcebuffer-configuration"></a>,
@@ -427,6 +427,7 @@
                   Set the <a def-id="mode"></a> attribute on the new object to
                   <a def-id="AppendMode-segments"></a>.
                 </dd>
+			  </dl>	
             </li>
             <li>Add the new object to <a def-id="sourceBuffers"></a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="addsourcebuffer"></a> at <a def-id="sourceBuffers"></a>.</li>
             <li>Return the new object.</li>
@@ -890,7 +891,7 @@
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Let <var>new mode</var> equal the new value being assigned to this attribute.</li>
             <li>If <a def-id="generate-timestamps-flag"></a> equals true and <var>new mode</var> equals
-              <a def-id="AppendMode-segments"></a>, then throw an <a def-id="invalid-access-error"></a>
+              <a def-id="AppendMode-segments"></a>, then throw a <a def-id="type-error"></a>
               exception and abort these steps.</li>
             <li>
               <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run the following steps:</p>
@@ -982,7 +983,7 @@
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an
               <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
-            <li>If the new value is less than 0 or greater than or equal to <a def-id="appendWindowEnd"></a> then throw an <a def-id="invalid-access-error"></a> exception
+            <li>If the new value is less than 0 or greater than or equal to <a def-id="appendWindowEnd"></a> then throw a <a def-id="type-error"></a> exception
               and abort these steps.</li>
             <li>Update the attribute to the new value.</li>
           </ol>
@@ -997,8 +998,8 @@
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an
               <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
-            <li>If the new value equals NaN, then throw an <a def-id="invalid-access-error"></a> and abort these steps.</li>
-            <li>If the new value is less than or equal to <a def-id="appendWindowStart"></a> then throw an <a def-id="invalid-access-error"></a> exception and abort these
+            <li>If the new value equals NaN, then throw a <a def-id="type-error"></a> and abort these steps.</li>
+            <li>If the new value is less than or equal to <a def-id="appendWindowStart"></a> then throw a <a def-id="type-error"></a> exception and abort these
               steps.</li>
             <li>Update the attribute to the new value.</li>
           </ol>
@@ -1063,9 +1064,9 @@
           <ol class="method-algorithm">
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
-            <li>If <a def-id="duration"></a> equals NaN, then throw an <a def-id="invalid-access-error"></a> exception and abort these steps.</li>
-            <li>If <var>start</var> is negative or greater than <a def-id="duration"></a>, then throw an <a def-id="invalid-access-error"></a> exception and abort these steps.</li>
-            <li>If <var>end</var> is less than or equal to <var>start</var> or <var>end</var> equals NaN, then throw an <a def-id="invalid-access-error"></a> exception and abort these steps.</li>
+            <li>If <a def-id="duration"></a> equals NaN, then throw a <a def-id="type-error"></a> exception and abort these steps.</li>
+            <li>If <var>start</var> is negative or greater than <a def-id="duration"></a>, then throw a <a def-id="type-error"></a> exception and abort these steps.</li>
+            <li>If <var>end</var> is less than or equal to <var>start</var> or <var>end</var> equals NaN, then throw a <a def-id="type-error"></a> exception and abort these steps.</li>
             <li>
               <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run
                 the following steps:</p>
@@ -1254,7 +1255,7 @@
                   </p>
                 </li>
                 <li>If this <a>SourceBuffer</a> is full and cannot accept more media data, then set the <a def-id="buffer-full-flag"></a> to true.</li>
-                <li>If the <a def-id="input-buffer"></a> does not contain a complete <a def-id="media-segment"></a>, then jump to the <i>need more data</i> step below.</p>
+                <li>If the <a def-id="input-buffer"></a> does not contain a complete <a def-id="media-segment"></a>, then jump to the <i>need more data</i> step below.</li>
                 <li>Remove the <a def-id="media-segment"></a> bytes from the beginning of the <a def-id="input-buffer"></a>.</li>
                 <li>Set <a def-id="append-state"></a> to <a def-id="waiting-for-segment"></a>.</li>
                 <li>Jump to the <i>loop top</i> step above.</li>
@@ -1899,6 +1900,7 @@
                         depended on the frames that were removed.
                       </p>
                     </dd>
+				  </dl>
                 </li>
                 <li>
                   <dl class="switch">
@@ -1975,30 +1977,30 @@
                           <dt>If <a def-id="mode"></a> equals <a def-id="AppendMode-sequence"></a>:</dt>
                           <dd>Set <a def-id="group-start-timestamp"></a> equal to the <a def-id="group-end-timestamp"></a>.</dd>
                         </dl>
-                      <li>Unset the <a def-id="last-decode-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
+                      </li>
+					  <li>Unset the <a def-id="last-decode-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
                       <li>Unset the <a def-id="last-frame-duration"></a> on all <a def-id="track-buffers"></a>.</li>
                       <li>Unset the <a def-id="highest-end-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
                       <li>Set the <a def-id="need-RAP-flag"></a> on all <a def-id="track-buffers"></a> to true.</li>               
-                    </li>
 			      </ol> 
-                <li>Remove decoding dependencies of the coded frames removed in the previous step:
-                  <dl class="switch">
-                    <dt>If detailed information about decoding dependencies is available:</dt>
-                    <dd>Remove all <a def-id="coded-frames"></a> from this <a def-id="track-buffer"></a> that have decoding dependencies on the coded frames removed in
-                      the previous step.
-                      <p class="note">For example if an I-frame is removed in the previous step, then all P-frames & B-frames that depend on that I-frame
-                        should be removed from this <a def-id="track-buffer"></a>.
-                      </p>
-                    </dd>
-                    <dt>Otherwise:</dt>
-                    <dd>Remove all <a def-id="coded-frames"></a> between the coded frames removed in the previous step and the next
-                      <a def-id="random-access-point"></a> after those removed frames.
-                      <p class="note">Removing all <a def-id="coded-frames"></a> until the next <a def-id="random-access-point"></a> is a conservative
-                        estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point
-                        depended on the frames that were removed.
-                      </p>
-                    </dd>
-                </li>
+                <li>Remove decoding dependencies of the coded frames removed in the previous step:</li>
+                <dl class="switch">
+                  <dt>If detailed information about decoding dependencies is available:</dt>
+                  <dd>Remove all <a def-id="coded-frames"></a> from this <a def-id="track-buffer"></a> that have decoding dependencies on the coded frames removed in
+                    the previous step.
+                    <p class="note">For example if an I-frame is removed in the previous step, then all P-frames & B-frames that depend on that I-frame
+                      should be removed from this <a def-id="track-buffer"></a>.
+                    </p>
+                  </dd>
+                  <dt>Otherwise:</dt>
+                  <dd>Remove all <a def-id="coded-frames"></a> between the coded frames removed in the previous step and the next
+                    <a def-id="random-access-point"></a> after those removed frames.
+                    <p class="note">Removing all <a def-id="coded-frames"></a> until the next <a def-id="random-access-point"></a> is a conservative
+                      estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point
+                      depended on the frames that were removed.
+                    </p>
+                  </dd>
+				</dl>
                 <li>
                   <p>If this object is in <a def-id="activeSourceBuffers"></a>, the <a def-id="current-playback-position"></a> is greater than or equal to
                     <var>start</var> and less than the <var>remove end timestamp</var>, and <a def-id="ready-state"></a> is greater than
@@ -2270,7 +2272,7 @@
         <dd>
           <ol class="method-algorithm">
             <li>If <var>language</var> is not an empty string and <var>language</var> is not a BCP 47
-              language tag, then throw an <a def-id="invalid-access-error"></a> and abort these steps.</li>
+              language tag, then throw a <a def-id="type-error"></a> and abort these steps.</li>
             <li>
               <dl class="switch">
                 <dt>If <var>type</var> equals <a def-id="TrackDefaultType-audio"></a>:</dt>
@@ -2342,8 +2344,8 @@
           <ol class="method-algorithm">
             <li>If <var>trackDefaults</var> contains two or more <a>TrackDefault</a> objects with
               the same <a def-id="TrackDefault-type"></a> and the same
-              <a def-id="TrackDefault-byteStreamTrackID"></a>, then throw an
-              <a def-id="invalid-access-error"></a> and abort these steps.
+              <a def-id="TrackDefault-byteStreamTrackID"></a>, then throw a
+              <a def-id="type-error"></a> and abort these steps.
               <p class="note">This also applies when <a def-id="TrackDefault-byteStreamTrackID"></a> contains
                 an empty string and ensures that there is only one "byteStreamTrackID independent" default
                 for each <a>TrackDefaultType</a> value.</p></li>
@@ -2706,37 +2708,49 @@
             <th>Comment</th>
           </tr>
         </thead>
-        <tbody>
-        <tbody>
-          <td>29 January 2016</td>
+        <tbody>          <tr>
+		    <td>5 February 2016</td>
+            <td>
+              <ul>
+                <li>Issue 34 - Replace InvalidAccessError usage with TypeError.</li>
+                <li>Fixed unexpected tag errors from previous changes.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+		    <td>29 January 2016</td>
             <td>
               <ul>
                 <li>Issue 23 - Require setting a random access point to prevent the coded frame removal algorithm from introducing a discontinuity at end of current coded frame group.</li>
               </ul>
             </td>
           </tr>
-          <td><a href="https://rawgit.com/w3c/media-source/cb6f9cc68031871f9b8980b7f9e0c56badf7105f/index.html">15 October 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/cb6f9cc68031871f9b8980b7f9e0c56badf7105f/index.html">15 October 2015</a></td>
             <td>
               <ul>
                 <li>Issue 30 - Remove unnecessary segment parser loop step referencing undefined media segment header.</li>
               </ul>
             </td>
           </tr>
-          <td><a href="https://rawgit.com/w3c/media-source/37fbc93c1b0fb11c2238cae25d206f5e766ad1ac/index.html">13 October 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/37fbc93c1b0fb11c2238cae25d206f5e766ad1ac/index.html">13 October 2015</a></td>
             <td>
               <ul>
                 <li>Issue 12 - Update bug tracker links to use github.</li>
               </ul>
             </td>
           </tr>
-          <td><a href="https://rawgit.com/w3c/media-source/d69d93d482a208f38eba43e34b366a75a8570901/index.html">17 September 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/d69d93d482a208f38eba43e34b366a75a8570901/index.html">17 September 2015</a></td>
             <td>
               <ul>
                 <li>Bug 29133 - Maintain coded group continuity in sequence append mode when resetting parser state.</li>
               </ul>
             </td>
           </tr>
-          <td><a href="https://rawgit.com/w3c/media-source/3105f930039965dddbc8201f928e2c6f175509e6/index.html">14 July 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/3105f930039965dddbc8201f928e2c6f175509e6/index.html">14 July 2015</a></td>
             <td>
               <ul>
                 <li>Bugs 28881 and 28882 - Editorial punctuation and whitespace fixes.</li>
@@ -2744,28 +2758,32 @@
               </ul>
             </td>
           </tr>
-          <td><a href="https://rawgit.com/w3c/media-source/3ea5e00384f132dc02df04a2c0d806cdb15cfde1/index.html">07 April 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/3ea5e00384f132dc02df04a2c0d806cdb15cfde1/index.html">07 April 2015</a></td>
             <td>
               <ul>
                 <li>Bug 28234 - Rename highest presentation timestamp to highest end timestamp and clarify definition.</li>
               </ul>
             </td>
           </tr>
-          <td><a href="https://rawgit.com/w3c/media-source/da0f7290b64626bf5cf97fb6cb5ad0d7d78c2a6a/index.html">03 April 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/da0f7290b64626bf5cf97fb6cb5ad0d7d78c2a6a/index.html">03 April 2015</a></td>
             <td>
               <ul>
                 <li>Update editors.</li>
               </ul>
             </td>
           </tr>
-          <td><a href="https://rawgit.com/w3c/media-source/7088a45f9b3a992d415cbfd320b8aac99577fea2/index.html">02 April 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/7088a45f9b3a992d415cbfd320b8aac99577fea2/index.html">02 April 2015</a></td>
             <td>
               <ul>
                 <li>Bug 28209 - Remove redundant definition of overlapped frame presentation timestamp.</li>
               </ul>
             </td>
           </tr>
-          <td><a href="https://rawgit.com/w3c/media-source/ee9ae4ba1681e34b6e90d172759f984ee64ab4c1/index.html">03 February 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/ee9ae4ba1681e34b6e90d172759f984ee64ab4c1/index.html">03 February 2015</a></td>
             <td>
               <ul>
                 <li>Bug 27790 - Make .buffered attributes return the same object if nothing has changed.</li>
@@ -2773,7 +2791,8 @@
               </ul>
             </td>
           </tr>
-          <td><a href="https://rawgit.com/w3c/media-source/c3ad59c7a370d04430969ba73d18dc9bcde57a33/index.html">09 January 2015</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/c3ad59c7a370d04430969ba73d18dc9bcde57a33/index.html">09 January 2015</a></td>
             <td>
               <ul>
                 <li>Bug 27649 - Clarify that setting the duration in the detach algorithm does not run the attribute set algorithm.</li>
@@ -2782,7 +2801,8 @@
               </ul>
             </td>
           </tr>
-          <td><a href="https://rawgit.com/w3c/media-source/13d9a1125c590d1cab6e78fa6bf4119426da5eb6/index.html">11 December 2014</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/13d9a1125c590d1cab6e78fa6bf4119426da5eb6/index.html">11 December 2014</a></td>
             <td>
               <ul>
                 <li>Bug 27559 - Clarify that the TrackDefaultList constructor does a shallow copy.</li>
@@ -3124,7 +3144,8 @@
               </ul>
             </td>
           </tr>
-          <td><a href="https://rawgit.com/w3c/media-source/e48bad78c421745a3a31c734140b370013391167/media-source.html">24 April 2013</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/e48bad78c421745a3a31c734140b370013391167/media-source.html">24 April 2013</a></td>
             <td>
               <ul>
                 <li>Bug 21796 - Removed issue box from 'Append Error' algorithm.</li>
@@ -3134,7 +3155,8 @@
               </ul>
             </td>
           </tr>
-          <td><a href="https://rawgit.com/w3c/media-source/7b8e1f70b3a517336735f442b90b4cfe8b8089f5/media-source.html">08 April 2013</a></td>
+          <tr>
+		    <td><a href="https://rawgit.com/w3c/media-source/7b8e1f70b3a517336735f442b90b4cfe8b8089f5/media-source.html">08 April 2013</a></td>
             <td>
               <ul>
                 <li>Bug 21327 - Crossfade clarifications.</li>
