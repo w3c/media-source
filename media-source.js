@@ -9,7 +9,7 @@
   var W3C_STREAMS_spec_url = "http://www.w3.org/TR/streams-api/"; // Make sure this matches the localBiblio entry.
   var WHATWG_STREAMS_spec_url = "https://streams.spec.whatwg.org/"; // Make sure this matches the localBiblio entry.
   var FILE_spec_url = "http://www.w3.org/TR/FileAPI/";
-  var WEBIDL_spec_url = "http://dev.w3.org/2006/webapi/WebIDL/";
+  var WEBIDL_spec_url = "https://www.w3.org/TR/WebIDL-1/";
 
   function url_helper(doc, url) {
     if (url[0] == "#" && doc.mseDefGroupName != window.respecConfig.mseDefGroupName) {
