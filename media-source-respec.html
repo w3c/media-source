@@ -9,6 +9,7 @@
       var respecConfig = {
       // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use ED.
       specStatus: "ED",
+      useExperimentalStyles: true,
 
       // the specification's short name, as in http://www.w3.org/TR/short-name/
       shortName: "media-source",
@@ -88,6 +89,38 @@
       noIDLIn: true,
 
       scheme: "https",
+
+      otherLinks: [{
+      key: 'Repository',
+      data: [{
+        value: 'We are on GitHub',
+        href: 'https://github.com/w3c/media-source/'
+      }, {
+        value: 'File a bug',
+        href: 'https://github.com/w3c/media-source/issues'
+      }, {
+        value: 'Commit history',
+        href: 'https://github.com/w3c/media-source/commits/gh-pages/media-source-respec.html'
+      }]
+    },{
+      key: 'Mailing list',
+      data: [{
+        value: 'public-html-media@w3.org',
+        href: 'https://lists.w3.org/Archives/Public/public-html-media/'
+      }]
+    },{
+      key: 'Implementation',
+      data: [{
+        value: 'Can I use Media Source Extensions?',
+        href: 'http://caniuse.com/#feat=mediasource'
+      }, {
+        value: 'Test Suite',
+        href: 'http://w3c-test.org/media-source/'
+      }, {
+        value: 'Test Suite repository',
+        href: 'https://github.com/w3c/web-platform-tests/tree/master/media-source'
+      }]
+    }],
 
       preProcess: [ mediaSourcePreProcessor ],
 
