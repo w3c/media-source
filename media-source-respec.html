@@ -644,7 +644,7 @@
 
         <section id="mediasource-detach">
           <h4>Detaching from a media element</h4>
-          <p>The following steps are run in any case where the media element is going to transition to <a def-id="videoref" name="dom-media-network_empty">NETWORK_EMPTY</a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="videoref" name="event-mediacontroller-emptied">emptied</a> at the media element. These steps must be run right before the transition.</p>
+          <p>The following steps are run in any case where the attached <a>MediaSource</a>, if any, must be detached from the media element</a>.
           <ol>
             <li>Set the <a def-id="readyState"></a> attribute to <a def-id="closed"></a>.</li>
             <li>Update <a def-id="duration"></a> to NaN.</li>
@@ -657,6 +657,7 @@
             <li>
               <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceclose"></a> at the <a>MediaSource</a>.</li>
           </ol>
+		  <p class="note">This algorithm has been generalized so that it may be called on HTMLMediaElement operations like load and fetch, in addition to when the media element transitions to <a def-id="videoref" name="dom-media-network_empty">NETWORK_EMPTY</a>.  [[HTML51]]</p>
         </section>
 
         <section id="mediasource-seeking">
@@ -2742,7 +2743,14 @@
           </tr>
         </thead>
         <tbody>          <tr>
-		    <td>5 February 2016</td>
+		    <td>April 13 2016</td>
+            <td>
+              <ul>
+                <li>Issue 17 - Generalize the detach MediaSource algorithm.</li>
+              </ul>
+            </td>
+          </tr>
+		  <td><a href="https://rawgit.com/w3c/media-source/1482e906f5adc329212d5c4f0f688177e73b9c8a/index.html">5 February 2016</td>
             <td>
               <ul>
                 <li>Issue 34 - Replace InvalidAccessError usage with TypeError.</li>
@@ -2751,7 +2759,7 @@
             </td>
           </tr>
           <tr>
-		    <td>29 January 2016</td>
+		    <td><a href="https://rawgit.com/w3c/media-source/de6ea96a49379c33c23d3e0c836fc5417f23be5c/index.html">29 January 2016</td>
             <td>
               <ul>
                 <li>Issue 23 - Require setting a random access point to prevent the coded frame removal algorithm from introducing a discontinuity at end of current coded frame group.</li>
