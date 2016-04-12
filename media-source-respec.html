@@ -20,7 +20,7 @@
       // if this is a LCWD, uncomment and set the end of its review period
       // lcEnd: "2009-08-05",
 
-      publishDate: "2015-11-12",
+      publishDate: "2016-04-11",
       previousMaturity: "CR",
       previousPublishDate: "2015-11-12",
 
@@ -460,7 +460,7 @@
                   Set the <a def-id="mode"></a> attribute on the new object to
                   <a def-id="AppendMode-segments"></a>.
                 </dd>
-			  </dl>	
+              </dl>
             </li>
             <li>Add the new object to <a def-id="sourceBuffers"></a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="addsourcebuffer"></a> at <a def-id="sourceBuffers"></a>.</li>
             <li>Return the new object.</li>
@@ -1933,7 +1933,7 @@
                         depended on the frames that were removed.
                       </p>
                     </dd>
-				  </dl>
+                  </dl>
                 </li>
                 <li>
                   <dl class="switch">
@@ -2002,20 +2002,20 @@
                     track are usually different than the dependencies in another track.</p>
                 </li>
                 <li>Remove all media data, from this <a def-id="track-buffer"></a>, that contain starting timestamps greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>.</li>
-				  <ol>
-				    <li><p>For each removed frame, if the frame has a <a def-id="decode-timestamp"></a> equal to the <a def-id="last-decode-timestamp"></a> for the frame's track, run the following steps:</p>
-                        <dl class="switch">
-                          <dt>If <a def-id="mode"></a> equals <a def-id="AppendMode-segments"></a>:</dt>
-                          <dd>Set <a def-id="group-end-timestamp"></a> to <a def-id="presentation-timestamp"></a>.</dd>
-                          <dt>If <a def-id="mode"></a> equals <a def-id="AppendMode-sequence"></a>:</dt>
-                          <dd>Set <a def-id="group-start-timestamp"></a> equal to the <a def-id="group-end-timestamp"></a>.</dd>
-                        </dl>
-                      </li>
-					  <li>Unset the <a def-id="last-decode-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
-                      <li>Unset the <a def-id="last-frame-duration"></a> on all <a def-id="track-buffers"></a>.</li>
-                      <li>Unset the <a def-id="highest-end-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
-                      <li>Set the <a def-id="need-RAP-flag"></a> on all <a def-id="track-buffers"></a> to true.</li>               
-			      </ol> 
+                <ol>
+                  <li><p>For each removed frame, if the frame has a <a def-id="decode-timestamp"></a> equal to the <a def-id="last-decode-timestamp"></a> for the frame's track, run the following steps:</p>
+                    <dl class="switch">
+                      <dt>If <a def-id="mode"></a> equals <a def-id="AppendMode-segments"></a>:</dt>
+                      <dd>Set <a def-id="group-end-timestamp"></a> to <a def-id="presentation-timestamp"></a>.</dd>
+                      <dt>If <a def-id="mode"></a> equals <a def-id="AppendMode-sequence"></a>:</dt>
+                      <dd>Set <a def-id="group-start-timestamp"></a> equal to the <a def-id="group-end-timestamp"></a>.</dd>
+                    </dl>
+                  </li>
+                  <li>Unset the <a def-id="last-decode-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
+                  <li>Unset the <a def-id="last-frame-duration"></a> on all <a def-id="track-buffers"></a>.</li>
+                  <li>Unset the <a def-id="highest-end-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
+                  <li>Set the <a def-id="need-RAP-flag"></a> on all <a def-id="track-buffers"></a> to true.</li>
+                </ol>
                 <li>Remove decoding dependencies of the coded frames removed in the previous step:</li>
                 <dl class="switch">
                   <dt>If detailed information about decoding dependencies is available:</dt>
@@ -2033,7 +2033,7 @@
                       depended on the frames that were removed.
                     </p>
                   </dd>
-				</dl>
+                </dl>
                 <li>
                   <p>If this object is in <a def-id="activeSourceBuffers"></a>, the <a def-id="current-playback-position"></a> is greater than or equal to
                     <var>start</var> and less than the <var>remove end timestamp</var>, and <a def-id="ready-state"></a> is greater than
@@ -2741,8 +2741,19 @@
             <th>Comment</th>
           </tr>
         </thead>
-        <tbody>          <tr>
-		    <td>5 February 2016</td>
+        <tbody>
+          <tr>
+            <td>11 April 2016</td>
+            <td>
+              <ul>
+                <li>Corrected the editor's draft publish date.</li>
+                <li>Minor whitespace fixes for source readability.</li>
+                <li>Added missing links in recent revision history.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/1482e906f5adc329212d5c4f0f688177e73b9c8a/index.html">5 February 2016</a></td>
             <td>
               <ul>
                 <li>Issue 34 - Replace InvalidAccessError usage with TypeError.</li>
@@ -2751,7 +2762,7 @@
             </td>
           </tr>
           <tr>
-		    <td>29 January 2016</td>
+            <td><a href="https://rawgit.com/w3c/media-source/de6ea96a49379c33c23d3e0c836fc5417f23be5c/index.html">29 January 2016</a></td>
             <td>
               <ul>
                 <li>Issue 23 - Require setting a random access point to prevent the coded frame removal algorithm from introducing a discontinuity at end of current coded frame group.</li>
@@ -2759,7 +2770,7 @@
             </td>
           </tr>
           <tr>
-		    <td><a href="https://rawgit.com/w3c/media-source/cb6f9cc68031871f9b8980b7f9e0c56badf7105f/index.html">15 October 2015</a></td>
+            <td><a href="https://rawgit.com/w3c/media-source/cb6f9cc68031871f9b8980b7f9e0c56badf7105f/index.html">15 October 2015</a></td>
             <td>
               <ul>
                 <li>Issue 30 - Remove unnecessary segment parser loop step referencing undefined media segment header.</li>
@@ -2767,7 +2778,7 @@
             </td>
           </tr>
           <tr>
-		    <td><a href="https://rawgit.com/w3c/media-source/37fbc93c1b0fb11c2238cae25d206f5e766ad1ac/index.html">13 October 2015</a></td>
+            <td><a href="https://rawgit.com/w3c/media-source/37fbc93c1b0fb11c2238cae25d206f5e766ad1ac/index.html">13 October 2015</a></td>
             <td>
               <ul>
                 <li>Issue 12 - Update bug tracker links to use github.</li>
@@ -2775,7 +2786,7 @@
             </td>
           </tr>
           <tr>
-		    <td><a href="https://rawgit.com/w3c/media-source/d69d93d482a208f38eba43e34b366a75a8570901/index.html">17 September 2015</a></td>
+            <td><a href="https://rawgit.com/w3c/media-source/d69d93d482a208f38eba43e34b366a75a8570901/index.html">17 September 2015</a></td>
             <td>
               <ul>
                 <li>Bug 29133 - Maintain coded group continuity in sequence append mode when resetting parser state.</li>
@@ -2783,7 +2794,7 @@
             </td>
           </tr>
           <tr>
-		    <td><a href="https://rawgit.com/w3c/media-source/3105f930039965dddbc8201f928e2c6f175509e6/index.html">14 July 2015</a></td>
+            <td><a href="https://rawgit.com/w3c/media-source/3105f930039965dddbc8201f928e2c6f175509e6/index.html">14 July 2015</a></td>
             <td>
               <ul>
                 <li>Bugs 28881 and 28882 - Editorial punctuation and whitespace fixes.</li>
@@ -2792,7 +2803,7 @@
             </td>
           </tr>
           <tr>
-		    <td><a href="https://rawgit.com/w3c/media-source/3ea5e00384f132dc02df04a2c0d806cdb15cfde1/index.html">07 April 2015</a></td>
+            <td><a href="https://rawgit.com/w3c/media-source/3ea5e00384f132dc02df04a2c0d806cdb15cfde1/index.html">07 April 2015</a></td>
             <td>
               <ul>
                 <li>Bug 28234 - Rename highest presentation timestamp to highest end timestamp and clarify definition.</li>
@@ -2800,7 +2811,7 @@
             </td>
           </tr>
           <tr>
-		    <td><a href="https://rawgit.com/w3c/media-source/da0f7290b64626bf5cf97fb6cb5ad0d7d78c2a6a/index.html">03 April 2015</a></td>
+            <td><a href="https://rawgit.com/w3c/media-source/da0f7290b64626bf5cf97fb6cb5ad0d7d78c2a6a/index.html">03 April 2015</a></td>
             <td>
               <ul>
                 <li>Update editors.</li>
@@ -2808,7 +2819,7 @@
             </td>
           </tr>
           <tr>
-		    <td><a href="https://rawgit.com/w3c/media-source/7088a45f9b3a992d415cbfd320b8aac99577fea2/index.html">02 April 2015</a></td>
+            <td><a href="https://rawgit.com/w3c/media-source/7088a45f9b3a992d415cbfd320b8aac99577fea2/index.html">02 April 2015</a></td>
             <td>
               <ul>
                 <li>Bug 28209 - Remove redundant definition of overlapped frame presentation timestamp.</li>
@@ -2816,7 +2827,7 @@
             </td>
           </tr>
           <tr>
-		    <td><a href="https://rawgit.com/w3c/media-source/ee9ae4ba1681e34b6e90d172759f984ee64ab4c1/index.html">03 February 2015</a></td>
+            <td><a href="https://rawgit.com/w3c/media-source/ee9ae4ba1681e34b6e90d172759f984ee64ab4c1/index.html">03 February 2015</a></td>
             <td>
               <ul>
                 <li>Bug 27790 - Make .buffered attributes return the same object if nothing has changed.</li>
@@ -2825,7 +2836,7 @@
             </td>
           </tr>
           <tr>
-		    <td><a href="https://rawgit.com/w3c/media-source/c3ad59c7a370d04430969ba73d18dc9bcde57a33/index.html">09 January 2015</a></td>
+            <td><a href="https://rawgit.com/w3c/media-source/c3ad59c7a370d04430969ba73d18dc9bcde57a33/index.html">09 January 2015</a></td>
             <td>
               <ul>
                 <li>Bug 27649 - Clarify that setting the duration in the detach algorithm does not run the attribute set algorithm.</li>
@@ -2835,7 +2846,7 @@
             </td>
           </tr>
           <tr>
-		    <td><a href="https://rawgit.com/w3c/media-source/13d9a1125c590d1cab6e78fa6bf4119426da5eb6/index.html">11 December 2014</a></td>
+            <td><a href="https://rawgit.com/w3c/media-source/13d9a1125c590d1cab6e78fa6bf4119426da5eb6/index.html">11 December 2014</a></td>
             <td>
               <ul>
                 <li>Bug 27559 - Clarify that the TrackDefaultList constructor does a shallow copy.</li>
@@ -3178,7 +3189,7 @@
             </td>
           </tr>
           <tr>
-		    <td><a href="https://rawgit.com/w3c/media-source/e48bad78c421745a3a31c734140b370013391167/media-source.html">24 April 2013</a></td>
+            <td><a href="https://rawgit.com/w3c/media-source/e48bad78c421745a3a31c734140b370013391167/media-source.html">24 April 2013</a></td>
             <td>
               <ul>
                 <li>Bug 21796 - Removed issue box from 'Append Error' algorithm.</li>
@@ -3189,7 +3200,7 @@
             </td>
           </tr>
           <tr>
-		    <td><a href="https://rawgit.com/w3c/media-source/7b8e1f70b3a517336735f442b90b4cfe8b8089f5/media-source.html">08 April 2013</a></td>
+            <td><a href="https://rawgit.com/w3c/media-source/7b8e1f70b3a517336735f442b90b4cfe8b8089f5/media-source.html">08 April 2013</a></td>
             <td>
               <ul>
                 <li>Bug 21327 - Crossfade clarifications.</li>
