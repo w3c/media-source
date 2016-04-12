@@ -1879,7 +1879,7 @@
                 </li>
                 <li>Let <var>spliced audio frame</var> be an unset variable for holding audio splice information</li>
                 <li>Let <var>spliced timed text frame</var> be an unset variable for holding timed text splice information</li>
-                <li>If <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> is unset and <var>presentation timestamp</var> falls within the <a def-id="presentation-interval"></a> of a <a def-id="coded-frame"></a> in <var>track buffer</var>,then run the following steps:
+                <li>If <a def-id="last-decode-timestamp"></a> for <var>track buffer</var> is unset and <var>presentation timestamp</var> falls within the <a def-id="presentation-interval"></a> of a <a def-id="coded-frame"></a> in <var>track buffer</var>, then run the following steps:
                   <ol>
                     <li>Let <var>overlapped frame</var> be the <a def-id="coded-frame"></a> in <var>track buffer</var> that matches the condition above.</li>
                     <li>
@@ -1890,8 +1890,7 @@
                         <dd>
                           <ol>
                             <li>Let <var>remove window timestamp</var> equal the <var>overlapped frame</var> <a def-id="presentation-timestamp"></a> plus 1 microsecond.</li>
-                            <li>If the <var>presentation timestamp</var> is less than the <var>remove window timestamp</var>, then remove <var>overlapped frame</var> and any
-                              <a def-id="coded-frames"></a> that depend on it from <var>track buffer</var>.
+                            <li>If the <var>presentation timestamp</var> is less than the <var>remove window timestamp</var>, then remove <var>overlapped frame</var> from <var>track buffer</var>.
                               <p class="note">
                                 This is to compensate for minor errors in frame timestamp computations that can appear when converting back and forth between double precision
                                 floating point numbers and rationals. This tolerance allows a frame to replace an existing one as long as it is within 1 microsecond of the existing
@@ -1916,24 +1915,13 @@
                       or equal to <a def-id="highest-end-timestamp"></a> and less than <var>frame end timestamp</var></dd>
                   </dl>
                 </li>
-                <li>Remove decoding dependencies of the coded frames removed in the previous step:
-                  <dl class="switch">
-                    <dt>If detailed information about decoding dependencies is available:</dt>
-                    <dd>Remove all <a def-id="coded-frames"></a> from <var>track buffer</var> that have decoding dependencies on the coded frames removed in
-                      the previous step.
-                      <p class="note">For example if an I-frame is removed in the previous step, then all P-frames & B-frames that depend on that I-frame
-                        should be removed from <var>track buffer</var>. This makes sure that decode dependencies are properly maintained during overlaps.
-                      </p>
-                    </dd>
-                    <dt>Otherwise:</dt>
-                    <dd>Remove all <a def-id="coded-frames"></a> between the coded frames removed in the previous step and the next
-                      <a def-id="random-access-point"></a> after those removed frames.
-                      <p class="note">Removing all <a def-id="coded-frames"></a> until the next <a def-id="random-access-point"></a> is a conservative
-                        estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point
-                        depended on the frames that were removed.
-                      </p>
-                    </dd>
-                  </dl>
+                <li>Remove all possible decoding dependencies on the <a def-id="coded-frames"></a> removed in the previous two steps
+                  by removing all <a def-id="coded-frames"></a> from <var>track buffer</var> between those frames removed in the previous two steps and the next
+                  <a def-id="random-access-point"></a> after those removed frames.
+                  <p class="note">Removing all <a def-id="coded-frames"></a> until the next <a def-id="random-access-point"></a> is a conservative
+                    estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point
+                    depended on the frames that were removed.
+                  </p>
                 </li>
                 <li>
                   <dl class="switch">
@@ -2016,24 +2004,14 @@
                   <li>Unset the <a def-id="highest-end-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
                   <li>Set the <a def-id="need-RAP-flag"></a> on all <a def-id="track-buffers"></a> to true.</li>
                 </ol>
-                <li>Remove decoding dependencies of the coded frames removed in the previous step:</li>
-                <dl class="switch">
-                  <dt>If detailed information about decoding dependencies is available:</dt>
-                  <dd>Remove all <a def-id="coded-frames"></a> from this <a def-id="track-buffer"></a> that have decoding dependencies on the coded frames removed in
-                    the previous step.
-                    <p class="note">For example if an I-frame is removed in the previous step, then all P-frames & B-frames that depend on that I-frame
-                      should be removed from this <a def-id="track-buffer"></a>.
-                    </p>
-                  </dd>
-                  <dt>Otherwise:</dt>
-                  <dd>Remove all <a def-id="coded-frames"></a> between the coded frames removed in the previous step and the next
-                    <a def-id="random-access-point"></a> after those removed frames.
-                    <p class="note">Removing all <a def-id="coded-frames"></a> until the next <a def-id="random-access-point"></a> is a conservative
-                      estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point
-                      depended on the frames that were removed.
-                    </p>
-                  </dd>
-                </dl>
+                <li>Remove all possible decoding dependencies on the <a def-id="coded-frames"></a> removed in the previous step
+                  by removing all <a def-id="coded-frames"></a> from this <a def-id="track-buffer"></a> between those frames removed in the previous step and the next
+                  <a def-id="random-access-point"></a> after those removed frames.
+                  <p class="note">Removing all <a def-id="coded-frames"></a> until the next <a def-id="random-access-point"></a> is a conservative
+                    estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point
+                    depended on the frames that were removed.
+                  </p>
+                </li>
                 <li>
                   <p>If this object is in <a def-id="activeSourceBuffers"></a>, the <a def-id="current-playback-position"></a> is greater than or equal to
                     <var>start</var> and less than the <var>remove end timestamp</var>, and <a def-id="ready-state"></a> is greater than
@@ -2746,7 +2724,8 @@
             <td>13 April 2016</td>
             <td>
               <ul>
-                <li>Issue 11 - Ignore preload attribute on parent media element.</li>
+                <li>Issue 25 - Fixed ambiguous behavior with CFP algorithm.</li>
+                <li><a href="https://rawgit.com/w3c/media-source/8aba06a6a10d8fe0bf26b2e4c11a3e5a209244e0/index.html">Issue 11 - Ignore preload attribute on parent media element.</a></li>
               </ul>
             </td>
           </tr>
