@@ -20,7 +20,7 @@
       // if this is a LCWD, uncomment and set the end of its review period
       // lcEnd: "2009-08-05",
 
-      publishDate: "2016-04-11",
+      publishDate: "2016-04-13",
       previousMaturity: "CR",
       previousPublishDate: "2015-11-12",
 
@@ -622,7 +622,7 @@
         <section id="mediasource-attach">
           <h4>Attaching to a media element</h4>
           <p> A <a>MediaSource</a> object can be attached to a media element by assigning a <a def-id="MediaSource-object-URL"></a> to the media element <a def-id="media-src"></a> attribute or the src attribute of a &lt;source&gt; inside a media element. A <a def-id="MediaSource-object-URL"></a> is created by passing a MediaSource object to <a def-id="createObjectURL"></a>.</p>
-          <p>If the <a def-id="resource-fetch-algorithm"></a> absolute URL matches the MediaSource object URL, run the following steps right before the <a def-id="perform-potentially-cors-enabled-fetch"></a>
+          <p>If the <a def-id="resource-fetch-algorithm"></a> absolute URL matches the MediaSource object URL, ignore any <a def-id="preload"></a> attribute of the media element, skip any optional steps for when <a def-id="preload"></a> equals <a def-id="preload-none"></a>, and run the following steps right before the <a def-id="perform-potentially-cors-enabled-fetch"></a>
             step in the <a def-id="resource-fetch-algorithm"></a>.</p>
 
           <dl class="switch">
@@ -2743,7 +2743,15 @@
         </thead>
         <tbody>
           <tr>
-            <td>11 April 2016</td>
+            <td>13 April 2016</td>
+            <td>
+              <ul>
+                <li>Issue 11 - Ignore preload attribute on parent media element.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/0c03baa308a5b634860e7536d636f161fe089232/index.html">11 April 2016</a></td>
             <td>
               <ul>
                 <li>Corrected the editor's draft publish date.</li>

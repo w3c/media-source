@@ -454,7 +454,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-11-april-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-04-11">11 April 2016</time></h2>
+  <h2 id="w3c-editor-s-draft-13-april-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-04-13">13 April 2016</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1104,7 +1104,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <section id="mediasource-attach" typeof="bibo:Chapter" resource="#mediasource-attach" property="bibo:hasPart">
           <h4 id="h-mediasource-attach" resource="#h-mediasource-attach"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4.1 </span>Attaching to a media element</span></h4>
           <p> A <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object can be attached to a media element by assigning a <a href="#mediasource-object-url">MediaSource object URL</a> to the media element <code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-src">src</a></code> attribute or the src attribute of a &lt;source&gt; inside a media element. A <a href="#mediasource-object-url">MediaSource object URL</a> is created by passing a MediaSource object to <code><a href="#widl-URL-createObjectURL-DOMString-MediaSource-mediaSource">createObjectURL()</a></code>.</p>
-          <p>If the <a href="https://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a> absolute URL matches the MediaSource object URL, run the following steps right before the <span>"<i>Perform a potentially CORS-enabled fetch</i>"</span>
+          <p>If the <a href="https://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a> absolute URL matches the MediaSource object URL, ignore any <code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">preload</a></code> attribute of the media element, skip any optional steps for when <code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">preload</a></code> equals <code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload-none">none</a></code>, and run the following steps right before the <span>"<i>Perform a potentially CORS-enabled fetch</i>"</span>
             step in the <a href="https://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a>.</p>
 
           <dl class="switch">
@@ -3162,7 +3162,15 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </thead>
         <tbody>
           <tr>
-            <td>11 April 2016</td>
+            <td>13 April 2016</td>
+            <td>
+              <ul>
+                <li>Issue 11 - Ignore preload attribute on parent media element.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/0c03baa308a5b634860e7536d636f161fe089232/index.html">11 April 2016</a></td>
             <td>
               <ul>
                 <li>Corrected the editor's draft publish date.</li>
