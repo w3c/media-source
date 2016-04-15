@@ -644,7 +644,8 @@
 
         <section id="mediasource-detach">
           <h4>Detaching from a media element</h4>
-          <p>The following steps are run in any case where the attached <a>MediaSource</a>, if any, must be detached from the media element</a>.
+          <p>The following steps are run in any case where the media element is going to transition to <a def-id="videoref" name="dom-media-network_empty">NETWORK_EMPTY</a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="videoref" name="event-mediacontroller-emptied">emptied</a> at the media element. These steps must be run right before the transition.</p>
+
           <ol>
             <li>Set the <a def-id="readyState"></a> attribute to <a def-id="closed"></a>.</li>
             <li>Update <a def-id="duration"></a> to NaN.</li>
@@ -657,7 +658,7 @@
             <li>
               <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceclose"></a> at the <a>MediaSource</a>.</li>
           </ol>
-		  <p class="note">This algorithm has been generalized so that it may be called on HTMLMediaElement operations like load and fetch, in addition to when the media element transitions to <a def-id="videoref" name="dom-media-network_empty">NETWORK_EMPTY</a>.  [[HTML51]]</p>
+		  <p class="note">Going forward, this algorithm is intended to be externally called and run in any case where the attached <a>MediaSource</a>, if any, must be detached from the media element.  It may be called on HTMLMediaElement [[HTML51]] operations like load() and fetch() in addition to, or in place of, when the media element transitions to <a def-id="videoref" name="dom-media-network_empty">NETWORK_EMPTY</a>.</p>
         </section>
 
         <section id="mediasource-seeking">
@@ -2722,7 +2723,7 @@
         </thead>
         <tbody>
           <tr>
-		    <td>April 13 2016</td>
+            <td>April 15 2016</td>
             <td>
               <ul>
                 <li>Issue 17 &amp; 18 - Generalize the detach MediaSource algorithm.</li>
@@ -2733,7 +2734,7 @@
             <td>13 April 2016</td>
             <td>
               <ul>
-                <li>Issue 25 - Fixed ambiguous behavior with CFP algorithm.</li>
+                <li><a href="https://rawgit.com/w3c/media-source/81b27bc84bc64419abff2b8235dc66418ba53a5a/index.html">Issue 25 - Fixed ambiguous behavior with CFP algorithm.</a></li>
                 <li><a href="https://rawgit.com/w3c/media-source/8aba06a6a10d8fe0bf26b2e4c11a3e5a209244e0/index.html">Issue 11 - Ignore preload attribute on parent media element.</a></li>
               </ul>
             </td>
