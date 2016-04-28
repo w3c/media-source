@@ -1161,6 +1161,9 @@
 
         <p>Each <a def-id="track-buffer"></a> has a <dfn id="track-buffer-ranges">track buffer ranges</dfn> variable that represents the presentation time ranges occupied by the <a def-id="coded-frames"></a>
           currently stored in the track buffer. For specification purposes, this information is treated as if it were stored in a <a def-id="normalized-timeranges-object"></a>.</p>
+		  
+        <p class="note">For track buffer ranges, these "presentation time ranges" are based on PTS, frame durations, and potentially coded frame group start times for coded frame groups across track buffers in a muxed <a>SourceBuffer</a>.</p>
+		  
       </section>
 
       <section id="sourcebuffer-events">
@@ -2728,10 +2731,19 @@
         </thead>
         <tbody>
           <tr>
-            <td>April 15 2016</td>
+            <td>April 28 2016</td>
             <td>
               <ul>
-                <li>Issue 17 &amp; 18 - Generalize the detach MediaSource algorithm.</li>
+                <li>Issue 54 - Clarified use of Presentation Time Stamps (PTS) for <a def-id="buffered"></a>.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/365acf8c3c50aa253439782894d5ee9492b81039/index.html">April 15 2016</td>
+            <td>
+              <ul>
+                <li>Issue 17 - Generalize the detach MediaSource algorithm for media element load.</li>
+                <li>Issue 18 - Generalize the detach MediaSource algorithm for media element fetch algorithm failures.</li>				
               </ul>
             </td>
           </tr>
