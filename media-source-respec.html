@@ -309,6 +309,8 @@
           <dt id="presentation-start-time">Presentation Start Time</dt>
           <dd><p>The presentation start time is the earliest time point in the presentation and specifies the <a def-id="videoref" name="initial-playback-position">initial playback position</a> and <a def-id="videoref" name="earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0.</dd>
 
+          <p class="note">For the purposes of determining if <a def-id="hme-buffered"></a> contains a <a def-id="timerange"></a> that includes the current playback position, implementations may choose to allow a current playback position at or after <a def-id="presentation-start-time"></a> and before the first <a def-id="timerange"></a> to play the first <a def-id="timerange"></a> if that <a def-id="timerange"></a> starts within a reasonably short time, like 1 second, after <a def-id="presentation-start-time"></a>. This allowance accommodates the reality that muxed streams commonly do not begin all tracks precisely at <a def-id="presentation-start-time"></a>. Implementations should report the actual buffered range, regardless of this allowance.</p>
+
           <dt id="presentation-interval">Presentation Interval</dt>
           <dd>
             <p>The presentation interval of a <a def-id="coded-frame"></a> is the time interval from its <a def-id="presentation-timestamp"></a> to the <a def-id="presentation-timestamp"></a> plus the <a def-id="coded-frames-duration"></a>. For example, if a coded frame has a presentation timestamp of 10 seconds and a <a def-id="coded-frame-duration"></a> of 100 milliseconds, then the presentation interval would be [10-10.1). Note that the start of the range is inclusive, but the end of the range is exclusive.</p>
@@ -849,12 +851,12 @@
           <p>Follow these steps when <a def-id="duration"></a> needs to change to a <var>new duration</var>.</p>
           <ol>
             <li>If the current value of <a def-id="duration"></a> is equal to <var>new duration</var>, then return.</li>
-			<li>If <var>new duration</var> is less than the highest starting <a def-id="presentation-timestamp"></a> of any buffered <a def-id="coded-frames"></a> for all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
-			  <p class="note">Duration reductions that would truncate currently buffered media are disallowed. When truncation is necessary, use <a def-id="remove"></a> to reduce the buffered range before updating <a def-id="duration"></a>.</p>
+            <li>If <var>new duration</var> is less than the highest starting <a def-id="presentation-timestamp"></a> of any buffered <a def-id="coded-frames"></a> for all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <p class="note">Duration reductions that would truncate currently buffered media are disallowed. When truncation is necessary, use <a def-id="remove"></a> to reduce the buffered range before updating <a def-id="duration"></a>.</p>
             <li>Set <var>old duration</var> to the current value of <a def-id="duration"></a>.</li>
             <li>Update <a def-id="duration"></a> to <var>new duration</var>.</li>
             <li>If a user agent is unable to partially render audio frames or text cues that start before and end after the <a def-id="duration"></a>, then run the following steps:</li>
-			  <p class="note">This condition can occur because the <a def-id="coded-frame-removal-algorithm"></a> preserves audio frames and text cues that start before and end after the <a def-id="duration"></a>.</p>
+            <p class="note">This condition can occur because the <a def-id="coded-frame-removal-algorithm"></a> preserves audio frames and text cues that start before and end after the <a def-id="duration"></a>.</p>
               <ol>
                 <li>Update <var>new duration</var> to the highest end time reported by the <a def-id="buffered"></a> attribute across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.</li>
                 <li>Update <a def-id="duration"></a> to <var>new duration</var>.</li>
@@ -1196,11 +1198,14 @@
           indicate that <a def-id="random-access-point"></a> <a def-id="coded-frame"></a> is needed before anything can be added to the
           <a def-id="track-buffer"></a>.</p>
 
-        <p>Each <a def-id="track-buffer"></a> has a <dfn id="track-buffer-ranges">track buffer ranges</dfn> variable that represents the presentation time ranges occupied by the <a def-id="coded-frames"></a>
-          currently stored in the track buffer. For specification purposes, this information is treated as if it were stored in a <a def-id="normalized-timeranges-object"></a>.</p>
+        <p>Each <a def-id="track-buffer"></a> has a <dfn id="track-buffer-ranges">track buffer ranges</dfn> variable that represents the presentation time ranges occupied by the <a def-id="coded-frames"></a> currently stored in the track buffer.</p>
 
-        <p class="note">For track buffer ranges, these "presentation time ranges" are based on Presentation Time Stamps (PTS), frame durations, and potentially coded frame group start times for coded frame groups across track buffers in a muxed <a>SourceBuffer</a>.</p>
+          <p class="note">For track buffer ranges, these presentation time ranges are based on <a def-id="presentation-timestamp">presentation timestamps</a>, frame durations, and potentially coded frame group start times for coded frame groups across track buffers in a muxed <a>SourceBuffer</a>.</p>
 
+          <p>For specification purposes, this information is treated as if it were stored in a <a def-id="normalized-timeranges-object"></a>. Intersected <a def-id="track-buffer-ranges"></a> are used to report <a def-id="hme-buffered"></a>, and must therefore support uninterrupted playback within each range of <a def-id="hme-buffered"></a>.</p>
+
+          <p class="note">These coded frame group start times differ slightly from those mentioned in the <a def-id="coded-frame-processing-algorithm"></a> in that they are the earliest <a def-id="presentation-timestamp"></a> across all track buffers following a discontinuity. Discontinuities can occur within the <a def-id="coded-frame-processing-algorithm"></a> or result from the <a def-id="coded-frame-removal-algorithm"></a>, regardless of <a def-id="mode"></a>.
+          The threshold for determining disjointness of <a def-id="track-buffer-ranges"></a> is implementation-specific. For example, to reduce unexpected playback stalls, implementations may approximate the <a def-id="coded-frame-processing-algorithm"></a>'s discontinuity detection logic by coalescing adjacent ranges separated by a gap smaller than 2 times the maximum frame duration buffered so far in this <a def-id="track-buffer"></a>. Implementations may also use coded frame group start times as range start times across <a def-id="track-buffer">track buffers</a> in a muxed <a>SourceBuffer</a> to further reduce unexpected playback stalls.</p>
       </section>
 
       <section id="sourcebuffer-events">
@@ -1986,7 +1991,7 @@
                   than <a def-id="highest-end-timestamp"></a>, then set <a def-id="highest-end-timestamp"></a> for <var>track buffer</var>
                   to <var>frame end timestamp</var>.
                   <p class="note">The greater than check is needed because bidirectional prediction between coded frames can cause
-                    <var>presentation timestamp</var> to not be monotonically increasing eventhough the decode timestamps are monotonically increasing.</p>
+                    <var>presentation timestamp</var> to not be monotonically increasing even though the decode timestamps are monotonically increasing.</p>
                 </li>
                 <li>If <var>frame end timestamp</var> is greater than <a def-id="group-end-timestamp"></a>,
                   then set <a def-id="group-end-timestamp"></a> equal to <var>frame end timestamp</var>.</li>
@@ -2779,7 +2784,16 @@
         </thead>
         <tbody>
           <tr>
-            <td>May 12 2016</td>
+            <td>12 May 2016</td>
+            <td>
+              <ul>
+                <li>Issue 15 - Clarified <a def-id="track-buffer-ranges"></a>. Clarified allowance near <a def-id="presentation-start-time"></a>.</li>
+                <li>Minor whitespace and formatting fixes.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/b386c1ca8637e8370f5817e35d71cb68d8854425/index.html">12 May 2016</a></td>
             <td>
               <ul>
                 <li>Issue 19, 20 &amp; 26 - Resolved problems with Duration Changes and Range Removals.</li>
@@ -2801,10 +2815,10 @@
             <td><a href="https://rawgit.com/w3c/media-source/cc7e3e8e25f42e1ece9e6fefc65d5638f4f9040b/index.html">April 28 2016</a></td>
             <td>
               <ul>
-                <li>Issue 54 - Clarified use of Presentation Time Stamps (PTS) for <a def-id="buffered"></a>.</li> 
+                <li>Issue 54 - Clarified use of Presentation Time Stamps (PTS) for <a def-id="buffered"></a>.</li>
               </ul>
             </td>
-          </tr>		  
+          </tr>
           <tr>
             <td><a href="https://rawgit.com/w3c/media-source/a0bf0e68c8e5e53a9450abe94b83a9c3a6f8f13e/index.html">April 15 2016</a></td>
             <td>
