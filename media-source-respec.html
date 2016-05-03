@@ -20,9 +20,9 @@
       // if this is a LCWD, uncomment and set the end of its review period
       // lcEnd: "2009-08-05",
 
-      publishDate: "2016-04-28",
+      publishDate: "2016-05-03",
       previousMaturity: "CR",
-      previousPublishDate: "2015-11-12",
+      previousPublishDate: "2015-05-03",
 
       // editors, add as many as you like
       // only "name" is required
@@ -434,6 +434,21 @@
           </ol>
         </dd>
 
+        <dt>attribute EventHandler onsourceopen</dt>
+        <dd>
+          <p>The event handler for the <a def-id="sourceopen"></a> event.</p>
+        </dd>
+
+        <dt>attribute EventHandler onsourceended</dt>
+        <dd>
+          <p>The event handler for the <a def-id="sourceended"></a> event.</p>
+        </dd>
+
+        <dt>attribute EventHandler onsourceclose</dt>
+        <dd>
+          <p>The event handler for the <a def-id="sourceclose"></a> event.</p>
+        </dd>
+
         <dt>SourceBuffer addSourceBuffer(DOMString type)</dt>
         <dd>
           <p>Adds a new <a>SourceBuffer</a> to <a def-id="sourceBuffers"></a>.</p>
@@ -663,7 +678,7 @@
             <li>
               <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceclose"></a> at the <a>MediaSource</a>.</li>
           </ol>
-		  <p class="note">Going forward, this algorithm is intended to be externally called and run in any case where the attached <a>MediaSource</a>, if any, must be detached from the media element.  It may be called on HTMLMediaElement [[HTML51]] operations like load() and fetch() in addition to, or in place of, when the media element transitions to <a def-id="videoref" name="dom-media-network_empty">NETWORK_EMPTY</a>.</p>
+          <p class="note">Going forward, this algorithm is intended to be externally called and run in any case where the attached <a>MediaSource</a>, if any, must be detached from the media element.  It may be called on HTMLMediaElement [[HTML51]] operations like load() and fetch() in addition to, or in place of, when the media element transitions to <a def-id="videoref" name="dom-media-network_empty">NETWORK_EMPTY</a>.</p>
         </section>
 
         <section id="mediasource-seeking">
@@ -1045,6 +1060,31 @@
           </ol>
         </dd>
 
+        <dt>attribute EventHandler onupdatestart</dt>
+        <dd>
+          <p>The event handler for the <a def-id="updatestart"></a> event.</p>
+        </dd>
+
+        <dt>attribute EventHandler onupdate</dt>
+        <dd>
+          <p>The event handler for the <a def-id="update"></a> event.</p>
+        </dd>
+
+        <dt>attribute EventHandler onupdateend</dt>
+        <dd>
+          <p>The event handler for the <a def-id="updateend"></a> event.</p>
+        </dd>
+
+        <dt>attribute EventHandler onerror</dt>
+        <dd>
+          <p>The event handler for the <a def-id="updateerror"></a> event.</p>
+        </dd>
+
+        <dt>attribute EventHandler onabort</dt>
+        <dd>
+          <p>The event handler for the <a def-id="updateabort"></a> event.</p>
+        </dd>
+
         <dt>void appendBuffer(ArrayBuffer data)</dt>
         <dd>
           <p>Appends the segment data in an <a class="externalDFN">ArrayBuffer</a>[[!TYPED-ARRAYS]] to the source buffer.</p>
@@ -1161,9 +1201,9 @@
 
         <p>Each <a def-id="track-buffer"></a> has a <dfn id="track-buffer-ranges">track buffer ranges</dfn> variable that represents the presentation time ranges occupied by the <a def-id="coded-frames"></a>
           currently stored in the track buffer. For specification purposes, this information is treated as if it were stored in a <a def-id="normalized-timeranges-object"></a>.</p>
-		  
+
         <p class="note">For track buffer ranges, these "presentation time ranges" are based on Presentation Time Stamps (PTS), frame durations, and potentially coded frame group start times for coded frame groups across track buffers in a muxed <a>SourceBuffer</a>.</p>
-		  
+
       </section>
 
       <section id="sourcebuffer-events">
@@ -2193,6 +2233,17 @@
         <dd>
           <p>Indicates the number of <a>SourceBuffer</a> objects in the list.</p>
         </dd>
+
+        <dt>attribute EventHandler onaddsourcebuffer</dt>
+        <dd>
+          <p>The event handler for the <a def-id="addsourcebuffer"></a> event.</p>
+        </dd>
+
+        <dt>attribute EventHandler onremovesourcebuffer</dt>
+        <dd>
+          <p>The event handler for the <a def-id="removesourcebuffer"></a> event.</p>
+        </dd>
+
         <dt>getter SourceBuffer (unsigned long index)</dt>
         <dd>
           <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e. []).</p>
@@ -2731,7 +2782,16 @@
         </thead>
         <tbody>
           <tr>
-            <td>April 28 2016</td>
+            <td>3 May 2016</td>
+            <td>
+              <ul>
+                <li>Issue 66 - Add EventHandler attributes to MediaSource, SourceBuffer, and SourceBufferList.</li>
+                <li>Minor whitespace and typo fixes.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/cc7e3e8e25f42e1ece9e6fefc65d5638f4f9040b/index.html">28 April 2016</a></td>
             <td>
               <ul>
                 <li>Issue 54 - Clarified use of Presentation Time Stamps (PTS) for <a def-id="buffered"></a>.</li>
@@ -2739,11 +2799,11 @@
             </td>
           </tr>
           <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/a0bf0e68c8e5e53a9450abe94b83a9c3a6f8f13e/index.html">April 15 2016</td>
+            <td><a href="https://rawgit.com/w3c/media-source/a0bf0e68c8e5e53a9450abe94b83a9c3a6f8f13e/index.html">April 15 2016</a></td>
             <td>
               <ul>
                 <li>Issue 17 - Generalize the detach MediaSource algorithm for media element load.</li>
-                <li>Issue 18 - Generalize the detach MediaSource algorithm for media element fetch algorithm failures.</li>				
+                <li>Issue 18 - Generalize the detach MediaSource algorithm for media element fetch algorithm failures.</li>
               </ul>
             </td>
           </tr>

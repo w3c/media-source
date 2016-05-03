@@ -13,7 +13,7 @@
 
   function url_helper(doc, url) {
     if (url[0] == "#" && doc.mseDefGroupName != window.respecConfig.mseDefGroupName) {
-        return groupBaseURLs[doc.mseDefGroupName] + url;
+      return groupBaseURLs[doc.mseDefGroupName] + url;
     }
     return url;
   }
@@ -117,7 +117,7 @@
     var str = "";
     for (var i = 0; i < contributors.length - 1; ++i) {
       if (i > 0)
-	str += ", ";
+        str += ", ";
       str += contributors[i];
     }
     str += ", and ";
@@ -385,48 +385,48 @@
   var definitionInfo = {};
   var groupBaseURLs = {};
   var helperTypes = {
-      'link' : link_helper,
-      'var' : var_helper,
+    'link' : link_helper,
+    'var' : var_helper,
   };
 
   function mediaSourceAddDefinitionInfo(groupName, groupBaseURL, definitions) {
-      groupBaseURLs[groupName] = groupBaseURL;
-      for (var def_id in definitions) {
-	  if (definitionInfo[def_id]) {
-	      console.log("Overriding previous definition of def-id '" + def_id + "'.");
-	  }
-          var info = definitions[def_id];
-          info.groupName = groupName;
-          if (!info.func) {
-	      var helper_type = info.helper_type || "link";
-              info.func = helperTypes[helper_type];
-	  }
-	  definitionInfo[def_id] = info;
+    groupBaseURLs[groupName] = groupBaseURL;
+    for (var def_id in definitions) {
+      if (definitionInfo[def_id]) {
+        console.log("Overriding previous definition of def-id '" + def_id + "'.");
       }
+      var info = definitions[def_id];
+      info.groupName = groupName;
+      if (!info.func) {
+        var helper_type = info.helper_type || "link";
+        info.func = helperTypes[helper_type];
+      }
+      definitionInfo[def_id] = info;
+    }
   }
 
   function mediaSourcePreProcessor() {
     for (var x in groupBaseURLs) {
       if (groupBaseURLs[x] == MSE_spec_url && window.respecConfig.specStatus == "ED") {
-	  MSE_spec_url = "index.html";
-	  groupBaseURLs[x] = MSE_spec_url;
-	  break;
+        MSE_spec_url = "index.html";
+        groupBaseURLs[x] = MSE_spec_url;
+        break;
       }
     }
 
-   $("a[def-id]").each(function () {
-       $(this).addClass('externalDFN');
-     });
+    $("a[def-id]").each(function () {
+      $(this).addClass('externalDFN');
+    });
 
     if (window.respecConfig.localBiblio) {
       var tmp = window.respecConfig.localBiblio["W3C-STREAMS-API"]
       if (tmp && tmp.indexOf(W3C_STREAMS_spec_url) == -1) {
-	console.log("W3C_STREAMS_spec_url is out of sync with the localBiblio entry");
+        console.log("W3C_STREAMS_spec_url is out of sync with the localBiblio entry");
       }
 
       var tmp = window.respecConfig.localBiblio["WHATWG-STREAMS-API"]
       if (tmp && tmp.indexOf(WHATWG_STREAMS_spec_url) == -1) {
-	console.log("WHATWG_STREAMS_spec_url is out of sync with the localBiblio entry");
+        console.log("WHATWG_STREAMS_spec_url is out of sync with the localBiblio entry");
       }
     }
   }
@@ -442,29 +442,29 @@
       var def_id = $ant.attr('def-id');
       var info = definitionInfo[def_id];
       if (info) {
-	if (!usedMap[def_id]) {
-	  usedMap[def_id] = 1;
-	} else {
-	  usedMap[def_id]++;
-	}
+        if (!usedMap[def_id]) {
+          usedMap[def_id] = 1;
+        } else {
+          usedMap[def_id]++;
+        }
 
-	var id = info.fragment;
-	var text = info.link_text;
+        var id = info.fragment;
+        var text = info.link_text;
 
-	if ($ant.attr('name')) {
-	  id = $ant.attr('name');
-	}
+        if ($ant.attr('name')) {
+          id = $ant.attr('name');
+        }
 
-	var element_text = this.innerHTML;
-	if (element_text) {
-	  text = element_text;
-	}
+        var element_text = this.innerHTML;
+        if (element_text) {
+          text = element_text;
+        }
 
-	var df = doc.createDocumentFragment();
+        var df = doc.createDocumentFragment();
         doc.mseDefGroupName = info.groupName;
         info.func(doc, df, id, text);
         doc.mseDefGroupName = "";
-	this.parentNode.replaceChild(df, this);
+        this.parentNode.replaceChild(df, this);
 
       } else {
         console.log("Found def-id '" + def_id + "' but it does not correspond to anything");
@@ -479,6 +479,7 @@
       'TextTrackList': {spec: 'html5', fragment: 'texttracklist' },
       'TimeRanges': { spec: 'html5', fragment: 'timeranges' },
       'VideoTrackList': {spec: 'html5', fragment: 'videotracklist' },
+      'EventHandler' : { spec: 'html5', fragment: 'eventhandler' },
       'EventTarget': { spec: 'dom', fragment: 'eventtarget' },
       'DOMString': { spec: 'webidl', fragment: 'idl-DOMString' },
       'boolean': { spec: 'webidl', fragment: 'idl-boolean' },
@@ -496,31 +497,31 @@
       var className = this.innerHTML;
       var info = externalClassInfo[className];
       if (info) {
-	var id = info.fragment;
-	var df = doc.createDocumentFragment();
-	var baseURL = null;
-	if (info.spec == 'w3c-streams-api') {
-	  baseURL = W3C_STREAMS_spec_url;
-	} else if (info.spec == 'whatwg-streams-api') {
-	  baseURL = WHATWG_STREAMS_spec_url;
+        var id = info.fragment;
+        var df = doc.createDocumentFragment();
+        var baseURL = null;
+        if (info.spec == 'w3c-streams-api') {
+          baseURL = W3C_STREAMS_spec_url;
+        } else if (info.spec == 'whatwg-streams-api') {
+          baseURL = WHATWG_STREAMS_spec_url;
         } else if (info.spec == 'html5') {
-	  baseURL = HTML5_spec_url;
-	} else if (info.spec == 'dom') {
-	  baseURL = DOM_spec_url;
+          baseURL = HTML5_spec_url;
+        } else if (info.spec == 'dom') {
+          baseURL = DOM_spec_url;
         } else if (info.spec == 'webidl') {
-	  baseURL = WEBIDL_spec_url;
+          baseURL = WEBIDL_spec_url;
         } else if (info.spec == 'typed-array') {
-	  baseURL = "http://www.khronos.org/registry/typedarray/specs/latest/";
+          baseURL = "http://www.khronos.org/registry/typedarray/specs/latest/";
         } else if (info.spec == 'hr-time') {
-	  baseURL = HRTIME_spec_url;
-	} else if (info.spec == 'mse') {
-	  baseURL = MSE_spec_url;
-	}
+          baseURL = HRTIME_spec_url;
+        } else if (info.spec == 'mse') {
+          baseURL = MSE_spec_url;
+        }
 
-	if (baseURL) {
-	  df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: baseURL + "#" + id, 'class': 'idlType'}).text(className))[0]);
-	  this.parentNode.replaceChild(df, this);
-	}
+        if (baseURL) {
+          df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: baseURL + "#" + id, 'class': 'idlType'}).text(className))[0]);
+          this.parentNode.replaceChild(df, this);
+        }
       }
     });
 
@@ -537,7 +538,7 @@
     for (var k in definitionInfo) {
       var defGroupName = definitionInfo[k].groupName;
       if (!usedMap[k] && !(excludeList.indexOf(defGroupName) != -1)) {
-	console.log("def-id '" + k + "' from groupName '" + defGroupName + "' never used.");
+        console.log("def-id '" + k + "' from groupName '" + defGroupName + "' never used.");
       }
     }
 
@@ -546,10 +547,10 @@
       var href = link.attr('href');
       var matched = /^#(.+)$/.exec(href);
       if (matched) {
-	var id = matched[1];
-	if (!document.getElementById(id)) {
-	  console.log("Internal link to an id '" + id + "' which does not exist");
-	}
+        var id = matched[1];
+        if (!document.getElementById(id)) {
+          console.log("Internal link to an id '" + id + "' which does not exist");
+        }
       }
     });
 

@@ -442,7 +442,7 @@ table.simple {
     }
 }
 </style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
-  <body class="h-entry toc-inline" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
+  <body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
       
         
@@ -454,7 +454,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-28-april-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-04-28">28 April 2016</time></h2>
+  <h2 id="w3c-editor-s-draft-03-may-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-05-03">03 May 2016</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -892,6 +892,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 <span class="idlAttribute">    readonly        attribute <span class="idlAttrType"><a href="#idl-def-SourceBufferList" class="idlType"><code>SourceBufferList</code></a></span>    <span class="idlAttrName"><a href="#widl-MediaSource-activeSourceBuffers">activeSourceBuffers</a></span>;</span>
 <span class="idlAttribute">    readonly        attribute <span class="idlAttrType"><a href="#idl-def-ReadyState" class="idlType"><code>ReadyState</code></a></span>          <span class="idlAttrName"><a href="#widl-MediaSource-readyState">readyState</a></span>;</span>
 <span class="idlAttribute">                    attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unrestricted-double" class="idlType">unrestricted double</a></code></span> <span class="idlAttrName"><a href="#widl-MediaSource-duration">duration</a></span>;</span>
+<span class="idlAttribute">                    attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span>        <span class="idlAttrName"><a href="#widl-MediaSource-onsourceopen">onsourceopen</a></span>;</span>
+<span class="idlAttribute">                    attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span>        <span class="idlAttrName"><a href="#widl-MediaSource-onsourceended">onsourceended</a></span>;</span>
+<span class="idlAttribute">                    attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span>        <span class="idlAttrName"><a href="#widl-MediaSource-onsourceclose">onsourceclose</a></span>;</span>
 <span class="idlMethod">    <span class="idlMethType"><a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a></span>   <span class="idlMethName"><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer</a></span> (<span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString" class="idlType">DOMString</a></code></span> <span class="idlParamName">type</span></span>);</span>
 <span class="idlMethod">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></span>           <span class="idlMethName"><a href="#widl-MediaSource-removeSourceBuffer-void-SourceBuffer-sourceBuffer">removeSourceBuffer</a></span> (<span class="idlParam"><span class="idlParamType"><a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a></span> <span class="idlParamName">sourceBuffer</span></span>);</span>
 <span class="idlMethod">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></span>           <span class="idlMethName"><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream</a></span> (<span class="idlParam">optional <span class="idlParamType"><a href="#idl-def-EndOfStreamError" class="idlType"><code>EndOfStreamError</code></a></span> <span class="idlParamName">error</span></span>);</span>
@@ -925,6 +928,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <div class="note"><div class="note-title marker" aria-level="4" role="heading" id="h-note7"><span>Note</span></div><p class=""><code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code>, <code><a href="#widl-SourceBuffer-appendStream-void-ReadableStream-stream-unsigned-long-long-maxSize">appendStream()</a></code> and <code><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream()</a></code> can update the duration under certain circumstances.</p></div>
             </li>
           </ol>
+        </dd><dt id="widl-MediaSource-onsourceclose"><code>onsourceclose</code> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span></dt><dd>
+          <p>The event handler for the <code><a href="#dom-evt-sourceclose">sourceclose</a></code> event.</p>
+        </dd><dt id="widl-MediaSource-onsourceended"><code>onsourceended</code> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span></dt><dd>
+          <p>The event handler for the <code><a href="#dom-evt-sourceended">sourceended</a></code> event.</p>
+        </dd><dt id="widl-MediaSource-onsourceopen"><code>onsourceopen</code> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span></dt><dd>
+          <p>The event handler for the <code><a href="#dom-evt-sourceopen">sourceopen</a></code> event.</p>
         </dd><dt id="widl-MediaSource-readyState"><code>readyState</code> of type <span class="idlAttrType"><a href="#idl-def-ReadyState" class="idlType"><code>ReadyState</code></a></span>, readonly       </dt><dd>
           <p>Indicates the current state of the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object. When the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> is created <code><a href="#widl-MediaSource-readyState">readyState</a></code> must be set to <code><a href="#idl-def-ReadyState.closed">"closed"</a></code>.
         </p></dd><dt id="widl-MediaSource-sourceBuffers"><code>sourceBuffers</code> of type <span class="idlAttrType"><a href="#idl-def-SourceBufferList" class="idlType"><code>SourceBufferList</code></a></span>, readonly       </dt><dd>
@@ -1147,7 +1156,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>
               <a href="https://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="https://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-sourceclose">sourceclose</a></code> at the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a>.</li>
           </ol>
-		  <div class="note"><div class="note-title marker" aria-level="5" role="heading" id="h-note11"><span>Note</span></div><p class="">Going forward, this algorithm is intended to be externally called and run in any case where the attached <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a>, if any, must be detached from the media element.  It may be called on HTMLMediaElement [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] operations like load() and fetch() in addition to, or in place of, when the media element transitions to <a href="https://www.w3.org/TR/html5/embedded-content-0.html#dom-media-network_empty">NETWORK_EMPTY</a>.</p></div>
+          <div class="note"><div class="note-title marker" aria-level="5" role="heading" id="h-note11"><span>Note</span></div><p class="">Going forward, this algorithm is intended to be externally called and run in any case where the attached <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a>, if any, must be detached from the media element.  It may be called on HTMLMediaElement [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] operations like load() and fetch() in addition to, or in place of, when the media element transitions to <a href="https://www.w3.org/TR/html5/embedded-content-0.html#dom-media-network_empty">NETWORK_EMPTY</a>.</p></div>
         </section>
 
         <section id="mediasource-seeking" typeof="bibo:Chapter" resource="#mediasource-seeking" property="bibo:hasPart">
@@ -1411,6 +1420,11 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 <span class="idlAttribute">    readonly        attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#texttracklist" class="idlType">TextTrackList</a></code></span>       <span class="idlAttrName"><a href="#widl-SourceBuffer-textTracks">textTracks</a></span>;</span>
 <span class="idlAttribute">                    attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-double" class="idlType">double</a></code></span>              <span class="idlAttrName"><a href="#widl-SourceBuffer-appendWindowStart">appendWindowStart</a></span>;</span>
 <span class="idlAttribute">                    attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unrestricted-double" class="idlType">unrestricted double</a></code></span> <span class="idlAttrName"><a href="#widl-SourceBuffer-appendWindowEnd">appendWindowEnd</a></span>;</span>
+<span class="idlAttribute">                    attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span>        <span class="idlAttrName"><a href="#widl-SourceBuffer-onupdatestart">onupdatestart</a></span>;</span>
+<span class="idlAttribute">                    attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span>        <span class="idlAttrName"><a href="#widl-SourceBuffer-onupdate">onupdate</a></span>;</span>
+<span class="idlAttribute">                    attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span>        <span class="idlAttrName"><a href="#widl-SourceBuffer-onupdateend">onupdateend</a></span>;</span>
+<span class="idlAttribute">                    attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span>        <span class="idlAttrName"><a href="#widl-SourceBuffer-onerror">onerror</a></span>;</span>
+<span class="idlAttribute">                    attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span>        <span class="idlAttrName"><a href="#widl-SourceBuffer-onabort">onabort</a></span>;</span>
 <span class="idlMethod">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></span> <span class="idlMethName"><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBuffer-data">appendBuffer</a></span> (<span class="idlParam"><span class="idlParamType"><code><a href="http://www.khronos.org/registry/typedarray/specs/latest/#ArrayBuffer" class="idlType">ArrayBuffer</a></code></span> <span class="idlParamName">data</span></span>);</span>
 <span class="idlMethod">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></span> <span class="idlMethName"><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer</a></span> (<span class="idlParam"><span class="idlParamType"><code><a href="http://www.khronos.org/registry/typedarray/specs/latest/#ArrayBufferView" class="idlType">ArrayBufferView</a></code></span> <span class="idlParamName">data</span></span>);</span>
 <span class="idlMethod">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></span> <span class="idlMethName"><a href="#widl-SourceBuffer-appendStream-void-ReadableStream-stream-unsigned-long-long-maxSize">appendStream</a></span> (<span class="idlParam"><span class="idlParamType"><code><a href="https://streams.spec.whatwg.org/#rs-class-definition" class="idlType">ReadableStream</a></code></span> <span class="idlParamName">stream</span></span>, <span class="idlParam">[<span class="extAttr">EnforceRange</span>] optional <span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long-long" class="idlType">unsigned long long</a></code></span> <span class="idlParamName">maxSize</span></span>);</span>
@@ -1489,6 +1503,16 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>If the <var>new mode</var> equals <code><a href="#idl-def-AppendMode.sequence">"sequence"</a></code>, then set the <var><a href="#sourcebuffer-group-start-timestamp">group start timestamp</a></var> to the <var><a href="#sourcebuffer-group-end-timestamp">group end timestamp</a></var>.</li>
             <li>Update the attribute to <var>new mode</var>.</li>
           </ol>
+        </dd><dt id="widl-SourceBuffer-onabort"><code>onabort</code> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span></dt><dd>
+          <p>The event handler for the <code><a href="#dom-evt-abort">abort</a></code> event.</p>
+        </dd><dt id="widl-SourceBuffer-onerror"><code>onerror</code> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span></dt><dd>
+          <p>The event handler for the <code><a href="#dom-evt-error">error</a></code> event.</p>
+        </dd><dt id="widl-SourceBuffer-onupdate"><code>onupdate</code> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span></dt><dd>
+          <p>The event handler for the <code><a href="#dom-evt-update">update</a></code> event.</p>
+        </dd><dt id="widl-SourceBuffer-onupdateend"><code>onupdateend</code> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span></dt><dd>
+          <p>The event handler for the <code><a href="#dom-evt-updateend">updateend</a></code> event.</p>
+        </dd><dt id="widl-SourceBuffer-onupdatestart"><code>onupdatestart</code> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span></dt><dd>
+          <p>The event handler for the <code><a href="#dom-evt-updatestart">updatestart</a></code> event.</p>
         </dd><dt id="widl-SourceBuffer-textTracks"><code>textTracks</code> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#texttracklist" class="idlType">TextTrackList</a></code></span>, readonly       </dt><dd>
           The list of <code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#texttrack">TextTrack</a></code> objects created by this object.
         </dd><dt id="widl-SourceBuffer-timestampOffset"><code>timestampOffset</code> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-double" class="idlType">double</a></code></span></dt><dd>
@@ -1615,9 +1639,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
         <p>Each <a href="#track-buffer">track buffer</a> has a <dfn id="track-buffer-ranges" data-dfn-for="" data-dfn-type="dfn">track buffer ranges</dfn> variable that represents the presentation time ranges occupied by the <a href="#coded-frame">coded frames</a>
           currently stored in the track buffer. For specification purposes, this information is treated as if it were stored in a <a href="https://www.w3.org/TR/html5/embedded-content-0.html#normalized-timeranges-object">normalized TimeRanges object</a>.</p>
-		  
+
         <div class="note"><div class="note-title marker" aria-level="4" role="heading" id="h-note17"><span>Note</span></div><p class="">For track buffer ranges, these "presentation time ranges" are based on Presentation Time Stamps (PTS), frame durations, and potentially coded frame group start times for coded frame groups across track buffers in a muxed <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a>.</p></div>
-		  
+
       </section>
 
       <section id="sourcebuffer-events" typeof="bibo:Chapter" resource="#sourcebuffer-events" property="bibo:hasPart">
@@ -2644,9 +2668,15 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
       <pre class="idl"><span class="idlInterface" id="idl-def-SourceBufferList">interface <span class="idlInterfaceID">SourceBufferList</span> : <span class="idlSuperclass"><code><a href="https://dom.spec.whatwg.org/#eventtarget" class="idlType">EventTarget</a></code></span> {
 <span class="idlAttribute">    readonly        attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long" class="idlType">unsigned long</a></code></span> <span class="idlAttrName"><a href="#widl-SourceBufferList-length">length</a></span>;</span>
+<span class="idlAttribute">                    attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span>  <span class="idlAttrName"><a href="#widl-SourceBufferList-onaddsourcebuffer">onaddsourcebuffer</a></span>;</span>
+<span class="idlAttribute">                    attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span>  <span class="idlAttrName"><a href="#widl-SourceBufferList-onremovesourcebuffer">onremovesourcebuffer</a></span>;</span>
 <span class="idlMethod">    <span class="idlMethType"><a>getter</a></span> <span class="idlMethName"><a href="#widl-SourceBufferList-SourceBuffer-getter-unsigned-long-index">SourceBuffer</a></span> (<span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long" class="idlType">unsigned long</a></code></span> <span class="idlParamName">index</span></span>);</span>
 };</span></pre><section id="attributes-2" typeof="bibo:Chapter" resource="#attributes-2" property="bibo:hasPart"><h3 id="h-attributes-2" resource="#h-attributes-2"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.1 </span>Attributes</span></h3><dl class="attributes"><dt id="widl-SourceBufferList-length"><code>length</code> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long" class="idlType">unsigned long</a></code></span>, readonly       </dt><dd>
           <p>Indicates the number of <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in the list.</p>
+        </dd><dt id="widl-SourceBufferList-onaddsourcebuffer"><code>onaddsourcebuffer</code> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span></dt><dd>
+          <p>The event handler for the <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> event.</p>
+        </dd><dt id="widl-SourceBufferList-onremovesourcebuffer"><code>onremovesourcebuffer</code> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#eventhandler" class="idlType">EventHandler</a></code></span></dt><dd>
+          <p>The event handler for the <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> event.</p>
         </dd></dl></section><section id="methods-2" typeof="bibo:Chapter" resource="#methods-2" property="bibo:hasPart"><h3 id="h-methods-2" resource="#h-methods-2"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.2 </span>Methods</span></h3><dl class="methods"><dt id="widl-SourceBufferList-SourceBuffer-getter-unsigned-long-index"><code>SourceBuffer</code></dt><dd>
           <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e. []).</p>
 
@@ -3152,7 +3182,16 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </thead>
         <tbody>
           <tr>
-            <td>April 28 2016</td>
+            <td>3 May 2016</td>
+            <td>
+              <ul>
+                <li>Issue 66 - Add EventHandler attributes to MediaSource, SourceBuffer, and SourceBufferList.</li>
+                <li>Minor whitespace and typo fixes.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/cc7e3e8e25f42e1ece9e6fefc65d5638f4f9040b/index.html">28 April 2016</a></td>
             <td>
               <ul>
                 <li>Issue 54 - Clarified use of Presentation Time Stamps (PTS) for <code><a href="#widl-SourceBuffer-buffered">buffered</a></code>.</li>
@@ -3164,7 +3203,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
             <td>
               <ul>
                 <li>Issue 17 - Generalize the detach MediaSource algorithm for media element load.</li>
-                <li>Issue 18 - Generalize the detach MediaSource algorithm for media element fetch algorithm failures.</li>				
+                <li>Issue 18 - Generalize the detach MediaSource algorithm for media element fetch algorithm failures.</li>
               </ul>
             </td>
           </tr>
@@ -3907,7 +3946,7 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
 </dd><dt id="bib-HTML5">[HTML5]</dt><dd>Ian Hickson; Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Edward O'Connor; Silvia Pfeiffer. <a href="http://www.w3.org/TR/html5/" property="dc:requires"><cite>HTML5</cite></a>. 28 October 2014. W3C Recommendation. URL: <a href="http://www.w3.org/TR/html5/" property="dc:requires">http://www.w3.org/TR/html5/</a>
 </dd><dt id="bib-TYPED-ARRAYS">[TYPED-ARRAYS]</dt><dd>David Herman; Kenneth Russell. <a href="https://www.khronos.org/registry/typedarray/specs/latest/" property="dc:requires"><cite>Typed Array Specification</cite></a>. 26 June 2013. Khronos Working Draft. URL: <a href="https://www.khronos.org/registry/typedarray/specs/latest/" property="dc:requires">https://www.khronos.org/registry/typedarray/specs/latest/</a>
 </dd><dt id="bib-WHATWG-STREAMS-API">[WHATWG-STREAMS-API]</dt><dd>Domenic Denicola; Takeshi Yoshino. <a href="https://streams.spec.whatwg.org/" property="dc:requires"><cite>WHATWG Streams API</cite></a>. URL: <a href="https://streams.spec.whatwg.org/" property="dc:requires">https://streams.spec.whatwg.org/</a>
-</dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart"><h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.2 </span>Informative references</span></h3><dl class="bibliography" resource=""><dt id="bib-HTML51">[HTML51]</dt><dd>Steve Faulkner; Arron Eicholz; Travis Leithead; Alex Danilo. <a href="http://www.w3.org/TR/html51/" property="dc:references"><cite>HTML 5.1</cite></a>. 12 April 2016. W3C Working Draft. URL: <a href="http://www.w3.org/TR/html51/" property="dc:references">http://www.w3.org/TR/html51/</a>
+</dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart"><h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.2 </span>Informative references</span></h3><dl class="bibliography" resource=""><dt id="bib-HTML51">[HTML51]</dt><dd>Steve Faulkner; Arron Eicholz; Travis Leithead; Alex Danilo. <a href="http://www.w3.org/TR/html51/" property="dc:references"><cite>HTML 5.1</cite></a>. 3 May 2016. W3C Working Draft. URL: <a href="http://www.w3.org/TR/html51/" property="dc:references">http://www.w3.org/TR/html51/</a>
 </dd><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt><dd>Bob Lund; Silvia Pfeiffer. <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. URL: <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references">http://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
 </dd><dt id="bib-MSE-REGISTRY">[MSE-REGISTRY]</dt><dd>Aaron Colwell. <a href="byte-stream-format-registry.html" property="dc:references"><cite>Media Source Extensions Byte Stream Format Registry</cite></a>. URL: <a href="byte-stream-format-registry.html" property="dc:references">byte-stream-format-registry.html</a>
 </dd></dl></section></section><p role="navigation" id="back-to-top"><a href="#toc"><abbr title="Back to Top">↑</abbr></a></p><script src="https://www.w3.org/scripts/TR/2016/fixup.js"></script></body></html>
