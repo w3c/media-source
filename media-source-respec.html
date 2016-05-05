@@ -20,7 +20,7 @@
       // if this is a LCWD, uncomment and set the end of its review period
       // lcEnd: "2009-08-05",
 
-      publishDate: "2016-05-03",
+      publishDate: "2016-05-12",
       previousMaturity: "CR",
       previousPublishDate: "2015-05-03",
 
@@ -849,19 +849,16 @@
           <p>Follow these steps when <a def-id="duration"></a> needs to change to a <var>new duration</var>.</p>
           <ol>
             <li>If the current value of <a def-id="duration"></a> is equal to <var>new duration</var>, then return.</li>
-            <li>Set <var>old duration</var> to the current value of <a def-id="duration"></a>.
+			<li>If <var>new duration</var> is less than the highest starting <a def-id="presentation-timestamp"></a> of any buffered <a def-id="coded-frames"></a> for all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+			  <p class="note">Duration reductions that would truncate currently buffered media are disallowed. When truncation is necessary, use <a def-id="remove"></a> to reduce the buffered range before updating <a def-id="duration"></a>.</p>
+            <li>Set <var>old duration</var> to the current value of <a def-id="duration"></a>.</li>
             <li>Update <a def-id="duration"></a> to <var>new duration</var>.</li>
-            <li>If the <var>new duration</var> is less than <var>old duration</var>, then run the
-              <a def-id="range-removal"></a> algorithm with <var>new duration</var> and
-              <var>old duration</var> as the start and end of the removal range.
-
-              <p class="note">This preserves audio frames and text cues that start before and end after the <a def-id="duration"></a>.</p></li>
-            <li>If a user agent is unable to partially render audio frames or text cues that start before and end after the <a def-id="duration"></a>, then run the following steps:
+            <li>If a user agent is unable to partially render audio frames or text cues that start before and end after the <a def-id="duration"></a>, then run the following steps:</li>
+			  <p class="note">This condition can occur because the <a def-id="coded-frame-removal-algorithm"></a> preserves audio frames and text cues that start before and end after the <a def-id="duration"></a>.</p>
               <ol>
                 <li>Update <var>new duration</var> to the highest end time reported by the <a def-id="buffered"></a> attribute across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.</li>
                 <li>Update <a def-id="duration"></a> to <var>new duration</var>.</li>
               </ol>
-            </li>
             <li>Update the <a def-id="hme-duration"></a> to <var>new duration</var> and run the <a def-id="hme-duration-change-algorithm"></a>.</li>
           </ol>
         </section>
@@ -941,8 +938,7 @@
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
-            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an <a def-id="invalid-state-error"></a> exception and
-              abort these steps.</li>
+            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Let <var>new mode</var> equal the new value being assigned to this attribute.</li>
             <li>If <a def-id="generate-timestamps-flag"></a> equals true and <var>new mode</var> equals
@@ -1123,6 +1119,7 @@
           <ol class="method-algorithm">
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="range-removal"></a> algorithm is running, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then run the following steps:
               <ol>
                 <li>Abort the <a def-id="buffer-append"></a> and <a def-id="stream-append-loop"></a> algorithms if they are running.</li>
@@ -2782,7 +2779,17 @@
         </thead>
         <tbody>
           <tr>
-            <td>3 May 2016</td>
+            <td>May 12 2016</td>
+            <td>
+              <ul>
+                <li>Issue 19, 20 &amp; 26 - Resolved problems with Duration Changes and Range Removals.</li>
+                <li>Separated Range Removals from Duration Changes, required separate remove().</li>
+                <li>Disabled abort on Range Removals.</li>
+             </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/1e4b68c15c327ba96c8f7fffa21b8754bf324499/index.html">3 May 2016</a></td>
             <td>
               <ul>
                 <li>Issue 66 - Add EventHandler attributes to MediaSource, SourceBuffer, and SourceBufferList.</li>
@@ -2791,13 +2798,13 @@
             </td>
           </tr>
           <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/cc7e3e8e25f42e1ece9e6fefc65d5638f4f9040b/index.html">28 April 2016</a></td>
+            <td><a href="https://rawgit.com/w3c/media-source/cc7e3e8e25f42e1ece9e6fefc65d5638f4f9040b/index.html">April 28 2016</a></td>
             <td>
               <ul>
-                <li>Issue 54 - Clarified use of Presentation Time Stamps (PTS) for <a def-id="buffered"></a>.</li>
+                <li>Issue 54 - Clarified use of Presentation Time Stamps (PTS) for <a def-id="buffered"></a>.</li> 
               </ul>
             </td>
-          </tr>
+          </tr>		  
           <tr>
             <td><a href="https://rawgit.com/w3c/media-source/a0bf0e68c8e5e53a9450abe94b83a9c3a6f8f13e/index.html">April 15 2016</a></td>
             <td>
