@@ -20,7 +20,7 @@
       // if this is a LCWD, uncomment and set the end of its review period
       // lcEnd: "2009-08-05",
 
-      publishDate: "2016-05-12",
+      publishDate: "2016-05-24",
       previousMaturity: "CR",
       previousPublishDate: "2015-05-03",
 
@@ -2453,11 +2453,9 @@
           <p>Creates URLs for <a>MediaSource</a> objects.</p>
 
           <ol class="method-algorithm">
-            <li>Return a unique <a def-id="MediaSource-object-URL"></a> that can be used to dereference the <var>mediaSource</var> argument, and run the rest of the algorithm asynchronously.</li>
-            <li><a def-id="provide-a-stable-state"></a></li>
-            <li>Revoke the <a def-id="MediaSource-object-URL"></a> by calling <a def-id="file-revokeObjectURL"></a> on it.</li>
+            <li>Return a unique <a def-id="MediaSource-object-URL"></a> that can be used to dereference the <var>mediaSource</var> argument.</li>
           </ol>
-          <p class="note">This algorithm is intended to mirror the behavior of the <a def-id="file-createObjectURL"></a>[[!FILE-API]] method with autoRevoke set to true.</p>
+          <p class="note">This algorithm is intended to mirror the behavior of the <a def-id="file-createObjectURL"></a>[[!FILE-API]] method, which does not auto-revoke the created URL. Web authors are encouraged to use <a def-id="file-revokeObjectURL"></a>[[!FILE-API]] for any <a def-id="MediaSource-object-URL"></a> that is no longer needed for attachment to a media element.</p>
         </dd>
       </dl>
     </section>
@@ -2784,7 +2782,15 @@
         </thead>
         <tbody>
           <tr>
-            <td>12 May 2016</td>
+            <td>24 May 2016</td>
+            <td>
+              <ul>
+                <li>Issue 10 - Updated <a def-id="createObjectURL"></a> to align to current (April 2015) non-autorevoking <a def-id="createObjectURL"></a>[[!FILE-API]] method. Encouraged web author use of <a def-id="file-revokeObjectURL"></a>[[!FILE-API]].</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/fb01530c0f1f83c65891f424229e0e48619a4b48/index.html">12 May 2016</a></td>
             <td>
               <ul>
                 <li>Issue 15 - Clarified <a def-id="track-buffer-ranges"></a>. Clarified allowance near <a def-id="presentation-start-time"></a>.</li>

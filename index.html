@@ -454,7 +454,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-12-may-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-05-12">12 May 2016</time></h2>
+  <h2 id="w3c-editor-s-draft-24-may-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-05-24">24 May 2016</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -2859,11 +2859,9 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
           <p>Creates URLs for <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> objects.</p>
 
           
-          <div class="note"><div class="note-title marker" aria-level="4" role="heading" id="h-note47"><span>Note</span></div><p class="">This algorithm is intended to mirror the behavior of the <a href="https://www.w3.org/TR/FileAPI/#dfn-createObjectURL">createObjectURL()</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] method with autoRevoke set to true.</p></div>
+          <div class="note"><div class="note-title marker" aria-level="4" role="heading" id="h-note47"><span>Note</span></div><p class="">This algorithm is intended to mirror the behavior of the <a href="https://www.w3.org/TR/FileAPI/#dfn-createObjectURL">createObjectURL()</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] method, which does not auto-revoke the created URL. Web authors are encouraged to use <a href="https://www.w3.org/TR/FileAPI/#dfn-revokeObjectURL">revokeObjectURL()</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] for any <a href="#mediasource-object-url">MediaSource object URL</a> that is no longer needed for attachment to a media element.</p></div>
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">mediaSource</td><td class="prmType"><code><a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString" class="idlType">DOMString</a></code></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>Return a unique <a href="#mediasource-object-url">MediaSource object URL</a> that can be used to dereference the <var>mediaSource</var> argument, and run the rest of the algorithm asynchronously.</li>
-            <li><a href="https://www.w3.org/TR/html5/webappapis.html#provide-a-stable-state">provide a stable state</a></li>
-            <li>Revoke the <a href="#mediasource-object-url">MediaSource object URL</a> by calling <a href="https://www.w3.org/TR/FileAPI/#dfn-revokeObjectURL">revokeObjectURL()</a> on it.</li>
+            <li>Return a unique <a href="#mediasource-object-url">MediaSource object URL</a> that can be used to dereference the <var>mediaSource</var> argument.</li>
           </ol></dd></dl></section>
     </section>
 
@@ -3184,7 +3182,15 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </thead>
         <tbody>
           <tr>
-            <td>12 May 2016</td>
+            <td>24 May 2016</td>
+            <td>
+              <ul>
+                <li>Issue 10 - Updated <code><a href="#widl-URL-createObjectURL-DOMString-MediaSource-mediaSource">createObjectURL()</a></code> to align to current (April 2015) non-autorevoking <code><a href="#widl-URL-createObjectURL-DOMString-MediaSource-mediaSource">createObjectURL()</a></code>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] method. Encouraged web author use of <a href="https://www.w3.org/TR/FileAPI/#dfn-revokeObjectURL">revokeObjectURL()</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>].</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/fb01530c0f1f83c65891f424229e0e48619a4b48/index.html">12 May 2016</a></td>
             <td>
               <ul>
                 <li>Issue 15 - Clarified <a href="#track-buffer-ranges">track buffer ranges</a>. Clarified allowance near <a href="#presentation-start-time">presentation start time</a>.</li>
