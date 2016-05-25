@@ -20,7 +20,7 @@
       // if this is a LCWD, uncomment and set the end of its review period
       // lcEnd: "2009-08-05",
 
-      publishDate: "2016-05-24",
+      publishDate: "2016-05-26",
       previousMaturity: "CR",
       previousPublishDate: "2015-05-03",
 
@@ -2447,7 +2447,7 @@
       <h2>URL Object Extensions</h2>
       <p>This section specifies extensions to the <a def-id="URL"></a>[[!FILE-API]] object definition.</p>
 
-      <dl title="partial interface URL" class="idl">
+      <dl title="[Exposed=Window,DedicatedWorker,SharedWorker] partial interface URL" class="idl">
         <dt>static DOMString createObjectURL(MediaSource mediaSource)</dt>
         <dd>
           <p>Creates URLs for <a>MediaSource</a> objects.</p>
@@ -2782,7 +2782,16 @@
         </thead>
         <tbody>
           <tr>
-            <td>24 May 2016</td>
+            <td>26 May 2016</td>
+            <td>
+              <ul>
+                <li>Issue 67 - Excluded <a def-id="createObjectURL"></a> from Service Workers.</li>
+                <li>Issue 68 - Made kinds attribute and ctor argument use sequence type.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/038cdcf65b7bd8fba964117312bacd920f643bb2/index.html">24 May 2016</a></td>
             <td>
               <ul>
                 <li>Issue 10 - Updated <a def-id="createObjectURL"></a> to align to current (April 2015) non-autorevoking <a def-id="createObjectURL"></a>[[!FILE-API]] method. Encouraged web author use of <a def-id="file-revokeObjectURL"></a>[[!FILE-API]].</li>

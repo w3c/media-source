@@ -442,7 +442,7 @@ table.simple {
     }
 }
 </style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
-  <body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
+  <body class="h-entry toc-inline" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
       
         
@@ -454,7 +454,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-24-may-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-05-24">24 May 2016</time></h2>
+  <h2 id="w3c-editor-s-draft-26-may-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-05-26">26 May 2016</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -2853,7 +2853,8 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
       <!--OddPage--><h2 id="h-url" resource="#h-url"><span property="xhv:role" resource="xhv:heading"><span class="secno">8. </span>URL Object Extensions</span></h2>
       <p>This section specifies extensions to the <a href="https://www.w3.org/TR/FileAPI/#URL-object">URL</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] object definition.</p>
 
-      <pre class="idl"><span class="idlInterface" id="idl-def-URL">partial interface <span class="idlInterfaceID">URL</span> {
+      <pre class="idl"><span class="idlInterface" id="idl-def-URL">[<span class="extAttr">Exposed=Window,DedicatedWorker,SharedWorker</span>]
+partial interface <span class="idlInterfaceID">URL</span> {
 <span class="idlMethod">    static <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString" class="idlType">DOMString</a></code></span> <span class="idlMethName"><a href="#widl-URL-createObjectURL-DOMString-MediaSource-mediaSource">createObjectURL</a></span> (<span class="idlParam"><span class="idlParamType"><a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a></span> <span class="idlParamName">mediaSource</span></span>);</span>
 };</span></pre><section id="methods-4" typeof="bibo:Chapter" resource="#methods-4" property="bibo:hasPart"><h3 id="h-methods-4" resource="#h-methods-4"><span property="xhv:role" resource="xhv:heading"><span class="secno">8.1 </span>Methods</span></h3><dl class="methods"><dt id="widl-URL-createObjectURL-DOMString-MediaSource-mediaSource"><code>createObjectURL</code>, static</dt><dd>
           <p>Creates URLs for <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> objects.</p>
@@ -3182,7 +3183,16 @@ interface <span class="idlInterfaceID">TrackDefaultList</span> {
         </thead>
         <tbody>
           <tr>
-            <td>24 May 2016</td>
+            <td>26 May 2016</td>
+            <td>
+              <ul>
+                <li>Issue 67 - Excluded <code><a href="#widl-URL-createObjectURL-DOMString-MediaSource-mediaSource">createObjectURL()</a></code> from Service Workers.</li>
+                <li>Issue 68 - Made kinds attribute and ctor argument use sequence type.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/038cdcf65b7bd8fba964117312bacd920f643bb2/index.html">24 May 2016</a></td>
             <td>
               <ul>
                 <li>Issue 10 - Updated <code><a href="#widl-URL-createObjectURL-DOMString-MediaSource-mediaSource">createObjectURL()</a></code> to align to current (April 2015) non-autorevoking <code><a href="#widl-URL-createObjectURL-DOMString-MediaSource-mediaSource">createObjectURL()</a></code>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] method. Encouraged web author use of <a href="https://www.w3.org/TR/FileAPI/#dfn-revokeObjectURL">revokeObjectURL()</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>].</li>
