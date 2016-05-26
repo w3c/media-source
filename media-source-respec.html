@@ -199,7 +199,7 @@
     </section>
 
     <section id="abstract">
-      This specification extends HTMLMediaElement to allow
+      This specification extends <a def-id="htmlmediaelement">HTMLMediaElement</a> [[HTML51]] to allow
       JavaScript to generate media streams for playback.
       Allowing JavaScript to generate streams facilitates a variety of use
       cases like adaptive streaming and time shifting live streams.
@@ -213,7 +213,7 @@
     <section id="introduction">
       <h2>Introduction</h2>
       <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;.
-        It defines objects that allow JavaScript to pass media segments to an <a def-id="videoref" name="htmlmediaelement">HTMLMediaElement</a> [[!HTML5]].
+        It defines objects that allow JavaScript to pass media segments to an <a def-id="htmlmediaelement">HTMLMediaElement</a> [[!HTML51]].
         A buffering model is also included to describe how the user agent acts when different media segments are
         appended at different times. Byte stream specifications used with these extensions are available in the byte stream format registry [[MSE-REGISTRY]].</p>
       <img src="pipeline_model.svg" alt="Media Source Pipeline Model Diagram" longdesc='pipeline_model_description.html#pipelinedesc'>
@@ -242,7 +242,7 @@
           <dt id="active-track-buffers">Active Track Buffers</dt>
           <dd><p>The <a def-id="track-buffers"></a> that provide <a def-id="coded-frames"></a> for the <a def-id="audiotrack-enabled"></a>
               <a def-id="audiotracks"></a>, the <a def-id="videotrack-selected"></a> <a def-id="videotracks"></a>, and the
-              <a def-id="texttrack-showing"></a> or <a def-id="texttrack-hidden"></a> <a def-id="texttracks"></a>. All these tracks are associated with
+              <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> <a def-id="texttracks"></a>. All these tracks are associated with
             <a>SourceBuffer</a> objects in the <a def-id="activeSourceBuffers"></a> list.</p>
           </dd>
 
@@ -299,7 +299,7 @@
             <p>A MediaSource object URL is a unique <a def-id="blob-uri"></a> [[!FILE-API]] created by <a def-id="createObjectURL"></a>. It is used to attach a <a>MediaSource</a> object to an HTMLMediaElement.</p>
             <p>These URLs are the same as a <a def-id="blob-uri"></a>, except that anything in the definition of that feature that refers to <a def-id="File"></a> and <a def-id="Blob"></a> objects is hereby extended to also apply to <a>MediaSource</a> objects.</p>
             <p>The <a def-id="origin">origin</a> of the MediaSource object URL is the <a def-id="effective-script-origin"></a> of the document that called <a def-id="createObjectURL"></a>.</p>
-            <p class="note">For example, the <a def-id="origin"></a> of the MediaSource object URL affects the way that the media element is <a href="http://www.w3.org/TR/html5/scripting-1.html#security-with-canvas-elements">consumed by canvas</a>.</p>
+            <p class="note">For example, the <a def-id="origin"></a> of the MediaSource object URL affects the way that the media element is <a href="https://www.w3.org/TR/html51/semantics-scripting.html#security-with-canvas-elements">consumed by canvas</a>.</p>
           </dd>
 
           <dt id="parent-media-source">Parent Media Source</dt>
@@ -400,7 +400,7 @@
           <p>Contains the subset of <a def-id="sourceBuffers"></a> that are providing the
             <a def-id="videoref" name="dom-videotrack-selected">selected video track</a>, the
             <a def-id="videoref" name="dom-audiotrack-enabled">enabled audio track(s)</a>, and the
-            <a def-id="videoref" name="dom-texttrack-showing">"showing"</a> or <a def-id="videoref" name="dom-texttrack-hidden">"hidden"</a> text track(s).
+            <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> text track(s).
           </p>
           <p><a>SourceBuffer</a> objects in this list must appear in the same order as they appear in
             the <a def-id="sourceBuffers"></a> attribute. (e.g., If only sourceBuffers[0] and
@@ -554,8 +554,8 @@
                 <li>For each <a def-id="text-track"></a> object in the <var>SourceBuffer textTracks list</var>, run the following steps:
                   <ol>
                     <li>Set the <a def-id="texttrack-sourceBuffer"></a> attribute on the <a def-id="text-track"></a> object to null.</li>
-                    <li>If the <a def-id="texttrack-mode"></a> attribute on the <a def-id="text-track"></a> object is set to  <a def-id="texttrack-showing"></a> or
-                      <a def-id="texttrack-hidden"></a>, then set the <var>removed enabled text track flag</var> to true.</li>
+                    <li>If the <a def-id="texttrack-mode"></a> attribute on the <a def-id="text-track"></a> object is set to  <a def-id="texttrackmode-showing"></a> or
+                      <a def-id="texttrackmode-hidden"></a>, then set the <var>removed enabled text track flag</var> to true.</li>
                     <li>Remove the <a def-id="text-track"></a> object from the <var>HTMLMediaElement textTracks list</var>.</li>
                     <li><a def-id="Queue-and-fire-removetrack"></a> at the <var>HTMLMediaElement textTracks list</var>.</li>
                     <li>Remove the <a def-id="text-track"></a> object from the <var>SourceBuffer textTracks list</var>.</li>
@@ -670,7 +670,7 @@
 
         <section id="mediasource-detach">
           <h4>Detaching from a media element</h4>
-          <p>The following steps are run in any case where the media element is going to transition to <a def-id="videoref" name="dom-media-network_empty">NETWORK_EMPTY</a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="videoref" name="event-mediacontroller-emptied">emptied</a> at the media element. These steps must be run right before the transition.</p>
+          <p>The following steps are run in any case where the media element is going to transition to <a def-id="videoref" name="dom-htmlmediaelement-network_empty">NETWORK_EMPTY</a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="videoref" name="eventdef-media-emptied">emptied</a> at the media element. These steps must be run right before the transition.</p>
 
           <ol>
             <li>Set the <a def-id="readyState"></a> attribute to <a def-id="closed"></a>.</li>
@@ -684,7 +684,7 @@
             <li>
               <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceclose"></a> at the <a>MediaSource</a>.</li>
           </ol>
-          <p class="note">Going forward, this algorithm is intended to be externally called and run in any case where the attached <a>MediaSource</a>, if any, must be detached from the media element.  It may be called on HTMLMediaElement [[HTML51]] operations like load() and resource fetch algorithm failures in addition to, or in place of, when the media element transitions to <a def-id="videoref" name="dom-media-network_empty">NETWORK_EMPTY</a>. Resource fetch algorithm failures are those which abort either the resource fetch algorithm or the resource selection algorithm, with the exception that the &quot;Final step&quot; [[HTML51]] is not considered a failure that triggers detachment.</p>
+          <p class="note">Going forward, this algorithm is intended to be externally called and run in any case where the attached <a>MediaSource</a>, if any, must be detached from the media element.  It may be called on HTMLMediaElement [[HTML51]] operations like load() and resource fetch algorithm failures in addition to, or in place of, when the media element transitions to <a def-id="videoref" name="dom-htmlmediaelement-network_empty">NETWORK_EMPTY</a>. Resource fetch algorithm failures are those which abort either the resource fetch algorithm or the resource selection algorithm, with the exception that the &quot;Final step&quot; [[HTML51]] is not considered a failure that triggers detachment.</p>
         </section>
 
         <section id="mediasource-seeking">
@@ -826,7 +826,7 @@
                 </li>
               </ol>
             </dd>
-            <dt>If a text track <a def-id="videoref" name="dom-texttrack-mode">mode</a> becomes <a def-id="videoref" name="dom-texttrack-disabled">"disabled"</a> and the <a>SourceBuffer</a> associated with this track is not associated with any other enabled or selected track, then run the following steps:</dt>
+            <dt>If a text track <a def-id="videoref" name="dom-texttrack-mode">mode</a> becomes <a def-id="texttrackmode-disabled"></a> and the <a>SourceBuffer</a> associated with this track is not associated with any other enabled or selected track, then run the following steps:</dt>
             <dd>
               <ol>
                 <li>Remove the <a>SourceBuffer</a> associated with the text track from <a def-id="activeSourceBuffers"></a>
@@ -836,7 +836,7 @@
                 </li>
               </ol>
             </dd>
-            <dt>If a text track <a def-id="videoref" name="dom-texttrack-mode">mode</a> becomes <a def-id="videoref" name="dom-texttrack-showing">"showing"</a> or <a def-id="videoref" name="dom-texttrack-hidden">"hidden"</a> and the <a>SourceBuffer</a> associated with this track is not already in <a def-id="activeSourceBuffers"></a>, then run the following steps:
+            <dt>If a text track <a def-id="videoref" name="dom-texttrack-mode">mode</a> becomes <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> and the <a>SourceBuffer</a> associated with this track is not already in <a def-id="activeSourceBuffers"></a>, then run the following steps:
             </dt>
             <dd>
               <ol>
@@ -1718,8 +1718,8 @@
                         <li>Populate the remaining properties on <var>new text track</var> with the
                           appropriate information from the <a def-id="init-segment"></a>.
                         <li>
-                          If the <a def-id="texttrack-mode"></a> property on <var>new text track</var> equals <a def-id="texttrack-showing"></a> or
-                          <a def-id="texttrack-hidden"></a>, then set <var>active track flag</var> to true.
+                          If the <a def-id="texttrack-mode"></a> property on <var>new text track</var> equals <a def-id="texttrackmode-showing"></a> or
+                          <a def-id="texttrackmode-hidden"></a>, then set <var>active track flag</var> to true.
                         </li>
                         <li>Add <var>new text track</var> to the <a def-id="sourcebuffer-textTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
                         <li><a def-id="Queue-and-fire-addtrack"></a> at <a def-id="sourcebuffer-textTracks"></a> attribute
@@ -2468,7 +2468,7 @@
       <h2>HTMLMediaElement Extensions</h2>
       <p>This section specifies what existing attributes on the <a def-id="htmlmediaelement"></a> must return when a <a>MediaSource</a> is attached to the element.</p>
 
-      <p>The <a def-id="videoref" name="dom-media-seekable">HTMLMediaElement.seekable</a> attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
+      <p>The <a def-id="hme-seekable"></a> attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
       <dl class="switch">
         <dt>If <a def-id="duration"></a> equals NaN:</dt>
         <dd>Return an empty <a def-id="timeranges"></a> object.</dd>
@@ -2786,7 +2786,15 @@
         </thead>
         <tbody>
           <tr>
-            <td>06 June 2016</td>
+            <td>08 June 2016</td>
+            <td>
+              <ul>
+                <li>Issue 78 - Update reference from HTML5.0 to HTML5.1</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/374bcfbd2915904d0e7376452c3e2dbc91221550/index.html">06 June 2016</a></td>
             <td>
               <ul>
                 <li>Issue 18 - Clarify fetch algorithm failure detachment trigger.</li>

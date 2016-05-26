@@ -1,9 +1,9 @@
 (function() {
   var MSE_spec_url = "http://www.w3.org/TR/media-source/";
-  var HTML5_spec_url = "https://www.w3.org/TR/html5/embedded-content-0.html";
-  var HTML5_infrastructure_spec_url = "https://www.w3.org/TR/html5/infrastructure.html";
-  var HTML5_browsers_spec_url = "https://www.w3.org/TR/html5/browsers.html";
-  var HTML5_webappapis_spec_url = "https://www.w3.org/TR/html5/webappapis.html";
+  var HTML5_spec_url = "https://www.w3.org/TR/html51/semantics-embedded-content.html";
+  var HTML5_infrastructure_spec_url = "https://www.w3.org/TR/html51/infrastructure.html";
+  var HTML5_browsers_spec_url = "https://www.w3.org/TR/html51/browsers.html";
+  var HTML5_webappapis_spec_url = "https://www.w3.org/TR/html51/webappapis.html";
   var DOM_spec_url = "https://dom.spec.whatwg.org/";
   var HRTIME_spec_url = "https://www.w3.org/TR/hr-time/";
   var W3C_STREAMS_spec_url = "https://www.w3.org/TR/streams-api/"; // Make sure this matches the localBiblio entry.
@@ -71,7 +71,7 @@
   }
 
   function exception_helper(doc, df, id, text) {
-    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: HTML5_infrastructure_spec_url + '#' + id}).text(text))[0]);
+    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: WEBIDL_spec_url + '#' + id}).text(text))[0]);
   }
 
   function typeerror_helper(doc, df, id, text) {
@@ -87,20 +87,20 @@
   }
 
   function queue_and_fire_helper(doc, df, id, text) {
-    webappapis_helper(doc, df, 'queue-a-task', text);
+    webappapis_helper(doc, df, 'queuing', text);
     df.appendChild(doc.createTextNode(' to '));
-    webappapis_helper(doc, df, 'fire-a-simple-event', 'fire a simple event');
+    infrastructure_helper(doc, df, 'fire', 'fire a simple event');
     df.appendChild(doc.createTextNode(' named'));
   }
 
   function queue_and_fire_track_event_helper(doc, df, id, text) {
-    webappapis_helper(doc, df, 'queue-a-task', 'Queue a task');
+    webappapis_helper(doc, df, 'queuing', 'Queue a task');
     df.appendChild(doc.createTextNode(' to fire a '));
-    infrastructure_helper(doc, df, 'concept-events-trusted', 'trusted event');
+    infrastructure_helper(doc, df, 'trusted', 'trusted event');
     df.appendChild(doc.createTextNode(' named '));
-    code_videoref_helper(doc, df, 'handler-tracklist-on' + text, text);
+    code_videoref_helper(doc, df, 'dom-mediatracklist-on' + text, text);
     df.appendChild(doc.createTextNode(', that does not bubble and is not cancelable, and that uses the '));
-    code_videoref_helper(doc, df, 'trackevent', 'TrackEvent');
+    code_videoref_helper(doc, df, 'trackevent-trackevent', 'TrackEvent');
     df.appendChild(doc.createTextNode(' interface,'));
   }
 
@@ -282,20 +282,20 @@
     'videoref': { func: videoref_helper, fragment: '', link_text: '', },
     'media-timeline': { func: videoref_helper, fragment: 'media-timeline', link_text: 'media timeline',  },
     'media-element-load-algorithm': { func: videoref_helper, fragment: 'media-element-load-algorithm', link_text: 'media element load algorithm',  },
-    'resource-fetch-algorithm': { func: videoref_helper, fragment: 'concept-media-load-resource', link_text: 'resource fetch algorithm',  },
+    'resource-fetch-algorithm': { func: videoref_helper, fragment: 'resource-fetch-algorithm', link_text: 'resource fetch algorithm',  },
     'delaying-the-load-event-flag': {func: videoref_helper, fragment: 'delaying-the-load-event-flag', link_text: 'delaying-the-load-event-flag', },
-    'intrinsic-width-and-height': { func: videoref_helper, fragment: 'concept-video-intrinsic-width', link_text: 'intrinsic width and height',  },
+    'intrinsic-width-and-height': { func: videoref_helper, fragment: 'video-intrinsic-width', link_text: 'intrinsic width and height',  },
     'normalized-timeranges-object': { func: videoref_helper, fragment: 'normalized-timeranges-object', link_text: 'normalized TimeRanges object',  },
-    'current-playback-position': { func: videoref_helper, fragment: 'current-playback-position', link_text: 'current playback position',  },
+    'current-playback-position': { func: videoref_helper, fragment: 'current-position', link_text: 'current playback position',  },
     'media-data-is-corrupted': { func: videoref_helper, fragment: 'fatal-decode-error', link_text: 'media data is corrupted',  },
-    'preload': { func: code_videoref_helper, fragment: 'attr-media-preload', link_text: 'preload', },
-    'preload-none': {func: code_videoref_helper, fragment: 'attr-media-preload-none', link_text: 'none', },
-    'media-src': { func: code_videoref_helper, fragment: 'attr-media-src', link_text: 'src',  },
-    'timerange': { func: code_videoref_helper, fragment: 'timeranges', link_text: 'TimeRange',  },
-    'timeranges': { func: code_videoref_helper, fragment: 'timeranges', link_text: 'TimeRanges',  },
-    'tracklist-change': { func: code_videoref_helper, fragment: 'handler-tracklist-onchange', link_text: 'change',  },
-    'video-track': { func: code_videoref_helper, fragment: 'videotrack', link_text: 'VideoTrack',  },
-    'video-track-list': { func: code_videoref_helper, fragment: 'videotracklist', link_text: 'VideoTrackList', },
+    'preload': { func: code_videoref_helper, fragment: 'element-attrdef-media-preload', link_text: 'preload', },
+    'preload-none': {func: code_videoref_helper, fragment: 'valdef-htmlmediaelement-preload-none', link_text: 'none', },
+    'media-src': { func: code_videoref_helper, fragment: 'element-attrdef-media-src', link_text: 'src',  },
+    'timerange': { func: code_videoref_helper, fragment: 'timeranges-timeranges', link_text: 'TimeRange',  },
+    'timeranges': { func: code_videoref_helper, fragment: 'timeranges-timeranges', link_text: 'TimeRanges',  },
+    'tracklist-change': { func: code_videoref_helper, fragment: 'dom-mediatracklist-onchange', link_text: 'change',  },
+    'video-track': { func: code_videoref_helper, fragment: 'videotrack-videotrack', link_text: 'VideoTrack',  },
+    'video-track-list': { func: code_videoref_helper, fragment: 'videotracklist-videotracklist', link_text: 'VideoTrackList', },
     'videotrack-id': { func: code_videoref_helper, fragment: 'dom-videotrack-id', link_text: 'id', },
     'videotrack-kind': { func: code_videoref_helper, fragment: 'dom-videotrack-kind', link_text: 'kind', },
     'videotrack-label': { func: code_videoref_helper, fragment: 'dom-videotrack-label', link_text: 'label', },
@@ -303,11 +303,11 @@
     'videotrack-selected': { func: code_videoref_helper, fragment: 'dom-videotrack-selected', link_text: 'selected', },
     'videotrack-sourceBuffer': { func: idlref_helper, fragment: 'widl-VideoTrack-sourceBuffer', link_text: 'sourceBuffer', },
     'videotracklist-length': { func: code_videoref_helper, fragment: 'dom-videotracklist-length', link_text: 'length',  },
-    'videotracks': { func: code_videoref_helper, fragment: 'dom-media-videotracks', link_text: 'videoTracks',  },
-    'audio-track': { func: code_videoref_helper, fragment: 'audiotrack', link_text: 'AudioTrack',  },
-    'audio-track-list': { func: code_videoref_helper, fragment: 'audiotracklist', link_text: 'AudioTrackList', },
+    'videotracks': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-videotracks', link_text: 'videoTracks',  },
+    'audio-track': { func: code_videoref_helper, fragment: 'audiotrack-audiotrack', link_text: 'AudioTrack',  },
+    'audio-track-list': { func: code_videoref_helper, fragment: 'audiotracklist-audiotracklist', link_text: 'AudioTrackList', },
     'audiotracklist-length': { func: code_videoref_helper, fragment: 'dom-audiotracklist-length', link_text: 'length', },
-    'audiotracks': { func: code_videoref_helper, fragment: 'dom-media-audiotracks', link_text: 'audioTracks',  },
+    'audiotracks': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-audiotracks', link_text: 'audioTracks',  },
     'audiotrack-id': { func: code_videoref_helper, fragment: 'dom-audiotrack-id', link_text: 'id',  },
     'audiotrack-kind': { func: code_videoref_helper, fragment: 'dom-audiotrack-kind', link_text: 'kind', },
     'audiotrack-label': { func: code_videoref_helper, fragment: 'dom-audiotrack-label', link_text: 'label', },
@@ -315,35 +315,37 @@
     'audiotrack-enabled': { func: code_videoref_helper, fragment: 'dom-audiotrack-enabled', link_text: 'enabled', },
     'audiotrack-sourceBuffer': { func: idlref_helper, fragment: 'widl-AudioTrack-sourceBuffer', link_text: 'sourceBuffer', },
     'av-kind-categories-table': { func: code_videoref_helper, fragment: 'dom-TrackList-getKind-categories', link_text: 'kind categories table', },
-    'text-track-kind-list': { func: code_videoref_helper, fragment: 'text-track-kind', link_text: 'text track kind list', },
-    'text-track': { func: code_videoref_helper, fragment: 'texttrack', link_text: 'TextTrack',  },
-    'text-track-list': { func: code_videoref_helper, fragment: 'texttracklist', link_text: 'TextTrackList', },
-    'texttracks': { func: code_videoref_helper, fragment: 'dom-media-texttracks', link_text: 'textTracks', },
+    'text-track-kind-list': { func: code_videoref_helper, fragment: 'kind-of-track', link_text: 'text track kind list', },
+    'text-track': { func: code_videoref_helper, fragment: 'texttrack-texttrack', link_text: 'TextTrack',  },
+    'text-track-list': { func: code_videoref_helper, fragment: 'texttracklist-texttracklist', link_text: 'TextTrackList', },
+    'texttracks': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-texttracks', link_text: 'textTracks', },
     'texttrack-mode': { func: code_videoref_helper, fragment: 'dom-texttrack-mode', link_text: 'mode',  },
     'texttrack-id': { func: code_videoref_helper, fragment: 'dom-texttrack-id', link_text: 'id', },
     'texttrack-kind': { func: code_videoref_helper, fragment: 'dom-texttrack-kind', link_text: 'kind', },
     'texttrack-label': { func: code_videoref_helper, fragment: 'dom-texttrack-label', link_text: 'label', },
     'texttrack-language': { func: code_videoref_helper, fragment: 'dom-texttrack-language', link_text: 'language', },
-    'texttrack-showing': { func: code_videoref_helper, fragment: 'dom-texttrack-showing', link_text: '"showing"', },
-    'texttrack-hidden': { func: code_videoref_helper, fragment: 'dom-texttrack-hidden', link_text: '"hidden"',  },
+    'texttrackmode-showing': { func: code_videoref_helper, fragment: 'dom-texttrackmode-showing', link_text: '"showing"', },
+    'texttrackmode-hidden': { func: code_videoref_helper, fragment: 'dom-texttrackmode-hidden', link_text: '"hidden"',  },
+    'texttrackmode-disabled': { func: code_videoref_helper, fragment: 'dom-texttrackmode-disabled', link_text: '"disabled"', },
     'texttrack-sourceBuffer': { func: idlref_helper, fragment: 'widl-TextTrack-sourceBuffer', link_text: 'sourceBuffer', },
-    'ready-state': { func: code_videoref_helper, fragment: 'dom-media-readystate', link_text: 'HTMLMediaElement.readyState',  },
-    'have-nothing': { func: code_videoref_helper, fragment: 'dom-media-have_nothing', link_text: 'HAVE_NOTHING',  },
-    'have-metadata': { func: code_videoref_helper, fragment: 'dom-media-have_metadata', link_text: 'HAVE_METADATA',  },
-    'have-current-data': { func: code_videoref_helper, fragment: 'dom-media-have_current_data', link_text: 'HAVE_CURRENT_DATA',  },
-    'have-future-data': { func: code_videoref_helper, fragment: 'dom-media-have_future_data', link_text: 'HAVE_FUTURE_DATA',  },
-    'have-enough-data': { func: code_videoref_helper, fragment: 'dom-media-have_enough_data', link_text: 'HAVE_ENOUGH_DATA',  },
-    'loadedmetadata': { func: code_videoref_helper, fragment: 'event-media-loadedmetadata', link_text: 'loadedmetadata',  },
-    'loadeddata': { func: code_videoref_helper, fragment: 'event-media-loadeddata', link_text: 'loadeddata',  },
-    'canplay': { func: code_videoref_helper, fragment: 'event-media-canplay', link_text: 'canplay',  },
-    'canplaythrough': { func: code_videoref_helper, fragment: 'event-media-canplaythrough', link_text: 'canplaythrough',  },
-    'htmlmediaelement': { func: code_videoref_helper, fragment: 'htmlmediaelement', link_text: 'HTMLMediaElement',  },
-    'hme-duration': { func: code_videoref_helper, fragment: 'media-controller-duration', link_text: 'media controller duration',  },
-    'hme-buffered': { func: code_videoref_helper, fragment: 'dom-media-buffered', link_text: 'HTMLMediaElement.buffered',  },
-    'hme-error': { func: code_videoref_helper, fragment: 'dom-media-error', link_text: 'HTMLMediaElement.error',  },
-    'hme-seek-algorithm': { func: videoref_helper, fragment: 'dom-media-seek', link_text: 'seek algorithm',  },
+    'ready-state': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-readystate', link_text: 'HTMLMediaElement.readyState',  },
+    'have-nothing': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-have_nothing', link_text: 'HAVE_NOTHING',  },
+    'have-metadata': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-have_metadata', link_text: 'HAVE_METADATA',  },
+    'have-current-data': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-have_current_data', link_text: 'HAVE_CURRENT_DATA',  },
+    'have-future-data': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-have_future_data', link_text: 'HAVE_FUTURE_DATA',  },
+    'have-enough-data': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-have_enough_data', link_text: 'HAVE_ENOUGH_DATA',  },
+    'loadedmetadata': { func: code_videoref_helper, fragment: 'eventdef-media-loadedmetadata', link_text: 'loadedmetadata',  },
+    'loadeddata': { func: code_videoref_helper, fragment: 'eventdef-media-loadeddata', link_text: 'loadeddata',  },
+    'canplay': { func: code_videoref_helper, fragment: 'eventdef-media-canplay', link_text: 'canplay',  },
+    'canplaythrough': { func: code_videoref_helper, fragment: 'eventdef-media-canplaythrough', link_text: 'canplaythrough',  },
+    'htmlmediaelement': { func: code_videoref_helper, fragment: 'htmlmediaelement-htmlmediaelement', link_text: 'HTMLMediaElement',  },
+    'hme-duration': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-duration', link_text: 'media duration',  },
+    'hme-buffered': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-buffered', link_text: 'HTMLMediaElement.buffered',  },
+    'hme-error': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-error', link_text: 'HTMLMediaElement.error',  },
+    'hme-seekable': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-seekable', link_text: 'HTMLMediaElement.seekable',  },
+    'hme-seek-algorithm': { func: videoref_helper, fragment: 'seek', link_text: 'seek algorithm',  },
     'hme-duration-change-algorithm': { func: videoref_helper, fragment: 'durationChange', link_text: 'HTMLMediaElement duration change algorithm',  },
-    'htmlvideoelement': { func: code_videoref_helper, fragment: 'htmlvideoelement', link_text: 'HTMLVideoElement',  },
+    'htmlvideoelement': { func: code_videoref_helper, fragment: 'htmlvideoelement-htmlvideoelement', link_text: 'HTMLVideoElement',  },
 
     'total-video-frame-count': { func: var_helper, fragment: '#total-video-frame-count', link_text: 'total video frame count', },
     'dropped-video-frame-count': { func: var_helper, fragment: '#dropped-video-frame-count', link_text: 'dropped video frame count', },
@@ -363,7 +365,7 @@
     'Queue-and-fire-removetrack': { func: queue_and_fire_track_event_helper, fragment: '', link_text: 'removetrack',  },
     'provide-a-stable-state': { func: webappapis_helper, fragment: 'provide-a-stable-state', link_text: 'provide a stable state',  },
 
-    'origin': { func: browsers_helper, fragment: 'origin-0', link_text: 'origin', },
+    'origin': { func: browsers_helper, fragment: 'origin', link_text: 'origin', },
     'effective-script-origin': { func: browsers_helper, fragment: 'effective-script-origin', link_text: 'effective script origin', },
 
 
@@ -476,11 +478,11 @@
     var externalClassInfo = {
       'ReadableStream': { spec: 'whatwg-streams-api', fragment: 'rs-class-definition' },
       'SourceBuffer': { spec: 'mse', fragment: 'idl-def-SourceBuffer' },
-      'AudioTrackList': {spec: 'html5', fragment: 'audiotracklist' },
-      'TextTrackList': {spec: 'html5', fragment: 'texttracklist' },
-      'TimeRanges': { spec: 'html5', fragment: 'timeranges' },
-      'VideoTrackList': {spec: 'html5', fragment: 'videotracklist' },
-      'EventHandler' : { spec: 'html5', fragment: 'eventhandler' },
+      'AudioTrackList': {spec: 'html5', fragment: 'audiotracklist-audiotracklist' },
+      'TextTrackList': {spec: 'html5', fragment: 'texttracklist-texttracklist' },
+      'TimeRanges': { spec: 'html5', fragment: 'timeranges-timeranges' },
+      'VideoTrackList': {spec: 'html5', fragment: 'videotracklist-videotracklist' },
+      'EventHandler' : { spec: 'html5-webappapis', fragment: 'typedefdef-eventhandlernonnull-eventhandler' },
       'EventTarget': { spec: 'dom', fragment: 'eventtarget' },
       'DOMString': { spec: 'webidl', fragment: 'idl-DOMString' },
       'boolean': { spec: 'webidl', fragment: 'idl-boolean' },
@@ -507,6 +509,8 @@
           baseURL = WHATWG_STREAMS_spec_url;
         } else if (info.spec == 'html5') {
           baseURL = HTML5_spec_url;
+        } else if (info.spec == 'html5-webappapis') {
+          baseURL = HTML5_webappapis_spec_url;
         } else if (info.spec == 'dom') {
           baseURL = DOM_spec_url;
         } else if (info.spec == 'webidl') {
