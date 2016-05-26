@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang=en>
+  <head>
+    <title>Media Source Pipeline Model</title>
+    <meta charset='utf-8'>
+    <meta name="viewport" cnt="width=device-width, initial-scale = 1.0, shrink-to-fit=no">
+    <link rel=stylesheet href='https://www.w3.org/StyleSheets/TR/2016/base'>
+    <style>
+      img { border: 0; }
+      table { border-collapse: collapse;border-spacing: 0;}
+      th, td { border: 1px solid black; padding: 0.5ex; }
+    </style>
+  </head>
+  <body>
+    <h1>Media Source Pipeline Model</h1>
+
+<h2 id='pipelinedesc'>Non-technical description of the Process Flowchart image</h2>
+
+    <p>The flowchart reads from a top down perspective. At the top is a container
+marked MediaSource, with 3 arrows flowing down to containers each marked
+SourceBuffer. (Not indicated, but for sake of clarity in this description
+referred to here-after as SourceBuffer 1, shown with a blue background;
+SourceBuffer 2, shown with a mauve background; and SourceBuffer 3, shown
+with a rose background; as described from Left to Right).</p>
+
+
+<p>Below these 3 SourceBuffer containers is a dashed line, with an indication
+that the top half (MediaSource plus the 3 SourceBuffer containers) are taken
+from the Media Source API, while the details to follow are taken from the
+HTMLMediaElement.<p>
+
+
+
+
+<h3 id='sourcebuffer1'>Flowing down from SourceBuffer 1</h3>
+
+
+<p>Flowing down from SourceBuffer 1 is a blue triangle with 3 arrows pointing
+to 3 process indications, each labeled Track Buffer.</p>
+
+<p>The first Track Buffer from the left then flows to a red box labeled Video
+Decoder, which then flows to an indicator (three dots stacked vertically)
+labeled Video Tag Display Region.</p>
+
+<p>The second Track Buffer flows to a green box labeled Audio Decoder, which
+then follows to an indicator of an open switch, which then continues to an
+indicator (green circle with an X) labeled Audio Device.</p>
+
+<p>The third Track Buffer also flows to a green box labeled Video Decoder,
+which also flows to a switch, this time however indicated closed, which then
+also continues to the same indicator (green circle with an X) labeled Audio
+Device as the second Track Buffer.</p>
+
+
+
+
+<h3 id='sourcebuffer2'>Flowing down from SourceBuffer 2</h3>
+
+
+<p>Flowing down from SourceBuffer 2 is a mauve triangle with an arrow flowing
+to a red box labeled Video Decoder, which then flows to the same  Video Tag
+Display Region previously mentioned in SourceBuffer 1.</p>
+
+
+<h3 id='sourcebuffer3'>Flowing down from SourceBuffer 3</h3>
+
+
+<p>Flowing down from SourceBuffer 3 is a rose triangle with an arrow flowing to
+a green box labeled Audio Decoder, which then flows through a closed switch,
+which then also continues to the same indicator (green circle with an X)
+labeled Audio Device previously mentioned in SourceBuffer 1</p>
+
+
+<p style='text-align: right;'>With thanks to <a href='https://lists.w3.org/Archives/Public/public-apa/2016Jan/0014.html'>J. Foliot, Deque Systems</a></p>
+
+<figure>
+  <figcaption>Media Source Pipeline Model figure</figcaption>
+  <img src="pipeline_model.svg" alt="Media Source Pipeline Model Diagram" longdesc='#pipelinedesc'>
+</figure>
+
+  </body>
+
+</html>
