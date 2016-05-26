@@ -493,7 +493,7 @@
       'void': { spec: 'webidl', fragment: 'idl-void' },
       'ArrayBuffer': { spec: 'typed-array', fragment: 'ArrayBuffer' },
       'ArrayBufferView': { spec: 'typed-array', fragment: 'ArrayBufferView' },
-      'DOMHighResTimeStamp': { spec: 'hr-time', fragment: 'sec-DOMHighResTimeStamp'},
+      'DOMHighResTimeStamp': { spec: 'hr-time', fragment: 'dom-domhighrestimestamp'},
     };
     $("a:not([href])").each(function () {
       var $ant = $(this);
