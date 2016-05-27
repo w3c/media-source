@@ -454,7 +454,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-26-may-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-05-26">26 May 2016</time></h2>
+  <h2 id="w3c-editor-s-draft-06-june-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-06-06">06 June 2016</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -1130,12 +1130,17 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <dt>Otherwise</dt>
             <dd>
               <ol>
+                <li>Set the media element's <a href="https://www.w3.org/TR/html5/embedded-content-0.html#delaying-the-load-event-flag">delaying-the-load-event-flag</a> to false.</li>
                 <li>Set the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute to <code><a href="#idl-def-ReadyState.open">"open"</a></code>.</li>
                 <li>
                   <a href="https://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="https://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-sourceopen">sourceopen</a></code> at the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a>.</li>
-                <li>Continue the <a href="https://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a> by running the <span>"<i>Perform a potentially CORS-enabled fetch</i>"</span> step. Text in the <a href="https://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a>
-                  that refers to "the download" or "bytes received" refer to data passed in via <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code> and <code><a href="#widl-SourceBuffer-appendStream-void-ReadableStream-stream-unsigned-long-long-maxSize">appendStream()</a></code>. References to
-                  HTTP in the <a href="https://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a> do not apply because the HTMLMediaElement does not fetch media data via HTTP when a <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> is attached.</li>
+                <li>Continue the <a href="https://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a> by running the <span>"<i>Perform a potentially CORS-enabled fetch</i>"</span> step, with these clarifications:
+                  <ol>
+                    <li>Text in the <a href="https://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a> that refers to "the download" or "bytes received" refers to data passed in via <code><a href="#widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data">appendBuffer()</a></code> and <code><a href="#widl-SourceBuffer-appendStream-void-ReadableStream-stream-unsigned-long-long-maxSize">appendStream()</a></code>.</li>
+                    <li>References to HTTP in the <a href="https://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a> do not apply because the HTMLMediaElement does not fetch media data via HTTP when a <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> is attached.</li>
+                    <li>Text in the <a href="https://www.w3.org/TR/html5/embedded-content-0.html#concept-media-load-resource">resource fetch algorithm</a> that refers to transitions to "NETWORK_IDLE" and firing "suspend" events, and the paragraph that begins with "User agents may decide to not download more content at any time", do not apply to a media element that has a <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object attached by this algorithm.</li>
+                  </ol>
+                </li>
               </ol>
             </dd>
           </dl>
@@ -3182,7 +3187,15 @@ partial interface <span class="idlInterfaceID">URL</span> {
         </thead>
         <tbody>
           <tr>
-            <td>26 May 2016</td>
+            <td>06 June 2016</td>
+            <td>
+              <ul>
+                <li>Issue 24 - Clarify MSE attachment stops delaying the 'load' event, and MSE disables 'suspend' event logic</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/1f80b6e98d13acc106d5da80a771b6e4756d971c/index.html">26 May 2016</a></td>
             <td>
               <ul>
                 <li>Issue 44 - Used SVG and longdesc for pipeline diagram.</li>
@@ -3983,7 +3996,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
 </dd><dt id="bib-HTML5">[HTML5]</dt><dd>Ian Hickson; Robin Berjon; Steve Faulkner; Travis Leithead; Erika Doyle Navara; Edward O'Connor; Silvia Pfeiffer. <a href="http://www.w3.org/TR/html5/" property="dc:requires"><cite>HTML5</cite></a>. 28 October 2014. W3C Recommendation. URL: <a href="http://www.w3.org/TR/html5/" property="dc:requires">http://www.w3.org/TR/html5/</a>
 </dd><dt id="bib-TYPED-ARRAYS">[TYPED-ARRAYS]</dt><dd>David Herman; Kenneth Russell. <a href="https://www.khronos.org/registry/typedarray/specs/latest/" property="dc:requires"><cite>Typed Array Specification</cite></a>. 26 June 2013. Khronos Working Draft. URL: <a href="https://www.khronos.org/registry/typedarray/specs/latest/" property="dc:requires">https://www.khronos.org/registry/typedarray/specs/latest/</a>
 </dd><dt id="bib-WHATWG-STREAMS-API">[WHATWG-STREAMS-API]</dt><dd>Domenic Denicola; Takeshi Yoshino. <a href="https://streams.spec.whatwg.org/" property="dc:requires"><cite>WHATWG Streams API</cite></a>. URL: <a href="https://streams.spec.whatwg.org/" property="dc:requires">https://streams.spec.whatwg.org/</a>
-</dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart"><h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.2 </span>Informative references</span></h3><dl class="bibliography" resource=""><dt id="bib-HTML51">[HTML51]</dt><dd>Steve Faulkner; Arron Eicholz; Travis Leithead; Alex Danilo. <a href="http://www.w3.org/TR/html51/" property="dc:references"><cite>HTML 5.1</cite></a>. 3 May 2016. W3C Working Draft. URL: <a href="http://www.w3.org/TR/html51/" property="dc:references">http://www.w3.org/TR/html51/</a>
+</dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart"><h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.2 </span>Informative references</span></h3><dl class="bibliography" resource=""><dt id="bib-HTML51">[HTML51]</dt><dd>Steve Faulkner; Arron Eicholz; Travis Leithead; Alex Danilo. <a href="http://www.w3.org/TR/html51/" property="dc:references"><cite>HTML 5.1</cite></a>. 2 June 2016. W3C Working Draft. URL: <a href="http://www.w3.org/TR/html51/" property="dc:references">http://www.w3.org/TR/html51/</a>
 </dd><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt><dd>Bob Lund; Silvia Pfeiffer. <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. URL: <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references">http://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
 </dd><dt id="bib-MSE-REGISTRY">[MSE-REGISTRY]</dt><dd>Aaron Colwell. <a href="byte-stream-format-registry.html" property="dc:references"><cite>Media Source Extensions Byte Stream Format Registry</cite></a>. URL: <a href="byte-stream-format-registry.html" property="dc:references">byte-stream-format-registry.html</a>
 </dd></dl></section></section><p role="navigation" id="back-to-top"><a href="#toc"><abbr title="Back to Top">↑</abbr></a></p><script src="https://www.w3.org/scripts/TR/2016/fixup.js"></script></body></html>

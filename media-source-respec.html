@@ -20,7 +20,7 @@
       // if this is a LCWD, uncomment and set the end of its review period
       // lcEnd: "2009-08-05",
 
-      publishDate: "2016-05-26",
+      publishDate: "2016-06-06",
       previousMaturity: "CR",
       previousPublishDate: "2015-05-03",
 
@@ -652,12 +652,17 @@
             <dt>Otherwise</dt>
             <dd>
               <ol>
+                <li>Set the media element's <a def-id="delaying-the-load-event-flag"></a> to false.</li>
                 <li>Set the <a def-id="readyState"></a> attribute to <a def-id="open"></a>.</li>
                 <li>
                   <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a>MediaSource</a>.</li>
-                <li>Continue the <a def-id="resource-fetch-algorithm"></a> by running the <a def-id="perform-potentially-cors-enabled-fetch"></a> step. Text in the <a def-id="resource-fetch-algorithm"></a>
-                  that refers to &quot;the download&quot; or &quot;bytes received&quot; refer to data passed in via <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a>. References to
-                  HTTP in the <a def-id="resource-fetch-algorithm"></a> do not apply because the HTMLMediaElement does not fetch media data via HTTP when a <a>MediaSource</a> is attached.</li>
+                <li>Continue the <a def-id="resource-fetch-algorithm"></a> by running the <a def-id="perform-potentially-cors-enabled-fetch"></a> step, with these clarifications:
+                  <ol>
+                    <li>Text in the <a def-id="resource-fetch-algorithm"></a> that refers to &quot;the download&quot; or &quot;bytes received&quot; refers to data passed in via <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a>.</li>
+                    <li>References to HTTP in the <a def-id="resource-fetch-algorithm"></a> do not apply because the HTMLMediaElement does not fetch media data via HTTP when a <a>MediaSource</a> is attached.</li>
+                    <li>Text in the <a def-id="resource-fetch-algorithm"></a> that refers to transitions to &quot;NETWORK_IDLE&quot; and firing &quot;suspend&quot; events, and the paragraph that begins with &quot;User agents may decide to not download more content at any time&quot;, do not apply to a media element that has a <a>MediaSource</a> object attached by this algorithm.</li>
+                  </ol>
+                </li>
               </ol>
             </dd>
           </dl>
@@ -2781,7 +2786,15 @@
         </thead>
         <tbody>
           <tr>
-            <td>26 May 2016</td>
+            <td>06 June 2016</td>
+            <td>
+              <ul>
+                <li>Issue 24 - Clarify MSE attachment stops delaying the 'load' event, and MSE disables 'suspend' event logic</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/1f80b6e98d13acc106d5da80a771b6e4756d971c/index.html">26 May 2016</a></td>
             <td>
               <ul>
                 <li>Issue 44 - Used SVG and longdesc for pipeline diagram.</li>
