@@ -1162,7 +1162,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>
               <a href="https://www.w3.org/TR/html5/webappapis.html#queue-a-task">Queue a task</a> to <a href="https://www.w3.org/TR/html5/webappapis.html#fire-a-simple-event">fire a simple event</a> named <code><a href="#dom-evt-sourceclose">sourceclose</a></code> at the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a>.</li>
           </ol>
-          <div class="note"><div class="note-title marker" aria-level="5" role="heading" id="h-note12"><span>Note</span></div><p class="">Going forward, this algorithm is intended to be externally called and run in any case where the attached <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a>, if any, must be detached from the media element.  It may be called on HTMLMediaElement [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] operations like load() and fetch() in addition to, or in place of, when the media element transitions to <a href="https://www.w3.org/TR/html5/embedded-content-0.html#dom-media-network_empty">NETWORK_EMPTY</a>.</p></div>
+          <div class="note"><div class="note-title marker" aria-level="5" role="heading" id="h-note12"><span>Note</span></div><p class="">Going forward, this algorithm is intended to be externally called and run in any case where the attached <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a>, if any, must be detached from the media element.  It may be called on HTMLMediaElement [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] operations like load() and resource fetch algorithm failures in addition to, or in place of, when the media element transitions to <a href="https://www.w3.org/TR/html5/embedded-content-0.html#dom-media-network_empty">NETWORK_EMPTY</a>. Resource fetch algorithm failures are those which abort either the resource fetch algorithm or the resource selection algorithm, with the exception that the "Final step" [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] is not considered a failure that triggers detachment.</p></div>
         </section>
 
         <section id="mediasource-seeking" typeof="bibo:Chapter" resource="#mediasource-seeking" property="bibo:hasPart">
@@ -3190,6 +3190,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
             <td>06 June 2016</td>
             <td>
               <ul>
+                <li>Issue 18 - Clarify fetch algorithm failure detachment trigger.</li>
                 <li>Issue 24 - Clarify MSE attachment stops delaying the 'load' event, and MSE disables 'suspend' event logic</li>
               </ul>
             </td>

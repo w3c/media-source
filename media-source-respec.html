@@ -684,7 +684,7 @@
             <li>
               <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceclose"></a> at the <a>MediaSource</a>.</li>
           </ol>
-          <p class="note">Going forward, this algorithm is intended to be externally called and run in any case where the attached <a>MediaSource</a>, if any, must be detached from the media element.  It may be called on HTMLMediaElement [[HTML51]] operations like load() and fetch() in addition to, or in place of, when the media element transitions to <a def-id="videoref" name="dom-media-network_empty">NETWORK_EMPTY</a>.</p>
+          <p class="note">Going forward, this algorithm is intended to be externally called and run in any case where the attached <a>MediaSource</a>, if any, must be detached from the media element.  It may be called on HTMLMediaElement [[HTML51]] operations like load() and resource fetch algorithm failures in addition to, or in place of, when the media element transitions to <a def-id="videoref" name="dom-media-network_empty">NETWORK_EMPTY</a>. Resource fetch algorithm failures are those which abort either the resource fetch algorithm or the resource selection algorithm, with the exception that the &quot;Final step&quot; [[HTML51]] is not considered a failure that triggers detachment.</p>
         </section>
 
         <section id="mediasource-seeking">
@@ -2789,6 +2789,7 @@
             <td>06 June 2016</td>
             <td>
               <ul>
+                <li>Issue 18 - Clarify fetch algorithm failure detachment trigger.</li>
                 <li>Issue 24 - Clarify MSE attachment stops delaying the 'load' event, and MSE disables 'suspend' event logic</li>
               </ul>
             </td>
