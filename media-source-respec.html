@@ -2289,6 +2289,8 @@
 
     <section id="videoplaybackquality">
       <h2>VideoPlaybackQuality Object</h2>
+      <p>The following section is OPTIONAL. There are several implementations of the current specification, but it is subject to change because some feel it needs further work. The community is actively investigating alternate designs to provide feedback on media playback quality. See <a href="https://wicg.github.io/media-playback-quality/">Media Playback Quality</a>.
+      </p>
       <dl title="interface VideoPlaybackQuality" class="idl">
         <dt>readonly attribute DOMHighResTimeStamp creationTime</dt>
         <dd>
@@ -2512,6 +2514,9 @@
 
     <section id="htmlvideoelement-extensions">
       <h2>HTMLVideoElement Extensions</h2>
+      <p>The following section uses <a>VideoPlaybackQuality</a> and is OPTIONAL. There are several implementations of the current specification, but it is subject to change because some feel it needs further work. The community is actively investigating alternate designs to provide feedback on media playback quality. See <a href="https://wicg.github.io/media-playback-quality/">Media Playback Quality</a>.
+      </p>
+
       <p>This section specifies new attributes and internal state that are being added to the <a def-id="htmlvideoelement"></a>.</p>
 
       <p>Each <a def-id="htmlvideoelement"></a> will maintain a <dfn id="total-video-frame-count">total video frame count</dfn> variable that keeps
@@ -2786,9 +2791,10 @@
         </thead>
         <tbody>
           <tr>
-            <td>08 June 2016</td>
+            <td>08 June 2016</a></td>
             <td>
               <ul>
+                <li>Issue 69 - Add optional & subject to change language to <a href="#videoplaybackquality">VideoPlaybackQuality</a>.</li>
                 <li>Issue 78 - Update reference from HTML5.0 to HTML5.1</li>
               </ul>
             </td>
@@ -2801,8 +2807,7 @@
                 <li>Issue 24 - Clarify MSE attachment stops delaying the 'load' event, and MSE disables 'suspend' event logic</li>
               </ul>
             </td>
-          </tr>
-          <tr>
+          </tr>          <tr>
             <td><a href="https://rawgit.com/w3c/media-source/1f80b6e98d13acc106d5da80a771b6e4756d971c/index.html">26 May 2016</a></td>
             <td>
               <ul>
