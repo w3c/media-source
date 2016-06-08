@@ -182,12 +182,12 @@
       <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>; there may also be open bugs in the <a href="http://w3.org/brief/Mjcw">previous bug tracker</a>. This draft highlights some of the pending issues that are still to be discussed in the working group. No decision has been taken on the outcome of these issues including whether they are valid.</p>
         <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should join the mailing list mentioned below and take part in the discussions.</p>
 
-        <p>The following features are <strong>at risk</strong> and may be removed due to lack of implementation.
-        </p>
+        <p>The following features are <strong>at risk</strong> and may be removed:</p>
         <ul>
-          <li><a def-id="totalFrameDelay"></a></li>
-          <li><a def-id="appendStream"></a></li>
-        </ul>
+          <li><p>The <a def-id="appendStream">appendStream</a> method on the <a href="#sourcebuffer">sourceBuffer</a> object and algorithm steps that use it.</p></li>
+		  <li><p>The <a href="#videoplaybackquality">VideoPlaybackQuality</a> object and the <a href="#htmlvideoelement-extensions">HTMLVideoElement Extensions</a> that use it.</p></li>
+          <li><p>The <a def-id="totalFrameDelay">totalFrameDelay</a> attribute on the <a href="#videoplaybackquality">VideoPlaybackQuality</a> object.</p></li>
+       </ul>
 
         <p>
           For this specification to exit the Candidate Recommendation stage,
@@ -2786,7 +2786,15 @@
         </thead>
         <tbody>
           <tr>
-            <td>06 June 2016</td>
+            <td>07 June 2016</a></td>
+            <td>
+              <ul>
+                <li>Issue 87 - Add <a href="#videoplaybackquality">VideoPlaybackQuality</a> to the list of at risk features.</li>
+              </ul>
+            </td>
+          </tr>		
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/374bcfbd2915904d0e7376452c3e2dbc91221550/index.html">06 June 2016</td>
             <td>
               <ul>
                 <li>Issue 18 - Clarify fetch algorithm failure detachment trigger.</li>
