@@ -625,12 +625,12 @@ table.simple {
       <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>; there may also be open bugs in the <a href="http://w3.org/brief/Mjcw">previous bug tracker</a>. This draft highlights some of the pending issues that are still to be discussed in the working group. No decision has been taken on the outcome of these issues including whether they are valid.</p>
         <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should join the mailing list mentioned below and take part in the discussions.</p>
 
-        <p>The following features are <strong>at risk</strong> and may be removed due to lack of implementation.
-        </p>
+        <p>The following features are <strong>at risk</strong> and may be removed:</p>
         <ul>
-          <li><code><a href="#widl-VideoPlaybackQuality-totalFrameDelay">totalFrameDelay</a></code></li>
-          <li><code><a href="#widl-SourceBuffer-appendStream-void-ReadableStream-stream-unsigned-long-long-maxSize">appendStream()</a></code></li>
-        </ul>
+          <li><p>The <code><a href="#widl-SourceBuffer-appendStream-void-ReadableStream-stream-unsigned-long-long-maxSize">appendStream</a></code> method on the <a href="#sourcebuffer">sourceBuffer</a> object and algorithm steps that are used only by it.</p></li>
+		  <li><p>The <a href="#videoplaybackquality">VideoPlaybackQuality</a> object and the <a href="#htmlvideoelement-extensions">HTMLVideoElement Extensions</a> that use it.</p></li>
+          <li><p>The <code><a href="#widl-VideoPlaybackQuality-totalFrameDelay">totalFrameDelay</a></code> attribute on the <a href="#videoplaybackquality">VideoPlaybackQuality</a> object.</p></li>
+       </ul>
 
         <p>
           For this specification to exit the Candidate Recommendation stage,
@@ -3195,8 +3195,9 @@ partial interface <span class="idlInterfaceID">URL</span> {
             <td>08 June 2016</td>
             <td>
               <ul>
+                <li>Issue 87 - Add <a href="#videoplaybackquality">VideoPlaybackQuality</a> to the list of at risk features.</li>
                 <li>Issue 69 - Add optional &amp; subject to change language to <a href="#videoplaybackquality">VideoPlaybackQuality</a>.</li>
-                <li>Issue 78 - Update reference from HTML5.0 to HTML5.1</li>
+                <li>Issue 78 - Update reference from HTML5.0 to HTML5.1.</li>
               </ul>
             </td>
           </tr>
@@ -3205,7 +3206,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
             <td>
               <ul>
                 <li>Issue 18 - Clarify fetch algorithm failure detachment trigger.</li>
-                <li>Issue 24 - Clarify MSE attachment stops delaying the 'load' event, and MSE disables 'suspend' event logic</li>
+                <li>Issue 24 - Clarify MSE attachment stops delaying the 'load' event, and MSE disables 'suspend' event logic.</li>
               </ul>
             </td>
           </tr>          <tr>
