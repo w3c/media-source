@@ -135,12 +135,15 @@
 
   var mseDefinitions = {
     'mse-spec': { func: link_helper, fragment: '#', link_text: 'Media Source Extensions', },
+    'live-seekable-range': { func: var_helper, fragment: '#live-seekable-range', link_text: 'live seekable range', },
     'sourceBuffers': { func: idlref_helper, fragment: 'widl-MediaSource-sourceBuffers', link_text: 'sourceBuffers',  },
     'activeSourceBuffers': { func: idlref_helper, fragment: 'widl-MediaSource-activeSourceBuffers', link_text: 'activeSourceBuffers',  },
     'addSourceBuffer': { func: idlref_helper, fragment: 'widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type', link_text: 'addSourceBuffer()',  },
     'endOfStream': { func: idlref_helper, fragment: 'widl-MediaSource-endOfStream-void-EndOfStreamError-error', link_text: 'endOfStream()',  },
     'readyState': { func: idlref_helper, fragment: 'widl-MediaSource-readyState', link_text: 'readyState',  },
     'duration': { func: idlref_helper, fragment: 'widl-MediaSource-duration', link_text: 'duration',  },
+    'setLiveSeekableRange': { func: idlref_helper, fragment: 'widl-MediaSource-setLiveSeekableRange-void-double-start-double-end', link_text: 'setLiveSeekableRange()',  },
+    'clearLiveSeekableRange': { func: idlref_helper, fragment: 'widl-MediaSource-clearLiveSeekableRange-void', link_text: 'clearLiveSeekableRange()',  },
     'isTypeSupported': { func: idlref_helper, fragment: 'widl-MediaSource-isTypeSupported-boolean-DOMString-type', link_text: 'isTypeSupported()',  },
 
     'appendBuffer': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data', link_text: 'appendBuffer()',  },

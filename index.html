@@ -442,7 +442,7 @@ table.simple {
     }
 }
 </style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
-  <body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
+  <body class="h-entry toc-inline" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
       
         
@@ -864,6 +864,8 @@ table.simple {
       <!--OddPage--><h2 id="h-mediasource" resource="#h-mediasource"><span property="xhv:role" resource="xhv:heading"><span class="secno">2. </span>MediaSource Object</span></h2>
       <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the <code><a href="#widl-MediaSource-readyState">readyState</a></code> for this source as well as a list of <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> objects in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> to add media data to this source. The HTMLMediaElement fetches this media data from the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object when it is needed during playback.</p>
 
+      <p>Each <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object has a <dfn id="live-seekable-range" data-dfn-for="" data-dfn-type="dfn">live seekable range</dfn> variable that stores a <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#normalized-timeranges-object">normalized TimeRanges object</a>.  This variable is initialized to an empty <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code> object when the <a href="#idl-def-MediaSource" class="idlType"><code>MediaSource</code></a> object is created, is maintained by <code><a href="#widl-MediaSource-setLiveSeekableRange-void-double-start-double-end">setLiveSeekableRange()</a></code> and <code><a href="#widl-MediaSource-clearLiveSeekableRange-void">clearLiveSeekableRange()</a></code>, and is used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-seekable">HTMLMediaElement.seekable</a></code> behavior.</p>
+
       <pre class="idl"><span class="idlEnum" id="idl-def-ReadyState">enum <span class="idlEnumID">ReadyState</span> {
     "<a href="#idl-def-ReadyState.closed" class="idlEnumItem">closed</a>",
     "<a href="#idl-def-ReadyState.open" class="idlEnumItem">open</a>",
@@ -899,6 +901,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 <span class="idlMethod">    <span class="idlMethType"><a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a></span>   <span class="idlMethName"><a href="#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer</a></span> (<span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString" class="idlType">DOMString</a></code></span> <span class="idlParamName">type</span></span>);</span>
 <span class="idlMethod">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></span>           <span class="idlMethName"><a href="#widl-MediaSource-removeSourceBuffer-void-SourceBuffer-sourceBuffer">removeSourceBuffer</a></span> (<span class="idlParam"><span class="idlParamType"><a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a></span> <span class="idlParamName">sourceBuffer</span></span>);</span>
 <span class="idlMethod">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></span>           <span class="idlMethName"><a href="#widl-MediaSource-endOfStream-void-EndOfStreamError-error">endOfStream</a></span> (<span class="idlParam">optional <span class="idlParamType"><a href="#idl-def-EndOfStreamError" class="idlType"><code>EndOfStreamError</code></a></span> <span class="idlParamName">error</span></span>);</span>
+<span class="idlMethod">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></span>           <span class="idlMethName"><a href="#widl-MediaSource-setLiveSeekableRange-void-double-start-double-end">setLiveSeekableRange</a></span> (<span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-double" class="idlType">double</a></code></span> <span class="idlParamName">start</span></span>, <span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-double" class="idlType">double</a></code></span> <span class="idlParamName">end</span></span>);</span>
+<span class="idlMethod">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></span>           <span class="idlMethName"><a href="#widl-MediaSource-clearLiveSeekableRange-void">clearLiveSeekableRange</a></span> ();</span>
 <span class="idlMethod">    static <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-boolean" class="idlType">boolean</a></code></span> <span class="idlMethName"><a href="#widl-MediaSource-isTypeSupported-boolean-DOMString-type">isTypeSupported</a></span> (<span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString" class="idlType">DOMString</a></code></span> <span class="idlParamName">type</span></span>);</span>
 };</span></pre><section id="attributes" typeof="bibo:Chapter" resource="#attributes" property="bibo:hasPart"><h3 id="h-attributes" resource="#h-attributes"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.1 </span>Attributes</span></h3><dl class="attributes"><dt id="widl-MediaSource-activeSourceBuffers"><code>activeSourceBuffers</code> of type <span class="idlAttrType"><a href="#idl-def-SourceBufferList" class="idlType"><code>SourceBufferList</code></a></span>, readonly       </dt><dd>
           <p>Contains the subset of <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> that are providing the
@@ -974,7 +978,15 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             </li>
             <li>Add the new object to <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> and <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> at <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.</li>
             <li>Return the new object.</li>
-          </ol></dd><dt id="widl-MediaSource-endOfStream-void-EndOfStreamError-error"><code>endOfStream</code></dt><dd>
+          </ol></dd><dt id="widl-MediaSource-clearLiveSeekableRange-void"><code>clearLiveSeekableRange</code></dt><dd>
+          <p>Updates the <var><a href="#live-seekable-range">live seekable range</a></var> variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-seekable">HTMLMediaElement.seekable</a></code> behavior.</p>
+
+          
+        <div><em>No parameters.</em></div><div><em>Return type: </em><code><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
+            <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not <code><a href="#idl-def-ReadyState.open">"open"</a></code> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true on any <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If <var><a href="#live-seekable-range">live seekable range</a></var> contains a range, then set <var><a href="#live-seekable-range">live seekable range</a></var> to be a new empty <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code> object.
+          </li></ol></dd><dt id="widl-MediaSource-endOfStream-void-EndOfStreamError-error"><code>endOfStream</code></dt><dd>
           <p>Signals the end of the stream.</p>
 
           
@@ -1083,7 +1095,16 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Remove <var>sourceBuffer</var> from <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code> and <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at
               the <a href="#idl-def-SourceBufferList" class="idlType"><code>SourceBufferList</code></a> returned by <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>.</li>
             <li>Destroy all resources for <var>sourceBuffer</var>.</li>
-          </ol></dd></dl></section>
+          </ol></dd><dt id="widl-MediaSource-setLiveSeekableRange-void-double-start-double-end"><code>setLiveSeekableRange</code></dt><dd>
+          <p>Updates the <var><a href="#live-seekable-range">live seekable range</a></var> variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-seekable">HTMLMediaElement.seekable</a></code> behavior.</p>
+
+          
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">start</td><td class="prmType"><code><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-double" class="idlType">double</a></code></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">end</td><td class="prmType"><code><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-double" class="idlType">double</a></code></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
+            <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not <code><a href="#idl-def-ReadyState.open">"open"</a></code> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true on any <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If <var>start</var> is negative or greater than <var>end</var>, then throw a <code>TypeError</code> exception and abort these steps.</li>
+            <li>Set <var><a href="#live-seekable-range">live seekable range</a></var> to be a new <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#normalized-timeranges-object">normalized TimeRanges object</a> containing a single range whose start position is <var>start</var> and end position is <var>end</var>.
+          </li></ol></dd></dl></section>
 
       <section id="mediasource-events" typeof="bibo:Chapter" resource="#mediasource-events" property="bibo:hasPart">
         <h3 id="h-mediasource-events" resource="#h-mediasource-events"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.3 </span>Event Summary</span></h3>
@@ -2883,6 +2904,12 @@ partial interface <span class="idlInterfaceID">URL</span> {
         <dt>If <code><a href="#widl-MediaSource-duration">duration</a></code> equals positive Infinity:</dt>
         <dd>
           <ol>
+            <li>If <var><a href="#live-seekable-range">live seekable range</a></var> is not empty:
+              <ol>
+                <li>Let <var>union ranges</var> be the union of <var><a href="#live-seekable-range">live seekable range</a></var> and the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> attribute.</li>
+                <li>Return a single range with a start time equal to the earliest start time in <var>union ranges</var> and an end time equal to the highest end time in <var>union ranges</var> and abort these steps.</li>
+              </ol>
+            </li>
             <li>If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> attribute returns an empty <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code>
               object, then return an empty <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code> object and abort these steps.</li>
             <li>Return a single range with a start time of 0 and an end time equal to the highest end time reported by the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> attribute.
@@ -2923,7 +2950,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
       <p>The following section uses <a href="#idl-def-VideoPlaybackQuality" class="idlType"><code>VideoPlaybackQuality</code></a> and is <em class="rfc2119" title="OPTIONAL">OPTIONAL</em>. There are several implementations of the current specification, but it is subject to change because some feel it needs further work. The community is actively investigating alternate designs to provide feedback on media playback quality. See <a href="https://wicg.github.io/media-playback-quality/">Media Playback Quality</a>.
       </p>
 
-      <p>This section specifies new attributes and internal state that are being added to the <code><a href="https://www.w3.org/TR/html5/embedded-content-0.html#htmlvideoelement">HTMLVideoElement</a></code>.</p>
+      <p>This section specifies new attributes and internal state that are being added to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#htmlvideoelement-htmlvideoelement">HTMLVideoElement</a></code>.</p>
 
       <p>Each <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#htmlvideoelement-htmlvideoelement">HTMLVideoElement</a></code> will maintain a <dfn id="total-video-frame-count" data-dfn-for="" data-dfn-type="dfn">total video frame count</dfn> variable that keeps
         track of the total number of frames that have been displayed and dropped. This variable is initialized to 0 when the
@@ -3195,6 +3222,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
             <td>08 June 2016</td>
             <td>
               <ul>
+                <li>Issue  5 - Add support for customizing <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-seekable">HTMLMediaElement.seekable</a></code> on live streams.</li>
                 <li>Issue 87 - Add <a href="#videoplaybackquality">VideoPlaybackQuality</a> to the list of at risk features.</li>
                 <li>Issue 69 - Add optional &amp; subject to change language to <a href="#videoplaybackquality">VideoPlaybackQuality</a>.</li>
                 <li>Issue 78 - Update reference from HTML5.0 to HTML5.1.</li>
