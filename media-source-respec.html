@@ -1595,10 +1595,10 @@
                       set to <var>audio byte stream track ID</var> and <var>type</var> set to
                       <a def-id="TrackDefaultType-audio"></a> and assign the value returned by the
                       algorithm to <var>audio label</var>.</li>
-                    <li>Let <var>audio kinds</var> be an array of kind strings specified in the
-                      <a def-id="init-segment"></a> for this track or an empty array if no kind information
+                    <li>Let <var>audio kinds</var> be a sequence of kind strings specified in the
+                      <a def-id="init-segment"></a> for this track or an empty sequence if no kind information
                       is provided.</li>
-                    <li>If <var>audio kinds</var> equals an empty array, then run the
+                    <li>If <var>audio kinds</var> equals an empty sequence, then run the
                       <a def-id="default-track-kinds-algorithm"></a> with <var>byteStreamTrackID</var>
                       set to <var>audio byte stream track ID</var> and <var>type</var> set to
                       <a def-id="TrackDefaultType-audio"></a> and assign the value returned by the
@@ -1657,10 +1657,10 @@
                       set to <var>video byte stream track ID</var> and <var>type</var> set to
                       <a def-id="TrackDefaultType-video"></a> and assign the value returned by the
                       algorithm to <var>video label</var>.</li>
-                    <li>Let <var>video kinds</var> be an array of kind strings specified in the
-                      <a def-id="init-segment"></a> for this track or an empty array if no kind information
+                    <li>Let <var>video kinds</var> be a sequence of kind strings specified in the
+                      <a def-id="init-segment"></a> for this track or an empty sequence if no kind information
                       is provided.</li>
-                    <li>If <var>video kinds</var> equals an empty array, then run the
+                    <li>If <var>video kinds</var> equals an empty sequence, then run the
                       <a def-id="default-track-kinds-algorithm"></a> with <var>byteStreamTrackID</var>
                       set to <var>video byte stream track ID</var> and <var>type</var> set to
                       <a def-id="TrackDefaultType-video"></a> and assign the value returned by the
@@ -1719,10 +1719,10 @@
                       set to <var>text byte stream track ID</var> and <var>type</var> set to
                       <a def-id="TrackDefaultType-text"></a> and assign the value returned by the
                       algorithm to <var>text label</var>.</li>
-                    <li>Let <var>text kinds</var> be an array of kind strings specified in the
-                      <a def-id="init-segment"></a> for this track or an empty array if no kind information
+                    <li>Let <var>text kinds</var> be a sequence of kind strings specified in the
+                      <a def-id="init-segment"></a> for this track or an empty sequence if no kind information
                       is provided.</li>
-                    <li>If <var>text kinds</var> equals an empty array, then run the
+                    <li>If <var>text kinds</var> equals an empty sequence, then run the
                       <a def-id="default-track-kinds-algorithm"></a> with <var>byteStreamTrackID</var>
                       set to <var>text byte stream track ID</var> and <var>type</var> set to
                       <a def-id="TrackDefaultType-text"></a> and assign the value returned by the
@@ -1844,18 +1844,18 @@
             <li>If <a def-id="trackDefaults"></a> contains a <a>TrackDefault</a> object with a
               <a def-id="TrackDefault-type"></a> attribute equal to <var>type</var> and a
               <a def-id="TrackDefault-byteStreamTrackID"></a> attribute equal to
-              <var>byteStreamTrackID</var>, then return the value of the
-              <a def-id="TrackDefault-kinds"></a> attribute on this matching object and abort these
+              <var>byteStreamTrackID</var>, then return the sequence returned by the
+              <a def-id="TrackDefault-getkinds"></a> method on this matching object and abort these
               steps.</li>
 
             <li>If <a def-id="trackDefaults"></a> contains a <a>TrackDefault</a> object with a
               <a def-id="TrackDefault-type"></a> attribute equal to <var>type</var> and a
               <a def-id="TrackDefault-byteStreamTrackID"></a> attribute equal to
-              an empty string, then return the value of the
-              <a def-id="TrackDefault-kinds"></a> attribute on this matching object and abort these
+              an empty string, then return the sequence returned by the
+              <a def-id="TrackDefault-getkinds"></a> method on this matching object and abort these
               steps.</li>
 
-            <li>Return an array with a single empty string element in it to the caller.</li>
+            <li>Return a sequence with a single empty string element in it to the caller.</li>
           </ol>
         </section>
 
@@ -2404,7 +2404,7 @@
             <li>Set the <a def-id="TrackDefault-type"></a> attribute on this new object to <var>type</var>.</li>
             <li>Set the <a def-id="TrackDefault-language"></a> attribute on this new object to <var>language</var>.</li>
             <li>Set the <a def-id="TrackDefault-label"></a> attribute on this new object to <var>label</var>.</li>
-            <li>Set the <a def-id="TrackDefault-kinds"></a> attribute to on this new object <var>kinds</var>.</li>
+            <li>Set the returned value of the <a def-id="TrackDefault-getkinds"></a> method to return this new object <var>kinds</var>.</li>
             <li>Set the <a def-id="TrackDefault-byteStreamTrackID"></a> attribute on this new object to <var>byteStreamTrackID</var>.</li>
           </ol>
         </dd>
@@ -2429,7 +2429,7 @@
           <p>The default label to use when an <a def-id="init-segment"></a> does not contain label
           information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
         </dd>
-        <dt>readonly attribute sequence&lt;DOMString&gt; kinds</dt>
+        <dt>sequence&lt;DOMString&gt; getKinds()</dt>
         <dd>
           <p>The default kinds used when an <a def-id="init-segment"></a> does not contain kind
           information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
