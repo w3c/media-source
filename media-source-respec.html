@@ -361,6 +361,8 @@
       <h2>MediaSource Object</h2>
       <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the <a def-id="readyState"></a> for this source as well as a list of <a>SourceBuffer</a> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a> to add media data to this source. The HTMLMediaElement fetches this media data from the <a>MediaSource</a> object when it is needed during playback.</p>
 
+      <p>Each <a>MediaSource</a> object has a <dfn id="live-seekable-range">live seekable range</dfn> variable that stores a <a def-id="normalized-timeranges-object"></a>.  This variable is initialized to an empty <a def-id="timeranges"></a> object when the <a>MediaSource</a> object is created, is maintained by <a def-id="setLiveSeekableRange"></a> and <a def-id="clearLiveSeekableRange"></a>, and is used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <a def-id="hme-seekable"></a> behavior.</p>
+
       <dl title="enum ReadyState" class="idl">
         <dt>closed</dt>
         <dd>
@@ -583,6 +585,29 @@
             <li>If the <a def-id="readyState"></a> attribute is not in the <a def-id="open"></a> state then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Run the <a def-id="end-of-stream-algorithm"></a> with the <var>error</var> parameter set to <var>error</var>.</li>
+          </ol>
+        </dd>
+
+        <dt>void setLiveSeekableRange(double start, double end)</dt>
+        <dd>
+          <p>Updates the <a def-id="live-seekable-range"></a> variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <a def-id="hme-seekable"></a> behavior.</p>
+
+          <ol class="method-algorithm">
+            <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If <var>start</var> is negative or greater than <var>end</var>, then throw a <a def-id="type-error"></a> exception and abort these steps.</li>
+            <li>Set <a def-id="live-seekable-range"></a> to be a new <a def-id="normalized-timeranges-object"></a> containing a single range whose start position is <var>start</var> and end position is <var>end</var>.
+          </ol>
+        </dd>
+
+        <dt>void clearLiveSeekableRange()</dt>
+        <dd>
+          <p>Updates the <a def-id="live-seekable-range"></a> variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <a def-id="hme-seekable"></a> behavior.</p>
+
+          <ol class="method-algorithm">
+            <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If <a def-id="live-seekable-range"></a> contains a range, then set <a def-id="live-seekable-range"></a> to be a new empty <a def-id="timeranges"></a> object.
           </ol>
         </dd>
 
@@ -2477,6 +2502,12 @@
         <dt>If <a def-id="duration"></a> equals positive Infinity:</dt>
         <dd>
           <ol>
+            <li>If <a def-id="live-seekable-range"></a> is not empty:
+              <ol>
+                <li>Let <var>union ranges</var> be the union of <a def-id="live-seekable-range"></a> and the <a def-id="hme-buffered"></a> attribute.</li>
+                <li>Return a single range with a start time equal to the earliest start time in <var>union ranges</var> and an end time equal to the highest end time in <var>union ranges</var> and abort these steps.</li>
+              </ol>
+            </li>
             <li>If the <a def-id="hme-buffered"></a> attribute returns an empty <a def-id="timeranges"></a>
               object, then return an empty <a def-id="timeranges"></a> object and abort these steps.</li>
             <li>Return a single range with a start time of 0 and an end time equal to the highest end time reported by the <a def-id="hme-buffered"></a> attribute.
@@ -2794,6 +2825,7 @@
             <td>08 June 2016</a></td>
             <td>
               <ul>
+                <li>Issue  5 - Add support for customizing <a def-id="hme-seekable"></a> on live streams.</li>
                 <li>Issue 87 - Add <a href="#videoplaybackquality">VideoPlaybackQuality</a> to the list of at risk features.</li>
                 <li>Issue 69 - Add optional & subject to change language to <a href="#videoplaybackquality">VideoPlaybackQuality</a>.</li>
                 <li>Issue 78 - Update reference from HTML5.0 to HTML5.1.</li>
