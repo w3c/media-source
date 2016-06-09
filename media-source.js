@@ -271,7 +271,7 @@
     'TrackDefault-byteStreamTrackID': { func: idlref_helper, fragment: 'widl-TrackDefault-byteStreamTrackID', link_text: 'byteStreamTrackID',  },
     'TrackDefault-language': { func: idlref_helper, fragment: 'widl-TrackDefault-language', link_text: 'language',  },
     'TrackDefault-label': { func: idlref_helper, fragment: 'widl-TrackDefault-label', link_text: 'label',  },
-    'TrackDefault-kinds': { func: idlref_helper, fragment: 'widl-TrackDefault-kinds', link_text: 'kinds',  },
+    'TrackDefault-getkinds': { func: idlref_helper, fragment: 'widl-TrackDefault-getKinds-sequence-DOMString', link_text: 'getKinds',  },
 
     'blob-uri': { func: fileapi_helper, fragment: 'url', link_text: 'Blob URI',  },
     'File': { func: fileapi_helper, fragment: 'dfn-file', link_text: 'File', },
