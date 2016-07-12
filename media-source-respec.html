@@ -2341,7 +2341,7 @@
       <dl title="interface VideoPlaybackQuality" class="idl">
         <dt>readonly attribute DOMHighResTimeStamp creationTime</dt>
         <dd>
-          <p>The timestamp returned by <a def-id="performance-now"></a> when this object was created.</p>
+          <p>The timestamp returned by <a def-id="performance-now"></a> [[!HR-TIME]] when this object was created.</p>
         </dd>
 
         <dt>readonly attribute unsigned long totalVideoFrames</dt>
@@ -2600,7 +2600,7 @@
           <p>Provides the current the playback quality metrics.</p>
           <ol class="method-algorithm">
             <li>Let <var>playbackQuality</var> be a new instance of <a>VideoPlaybackQuality</a>.</li>
-            <li>Set <var>playbackQuality</var>.<a def-id="creationTime"></a> to the value returned by a call to <a def-id="performance-now"></a>.</li>
+            <li>Set <var>playbackQuality</var>.<a def-id="creationTime"></a> to the value returned by a call to <a def-id="performance-now"></a> [[!HR-TIME]].</li>
             <li>Set <var>playbackQuality</var>.<a def-id="totalVideoFrames"></a> to the current value of the <a def-id="total-video-frame-count"></a>.</li>
             <li>Set <var>playbackQuality</var>.<a def-id="droppedVideoFrames"></a> to the current value of the <a def-id="dropped-video-frame-count"></a>.</li>
             <li>Set <var>playbackQuality</var>.<a def-id="corruptedVideoFrames"></a> to the current value of the <a def-id="corrupted-video-frame-count"></a>.</li>
@@ -2852,6 +2852,7 @@
                 <li>Issue 106 - Remove extraneous step from duration change algorithm.</li>
                 <li>Issue 105 - Clarify the unit is seconds for remove() and setLiveSeekableRange() parameters.</li>
                 <li>Issue 102 - Fix "starting" presentation timestamp wording in duration change algorithm.</li>
+                <li>Issue 103 - Add normative reference for Performance.now().</li>
               </ul>
             </td>
           </tr>

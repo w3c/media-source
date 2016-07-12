@@ -2764,7 +2764,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 };</span></pre><section id="attributes-3" typeof="bibo:Chapter" resource="#attributes-3" property="bibo:hasPart"><h3 id="h-attributes-3" resource="#h-attributes-3"><span property="xhv:role" resource="xhv:heading"><span class="secno">5.1 </span>Attributes</span></h3><dl class="attributes"><dt id="widl-VideoPlaybackQuality-corruptedVideoFrames"><code>corruptedVideoFrames</code> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long" class="idlType">unsigned long</a></code></span>, readonly       </dt><dd>
           <p>The total number of corrupted frames that have been detected.</p>
         </dd><dt id="widl-VideoPlaybackQuality-creationTime"><code>creationTime</code> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/hr-time/#dom-domhighrestimestamp" class="idlType">DOMHighResTimeStamp</a></code></span>, readonly       </dt><dd>
-          <p>The timestamp returned by <a href="https://www.w3.org/TR/hr-time/#dom-performance-now">Performance.now()</a> when this object was created.</p>
+          <p>The timestamp returned by <a href="https://www.w3.org/TR/hr-time/#dom-performance-now">Performance.now()</a> [<cite><a class="bibref" href="#bib-HR-TIME">HR-TIME</a></cite>] when this object was created.</p>
         </dd><dt id="widl-VideoPlaybackQuality-droppedVideoFrames"><code>droppedVideoFrames</code> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long" class="idlType">unsigned long</a></code></span>, readonly       </dt><dd>
           <p>The total number of frames dropped predecode or dropped because the frame missed
             its display deadline.</p>
@@ -2993,7 +2993,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
           
         <div><em>No parameters.</em></div><div><em>Return type: </em><code><a href="#idl-def-VideoPlaybackQuality" class="idlType"><code>VideoPlaybackQuality</code></a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>Let <var>playbackQuality</var> be a new instance of <a href="#idl-def-VideoPlaybackQuality" class="idlType"><code>VideoPlaybackQuality</code></a>.</li>
-            <li>Set <var>playbackQuality</var>.<code><a href="#widl-VideoPlaybackQuality-creationTime">creationTime</a></code> to the value returned by a call to <a href="https://www.w3.org/TR/hr-time/#dom-performance-now">Performance.now()</a>.</li>
+            <li>Set <var>playbackQuality</var>.<code><a href="#widl-VideoPlaybackQuality-creationTime">creationTime</a></code> to the value returned by a call to <a href="https://www.w3.org/TR/hr-time/#dom-performance-now">Performance.now()</a> [<cite><a class="bibref" href="#bib-HR-TIME">HR-TIME</a></cite>].</li>
             <li>Set <var>playbackQuality</var>.<code><a href="#widl-VideoPlaybackQuality-totalVideoFrames">totalVideoFrames</a></code> to the current value of the <var><a href="#total-video-frame-count">total video frame count</a></var>.</li>
             <li>Set <var>playbackQuality</var>.<code><a href="#widl-VideoPlaybackQuality-droppedVideoFrames">droppedVideoFrames</a></code> to the current value of the <var><a href="#dropped-video-frame-count">dropped video frame count</a></var>.</li>
             <li>Set <var>playbackQuality</var>.<code><a href="#widl-VideoPlaybackQuality-corruptedVideoFrames">corruptedVideoFrames</a></code> to the current value of the <var><a href="#corrupted-video-frame-count">corrupted video frame count</a></var>.</li>
@@ -3248,6 +3248,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
                 <li>Issue 106 - Remove extraneous step from duration change algorithm.</li>
                 <li>Issue 105 - Clarify the unit is seconds for remove() and setLiveSeekableRange() parameters.</li>
                 <li>Issue 102 - Fix "starting" presentation timestamp wording in duration change algorithm.</li>
+                <li>Issue 103 - Add normative reference for Performance.now().</li>
               </ul>
             </td>
           </tr>
@@ -4096,6 +4097,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
   
 
 <section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart"><!--OddPage--><h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>References</span></h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart"><h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.1 </span>Normative references</span></h3><dl class="bibliography" resource=""><dt id="bib-FILE-API">[FILE-API]</dt><dd>Arun Ranganathan; Jonas Sicking. <a href="https://www.w3.org/TR/FileAPI/" property="dc:requires"><cite>File API</cite></a>. 21 April 2015. W3C Working Draft. URL: <a href="https://www.w3.org/TR/FileAPI/" property="dc:requires">https://www.w3.org/TR/FileAPI/</a>
+</dd><dt id="bib-HR-TIME">[HR-TIME]</dt><dd>Jatinder Mann. <a href="https://www.w3.org/TR/hr-time/" property="dc:requires"><cite>High Resolution Time</cite></a>. 17 December 2012. W3C Recommendation. URL: <a href="https://www.w3.org/TR/hr-time/" property="dc:requires">https://www.w3.org/TR/hr-time/</a>
 </dd><dt id="bib-HTML51">[HTML51]</dt><dd>Steve Faulkner; Arron Eicholz; Travis Leithead; Alex Danilo. <a href="https://www.w3.org/TR/html51/" property="dc:requires"><cite>HTML 5.1</cite></a>. 21 June 2016. W3C Candidate Recommendation. URL: <a href="https://www.w3.org/TR/html51/" property="dc:requires">https://www.w3.org/TR/html51/</a>
 </dd><dt id="bib-RFC2119">[RFC2119]</dt><dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires">https://tools.ietf.org/html/rfc2119</a>
 </dd><dt id="bib-TYPED-ARRAYS">[TYPED-ARRAYS]</dt><dd>David Herman; Kenneth Russell. <a href="https://www.khronos.org/registry/typedarray/specs/latest/" property="dc:requires"><cite>Typed Array Specification</cite></a>. 26 June 2013. Khronos Working Draft. URL: <a href="https://www.khronos.org/registry/typedarray/specs/latest/" property="dc:requires">https://www.khronos.org/registry/typedarray/specs/latest/</a>
