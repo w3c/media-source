@@ -20,9 +20,9 @@
       // if this is a LCWD, uncomment and set the end of its review period
       // lcEnd: "2009-08-05",
 
-      publishDate: "2016-06-09",
+      publishDate: "2016-07-12",
       previousMaturity: "CR",
-      previousPublishDate: "2015-05-03",
+      previousPublishDate: "2015-07-05",
 
       // editors, add as many as you like
       // only "name" is required
@@ -187,7 +187,7 @@
           <li><p>The <a def-id="appendStream">appendStream</a> method on the <a href="#sourcebuffer">sourceBuffer</a> object and algorithm steps that are used only by it.</p></li>
 		  <li><p>The <a href="#videoplaybackquality">VideoPlaybackQuality</a> object and the <a href="#htmlvideoelement-extensions">HTMLVideoElement Extensions</a> that use it.</p></li>
           <li><p>The <a def-id="totalFrameDelay">totalFrameDelay</a> attribute on the <a href="#videoplaybackquality">VideoPlaybackQuality</a> object.</p></li>
-          <li><p>The <a href=#idl-def-TrackDefault>TrackDefault</a> object and its related objects, attributes, methods and algorithms, including: <a href=#idl-def-TrackDefaultList>TrackDefaultList</a>, <a href=#widl-SourceBuffer-trackDefaults>SourceBuffer.trackDefaults</a>, <a href=#sourcebuffer-default-track-language>Default track language</a>, <a href=#sourcebuffer-default-track-label>Default track label</a>, and <a href=#sourcebuffer-default-track-kinds>Default track kinds</a>. Implementations still must at least include trivial versions of these default track language/label/kinds algorithms that are used by the <a href=#sourcebuffer-init-segment-received>initialization segment received algorithm</a>. These trivial versions would behave as follows: Trivial default track language and Trivial default track label algorithms must return an empty string, and Trivial default kinds algorithm must return a sequence with a single empty string element in it.</p></li>
+          <li><p>The <a href=#idl-def-TrackDefault>TrackDefault</a> object and its related objects, attributes, methods and algorithms, including: <a href=#idl-def-TrackDefaultList>TrackDefaultList</a>, <a href=#widl-SourceBuffer-trackDefaults>SourceBuffer.trackDefaults</a>, <a href=#sourcebuffer-default-track-language>Default track language</a>, <a href=#sourcebuffer-default-track-label>Default track label</a>, and <a href=#sourcebuffer-default-track-kinds>Default track kinds</a>. Implementations still MUST at least include trivial versions of these default track language/label/kinds algorithms that are used by the <a href=#sourcebuffer-init-segment-received>initialization segment received algorithm</a>. These trivial versions would behave as follows: Trivial default track language and Trivial default track label algorithms MUST return an empty string, and Trivial default kinds algorithm MUST return a sequence with a single empty string element in it.</p></li>
 		  </ul>
 
         <p>
@@ -258,7 +258,7 @@
 
           <dt id="coded-frame-duration">Coded Frame Duration</dt>
           <dd>
-            <p>The duration of a <a def-id="coded-frame"></a>. For video and text, the duration indicates how long the video frame or text should be displayed. For audio, the duration represents the sum of all the samples contained within the coded frame. For example, if an audio frame contained 441 samples @44100Hz the frame duration would be 10 milliseconds.</p>
+            <p>The duration of a <a def-id="coded-frame"></a>. For video and text, the duration indicates how long the video frame or text SHOULD be displayed. For audio, the duration represents the sum of all the samples contained within the coded frame. For example, if an audio frame contained 441 samples @44100Hz the frame duration would be 10 milliseconds.</p>
           </dd>
 
           <dt id="coded-frame-end-timestamp">Coded Frame End Timestamp</dt>
@@ -274,13 +274,13 @@
 
           <dt id="decode-timestamp">Decode Timestamp</dt>
           <dd>
-            <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a def-id="presentation-timestamp"></a> of the earliest frame, in <a def-id="presentation-order"></a>, that is dependant on this frame). If frames can be decoded out of <a def-id="presentation-order"></a>, then the decode timestamp must be present in or derivable from the byte stream. The user agent must run the <a def-id="append-decode-error-algorithm"></a> if this is not the case. If frames cannot be decoded out of  <a def-id="presentation-order"></a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a def-id="presentation-timestamp"></a>.</p>
+            <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a def-id="presentation-timestamp"></a> of the earliest frame, in <a def-id="presentation-order"></a>, that is dependant on this frame). If frames can be decoded out of <a def-id="presentation-order"></a>, then the decode timestamp MUST be present in or derivable from the byte stream. The user agent MUST run the <a def-id="append-decode-error-algorithm"></a> if this is not the case. If frames cannot be decoded out of  <a def-id="presentation-order"></a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a def-id="presentation-timestamp"></a>.</p>
           </dd>
 
           <dt id="displayed-frame-delay">Displayed Frame Delay</dt>
           <dd>
-            <p>The delay between a frame's presentation time and the actual time it was displayed, in a double-precision value in seconds & rounded to the nearest display refresh interval. This
-              delay is always greater than or equal to zero since frames must never be displayed before their presentation time. Non-zero delays are a sign of playback jitter
+            <p>The delay between a frame's presentation time and the actual time it was displayed, in a double-precision value in seconds and rounded to the nearest display refresh interval. This
+              delay is always greater than or equal to zero since frames MUST never be displayed before their presentation time. Non-zero delays are a sign of playback jitter
               and possible loss of A/V sync.</p>
           </dd>
 
@@ -309,7 +309,7 @@
           <dt id="presentation-start-time">Presentation Start Time</dt>
           <dd><p>The presentation start time is the earliest time point in the presentation and specifies the <a def-id="videoref" name="initial-playback-position">initial playback position</a> and <a def-id="videoref" name="earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0.</dd>
 
-          <p class="note">For the purposes of determining if <a def-id="hme-buffered"></a> contains a <a def-id="timerange"></a> that includes the current playback position, implementations may choose to allow a current playback position at or after <a def-id="presentation-start-time"></a> and before the first <a def-id="timerange"></a> to play the first <a def-id="timerange"></a> if that <a def-id="timerange"></a> starts within a reasonably short time, like 1 second, after <a def-id="presentation-start-time"></a>. This allowance accommodates the reality that muxed streams commonly do not begin all tracks precisely at <a def-id="presentation-start-time"></a>. Implementations should report the actual buffered range, regardless of this allowance.</p>
+          <p class="note">For the purposes of determining if <a def-id="hme-buffered"></a> contains a <a def-id="timerange"></a> that includes the current playback position, implementations MAY choose to allow a current playback position at or after <a def-id="presentation-start-time"></a> and before the first <a def-id="timerange"></a> to play the first <a def-id="timerange"></a> if that <a def-id="timerange"></a> starts within a reasonably short time, like 1 second, after <a def-id="presentation-start-time"></a>. This allowance accommodates the reality that muxed streams commonly do not begin all tracks precisely at <a def-id="presentation-start-time"></a>. Implementations MUST report the actual buffered range, regardless of this allowance.</p>
 
           <dt id="presentation-interval">Presentation Interval</dt>
           <dd>
@@ -323,7 +323,7 @@
 
           <dt id="presentation-timestamp">Presentation Timestamp</dt>
           <dd>
-             <p>A reference to a specific time in the presentation. The presentation timestamp in a <a def-id="coded-frame"></a> indicates when the frame must be rendered.</p>
+             <p>A reference to a specific time in the presentation. The presentation timestamp in a <a def-id="coded-frame"></a> indicates when the frame SHOULD be rendered.</p>
           </dd>
 
           <dt id="random-access-point">Random Access Point</dt>
@@ -337,19 +337,19 @@
           <dt id="sourcebuffer-configuration">SourceBuffer configuration</dt>
           <dd><p>A specific set of tracks distributed across one or more <a>SourceBuffer</a>
               objects owned by a single <a>MediaSource</a> instance.</p>
-            <p>Implementations must support at least 1 <a>MediaSource</a> object with the following
+            <p>Implementations MUST support at least 1 <a>MediaSource</a> object with the following
             configurations:</p>
             <ul>
               <li>A single SourceBuffer with 1 audio track and/or 1 video track.</li>
               <li>Two SourceBuffers with one handling a single audio track and the other handling a single video track.</li>
             </ul>
-            <p>MediaSource objects must support each of the configurations above, but they are only
+            <p>MediaSource objects MUST support each of the configurations above, but they are only
               required to support one configuration at a time. Supporting multiple configurations at once
               or additional configurations is a quality of implementation issue.</p>
           </dd>
 
           <dt id="track-description">Track Description</dt>
-          <dd><p>A byte stream format specific structure that provides the <a def-id="track-id"></a>, codec configuration, and other metadata for a single track. Each track description inside a single <a def-id="init-segment"></a> has a unique <a def-id="track-id"></a>. The user agent must run the <a def-id="append-decode-error-algorithm"></a> if the <a def-id="track-id"></a> is not unique within the <a def-id="init-segment"></a>.</p></dd>
+          <dd><p>A byte stream format specific structure that provides the <a def-id="track-id"></a>, codec configuration, and other metadata for a single track. Each track description inside a single <a def-id="init-segment"></a> has a unique <a def-id="track-id"></a>. The user agent MUST run the <a def-id="append-decode-error-algorithm"></a> if the <a def-id="track-id"></a> is not unique within the <a def-id="init-segment"></a>.</p></dd>
 
           <dt id="track-id">Track ID</dt>
           <dd><p>A Track ID is a byte stream format specific identifier that marks sections of the byte stream as being part of a specific track. The Track ID in a <a def-id="track-description"></a> identifies which sections of a <a def-id="media-segment"></a> belong to that track.</p></dd>
@@ -383,12 +383,12 @@
         <dt>network</dt>
         <dd>
           <p>Terminates playback and signals that a network error has occured.</p>
-          <p class="note">JavaScript applications should use this status code to terminate playback with a network error. For example, if a network error occurs while fetching media data.</p>
+          <p class="note">JavaScript applications SHOULD use this status code to terminate playback with a network error. For example, if a network error occurs while fetching media data.</p>
         </dd>
         <dt>decode</dt>
         <dd>
           <p>Terminates playback and signals that a decoding error has occured.</p>
-          <p class="note">JavaScript applications should use this status code to terminate playback with a decode error. For example, if a parsing error occurs while processing out-of-band media data.</p>
+          <p class="note">JavaScript applications SHOULD use this status code to terminate playback with a decode error. For example, if a parsing error occurs while processing out-of-band media data.</p>
         </dd>
       </dl>
 
@@ -405,10 +405,10 @@
             <a def-id="videoref" name="dom-audiotrack-enabled">enabled audio track(s)</a>, and the
             <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> text track(s).
           </p>
-          <p><a>SourceBuffer</a> objects in this list must appear in the same order as they appear in
+          <p><a>SourceBuffer</a> objects in this list MUST appear in the same order as they appear in
             the <a def-id="sourceBuffers"></a> attribute. (e.g., If only sourceBuffers[0] and
-            sourceBuffers[3] are in <a def-id="activeSourceBuffers"></a>, then activeSourceBuffers[0] must
-            equal sourceBuffers[0] and activeSourceBuffers[1] must equal sourceBuffers[3].)
+            sourceBuffers[3] are in <a def-id="activeSourceBuffers"></a>, then activeSourceBuffers[0] MUST
+            equal sourceBuffers[0] and activeSourceBuffers[1] MUST equal sourceBuffers[3].)
           </p>
           <p class="note">The <a href="#active-source-buffer-changes">Changes to selected/enabled track state</a> section describes how this attribute gets
             updated.</p>
@@ -416,7 +416,7 @@
 
         <dt>readonly attribute ReadyState readyState</dt>
         <dd>
-          <p>Indicates the current state of the <a>MediaSource</a> object. When the <a>MediaSource</a> is created <a def-id="readyState"></a> must be set to <a def-id="closed"></a>.
+          <p>Indicates the current state of the <a>MediaSource</a> object. When the <a>MediaSource</a> is created <a def-id="readyState"></a> MUST be set to <a def-id="closed"></a>.
         </dd>
 
         <dt>attribute unrestricted double duration</dt>
@@ -462,7 +462,7 @@
             <li>If the user agent can't handle any more SourceBuffer objects or if creating a SourceBuffer
               based on <var>type</var> would result in an unsupported <a def-id="sourcebuffer-configuration"></a>,
               then throw a <a def-id="quota-exceeded-error"></a> exception and abort these steps.
-              <p class="note">For example, a user agent may throw a <a def-id="quota-exceeded-error"></a> exception if the media element has reached the
+              <p class="note">For example, a user agent MAY throw a <a def-id="quota-exceeded-error"></a> exception if the media element has reached the
                 <a def-id="have-metadata"></a> readyState. This can occur if the user agent's media engine does not support adding more tracks during
                 playback.
               </p>
@@ -625,7 +625,7 @@
             <li>Return true.</li>
           </ol>
           <p class="note">
-            If true is returned from this method, it only indicates that the <a>MediaSource</a> implementation is capable of creating <a>SourceBuffer</a> objects for the specified MIME type. An <a def-id="addSourceBuffer"></a> call may still fail if sufficient resources are not available to support the addition of a new <a>SourceBuffer</a>.
+            If true is returned from this method, it only indicates that the <a>MediaSource</a> implementation is capable of creating <a>SourceBuffer</a> objects for the specified MIME type. An <a def-id="addSourceBuffer"></a> call SHOULD still fail if sufficient resources are not available to support the addition of a new <a>SourceBuffer</a>.
           </p>
           <p class="note">
             This method returning true implies that HTMLMediaElement.canPlayType() will return "maybe" or "probably" since it does not make sense for a <a>MediaSource</a> to support a type the HTMLMediaElement knows it cannot play.
@@ -696,7 +696,7 @@
 
         <section id="mediasource-detach">
           <h4>Detaching from a media element</h4>
-          <p>The following steps are run in any case where the media element is going to transition to <a def-id="videoref" name="dom-htmlmediaelement-network_empty">NETWORK_EMPTY</a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="videoref" name="eventdef-media-emptied">emptied</a> at the media element. These steps must be run right before the transition.</p>
+          <p>The following steps are run in any case where the media element is going to transition to <a def-id="videoref" name="dom-htmlmediaelement-network_empty">NETWORK_EMPTY</a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="videoref" name="eventdef-media-emptied">emptied</a> at the media element. These steps SHOULD be run right before the transition.</p>
 
           <ol>
             <li>Set the <a def-id="readyState"></a> attribute to <a def-id="closed"></a>.</li>
@@ -710,7 +710,7 @@
             <li>
               <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceclose"></a> at the <a>MediaSource</a>.</li>
           </ol>
-          <p class="note">Going forward, this algorithm is intended to be externally called and run in any case where the attached <a>MediaSource</a>, if any, must be detached from the media element.  It may be called on HTMLMediaElement [[HTML51]] operations like load() and resource fetch algorithm failures in addition to, or in place of, when the media element transitions to <a def-id="videoref" name="dom-htmlmediaelement-network_empty">NETWORK_EMPTY</a>. Resource fetch algorithm failures are those which abort either the resource fetch algorithm or the resource selection algorithm, with the exception that the &quot;Final step&quot; [[HTML51]] is not considered a failure that triggers detachment.</p>
+          <p class="note">Going forward, this algorithm is intended to be externally called and run in any case where the attached <a>MediaSource</a>, if any, must be detached from the media element.  It MAY be called on HTMLMediaElement [[HTML51]] operations like load() and resource fetch algorithm failures in addition to, or in place of, when the media element transitions to <a def-id="videoref" name="dom-htmlmediaelement-network_empty">NETWORK_EMPTY</a>. Resource fetch algorithm failures are those which abort either the resource fetch algorithm or the resource selection algorithm, with the exception that the &quot;Final step&quot; [[HTML51]] is not considered a failure that triggers detachment.</p>
         </section>
 
         <section id="mediasource-seeking">
@@ -752,11 +752,11 @@
           constantly evaluated to determine when to transition the media element into and out of the <a def-id="have-enough-data"></a> ready state.
           These transitions indicate when the user agent believes it has enough data buffered or it needs more data respectively.</p>
 
-          <p class="note">An implementation may choose to use bytes buffered, time buffered, the append rate, or any other metric it sees fit to
-            determine when it has enough data. The metrics used may change during playback so web applications should only rely on the value of
+          <p class="note">An implementation MAY choose to use bytes buffered, time buffered, the append rate, or any other metric it sees fit to
+            determine when it has enough data. The metrics used MAY change during playback so web applications SHOULD only rely on the value of
             <a def-id="ready-state"></a> to determine whether more data is needed or not.</p>
 
-          <p class="note">When the media element needs more data, the user agent should transition it from <a def-id="have-enough-data"></a> to
+          <p class="note">When the media element needs more data, the user agent SHOULD transition it from <a def-id="have-enough-data"></a> to
             <a def-id="have-future-data"></a> early enough for a web application to be able to respond without causing an interruption in playback.
             For example, transitioning when the current playback position is 500ms before the end of the buffered data gives the application roughly
             500ms to append more data before playback stalls.</p>
@@ -1000,7 +1000,7 @@
           <p>Indicates what <a def-id="timeranges"></a> are buffered in the <a>SourceBuffer</a>. This
           attribute is initially set to an empty <a def-id="timeranges"></a> object when the object is
           created.</p>
-          <p>When the attribute is read the following steps must occur:</p>
+          <p>When the attribute is read the following steps MUST occur:</p>
           <ol>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Let <var>highest end time</var> be the largest <a def-id="track-buffer-ranges"></a> end time across all the <a def-id="track-buffers"></a> managed by this <a>SourceBuffer</a> object.</li>
@@ -1232,10 +1232,10 @@
 
           <p class="note">For track buffer ranges, these presentation time ranges are based on <a def-id="presentation-timestamp">presentation timestamps</a>, frame durations, and potentially coded frame group start times for coded frame groups across track buffers in a muxed <a>SourceBuffer</a>.</p>
 
-          <p>For specification purposes, this information is treated as if it were stored in a <a def-id="normalized-timeranges-object"></a>. Intersected <a def-id="track-buffer-ranges"></a> are used to report <a def-id="hme-buffered"></a>, and must therefore support uninterrupted playback within each range of <a def-id="hme-buffered"></a>.</p>
+          <p>For specification purposes, this information is treated as if it were stored in a <a def-id="normalized-timeranges-object"></a>. Intersected <a def-id="track-buffer-ranges"></a> are used to report <a def-id="hme-buffered"></a>, and MUST therefore support uninterrupted playback within each range of <a def-id="hme-buffered"></a>.</p>
 
           <p class="note">These coded frame group start times differ slightly from those mentioned in the <a def-id="coded-frame-processing-algorithm"></a> in that they are the earliest <a def-id="presentation-timestamp"></a> across all track buffers following a discontinuity. Discontinuities can occur within the <a def-id="coded-frame-processing-algorithm"></a> or result from the <a def-id="coded-frame-removal-algorithm"></a>, regardless of <a def-id="mode"></a>.
-          The threshold for determining disjointness of <a def-id="track-buffer-ranges"></a> is implementation-specific. For example, to reduce unexpected playback stalls, implementations may approximate the <a def-id="coded-frame-processing-algorithm"></a>'s discontinuity detection logic by coalescing adjacent ranges separated by a gap smaller than 2 times the maximum frame duration buffered so far in this <a def-id="track-buffer"></a>. Implementations may also use coded frame group start times as range start times across <a def-id="track-buffer">track buffers</a> in a muxed <a>SourceBuffer</a> to further reduce unexpected playback stalls.</p>
+          The threshold for determining disjointness of <a def-id="track-buffer-ranges"></a> is implementation-specific. For example, to reduce unexpected playback stalls, implementations MAY approximate the <a def-id="coded-frame-processing-algorithm"></a>'s discontinuity detection logic by coalescing adjacent ranges separated by a gap smaller than 2 times the maximum frame duration buffered so far in this <a def-id="track-buffer"></a>. Implementations MAY also use coded frame group start times as range start times across <a def-id="track-buffer">track buffers</a> in a muxed <a>SourceBuffer</a> to further reduce unexpected playback stalls.</p>
       </section>
 
       <section id="sourcebuffer-events">
@@ -1338,7 +1338,7 @@
             <li><i>Loop Top:</i> If the <a def-id="input-buffer"></a> is empty, then jump to the <i>need more data</i> step below.</li>
             <li>If the <a def-id="input-buffer"></a> contains bytes that violate the <a def-id="sourcebuffer-byte-stream-format-spec"></a>, then run the
               <a def-id="append-decode-error-algorithm"></a> and abort this algorithm.</li>
-            <li>Remove any bytes that the <a def-id="byte-stream-format-specs"></a> say must be ignored from the start of the <a def-id="input-buffer"></a>.</li>
+            <li>Remove any bytes that the <a def-id="byte-stream-format-specs"></a> say MUST be ignored from the start of the <a def-id="input-buffer"></a>.</li>
             <li>
               <p>If the <a def-id="append-state"></a> equals <a def-id="waiting-for-segment"></a>, then run the following steps:</p>
               <ol>
@@ -1364,8 +1364,8 @@
                 <li>If the <a def-id="input-buffer"></a> contains one or more complete <a def-id="coded-frames"></a>, then run the
                   <a def-id="coded-frame-processing-algorithm"></a>.
                   <p class="note">
-                    The frequency at which the coded frame processing algorithm is run is implementation-specific. The coded frame processing algorithm may
-                    be called when the input buffer contains the complete media segment or it may be called multiple times as complete coded frames are
+                    The frequency at which the coded frame processing algorithm is run is implementation-specific. The coded frame processing algorithm MAY
+                    be called when the input buffer contains the complete media segment or it MAY be called multiple times as complete coded frames are
                     added to the input buffer.
                   </p>
                 </li>
@@ -1432,7 +1432,7 @@
             <li>
               <p>If the <a def-id="buffer-full-flag"></a> equals true, then throw a <a def-id="quota-exceeded-error"></a> exception and abort these step.</p>
               <p class="note">This is the signal that the implementation was unable to evict enough data to accomodate the append or the append is too big. The web
-                application should use <a def-id="remove"></a> to explicitly free up space and/or reduce the size of the append.</p>
+                application SHOULD use <a def-id="remove"></a> to explicitly free up space and/or reduce the size of the append.</p>
             </li>
             </ol>
         </section>
@@ -1469,10 +1469,10 @@
                     where the <code>continueAppendLoop</code> function returns control to this algorithm and
                     starts executing the step that follows this one. If the
                     <a def-id="stream-append-loop"></a> algorithm is aborted while waiting for the promises,
-                    continueAppendLoop must not continue the algorithm when it is eventually called.
+                    continueAppendLoop MUST NOT continue the algorithm when it is eventually called.
                   </p>
                   <p class="note">This step is only represented as a blocking wait to make it easier to
-                    describe the intended behavior. It should not block other JavaScript from executing.
+                    describe the intended behavior. It SHOULD NOT block other JavaScript from executing.
                   </p></li>
                 <li>Continue onto the next step.</li>
             </ol>
@@ -1493,7 +1493,7 @@
                     <li>Let <var>new data</var> equal the value returned by calling <var>data</var>.slice(0, <var>bytesLeft</var>).
                     <p class="note">This step and the next one are assuming <var>data</var> is an
                       <a class="externalDFN">ArrayBuffer</a>. If <var>data</var> is an
-                      <a class="externalDFN">ArrayBufferView</a> subarray() should be called instead.</li>
+                      <a class="externalDFN">ArrayBufferView</a> subarray() SHOULD be called instead.</li>
                     <li>Let <var>remaining data</var> equal the value returned by calling
                       <var>data</var>.slice(<var>bytesLeft</var>).</li>
                     <li>Push <var>remaining data</var> back onto the front of <var>stream</var> so it
@@ -1507,7 +1507,7 @@
             <li>Run the <a def-id="coded-frame-eviction-algorithm"></a>.</li>
             <li>
               <p>If the <a def-id="buffer-full-flag"></a> equals true, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</p>
-              <p class="note">The web application should use <a def-id="remove"></a> to free up space in the <a>SourceBuffer</a>.</p>
+              <p class="note">The web application SHOULD use <a def-id="remove"></a> to free up space in the <a>SourceBuffer</a>.</p>
             </li>
             <li>Add <var>data</var> to the end of the <a def-id="input-buffer"></a>.</li>
             <li>Run the <a def-id="segment-parser-loop"></a> algorithm.</li>
@@ -1569,11 +1569,11 @@
               <p>If the <a def-id="first-init-segment-received-flag"></a> is false, then run the following steps:</p>
               <ol>
                 <li>If the <a def-id="init-segment"></a> contains tracks with codecs the user agent does not support, then run the <a def-id="append-decode-error-algorithm"></a> and abort these steps.
-                  <p class="note">User agents may consider codecs, that would otherwise be supported, as &quot;not supported&quot; here if the codecs were not
+                  <p class="note">User agents MAY consider codecs, that would otherwise be supported, as &quot;not supported&quot; here if the codecs were not
                     specified in the <var>type</var> parameter passed to <a def-id="addSourceBuffer"></a>. <br>
                     For example, MediaSource.isTypeSupported('video/webm;codecs=&quot;vp8,vorbis&quot;') may return true, but if
                     <a def-id="addSourceBuffer"></a> was called with 'video/webm;codecs=&quot;vp8&quot;' and a Vorbis track appears in the
-                    <a def-id="init-segment"></a>, then the user agent may use this step to trigger a decode error.
+                    <a def-id="init-segment"></a>, then the user agent MAY use this step to trigger a decode error.
                   </p>
                 </li>
                 <li>
@@ -1881,14 +1881,14 @@
                         <li>Let <var>presentation timestamp</var> be a double precision floating point representation of the coded frame's <a def-id="presentation-timestamp"></a> in seconds.
                           <p class="note">Special processing may be needed to determine the presentation and decode timestamps for timed text frames since this information may not be explicitly
                             present in the underlying format or may be dependent on the order of the frames. Some metadata text tracks, like MPEG2-TS PSI data, may only have implied timestamps.
-                            Format specific rules for these situations should be in the <a def-id="byte-stream-format-specs"></a> or in separate extension specifications.</p>
+                            Format specific rules for these situations SHOULD be in the <a def-id="byte-stream-format-specs"></a> or in separate extension specifications.</p>
                         </li>
                         <li>Let <var>decode timestamp</var> be a double precision floating point representation of the coded frame's decode timestamp in seconds.
                           <p class="note">Implementations don't have to internally store timestamps in a double precision floating point representation. This
                             representation is used here because it is the represention for timestamps in the HTML spec. The intention here is to make the
                             behavior clear without adding unnecessary complexity to the algorithm to deal with the fact that adding a timestampOffset may
                             cause a timestamp rollover in the underlying timestamp representation used by the byte stream format. Implementations can use any
-                            internal timestamp representation they wish, but the addition of timestampOffset should behave in a similar manner to what would happen
+                            internal timestamp representation they wish, but the addition of timestampOffset SHOULD behave in a similar manner to what would happen
                             if a double precision floating point representation was used.
                           </p>
                         </li>
@@ -1944,7 +1944,7 @@
                 <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
                 <li>If <var>presentation timestamp</var> is less than <a def-id="appendWindowStart"></a>, then set the <a def-id="need-RAP-flag"></a> to true, drop the
                   coded frame, and jump to the top of the loop to start processing the next coded frame.
-                  <p class="note">Some implementations may choose to collect some of these coded frames that are outside the <a def-id="append-window"></a> and use them
+                  <p class="note">Some implementations MAY choose to collect some of these coded frames that are outside the <a def-id="append-window"></a> and use them
                     to generate a splice at the first coded frame that has a <a def-id="presentation-timestamp"></a> greater than or equal to <a def-id="appendWindowStart"></a> even if
                     that frame is not a <a def-id="random-access-point"></a>. Supporting this requires multiple decoders or faster than real-time decoding so for now
                     this behavior will not be a normative requirement.
@@ -2116,7 +2116,7 @@
             <li>If the <a def-id="buffer-full-flag"></a> equals false, then abort these steps.</li>
             <li>Let <var>removal ranges</var> equal a list of presentation time ranges that can be evicted from the presentation to make room for the
               <var>new data</var>.
-              <p class="note">Implementations may use different methods for selecting <var>removal ranges</var> so web applications should not depend on a
+              <p class="note">Implementations MAY use different methods for selecting <var>removal ranges</var> so web applications SHOULD NOT depend on a
                 specific behavior. The web application can use the <a def-id="buffered"></a> attribute to observe whether portions of the buffered data have been evicted.
               </p>
             </li>
@@ -2162,7 +2162,7 @@
                     <li>The <a def-id="coded-frame-duration"></a> set to difference between <var>presentation timestamp</var> and the <var>overlapped frame</var> <a def-id="presentation-timestamp"></a>.</li>
                   </ul>
                   <p class="note">
-                    Some implementations may apply fades to/from silence to coded frames on either side of the inserted silence to make the transition less
+                    Some implementations MAY apply fades to/from silence to coded frames on either side of the inserted silence to make the transition less
                     jarring.
                   </p>
                 </li>
@@ -2356,17 +2356,17 @@
       <dl title="enum TrackDefaultType" class="idl">
         <dt>audio</dt>
         <dd>
-          Indicates that the information in the <a>TrackDefault</a> object should only be used when
+          Indicates that the information in the <a>TrackDefault</a> object SHOULD only be used when
           creating <a>AudioTrack</a> objects.
         </dd>
         <dt>video</dt>
         <dd>
-          Indicates that the information in the  <a>TrackDefault</a> object should only be used when
+          Indicates that the information in the  <a>TrackDefault</a> object SHOULD only be used when
           creating <a>VideoTrack</a> objects.
         </dd>
         <dt>text</dt>
         <dd>
-          Indicates that the  information in the <a>TrackDefault</a> object should only be used when
+          Indicates that the  information in the <a>TrackDefault</a> object SHOULD only be used when
           creating <a>TextTrack</a> objects.
         </dd>
       </dl>
@@ -2416,7 +2416,7 @@
         <dt>readonly attribute DOMString byteStreamTrackID</dt>
         <dd>
           <p>The decimal string representation of the <a def-id="track-id"></a> that identifies the specific
-            track that this object should apply to. An empty string indicates that this object can be
+            track that this object SHOULD apply to. An empty string indicates that this object can be
             used for any track of the appropriate type. (i.e. any <a>AudioTrack</a> if
             <a def-id="TrackDefault-type"></a> equals <a def-id="TrackDefaultType-audio"></a>).</p>
         </dd>
@@ -2494,7 +2494,7 @@
 
     <section id="htmlmediaelement-extensions">
       <h2>HTMLMediaElement Extensions</h2>
-      <p>This section specifies what existing attributes on the <a def-id="htmlmediaelement"></a> must return when a <a>MediaSource</a> is attached to the element.</p>
+      <p>This section specifies what existing attributes on the <a def-id="htmlmediaelement"></a> MUST return when a <a>MediaSource</a> is attached to the element.</p>
 
       <p>The <a def-id="hme-seekable"></a> attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
       <dl class="switch">
@@ -2565,7 +2565,7 @@
         track of the total number of corrupted frames detected. This variable is initialized to 0 when the element is created and whenever the
         <a def-id="media-element-load-algorithm"></a> is invoked. It is incremented when a corrupted video frame is detected by the decoder. It is up to
         the implementation to determine whether to display or drop a corrupted frame. Whichever choice is made, the <a def-id="total-video-frame-count"></a>
-        and <a def-id="dropped-video-frame-count"></a> must be updated appropriately.
+        and <a def-id="dropped-video-frame-count"></a> MUST be updated appropriately.
       </p>
 
       <p>Each <a def-id="htmlvideoelement"></a> will maintain a <dfn id="displayed-frame-delay-sum">displayed frame delay sum</dfn> variable that keeps
@@ -2634,7 +2634,7 @@
         The byte stream format registry [[MSE-REGISTRY]] provides mappings between a MIME type that may be passed to <a def-id="addSourceBuffer"></a> or
         <a def-id="isTypeSupported"></a> and the byte stream format expected by a <a>SourceBuffer</a> created with that MIME type. Implementations are encouraged to register
         mappings for byte stream formats they support to facilitate interoperability. The byte stream format registry [[MSE-REGISTRY]] is the authoritative source for these
-        mappings. If an implementation claims to support a MIME type listed in the registry, its <a>SourceBuffer</a> implementation must conform to the
+        mappings. If an implementation claims to support a MIME type listed in the registry, its <a>SourceBuffer</a> implementation MUST conform to the
         <a def-id="byte-stream-format-spec"></a> listed in the registry entry.</p>
       <p class="note">The byte stream format specifications in the registry are not intended to define new storage formats. They simply outline the subset of
         existing storage format structures that implementations of this specification will accept.</p>
@@ -2642,19 +2642,19 @@
 
       <p>This section provides general requirements for all byte stream format specifications:</p>
       <ul>
-        <li>A byte stream format specification must define <a def-id="init-segments"></a> and <a def-id="media-segments"></a>.</li>
-        <li>A byte stream format should provide references for sourcing <a>AudioTrack</a>, <a>VideoTrack</a>, and <a>TextTrack</a> attribute values
+        <li>A byte stream format specification MUST define <a def-id="init-segments"></a> and <a def-id="media-segments"></a>.</li>
+        <li>A byte stream format SHOULD provide references for sourcing <a>AudioTrack</a>, <a>VideoTrack</a>, and <a>TextTrack</a> attribute values
           from data in <a def-id="init-segments"></a>.
           <p class="note">If the byte stream format covers a format similar to one covered in the in-band tracks spec [[INBANDTRACKS]], then
-            it should try to use the same attribute mappings so that Media Source Extensions playback and non-Media Source Extensions playback provide the
+            it SHOULD try to use the same attribute mappings so that Media Source Extensions playback and non-Media Source Extensions playback provide the
             same track information.</p>
         </li>
-        <li>It must be possible to identify segment boundaries and segment type (initialization or media) by examining the byte stream alone.</li>
-        <li>The user agent must run the <a def-id="append-decode-error-algorithm"></a> when any of the following conditions are met:
+        <li>It MUST be possible to identify segment boundaries and segment type (initialization or media) by examining the byte stream alone.</li>
+        <li>The user agent MUST run the <a def-id="append-decode-error-algorithm"></a> when any of the following conditions are met:
           <ol>
             <li>
               <p>The number and type of tracks are not consistent.</p>
-              <p class="note">For example, if the first <a def-id="init-segment"></a> has 2 audio tracks and 1 video track, then all <a def-id="init-segments"></a> that follow it in the byte stream must describe 2 audio tracks and 1 video track.</p>
+              <p class="note">For example, if the first <a def-id="init-segment"></a> has 2 audio tracks and 1 video track, then all <a def-id="init-segments"></a> that follow it in the byte stream MUST describe 2 audio tracks and 1 video track.</p>
             </li>
             <li><a def-id="track-ids"></a> are not the same across <a def-id="init-segments"></a>, for segments describing multiple tracks of a single type. (e.g. 2 audio tracks).</li>
             <li>
@@ -2663,28 +2663,28 @@
             </li>
           </ol>
         </li>
-        <li>The user agent must support the following:
+        <li>The user agent MUST support the following:
           <ol>
             <li><a def-id="track-ids"></a> changing across <a def-id="init-segments"></a> if the segments describes only one track of each type.</li>
             <li>
-              <p>Video frame size changes. The user agent must support seamless playback.</p>
+              <p>Video frame size changes. The user agent MUST support seamless playback.</p>
               <p class="note">This will cause the &lt;video&gt; display region to change size if the web application does not use CSS or HTML attributes (width/height) to constrain the element size.</p>
             </li>
             <li>
-              <p>Audio channel count changes. The user agent may support this seamlessly and could trigger downmixing.</p>
+              <p>Audio channel count changes. The user agent MAY support this seamlessly and could trigger downmixing.</p>
               <p class="note">This is a quality of implementation issue because changing the channel count may require reinitializing the audio device, resamplers, and channel mixers which tends to be audible.</p>
             </li>
           </ol>
         </li>
-        <li>The following rules apply to all <a def-id="media-segments"></a> within a byte stream. A user agent must:
+        <li>The following rules apply to all <a def-id="media-segments"></a> within a byte stream. A user agent MUST:
           <ol>
             <li>Map all timestamps to the same <a def-id="media-timeline"></a>.</li>
-            <li>Support seamless playback of <a def-id="media-segments"></a> having a timestamp gap smaller than the audio frame size. User agent must not reflect these gaps in the <a def-id="buffered"></a> attribute.
+            <li>Support seamless playback of <a def-id="media-segments"></a> having a timestamp gap smaller than the audio frame size. User agents MUST NOT reflect these gaps in the <a def-id="buffered"></a> attribute.
               <p class="note">This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g. Vorbis).</p>
             </li>
           </ol>
         </li>
-        <li>The user agent must run the <a def-id="append-decode-error-algorithm"></a> when any combination of an <a def-id="init-segment"></a> and any contiguous sequence of <a def-id="media-segments"></a> satisfies the
+        <li>The user agent MUST run the <a def-id="append-decode-error-algorithm"></a> when any combination of an <a def-id="init-segment"></a> and any contiguous sequence of <a def-id="media-segments"></a> satisfies the
           following conditions:
           <ol>
             <li>The number and type (audio, video, text, etc.) of all tracks in the <a def-id="media-segments"></a> are not identified.</li>
@@ -2700,12 +2700,14 @@
             </li>
             <li>Information necessary to compute the global <a def-id="presentation-timestamp"></a> of every sample in the sequence of <a def-id="media-segments"></a> is not provided.</li>
           </ol>
-          <p>For example, if I1 is associated with M1, M2, M3 then the above must hold for all the combinations I1+M1, I1+M2, I1+M1+M2, I1+M2+M3, etc.</p>
+          <p>For example, if I1 is associated with M1, M2, M3 then the above MUST hold for all the combinations I1+M1, I1+M2, I1+M1+M2, I1+M2+M3, etc.</p>
         </li>
       </ul>
-      <p>Byte stream specifications must at a minimum define constraints which ensure that the above requirements hold. Additional constraints may be defined, for example to simplify implementation.</p>
+      <p>Byte stream specifications MUST at a minimum define constraints which ensure that the above requirements hold. Additional constraints MAY be defined, for example to simplify implementation.</p>
 
     </section>
+
+    <section id="conformance"></section>
 
     <section id="examples">
       <h2>Examples</h2>
@@ -2823,7 +2825,15 @@
         </thead>
         <tbody>
           <tr>
-            <td>09 June 2016</a></td>
+            <td>12 July 2016</td>
+            <td>
+              <ul>
+                <li>Issue 52 - Add conformance section and update relevant key words.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/d8f901f22e756dcc9f6ecd5d1216862b9f602623/index.html">09 June 2016</a></td>
             <td>
               <ul>
                 <li>Issue  91 - Change TrackDefault.kinds to TrackDefault.getKinds.</li>
