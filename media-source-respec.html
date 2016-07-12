@@ -7,7 +7,7 @@
     <script src="media-source.js" class="remove"></script>
     <script class="remove">
       var respecConfig = {
-      // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use ED.
+      // specification status (e.g., WD, LCWD, NOTE, etc.). If in doubt use ED.
       specStatus: "ED",
       useExperimentalStyles: true,
 
@@ -20,9 +20,9 @@
       // if this is a LCWD, uncomment and set the end of its review period
       // lcEnd: "2009-08-05",
 
-      publishDate: "2016-06-09",
+      publishDate: "2016-07-12",
       previousMaturity: "CR",
-      previousPublishDate: "2015-05-03",
+      previousPublishDate: "2015-07-05",
 
       // editors, add as many as you like
       // only "name" is required
@@ -286,7 +286,7 @@
 
           <dt id="init-segment">Initialization Segment</dt>
           <dd>
-            <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of <a def-id="media-segments"></a>. This includes codec initialization data, <a def-id="track-id"></a> mappings for multiplexed segments, and timestamp offsets (e.g. edit lists).</p>
+            <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of <a def-id="media-segments"></a>. This includes codec initialization data, <a def-id="track-id"></a> mappings for multiplexed segments, and timestamp offsets (e.g., edit lists).</p>
             <p class="note">The <a def-id="byte-stream-format-specs"></a> in the byte stream format registry [[MSE-REGISTRY]] contain format specific examples.</p>
 
           <dt id="media-segment">Media Segment</dt>
@@ -406,9 +406,9 @@
             <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> text track(s).
           </p>
           <p><a>SourceBuffer</a> objects in this list must appear in the same order as they appear in
-            the <a def-id="sourceBuffers"></a> attribute. (e.g., If only sourceBuffers[0] and
+            the <a def-id="sourceBuffers"></a> attribute; e.g., if only sourceBuffers[0] and
             sourceBuffers[3] are in <a def-id="activeSourceBuffers"></a>, then activeSourceBuffers[0] must
-            equal sourceBuffers[0] and activeSourceBuffers[1] must equal sourceBuffers[3].)
+            equal sourceBuffers[0] and activeSourceBuffers[1] must equal sourceBuffers[3].
           </p>
           <p class="note">The <a href="#active-source-buffer-changes">Changes to selected/enabled track state</a> section describes how this attribute gets
             updated.</p>
@@ -2138,8 +2138,8 @@
             <li>Let <var>overlapped frame</var> be the <a def-id="coded-frame"></a> in <var>track buffer</var> with a <a def-id="presentation-interval"></a> that contains <var>presentation timestamp</var>.
             </li>
             <li>Update <var>presentation timestamp</var> and <var>decode timestamp</var> to the nearest audio sample timestamp based on sample rate of the
-              audio in <var>overlapped frame</var>. If a timestamp is equidistant from both audio sample timestamps, then use the higher timestamp. (eg.
-              floor(x * sample_rate + 0.5) / sample_rate).
+              audio in <var>overlapped frame</var>. If a timestamp is equidistant from both audio sample timestamps, then use the higher timestamp (e.g.,
+              <code>floor(x * sample_rate + 0.5) / sample_rate</code>).
               <div class="note">
                 <p>For example, given the following values:</p>
                 <ul>
@@ -2278,7 +2278,7 @@
 
         <dt>getter SourceBuffer (unsigned long index)</dt>
         <dd>
-          <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e. []).</p>
+          <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e., []).</p>
 
           <ol class="method-algorithm">
             <li>If <var>index</var> is greater than or equal to the <a def-id="SourceBufferList-length"></a> attribute then return undefined and abort these steps.</li>
@@ -2341,8 +2341,7 @@
 
         <dt>readonly attribute double totalFrameDelay</dt>
         <dd>
-          <p>The sum of all <a def-id="displayed-frame-delays"></a> for all displayed frames. (i.e., Frames included in the <a def-id="totalVideoFrames"></a> count, but not in the <a def-id="droppedVideoFrames"></a>
-            count.</p>
+          <p>The sum of all <a def-id="displayed-frame-delays"></a> for all displayed frames. (i.e., frames included in the <a def-id="totalVideoFrames"></a> count, but not in the <a def-id="droppedVideoFrames"></a> count).</p>
         </dd>
       </dl>
     </section>
@@ -2417,7 +2416,7 @@
         <dd>
           <p>The decimal string representation of the <a def-id="track-id"></a> that identifies the specific
             track that this object should apply to. An empty string indicates that this object can be
-            used for any track of the appropriate type. (i.e. any <a>AudioTrack</a> if
+            used for any track of the appropriate type (e.g., any <a>AudioTrack</a> if
             <a def-id="TrackDefault-type"></a> equals <a def-id="TrackDefaultType-audio"></a>).</p>
         </dd>
         <dt>readonly attribute DOMString language</dt>
@@ -2465,7 +2464,7 @@
         </dd>
         <dt>getter TrackDefault (unsigned long index)</dt>
         <dd>
-          <p>Allows the TrackDefault objects in the list to be accessed with an array operator (i.e. []).</p>
+          <p>Allows the TrackDefault objects in the list to be accessed with an array operator (i.e., []).</p>
 
           <ol class="method-algorithm">
             <li>If <var>index</var> is greater than or equal to the <a def-id="TrackDefaultList-length"></a> attribute then return undefined and abort these steps.</li>
@@ -2656,7 +2655,7 @@
               <p>The number and type of tracks are not consistent.</p>
               <p class="note">For example, if the first <a def-id="init-segment"></a> has 2 audio tracks and 1 video track, then all <a def-id="init-segments"></a> that follow it in the byte stream must describe 2 audio tracks and 1 video track.</p>
             </li>
-            <li><a def-id="track-ids"></a> are not the same across <a def-id="init-segments"></a>, for segments describing multiple tracks of a single type. (e.g. 2 audio tracks).</li>
+            <li><a def-id="track-ids"></a> are not the same across <a def-id="init-segments"></a>, for segments describing multiple tracks of a single type (e.g., 2 audio tracks).</li>
             <li>
               <p>Codecs changes across <a def-id="init-segments"></a>.</p>
               <p class="note">For example, a byte stream that starts with an <a def-id="init-segment"></a> that specifies a single AAC track and later contains an <a def-id="init-segment"></a> that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a>SourceBuffer</a> objects.</p>
@@ -2680,7 +2679,7 @@
           <ol>
             <li>Map all timestamps to the same <a def-id="media-timeline"></a>.</li>
             <li>Support seamless playback of <a def-id="media-segments"></a> having a timestamp gap smaller than the audio frame size. User agent must not reflect these gaps in the <a def-id="buffered"></a> attribute.
-              <p class="note">This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g. Vorbis).</p>
+              <p class="note">This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g., Vorbis).</p>
             </li>
           </ol>
         </li>
@@ -2688,7 +2687,7 @@
           following conditions:
           <ol>
             <li>The number and type (audio, video, text, etc.) of all tracks in the <a def-id="media-segments"></a> are not identified.</li>
-            <li>The decoding capabilities needed to decode each track (i.e. codec and codec parameters) are not provided.</li>
+            <li>The decoding capabilities needed to decode each track (i.e., codec and codec parameters) are not provided.</li>
             <li>Encryption parameters necessary to decrypt the content (except the encryption key itself) are not provided for all encrypted tracks.</li>
             <li>All information necessary to decode and render the earliest <a def-id="random-access-point"></a> in the sequence of <a def-id="media-segments"></a> and all subsequence samples in the sequence
               (in presentation time) are not provided. This includes in particular,
@@ -2823,7 +2822,15 @@
         </thead>
         <tbody>
           <tr>
-            <td>09 June 2016</a></td>
+            <td>12 July 2016</td>
+            <td>
+              <ul>
+                <li>Issue 59 - Correct i.e. and e.g. style.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/d8f901f22e756dcc9f6ecd5d1216862b9f602623/index.html">09 June 2016</a></td>
             <td>
               <ul>
                 <li>Issue  91 - Change TrackDefault.kinds to TrackDefault.getKinds.</li>
