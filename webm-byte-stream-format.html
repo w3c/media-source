@@ -266,7 +266,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">WebM Byte Stream Format</h1>
   
-  <h2 id="w3c-editor-s-draft-11-july-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-07-11">11 July 2016</time></h2>
+  <h2 id="w3c-editor-s-draft-20-july-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-07-20">20 July 2016</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -409,7 +409,7 @@ table.simple {
       
     
   
-</section><section id="toc"><h2 class="introductory" id="h-toc" resource="#h-toc"><span property="xhv:role" resource="xhv:heading">Table of Contents</span></h2><ul class="toc" role="directory"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#webm-mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#webm-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#webm-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#webm-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">6. </span>Acknowledgments</a></li><li class="tocline"><a href="#references" class="tocxref"><span class="secno">A. </span>References</a><ul class="toc"><li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">A.1 </span>Informative references</a></li></ul></li></ul></section>
+</section><section id="toc"><h2 class="introductory" id="h-toc" resource="#h-toc"><span property="xhv:role" resource="xhv:heading">Table of Contents</span></h2><ul class="toc" role="directory"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#webm-mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#webm-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#webm-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#webm-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#conformance" class="tocxref"><span class="secno">6. </span>Conformance</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">7. </span>Acknowledgments</a></li><li class="tocline"><a href="#references" class="tocxref"><span class="secno">A. </span>References</a><ul class="toc"><li class="tocline"><a href="#normative-references" class="tocxref"><span class="secno">A.1 </span>Normative references</a></li><li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">A.2 </span>Informative references</a></li></ul></li></ul></section>
 
     <section id="introduction" typeof="bibo:Chapter" resource="#introduction" property="bibo:hasPart">
       <!--OddPage--><h2 id="h-introduction" resource="#h-introduction"><span property="xhv:role" resource="xhv:heading"><span class="secno">1. </span>Introduction</span></h2>
@@ -457,7 +457,7 @@ table.simple {
             </tbody>
           </table>
           <div class="note"><div class="note-title" aria-level="3" role="heading" id="h-note1"><span>Note</span></div><div class="">
-            Implementations should support all of the codec IDs mentioned in the table above.
+            Implementations <em class="rfc2119" title="SHOULD">SHOULD</em> support all of the codec IDs mentioned in the table above.
           </div></div>
 
           <p>Examples of valid MIME-types with a codecs parameter.</p>
@@ -474,19 +474,19 @@ table.simple {
 
     <section id="webm-init-segments" typeof="bibo:Chapter" resource="#webm-init-segments" property="bibo:hasPart">
       <!--OddPage--><h2 id="h-webm-init-segments" resource="#h-webm-init-segments"><span property="xhv:role" resource="xhv:heading"><span class="secno">3. </span>Initialization Segments</span></h2>
-      <p>A WebM <a href="index.html#init-segment">initialization segment</a> must contain a subset of the elements at the start of a typical WebM file.</p>
+      <p>A WebM <a href="index.html#init-segment">initialization segment</a> <em class="rfc2119" title="MUST">MUST</em> contain a subset of the elements at the start of a typical WebM file.</p>
 
-      <p>The user agent must run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if any of the following conditions are not met:</p>
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if any of the following conditions are not met:</p>
       <ol>
-	<li>The <a href="index.html#init-segment">initialization segment</a> must start with an <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> element, followed by a <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header.</li>
-	<li>The size value in the <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header must signal an "unknown size" or contain a value large enough to include the <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> and <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> elements that follow.</li>
-	<li>A <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> element and a <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> element must appear, in that order, after the <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header and before any further <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> or <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> elements.
+	<li>The <a href="index.html#init-segment">initialization segment</a> <em class="rfc2119" title="MUST">MUST</em> start with an <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> element, followed by a <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header.</li>
+	<li>The size value in the <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header <em class="rfc2119" title="MUST">MUST</em> signal an "unknown size" or contain a value large enough to include the <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> and <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> elements that follow.</li>
+	<li>A <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> element and a <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> element <em class="rfc2119" title="MUST">MUST</em> appear, in that order, after the <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header and before any further <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> or <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> elements.
         </li>
       </ol>
-      <p>The user agent must accept and ignore any elements other than an <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> or a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> that occur before, in between, or after the <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> and
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> accept and ignore any elements other than an <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> or a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> that occur before, in between, or after the <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> and
       <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> elements.</p>
 
-      <p>The user agent must source attribute values for id, kind, label and language for <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code>, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> and
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> source attribute values for id, kind, label and language for <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code>, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> and
         <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> objects as described for WebM in the in-band tracks spec [<cite><a class="bibref" href="#bib-INBANDTRACKS">INBANDTRACKS</a></cite>].</p>
     </section>
 
@@ -498,31 +498,43 @@ table.simple {
       <ol>
         <li>The TimecodeScale in the <a href="#webm-init-segments">WebM initialization segment</a> most recently appended applies to all timestamps in the <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a></li>
         <li>The Timecode element in the <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> contains a <a href="index.html#presentation-timestamp">presentation timestamp</a> in TimecodeScale units.</li>
-        <li>The Cluster header may contain an "unknown" size value. If it does then the end of the cluster is reached when another <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> header or an element header that indicates the start
+        <li>The Cluster header <em class="rfc2119" title="MAY">MAY</em> contain an "unknown" size value. If it does then the end of the cluster is reached when another <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> header or an element header that indicates the start
           of an <a href="#webm-init-segments">WebM initialization segment</a> is encountered.</li>
       </ol>
 
-      <p>The user agent must run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if any of the following conditions are not met:</p>
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if any of the following conditions are not met:</p>
       <ol>
-        <li>The Timecode element must appear before any Block &amp; SimpleBlock elements in a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a>.</li>
+        <li>The Timecode element <em class="rfc2119" title="MUST">MUST</em> appear before any Block &amp; SimpleBlock elements in a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a>.</li>
         <li>Block &amp; SimpleBlock elements are in time increasing order consistent with the <a href="http://www.webmproject.org/code/specs/container/#webm-guidelines">WebM spec</a>.</li>
-        <li>If the most recent <a href="#webm-init-segments">WebM initialization segment</a> describes multiple tracks, then blocks from all the tracks must be interleaved in time increasing order. At least one block from all audio and video
-          tracks must be present.</li>
+        <li>If the most recent <a href="#webm-init-segments">WebM initialization segment</a> describes multiple tracks, then blocks from all the tracks <em class="rfc2119" title="MUST">MUST</em> be interleaved in time increasing order. At least one block from all audio and video
+          tracks <em class="rfc2119" title="MUST">MUST</em> be present.</li>
       </ol>
 
-      <p>The user agent must accept and ignore <a href="http://www.webmproject.org/code/specs/container/#cueing-data">Cues</a> or <a href="http://www.webmproject.org/code/specs/container/#chapters">Chapters</a> elements that follow a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element.</p>
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> accept and ignore <a href="http://www.webmproject.org/code/specs/container/#cueing-data">Cues</a> or <a href="http://www.webmproject.org/code/specs/container/#chapters">Chapters</a> elements that follow a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element.</p>
     </section>
 
     <section id="webm-random-access-points" typeof="bibo:Chapter" resource="#webm-random-access-points" property="bibo:hasPart">
       <!--OddPage--><h2 id="h-webm-random-access-points" resource="#h-webm-random-access-points"><span property="xhv:role" resource="xhv:heading"><span class="secno">5. </span>Random Access Points</span></h2>
-      <p>Either a SimpleBlock element with its Keyframe flag set, or a BlockGroup element having no ReferenceBlock elements, signals the location of a <a href="index.html#random-access-point">random access point</a> for that track. The order of multiplexed blocks within a <a href="index.html#media-segment">media segment</a> must conform to the <a href="http://www.webmproject.org/code/specs/container/#muxer-guidelines">WebM Muxer Guidelines</a>.</p>
+      <p>Either a SimpleBlock element with its Keyframe flag set, or a BlockGroup element having no ReferenceBlock elements, signals the location of a <a href="index.html#random-access-point">random access point</a> for that track. The order of multiplexed blocks within a <a href="index.html#media-segment">media segment</a> <em class="rfc2119" title="MUST">MUST</em> conform to the <a href="http://www.webmproject.org/code/specs/container/#muxer-guidelines">WebM Muxer Guidelines</a>.</p>
     </section>
 
+    <section id="conformance" typeof="bibo:Chapter" resource="#conformance" property="bibo:hasPart"><!--OddPage--><h2 id="h-conformance" resource="#h-conformance"><span property="xhv:role" resource="xhv:heading"><span class="secno">6. </span>Conformance</span></h2>
+<p>
+  As well as sections marked as non-normative, all authoring guidelines, diagrams, examples,
+  and notes in this specification are non-normative. Everything else in this specification is
+  normative.
+</p>
+<p id="respecRFC2119">The key words <em class="rfc2119" title="MAY">MAY</em>, <em class="rfc2119" title="MUST">MUST</em>, and <em class="rfc2119" title="SHOULD">SHOULD</em> are 
+  to be interpreted as described in [<cite><a class="bibref" href="#bib-RFC2119">RFC2119</a></cite>].
+</p>
+</section>
+
     <section id="acknowledgements" typeof="bibo:Chapter" resource="#acknowledgements" property="bibo:hasPart">
-      <!--OddPage--><h2 id="h-acknowledgements" resource="#h-acknowledgements"><span property="xhv:role" resource="xhv:heading"><span class="secno">6. </span>Acknowledgments</span></h2>
+      <!--OddPage--><h2 id="h-acknowledgements" resource="#h-acknowledgements"><span property="xhv:role" resource="xhv:heading"><span class="secno">7. </span>Acknowledgments</span></h2>
       The editors would like to thank Frank Galligan, and Philip Jägenstedt for their contributions to this specification.
     </section>
   
 
-<form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form><section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart"><!--OddPage--><h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>References</span></h2><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart"><h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.1 </span>Informative references</span></h3><dl class="bibliography" resource=""><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt><dd>Bob Lund; Silvia Pfeiffer. <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. URL: <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references">http://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
+<form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form><section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart"><!--OddPage--><h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>References</span></h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart"><h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.1 </span>Normative references</span></h3><dl class="bibliography" resource=""><dt id="bib-RFC2119">[RFC2119]</dt><dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires">https://tools.ietf.org/html/rfc2119</a>
+</dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart"><h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.2 </span>Informative references</span></h3><dl class="bibliography" resource=""><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt><dd>Bob Lund; Silvia Pfeiffer. <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. URL: <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references">http://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
 </dd></dl></section></section></body></html>

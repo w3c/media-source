@@ -45,8 +45,9 @@
       // editors, add as many as you like
       // only "name" is required
       editors:  [
-        { name: "Aaron Colwell",  url: "", company: "Google Inc.", companyURL: "http://www.google.com/" },
         { name: "Dale Curtis", url: "", company: "Google Inc.", companyURL: "http://www.google.com/" },
+        { name: "Matthew Wolenetz",  url: "", company: "Google Inc.", companyURL: "http://www.google.com/" },
+        { name: "Aaron Colwell (until April 2015)",  url: "", company: "Google Inc.", companyURL: "http://www.google.com/" },
       ],
 
       mseDefGroupName: "mpeg-byte-stream-format",
@@ -55,7 +56,7 @@
       ],
 
       // name of the WG
-      wg:           "HTML Working Group",
+      wg:           "HTML Media Extensions Working Group",
 
       // URI of the public WG page
       wgURI:        "http://www.w3.org/html/wg/",
@@ -113,7 +114,7 @@
         <li>"audio/aac" for sequences of ADTS frames, as specified in <a def-id="iso-14496-3"></a>.</li>
         <li>"audio/mpeg" for MPEG-1/2/2.5 Layer I/II/III streams, as specified in <a href="http://tools.ietf.org/html/rfc3003">RFC 3003</a>.</li>
       </ul>
-      <p>The "codecs" MIME-type parameter must not be used with these MIME-types.</p>
+      <p>The "codecs" MIME-type parameter MUST NOT be used with these MIME-types.</p>
     </section>
 
     <section id="mpeg-audio-frames">
@@ -127,7 +128,7 @@
 
     <section id="mpeg-metadata">
       <h4>Metadata Frames</h4>
-      <p>Since <a def-id="id3v1"></a>, <a def-id="id3v2"></a> metadata frames, and <a def-id="icecast-headers"></a> are common in existing MPEG audio streams, implementations should gracefully handle such frames. Zero or more of these metadata frames are allowed to occur before, after, or between <a def-id="mpeg-audio-frames"></a>. Minimal implementations must accept, consume, and ignore these frames. More advanced implementations may choose to expose the metadata information via an inband <a def-id="text-track"></a> or some other mechanism.</p>
+      <p>Since <a def-id="id3v1"></a>, <a def-id="id3v2"></a> metadata frames, and <a def-id="icecast-headers"></a> are common in existing MPEG audio streams, implementations SHOULD gracefully handle such frames. Zero or more of these metadata frames are allowed to occur before, after, or between <a def-id="mpeg-audio-frames"></a>. Minimal implementations MUST accept, consume, and ignore these frames. More advanced implementations MAY choose to expose the metadata information via an inband <a def-id="text-track"></a> or some other mechanism.</p>
 
       <section id="icecast">
         <h3>Icecast headers</h3>
@@ -149,6 +150,8 @@
         <li>The coded audio in each <a def-id="mpeg-audio-frame"></a> is a <a def-id="media-segment"></a>.</li>
       </ul>
     </section>
+
+    <section id="conformance"></section>
 
 <!--     <section id="acknowledgements">
       <h2>Acknowledgments</h2>
