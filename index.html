@@ -985,7 +985,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           
         <div><em>No parameters.</em></div><div><em>Return type: </em><code><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not <code><a href="#idl-def-ReadyState.open">"open"</a></code> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true on any <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If <var><a href="#live-seekable-range">live seekable range</a></var> contains a range, then set <var><a href="#live-seekable-range">live seekable range</a></var> to be a new empty <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code> object.
           </li></ol></dd><dt id="widl-MediaSource-endOfStream-void-EndOfStreamError-error"><code>endOfStream</code></dt><dd>
           <p>Signals the end of the stream.</p>
@@ -1102,7 +1101,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">start</td><td class="prmType"><code><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-double" class="idlType">double</a></code></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">end</td><td class="prmType"><code><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-double" class="idlType">double</a></code></code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If the <code><a href="#widl-MediaSource-readyState">readyState</a></code> attribute is not <code><a href="#idl-def-ReadyState.open">"open"</a></code> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#widl-SourceBuffer-updating">updating</a></code> attribute equals true on any <a href="#idl-def-SourceBuffer" class="idlType"><code>SourceBuffer</code></a> in <code><a href="#widl-MediaSource-sourceBuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If <var>start</var> is negative or greater than <var>end</var>, then throw a <code>TypeError</code> exception and abort these steps.</li>
             <li>Set <var><a href="#live-seekable-range">live seekable range</a></var> to be a new <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#normalized-timeranges-object">normalized TimeRanges object</a> containing a single range whose start position is <var>start</var> and end position is <var>end</var>.
           </li></ol></dd></dl></section>
@@ -3235,6 +3233,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
               <ul>
                 <li>Issue 59 - Correct i.e. and e.g. style.</li>
                 <li>Issue 115 - Updated byte stream format registry editors in localbiblio.</li>
+                <li>Issue 118 - Remove the restriction on not 'updating' from {set,clear}LiveSeekableRange().</li>
               </ul>
             </td>
           </tr>
