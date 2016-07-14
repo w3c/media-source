@@ -34,7 +34,7 @@
       specStatus: "ED",
 
       // the specification's short name, as in http://www.w3.org/TR/short-name/
-      shortName: "",
+      shortName: "media-source", <!-- The registry does not have its own short name. -->
 
       // if there a publicly available Editor's Draft, this is the link
       edDraftURI: "https://w3c.github.io/media-source/webm-byte-stream-format.html",
@@ -83,6 +83,26 @@
 
       scheme: "https",
 
+      otherLinks: [{
+      key: 'Repository',
+      data: [{
+          value: 'We are on GitHub',
+          href: 'https://github.com/w3c/media-source/'
+        }, {
+          value: 'File a bug',
+          href: 'https://github.com/w3c/media-source/issues'
+        }, {
+          value: 'Commit history',
+          href: 'https://github.com/w3c/media-source/commits/gh-pages/webm-byte-stream-format-respec.html'
+        }]
+      },{
+        key: 'Mailing list',
+        data: [{
+          value: 'public-html-media@w3.org',
+          href: 'https://lists.w3.org/Archives/Public/public-html-media/'
+        }]
+      }],
+
       preProcess: [ mediaSourcePreProcessor ],
 
       // Empty definitions for objects declared in the document are here to
@@ -103,16 +123,23 @@
       };
     </script>
     <!-- script to register bugs -->
+    <!-- Disabled unless/until it supports GitHub issues.
     <script src="https://w3c.github.io/webcomponents/assets/scripts/bug-assist.js"></script>
     <meta name="bug.short_desc" content="[MSE] ">
     <meta name="bug.product" content="HTML WG">
     <meta name="bug.component" content="Media Source Extensions">
+    -->
 
     <link rel="stylesheet" href="mse.css">
   </head>
   <body>
     <section id="abstract">
       This specification defines a <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> byte stream format specification based on the WebM container format.
+    </section>
+
+    <section id="sotd">
+      <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>; there may also be open bugs in the <a href="http://w3.org/brief/Mjcw">previous bug tracker</a>.</p>
+      <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should join the mailing list mentioned below and take part in the discussions.</p>
     </section>
 
     <section id="introduction">
