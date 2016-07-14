@@ -478,13 +478,13 @@ table.simple {
 
       <p>The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if any of the following conditions are not met:</p>
       <ol>
-	<li>The <a href="index.html#init-segment">initialization segment</a> <em class="rfc2119" title="MUST">MUST</em> start with an <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> element, followed by a <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header.</li>
-	<li>The size value in the <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header <em class="rfc2119" title="MUST">MUST</em> signal an "unknown size" or contain a value large enough to include the <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> and <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> elements that follow.</li>
-	<li>A <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> element and a <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> element <em class="rfc2119" title="MUST">MUST</em> appear, in that order, after the <a href="http://www.webmproject.org/code/specs/container/#segment">Segment</a> header and before any further <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> or <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> elements.
+	<li>The <a href="index.html#init-segment">initialization segment</a> <em class="rfc2119" title="MUST">MUST</em> start with an <a href="http://www.webmproject.org/docs/container/#ebml-basics">EBML Header</a> element, followed by a <a href="http://www.webmproject.org/docs/container/#segment">Segment</a> header.</li>
+	<li>The size value in the <a href="http://www.webmproject.org/docs/container/#segment">Segment</a> header <em class="rfc2119" title="MUST">MUST</em> signal an "unknown size" or contain a value large enough to include the <a href="http://www.webmproject.org/docs/container/#segment-information">Segment Information</a> and <a href="http://www.webmproject.org/docs/container/#track">Tracks</a> elements that follow.</li>
+	<li>A <a href="http://www.webmproject.org/docs/container/#segment-information">Segment Information</a> element and a <a href="http://www.webmproject.org/docs/container/#track">Tracks</a> element <em class="rfc2119" title="MUST">MUST</em> appear, in that order, after the <a href="http://www.webmproject.org/docs/container/#segment">Segment</a> header and before any further <a href="http://www.webmproject.org/docs/container/#ebml-basics">EBML Header</a> or <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> elements.
         </li>
       </ol>
-      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> accept and ignore any elements other than an <a href="http://www.webmproject.org/code/specs/container/#ebml-basics">EBML Header</a> or a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> that occur before, in between, or after the <a href="http://www.webmproject.org/code/specs/container/#segment-information">Segment Information</a> and
-      <a href="http://www.webmproject.org/code/specs/container/#track">Tracks</a> elements.</p>
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> accept and ignore any elements other than an <a href="http://www.webmproject.org/docs/container/#ebml-basics">EBML Header</a> or a <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> that occur before, in between, or after the <a href="http://www.webmproject.org/docs/container/#segment-information">Segment Information</a> and
+      <a href="http://www.webmproject.org/docs/container/#track">Tracks</a> elements.</p>
 
       <p>The user agent <em class="rfc2119" title="MUST">MUST</em> source attribute values for id, kind, label and language for <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code>, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> and
         <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> objects as described for WebM in the in-band tracks spec [<cite><a class="bibref" href="#bib-INBANDTRACKS">INBANDTRACKS</a></cite>].</p>
@@ -492,30 +492,30 @@ table.simple {
 
     <section id="webm-media-segments" typeof="bibo:Chapter" resource="#webm-media-segments" property="bibo:hasPart">
       <!--OddPage--><h2 id="h-webm-media-segments" resource="#h-webm-media-segments"><span property="xhv:role" resource="xhv:heading"><span class="secno">4. </span>Media Segments</span></h2>
-      <p>A WebM <a href="index.html#media-segment">media segment</a> is a single <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element.</p>
+      <p>A WebM <a href="index.html#media-segment">media segment</a> is a single <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> element.</p>
 
-      <p>The user agent uses the following rules when interpreting content in a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a>:</p>
+      <p>The user agent uses the following rules when interpreting content in a <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a>:</p>
       <ol>
-        <li>The TimecodeScale in the <a href="#webm-init-segments">WebM initialization segment</a> most recently appended applies to all timestamps in the <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a></li>
-        <li>The Timecode element in the <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> contains a <a href="index.html#presentation-timestamp">presentation timestamp</a> in TimecodeScale units.</li>
-        <li>The Cluster header <em class="rfc2119" title="MAY">MAY</em> contain an "unknown" size value. If it does then the end of the cluster is reached when another <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> header or an element header that indicates the start
+        <li>The TimecodeScale in the <a href="#webm-init-segments">WebM initialization segment</a> most recently appended applies to all timestamps in the <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a></li>
+        <li>The Timecode element in the <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> contains a <a href="index.html#presentation-timestamp">presentation timestamp</a> in TimecodeScale units.</li>
+        <li>The Cluster header <em class="rfc2119" title="MAY">MAY</em> contain an "unknown" size value. If it does then the end of the cluster is reached when another <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> header or an element header that indicates the start
           of an <a href="#webm-init-segments">WebM initialization segment</a> is encountered.</li>
       </ol>
 
       <p>The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if any of the following conditions are not met:</p>
       <ol>
-        <li>The Timecode element <em class="rfc2119" title="MUST">MUST</em> appear before any Block &amp; SimpleBlock elements in a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a>.</li>
-        <li>Block &amp; SimpleBlock elements are in time increasing order consistent with the <a href="http://www.webmproject.org/code/specs/container/#webm-guidelines">WebM spec</a>.</li>
+        <li>The Timecode element <em class="rfc2119" title="MUST">MUST</em> appear before any Block &amp; SimpleBlock elements in a <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a>.</li>
+        <li>Block &amp; SimpleBlock elements are in time increasing order consistent with the <a href="http://www.webmproject.org/docs/container/#webm-guidelines">WebM spec</a>.</li>
         <li>If the most recent <a href="#webm-init-segments">WebM initialization segment</a> describes multiple tracks, then blocks from all the tracks <em class="rfc2119" title="MUST">MUST</em> be interleaved in time increasing order. At least one block from all audio and video
           tracks <em class="rfc2119" title="MUST">MUST</em> be present.</li>
       </ol>
 
-      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> accept and ignore <a href="http://www.webmproject.org/code/specs/container/#cueing-data">Cues</a> or <a href="http://www.webmproject.org/code/specs/container/#chapters">Chapters</a> elements that follow a <a href="http://www.webmproject.org/code/specs/container/#cluster">Cluster</a> element.</p>
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> accept and ignore <a href="http://www.webmproject.org/docs/container/#cueing-data">Cues</a> or <a href="http://www.webmproject.org/docs/container/#chapters">Chapters</a> elements that follow a <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> element.</p>
     </section>
 
     <section id="webm-random-access-points" typeof="bibo:Chapter" resource="#webm-random-access-points" property="bibo:hasPart">
       <!--OddPage--><h2 id="h-webm-random-access-points" resource="#h-webm-random-access-points"><span property="xhv:role" resource="xhv:heading"><span class="secno">5. </span>Random Access Points</span></h2>
-      <p>Either a SimpleBlock element with its Keyframe flag set, or a BlockGroup element having no ReferenceBlock elements, signals the location of a <a href="index.html#random-access-point">random access point</a> for that track. The order of multiplexed blocks within a <a href="index.html#media-segment">media segment</a> <em class="rfc2119" title="MUST">MUST</em> conform to the <a href="http://www.webmproject.org/code/specs/container/#muxer-guidelines">WebM Muxer Guidelines</a>.</p>
+      <p>Either a SimpleBlock element with its Keyframe flag set, or a BlockGroup element having no ReferenceBlock elements, signals the location of a <a href="index.html#random-access-point">random access point</a> for that track. The order of multiplexed blocks within a <a href="index.html#media-segment">media segment</a> <em class="rfc2119" title="MUST">MUST</em> conform to the <a href="http://www.webmproject.org/docs/container/#muxer-guidelines">WebM Muxer Guidelines</a>.</p>
     </section>
 
     <section id="conformance" typeof="bibo:Chapter" resource="#conformance" property="bibo:hasPart"><!--OddPage--><h2 id="h-conformance" resource="#h-conformance"><span property="xhv:role" resource="xhv:heading"><span class="secno">6. </span>Conformance</span></h2>
