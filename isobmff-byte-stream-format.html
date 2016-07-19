@@ -295,7 +295,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">ISO BMFF Byte Stream Format</h1>
   
-  <h2 id="w3c-editor-s-draft-12-july-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-07-12">12 July 2016</time></h2>
+  <h2 id="w3c-editor-s-draft-20-july-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-07-20">20 July 2016</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -481,9 +481,8 @@ table.simple {
         (<span class="iso-box">elst</span>) that contains a single edit with media rate one. This edit <em class="rfc2119" title="MAY">MAY</em> have a duration of 0 (indicating that it spans all subsequent media) or <em class="rfc2119" title="MAY">MAY</em> have a non-zero duration
         (indicating the total duration of the movie including fragments).</p>
 
-      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> support parameter sets (e.g., PPS/SPS) stored in the sample entry (as defined for avc1/avc2), and <em class="rfc2119" title="SHOULD">SHOULD</em> support parameter
-        sets stored inband in the samples themselves (as defined for avc3/avc4).</p>
-      <div class="note"><div class="note-title" aria-level="3" role="heading" id="h-note2"><span>Note</span></div><p class="">For maximum content interoperability, user agents are strongly advised to support both inband and out-of-band storage of the SPS and PPS.</p></div>
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> support codec configurations stored out-of-band in the sample entry, and for codecs which allow codec configurations stored inband in the samples themselves, the user agent <em class="rfc2119" title="SHOULD">SHOULD</em> support codec configurations stored inband.</p>
+      <div class="note"><div class="note-title" aria-level="3" role="heading" id="h-note2"><span>Note</span></div><p class="">For example, for codecs which include SPS and PPS parameter sets, for maximum content interoperability, user agents are strongly advised to support both inband (e.g., as defined for avc3/avc4) and out-of-band (e.g., as defined for avc1/2) storage of the SPS and PPS.</p></div>
 
       <p>Valid top-level boxes such as <span class="iso-box">pdin</span>, <span class="iso-box">free</span>, and <span class="iso-box">sidx</span> are
         allowed to appear before the <span class="iso-box">moov</span> box. These boxes <em class="rfc2119" title="MUST">MUST</em> be accepted and ignored by the user agent and are not
@@ -569,10 +568,11 @@ table.simple {
         </thead>
         <tbody>
           <tr>
-            <td>12 July 2016</td>
+            <td>20 July 2016</td>
             <td>
               <ul>
                 <li>Issue 115 - Updated editors and updated to use RFC2119 key word mark-up and reference.</li>
+                <li>Issue 50 - Moved avc1-4 to non-normative note.</li>
               </ul>
             </td>
           </tr>
