@@ -9,10 +9,12 @@
 
     
     <!-- script to register bugs -->
+    <!-- Disabled unless/until it supports GitHub issues.
     <script src="https://w3c.github.io/webcomponents/assets/scripts/bug-assist.js"></script>
     <meta name="bug.short_desc" content="[MSE] ">
     <meta name="bug.product" content="HTML WG">
     <meta name="bug.component" content="Media Source Extensions">
+    -->
 
     <style>/* --- ISSUES/NOTES --- */
 div.issue-title, div.note-title , div.ednote-title, div.warning-title {
@@ -198,7 +200,7 @@ table.simple {
 }
 </style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--><script id="initialUserConfig" type="application/json">{
   "specStatus": "ED",
-  "shortName": "",
+  "shortName": "media-source",
   "edDraftURI": "https://w3c.github.io/media-source/webm-byte-stream-format.html",
   "prevVersion": "http://www.w3.org/2013/12/byte-stream-format-registry/webm-byte-stream-format.html",
   "editors": [
@@ -235,6 +237,34 @@ table.simple {
   "wgPatentURI": "http://www.w3.org/2004/01/pp-impl/40318/status",
   "noIDLIn": true,
   "scheme": "https",
+  "otherLinks": [
+    {
+      "key": "Repository",
+      "data": [
+        {
+          "value": "We are on GitHub",
+          "href": "https://github.com/w3c/media-source/"
+        },
+        {
+          "value": "File a bug",
+          "href": "https://github.com/w3c/media-source/issues"
+        },
+        {
+          "value": "Commit history",
+          "href": "https://github.com/w3c/media-source/commits/gh-pages/webm-byte-stream-format-respec.html"
+        }
+      ]
+    },
+    {
+      "key": "Mailing list",
+      "data": [
+        {
+          "value": "public-html-media@w3.org",
+          "href": "https://lists.w3.org/Archives/Public/public-html-media/"
+        }
+      ]
+    }
+  ],
   "preProcess": [
     null
   ],
@@ -272,7 +302,7 @@ table.simple {
       <dt>This version:</dt>
       <dd><a class="u-url" href="https://w3c.github.io/media-source/webm-byte-stream-format.html">https://w3c.github.io/media-source/webm-byte-stream-format.html</a></dd>
       <dt>Latest published version:</dt>
-      <dd><a href="http://www.w3.org/TR//">http://www.w3.org/TR//</a></dd>
+      <dd><a href="http://www.w3.org/TR/media-source/">http://www.w3.org/TR/media-source/</a></dd>
     
     
       <dt>Latest editor's draft:</dt>
@@ -298,6 +328,54 @@ table.simple {
 </dd>
 
     
+    
+      
+        
+          <dt>Repository:</dt>
+          
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/media-source/">
+                      We are on GitHub
+                    </a>
+                  </dd>
+                
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/media-source/issues">
+                      File a bug
+                    </a>
+                  </dd>
+                
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/media-source/commits/gh-pages/webm-byte-stream-format-respec.html">
+                      Commit history
+                    </a>
+                  </dd>
+                
+             
+          
+        
+      
+        
+          <dt>Mailing list:</dt>
+          
+             
+                
+                  <dd>
+                    <a href="https://lists.w3.org/Archives/Public/public-html-media/">
+                      public-html-media@w3.org
+                    </a>
+                  </dd>
+                
+             
+          
+        
+      
     
   </dl>
   
@@ -339,6 +417,9 @@ table.simple {
         
           
           
+      <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>; there may also be open bugs in the <a href="http://w3.org/brief/Mjcw">previous bug tracker</a>.</p>
+      <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should join the mailing list mentioned below and take part in the discussions.</p>
+    
           
           
           <p>
@@ -410,6 +491,8 @@ table.simple {
     
   
 </section><section id="toc"><h2 class="introductory" id="h-toc" resource="#h-toc"><span property="xhv:role" resource="xhv:heading">Table of Contents</span></h2><ul class="toc" role="directory"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#webm-mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#webm-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#webm-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#webm-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#conformance" class="tocxref"><span class="secno">6. </span>Conformance</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">7. </span>Acknowledgments</a></li><li class="tocline"><a href="#references" class="tocxref"><span class="secno">A. </span>References</a><ul class="toc"><li class="tocline"><a href="#normative-references" class="tocxref"><span class="secno">A.1 </span>Normative references</a></li><li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">A.2 </span>Informative references</a></li></ul></li></ul></section>
+
+    
 
     <section id="introduction" typeof="bibo:Chapter" resource="#introduction" property="bibo:hasPart">
       <!--OddPage--><h2 id="h-introduction" resource="#h-introduction"><span property="xhv:role" resource="xhv:heading"><span class="secno">1. </span>Introduction</span></h2>
@@ -535,6 +618,6 @@ table.simple {
     </section>
   
 
-<form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form><section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart"><!--OddPage--><h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>References</span></h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart"><h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.1 </span>Normative references</span></h3><dl class="bibliography" resource=""><dt id="bib-RFC2119">[RFC2119]</dt><dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires">https://tools.ietf.org/html/rfc2119</a>
+<section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart"><!--OddPage--><h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>References</span></h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart"><h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.1 </span>Normative references</span></h3><dl class="bibliography" resource=""><dt id="bib-RFC2119">[RFC2119]</dt><dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires">https://tools.ietf.org/html/rfc2119</a>
 </dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart"><h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.2 </span>Informative references</span></h3><dl class="bibliography" resource=""><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt><dd>Bob Lund; Silvia Pfeiffer. <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. URL: <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references">http://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
 </dd></dl></section></section></body></html>

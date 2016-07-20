@@ -9,10 +9,12 @@
 
     
     <!-- script to register bugs -->
+    <!-- Disabled unless/until it supports GitHub issues.
     <script src="https://w3c.github.io/webcomponents/assets/scripts/bug-assist.js"></script>
     <meta name="bug.short_desc" content="[MSE] ">
     <meta name="bug.product" content="HTML WG">
     <meta name="bug.component" content="Media Source Extensions">
+    -->
 
     <style>/* --- ISSUES/NOTES --- */
 div.issue-title, div.note-title , div.ednote-title, div.warning-title {
@@ -197,7 +199,85 @@ table.simple {
         display: none;
     }
 }
-</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
+</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--><script id="initialUserConfig" type="application/json">{
+  "specStatus": "ED",
+  "shortName": "media-source",
+  "edDraftURI": "https://w3c.github.io/media-source/mpeg-audio-byte-stream-format.html",
+  "prevVersion": "http://www.w3.org/2013/12/byte-stream-format-registry/mpeg-audio-byte-stream-format.html",
+  "editors": [
+    {
+      "name": "Dale Curtis",
+      "url": "",
+      "company": "Google Inc.",
+      "companyURL": "http://www.google.com/"
+    },
+    {
+      "name": "Matthew Wolenetz",
+      "url": "",
+      "company": "Google Inc.",
+      "companyURL": "http://www.google.com/"
+    },
+    {
+      "name": "Aaron Colwell (until April 2015)",
+      "url": "",
+      "company": "Google Inc.",
+      "companyURL": "http://www.google.com/"
+    }
+  ],
+  "mseDefGroupName": "mpeg-byte-stream-format",
+  "mseUnusedGroupNameExcludeList": [
+    "media-source"
+  ],
+  "mseContributors": [],
+  "wg": "HTML Media Extensions Working Group",
+  "wgURI": "http://www.w3.org/html/wg/",
+  "wgPublicList": "public-html-media",
+  "wgPatentURI": "http://www.w3.org/2004/01/pp-impl/40318/status",
+  "noIDLIn": true,
+  "scheme": "https",
+  "otherLinks": [
+    {
+      "key": "Repository",
+      "data": [
+        {
+          "value": "We are on GitHub",
+          "href": "https://github.com/w3c/media-source/"
+        },
+        {
+          "value": "File a bug",
+          "href": "https://github.com/w3c/media-source/issues"
+        },
+        {
+          "value": "Commit history",
+          "href": "https://github.com/w3c/media-source/commits/gh-pages/mpeg-audio-byte-stream-format-respec.html"
+        }
+      ]
+    },
+    {
+      "key": "Mailing list",
+      "data": [
+        {
+          "value": "public-html-media@w3.org",
+          "href": "https://lists.w3.org/Archives/Public/public-html-media/"
+        }
+      ]
+    }
+  ],
+  "preProcess": [
+    null
+  ],
+  "definitionMap": {
+    "mpeg audio frame": [
+      "mpeg-audio-frame"
+    ],
+    "icecast header": [
+      "icecast-header"
+    ]
+  },
+  "postProcess": [
+    null
+  ]
+}</script></head>
   <body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
       
@@ -216,7 +296,7 @@ table.simple {
       <dt>This version:</dt>
       <dd><a class="u-url" href="https://w3c.github.io/media-source/mpeg-audio-byte-stream-format.html">https://w3c.github.io/media-source/mpeg-audio-byte-stream-format.html</a></dd>
       <dt>Latest published version:</dt>
-      <dd><a href="http://www.w3.org/TR//">http://www.w3.org/TR//</a></dd>
+      <dd><a href="http://www.w3.org/TR/media-source/">http://www.w3.org/TR/media-source/</a></dd>
     
     
       <dt>Latest editor's draft:</dt>
@@ -242,6 +322,54 @@ table.simple {
 </dd>
 
     
+    
+      
+        
+          <dt>Repository:</dt>
+          
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/media-source/">
+                      We are on GitHub
+                    </a>
+                  </dd>
+                
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/media-source/issues">
+                      File a bug
+                    </a>
+                  </dd>
+                
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/media-source/commits/gh-pages/mpeg-audio-byte-stream-format-respec.html">
+                      Commit history
+                    </a>
+                  </dd>
+                
+             
+          
+        
+      
+        
+          <dt>Mailing list:</dt>
+          
+             
+                
+                  <dd>
+                    <a href="https://lists.w3.org/Archives/Public/public-html-media/">
+                      public-html-media@w3.org
+                    </a>
+                  </dd>
+                
+             
+          
+        
+      
     
   </dl>
   
@@ -283,6 +411,9 @@ table.simple {
         
           
           
+      <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>; there may also be open bugs in the <a href="http://w3.org/brief/Mjcw">previous bug tracker</a>.</p>
+      <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should join the mailing list mentioned below and take part in the discussions.</p>
+    
           
           
           <p>
@@ -355,6 +486,8 @@ table.simple {
   
 </section><section id="toc"><h2 class="introductory" id="h-toc" resource="#h-toc"><span property="xhv:role" resource="xhv:heading">Table of Contents</span></h2><ul class="toc" role="directory"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-types" class="tocxref"><span class="secno">2. </span>MIME-types</a></li><li class="tocline"><a href="#mpeg-audio-frames" class="tocxref"><span class="secno">3. </span>MPEG Audio Frames</a></li><li class="tocline"><a href="#mpeg-metadata" class="tocxref"><span class="secno">4. </span>Metadata Frames</a><ul class="toc"><li class="tocline"><a href="#icecast" class="tocxref"><span class="secno">4.1 </span>Icecast headers</a></li></ul></li><li class="tocline"><a href="#mpeg-segments" class="tocxref"><span class="secno">5. </span>Segment Definitions</a></li><li class="tocline"><a href="#conformance" class="tocxref"><span class="secno">6. </span>Conformance</a></li><li class="tocline"><a href="#references" class="tocxref"><span class="secno">A. </span>References</a><ul class="toc"><li class="tocline"><a href="#normative-references" class="tocxref"><span class="secno">A.1 </span>Normative references</a></li></ul></li></ul></section>
 
+    
+
     <section id="introduction" typeof="bibo:Chapter" resource="#introduction" property="bibo:hasPart">
       <!--OddPage--><h2 id="h-introduction" resource="#h-introduction"><span property="xhv:role" resource="xhv:heading"><span class="secno">1. </span>Introduction</span></h2>
       <p>This specification defines segment formats for implementations that choose to support MPEG audio streams specified in <a href="http://www.iso.org/iso/catalogue_detail.htm?csnumber=22412">ISO/IEC 11172-3:1993</a>, <a href="http://www.iso.org/iso/catalogue_detail.htm?csnumber=26797">ISO/IEC 13818-3:1998</a>, and <a href="http://www.iso.org/iso/catalogue_detail.htm?csnumber=53943">ISO/IEC 14496-3:2009</a>.</p>
@@ -373,7 +506,7 @@ table.simple {
 
     <section id="mpeg-audio-frames" typeof="bibo:Chapter" resource="#mpeg-audio-frames" property="bibo:hasPart">
       <!--OddPage--><h2 id="h-mpeg-audio-frames" resource="#h-mpeg-audio-frames"><span property="xhv:role" resource="xhv:heading"><span class="secno">3. </span>MPEG Audio Frames</span></h2>
-      <p>The format of an <dfn id="mpeg-audio-frame" data-dfn-for="" data-dfn-type="dfn">MPEG Audio Frame</dfn> depends on the <a href="#mime-types">MIME-type</a> used.</p>
+      <p>The format of an <dfn id="mpeg-audio-frame" data-dfn-type="dfn">MPEG Audio Frame</dfn> depends on the <a href="#mime-types">MIME-type</a> used.</p>
       <ul>
         <li>If the "audio/aac" MIME-type is used, an MPEG Audio Frame is a sequence of bytes that conform to the adts_frame() syntax specified in Table 1.A.5 of <a href="http://www.iso.org/iso/catalogue_detail.htm?csnumber=53943">ISO/IEC 14496-3:2009</a>.</li>
         <li>If the "audio/mpeg" MIME-type is used, an MPEG Audio Frame is a sequence of bytes that conform to the frame() syntax element specified in Section 2.4.1.2 of <a href="http://www.iso.org/iso/catalogue_detail.htm?csnumber=22412">ISO/IEC 11172-3:1993</a> or the corresponding definition in <a href="http://www.iso.org/iso/catalogue_detail.htm?csnumber=26797">ISO/IEC 13818-3:1998</a>.</li>
@@ -386,7 +519,7 @@ table.simple {
 
       <section id="icecast" typeof="bibo:Chapter" resource="#icecast" property="bibo:hasPart">
         <h3 id="h-icecast" resource="#h-icecast"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.1 </span>Icecast headers</span></h3>
-        <p>There is no normative spec for <a href="http://en.wikipedia.org/wiki/Icecast">Icecast</a>/<a href="http://en.wikipedia.org/wiki/SHOUTcast">SHOUTcast</a> headers, just <a href="http://forums.radiotoolbox.com/viewtopic.php?t=74">examples</a>. For the purpose of this specification, an <dfn id="icecast-header" data-dfn-for="" data-dfn-type="dfn">Icecast header</dfn> is defined as beginning with the 4 character sequence "ICY&nbsp;"(U+0049 I, U+0043 C, U+0059 Y, U+0020 SPACE) and ending with a pair of carriage-return line-feed sequences (U+000D CARRIAGE RETURN, U+000A LINE FEED, U+000D CARRIAGE RETURN, U+000A LINE FEED).</p>
+        <p>There is no normative spec for <a href="http://en.wikipedia.org/wiki/Icecast">Icecast</a>/<a href="http://en.wikipedia.org/wiki/SHOUTcast">SHOUTcast</a> headers, just <a href="http://forums.radiotoolbox.com/viewtopic.php?t=74">examples</a>. For the purpose of this specification, an <dfn id="icecast-header" data-dfn-type="dfn">Icecast header</dfn> is defined as beginning with the 4 character sequence "ICY&nbsp;"(U+0049 I, U+0043 C, U+0059 Y, U+0020 SPACE) and ending with a pair of carriage-return line-feed sequences (U+000D CARRIAGE RETURN, U+000A LINE FEED, U+000D CARRIAGE RETURN, U+000A LINE FEED).</p>
         <div class="note"><div class="note-title" aria-level="4" role="heading" id="h-note1"><span>Note</span></div><p class="">Icecast headers are allowed in the byte streams because some Icecast and SHOUTcast
           servers return a status line that looks like "ICY OK 200" instead of a standard HTTP status line.
           User-agent network stacks typically interpret this as an HTTP 0.9 response and include the
@@ -422,5 +555,5 @@ table.simple {
     </section> -->
   
 
-<form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form><section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart"><!--OddPage--><h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>References</span></h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart"><h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.1 </span>Normative references</span></h3><dl class="bibliography" resource=""><dt id="bib-RFC2119">[RFC2119]</dt><dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires">https://tools.ietf.org/html/rfc2119</a>
+<section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart"><!--OddPage--><h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>References</span></h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart"><h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.1 </span>Normative references</span></h3><dl class="bibliography" resource=""><dt id="bib-RFC2119">[RFC2119]</dt><dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires">https://tools.ietf.org/html/rfc2119</a>
 </dd></dl></section></section></body></html>
