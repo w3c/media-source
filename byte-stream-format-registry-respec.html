@@ -25,7 +25,12 @@
       // editors, add as many as you like
       // only "name" is required
       editors:  [
-      { name: "Aaron Colwell",  url: "", company: "Google Inc.", companyURL: "http://www.google.com/" },
+      { name: "Matthew Wolenetz",  url: "",
+      company: "Google Inc.", companyURL: "http://www.google.com/" },
+      { name: "Jerry Smith", url: "",
+      company: "Microsoft Corporation", companyURL: "http://www.microsoft.com/" },
+      { name: "Aaron Colwell (until April 2015)",  url: "",
+      company: "Google Inc.", companyURL: "http://www.google.com/" },
       ],
 
       mseDefGroupName: "byte-stream-format-registry",
@@ -34,7 +39,7 @@
       ],
 
       // name of the WG
-      wg:           "HTML Working Group",
+      wg:           "HTML Media Extensions Working Group",
 
       // URI of the public WG page
       wgURI:        "http://www.w3.org/html/wg/",
@@ -102,19 +107,19 @@
     <section id="entry-requirements">
       <h2>Registration Entry Requirements</h2>
       <ol>
-        <li>Each entry must include a unique MIME-type/subtype pair. If the byte stream format is derived-from an existing file format, then it should use the
+        <li>Each entry MUST include a unique MIME-type/subtype pair. If the byte stream format is derived-from an existing file format, then it SHOULD use the
           MIME-type/subtype pairs typically used for the file format.</li>
-        <li>Each entry must include a <a def-id="generate-timestamps-flag"></a> value that must be used by
+        <li>Each entry MUST include a <a def-id="generate-timestamps-flag"></a> value that MUST be used by
             <a class="externalDFN">SourceBuffer</a> when handling the byte stream format.</li>
-        <li>Each entry must include a link that references a publically available specification. It is recommended that such a specification be made available
+        <li>Each entry MUST include a link that references a publically available specification. It is recommended that such a specification be made available
           without cost (other than reasonable shipping and handling if not available by online means).</li>
-        <li>Each entry must comply with all requirements outlined in the <a def-id="byte-stream-formats-section"></a>
+        <li>Each entry MUST comply with all requirements outlined in the <a def-id="byte-stream-formats-section"></a>
           of the <a def-id="mse-spec"></a> specification.</li>
-        <li>Candidate entries must be announced on <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a>(<a href="mailto:public-html-media-request@w3.org">subscribe</a>,
+        <li>Candidate entries MUST be announced on <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a>(<a href="mailto:public-html-media-request@w3.org">subscribe</a>,
           <a href="http://lists.w3.org/Archives/Public/public-html-media/">archives</a>) so they can be discussed and evaluated for compliance before being added to the
           registry.</li>
       </ol>
-      <p>If a registration fails to satisfy a mandatory requirement specified above, then it may be removed from the registry (without prejudice).
+      <p>If a registration fails to satisfy a mandatory requirement specified above, then it MAY be removed from the registry (without prejudice).
     </section>
 
     <section id="registry">
@@ -163,5 +168,6 @@
         </tbody>
       </table>
     </section>
+    <section id="conformance"></section>
   </body>
 </html>
