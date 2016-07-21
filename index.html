@@ -447,7 +447,7 @@ table.simple {
   "useExperimentalStyles": true,
   "shortName": "media-source",
   "edDraftURI": "http://w3c.github.io/media-source/",
-  "publishDate": "2016-07-12",
+  "publishDate": "2016-07-20",
   "previousMaturity": "CR",
   "previousPublishDate": "2015-07-05",
   "editors": [
@@ -589,6 +589,8 @@ table.simple {
       "title": "Media Source Extensions Byte Stream Format Registry",
       "href": "byte-stream-format-registry.html",
       "authors": [
+        "Matthew Wolenetz",
+        "Jerry Smith",
         "Aaron Colwell"
       ],
       "publisher": "W3C"
@@ -604,7 +606,7 @@ table.simple {
     }
   }
 }</script></head>
-  <body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
+  <body class="h-entry toc-inline" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
       
         
@@ -616,7 +618,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
   
-  <h2 id="w3c-editor-s-draft-12-july-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-07-12">12 July 2016</time></h2>
+  <h2 id="w3c-editor-s-draft-20-july-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-07-20">20 July 2016</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -951,7 +953,7 @@ table.simple {
 
           <dt id="init-segment">Initialization Segment</dt>
           <dd>
-            <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of <a href="#media-segment">media segments</a>. This includes codec initialization data, <a href="#track-id">Track ID</a> mappings for multiplexed segments, and timestamp offsets (e.g. edit lists).</p>
+            <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of <a href="#media-segment">media segments</a>. This includes codec initialization data, <a href="#track-id">Track ID</a> mappings for multiplexed segments, and timestamp offsets (e.g., edit lists).</p>
             <div class="note"><div class="note-title marker" aria-level="4" role="heading" id="h-note1"><span>Note</span></div><p class="">The <a href="#byte-stream-format-specs">byte stream format specifications</a> in the byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>] contain format specific examples.</p></div>
 
           </dd><dt id="media-segment">Media Segment</dt>
@@ -1076,9 +1078,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-showing">"showing"</a></code> or <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-hidden">"hidden"</a></code> text track(s).
           </p>
           <p><a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in this list <em class="rfc2119" title="MUST">MUST</em> appear in the same order as they appear in
-            the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute. (e.g., If only sourceBuffers[0] and
+            the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute; e.g., if only sourceBuffers[0] and
             sourceBuffers[3] are in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>, then activeSourceBuffers[0] <em class="rfc2119" title="MUST">MUST</em>
-            equal sourceBuffers[0] and activeSourceBuffers[1] <em class="rfc2119" title="MUST">MUST</em> equal sourceBuffers[3].)
+            equal sourceBuffers[0] and activeSourceBuffers[1] <em class="rfc2119" title="MUST">MUST</em> equal sourceBuffers[3].
           </p>
           <div class="note"><div class="note-title marker" aria-level="4" role="heading" id="h-note7"><span>Note</span></div><p class="">The <a href="#active-source-buffer-changes">Changes to selected/enabled track state</a> section describes how this attribute gets
             updated.</p></div>
@@ -1239,7 +1241,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">start</td><td class="prmType"><code>double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">end</td><td class="prmType"><code>double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>void</code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute is not <code><a href="#idl-def-ReadyState.open">"open"</a></code> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute equals true on any <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If <var>start</var> is negative or greater than <var>end</var>, then throw a <code>TypeError</code> exception and abort these steps.</li>
             <li>Set <var><a href="#live-seekable-range">live seekable range</a></var> to be a new <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#normalized-timeranges-object">normalized TimeRanges object</a> containing a single range whose start position is <var>start</var> and end position is <var>end</var>.
           </li></ol></dd><dt><dfn data-dfn-for="mediasource" data-dfn-type="dfn" id="dom-mediasource-clearliveseekablerange" data-idl=""><code>clearLiveSeekableRange</code></dfn></dt><dd>
@@ -1248,7 +1249,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           
         <div><em>No parameters.</em></div><div><em>Return type: </em><code>void</code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute is not <code><a href="#idl-def-ReadyState.open">"open"</a></code> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute equals true on any <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If <var><a href="#live-seekable-range">live seekable range</a></var> contains a range, then set <var><a href="#live-seekable-range">live seekable range</a></var> to be a new empty <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code> object.
           </li></ol></dd><dt><dfn data-dfn-for="mediasource" data-dfn-type="dfn" id="dom-mediasource-istypesupported" data-idl=""><code>isTypeSupported</code></dfn>, static</dt><dd>
           <p>Check to see whether the <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> is capable of creating <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects for the specified MIME type.</p>
@@ -2152,7 +2152,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   <ul>
                     <li>The number of audio, video, and text tracks match what was in the first <a href="#init-segment">initialization segment</a>.</li>
                     <li>The codecs for each track, match what was specified in the first <a href="#init-segment">initialization segment</a>.</li>
-                    <li>If more than one track for a single type are present (ie 2 audio tracks), then the <a href="#track-id">Track IDs</a> match the ones in the
+                    <li>If more than one track for a single type are present (e.g., 2 audio tracks), then the <a href="#track-id">Track IDs</a> match the ones in the
                       first <a href="#init-segment">initialization segment</a>.</li>
                   </ul>
                 </li>
@@ -2735,8 +2735,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Let <var>overlapped frame</var> be the <a href="#coded-frame">coded frame</a> in <var>track buffer</var> with a <a href="#presentation-interval">presentation interval</a> that contains <var>presentation timestamp</var>.
             </li>
             <li>Update <var>presentation timestamp</var> and <var>decode timestamp</var> to the nearest audio sample timestamp based on sample rate of the
-              audio in <var>overlapped frame</var>. If a timestamp is equidistant from both audio sample timestamps, then use the higher timestamp. (eg.
-              floor(x * sample_rate + 0.5) / sample_rate).
+              audio in <var>overlapped frame</var>. If a timestamp is equidistant from both audio sample timestamps, then use the higher timestamp (e.g.,
+              <code>floor(x * sample_rate + 0.5) / sample_rate</code>).
               <div class="note"><div class="note-title marker" aria-level="5" role="heading" id="h-note39"><span>Note</span></div><div class="">
                 <p>For example, given the following values:</p>
                 <ul>
@@ -2868,8 +2868,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <p>The event handler for the <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> event.</p>
         </dd><dt><dfn data-dfn-for="sourcebufferlist" data-dfn-type="dfn" id="dom-sourcebufferlist-onremovesourcebuffer" data-idl=""><code>onremovesourcebuffer</code></dfn> of type <span class="idlAttrType">EventHandler</span></dt><dd>
           <p>The event handler for the <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> event.</p>
+
         </dd></dl></section><section typeof="bibo:Chapter" resource="#methods-2" property="bibo:hasPart"><h3 id="methods-2" resource="#methods-2"><span property="xhv:role" resource="xhv:heading">Methods</span></h3><dl class="methods" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList"><dt><dfn data-dfn-type="dfn" id="dfn-sourcebuffer"><code>SourceBuffer</code></dfn></dt><dd>
-          <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e. []).</p>
+          <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e., []).</p>
 
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">index</td><td class="prmType"><code>unsigned long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>getter</code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
@@ -2923,8 +2924,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </dd><dt><dfn data-dfn-for="videoplaybackquality" data-dfn-type="dfn" id="dom-videoplaybackquality-corruptedvideoframes" data-idl=""><code>corruptedVideoFrames</code></dfn> of type <span class="idlAttrType">unsigned long</span>, readonly       </dt><dd>
           <p>The total number of corrupted frames that have been detected.</p>
         </dd><dt><dfn data-dfn-for="videoplaybackquality" data-dfn-type="dfn" id="dom-videoplaybackquality-totalframedelay" data-idl=""><code>totalFrameDelay</code></dfn> of type <span class="idlAttrType">double</span>, readonly       </dt><dd>
-          <p>The sum of all <a href="#displayed-frame-delay">displayed frame delays</a> for all displayed frames. (i.e., Frames included in the <code><a href="#dom-videoplaybackquality-totalvideoframes">totalVideoFrames</a></code> count, but not in the <code><a href="#dom-videoplaybackquality-droppedvideoframes">droppedVideoFrames</a></code>
-            count.</p>
+          <p>The sum of all <a href="#displayed-frame-delay">displayed frame delays</a> for all displayed frames. (i.e., frames included in the <code><a href="#dom-videoplaybackquality-totalvideoframes">totalVideoFrames</a></code> count, but not in the <code><a href="#dom-videoplaybackquality-droppedvideoframes">droppedVideoFrames</a></code> count.</p>
         </dd></dl></section></div>
     </section>
 
@@ -2994,7 +2994,7 @@ interface <span class="idlInterfaceID">TrackDefault</span> {
         </dd><dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-bytestreamtrackid" data-idl=""><code>byteStreamTrackID</code></dfn> of type <span class="idlAttrType">DOMString</span>, readonly       </dt><dd>
           <p>The decimal string representation of the <a href="#track-id">Track ID</a> that identifies the specific
             track that this object <em class="rfc2119" title="SHOULD">SHOULD</em> apply to. An empty string indicates that this object can be
-            used for any track of the appropriate type. (i.e. any <a href="#idl-def-audiotrack-partial-1" class="internalDFN" data-link-type="dfn"><code>AudioTrack</code></a> if
+            used for any track of the appropriate type (e.g., any <a href="#idl-def-audiotrack-partial-1" class="internalDFN" data-link-type="dfn"><code>AudioTrack</code></a> if
             <code><a href="#dom-trackdefault-type">type</a></code> equals <code><a href="#idl-def-TrackDefaultType.audio">"audio"</a></code>).</p>
         </dd><dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-language" data-idl=""><code>language</code></dfn> of type <span class="idlAttrType">DOMString</span>, readonly       </dt><dd>
           <p>The default language to use when an <a href="#init-segment">initialization segment</a> does not contain language
@@ -3030,8 +3030,9 @@ interface <span class="idlInterfaceID"><a data-lt="TrackDefaultList" href="#dom-
               by the accessor methods.</li>
           </ol></dd></dl></section><section typeof="bibo:Chapter" resource="#attributes-5" property="bibo:hasPart"><h3 id="attributes-5" resource="#attributes-5"><span property="xhv:role" resource="xhv:heading">Attributes</span></h3><dl class="attributes" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList"><dt><dfn data-dfn-for="trackdefaultlist" data-dfn-type="dfn" id="dom-trackdefaultlist-length" data-idl=""><code>length</code></dfn> of type <span class="idlAttrType">unsigned long</span>, readonly       </dt><dd>
           <p>Indicates the number of <a href="#dfn-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> objects in the list.</p>
+
         </dd></dl></section><section typeof="bibo:Chapter" resource="#methods-4" property="bibo:hasPart"><h3 id="methods-4" resource="#methods-4"><span property="xhv:role" resource="xhv:heading">Methods</span></h3><dl class="methods" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList"><dt><dfn data-dfn-type="dfn"><code>TrackDefault</code></dfn></dt><dd>
-          <p>Allows the TrackDefault objects in the list to be accessed with an array operator (i.e. []).</p>
+          <p>Allows the TrackDefault objects in the list to be accessed with an array operator (i.e., []).</p>
 
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">index</td><td class="prmType"><code>unsigned long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>getter</code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
@@ -3219,7 +3220,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
               <p>The number and type of tracks are not consistent.</p>
               <div class="note"><div class="note-title marker" aria-level="3" role="heading" id="h-note51"><span>Note</span></div><p class="">For example, if the first <a href="#init-segment">initialization segment</a> has 2 audio tracks and 1 video track, then all <a href="#init-segment">initialization segments</a> that follow it in the byte stream <em class="rfc2119" title="MUST">MUST</em> describe 2 audio tracks and 1 video track.</p></div>
             </li>
-            <li><a href="#track-id">Track IDs</a> are not the same across <a href="#init-segment">initialization segments</a>, for segments describing multiple tracks of a single type. (e.g. 2 audio tracks).</li>
+            <li><a href="#track-id">Track IDs</a> are not the same across <a href="#init-segment">initialization segments</a>, for segments describing multiple tracks of a single type (e.g., 2 audio tracks).</li>
             <li>
               <p>Codecs changes across <a href="#init-segment">initialization segments</a>.</p>
               <div class="note"><div class="note-title marker" aria-level="3" role="heading" id="h-note52"><span>Note</span></div><p class="">For example, a byte stream that starts with an <a href="#init-segment">initialization segment</a> that specifies a single AAC track and later contains an <a href="#init-segment">initialization segment</a> that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects.</p></div>
@@ -3243,7 +3244,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
           <ol>
             <li>Map all timestamps to the same <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#media-timeline">media timeline</a>.</li>
             <li>Support seamless playback of <a href="#media-segment">media segments</a> having a timestamp gap smaller than the audio frame size. User agents <em class="rfc2119" title="MUST NOT">MUST NOT</em> reflect these gaps in the <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> attribute.
-              <div class="note"><div class="note-title marker" aria-level="3" role="heading" id="h-note55"><span>Note</span></div><p class="">This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g. Vorbis).</p></div>
+              <div class="note"><div class="note-title marker" aria-level="3" role="heading" id="h-note55"><span>Note</span></div><p class="">This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g., Vorbis).</p></div>
             </li>
           </ol>
         </li>
@@ -3251,7 +3252,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
           following conditions:
           <ol>
             <li>The number and type (audio, video, text, etc.) of all tracks in the <a href="#media-segment">media segments</a> are not identified.</li>
-            <li>The decoding capabilities needed to decode each track (i.e. codec and codec parameters) are not provided.</li>
+            <li>The decoding capabilities needed to decode each track (i.e., codec and codec parameters) are not provided.</li>
             <li>Encryption parameters necessary to decrypt the content (except the encryption key itself) are not provided for all encrypted tracks.</li>
             <li>All information necessary to decode and render the earliest <a href="#random-access-point">random access point</a> in the sequence of <a href="#media-segment">media segments</a> and all subsequence samples in the sequence
               (in presentation time) are not provided. This includes in particular,
@@ -3396,7 +3397,17 @@ partial interface <span class="idlInterfaceID">URL</span> {
         </thead>
         <tbody>
           <tr>
-            <td>12 July 2016</td>
+            <td>20 July 2016</td>
+            <td>
+              <ul>
+                <li>Issue 59 - Correct i.e. and e.g. style.</li>
+                <li>Issue 115 - Updated byte stream format registry editors in localbiblio.</li>
+                <li>Issue 118 - Remove the restriction on not 'updating' from {set,clear}LiveSeekableRange().</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/8b2b4f87d6ee637855fd5405a75b345c8c31a4cc/index.html">12 July 2016</a></td>
             <td>
               <ul>
                 <li>Issue 52 - Add conformance section and update relevant key words.</li>
@@ -4235,5 +4246,5 @@ partial interface <span class="idlInterfaceID">URL</span> {
 </dd><dt id="bib-TYPED-ARRAYS">[TYPED-ARRAYS]</dt><dd>David Herman; Kenneth Russell. <a href="https://www.khronos.org/registry/typedarray/specs/latest/" property="dc:requires"><cite>Typed Array Specification</cite></a>. 26 June 2013. Khronos Working Draft. URL: <a href="https://www.khronos.org/registry/typedarray/specs/latest/" property="dc:requires">https://www.khronos.org/registry/typedarray/specs/latest/</a>
 </dd><dt id="bib-WHATWG-STREAMS-API">[WHATWG-STREAMS-API]</dt><dd>Domenic Denicola; Takeshi Yoshino. <a href="https://streams.spec.whatwg.org/" property="dc:requires"><cite>WHATWG Streams API</cite></a>. URL: <a href="https://streams.spec.whatwg.org/" property="dc:requires">https://streams.spec.whatwg.org/</a>
 </dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart"><h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.2 </span>Informative references</span></h3><dl class="bibliography" resource=""><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt><dd>Bob Lund; Silvia Pfeiffer. <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. URL: <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references">http://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
-</dd><dt id="bib-MSE-REGISTRY">[MSE-REGISTRY]</dt><dd>Aaron Colwell. <a href="byte-stream-format-registry.html" property="dc:references"><cite>Media Source Extensions Byte Stream Format Registry</cite></a>. URL: <a href="byte-stream-format-registry.html" property="dc:references">byte-stream-format-registry.html</a>
+</dd><dt id="bib-MSE-REGISTRY">[MSE-REGISTRY]</dt><dd>Matthew Wolenetz; Jerry Smith; Aaron Colwell. <a href="byte-stream-format-registry.html" property="dc:references"><cite>Media Source Extensions Byte Stream Format Registry</cite></a>. URL: <a href="byte-stream-format-registry.html" property="dc:references">byte-stream-format-registry.html</a>
 </dd></dl></section></section><p role="navigation" id="back-to-top"><a href="#toc"><abbr title="Back to Top">↑</abbr></a></p><script src="https://www.w3.org/scripts/TR/2016/fixup.js"></script></body></html>

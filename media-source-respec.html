@@ -8,7 +8,7 @@
     <script src="media-source.js" class="remove"></script>
     <script class="remove">
       var respecConfig = {
-      // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use ED.
+      // specification status (e.g., WD, LCWD, NOTE, etc.). If in doubt use ED.
       specStatus: "ED",
       useExperimentalStyles: true,
 
@@ -21,7 +21,7 @@
       // if this is a LCWD, uncomment and set the end of its review period
       // lcEnd: "2009-08-05",
 
-      publishDate: "2016-07-12",
+      publishDate: "2016-07-20",
       previousMaturity: "CR",
       previousPublishDate: "2015-07-05",
 
@@ -156,7 +156,7 @@
               title: "Media Source Extensions Byte Stream Format Registry",
               href: "byte-stream-format-registry.html",
               //href: "http://www.w3.org/2013/12/byte-stream-format-registry/",
-              authors: ["Aaron Colwell"],
+              authors: ["Matthew Wolenetz", "Jerry Smith", "Aaron Colwell"],
               publisher: "W3C",
           },
           "INBANDTRACKS": {
@@ -289,7 +289,7 @@
 
           <dt id="init-segment">Initialization Segment</dt>
           <dd>
-            <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of <a def-id="media-segments"></a>. This includes codec initialization data, <a def-id="track-id"></a> mappings for multiplexed segments, and timestamp offsets (e.g. edit lists).</p>
+            <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of <a def-id="media-segments"></a>. This includes codec initialization data, <a def-id="track-id"></a> mappings for multiplexed segments, and timestamp offsets (e.g., edit lists).</p>
             <p class="note">The <a def-id="byte-stream-format-specs"></a> in the byte stream format registry [[MSE-REGISTRY]] contain format specific examples.</p>
 
           </dd><dt id="media-segment">Media Segment</dt>
@@ -414,9 +414,9 @@ interface MediaSource : EventTarget {
             <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> text track(s).
           </p>
           <p><a>SourceBuffer</a> objects in this list MUST appear in the same order as they appear in
-            the <a def-id="sourceBuffers"></a> attribute. (e.g., If only sourceBuffers[0] and
+            the <a def-id="sourceBuffers"></a> attribute; e.g., if only sourceBuffers[0] and
             sourceBuffers[3] are in <a def-id="activeSourceBuffers"></a>, then activeSourceBuffers[0] MUST
-            equal sourceBuffers[0] and activeSourceBuffers[1] MUST equal sourceBuffers[3].)
+            equal sourceBuffers[0] and activeSourceBuffers[1] MUST equal sourceBuffers[3].
           </p>
           <p class="note">The <a href="#active-source-buffer-changes">Changes to selected/enabled track state</a> section describes how this attribute gets
             updated.</p>
@@ -576,7 +576,6 @@ interface MediaSource : EventTarget {
 
           <ol class="method-algorithm">
             <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If <var>start</var> is negative or greater than <var>end</var>, then throw a <a def-id="type-error"></a> exception and abort these steps.</li>
             <li>Set <a def-id="live-seekable-range"></a> to be a new <a def-id="normalized-timeranges-object"></a> containing a single range whose start position is <var>start</var> and end position is <var>end</var>.
           </li></ol>
@@ -585,7 +584,6 @@ interface MediaSource : EventTarget {
 
           <ol class="method-algorithm">
             <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If <a def-id="live-seekable-range"></a> contains a range, then set <a def-id="live-seekable-range"></a> to be a new empty <a def-id="timeranges"></a> object.
           </li></ol>
         <div><em>No parameters.</em></div><div><em>Return type: </em><code>void</code></div></dd><dt><dfn><code>isTypeSupported</code></dfn>, static</dt><dd>
@@ -1489,7 +1487,7 @@ interface MediaSource : EventTarget {
                   <ul>
                     <li>The number of audio, video, and text tracks match what was in the first <a def-id="init-segment"></a>.</li>
                     <li>The codecs for each track, match what was specified in the first <a def-id="init-segment"></a>.</li>
-                    <li>If more than one track for a single type are present (ie 2 audio tracks), then the <a def-id="track-ids"></a> match the ones in the
+                    <li>If more than one track for a single type are present (e.g., 2 audio tracks), then the <a def-id="track-ids"></a> match the ones in the
                       first <a def-id="init-segment"></a>.</li>
                   </ul>
                 </li>
@@ -2072,8 +2070,8 @@ interface MediaSource : EventTarget {
             <li>Let <var>overlapped frame</var> be the <a def-id="coded-frame"></a> in <var>track buffer</var> with a <a def-id="presentation-interval"></a> that contains <var>presentation timestamp</var>.
             </li>
             <li>Update <var>presentation timestamp</var> and <var>decode timestamp</var> to the nearest audio sample timestamp based on sample rate of the
-              audio in <var>overlapped frame</var>. If a timestamp is equidistant from both audio sample timestamps, then use the higher timestamp. (eg.
-              floor(x * sample_rate + 0.5) / sample_rate).
+              audio in <var>overlapped frame</var>. If a timestamp is equidistant from both audio sample timestamps, then use the higher timestamp (e.g.,
+              <code>floor(x * sample_rate + 0.5) / sample_rate</code>).
               <div class="note">
                 <p>For example, given the following values:</p>
                 <ul>
@@ -2205,8 +2203,9 @@ interface MediaSource : EventTarget {
           <p>The event handler for the <a def-id="addsourcebuffer"></a> event.</p>
         </dd><dt><dfn><code>onremovesourcebuffer</code></dfn> of type <span class="idlAttrType"><a>EventHandler</a></span></dt><dd>
           <p>The event handler for the <a def-id="removesourcebuffer"></a> event.</p>
+
         </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList"><dt><dfn><code>SourceBuffer</code></dfn></dt><dd>
-          <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e. []).</p>
+          <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e., []).</p>
 
           <ol class="method-algorithm">
             <li>If <var>index</var> is greater than or equal to the <a def-id="SourceBufferList-length"></a> attribute then return undefined and abort these steps.</li>
@@ -2260,8 +2259,7 @@ interface MediaSource : EventTarget {
         </dd><dt><dfn><code>corruptedVideoFrames</code></dfn> of type <span class="idlAttrType"><a>unsigned long</a></span>, readonly       </dt><dd>
           <p>The total number of corrupted frames that have been detected.</p>
         </dd><dt><dfn><code>totalFrameDelay</code></dfn> of type <span class="idlAttrType"><a>double</a></span>, readonly       </dt><dd>
-          <p>The sum of all <a def-id="displayed-frame-delays"></a> for all displayed frames. (i.e., Frames included in the <a def-id="totalVideoFrames"></a> count, but not in the <a def-id="droppedVideoFrames"></a>
-            count.</p>
+          <p>The sum of all <a def-id="displayed-frame-delays"></a> for all displayed frames. (i.e., frames included in the <a def-id="totalVideoFrames"></a> count, but not in the <a def-id="droppedVideoFrames"></a> count.</p>
         </dd></dl></section></div>
     </section>
 
@@ -2331,7 +2329,7 @@ interface TrackDefault {
         </dd><dt><dfn><code>byteStreamTrackID</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt><dd>
           <p>The decimal string representation of the <a def-id="track-id"></a> that identifies the specific
             track that this object SHOULD apply to. An empty string indicates that this object can be
-            used for any track of the appropriate type. (i.e. any <a>AudioTrack</a> if
+            used for any track of the appropriate type (e.g., any <a>AudioTrack</a> if
             <a def-id="TrackDefault-type"></a> equals <a def-id="TrackDefaultType-audio"></a>).</p>
         </dd><dt><dfn><code>language</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt><dd>
           <p>The default language to use when an <a def-id="init-segment"></a> does not contain language
@@ -2367,8 +2365,9 @@ interface TrackDefaultList {
           </ol>
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">trackDefaults</td><td class="prmType"><code>sequence&lt;TrackDefault&gt; = []</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table></dd></dl></section><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList"><dt><dfn><code>length</code></dfn> of type <span class="idlAttrType"><a>unsigned long</a></span>, readonly       </dt><dd>
           <p>Indicates the number of <a>TrackDefault</a> objects in the list.</p>
+
         </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList"><dt><dfn><code>TrackDefault</code></dfn></dt><dd>
-          <p>Allows the TrackDefault objects in the list to be accessed with an array operator (i.e. []).</p>
+          <p>Allows the TrackDefault objects in the list to be accessed with an array operator (i.e., []).</p>
 
           <ol class="method-algorithm">
             <li>If <var>index</var> is greater than or equal to the <a def-id="TrackDefaultList-length"></a> attribute then return undefined and abort these steps.</li>
@@ -2554,7 +2553,7 @@ partial interface URL {
               <p>The number and type of tracks are not consistent.</p>
               <p class="note">For example, if the first <a def-id="init-segment"></a> has 2 audio tracks and 1 video track, then all <a def-id="init-segments"></a> that follow it in the byte stream MUST describe 2 audio tracks and 1 video track.</p>
             </li>
-            <li><a def-id="track-ids"></a> are not the same across <a def-id="init-segments"></a>, for segments describing multiple tracks of a single type. (e.g. 2 audio tracks).</li>
+            <li><a def-id="track-ids"></a> are not the same across <a def-id="init-segments"></a>, for segments describing multiple tracks of a single type (e.g., 2 audio tracks).</li>
             <li>
               <p>Codecs changes across <a def-id="init-segments"></a>.</p>
               <p class="note">For example, a byte stream that starts with an <a def-id="init-segment"></a> that specifies a single AAC track and later contains an <a def-id="init-segment"></a> that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a>SourceBuffer</a> objects.</p>
@@ -2578,7 +2577,7 @@ partial interface URL {
           <ol>
             <li>Map all timestamps to the same <a def-id="media-timeline"></a>.</li>
             <li>Support seamless playback of <a def-id="media-segments"></a> having a timestamp gap smaller than the audio frame size. User agents MUST NOT reflect these gaps in the <a def-id="buffered"></a> attribute.
-              <p class="note">This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g. Vorbis).</p>
+              <p class="note">This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g., Vorbis).</p>
             </li>
           </ol>
         </li>
@@ -2586,7 +2585,7 @@ partial interface URL {
           following conditions:
           <ol>
             <li>The number and type (audio, video, text, etc.) of all tracks in the <a def-id="media-segments"></a> are not identified.</li>
-            <li>The decoding capabilities needed to decode each track (i.e. codec and codec parameters) are not provided.</li>
+            <li>The decoding capabilities needed to decode each track (i.e., codec and codec parameters) are not provided.</li>
             <li>Encryption parameters necessary to decrypt the content (except the encryption key itself) are not provided for all encrypted tracks.</li>
             <li>All information necessary to decode and render the earliest <a def-id="random-access-point"></a> in the sequence of <a def-id="media-segments"></a> and all subsequence samples in the sequence
               (in presentation time) are not provided. This includes in particular,
@@ -2722,7 +2721,17 @@ partial interface URL {
         </thead>
         <tbody>
           <tr>
-            <td>12 July 2016</td>
+            <td>20 July 2016</td>
+            <td>
+              <ul>
+                <li>Issue 59 - Correct i.e. and e.g. style.</li>
+                <li>Issue 115 - Updated byte stream format registry editors in localbiblio.</li>
+                <li>Issue 118 - Remove the restriction on not 'updating' from {set,clear}LiveSeekableRange().</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/8b2b4f87d6ee637855fd5405a75b345c8c31a4cc/index.html">12 July 2016</a></td>
             <td>
               <ul>
                 <li>Issue 52 - Add conformance section and update relevant key words.</li>

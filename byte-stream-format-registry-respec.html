@@ -11,7 +11,7 @@
       specStatus: "ED",
 
       // the specification's short name, as in http://www.w3.org/TR/short-name/
-      shortName: "",
+      shortName: "media-source", <!-- The registry does not have its own short name. -->
 
       // if there a publicly available Editor's Draft, this is the link
       edDraftURI: "https://w3c.github.io/media-source/byte-stream-format-registry.html",
@@ -25,7 +25,12 @@
       // editors, add as many as you like
       // only "name" is required
       editors:  [
-      { name: "Aaron Colwell",  url: "", company: "Google Inc.", companyURL: "http://www.google.com/" },
+      { name: "Matthew Wolenetz",  url: "",
+      company: "Google Inc.", companyURL: "http://www.google.com/" },
+      { name: "Jerry Smith", url: "",
+      company: "Microsoft Corporation", companyURL: "http://www.microsoft.com/" },
+      { name: "Aaron Colwell (until April 2015)",  url: "",
+      company: "Google Inc.", companyURL: "http://www.google.com/" },
       ],
 
       mseDefGroupName: "byte-stream-format-registry",
@@ -34,7 +39,7 @@
       ],
 
       // name of the WG
-      wg:           "HTML Working Group",
+      wg:           "HTML Media Extensions Working Group",
 
       // URI of the public WG page
       wgURI:        "http://www.w3.org/html/wg/",
@@ -53,21 +58,42 @@
 
       scheme: "https",
 
+      otherLinks: [{
+      key: 'Repository',
+      data: [{
+          value: 'We are on GitHub',
+          href: 'https://github.com/w3c/media-source/'
+        }, {
+          value: 'File a bug',
+          href: 'https://github.com/w3c/media-source/issues'
+        }, {
+          value: 'Commit history',
+          href: 'https://github.com/w3c/media-source/commits/gh-pages/byte-stream-format-registry-respec.html'
+        }]
+      },{
+        key: 'Mailing list',
+        data: [{
+          value: 'public-html-media@w3.org',
+          href: 'https://lists.w3.org/Archives/Public/public-html-media/'
+        }]
+      }],
+
       preProcess: [ mediaSourcePreProcessor ],
 
       // Empty definitions for objects declared in the document are here to
       // prevent error messages from being displayed for references to these objects.
-      definitionMap: {
-      },
+      definitionMap: {},
 
       postProcess: [ mediaSourcePostProcessor ]
       };
     </script>
     <!-- script to register bugs -->
+    <!-- Disabled unless/until it supports GitHub issues.
     <script src="https://w3c.github.io/webcomponents/assets/scripts/bug-assist.js"></script>
     <meta name="bug.short_desc" content="[MSE] ">
     <meta name="bug.product" content="HTML WG">
     <meta name="bug.component" content="Media Source Extensions">
+    -->
 
     <link rel="stylesheet" href="mse.css">
 
@@ -80,6 +106,15 @@
     </style>
   </head>
   <body>
+
+    <section id="abstract">
+      <p>This specification defines the byte stream formats for use with the <a def-id="mse-spec"></a> specification.</p>
+    </section>
+
+    <section id="sotd">
+      <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>; there may also be open bugs in the <a href="http://w3.org/brief/Mjcw">previous bug tracker</a>.</p>
+      <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should join the mailing list mentioned below and take part in the discussions.</p>
+    </section>
 
     <section id="purpose">
       <h2>Purpose</h2>
@@ -102,19 +137,19 @@
     <section id="entry-requirements">
       <h2>Registration Entry Requirements</h2>
       <ol>
-        <li>Each entry must include a unique MIME-type/subtype pair. If the byte stream format is derived-from an existing file format, then it should use the
+        <li>Each entry MUST include a unique MIME-type/subtype pair. If the byte stream format is derived-from an existing file format, then it SHOULD use the
           MIME-type/subtype pairs typically used for the file format.</li>
-        <li>Each entry must include a <a def-id="generate-timestamps-flag"></a> value that must be used by
+        <li>Each entry MUST include a <a def-id="generate-timestamps-flag"></a> value that MUST be used by
             <a class="externalDFN">SourceBuffer</a> when handling the byte stream format.</li>
-        <li>Each entry must include a link that references a publically available specification. It is recommended that such a specification be made available
+        <li>Each entry MUST include a link that references a publically available specification. It is recommended that such a specification be made available
           without cost (other than reasonable shipping and handling if not available by online means).</li>
-        <li>Each entry must comply with all requirements outlined in the <a def-id="byte-stream-formats-section"></a>
+        <li>Each entry MUST comply with all requirements outlined in the <a def-id="byte-stream-formats-section"></a>
           of the <a def-id="mse-spec"></a> specification.</li>
-        <li>Candidate entries must be announced on <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a>(<a href="mailto:public-html-media-request@w3.org">subscribe</a>,
+        <li>Candidate entries MUST be announced on <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a>(<a href="mailto:public-html-media-request@w3.org">subscribe</a>,
           <a href="http://lists.w3.org/Archives/Public/public-html-media/">archives</a>) so they can be discussed and evaluated for compliance before being added to the
           registry.</li>
       </ol>
-      <p>If a registration fails to satisfy a mandatory requirement specified above, then it may be removed from the registry (without prejudice).
+      <p>If a registration fails to satisfy a mandatory requirement specified above, then it MAY be removed from the registry (without prejudice).
     </section>
 
     <section id="registry">
@@ -163,5 +198,6 @@
         </tbody>
       </table>
     </section>
+    <section id="conformance"></section>
   </body>
 </html>

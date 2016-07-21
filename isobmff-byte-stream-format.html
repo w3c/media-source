@@ -9,46 +9,48 @@
 
     
     <!-- script to register bugs -->
+    <!-- Disabled unless/until it supports GitHub issues.
     <script src="https://w3c.github.io/webcomponents/assets/scripts/bug-assist.js"></script>
     <meta name="bug.short_desc" content="[MSE] ">
     <meta name="bug.product" content="HTML WG">
     <meta name="bug.component" content="Media Source Extensions">
+    -->
 
     <style>/* --- ISSUES/NOTES --- */
-div.issue-title, div.note-title , div.warning-title {
+div.issue-title, div.note-title , div.ednote-title, div.warning-title {
     padding-right:  1em;
     min-width: 7.5em;
     color: #b9ab2d;
 }
 div.issue-title { color: #e05252; }
-div.note-title { color: #2b2; }
+div.note-title, div.ednote-title { color: #2b2; }
 div.warning-title { color: #f22; }
-div.issue-title span, div.note-title span, div.warning-title span {
+div.issue-title span, div.note-title span, div.ednote-title span, div.warning-title span {
     text-transform: uppercase;
 }
-div.note, div.issue, div.warning {
+div.note, div.issue, div.ednote, div.warning {
     margin-top: 1em;
     margin-bottom: 1em;
 }
-.note > p:first-child, .issue > p:first-child, .warning > p:first-child { margin-top: 0 }
-.issue, .note, .warning {
+.note > p:first-child, .ednote > p:first-child, .issue > p:first-child, .warning > p:first-child { margin-top: 0 }
+.issue, .note, .ednote, .warning {
     padding: .5em;
     border-left-width: .5em;
     border-left-style: solid;
 }
-div.issue, div.note , div.warning {
+div.issue, div.note , div.ednote,  div.warning {
     padding: 1em 1.2em 0.5em;
     margin: 1em 0;
     position: relative;
     clear: both;
 }
-span.note, span.issue, span.warning { padding: .1em .5em .15em; }
+span.note, span.ednote, span.issue, span.warning { padding: .1em .5em .15em; }
 
 .issue {
     border-color: #e05252;
     background: #fbe9e9;
 }
-.note {
+.note, .ednote {
     border-color: #52e052;
     background: #e9fbe9;
 }
@@ -70,6 +72,15 @@ span.note, span.issue, span.warning { padding: .1em .5em .15em; }
     padding-right: .3em;
     vertical-align: top;
     margin-top: -0.5em;
+}
+
+li.task-list-item {
+    list-style: none;
+}
+
+input.task-list-item-checkbox {
+    margin: 0 0.35em 0.25em -1.6em;
+    vertical-align: middle;
 }
 </style><link rel="stylesheet" href="mse.css">
     <style>
@@ -192,24 +203,135 @@ table.simple {
         display: none;
     }
 }
-</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head>
+</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/W3C-ED"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--><script id="initialUserConfig" type="application/json">{
+  "specStatus": "ED",
+  "shortName": "media-source",
+  "edDraftURI": "https://w3c.github.io/media-source/isobmff-byte-stream-format.html",
+  "prevVersion": "http://www.w3.org/2013/12/byte-stream-format-registry/isobmff-byte-stream-format.html",
+  "editors": [
+    {
+      "name": "Matthew Wolenetz",
+      "url": "",
+      "company": "Google Inc.",
+      "companyURL": "http://www.google.com/"
+    },
+    {
+      "name": "Jerry Smith",
+      "url": "",
+      "company": "Microsoft Corporation",
+      "companyURL": "http://www.microsoft.com/"
+    },
+    {
+      "name": "Mark Watson",
+      "url": "",
+      "company": "Netflix Inc.",
+      "companyURL": "http://www.netflix.com/"
+    },
+    {
+      "name": "Aaron Colwell (until April 2015)",
+      "url": "",
+      "company": "Google Inc.",
+      "companyURL": "http://www.google.com/"
+    },
+    {
+      "name": "Adrian Bateman (until April 2015)",
+      "url": "",
+      "company": "Microsoft Corporation",
+      "companyURL": "http://www.microsoft.com/"
+    }
+  ],
+  "mseDefGroupName": "isobmff-byte-stream-format",
+  "mseUnusedGroupNameExcludeList": [
+    "media-source"
+  ],
+  "mseContributors": [
+    "Chris Poole",
+    "Cyril Concolato",
+    "David Singer",
+    "Jer Noble",
+    "Jerry Smith",
+    "Joe Steele",
+    "John Simmons",
+    "Kevin Streeter",
+    "Michael Thornburgh",
+    "Steven Robertson"
+  ],
+  "wg": "HTML Media Extensions Working Group",
+  "wgURI": "http://www.w3.org/html/wg/",
+  "wgPublicList": "public-html-media",
+  "wgPatentURI": "http://www.w3.org/2004/01/pp-impl/40318/status",
+  "noIDLIn": true,
+  "scheme": "https",
+  "otherLinks": [
+    {
+      "key": "Repository",
+      "data": [
+        {
+          "value": "We are on GitHub",
+          "href": "https://github.com/w3c/media-source/"
+        },
+        {
+          "value": "File a bug",
+          "href": "https://github.com/w3c/media-source/issues"
+        },
+        {
+          "value": "Commit history",
+          "href": "https://github.com/w3c/media-source/commits/gh-pages/isobmff-byte-stream-format-respec.html"
+        }
+      ]
+    },
+    {
+      "key": "Mailing list",
+      "data": [
+        {
+          "value": "public-html-media@w3.org",
+          "href": "https://lists.w3.org/Archives/Public/public-html-media/"
+        }
+      ]
+    }
+  ],
+  "preProcess": [
+    null
+  ],
+  "definitionMap": {
+    "movie-fragment relative addressing": [
+      "movie-fragment-relative-addressing"
+    ]
+  },
+  "postProcess": [
+    null
+  ],
+  "localBiblio": {
+    "INBANDTRACKS": {
+      "title": "Sourcing In-band Media Resource Tracks from Media Containers into HTML",
+      "href": "http://dev.w3.org/html5/html-sourcing-inband-tracks/",
+      "authors": [
+        "Bob Lund",
+        "Silvia Pfeiffer"
+      ],
+      "publisher": "W3C"
+    }
+  }
+}</script></head>
   <body class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
   <p>
       
         
-            <a href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
+            <a class="logo" href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/Icons/w3c_home" alt="W3C"></a>
+            
+            
         
       
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">ISO BMFF Byte Stream Format</h1>
   
-  <h2 id="w3c-editor-s-draft-20-march-2015"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2015-03-20">20 March 2015</time></h2>
+  <h2 id="w3c-editor-s-draft-20-july-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-07-20">20 July 2016</time></h2>
   <dl>
     
       <dt>This version:</dt>
       <dd><a class="u-url" href="https://w3c.github.io/media-source/isobmff-byte-stream-format.html">https://w3c.github.io/media-source/isobmff-byte-stream-format.html</a></dd>
       <dt>Latest published version:</dt>
-      <dd><a href="http://www.w3.org/TR//">http://www.w3.org/TR//</a></dd>
+      <dd><a href="http://www.w3.org/TR/media-source/">http://www.w3.org/TR/media-source/</a></dd>
     
     
       <dt>Latest editor's draft:</dt>
@@ -224,17 +346,71 @@ table.simple {
     
     
     <dt>Editors:</dt>
-    <dd class="p-author h-card vcard" property="bibo:editor" resource="_:editor0"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Aaron Colwell</span>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.google.com/">Google Inc.</a></span>
+    <dd class="p-author h-card vcard" property="bibo:editor" resource="_:editor0"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Matthew Wolenetz</span>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.google.com/">Google Inc.</a></span>
 <span property="rdf:rest" resource="_:editor1"></span>
 </dd>
-<dd class="p-author h-card vcard" resource="_:editor1"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Adrian Bateman</span>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.microsoft.com/">Microsoft Corporation</a></span>
+<dd class="p-author h-card vcard" resource="_:editor1"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Jerry Smith</span>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.microsoft.com/">Microsoft Corporation</a></span>
 <span property="rdf:rest" resource="_:editor2"></span>
 </dd>
 <dd class="p-author h-card vcard" resource="_:editor2"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Mark Watson</span>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.netflix.com/">Netflix Inc.</a></span>
+<span property="rdf:rest" resource="_:editor3"></span>
+</dd>
+<dd class="p-author h-card vcard" resource="_:editor3"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Aaron Colwell (until April 2015)</span>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.google.com/">Google Inc.</a></span>
+<span property="rdf:rest" resource="_:editor4"></span>
+</dd>
+<dd class="p-author h-card vcard" resource="_:editor4"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Adrian Bateman (until April 2015)</span>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.microsoft.com/">Microsoft Corporation</a></span>
 <span property="rdf:rest" resource="rdf:nil"></span>
 </dd>
 
     
+    
+      
+        
+          <dt>Repository:</dt>
+          
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/media-source/">
+                      We are on GitHub
+                    </a>
+                  </dd>
+                
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/media-source/issues">
+                      File a bug
+                    </a>
+                  </dd>
+                
+             
+                
+                  <dd>
+                    <a href="https://github.com/w3c/media-source/commits/gh-pages/isobmff-byte-stream-format-respec.html">
+                      Commit history
+                    </a>
+                  </dd>
+                
+             
+          
+        
+      
+        
+          <dt>Mailing list:</dt>
+          
+             
+                
+                  <dd>
+                    <a href="https://lists.w3.org/Archives/Public/public-html-media/">
+                      public-html-media@w3.org
+                    </a>
+                  </dd>
+                
+             
+          
+        
+      
     
   </dl>
   
@@ -244,7 +420,7 @@ table.simple {
     
       <p class="copyright">
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
-        2015
+        2016
         
         <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
         (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
@@ -254,13 +430,15 @@ table.simple {
         <abbr title="World Wide Web Consortium">W3C</abbr> <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
         <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
         
-          <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a>
+          
+            <a rel="license" href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a>
+          
         
         rules apply.
       </p>
     
   
-  <hr>
+  <hr title="Separator for header">
 </div>
     <section id="abstract" class="introductory" property="dc:abstract"><h2 id="h-abstract" resource="#h-abstract"><span property="xhv:role" resource="xhv:heading">Abstract</span></h2><p>
       This specification defines a <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> byte stream format specification based on the ISO Base Media
@@ -270,75 +448,87 @@ table.simple {
     
       
         <p>
-          <em>This section describes the status of this document at the time of its publication.
-          Other documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the
-          latest revision of this technical report can be found in the <a href="http://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at
-          http://www.w3.org/TR/.</em>
+          <em>This section describes the status of this document at the time of its publication. Other documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the latest revision of this technical report can be found in the <a href="http://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at http://www.w3.org/TR/.</em>
         </p>
         
-        
-        
-        <p>
-          This document was published by the <a href="http://www.w3.org/html/wg/">HTML Working Group</a> as an Editor's Draft.
           
           
-            If you wish to make comments regarding this document, please send them to 
-            <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a> 
-            (<a href="mailto:public-html-media-request@w3.org?subject=subscribe">subscribe</a>,
-            <a href="http://lists.w3.org/Archives/Public/public-html-media/">archives</a>).
+      <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>; there may also be open bugs in the <a href="http://w3.org/brief/Mjcw">previous bug tracker</a>.</p>
+      <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should join the mailing list mentioned below and take part in the discussions.</p>
+    
           
           
-          
-          
-          
-            
-            All comments are welcome.
-            
-          
-        </p>
-        
-        
-        
           <p>
-            Publication as an Editor's Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr>
-            Membership. This is a draft document and may be updated, replaced or obsoleted by other
-            documents at any time. It is inappropriate to cite this document as other than work in
-            progress.
-          </p>
-        
-        
-        
-        <p>
-          
-            This document was produced by a group operating under the 
-            <a id="sotd_patent" property="w3p:patentRules" href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent
-            Policy</a>.
-          
-          
-          
+            This document was published by the <a href="http://www.w3.org/html/wg/">HTML Media Extensions Working Group</a> as an Editor's Draft.
             
-              <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="http://www.w3.org/2004/01/pp-impl/40318/status" rel="disclosure">public list of any patent
-              disclosures</a> 
             
-            made in connection with the deliverables of the group; that page also includes
-            instructions for disclosing a patent. An individual who has actual knowledge of a patent
-            which the individual believes contains
-            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential
-            Claim(s)</a> must disclose the information in accordance with
-            <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section
-            6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
-          
-          
-        </p>
-        
-          <p>This document is governed by the <a id="w3c_process_revision" href="http://www.w3.org/2014/Process-20140801/">1 August 2014 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
+              If you wish to make comments regarding this document, please send them to
+              <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a>
+              (<a href="mailto:public-html-media-request@w3.org?subject=subscribe">subscribe</a>,
+              <a href="http://lists.w3.org/Archives/Public/public-html-media/">archives</a>).
+            
+            
+            
+            
+            
+              
+              All comments are welcome.
+              
+            
           </p>
-        
+          
+          
+          
+          
+            <p>
+              Publication as an Editor's Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr>
+              Membership. This is a draft document and may be updated, replaced or obsoleted by other
+              documents at any time. It is inappropriate to cite this document as other than work in
+              progress.
+            </p>
+          
+          
+          
+          <p>
+            
+              This document was produced by
+              
+              a group
+               operating under the
+              <a id="sotd_patent" property="w3p:patentRules" href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent
+              Policy</a>.
+            
+            
+            
+              
+                <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="http://www.w3.org/2004/01/pp-impl/40318/status" rel="disclosure">public list of any patent
+                disclosures</a>
+              
+              made in connection with the deliverables of
+              
+              the group; that page also includes
+              
+              instructions for disclosing a patent. An individual who has actual knowledge of a patent
+              which the individual believes contains
+              <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential
+              Claim(s)</a> must disclose the information in accordance with
+              <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section
+              6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+            
+            
+          </p>
+          
+            <p>This document is governed by the <a id="w3c_process_revision" href="http://www.w3.org/2015/Process-20150901/">1 September 2015 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
+            </p>
+          
+          
         
       
     
   
-</section><section id="toc"><h2 class="introductory" id="h-toc" resource="#h-toc"><span property="xhv:role" resource="xhv:heading">Table of Contents</span></h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#iso-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#iso-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#iso-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">6. </span>Acknowledgments</a></li><li class="tocline"><a href="#revision-history" class="tocxref"><span class="secno">7. </span>Revision History</a></li><li class="tocline"><a href="#references" class="tocxref"><span class="secno">A. </span>References</a><ul class="toc"><li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">A.1 </span>Informative references</a></li></ul></li></ul></section>
+</section><section id="toc"><h2 class="introductory" id="h-toc" resource="#h-toc"><span property="xhv:role" resource="xhv:heading">Table of Contents</span></h2><ul class="toc" role="directory"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#iso-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#iso-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#iso-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#conformance" class="tocxref"><span class="secno">6. </span>Conformance</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">7. </span>Acknowledgments</a></li><li class="tocline"><a href="#revision-history" class="tocxref"><span class="secno">8. </span>Revision History</a></li><li class="tocline"><a href="#references" class="tocxref"><span class="secno">A. </span>References</a><ul class="toc"><li class="tocline"><a href="#normative-references" class="tocxref"><span class="secno">A.1 </span>Normative references</a></li><li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">A.2 </span>Informative references</a></li></ul></li></ul></section>
+
+    
 
     <section id="introduction" typeof="bibo:Chapter" resource="#introduction" property="bibo:hasPart">
       <!--OddPage--><h2 id="h-introduction" resource="#h-introduction"><span property="xhv:role" resource="xhv:heading"><span class="secno">1. </span>Introduction</span></h2>
@@ -351,39 +541,38 @@ table.simple {
     <section id="mime-parameters" typeof="bibo:Chapter" resource="#mime-parameters" property="bibo:hasPart">
       <!--OddPage--><h2 id="h-mime-parameters" resource="#h-mime-parameters"><span property="xhv:role" resource="xhv:heading"><span class="secno">2. </span>MIME-type parameters</span></h2>
       <p>This section specifies the parameters that can be used in the MIME-type passed to <code><a href="index.html#widl-MediaSource-isTypeSupported-boolean-DOMString-type">isTypeSupported()</a></code> or <code><a href="index.html#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code>.</p>
-      <p>MIME-types for this specification must conform to the rules outlined for "audio/mp4" and "video/mp4" in <a href="http://tools.ietf.org/html/rfc6381">RFC 6381</a>.
+      <p>MIME-types for this specification <em class="rfc2119" title="MUST">MUST</em> conform to the rules outlined for "audio/mp4" and "video/mp4" in <a href="http://tools.ietf.org/html/rfc6381">RFC 6381</a>.
       </p>
-      <div class="note"><div class="note-title" aria-level="3" role="heading" id="h-note1"><span>Note</span></div><div class="">Implementations may only implement a subset of the codecs and profiles mentioned in the RFC.</div></div>
+      <div class="note"><div class="note-title" aria-level="3" role="heading" id="h-note1"><span>Note</span></div><div class="">Implementations <em class="rfc2119" title="MAY">MAY</em> only implement a subset of the codecs and profiles mentioned in the RFC.</div></div>
     </section>
 
     <section id="iso-init-segments" typeof="bibo:Chapter" resource="#iso-init-segments" property="bibo:hasPart">
       <!--OddPage--><h2 id="h-iso-init-segments" resource="#h-iso-init-segments"><span property="xhv:role" resource="xhv:heading"><span class="secno">3. </span>Initialization Segments</span></h2>
       <p>An ISO BMFF <a href="index.html#init-segment">initialization segment</a> is defined in this specification as a single File Type Box (<span class="iso-box">ftyp</span>) followed by a single Movie Box (<span class="iso-box">moov</span>).</p>
 
-      <p>The user agent must run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if any of the following conditions are met:</p>
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if any of the following conditions are met:</p>
       <ol>
         <li>A File Type Box contains a <span class="iso-var">major_brand</span> or <span class="iso-var">compatible_brand</span> that the user agent does not support.</li>
         <li>A box or field in the Movie Box is encountered that violates the requirements mandated
           by the <span class="iso-var">major_brand</span> or one of the
           <span class="iso-var">compatible_brands</span> in the File Type Box.</li>
-        <li>The tracks in the Movie Box contain samples (i.e. the <span class="iso-var">entry_count</span> in the
+        <li>The tracks in the Movie Box contain samples (i.e., the <span class="iso-var">entry_count</span> in the
           <span class="iso-box">stts</span>, <span class="iso-box">stsc</span> or <span class="iso-box">stco</span> boxes are not set to zero).</li>
         <li>A Movie Extends (<span class="iso-box">mvex</span>) box is not contained in the Movie (<span class="iso-box">moov</span>) box to indicate that Movie Fragments are to be expected.</li>
       </ol>
-      <p>The user agent must support setting the offset from media composition time to movie presentation time by handling an Edit Box (<span class="iso-box">edts</span>) containing a single Edit List Box
-        (<span class="iso-box">elst</span>) that contains a single edit with media rate one. This edit may have a duration of 0 (indicating that it spans all subsequent media) or may have a non-zero duration
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> support setting the offset from media composition time to movie presentation time by handling an Edit Box (<span class="iso-box">edts</span>) containing a single Edit List Box
+        (<span class="iso-box">elst</span>) that contains a single edit with media rate one. This edit <em class="rfc2119" title="MAY">MAY</em> have a duration of 0 (indicating that it spans all subsequent media) or <em class="rfc2119" title="MAY">MAY</em> have a non-zero duration
         (indicating the total duration of the movie including fragments).</p>
 
-      <p>The user agent must support parameter sets (e.g., PPS/SPS) stored in the sample entry (as defined for avc1/avc2), and should support parameter
-        sets stored inband in the samples themselves (as defined for avc3/avc4).</p>
-      <div class="note"><div class="note-title" aria-level="3" role="heading" id="h-note2"><span>Note</span></div><p class="">For maximum content interoperability, user agents are strongly advised to support both inband and out-of-band storage of the SPS and PPS.</p></div>
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> support codec configurations stored out-of-band in the sample entry, and for codecs which allow codec configurations stored inband in the samples themselves, the user agent <em class="rfc2119" title="SHOULD">SHOULD</em> support codec configurations stored inband.</p>
+      <div class="note"><div class="note-title" aria-level="3" role="heading" id="h-note2"><span>Note</span></div><p class="">For example, for codecs which include SPS and PPS parameter sets, for maximum content interoperability, user agents are strongly advised to support both inband (e.g., as defined for avc3/avc4) and out-of-band (e.g., as defined for avc1/2) storage of the SPS and PPS.</p></div>
 
       <p>Valid top-level boxes such as <span class="iso-box">pdin</span>, <span class="iso-box">free</span>, and <span class="iso-box">sidx</span> are
-        allowed to appear before the <span class="iso-box">moov</span> box. These boxes must be accepted and ignored by the user agent and are not
+        allowed to appear before the <span class="iso-box">moov</span> box. These boxes <em class="rfc2119" title="MUST">MUST</em> be accepted and ignored by the user agent and are not
         considered part of the <a href="index.html#init-segment">initialization segment</a> in this specification.</p>
 
-      <p>The user agent must source attribute values for id, kind, label and language for <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#audiotrack">AudioTrack</a></code>, <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#videotrack">VideoTrack</a></code> and
-        <code><a href="http://www.w3.org/TR/html5/embedded-content-0.html#texttrack">TextTrack</a></code> objects as described for MPEG-4 ISOBMFF in the in-band tracks spec [<cite><a class="bibref" href="#bib-INBANDTRACKS">INBANDTRACKS</a></cite>].</p>
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> source attribute values for id, kind, label and language for <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code>, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> and
+        <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> objects as described for MPEG-4 ISOBMFF in the in-band tracks spec [<cite><a class="bibref" href="#bib-INBANDTRACKS">INBANDTRACKS</a></cite>].</p>
     </section>
 
     <section id="iso-media-segments" typeof="bibo:Chapter" resource="#iso-media-segments" property="bibo:hasPart">
@@ -391,16 +580,16 @@ table.simple {
       <p>An ISO BMFF <a href="index.html#media-segment">media segment</a> is defined in this specification as one optional
         Segment Type Box (<span class="iso-box">styp</span>) followed by a single Movie Fragment Box
         (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>). 
-        If the Segment Type Box is not present, the segment must conform to the brands listed in the
+        If the Segment Type Box is not present, the segment <em class="rfc2119" title="MUST">MUST</em> conform to the brands listed in the
         File Type Box (<span class="iso-box">ftyp</span>) in the <a href="index.html#init-segment">initialization segment</a>.</p>
       <p>Valid top-level boxes defined in <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a> other than <span class="iso-box">ftyp</span>,
         <span class="iso-box">moov</span>, <span class="iso-box">styp</span>, <span class="iso-box">moof</span>, and <span class="iso-box">mdat</span> are allowed to appear between the end of an
         <a href="index.html#init-segment">initialization segment</a> or <a href="index.html#media-segment">media segment</a> and before the beginning of a new <a href="index.html#media-segment">media segment</a>.
-        These boxes must be accepted and ignored by the user agent and are not considered part of the <a href="index.html#media-segment">media segment</a> in this
+        These boxes <em class="rfc2119" title="MUST">MUST</em> be accepted and ignored by the user agent and are not considered part of the <a href="index.html#media-segment">media segment</a> in this
         specification.
       </p>
 
-      <p>The user agent must run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if any of the following conditions are met:</p>
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if any of the following conditions are met:</p>
       <ol>
         <li>A box or field in the Movie Fragment Box is encountered that violates the requirements mandated
           by the <span class="iso-var">major_brand</span> or one of the
@@ -417,7 +606,7 @@ table.simple {
 	<li>Inband parameter sets are not present in the appropriate samples and parameter sets are not present in the last initialization segment appended.</li>
       </ol>
 
-      <p>A Movie Fragment Box uses <dfn id="movie-fragment-relative-addressing">movie-fragment relative addressing</dfn> 
+      <p>A Movie Fragment Box uses <dfn id="movie-fragment-relative-addressing" data-dfn-type="dfn">movie-fragment relative addressing</dfn> 
         when the first Track Fragment Run(<span class="iso-box">trun</span>) box in each Track Fragment Box
         has the <span class="iso-var">data-offset-present</span> flag set and either of the following
         conditions are met:</p>
@@ -435,13 +624,24 @@ table.simple {
       <p>A <a href="index.html#random-access-point">random access point</a> as defined in this specification corresponds to a Stream Access Point of type 1 or 2 as defined in Annex I of <a href="http://standards.iso.org/ittf/PubliclyAvailableStandards/c061988_ISO_IEC_14496-12_2012.zip">ISO/IEC 14496-12</a>.</p>
     </section>
 
+    <section id="conformance" typeof="bibo:Chapter" resource="#conformance" property="bibo:hasPart"><!--OddPage--><h2 id="h-conformance" resource="#h-conformance"><span property="xhv:role" resource="xhv:heading"><span class="secno">6. </span>Conformance</span></h2>
+<p>
+  As well as sections marked as non-normative, all authoring guidelines, diagrams, examples,
+  and notes in this specification are non-normative. Everything else in this specification is
+  normative.
+</p>
+<p id="respecRFC2119">The key words <em class="rfc2119" title="MAY">MAY</em>, <em class="rfc2119" title="MUST">MUST</em>, and <em class="rfc2119" title="SHOULD">SHOULD</em> are 
+  to be interpreted as described in [<cite><a class="bibref" href="#bib-RFC2119">RFC2119</a></cite>].
+</p>
+</section>
+
     <section id="acknowledgements" typeof="bibo:Chapter" resource="#acknowledgements" property="bibo:hasPart">
-      <!--OddPage--><h2 id="h-acknowledgements" resource="#h-acknowledgements"><span property="xhv:role" resource="xhv:heading"><span class="secno">6. </span>Acknowledgments</span></h2>
+      <!--OddPage--><h2 id="h-acknowledgements" resource="#h-acknowledgements"><span property="xhv:role" resource="xhv:heading"><span class="secno">7. </span>Acknowledgments</span></h2>
       The editors would like to thank Chris Poole, Cyril Concolato, David Singer, Jer Noble, Jerry Smith, Joe Steele, John Simmons, Kevin Streeter, Michael Thornburgh, and Steven Robertson for their contributions to this specification.
     </section>
 
     <section id="revision-history" typeof="bibo:Chapter" resource="#revision-history" property="bibo:hasPart">
-      <!--OddPage--><h2 id="h-revision-history" resource="#h-revision-history"><span property="xhv:role" resource="xhv:heading"><span class="secno">7. </span>Revision History</span></h2>
+      <!--OddPage--><h2 id="h-revision-history" resource="#h-revision-history"><span property="xhv:role" resource="xhv:heading"><span class="secno">8. </span>Revision History</span></h2>
       <table class="old-table">
         <thead>
           <tr>
@@ -451,7 +651,17 @@ table.simple {
         </thead>
         <tbody>
           <tr>
-            <td>20 March 2015</td>
+            <td>20 July 2016</td>
+            <td>
+              <ul>
+                <li>Issue 115 - Updated editors and updated to use RFC2119 key word mark-up and reference.</li>
+                <li>Issue 50 - Moved avc1-4 to non-normative note.</li>
+                <li>Issue 49 - Added headers, SOTD. Removed file-a-bugzilla link.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/ec35e38422eb1a5f114cffb61ddf6ea99acf6985/isobmff-byte-stream-format.html">20 March 2015</a></td>
             <td>
               <ul>
                 <li>Bug 28066 - Changed Movie Header Box to Movie Box.</li>
@@ -491,5 +701,6 @@ table.simple {
       </table>
   
 
-</section><form id="bug-assist-form" action="//www.w3.org/Bugs/Public/enter_bug.cgi" target="_blank">See a problem? Select text and <input type="submit" accesskey="f" value="file a bug" style="font-family: Tahoma, sans-serif; font-size: 10px;"><input type="hidden" name="comment" value=""><input type="hidden" name="short_desc" value="[MSE] "><input type="hidden" name="product" value="HTML WG"><input type="hidden" name="component" value="Media Source Extensions">.</form><section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart"><!--OddPage--><h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>References</span></h2><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart"><h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.1 </span>Informative references</span></h3><dl class="bibliography" resource=""><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt><dd>Bob Lund; Silvia Pfeiffer. <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. URL: <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references">http://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
+</section><section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart"><!--OddPage--><h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>References</span></h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart"><h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.1 </span>Normative references</span></h3><dl class="bibliography" resource=""><dt id="bib-RFC2119">[RFC2119]</dt><dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires">https://tools.ietf.org/html/rfc2119</a>
+</dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart"><h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.2 </span>Informative references</span></h3><dl class="bibliography" resource=""><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt><dd>Bob Lund; Silvia Pfeiffer. <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. URL: <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references">http://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
 </dd></dl></section></section></body></html>
