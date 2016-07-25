@@ -20,7 +20,7 @@
       // if this is a LCWD, uncomment and set the end of its review period
       // lcEnd: "2009-08-05",
 
-      publishDate: "2016-07-20",
+      publishDate: "2016-07-25",
       previousMaturity: "CR",
       previousPublishDate: "2015-07-05",
 
@@ -185,11 +185,10 @@
         <p>The following features are <strong>at risk</strong> and may be removed:</p>
         <ul>
           <li><p>The <a def-id="appendStream">appendStream</a> method on the <a href="#sourcebuffer">sourceBuffer</a> object and algorithm steps that are used only by it.</p></li>
-		  <li><p>The <a href="#videoplaybackquality">VideoPlaybackQuality</a> object and the <a href="#htmlvideoelement-extensions">HTMLVideoElement Extensions</a> that use it.</p></li>
+          <li><p>The <a href="#videoplaybackquality">VideoPlaybackQuality</a> object and the <a href="#htmlvideoelement-extensions">HTMLVideoElement Extensions</a> that use it.</p></li>
           <li><p>The <a def-id="totalFrameDelay">totalFrameDelay</a> attribute on the <a href="#videoplaybackquality">VideoPlaybackQuality</a> object.</p></li>
           <li><p>The <a href=#idl-def-TrackDefault>TrackDefault</a> object and its related objects, attributes, methods and algorithms, including: <a href=#idl-def-TrackDefaultList>TrackDefaultList</a>, <a href=#widl-SourceBuffer-trackDefaults>SourceBuffer.trackDefaults</a>, <a href=#sourcebuffer-default-track-language>Default track language</a>, <a href=#sourcebuffer-default-track-label>Default track label</a>, and <a href=#sourcebuffer-default-track-kinds>Default track kinds</a>. Implementations still MUST at least include trivial versions of these default track language/label/kinds algorithms that are used by the <a href=#sourcebuffer-init-segment-received>initialization segment received algorithm</a>. These trivial versions would behave as follows: Trivial default track language and Trivial default track label algorithms MUST return an empty string, and Trivial default kinds algorithm MUST return a sequence with a single empty string element in it.</p></li>
-		  </ul>
-
+        </ul>
         <p>
           For this specification to exit the Candidate Recommendation stage,
           two independent implementations as detailed in the <a href="http://dev.w3.org/html5/decision-policy/public-permissive-exit-criteria.html">CR Exit Criteria (Public Permissive version 3)</a> document
@@ -1942,14 +1941,21 @@
                 <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
                 <li>If <var>presentation timestamp</var> is less than <a def-id="appendWindowStart"></a>, then set the <a def-id="need-RAP-flag"></a> to true, drop the
                   coded frame, and jump to the top of the loop to start processing the next coded frame.
-                  <p class="note">Some implementations MAY choose to collect some of these coded frames that are outside the <a def-id="append-window"></a> and use them
+                  <p class="note">Some implementations MAY choose to collect some of these coded frames with <var>presentation timestamp</var> less than <a def-id="appendWindowStart"></a> and use them
                     to generate a splice at the first coded frame that has a <a def-id="presentation-timestamp"></a> greater than or equal to <a def-id="appendWindowStart"></a> even if
                     that frame is not a <a def-id="random-access-point"></a>. Supporting this requires multiple decoders or faster than real-time decoding so for now
                     this behavior will not be a normative requirement.
                   </p>
                 </li>
                 <li>If <var>frame end timestamp</var> is greater than <a def-id="appendWindowEnd"></a>, then set the <a def-id="need-RAP-flag"></a> to true, drop the
-                  coded frame, and jump to the top of the loop to start processing the next coded frame.</li>
+                  coded frame, and jump to the top of the loop to start processing the next coded frame.
+                  <p class="note">Some implementations MAY choose to collect coded frames with <var>presentation timestamp</var> less than <a def-id="appendWindowEnd"></a> and <var>frame end timestamp</var> greater than <a def-id="appendWindowEnd"></a> and use them
+                  to generate a splice across the portion of the collected coded frames within the append window at time of collection, and the beginning portion of later processed frames which only partially overlap the end of the collected coded frames.
+                    Supporting this requires multiple decoders or faster than real-time decoding so for now
+                    this behavior will not be a normative requirement.
+                    In conjunction with collecting coded frames that span <a def-id="appendWindowStart"></a>, implementations MAY thus support gapless audio splicing.
+                  </p>
+                </li>
                 <li>If the <a def-id="need-RAP-flag"></a> on <var>track buffer</var> equals true, then run the following steps:
                   <ol>
                     <li>If the coded frame is not a <a def-id="random-access-point"></a>, then drop the coded frame and jump to the top of the loop to start
@@ -2822,7 +2828,15 @@
         </thead>
         <tbody>
           <tr>
-            <td>20 July 2016</td>
+            <td>25 July 2016</a></td>
+            <td>
+              <ul>
+                <li>Issue 97 - Add note that splicing around <a def-id="appendWindowEnd"></a> is also allowed.</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="https://rawgit.com/w3c/media-source/70b66f9a34b38a689e0cf006f0b8b4b9533ba929/index.html">20 July 2016</a></td>
             <td>
               <ul>
                 <li>Issue 59 - Correct i.e. and e.g. style.</li>
@@ -2843,13 +2857,13 @@
             <td><a href="https://rawgit.com/w3c/media-source/d8f901f22e756dcc9f6ecd5d1216862b9f602623/index.html">09 June 2016</a></td>
             <td>
               <ul>
-                <li>Issue  91 - Change TrackDefault.kinds to TrackDefault.getKinds.</li>
-				<li>Add TrackDefaults to the at risk feature list.</li>
+                <li>Issue 91 - Change TrackDefault.kinds to TrackDefault.getKinds.</li>
+                <li>           Add TrackDefaults to the at risk feature list.</li>
               </ul>
             </td>
           </tr>
           <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/cc317c86c0718dd7ff673757fe563087fbaccb6a/index.html">08 June 2016</a></td>		  
+            <td><a href="https://rawgit.com/w3c/media-source/cc317c86c0718dd7ff673757fe563087fbaccb6a/index.html">08 June 2016</a></td>
             <td>
               <ul>
                 <li>Issue  5 - Add support for customizing <a def-id="hme-seekable"></a> on live streams.</li>
