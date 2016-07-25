@@ -588,10 +588,19 @@
           </ol>
         </dd>
 
-        <dt>void setLiveSeekableRange(double start, double end)</dt>
+        <dt>void setLiveSeekableRange()</dt>
         <dd>
           <p>Updates the <a def-id="live-seekable-range"></a> variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <a def-id="hme-seekable"></a> behavior.</p>
-
+          <dl class='parameters'>
+            <dt>double start</dt>
+            <dd>
+              The start of the range, in seconds measured from <a def-id="presentation-start-time"></a>. While set, and if <a def-id="duration"></a> equals positive Infinity, <a def-id="hme-seekable"></a> will return a non-empty TimeRanges object with a lowest range start timestamp no greater than <var>start</var>.
+            </dd>
+            <dt>double end</dt>
+            <dd>
+              The end of range, in seconds measured from <a def-id="presentation-start-time"></a>. While set, and if <a def-id="duration"></a> equals positive Infinity, <a def-id="hme-seekable"></a> will return a non-empty TimeRanges object with a highest range end timestamp no less than <var>end</var>.
+            </dd>
+          </dl>
           <ol class="method-algorithm">
             <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If <var>start</var> is negative or greater than <var>end</var>, then throw a <a def-id="type-error"></a> exception and abort these steps.</li>
@@ -1162,10 +1171,19 @@
           </ol>
         </dd>
 
-        <dt>void remove(double start, unrestricted double end)</dt>
+        <dt>void remove()</dt>
         <dd>
           <p>Removes media for a specific time range.</p>
-
+          <dl class='parameters'>
+            <dt>double start</dt>
+            <dd>
+              The start of the removal range, in seconds measured from <a def-id="presentation-start-time"></a>.
+            </dd>
+            <dt>unrestricted double end</dt>
+            <dd>
+              The end of the removal range, in seconds measured from <a def-id="presentation-start-time"></a>.
+            </dd>
+          </dl>
           <ol class="method-algorithm">
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
@@ -1520,8 +1538,8 @@
           <p>Follow these steps when a caller needs to initiate a JavaScript visible range removal
             operation that blocks other SourceBuffer updates:</p>
           <ol>
-            <li>Let <var>start</var> equal the starting <a def-id="presentation-timestamp"></a> for the removal range.</li>
-            <li>Let <var>end</var> equal the end <a def-id="presentation-timestamp"></a> for the removal range.</li>
+            <li>Let <var>start</var> equal the starting <a def-id="presentation-timestamp"></a> for the removal range, in seconds measured from <a def-id="presentation-start-time"></a>.</li>
+            <li>Let <var>end</var> equal the end <a def-id="presentation-timestamp"></a> for the removal range, in seconds measured from <a def-id="presentation-start-time"></a>.</li>
             <li>Set the <a def-id="updating"></a> attribute to true.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
             <li>Return control to the caller and run the rest of the steps asynchronously.</li>
@@ -2832,6 +2850,7 @@
               <ul>
                 <li>Issue 97 - Add note that splicing around <a def-id="appendWindowEnd"></a> is also allowed.</li>
                 <li>Issue 106 - Remove extraneous step from duration change algorithm.</li>
+                <li>Issue 105 - Clarify the unit is seconds for remove() and setLiveSeekableRange() parameters.</li>
               </ul>
             </td>
           </tr>
