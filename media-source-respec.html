@@ -512,20 +512,21 @@
             <li>If the <var>SourceBuffer audioTracks list</var> is not empty, then run the following steps:
               <ol>
                 <li>Let <var>HTMLMediaElement audioTracks list</var> equal the <a def-id="audio-track-list"></a> object returned by the <a def-id="audiotracks"></a> attribute on the HTMLMediaElement.</li>
-                <li>Let the <var>removed enabled audio track flag</var> equal false.</li>
                 <li>For each <a def-id="audio-track"></a> object in the <var>SourceBuffer audioTracks list</var>, run the following steps:
                   <ol>
                     <li>Set the <a def-id="audiotrack-sourceBuffer"></a> attribute on the <a def-id="audio-track"></a> object to null.</li>
-                    <li>If the <a def-id="audiotrack-enabled"></a> attribute on the <a def-id="audio-track"></a> object is true, then
-                      set the <var>removed enabled audio track flag</var> to true.</li>
                     <li>Remove the <a def-id="audio-track"></a> object from the <var>HTMLMediaElement audioTracks list</var>.</li>
-                    <li><a def-id="Queue-and-fire-removetrack"></a> at the <var>HTMLMediaElement audioTracks list</var>.</li>
+                    <p class="note">
+                      This should trigger <a def-id="audio-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the <a def-id="audio-track"></a> object, at the <var>HTMLMediaElement audioTracks list</var>.
+                      If the <a def-id="audiotrack-enabled"></a> attribute on the <a def-id="audio-track"></a> object was true at the beginning of this removal step, then this should also trigger <a def-id="audio-track-list"></a> [[HTML51]] logic to <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="mediatracklist-change"></a> at the <var>HTMLMediaElement audioTracks list</var>
+                    </p>
                     <li>Remove the <a def-id="audio-track"></a> object from the <var>SourceBuffer audioTracks list</var>.</li>
-                    <li><a def-id="Queue-and-fire-removetrack"></a> at the <var>SourceBuffer audioTracks list</var>.</li>
+                    <p class="note">
+                      This should trigger <a def-id="audio-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the <a def-id="audio-track"></a> object, at the <var>SourceBuffer audioTracks list</var>.
+                      If the <a def-id="audiotrack-enabled"></a> attribute on the <a def-id="audio-track"></a> object was true at the beginning of this removal step, then this should also trigger <a def-id="audio-track-list"></a> [[HTML51]] logic to <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="mediatracklist-change"></a> at the <var>SourceBuffer audioTracks list</var>
+                    </p>
                   </ol>
                 </li>
-                <li>If the <var>removed enabled audio track flag</var> equals true, then <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the
-                  <var>HTMLMediaElement audioTracks list</var>.</li>
               </ol>
             </li>
 
@@ -533,20 +534,21 @@
             <li>If the <var>SourceBuffer videoTracks list</var> is not empty, then run the following steps:
               <ol>
                 <li>Let <var>HTMLMediaElement videoTracks list</var> equal the <a def-id="video-track-list"></a> object returned by the <a def-id="videotracks"></a> attribute on the HTMLMediaElement.</li>
-                <li>Let the <var>removed selected video track flag</var> equal false.</li>
                 <li>For each <a def-id="video-track"></a> object in the <var>SourceBuffer videoTracks list</var>, run the following steps:
                   <ol>
                     <li>Set the <a def-id="videotrack-sourceBuffer"></a> attribute on the <a def-id="video-track"></a> object to null.</li>
-                    <li>If the <a def-id="videotrack-selected"></a> attribute on the <a def-id="video-track"></a> object is true, then
-                      set the <var>removed selected video track flag</var> to true.</li>
                     <li>Remove the <a def-id="video-track"></a> object from the <var>HTMLMediaElement videoTracks list</var>.</li>
-                    <li><a def-id="Queue-and-fire-removetrack"></a> at the <var>HTMLMediaElement videoTracks list</var>.</li>
+                    <p class="note">
+                      This should trigger <a def-id="video-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the <a def-id="video-track"></a> object, at the <var>HTMLMediaElement videoTracks list</var>.
+                      If the <a def-id="videotrack-selected"></a> attribute on the <a def-id="video-track"></a> object was true at the beginning of this removal step, then this should also trigger <a def-id="video-track-list"></a> [[HTML51]] logic to <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="mediatracklist-change"></a> at the <var>HTMLMediaElement videoTracks list</var>
+                    </p>
                     <li>Remove the <a def-id="video-track"></a> object from the <var>SourceBuffer videoTracks list</var>.</li>
-                    <li><a def-id="Queue-and-fire-removetrack"></a> at the <var>SourceBuffer videoTracks list</var>.</li>
+                    <p class="note">
+                      This should trigger <a def-id="video-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the <a def-id="video-track"></a> object, at the <var>SourceBuffer videoTracks list</var>.
+                      If the <a def-id="videotrack-selected"></a> attribute on the <a def-id="video-track"></a> object was true at the beginning of this removal step, then this should also trigger <a def-id="video-track-list"></a> [[HTML51]] logic to <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="mediatracklist-change"></a> at the <var>SourceBuffer videoTracks list</var>
+                    </p>
                   </ol>
                 </li>
-                <li>If the <var>removed selected video track flag</var> equals true, then <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the
-                  <var>HTMLMediaElement videoTracks list</var>.</li>
               </ol>
             </li>
 
@@ -555,20 +557,21 @@
             <li>If the <var>SourceBuffer textTracks list</var> is not empty, then run the following steps:
               <ol>
                 <li>Let <var>HTMLMediaElement textTracks list</var> equal the <a def-id="text-track-list"></a> object returned by the <a def-id="texttracks"></a> attribute on the HTMLMediaElement.</li>
-                <li>Let the <var>removed enabled text track flag</var> equal false.</li>
                 <li>For each <a def-id="text-track"></a> object in the <var>SourceBuffer textTracks list</var>, run the following steps:
                   <ol>
                     <li>Set the <a def-id="texttrack-sourceBuffer"></a> attribute on the <a def-id="text-track"></a> object to null.</li>
-                    <li>If the <a def-id="texttrack-mode"></a> attribute on the <a def-id="text-track"></a> object is set to  <a def-id="texttrackmode-showing"></a> or
-                      <a def-id="texttrackmode-hidden"></a>, then set the <var>removed enabled text track flag</var> to true.</li>
                     <li>Remove the <a def-id="text-track"></a> object from the <var>HTMLMediaElement textTracks list</var>.</li>
-                    <li><a def-id="Queue-and-fire-removetrack"></a> at the <var>HTMLMediaElement textTracks list</var>.</li>
+                    <p class="note">
+                      This should trigger <a def-id="text-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-text-removetrack-with-track-attr-initialized-to"></a> the <a def-id="text-track"></a> object, at the <var>HTMLMediaElement textTracks list</var>.
+                      If the <a def-id="texttrack-mode"></a> attribute on the <a def-id="text-track"></a> object was <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> at the beginning of this removal step, then this should also trigger <a def-id="text-track-list"></a> [[HTML51]] logic to <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="texttracklist-change"></a> at the <var>HTMLMediaElement textTracks list</var>.
+                    </p>
                     <li>Remove the <a def-id="text-track"></a> object from the <var>SourceBuffer textTracks list</var>.</li>
-                    <li><a def-id="Queue-and-fire-removetrack"></a> at the <var>SourceBuffer textTracks list</var>.</li>
+                    <p class="note">
+                      This should trigger <a def-id="text-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-text-removetrack-with-track-attr-initialized-to"></a> the <a def-id="text-track"></a> object, at the <var>SourceBuffer textTracks list</var>.
+                      If the <a def-id="texttrack-mode"></a> attribute on the <a def-id="text-track"></a> object was <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> at the beginning of this removal step, then this should also trigger <a def-id="text-track-list"></a> [[HTML51]] logic to <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="texttracklist-change"></a> at the <var>SourceBuffer textTracks list</var>.
+                    </p>
                   </ol>
                 </li>
-                <li>If the <var>removed enabled text track flag</var> equals true, then <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="tracklist-change"></a> at the
-                  <var>HTMLMediaElement textTracks list</var>.</li>
               </ol>
             </li>
 
@@ -1644,11 +1647,13 @@
                           </ol>
                         </li>
                         <li>Add <var>new audio track</var> to the <a def-id="sourcebuffer-audioTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
-                        <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="audio-track-list"></a> object referenced by the
-                          <a def-id="sourcebuffer-audioTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
+                        <p class="note">
+                          This should trigger <a def-id="audio-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a> <var>new audio track</var>, at the <a def-id="audio-track-list"></a> object referenced by the <a def-id="sourcebuffer-audioTracks"></a> attribute on this <a>SourceBuffer</a> object.
+                        </p>
                         <li>Add <var>new audio track</var> to the <a def-id="audiotracks"></a> attribute on the HTMLMediaElement.</li>
-                        <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="audio-track-list"></a> object referenced by the <a def-id="audiotracks"></a>
-                          attribute on the HTMLMediaElement.</li>
+                        <p class="note">
+                          This should trigger <a def-id="audio-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a> <var>new audio track</var>, at the <a def-id="audio-track-list"></a> object referenced by the <a def-id="audiotracks"></a> attribute on the HTMLMediaElement.
+                        </p>
                       </ol>
                     </li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
@@ -1706,11 +1711,13 @@
                           </ol>
                         </li>
                         <li>Add <var>new video track</var> to the <a def-id="sourcebuffer-videoTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
-                        <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="sourcebuffer-videoTracks"></a> attribute
-                          on this <a>SourceBuffer</a> object.</li>
+                        <p class="note">
+                          This should trigger <a def-id="video-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a> <var>new video track</var>, at the <a def-id="video-track-list"></a> object referenced by the <a def-id="sourcebuffer-videoTracks"></a> attribute on this <a>SourceBuffer</a> object.
+                        </p>
                         <li>Add <var>new video track</var> to the <a def-id="videotracks"></a> attribute on the HTMLMediaElement.</li>
-                        <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="video-track-list"></a> object referenced by the <a def-id="videotracks"></a> attribute on the
-                          HTMLMediaElement.</li>
+                        <p class="note">
+                          This should trigger <a def-id="video-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a> <var>new video track</var>, at the <a def-id="video-track-list"></a> object referenced by the <a def-id="videotracks"></a> attribute on the HTMLMediaElement.
+                        </p>
                       </ol>
                     </li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
@@ -1765,11 +1772,13 @@
                           <a def-id="texttrackmode-hidden"></a>, then set <var>active track flag</var> to true.
                         </li>
                         <li>Add <var>new text track</var> to the <a def-id="sourcebuffer-textTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
-                        <li><a def-id="Queue-and-fire-addtrack"></a> at <a def-id="sourcebuffer-textTracks"></a> attribute
-                          on this <a>SourceBuffer</a> object.</li>
+                        <p class="note">
+                          This should trigger <a def-id="text-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-text-addtrack-with-track-attr-initialized-to"></a> <var>new text track</var>, at the <a def-id="text-track-list"></a> object referenced by the <a def-id="sourcebuffer-textTracks"></a> attribute on this <a>SourceBuffer</a> object.
+                        </p>
                         <li>Add <var>new text track</var> to the <a def-id="texttracks"></a> attribute on the HTMLMediaElement.</li>
-                        <li><a def-id="Queue-and-fire-addtrack"></a> at the <a def-id="text-track-list"></a> object referenced by the <a def-id="texttracks"></a> attribute on the
-                          HTMLMediaElement.</li>
+                        <p class="note">
+                          This should trigger <a def-id="text-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-text-addtrack-with-track-attr-initialized-to"></a> <var>new text track</var>, at the <a def-id="text-track-list"></a> object referenced by the <a def-id="texttracks"></a> attribute on the HTMLMediaElement.
+                        </p>
                       </ol>
                     </li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
