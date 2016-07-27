@@ -20,7 +20,10 @@
       // if this is a LCWD, uncomment and set the end of its review period
       // lcEnd: "2009-08-05",
 
-      publishDate: "2016-07-20",
+      /* Commented out to enable auto-updating of publishDate during respec execution
+      publishDate: "2016-07-26",
+      */
+
       previousMaturity: "CR",
       previousPublishDate: "2015-07-05",
 
@@ -185,11 +188,10 @@
         <p>The following features are <strong>at risk</strong> and may be removed:</p>
         <ul>
           <li><p>The <a def-id="appendStream">appendStream</a> method on the <a href="#sourcebuffer">sourceBuffer</a> object and algorithm steps that are used only by it.</p></li>
-		  <li><p>The <a href="#videoplaybackquality">VideoPlaybackQuality</a> object and the <a href="#htmlvideoelement-extensions">HTMLVideoElement Extensions</a> that use it.</p></li>
+          <li><p>The <a href="#videoplaybackquality">VideoPlaybackQuality</a> object and the <a href="#htmlvideoelement-extensions">HTMLVideoElement Extensions</a> that use it.</p></li>
           <li><p>The <a def-id="totalFrameDelay">totalFrameDelay</a> attribute on the <a href="#videoplaybackquality">VideoPlaybackQuality</a> object.</p></li>
           <li><p>The <a href=#idl-def-TrackDefault>TrackDefault</a> object and its related objects, attributes, methods and algorithms, including: <a href=#idl-def-TrackDefaultList>TrackDefaultList</a>, <a href=#widl-SourceBuffer-trackDefaults>SourceBuffer.trackDefaults</a>, <a href=#sourcebuffer-default-track-language>Default track language</a>, <a href=#sourcebuffer-default-track-label>Default track label</a>, and <a href=#sourcebuffer-default-track-kinds>Default track kinds</a>. Implementations still MUST at least include trivial versions of these default track language/label/kinds algorithms that are used by the <a href=#sourcebuffer-init-segment-received>initialization segment received algorithm</a>. These trivial versions would behave as follows: Trivial default track language and Trivial default track label algorithms MUST return an empty string, and Trivial default kinds algorithm MUST return a sequence with a single empty string element in it.</p></li>
-		  </ul>
-
+        </ul>
         <p>
           For this specification to exit the Candidate Recommendation stage,
           two independent implementations as detailed in the <a href="http://dev.w3.org/html5/decision-policy/public-permissive-exit-criteria.html">CR Exit Criteria (Public Permissive version 3)</a> document
@@ -589,10 +591,19 @@
           </ol>
         </dd>
 
-        <dt>void setLiveSeekableRange(double start, double end)</dt>
+        <dt>void setLiveSeekableRange()</dt>
         <dd>
           <p>Updates the <a def-id="live-seekable-range"></a> variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <a def-id="hme-seekable"></a> behavior.</p>
-
+          <dl class='parameters'>
+            <dt>double start</dt>
+            <dd>
+              The start of the range, in seconds measured from <a def-id="presentation-start-time"></a>. While set, and if <a def-id="duration"></a> equals positive Infinity, <a def-id="hme-seekable"></a> will return a non-empty TimeRanges object with a lowest range start timestamp no greater than <var>start</var>.
+            </dd>
+            <dt>double end</dt>
+            <dd>
+              The end of range, in seconds measured from <a def-id="presentation-start-time"></a>. While set, and if <a def-id="duration"></a> equals positive Infinity, <a def-id="hme-seekable"></a> will return a non-empty TimeRanges object with a highest range end timestamp no less than <var>end</var>.
+            </dd>
+          </dl>
           <ol class="method-algorithm">
             <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If <var>start</var> is negative or greater than <var>end</var>, then throw a <a def-id="type-error"></a> exception and abort these steps.</li>
@@ -879,9 +890,8 @@
           <p>Follow these steps when <a def-id="duration"></a> needs to change to a <var>new duration</var>.</p>
           <ol>
             <li>If the current value of <a def-id="duration"></a> is equal to <var>new duration</var>, then return.</li>
-            <li>If <var>new duration</var> is less than the highest starting <a def-id="presentation-timestamp"></a> of any buffered <a def-id="coded-frames"></a> for all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If <var>new duration</var> is less than the highest <a def-id="presentation-timestamp"></a> of any buffered <a def-id="coded-frames"></a> for all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <p class="note">Duration reductions that would truncate currently buffered media are disallowed. When truncation is necessary, use <a def-id="remove"></a> to reduce the buffered range before updating <a def-id="duration"></a>.</p>
-            <li>Set <var>old duration</var> to the current value of <a def-id="duration"></a>.</li>
             <li>Update <a def-id="duration"></a> to <var>new duration</var>.</li>
             <li>If a user agent is unable to partially render audio frames or text cues that start before and end after the <a def-id="duration"></a>, then run the following steps:</li>
             <p class="note">This condition can occur because the <a def-id="coded-frame-removal-algorithm"></a> preserves audio frames and text cues that start before and end after the <a def-id="duration"></a>.</p>
@@ -1164,10 +1174,19 @@
           </ol>
         </dd>
 
-        <dt>void remove(double start, unrestricted double end)</dt>
+        <dt>void remove()</dt>
         <dd>
           <p>Removes media for a specific time range.</p>
-
+          <dl class='parameters'>
+            <dt>double start</dt>
+            <dd>
+              The start of the removal range, in seconds measured from <a def-id="presentation-start-time"></a>.
+            </dd>
+            <dt>unrestricted double end</dt>
+            <dd>
+              The end of the removal range, in seconds measured from <a def-id="presentation-start-time"></a>.
+            </dd>
+          </dl>
           <ol class="method-algorithm">
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
@@ -1522,8 +1541,8 @@
           <p>Follow these steps when a caller needs to initiate a JavaScript visible range removal
             operation that blocks other SourceBuffer updates:</p>
           <ol>
-            <li>Let <var>start</var> equal the starting <a def-id="presentation-timestamp"></a> for the removal range.</li>
-            <li>Let <var>end</var> equal the end <a def-id="presentation-timestamp"></a> for the removal range.</li>
+            <li>Let <var>start</var> equal the starting <a def-id="presentation-timestamp"></a> for the removal range, in seconds measured from <a def-id="presentation-start-time"></a>.</li>
+            <li>Let <var>end</var> equal the end <a def-id="presentation-timestamp"></a> for the removal range, in seconds measured from <a def-id="presentation-start-time"></a>.</li>
             <li>Set the <a def-id="updating"></a> attribute to true.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
             <li>Return control to the caller and run the rest of the steps asynchronously.</li>
@@ -1942,14 +1961,21 @@
                 <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
                 <li>If <var>presentation timestamp</var> is less than <a def-id="appendWindowStart"></a>, then set the <a def-id="need-RAP-flag"></a> to true, drop the
                   coded frame, and jump to the top of the loop to start processing the next coded frame.
-                  <p class="note">Some implementations MAY choose to collect some of these coded frames that are outside the <a def-id="append-window"></a> and use them
+                  <p class="note">Some implementations MAY choose to collect some of these coded frames with <var>presentation timestamp</var> less than <a def-id="appendWindowStart"></a> and use them
                     to generate a splice at the first coded frame that has a <a def-id="presentation-timestamp"></a> greater than or equal to <a def-id="appendWindowStart"></a> even if
                     that frame is not a <a def-id="random-access-point"></a>. Supporting this requires multiple decoders or faster than real-time decoding so for now
                     this behavior will not be a normative requirement.
                   </p>
                 </li>
                 <li>If <var>frame end timestamp</var> is greater than <a def-id="appendWindowEnd"></a>, then set the <a def-id="need-RAP-flag"></a> to true, drop the
-                  coded frame, and jump to the top of the loop to start processing the next coded frame.</li>
+                  coded frame, and jump to the top of the loop to start processing the next coded frame.
+                  <p class="note">Some implementations MAY choose to collect coded frames with <var>presentation timestamp</var> less than <a def-id="appendWindowEnd"></a> and <var>frame end timestamp</var> greater than <a def-id="appendWindowEnd"></a> and use them
+                  to generate a splice across the portion of the collected coded frames within the append window at time of collection, and the beginning portion of later processed frames which only partially overlap the end of the collected coded frames.
+                    Supporting this requires multiple decoders or faster than real-time decoding so for now
+                    this behavior will not be a normative requirement.
+                    In conjunction with collecting coded frames that span <a def-id="appendWindowStart"></a>, implementations MAY thus support gapless audio splicing.
+                  </p>
+                </li>
                 <li>If the <a def-id="need-RAP-flag"></a> on <var>track buffer</var> equals true, then run the following steps:
                   <ol>
                     <li>If the coded frame is not a <a def-id="random-access-point"></a>, then drop the coded frame and jump to the top of the loop to start
@@ -2318,7 +2344,7 @@
       <dl title="interface VideoPlaybackQuality" class="idl">
         <dt>readonly attribute DOMHighResTimeStamp creationTime</dt>
         <dd>
-          <p>The timestamp returned by <a def-id="performance-now"></a> when this object was created.</p>
+          <p>The timestamp returned by <a def-id="performance-now"></a> [[!HR-TIME]] when this object was created.</p>
         </dd>
 
         <dt>readonly attribute unsigned long totalVideoFrames</dt>
@@ -2577,7 +2603,7 @@
           <p>Provides the current the playback quality metrics.</p>
           <ol class="method-algorithm">
             <li>Let <var>playbackQuality</var> be a new instance of <a>VideoPlaybackQuality</a>.</li>
-            <li>Set <var>playbackQuality</var>.<a def-id="creationTime"></a> to the value returned by a call to <a def-id="performance-now"></a>.</li>
+            <li>Set <var>playbackQuality</var>.<a def-id="creationTime"></a> to the value returned by a call to <a def-id="performance-now"></a> [[!HR-TIME]].</li>
             <li>Set <var>playbackQuality</var>.<a def-id="totalVideoFrames"></a> to the current value of the <a def-id="total-video-frame-count"></a>.</li>
             <li>Set <var>playbackQuality</var>.<a def-id="droppedVideoFrames"></a> to the current value of the <a def-id="dropped-video-frame-count"></a>.</li>
             <li>Set <var>playbackQuality</var>.<a def-id="corruptedVideoFrames"></a> to the current value of the <a def-id="corrupted-video-frame-count"></a>.</li>
@@ -2811,857 +2837,5 @@
       The editors would like to thank <a def-id="contributors"></a> for their contributions to this specification.
     </section>
 
-    <section id="revision-history">
-      <h2>Revision History</h2>
-      <table class="old-table">
-        <thead>
-          <tr>
-            <th>Version</th>
-            <th>Comment</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>20 July 2016</td>
-            <td>
-              <ul>
-                <li>Issue 59 - Correct i.e. and e.g. style.</li>
-                <li>Issue 115 - Updated byte stream format registry editors in localbiblio.</li>
-                <li>Issue 118 - Remove the restriction on not 'updating' from {set,clear}LiveSeekableRange().</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/8b2b4f87d6ee637855fd5405a75b345c8c31a4cc/index.html">12 July 2016</a></td>
-            <td>
-              <ul>
-                <li>Issue 52 - Add conformance section and update relevant key words.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/d8f901f22e756dcc9f6ecd5d1216862b9f602623/index.html">09 June 2016</a></td>
-            <td>
-              <ul>
-                <li>Issue  91 - Change TrackDefault.kinds to TrackDefault.getKinds.</li>
-				<li>Add TrackDefaults to the at risk feature list.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/cc317c86c0718dd7ff673757fe563087fbaccb6a/index.html">08 June 2016</a></td>		  
-            <td>
-              <ul>
-                <li>Issue  5 - Add support for customizing <a def-id="hme-seekable"></a> on live streams.</li>
-                <li>Issue 87 - Add <a href="#videoplaybackquality">VideoPlaybackQuality</a> to the list of at risk features.</li>
-                <li>Issue 69 - Add optional & subject to change language to <a href="#videoplaybackquality">VideoPlaybackQuality</a>.</li>
-                <li>Issue 78 - Update reference from HTML5.0 to HTML5.1.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/374bcfbd2915904d0e7376452c3e2dbc91221550/index.html">06 June 2016</a></td>
-            <td>
-              <ul>
-                <li>Issue 18 - Clarify fetch algorithm failure detachment trigger.</li>
-                <li>Issue 24 - Clarify MSE attachment stops delaying the 'load' event, and MSE disables 'suspend' event logic.</li>
-              </ul>
-            </td>
-          </tr>          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/1f80b6e98d13acc106d5da80a771b6e4756d971c/index.html">26 May 2016</a></td>
-            <td>
-              <ul>
-                <li>Issue 44 - Used SVG and longdesc for pipeline diagram.</li>
-                <li>Issue 67 - Excluded <a def-id="createObjectURL"></a> from Service Workers.</li>
-                <li>Issue 68 - Made kinds attribute and ctor argument use sequence type.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/038cdcf65b7bd8fba964117312bacd920f643bb2/index.html">24 May 2016</a></td>
-            <td>
-              <ul>
-                <li>Issue 10 - Updated <a def-id="createObjectURL"></a> to align to current (April 2015) non-autorevoking <a def-id="createObjectURL"></a>[[!FILE-API]] method. Encouraged web author use of <a def-id="file-revokeObjectURL"></a>[[!FILE-API]].</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/fb01530c0f1f83c65891f424229e0e48619a4b48/index.html">12 May 2016</a></td>
-            <td>
-              <ul>
-                <li>Issue 15 - Clarified <a def-id="track-buffer-ranges"></a>. Clarified allowance near <a def-id="presentation-start-time"></a>.</li>
-                <li>Minor whitespace and formatting fixes.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/b386c1ca8637e8370f5817e35d71cb68d8854425/index.html">12 May 2016</a></td>
-            <td>
-              <ul>
-                <li>Issue 19, 20 &amp; 26 - Resolved problems with Duration Changes and Range Removals.</li>
-                <li>Separated Range Removals from Duration Changes, required separate remove().</li>
-                <li>Disabled abort on Range Removals.</li>
-             </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/1e4b68c15c327ba96c8f7fffa21b8754bf324499/index.html">3 May 2016</a></td>
-            <td>
-              <ul>
-                <li>Issue 66 - Add EventHandler attributes to MediaSource, SourceBuffer, and SourceBufferList.</li>
-                <li>Minor whitespace and typo fixes.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/cc7e3e8e25f42e1ece9e6fefc65d5638f4f9040b/index.html">April 28 2016</a></td>
-            <td>
-              <ul>
-                <li>Issue 54 - Clarified use of Presentation Time Stamps (PTS) for <a def-id="buffered"></a>.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/a0bf0e68c8e5e53a9450abe94b83a9c3a6f8f13e/index.html">April 15 2016</a></td>
-            <td>
-              <ul>
-                <li>Issue 17 - Generalize the detach MediaSource algorithm for media element load.</li>
-                <li>Issue 18 - Generalize the detach MediaSource algorithm for media element fetch algorithm failures.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td>13 April 2016</td>
-            <td>
-              <ul>
-                <li><a href="https://rawgit.com/w3c/media-source/81b27bc84bc64419abff2b8235dc66418ba53a5a/index.html">Issue 25 - Fixed ambiguous behavior with CFP algorithm.</a></li>
-                <li><a href="https://rawgit.com/w3c/media-source/8aba06a6a10d8fe0bf26b2e4c11a3e5a209244e0/index.html">Issue 11 - Ignore preload attribute on parent media element.</a></li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/0c03baa308a5b634860e7536d636f161fe089232/index.html">11 April 2016</a></td>
-            <td>
-              <ul>
-                <li>Corrected the editor's draft publish date.</li>
-                <li>Minor whitespace fixes for source readability.</li>
-                <li>Added missing links in recent revision history.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/1482e906f5adc329212d5c4f0f688177e73b9c8a/index.html">5 February 2016</a></td>
-            <td>
-              <ul>
-                <li>Issue 34 - Replace InvalidAccessError usage with TypeError.</li>
-                <li>Fixed unexpected tag errors from previous changes.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/de6ea96a49379c33c23d3e0c836fc5417f23be5c/index.html">29 January 2016</a></td>
-            <td>
-              <ul>
-                <li>Issue 23 - Require setting a random access point to prevent the coded frame removal algorithm from introducing a discontinuity at end of current coded frame group.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/cb6f9cc68031871f9b8980b7f9e0c56badf7105f/index.html">15 October 2015</a></td>
-            <td>
-              <ul>
-                <li>Issue 30 - Remove unnecessary segment parser loop step referencing undefined media segment header.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/37fbc93c1b0fb11c2238cae25d206f5e766ad1ac/index.html">13 October 2015</a></td>
-            <td>
-              <ul>
-                <li>Issue 12 - Update bug tracker links to use github.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/d69d93d482a208f38eba43e34b366a75a8570901/index.html">17 September 2015</a></td>
-            <td>
-              <ul>
-                <li>Bug 29133 - Maintain coded group continuity in sequence append mode when resetting parser state.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/3105f930039965dddbc8201f928e2c6f175509e6/index.html">14 July 2015</a></td>
-            <td>
-              <ul>
-                <li>Bugs 28881 and 28882 - Editorial punctuation and whitespace fixes.</li>
-                <li>Also replaced tabs with spaces and removed spaces at end of line and before periods and commas.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/3ea5e00384f132dc02df04a2c0d806cdb15cfde1/index.html">07 April 2015</a></td>
-            <td>
-              <ul>
-                <li>Bug 28234 - Rename highest presentation timestamp to highest end timestamp and clarify definition.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/da0f7290b64626bf5cf97fb6cb5ad0d7d78c2a6a/index.html">03 April 2015</a></td>
-            <td>
-              <ul>
-                <li>Update editors.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/7088a45f9b3a992d415cbfd320b8aac99577fea2/index.html">02 April 2015</a></td>
-            <td>
-              <ul>
-                <li>Bug 28209 - Remove redundant definition of overlapped frame presentation timestamp.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/ee9ae4ba1681e34b6e90d172759f984ee64ab4c1/index.html">03 February 2015</a></td>
-            <td>
-              <ul>
-                <li>Bug 27790 - Make .buffered attributes return the same object if nothing has changed.</li>
-                <li>Bug 27857 - Make the 'removed from the sourceBuffers' checks in remove() and .mode setter consistent with other algorithms.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/c3ad59c7a370d04430969ba73d18dc9bcde57a33/index.html">09 January 2015</a></td>
-            <td>
-              <ul>
-                <li>Bug 27649 - Clarify that setting the duration in the detach algorithm does not run the attribute set algorithm.</li>
-                <li>Bug 27599 - Make TrackDefaultList constructor parameter optional and have a default value of [].</li>
-                <li>Bug 27758 - Add informative reference to INBANDTRACKS and track attribute sourcing requirements.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/13d9a1125c590d1cab6e78fa6bf4119426da5eb6/index.html">11 December 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 27559 - Clarify that the TrackDefaultList constructor does a shallow copy.</li>
-                <li>Bug 27548 - Reroute decode errors through the append error algorithm.</li>
-                <li>Bug 27542 - Prevent SourceBuffer monitoring algorithm from triggering a HAVE_NOTHING to
-                  HAVE_METADATA transition.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/d77ec3993a42c2a692a3518a1a9aeecd50f2c72e/index.html">02 December 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 27239 - Updated appendStream() to use the new Streams API.</li>
-                <li>Bug 27487 - Removed negative decode timestamp check from coded frame processing algorithm.</li>
-                <li>Bug 27342 - Changed prepare append algorithm to throw an exception if HTMLMediaElement.error is not null.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/75ea13bcfb19c3756ade0354e88a463a784727f1/index.html">18 November 2014</a></td>
-            <td>
-              <ul>
-                <li>Update all links in the revision history to point to GitHub.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/04130c0a69fc8e1c11093fe1116935d75f46b179/index.html">17 November 2014</a></td>
-            <td>
-              <ul>
-                <li>Changed Editor's draft link to point to GitHub.</li>
-                <li>Bug 27353 - Convert exceptions from xxx_ERR to xxxError form. Changed broken exception links to point to HTML5 instead of WHATWG DOM.</li>
-                <li>Bug 27352 - Changed TrackDefault constructor to throw a TypeError instead of an InvalidAccessError for invalid kinds.</li>
-                <li>Bug 27318 - Fix length attribute link in TrackBufferList getter method.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/d9874386afa8d5a05e7ea6b17cdde0ea71608b2c/media-source.html">11 November 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 27296 - Clarify .seekable when duration is Infinity and .buffered is empty.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/a30a0d598c004c84fb1981ae4c26eaa3b24f615f/media-source.html">04 November 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 27241 - Fixed step 1 of the TrackDefault constructor so it doesn't always throw an exception.</li>
-                <li>Bug 27240 - Make TrackDefaultList contructor throw an exception on any duplicate (type, byteStreamTrackID) pair.</li>
-                <li>Bug 27174 - Added SourceBuffer configuration definition to clarify addSourceBuffer() behavior.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/7c26010625fd8a144dda7eedf016ab249c84f3f6/media-source.html">06 October 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 26924 - Run default language algorithm if 'und' BCP 47 value is present in the init segment.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/5f683de3726dde6940388ea160b8f85ddd6da909/media-source.html">29 September 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 26932 - Fix TrackDefault constructor kinds parameter type.</li>
-                <li>Update to ReSpec 3.2.20.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/ced6075bc41bd3edd4abe625748be8406fe6113b/media-source.html">10 September 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 26777 - Rename 'first initialization segment flag' to 'first initialization segment received flag'.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/66a84a43e9d42feddae1ec3499828f05be1b20b5/media-source.html">09 September 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 26721 - Add label attribute to TrackDefault object.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/7252b9eefcdbf47f4e8aa96da72b726095bdcc6d/media-source.html">12 August 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 26436 - Use HTMLMediaElement.buffered for HTMLMediaElement.readyState transitions instead of individual SourceBuffer.buffered attributes.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/7bbe4aa33c61ec025bc7acbd80354110f6a000f9/media-source.html">24 July 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 26345 - Make activeSourceBuffers order match sourceBuffers order.</li>
-                <li>Bug 26316 - Changed duration change algorithm to avoid open transition on endOfStream().</li>
-                <li>Bug 26314 - Fixed coded frame removal algorithm to remove dependencies that may lie outside the removal range.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/4245b0f0ed34d979fe18203c21e369bec8016156/media-source.html">20 June 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 26032 - Set need random access point flag on all track buffers when a new init
-                  segment is received.</li>
-                <li>Bug 25845 - Clarify SourceBuffer.buffered getter behavior.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/18ad6acd86687edf9dd5dfa5f4ef3a2baeaf88e4/media-source.html">13 June 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 25995 - Fix conditions in "remove existing coded frames" step.</li>
-                <li>Bug 25999 - Change appendWindowStart assignments to reference presentation start time.</li>
-                <li>Bug 26000 - Make it explicit that SourceBuffer.remove() throws an exception if duration equals NaN.</li>
-                <li>Bug 25846 - Update end of stream algorithm to invoke the append error algorithm on decode errors.</li>
-                <li>Bug 25850 - Specify SourceBuffer.trackDefaults initial value and setter/getter behavior.</li>
-                <li>Bug 25998 - Move presentation & decode timestamp checks after append window filtering steps.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/682090013679352847693f6992074765932efe7c/media-source.html">21 May 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 24370 - Add TrackDefault object and remove kind/language overloads.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/c246d1099a5facf75b22f10c702b4b082d242a06/media-source.html">20 May 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 25518 - Make remove() end parameter an unrestricted double.</li>
-                <li>Bug 25580 - Add informative reference to byte stream format registry.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/f122d10cce4d3c1697138c05a1b9598b8b92f3d5/media-source.html">29 April 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 25347 - Remove unnecessary null & invalid enum value checks.</li>
-                <li>Bug 25505 - Introduce "generate timestamps flag" to handle MPEG audio timestamp
-                  generation.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/746b2ecdd8eaf1f0ff584eb1ecdc11fdbf8c4854/media-source.html">01 April 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 25157 - Fix typo in coded frame duration example.</li>
-                <li>Bug 24854 - Moved negative timestamp checking to allow "sequence" mode to handle
-                  appending coded frames in reverse order</li>
-                <li>Bug 24820 - Renamed highest presentation end timestamp to group end timestamp and
-                  fixed a few related issues.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/6a57b8c6e4fde462a69db34e6376ccb77e58683f/media-source.html">03 March 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 24347 - Fix HAVE_FUTURE_DATA transition condition in SourceBuffer monitoring algorithm.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/0e0e6769f8e9968e527e1d5e07a49acc5b12c0c7/media-source.html">10 December 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 23169 - Restore totalFrameDelay units to seconds.</li>
-                <li>Bug 23989 - Update blob URL origin text to remove stale File API reference.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/cfd442a35dd10d099629c6a819a13172662ad615/media-source.html">02 December 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 23818 - Make external spec references normative.</li>
-                <li>Bug 23441 - Update byte stream format registry text.</li>
-                <li>Bug 23169 - Update totalFrameDelay text.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/665321e45498c74c0a75a81dcf68cf1d327995c5/media-source.html">14 November 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 23663 - Clarify seeking behavior in Section 2.4.3.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/45b7b9fb71233e4e318d3b9aa64445487e22442b/media-source.html">04 November 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 23441 - Established MSE byte stream format registry and extracted byte stream format text into separate documents.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/d2128dc277e28cd3c6de2a9b4fd369f638496e60/media-source.html">29 October 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 23553 - Fixed segment parser loop so it doesn't appear to prematurely remove the media segment header.</li>
-                <li>Bug 23557 - Update SPS/PPS note to not explicitly recommend specific avc versions.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/fadbcdc6f6deeea76cf561255be84c7e30e90688/media-source.html">28 October 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 23549 - Add definitions for decode timestamp, presentation timestamp, an presentation order.</li>
-                <li>Bug 23552 - Clarify 'this' in section 3.5.1</li>
-                <li>Bug 23554 - Introduced presentation interval and coded frame duration terms to clarify text.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/6c82991c438fc47cf891a20221b1a735e71dfdcc/media-source.html">15 October 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 23525 - Fix mvex box error behavior.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/f063825ec201bfed336f5c1b2cb85d95d6b437f0/media-source.html">04 October 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 23442 - Fix example to work when seeking in the 'ended' state.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/55ed838be5c268696ad92782be6c3801467fbacf/media-source.html">26 July 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 22136 - Added text for Inband SPS/PPS support.</li>
-                <li>Bug 22776 - Clarified that implementations are only required to support one SourceBuffer configuration at a time.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/c0b1175a2571edc7409912eec3b5593350d64280/media-source.html">18 July 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 22117 - Reword byte stream specs in terms of UA behavior.</li>
-                <li>Bug 22148 - Replace VideoPlaybackQuality.playbackJitter with VideoPlaybackQuality.totalFrameDelay.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/6d343741aa4f032618897df4fa85192d4ec33f80/media-source.html">02 July 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 22401 - Fix typo</li>
-                <li>Bug 22134 - Clarify byte stream format enforcement.</li>
-                <li>Bug 22431 - Convert videoPlaybackQuality attribute to getVideoPlaybackQuality() method.</li>
-                <li>Bug 22109 - Renamed 'coded frame sequence' to 'coded frame group' to avoid confusion around multiple 'sequence' concepts.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/0bd516405d8f5f8a14fe0b6380450b054c5d36a8/media-source.html">05 June 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 22139 - Added a note clarifying that byte stream specs aren't defining new storage formats.</li>
-                <li>Bug 22148 - Added playbackJitter metric.</li>
-                <li>Bug 22134 - Added minimal number of SourceBuffers requirements.</li>
-                <li>Bug 22115 - Make algorithm abort text consistent.</li>
-                <li>Bug 22113 - Address typos.</li>
-                <li>Bug 22065 - Fix infinite loop in coded frame processing algorithm.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/81b96a0c101c57e641f6ae24a4e2ec13c1cb904e/media-source.html">01 June 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 21431 - Updated coded frame processing algorithm for text splicing.</li>
-                <li>Bug 22035 - Update addtrack and removetrack event firing text to match HTML5 language.</li>
-                <li>Bug 22111 - Remove useless playback sentence from end of stream algorithm.</li>
-                <li>Bug 22052 - Add corrupted frame metric.</li>
-                <li>Bug 22062 - Added links for filing bugs.</li>
-                <li>Bug 22125 - Add "ended" to "open" transition to remove().</li>
-                <li>Bug 22143 - Move HTMLMediaElement.playbackQuality to HTMLVideoElement.videoPlaybackQuality.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/a92c5c209a1804df08fc3dfeb783c17b8c344790/media-source.html">13 May 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 21954 - Add [EnforceRange] to appendStream's maxSize parameter.</li>
-                <li>Bug 21953 - Add NaN handling to appendWindowEnd setter algorithm.</li>
-                <li>Alphabetize definitions section.</li>
-                <li>Changed endOfStream('decode') references to make it clear that JavaScript can't intercept these calls.</li>
-                <li>Fix links for all types in the IDL that are defined in external specifications.</li>
-              </ul>
-            </td>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/0ad6f669fe7ac5a0b1e3df4d28a830eb24da470c/media-source.html">06 May 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 20901 - Remove AbortMode and add AppendMode.</li>
-                <li>Bug 21911 - Change MediaPlaybackQuality.creationTime to DOMHighResTimeStamp.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/6428af29ecb9eadcaa472c89e1a9162b2f1f6519/media-source.html">02 May 2013</a></td>
-            <td>
-              <ul>
-                <li>Reworked ambiguous text in a variety of places.</li>
-                <li>Added Acknowledgements section.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/a710ee89945ac3f8861dd075b24f0a025df30902/media-source.html">30 April 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 21822 - Fix 'fire ... event ... at the X attribute' text.</li>
-                <li>Bug 21819 &amp; 21328 - Remove 'compressed' from coded frame definition.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/e48bad78c421745a3a31c734140b370013391167/media-source.html">24 April 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 21796 - Removed issue box from 'Append Error' algorithm.</li>
-                <li>Bug 21703 - Changed appendWindowEnd to 'unrestricted double'.</li>
-                <li>Bug 20760 - Adding MediaPlaybackQuality object.</li>
-                <li>Bug 21536 - Specify the origin of media data appended.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/7b8e1f70b3a517336735f442b90b4cfe8b8089f5/media-source.html">08 April 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 21327 - Crossfade clarifications.</li>
-                <li>Bug 21334 - Clarified seeking behavoir.</li>
-                <li>Bug 21326 - Add a note stating some implementations may choose to add fades to/from silence.</li>
-                <li>Bug 21375 - Clarified decode dependency removal.</li>
-                <li>Bug 21376 - Replace 100ms limit with 2x last frame duration limit.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/c8e6ea8cfbe3713be59f9fca3e0eadd123ce92f1/media-source.html">26 March 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 21301 - Change timeline references to "media timeline" links.</li>
-                <li>Bug 19676 - Clarified "fade out coded frames" definition.</li>
-                <li>Bug 21276 - Convert a few append error scenarios to endOfStream('decode') errors.</li>
-                <li>Bug 21376 - Changed 'time' to 'decode time' to append sequence definition.</li>
-                <li>Bug 21374 - Clarify the abort() behavior.</li>
-                <li>Bug 21373 - Clarified incremental parsing text in segment parser loop.</li>
-                <li>Bug 21364 - Remove redundant condition from remove overlapped frame step.</li>
-                <li>Bug 21327 - Clarify what to do with a splice that starts with an audio frame with a duration less than 5ms.</li>
-                <li>Update to ReSpec 3.1.48</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/d5563265ff6243010933960a080bdf04090576f0/media-source.html">12 March 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 21112 - Add appendWindowStart & appendWindowEnd attributes.</li>
-                <li>Bug 19676 - Clarify overlapped frame definitions and splice logic.</li>
-                <li>Bug 21172 - Added coded frame removal and eviction algorithms.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/055baf94526c9dc1986d75d91869348fce42c91d/media-source.html">05 March 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 21170 - Remove 'stream aborted' step from stream append loop algorithm.</li>
-                <li>Bug 21171 - Added informative note about when addSourceBuffer() might throw an QUOTA_EXCEEDED_ERR exception.</li>
-                <li>Bug 20901 - Add support for 'continuation' and 'timestampOffset' abort modes.</li>
-                <li>Bug 21159 - Rename appendArrayBuffer to appendBuffer() and add ArrayBufferView overload.</li>
-                <li>Bug 21198 - Remove redundant 'closed' readyState checks.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/1958fcb45cc95cfb00d946e007e85945ec6a8599/media-source.html">25 February 2013</a></td>
-            <td>
-              <ul>
-                 <li>Remove Source Buffer Model section since all the behavior is covered by the algorithms now.</li>
-                 <li>Bug 20899 - Remove media segments must start with a random access point requirement.</li>
-                 <li>Bug 21065 - Update example code to use updating attribute instead of old appending attribute.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/30c2d1eb6e8b791042de319fcc9f7231dc9fea4d/media-source.html">19 February 2013</a></td>
-            <td>
-              <ul>
-                 <li>Bug 19676, 20327 - Provide more detail for audio & video splicing.</li>
-                 <li>Bug 20900 - Remove complete access unit constraint.</li>
-                 <li>Bug 20948 - Setting timestampOffset in 'ended' triggers a transition to 'open'</li>
-                 <li>Bug 20952 - Added update event.</li>
-                 <li>Bug 20953 - Move end of append event firing out of segment parser loop.</li>
-                 <li>Bug 21034 - Add steps to fire addtrack and removetrack events.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/cfdd8686b1c6a55b5dba20a9cc3d7f45274a8a0e/media-source.html">05 February 2013</a></td>
-            <td>
-              <ul>
-                <li>Bug 19676 - Added a note clarifying that the internal timestamp representation doesn't have to be a double.</li>
-                <li>Added steps to the coded frame processing algorithm to remove old frames when new ones overlap them.</li>
-                <li>Fix isTypeSupported() return type.</li>
-                <li>Bug 18933 - Clarify what top-level boxes to ignore for ISO-BMFF.</li>
-                <li>Bug 18400 - Add a check to avoid creating huge hidden gaps when out-of-order appends occur w/o calling abort().</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/8ac8cf32b1b909609b30eb4353961a74ccb06e39/media-source.html">31 January 2013</a></td>
-            <td>
-              <ul>
-                <li>Make remove() asynchronous.</li>
-                <li>Added steps to various algorithms to throw an INVALID_STATE_ERR exception when async appends or remove() are pending.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/06c44b6f1f335dc98a7191c3e6d91340c94abc4c/media-source.html">30 January 2013</a></td>
-            <td>
-              <ul>
-                <li>Remove early abort step on 0-byte appends so the same events fire as a normal append with bytes.</li>
-                <li>Added definition for 'enough data to ensure uninterrupted playback'.</li>
-                <li>Updated buffered ranges algorithm to properly compute the ranges for Philip's example.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/d4a3038c98aaf6151c9aeac5617378050ff3e3c9/media-source.html">15 January 2013</a></td>
-            <td>Replace setTrackInfo() and getSourceBuffer() with AudioTrack, VideoTrack, and TextTrack extensions.</td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/8e37a22165623562b80d155af4b3ea5719fd166e/media-source.html">04 January 2013</a></td>
-            <td>
-              <ul>
-                <li>Renamed append() to appendArrayBuffer() and made appending asynchronous.</li>
-                <li>Added SourceBuffer.appendStream().</li>
-                <li>Added SourceBuffer.setTrackInfo() methods.</li>
-                <li>Added issue boxes to relevant sections for outstanding bugs.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/5cf3f3c4ce17c169d8f9d06c894b7afffa3ef0c7/media-source.html">14 December 2012</a></td>
-            <td>
-              Pubrules, Link Checker, and Markup Validation fixes.
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/68420ee97214a7c1f5ad9d26bba9c8c523638e76/media-source.html">13 December 2012</a></td>
-            <td>
-              <ul>
-                <li>Added MPEG-2 Transport Stream section.</li>
-                <li>Added text to require abort() for out-of-order appends.</li>
-                <li>Renamed "track buffer" to "decoder buffer".</li>
-                <li>Redefined "track buffer" to mean the per-track buffers that hold the SourceBuffer media data.</li>
-                <li>Editorial fixes.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/c04a46dc6bf96661e162c21d6228879999fa62f8/media-source.html">08 December 2012</a></td>
-            <td>
-              <ul>
-                <li>Added MediaSource.getSourceBuffer() methods.</li>
-                <li>Section 2 cleanup.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/d98eef1dadf012c39c5235bb5fb30497cbfc6572/media-source.html">06 December 2012</a></td>
-            <td>
-              <ul>
-                <li>append() now throws a QUOTA_EXCEEDED_ERR when the SourceBuffer is full.</li>
-                <li>Added unique ID generation text to Initialization Segment Received algorithm.</li>
-                <li>Remove 2.x subsections that are already covered by algorithm text.</li>
-                <li>Rework byte stream format text so it doesn't imply that the MediaSource implementation must support all formats supported by the
-                  HTMLMediaElement.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/4895363599983487533fd80ebd3e3ecae3b8aa76/media-source.html">28 November 2012</a></td>
-            <td>
-              <ul>
-                <li>Added transition to HAVE_METADATA when current playback position is removed.</li>
-                <li>Added remove() calls to duration change algorithm.</li>
-                <li>Added MediaSource.isTypeSupported() method.</li>
-                <li>Remove initialization segments are optional text.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/8a38ea6a0e75b557fb6683e44d6624490611b7bf/media-source.html">09 November 2012</a></td>
-            <td>Converted document to ReSpec.</td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/3feaafa68cb2d8795465bb793983d05f5c420a7e/media-source.html">18 October 2012</a></td>
-            <td>Refactored SourceBuffer.append() &amp; added SourceBuffer.remove().</td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/416b646d223f866441bba77f7cc6c606f038a861/media-source.html">8 October 2012</a></td>
-            <td>
-              <ul>
-                <li>Defined what HTMLMediaElement.seekable and HTMLMediaElement.buffered should return.</li>
-                <li>Updated seeking algorithm to run inside Step 10 of the HTMLMediaElement seeking algorithm.</li>
-                <li>Removed transition from "ended" to "open" in the seeking algorithm.</li>
-                <li>Clarified all the event targets.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/fa8c6f5cdb27d5c11b0657352caf504de1280e15/media-source.html">1 October 2012</a></td>
-            <td>Fixed various addsourcebuffer &amp; removesourcebuffer bugs and allow append() in ended state.</td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/fe00dbd95eb29e8df9f1dc030f89d45bd323fbcf/media-source.html">13 September 2012</a></td>
-            <td>Updated endOfStream() behavior to change based on the value of HTMLMediaElement.readyState.</td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/cfb1b3d4309a6e6e2c01bd87e048758172a86e4b/media-source.html">24 August 2012</a></td>
-            <td>
-              <ul>
-                <li>Added early abort on to duration change algorithm.</li>
-                <li>Added createObjectURL() IDL &amp; algorithm.</li>
-                <li>Added Track ID &amp; Track description definitions.</li>
-                <li>Rewrote start overlap for audio frames text.</li>
-                <li>Removed rendering silence requirement from section 2.5.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/5c7f2a89e96af1a3bd8014280179f5f4e6fcf234/media-source.html">22 August 2012</a></td>
-            <td>
-              <ul>
-                <li>Clarified WebM byte stream requirements.</li>
-                <li>Clarified SourceBuffer.buffered return value.</li>
-                <li>Clarified addsourcebuffer &amp; removesourcebuffer event targets.</li>
-                <li>Clarified when media source attaches to the HTMLMediaElement.</li>
-                <li>Introduced duration change algorithm and update relevant algorithms to use it.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/c9960054e01f5c012165528f2701bc638834f449/media-source.html">17 August 2012</a></td>
-            <td>Minor editorial fixes.</td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/6747ed7a3206f646963d760100b0f37e2fc7e47e/media-source.html">09 August 2012</a></td>
-            <td>Change presentation start time to always be 0 instead of using format specific rules about the first media segment appended.</td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/a76c76117a27e4d7107c53f80db91e9a654638a3/media-source.html">30 July 2012</a></td>
-            <td>Added SourceBuffer.timestampOffset and MediaSource.duration.</td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/38d12bac903a1771a9144eca516486f172ddbdd4/media-source.html">17 July 2012</a></td>
-            <td>Replaced SourceBufferList.remove() with MediaSource.removeSourceBuffer().</td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/a6376439ce58a2399614c6083754f5819e9d4232/media-source.html">02 July 2012</a></td>
-            <td>Converted to the object-oriented API</td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/f3966bc5770b51ca19f228a5c437e203527c5cd0/media-source.html">26 June 2012</a></td>
-            <td>Converted to Editor's draft.</td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/dc662de122435a92bf18348d57c207b7a1c52b4e/media-source.html">0.5</a></td>
-            <td>Minor updates before proposing to W3C HTML-WG.</td>
-          </tr>
-          <tr>
-            <td><a href="http://html5-mediasource-api.googlecode.com/svn/tags/0.4/draft-spec/mediasource-draft-spec.html">0.4</a></td>
-            <td>Major revision. Adding source IDs, defining buffer model, and clarifying byte stream formats.</td>
-          </tr>
-          <tr>
-            <td><a href="http://html5-mediasource-api.googlecode.com/svn/tags/0.3/draft-spec/mediasource-draft-spec.html">0.3</a></td>
-            <td>Minor text updates.</td>
-          </tr>
-          <tr>
-            <td><a href="http://html5-mediasource-api.googlecode.com/svn/tags/0.2/draft-spec/mediasource-draft-spec.html">0.2</a></td>
-            <td>Updates to reflect initial WebKit implementation.</td>
-          </tr>
-          <tr>
-            <td><a href="http://html5-mediasource-api.googlecode.com/svn/tags/0.1/draft-spec/mediasource-draft-spec.html">0.1</a></td>
-            <td>Initial Proposal</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
   </body>
 </html>
