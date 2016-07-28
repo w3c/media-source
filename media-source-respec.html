@@ -738,6 +738,7 @@
                     <li>If the <a def-id="ready-state"></a> attribute is greater than
                       <a def-id="have-metadata"></a>, then set the <a def-id="ready-state"></a> attribute
                       to <a def-id="have-metadata"></a>.</li>
+                    <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
                     <li>The media element waits until an <a def-id="appendBuffer"></a> or an <a def-id="appendStream"></a> call causes the <a def-id="coded-frame-processing-algorithm"></a> to set
                       the <a def-id="ready-state"></a> attribute to a value greater than <a def-id="have-metadata"></a>.
                       <p class="note">The web application can use <a def-id="buffered"></a> to determine what the media element needs to resume playback.</p>
@@ -784,6 +785,7 @@
             <dd>
               <ol>
                 <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.</li>
+                <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
                 <li>Abort these steps.</li>
               </ol>
             </dd>
@@ -791,8 +793,7 @@
             <dd>
               <ol>
                 <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-enough-data"></a>.</li>
-                <li>
-                  <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="canplaythrough"></a> at the media element.</li>
+                <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
                 <li>Playback may resume at this point if it was previously suspended by a transition to <a def-id="have-current-data"></a>.</li>
                 <li>Abort these steps.</li>
               </ol>
@@ -801,7 +802,7 @@
             <dd>
               <ol>
                 <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-future-data"></a>.</li>
-                <li>If the previous value of <a def-id="ready-state"></a> was less than <a def-id="have-future-data"></a>, then <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="canplay"></a> at the media element.</li>
+                <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
                 <li>Playback may resume at this point if it was previously suspended by a transition to <a def-id="have-current-data"></a>.</li>
                 <li>Abort these steps.</li>
               </ol>
@@ -810,7 +811,7 @@
             <dd>
               <ol>
                 <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-current-data"></a>.</li>
-                <li>If this is the first transition to <a def-id="have-current-data"></a>, then <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="loadeddata"></a> at the media element.</li>
+                <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
                 <li>Playback is suspended at this point since the media element doesn't have enough data to advance the <a def-id="media-timeline"></a>.</li>
                 <li>Abort these steps.</li>
               </ol>
@@ -1801,13 +1802,16 @@
                   If one or more objects in <a def-id="sourceBuffers"></a> have <a def-id="first-init-segment-received-flag"></a> set to false, then abort
                   these steps.</li>
                 <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.</li>
-                <li><a def-id="Queue-a-task-to-fire-an-event-named"></a>  <a def-id="loadedmetadata"></a> at the media element.</li>
+                <p class="note">
+                  Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement. This particular transition should trigger HTMLMediaElement logic to <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="loadedmetadata"></a> at the media element.
+                </p>
               </ol>
             </li>
             <li>
               If the <var>active track flag</var> equals true and the <a def-id="ready-state"></a> attribute is greater than
               <a def-id="have-current-data"></a>, then set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.
             </li>
+            <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
           </ol>
         </section>
 
@@ -2063,27 +2067,16 @@
               </ol>
             </li>
             <li>
-              <p>If the <a def-id="ready-state"></a> attribute is <a def-id="have-metadata"></a> and the new <a def-id="coded-frames"></a> cause <a def-id="hme-buffered"></a> to have a <a def-id="timerange"></a> for the current playback position, then run the following steps:</p>
-              <ol>
-                <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-current-data"></a>.</li>
-                <li>If this is the first transition to <a def-id="have-current-data"></a>, then <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="loadeddata"></a> at the media element.</li>
-              </ol>
+              <p>If the <a def-id="ready-state"></a> attribute is <a def-id="have-metadata"></a> and the new <a def-id="coded-frames"></a> cause <a def-id="hme-buffered"></a> to have a <a def-id="timerange"></a> for the current playback position, then set the <a def-id="ready-state"></a> attribute to <a def-id="have-current-data"></a>.</p>
+              <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
             </li>
             <li>
-              <p>If the <a def-id="ready-state"></a> attribute is <a def-id="have-current-data"></a> and the new <a def-id="coded-frames"></a> cause <a def-id="hme-buffered"></a> to have a <a def-id="timerange"></a> that includes the current playback position and some time beyond the current playback position, then run the following steps:</p>
-              <ol>
-                <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-future-data"></a>.</li>
-                <li>
-                  <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="canplay"></a> at the media element.</li>
-              </ol>
+              <p>If the <a def-id="ready-state"></a> attribute is <a def-id="have-current-data"></a> and the new <a def-id="coded-frames"></a> cause <a def-id="hme-buffered"></a> to have a <a def-id="timerange"></a> that includes the current playback position and some time beyond the current playback position, then set the <a def-id="ready-state"></a> attribute to <a def-id="have-future-data"></a>.</p>
+              <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
             </li>
             <li>
-              <p>If the <a def-id="ready-state"></a> attribute is <a def-id="have-future-data"></a> and the new <a def-id="coded-frames"></a> cause <a def-id="hme-buffered"></a> to have a <a def-id="timerange"></a> that includes the current playback position and <a def-id="enough-data"></a>, then run the following steps:</p>
-              <ol>
-                <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-enough-data"></a>.</li>
-                <li>
-                  <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="canplaythrough"></a> at the media element.</li>
-              </ol>
+              <p>If the <a def-id="ready-state"></a> attribute is <a def-id="have-future-data"></a> and the new <a def-id="coded-frames"></a> cause <a def-id="hme-buffered"></a> to have a <a def-id="timerange"></a> that includes the current playback position and <a def-id="enough-data"></a>, then set the <a def-id="ready-state"></a> attribute to <a def-id="have-enough-data"></a>.</p>
+              <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
             </li>
             <li>If the <a def-id="media-segment"></a> contains data beyond the current <a def-id="duration"></a>, then run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the maximum of the current duration and the <a def-id="group-end-timestamp"></a>.</li>
           </ol>
@@ -2131,6 +2124,7 @@
                   <p>If this object is in <a def-id="activeSourceBuffers"></a>, the <a def-id="current-playback-position"></a> is greater than or equal to
                     <var>start</var> and less than the <var>remove end timestamp</var>, and <a def-id="ready-state"></a> is greater than
                     <a def-id="have-metadata"></a>, then set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a> and stall playback.</p>
+                  <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
                   <p class="note">This transition occurs because media data for the current position has been removed. Playback cannot progress until media for the
                     <a def-id="current-playback-position"></a> is appended or the <a href="#active-source-buffer-changes">selected/enabled tracks change</a>.</p>
                 </li>
