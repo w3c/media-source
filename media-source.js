@@ -498,7 +498,11 @@
       'ArrayBufferView': { spec: 'typed-array', fragment: 'ArrayBufferView' },
       'DOMHighResTimeStamp': { spec: 'hr-time', fragment: 'dom-domhighrestimestamp'},
     };
-    $("a:not([href])").each(function () {
+ 
+    $("a:not([href])").each( updateExternalReference );
+    $("span.idlAttrType").each( updateExternalReference );
+    
+    function updateExternalReference() {
       var $ant = $(this);
       var className = this.innerHTML;
       var info = externalClassInfo[className];
@@ -531,7 +535,7 @@
           this.parentNode.replaceChild(df, this);
         }
       }
-    });
+    };
 
     // Move algorithm text after method parameter & return value information.
     $("ol.method-algorithm").each(function() {
