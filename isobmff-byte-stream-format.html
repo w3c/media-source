@@ -325,7 +325,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">ISO BMFF Byte Stream Format</h1>
   
-  <h2 id="w3c-editor-s-draft-20-july-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-07-20">20 July 2016</time></h2>
+  <h2 id="w3c-editor-s-draft-26-july-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-07-26">26 July 2016</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -526,7 +526,7 @@ table.simple {
       
     
   
-</section><section id="toc"><h2 class="introductory" id="h-toc" resource="#h-toc"><span property="xhv:role" resource="xhv:heading">Table of Contents</span></h2><ul class="toc" role="directory"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#iso-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#iso-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#iso-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#conformance" class="tocxref"><span class="secno">6. </span>Conformance</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">7. </span>Acknowledgments</a></li><li class="tocline"><a href="#revision-history" class="tocxref"><span class="secno">8. </span>Revision History</a></li><li class="tocline"><a href="#references" class="tocxref"><span class="secno">A. </span>References</a><ul class="toc"><li class="tocline"><a href="#normative-references" class="tocxref"><span class="secno">A.1 </span>Normative references</a></li><li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">A.2 </span>Informative references</a></li></ul></li></ul></section>
+</section><section id="toc"><h2 class="introductory" id="h-toc" resource="#h-toc"><span property="xhv:role" resource="xhv:heading">Table of Contents</span></h2><ul class="toc" role="directory"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#iso-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#iso-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#iso-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#conformance" class="tocxref"><span class="secno">6. </span>Conformance</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">7. </span>Acknowledgments</a></li><li class="tocline"><a href="#references" class="tocxref"><span class="secno">A. </span>References</a><ul class="toc"><li class="tocline"><a href="#normative-references" class="tocxref"><span class="secno">A.1 </span>Normative references</a></li><li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">A.2 </span>Informative references</a></li></ul></li></ul></section>
 
     
 
@@ -640,67 +640,8 @@ table.simple {
       The editors would like to thank Chris Poole, Cyril Concolato, David Singer, Jer Noble, Jerry Smith, Joe Steele, John Simmons, Kevin Streeter, Michael Thornburgh, and Steven Robertson for their contributions to this specification.
     </section>
 
-    <section id="revision-history" typeof="bibo:Chapter" resource="#revision-history" property="bibo:hasPart">
-      <!--OddPage--><h2 id="h-revision-history" resource="#h-revision-history"><span property="xhv:role" resource="xhv:heading"><span class="secno">8. </span>Revision History</span></h2>
-      <table class="old-table">
-        <thead>
-          <tr>
-            <th>Version</th>
-            <th>Comment</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>20 July 2016</td>
-            <td>
-              <ul>
-                <li>Issue 115 - Updated editors and updated to use RFC2119 key word mark-up and reference.</li>
-                <li>Issue 50 - Moved avc1-4 to non-normative note.</li>
-                <li>Issue 49 - Added headers, SOTD. Removed file-a-bugzilla link.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/ec35e38422eb1a5f114cffb61ddf6ea99acf6985/isobmff-byte-stream-format.html">20 March 2015</a></td>
-            <td>
-              <ul>
-                <li>Bug 28066 - Changed Movie Header Box to Movie Box.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/c3ad59c7a370d04430969ba73d18dc9bcde57a33/isobmff-byte-stream-format.html">09 January 2015</a></td>
-            <td>
-              <ul>
-                <li>Bug 27758 - Add reference to INBANDTRACKS spec.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/163dbff04bcc89e0659bceab65abc409c3ce3895/isobmff-byte-stream-format.html">20 June 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 26066 - Clarify edit list requirements.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/6a57b8c6e4fde462a69db34e6376ccb77e58683f/isobmff-byte-stream-format.html">03 March 2014</a></td>
-            <td>
-              <ul>
-                <li>Bug 24903 - Add ftyp &amp; styp validation text.</li>
-                <li>Bug 24345 - Loosen restrictions and clarify what relative addressing means.</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td><a href="https://rawgit.com/w3c/media-source/edd2cf21d5779171409b1a78a34ee5b3063543d5/isobmff-byte-stream-format.html">02 December 2013</a></td>
-            <td>Initial CR version.</td>
-          </tr>
-        </tbody>
-      </table>
   
 
-</section><section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart"><!--OddPage--><h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>References</span></h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart"><h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.1 </span>Normative references</span></h3><dl class="bibliography" resource=""><dt id="bib-RFC2119">[RFC2119]</dt><dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires">https://tools.ietf.org/html/rfc2119</a>
+<section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart"><!--OddPage--><h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>References</span></h2><section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart"><h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.1 </span>Normative references</span></h3><dl class="bibliography" resource=""><dt id="bib-RFC2119">[RFC2119]</dt><dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires">https://tools.ietf.org/html/rfc2119</a>
 </dd></dl></section><section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart"><h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.2 </span>Informative references</span></h3><dl class="bibliography" resource=""><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt><dd>Bob Lund; Silvia Pfeiffer. <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. URL: <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references">http://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
 </dd></dl></section></section></body></html>

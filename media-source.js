@@ -369,7 +369,7 @@
     'provide-a-stable-state': { func: webappapis_helper, fragment: 'provide-a-stable-state', link_text: 'provide a stable state',  },
 
     'origin': { func: browsers_helper, fragment: 'origin', link_text: 'origin', },
-    'effective-script-origin': { func: browsers_helper, fragment: 'effective-script-origin', link_text: 'effective script origin', },
+    'relevant-settings-object': { func: webappapis_helper, fragment: 'relevant-settings-object', link_text: 'relevant settings object', },
 
 
     'media-data-cannot-be-fetched': { func: fragment_helper, fragment: '', link_text: '&quot;<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>&quot;', },
