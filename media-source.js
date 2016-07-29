@@ -499,17 +499,7 @@
       'DOMHighResTimeStamp': { spec: 'hr-time', fragment: 'dom-domhighrestimestamp'},
     };
  
-    $("a:not([href])").each( updateExternalReference );
-    $("span.idlAttrType").each( updateExternalReference );
-    
-    function updateExternalReference() {
-      var $ant = $(this);
-      var className = this.innerHTML;
-      var info = externalClassInfo[className];
-      if (info) {
-        var id = info.fragment;
-        var df = doc.createDocumentFragment();
-        var baseURL = null;
+    function lookupBaseUrlForSpec( info ) {
         if (info.spec == 'w3c-streams-api') {
           baseURL = W3C_STREAMS_spec_url;
         } else if (info.spec == 'whatwg-streams-api') {
@@ -529,13 +519,39 @@
         } else if (info.spec == 'mse') {
           baseURL = MSE_spec_url;
         }
-
+        return baseURL;
+    }
+ 
+    $("a:not([href])").each( function() {
+      var $ant = $(this);
+      var className = this.innerHTML;
+      var info = externalClassInfo[className];
+      if (info) {
+        var id = info.fragment;
+        var df = doc.createDocumentFragment();
+        var baseURL = lookupBaseUrlForSpec( info );
+ 
         if (baseURL) {
           df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: baseURL + "#" + id, 'class': 'idlType'}).text(className))[0]);
           this.parentNode.replaceChild(df, this);
         }
       }
-    };
+    } );
+ 
+    $("span.idlAttrType, span.idlMethType, span.idlParamType").each( function() {
+      var $ant = $(this);
+      var className = this.innerHTML;
+      var info = externalClassInfo[className];
+      if (info) {
+        var id = info.fragment;
+        var baseURL = lookupBaseUrlForSpec( info );
+ 
+        if (baseURL) {
+          $ant.empty();
+          $ant.append($("<a/>").attr({href: baseURL + "#" + id }).text(className));
+        }
+      }
+    } );
 
     // Move algorithm text after method parameter & return value information.
     $("ol.method-algorithm").each(function() {
