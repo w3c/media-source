@@ -538,9 +538,9 @@
       }
     } );
  
-    $("span.idlAttrType, span.idlMethType, span.idlParamType").each( function() {
+    $("span.idlAttrType, span.idlMethType, span.idlParamType, td.prmType").each( function() {
       var $ant = $(this);
-      var className = this.innerHTML;
+      var className = $ant.text();
       var info = externalClassInfo[className];
       if (info) {
         var id = info.fragment;
@@ -548,7 +548,7 @@
  
         if (baseURL) {
           $ant.empty();
-          $ant.append($("<a/>").attr({href: baseURL + "#" + id }).text(className));
+          $ant.append($("<code/>").wrapInner($("<a/>").attr({href: baseURL + "#" + id }).text(className)));
         }
       }
     } );
