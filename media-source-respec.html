@@ -576,22 +576,41 @@ interface MediaSource : EventTarget {
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">error</td><td class="prmType"><code>EndOfStreamError</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>setLiveSeekableRange</code></dfn></dt><dd>
 
           <p>Updates the <a def-id="live-seekable-range"></a> variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <a def-id="hme-seekable"></a> behavior.</p>
-          <dl class='parameters'>
-            <dt>double start</dt>
-            <dd>
-              The start of the range, in seconds measured from <a def-id="presentation-start-time"></a>. While set, and if <a def-id="duration"></a> equals positive Infinity, <a def-id="hme-seekable"></a> will return a non-empty TimeRanges object with a lowest range start timestamp no greater than <var>start</var>.
-            </dd>
-            <dt>double end</dt>
-            <dd>
-              The end of range, in seconds measured from <a def-id="presentation-start-time"></a>. While set, and if <a def-id="duration"></a> equals positive Infinity, <a def-id="hme-seekable"></a> will return a non-empty TimeRanges object with a highest range end timestamp no less than <var>end</var>.
-            </dd>
-          </dl>
           <ol class="method-algorithm">
             <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If <var>start</var> is negative or greater than <var>end</var>, then throw a <a def-id="type-error"></a> exception and abort these steps.</li>
             <li>Set <a def-id="live-seekable-range"></a> to be a new <a def-id="normalized-timeranges-object"></a> containing a single range whose start position is <var>start</var> and end position is <var>end</var>.
           </li></ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">start</td><td class="prmType"><code>double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">end</td><td class="prmType"><code>double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>clearLiveSeekableRange</code></dfn></dt><dd>
+          <table class="parameters">
+            <tbody>
+              <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Nullable</th>
+                <th>Optional</th>
+                <th>Description</th>
+              </tr>
+              <tr>
+                <td class="prmName">start</td>
+                <td class="prmType"><code>double</code></td>
+                <td class="prmNullFalse"><span aria-label="False" role=
+                "img">✘</span></td>
+                <td class="prmOptFalse"><span aria-label="False" role=
+                "img">✘</span></td>
+                <td class="prmDesc">The start of the range, in seconds measured from <a def-id="presentation-start-time"></a>. While set, and if <a def-id="duration"></a> equals positive Infinity, <a def-id="hme-seekable"></a> will return a non-empty TimeRanges object with a lowest range start timestamp no greater than <var>start</var>.</td>
+              </tr>
+              <tr>
+                <td class="prmName">end</td>
+                <td class="prmType"><code>double</code></td>
+                <td class="prmNullFalse"><span aria-label="False" role=
+                "img">✘</span></td>
+                <td class="prmOptFalse"><span aria-label="False" role=
+                "img">✘</span></td>
+                <td class="prmDesc">The end of range, in seconds measured from <a def-id="presentation-start-time"></a>. While set, and if <a def-id="duration"></a> equals positive Infinity, <a def-id="hme-seekable"></a> will return a non-empty TimeRanges object with a highest range end timestamp no less than <var>end</var>.</td>
+              </tr>
+            </tbody>
+          </table>
+        <div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>clearLiveSeekableRange</code></dfn></dt><dd>
           <p>Updates the <a def-id="live-seekable-range"></a> variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <a def-id="hme-seekable"></a> behavior.</p>
 
           <ol class="method-algorithm">
@@ -1126,18 +1145,8 @@ interface MediaSource : EventTarget {
             <li>Set <a def-id="appendWindowEnd"></a> to positive Infinity.</li>
           </ol>
         <div><em>No parameters.</em></div><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>remove</code></dfn></dt><dd>
-          <p>Removes media for a specific time range.</p>
-          <dl class='parameters'>
-            <dt>double start</dt>
-            <dd>
-              The start of the removal range, in seconds measured from <a def-id="presentation-start-time"></a>.
-            </dd>
-            <dt>unrestricted double end</dt>
-            <dd>
-              The end of the removal range, in seconds measured from <a def-id="presentation-start-time"></a>.
-            </dd>
-          </dl>
-          <ol class="method-algorithm">
+        <p>Removes media for a specific time range.</p>
+        <ol class="method-algorithm">
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If <a def-id="duration"></a> equals NaN, then throw a <a def-id="type-error"></a> exception and abort these steps.</li>
@@ -1154,7 +1163,36 @@ interface MediaSource : EventTarget {
             <li>Run the <a def-id="range-removal"></a> algorithm with <var>start</var> and <var>end</var> as the start and end of the removal range.</li>
        </ol>
 
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">start</td><td class="prmType"><code>double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">end</td><td class="prmType"><code>unrestricted double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd></dl></section></div>
+      <table class="parameters">
+        <tbody>
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Nullable</th>
+            <th>Optional</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="prmName">start</td>
+            <td class="prmType"><code>double</code></td>
+            <td class="prmNullFalse"><span aria-label="False" role=
+            "img">✘</span></td>
+            <td class="prmOptFalse"><span aria-label="False" role=
+            "img">✘</span></td>
+            <td class="prmDesc">The start of the removal range, in seconds measured from <a def-id="presentation-start-time"></a>.</td>
+          </tr>
+          <tr>
+            <td class="prmName">end</td>
+            <td class="prmType"><code>unrestricted double</code></td>
+            <td class="prmNullFalse"><span aria-label="False" role=
+            "img">✘</span></td>
+            <td class="prmOptFalse"><span aria-label="False" role=
+            "img">✘</span></td>
+            <td class="prmDesc">The end of the removal range, in seconds measured from <a def-id="presentation-start-time"></a>.</td>
+          </tr>
+        </tbody>
+      </table>
+        <div><em>Return type: </em><a>void</a></div></dd></dl></section></div>
 
       <section id="track-buffers">
         <h3>Track Buffers</h3>
