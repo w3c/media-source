@@ -3,8 +3,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Media Source Extensions</title>
-    <!--<script src="https://www.w3.org/Tools/respec/respec-w3c-common" class="remove"></script>-->
-    <script src="respec-w3c-common.js" class="remove"></script>
+    <script src="https://www.w3.org/Tools/respec/respec-w3c-common" class="remove"></script>
+    <!--<script src="respec-w3c-common.js" class="remove"></script>-->
     <script src="media-source.js" class="remove"></script>
     <script class="remove">
       var respecConfig = {
@@ -481,7 +481,7 @@ interface MediaSource : EventTarget {
             <li>Add the new object to <a def-id="sourceBuffers"></a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="addsourcebuffer"></a> at <a def-id="sourceBuffers"></a>.</li>
             <li>Return the new object.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>SourceBuffer</code></div></dd><dt><dfn><code>removeSourceBuffer</code></dfn></dt><dd>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>SourceBuffer</a></div></dd><dt><dfn><code>removeSourceBuffer</code></dfn></dt><dd>
           <p>Removes a <a>SourceBuffer</a> from <a def-id="sourceBuffers"></a>.</p>
 
           <ol class="method-algorithm">
@@ -565,7 +565,7 @@ interface MediaSource : EventTarget {
               the <a>SourceBufferList</a> returned by <a def-id="sourceBuffers"></a>.</li>
             <li>Destroy all resources for <var>sourceBuffer</var>.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">sourceBuffer</td><td class="prmType"><code>SourceBuffer</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>void</code></div></dd><dt><dfn><code>endOfStream</code></dfn></dt><dd>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">sourceBuffer</td><td class="prmType"><code>SourceBuffer</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>endOfStream</code></dfn></dt><dd>
           <p>Signals the end of the stream.</p>
 
           <ol class="method-algorithm">
@@ -573,7 +573,7 @@ interface MediaSource : EventTarget {
             <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Run the <a def-id="end-of-stream-algorithm"></a> with the <var>error</var> parameter set to <var>error</var>.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">error</td><td class="prmType"><code>EndOfStreamError</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>void</code></div></dd><dt><dfn><code>setLiveSeekableRange</code></dfn></dt><dd>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">error</td><td class="prmType"><code>EndOfStreamError</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>setLiveSeekableRange</code></dfn></dt><dd>
 
           <p>Updates the <a def-id="live-seekable-range"></a> variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <a def-id="hme-seekable"></a> behavior.</p>
           <dl class='parameters'>
@@ -591,14 +591,14 @@ interface MediaSource : EventTarget {
             <li>If <var>start</var> is negative or greater than <var>end</var>, then throw a <a def-id="type-error"></a> exception and abort these steps.</li>
             <li>Set <a def-id="live-seekable-range"></a> to be a new <a def-id="normalized-timeranges-object"></a> containing a single range whose start position is <var>start</var> and end position is <var>end</var>.
           </li></ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">start</td><td class="prmType"><code>double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">end</td><td class="prmType"><code>double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>void</code></div></dd><dt><dfn><code>clearLiveSeekableRange</code></dfn></dt><dd>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">start</td><td class="prmType"><code>double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">end</td><td class="prmType"><code>double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>clearLiveSeekableRange</code></dfn></dt><dd>
           <p>Updates the <a def-id="live-seekable-range"></a> variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <a def-id="hme-seekable"></a> behavior.</p>
 
           <ol class="method-algorithm">
             <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If <a def-id="live-seekable-range"></a> contains a range, then set <a def-id="live-seekable-range"></a> to be a new empty <a def-id="timeranges"></a> object.
           </li></ol>
-        <div><em>No parameters.</em></div><div><em>Return type: </em><code>void</code></div></dd><dt><dfn><code>isTypeSupported</code></dfn>, static</dt><dd>
+        <div><em>No parameters.</em></div><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>isTypeSupported</code></dfn>, static</dt><dd>
           <p>Check to see whether the <a>MediaSource</a> is capable of creating <a>SourceBuffer</a> objects for the specified MIME type.</p>
 
           <ol class="method-algorithm">
@@ -615,7 +615,7 @@ interface MediaSource : EventTarget {
           <p class="note">
             This method returning true implies that HTMLMediaElement.canPlayType() will return "maybe" or "probably" since it does not make sense for a <a>MediaSource</a> to support a type the HTMLMediaElement knows it cannot play.
           </p>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>boolean</code></div></dd></dl></section></div>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a><code>boolean</code></a></div></dd></dl></section></div>
 
       <section id="mediasource-events">
         <h3>Event Summary</h3>
@@ -1087,7 +1087,7 @@ interface MediaSource : EventTarget {
         </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="SourceBuffer" data-link-for="SourceBuffer"><dt><dfn id="dom-sourcebuffer-appendbuffer"><code>appendBuffer(ArrayBuffer)</code></dfn></dt><dd>
           <p>Appends the segment data in an <a class="externalDFN">ArrayBuffer</a>[[!TYPED-ARRAYS]] to the source buffer.</p>
           <p>The steps for this method are the same as the ArrayBufferView version of <a def-id="appendBuffer"></a>.</p>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType"><code>ArrayBuffer</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>void</code></div></dd><dt><dfn id="dom-sourcebuffer-appendbuffer-arraybufferview"><code>appendBuffer(ArrayBufferView)</code></dfn></dt><dd>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType"><code>ArrayBuffer</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn id="dom-sourcebuffer-appendbuffer-arraybufferview"><code>appendBuffer(ArrayBufferView)</code></dfn></dt><dd>
           <p>Appends the segment data in an <a class="externalDFN">ArrayBufferView</a>[[!TYPED-ARRAYS]] to the source buffer.</p>
 
           <ol class="method-algorithm">
@@ -1097,7 +1097,7 @@ interface MediaSource : EventTarget {
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
             <li>Asynchronously run the <a def-id="buffer-append"></a> algorithm.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType"><code>ArrayBufferView</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>void</code></div></dd><dt><dfn><code>appendStream</code></dfn></dt><dd>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType"><code>ArrayBufferView</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>appendStream</code></dfn></dt><dd>
           <p>Appends segment data to the source buffer from a <a class="externalDFN">ReadableStream</a>[[!WHATWG-STREAMS-API]].</p>
 
           <ol class="method-algorithm">
@@ -1106,7 +1106,7 @@ interface MediaSource : EventTarget {
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
             <li>Asynchronously run the <a def-id="stream-append-loop"></a> algorithm with <var>stream</var> and <var>maxSize</var>.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">stream</td><td class="prmType"><code>ReadableStream</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">maxSize</td><td class="prmType"><code>unsigned long long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>void</code></div></dd><dt><dfn><code>abort</code></dfn></dt><dd>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">stream</td><td class="prmType"><code>ReadableStream</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">maxSize</td><td class="prmType"><code>unsigned long long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>abort</code></dfn></dt><dd>
           <p>Aborts the current segment and resets the segment parser.</p>
 
           <ol class="method-algorithm">
@@ -1125,7 +1125,7 @@ interface MediaSource : EventTarget {
             <li>Set <a def-id="appendWindowStart"></a> to the <a def-id="presentation-start-time"></a>.</li>
             <li>Set <a def-id="appendWindowEnd"></a> to positive Infinity.</li>
           </ol>
-        <div><em>No parameters.</em></div><div><em>Return type: </em><code>void</code></div></dd><dt><dfn><code>remove</code></dfn></dt><dd>
+        <div><em>No parameters.</em></div><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>remove</code></dfn></dt><dd>
           <p>Removes media for a specific time range.</p>
           <dl class='parameters'>
             <dt>double start</dt>
@@ -1154,7 +1154,7 @@ interface MediaSource : EventTarget {
             <li>Run the <a def-id="range-removal"></a> algorithm with <var>start</var> and <var>end</var> as the start and end of the removal range.</li>
        </ol>
 
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">start</td><td class="prmType"><code>double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">end</td><td class="prmType"><code>unrestricted double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>void</code></div></dd></dl></section></div>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">start</td><td class="prmType"><code>double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">end</td><td class="prmType"><code>unrestricted double</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd></dl></section></div>
 
       <section id="track-buffers">
         <h3>Track Buffers</h3>
@@ -2238,7 +2238,7 @@ interface MediaSource : EventTarget {
             <li>If <var>index</var> is greater than or equal to the <a def-id="SourceBufferList-length"></a> attribute then return undefined and abort these steps.</li>
             <li>Return the <var>index</var>'th <a>SourceBuffer</a> object in the list.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">index</td><td class="prmType"><code>unsigned long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>getter</code></div></dd></dl></section></div>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">index</td><td class="prmType"><code>unsigned long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a><code>getter</code></a></div></dd></dl></section></div>
 
       <section id="sourcebufferlist-events">
         <h3>Event Summary</h3>
@@ -2367,7 +2367,7 @@ interface TrackDefault {
         </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="TrackDefault" data-link-for="TrackDefault"><dt><dfn><code>getKinds</code></dfn></dt><dd>
           <p>The default kinds used when an <a def-id="init-segment"></a> does not contain kind
           information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
-        <div><em>No parameters.</em></div><div><em>Return type: </em><code>sequence&lt;DOMString&gt;</code></div></dd></dl></section></div>
+        <div><em>No parameters.</em></div><div><em>Return type: </em><code>sequence&lt;<a>DOMString</a>&gt;</code></div></dd></dl></section></div>
     </section>
 
     <section id="trackdefaultlist">
@@ -2400,7 +2400,7 @@ interface TrackDefaultList {
             <li>If <var>index</var> is greater than or equal to the <a def-id="TrackDefaultList-length"></a> attribute then return undefined and abort these steps.</li>
             <li>Return the <var>index</var>'th <a>TrackDefault</a> object in the list.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">index</td><td class="prmType"><code>unsigned long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>getter</code></div></dd></dl></section></div>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">index</td><td class="prmType"><code>unsigned long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a><code>getter</code></a></div></dd></dl></section></div>
     </section>
 
     <section id="url">
@@ -2417,7 +2417,7 @@ partial interface URL {
             <li>Return a unique <a def-id="MediaSource-object-URL"></a> that can be used to dereference the <var>mediaSource</var> argument.</li>
           </ol>
           <p class="note">This algorithm is intended to mirror the behavior of the <a def-id="file-createObjectURL"></a>[[!FILE-API]] method, which does not auto-revoke the created URL. Web authors are encouraged to use <a def-id="file-revokeObjectURL"></a>[[!FILE-API]] for any <a def-id="MediaSource-object-URL"></a> that is no longer needed for attachment to a media element.</p>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">mediaSource</td><td class="prmType"><code>MediaSource</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code>DOMString</code></div></dd></dl></section></div>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">mediaSource</td><td class="prmType"><code>MediaSource</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a><code>DOMString</code></a></div></dd></dl></section></div>
     </section>
 
     <section id="htmlmediaelement-extensions">
@@ -2515,7 +2515,7 @@ partial interface URL {
             <li>Set <var>playbackQuality</var>.<a def-id="totalFrameDelay"></a> to the current value of the <a def-id="displayed-frame-delay-sum"></a>.</li>
             <li>Return <var>playbackQuality</var>.</li>
           </ol>
-        <div><em>No parameters.</em></div><div><em>Return type: </em><code>VideoPlaybackQuality</code></div></dd></dl></section></div>
+        <div><em>No parameters.</em></div><div><em>Return type: </em><a><code>VideoPlaybackQuality</code></a></div></dd></dl></section></div>
     </section>
 
     <section id="audio-track-extensions">

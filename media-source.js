@@ -387,96 +387,7 @@
     'ReadableStream-state-closed': { func: whatwg_streams_helper, fragment: 'rs-state', link_text:'"closed"', },
     'ReadableStream-state-errored': { func: whatwg_streams_helper, fragment: 'rs-state', link_text:'"errored"', },
   };
-
-  var definitionInfo = {};
-  var groupBaseURLs = {};
-  var helperTypes = {
-    'link' : link_helper,
-    'var' : var_helper,
-  };
-
-  function mediaSourceAddDefinitionInfo(groupName, groupBaseURL, definitions) {
-    groupBaseURLs[groupName] = groupBaseURL;
-    for (var def_id in definitions) {
-      if (definitionInfo[def_id]) {
-        console.log("Overriding previous definition of def-id '" + def_id + "'.");
-      }
-      var info = definitions[def_id];
-      info.groupName = groupName;
-      if (!info.func) {
-        var helper_type = info.helper_type || "link";
-        info.func = helperTypes[helper_type];
-      }
-      definitionInfo[def_id] = info;
-    }
-  }
-
-  function mediaSourcePreProcessor() {
-    for (var x in groupBaseURLs) {
-      if (groupBaseURLs[x] == MSE_spec_url && window.respecConfig.specStatus == "ED") {
-        MSE_spec_url = "index.html";
-        groupBaseURLs[x] = MSE_spec_url;
-        break;
-      }
-    }
-
-    $("a[def-id]").each(function () {
-      $(this).addClass('externalDFN');
-    });
-
-    if (window.respecConfig.localBiblio) {
-      var tmp = window.respecConfig.localBiblio["W3C-STREAMS-API"]
-      if (tmp && tmp.indexOf(W3C_STREAMS_spec_url) == -1) {
-        console.log("W3C_STREAMS_spec_url is out of sync with the localBiblio entry");
-      }
-
-      var tmp = window.respecConfig.localBiblio["WHATWG-STREAMS-API"]
-      if (tmp && tmp.indexOf(WHATWG_STREAMS_spec_url) == -1) {
-        console.log("WHATWG_STREAMS_spec_url is out of sync with the localBiblio entry");
-      }
-    }
-  }
-
-  function mediaSourcePostProcessor() {
-    var doc = document;
-    doc.normalize();
-
-    var usedMap = {};
-
-    $("a[def-id]").each(function () {
-      var $ant = $(this);
-      var def_id = $ant.attr('def-id');
-      var info = definitionInfo[def_id];
-      if (info) {
-        if (!usedMap[def_id]) {
-          usedMap[def_id] = 1;
-        } else {
-          usedMap[def_id]++;
-        }
-
-        var id = info.fragment;
-        var text = info.link_text;
-
-        if ($ant.attr('name')) {
-          id = $ant.attr('name');
-        }
-
-        var element_text = this.innerHTML;
-        if (element_text) {
-          text = element_text;
-        }
-
-        var df = doc.createDocumentFragment();
-        doc.mseDefGroupName = info.groupName;
-        info.func(doc, df, id, text);
-        doc.mseDefGroupName = "";
-        this.parentNode.replaceChild(df, this);
-
-      } else {
-        console.log("Found def-id '" + def_id + "' but it does not correspond to anything");
-      }
-    });
-
+ 
     // Update links to external type definitions.
     var externalClassInfo = {
       'ReadableStream': { spec: 'whatwg-streams-api', fragment: 'rs-class-definition' },
@@ -521,14 +432,51 @@
         }
         return baseURL;
     }
+
+  var definitionInfo = {};
+  var groupBaseURLs = {};
+  var helperTypes = {
+    'link' : link_helper,
+    'var' : var_helper,
+  };
+
+  function mediaSourceAddDefinitionInfo(groupName, groupBaseURL, definitions) {
+    groupBaseURLs[groupName] = groupBaseURL;
+    for (var def_id in definitions) {
+      if (definitionInfo[def_id]) {
+        console.log("Overriding previous definition of def-id '" + def_id + "'.");
+      }
+      var info = definitions[def_id];
+      info.groupName = groupName;
+      if (!info.func) {
+        var helper_type = info.helper_type || "link";
+        info.func = helperTypes[helper_type];
+      }
+      definitionInfo[def_id] = info;
+    }
+  }
+
+  function mediaSourcePreProcessor() {
+    for (var x in groupBaseURLs) {
+      if (groupBaseURLs[x] == MSE_spec_url && window.respecConfig.specStatus == "ED") {
+        MSE_spec_url = "index.html";
+        groupBaseURLs[x] = MSE_spec_url;
+        break;
+      }
+    }
+
+    $("a[def-id]").each(function () {
+      $(this).addClass('externalDFN');
+    });
  
+    // Process external links first, so ReSpec will leave them alone
     $("a:not([href])").each( function() {
       var $ant = $(this);
-      var className = this.innerHTML;
+      var className = $ant.text();
       var info = externalClassInfo[className];
       if (info) {
         var id = info.fragment;
-        var df = doc.createDocumentFragment();
+        var df = document.createDocumentFragment();
         var baseURL = lookupBaseUrlForSpec( info );
  
         if (baseURL) {
@@ -537,7 +485,63 @@
         }
       }
     } );
+
+    if (window.respecConfig.localBiblio) {
+      var tmp = window.respecConfig.localBiblio["W3C-STREAMS-API"]
+      if (tmp && tmp.href !== W3C_STREAMS_spec_url ) {
+        W3C_STREAMS_spec_url = tmp.href;
+        console.log("W3C_STREAMS_spec_url is out of sync with the localBiblio entry");
+      }
+
+      var tmp = window.respecConfig.localBiblio["WHATWG-STREAMS-API"]
+      if (tmp && tmp.href !== WHATWG_STREAMS_spec_url ) {
+        WHATWG_STREAMS_spec_url = tmp.href;
+        console.log("WHATWG_STREAMS_spec_url is out of sync with the localBiblio entry");
+      }
+    }
+  }
+
+  function mediaSourcePostProcessor() {
+    var doc = document;
+    doc.normalize();
+
+    var usedMap = {};
+
+    $("a[def-id]").each(function () {
+      var $ant = $(this);
+      var def_id = $ant.attr('def-id');
+      var info = definitionInfo[def_id];
+      if (info) {
+        if (!usedMap[def_id]) {
+          usedMap[def_id] = 1;
+        } else {
+          usedMap[def_id]++;
+        }
+
+        var id = info.fragment;
+        var text = info.link_text;
+
+        if ($ant.attr('name')) {
+          id = $ant.attr('name');
+        }
+
+        var element_text = this.innerHTML;
+        if (element_text) {
+          text = element_text;
+        }
+
+        var df = doc.createDocumentFragment();
+        doc.mseDefGroupName = info.groupName;
+        info.func(doc, df, id, text);
+        doc.mseDefGroupName = "";
+        this.parentNode.replaceChild(df, this);
+
+      } else {
+        console.log("Found def-id '" + def_id + "' but it does not correspond to anything");
+      }
+    });
  
+    // Link external references from IDL and method parameter tables
     $("span.idlAttrType, span.idlMethType, span.idlParamType, td.prmType").each( function() {
       var $ant = $(this);
       var className = $ant.text();
