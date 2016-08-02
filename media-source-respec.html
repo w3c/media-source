@@ -2375,63 +2375,140 @@ interface MediaSource : EventTarget {
           creating <a>TextTrack</a> objects.
         </td></tr></tbody></table></div>
 
-      <div><pre class="idl">[ Constructor (TrackDefaultType type, DOMString language, DOMString label, sequence&lt;DOMString&gt; kinds, optional DOMString byteStreamTrackID = "")]
+      <div>
+<pre class="idl">[ Constructor (TrackDefaultType type, DOMString language, DOMString label, sequence&lt;DOMString&gt; kinds, optional DOMString byteStreamTrackID = "")]
 interface TrackDefault {
     readonly        attribute TrackDefaultType type;
     readonly        attribute DOMString        byteStreamTrackID;
     readonly        attribute DOMString        language;
     readonly        attribute DOMString        label;
     sequence&lt;DOMString&gt; getKinds ();
-};</pre><section><h2>Constructors</h2><dl class="constructors" data-dfn-for="TrackDefault" data-link-for="TrackDefault"><dt><dfn><code>TrackDefault</code></dfn></dt><dd>
-          <ol class="method-algorithm">
-            <li>If <var>language</var> is not an empty string and <var>language</var> is not a BCP 47
-              language tag, then throw a <a def-id="type-error"></a> and abort these steps.</li>
-            <li>
-              <dl class="switch">
-                <dt>If <var>type</var> equals <a def-id="TrackDefaultType-audio"></a>:</dt>
-                <dd>
-                  If any string in <var>kinds</var> contains a value that is not listed as applying to
-                  audio in the <a def-id="av-kind-categories-table"></a>, then throw a
-                  <a def-id="type-error"></a> and abort these steps.
-                </dd>
-                <dt>If <var>type</var> equals <a def-id="TrackDefaultType-video"></a>:</dt>
-                <dd>
-                  If any string in <var>kinds</var> contains a value that is not listed as applying to
-                  video in the <a def-id="av-kind-categories-table"></a>, then throw a
-                  <a def-id="type-error"></a> and abort these steps.
-                </dd>
+};</pre>
+        <section>
+          <h2>Constructors</h2>
+          <dl class="constructors" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
+            <dt><dfn><code>TrackDefault(type,language,label,kinds,byteStreamTrackID)</code></dfn></dt>
+            <dd>
+              <ol class="method-algorithm">
+                <li>If <var>language</var> is not an empty string and <var>language</var> is not a BCP 47
+                  language tag, then throw a <a def-id="type-error"></a> and abort these steps.</li>
+                <li>
+                  <dl class="switch">
+                    <dt>If <var>type</var> equals <a def-id="TrackDefaultType-audio"></a>:</dt>
+                    <dd>
+                      If any string in <var>kinds</var> contains a value that is not listed as applying to
+                      audio in the <a def-id="av-kind-categories-table"></a>, then throw a
+                      <a def-id="type-error"></a> and abort these steps.
+                    </dd>
+                    <dt>If <var>type</var> equals <a def-id="TrackDefaultType-video"></a>:</dt>
+                    <dd>
+                      If any string in <var>kinds</var> contains a value that is not listed as applying to
+                      video in the <a def-id="av-kind-categories-table"></a>, then throw a
+                      <a def-id="type-error"></a> and abort these steps.
+                    </dd>
 
-                <dt>If <var>type</var> equals <a def-id="TrackDefaultType-text"></a>:</dt>
-                <dd>
-                  If any string in <var>kinds</var> contains a value that is not listed in the
-                  <a def-id="text-track-kind-list"></a>, then throw a <a def-id="type-error"></a>
-                  and abort these steps.
-                </dd>
-              </dl>
-            </li>
-            <li>Set the <a def-id="TrackDefault-type"></a> attribute on this new object to <var>type</var>.</li>
-            <li>Set the <a def-id="TrackDefault-language"></a> attribute on this new object to <var>language</var>.</li>
-            <li>Set the <a def-id="TrackDefault-label"></a> attribute on this new object to <var>label</var>.</li>
-            <li>Set the returned value of the <a def-id="TrackDefault-getkinds"></a> method to return this new object <var>kinds</var>.</li>
-            <li>Set the <a def-id="TrackDefault-byteStreamTrackID"></a> attribute on this new object to <var>byteStreamTrackID</var>.</li>
-          </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code>TrackDefaultType</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">language</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">label</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">kinds</td><td class="prmType"><code>sequence&lt;DOMString&gt;</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">byteStreamTrackID</td><td class="prmType"><code>DOMString = ""</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table></dd></dl></section><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="TrackDefault" data-link-for="TrackDefault"><dt><dfn><code>type</code></dfn> of type <span class="idlAttrType"><a>TrackDefaultType</a></span>, readonly       </dt><dd>
-          <p>The type of track that can be constructed using the information in this object.</p>
-        </dd><dt><dfn><code>byteStreamTrackID</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt><dd>
-          <p>The decimal string representation of the <a def-id="track-id"></a> that identifies the specific
-            track that this object SHOULD apply to. An empty string indicates that this object can be
-            used for any track of the appropriate type (e.g., any <a>AudioTrack</a> if
-            <a def-id="TrackDefault-type"></a> equals <a def-id="TrackDefaultType-audio"></a>).</p>
-        </dd><dt><dfn><code>language</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt><dd>
-          <p>The default language to use when an <a def-id="init-segment"></a> does not contain language
-          information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
-        </dd><dt><dfn><code>label</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt><dd>
-          <p>The default label to use when an <a def-id="init-segment"></a> does not contain label
-          information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
-        </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="TrackDefault" data-link-for="TrackDefault"><dt><dfn><code>getKinds</code></dfn></dt><dd>
-          <p>The default kinds used when an <a def-id="init-segment"></a> does not contain kind
-          information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
-        <div><em>No parameters.</em></div><div><em>Return type: </em><code>sequence&lt;<a>DOMString</a>&gt;</code></div></dd></dl></section></div>
+                    <dt>If <var>type</var> equals <a def-id="TrackDefaultType-text"></a>:</dt>
+                    <dd>
+                      If any string in <var>kinds</var> contains a value that is not listed in the
+                      <a def-id="text-track-kind-list"></a>, then throw a <a def-id="type-error"></a>
+                      and abort these steps.
+                    </dd>
+                  </dl>
+                </li>
+                <li>Set the <a def-id="TrackDefault-type"></a> attribute on this new object to <var>type</var>.</li>
+                <li>Set the <a def-id="TrackDefault-language"></a> attribute on this new object to <var>language</var>.</li>
+                <li>Set the <a def-id="TrackDefault-label"></a> attribute on this new object to <var>label</var>.</li>
+                <li>Set the returned value of the <a def-id="TrackDefault-getkinds"></a> method to return this new object <var>kinds</var>.</li>
+                <li>Set the <a def-id="TrackDefault-byteStreamTrackID"></a> attribute on this new object to <var>byteStreamTrackID</var>.</li>
+              </ol>
+              <table class="parameters">
+                <tbody>
+                  <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Nullable</th>
+                    <th>Optional</th>
+                    <th>Description</th>
+                  </tr>
+                  <tr>
+                    <td class="prmName">type</td>
+                    <td class="prmType"><code>TrackDefaultType</code></td>
+                    <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
+                    <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
+                    <td class="prmDesc"></td>
+                  </tr>
+                  <tr>
+                    <td class="prmName">language</td>
+                    <td class="prmType"><code>DOMString</code></td>
+                    <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
+                    <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
+                    <td class="prmDesc"></td>
+                  </tr>
+                  <tr>
+                    <td class="prmName">label</td>
+                    <td class="prmType"><code>DOMString</code></td>
+                    <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
+                    <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
+                    <td class="prmDesc"></td>
+                  </tr>
+                  <tr>
+                    <td class="prmName">kinds</td>
+                    <td class="prmType"><code>sequence&lt;DOMString&gt;</code></td>
+                    <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
+                    <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
+                    <td class="prmDesc"></td>
+                  </tr>
+                  <tr>
+                    <td class="prmName">byteStreamTrackID</td>
+                    <td class="prmType"><code>DOMString = ""</code></td>
+                    <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
+                    <td class="prmOptTrue"><span aria-label="True" role="img">✔</span></td>
+                    <td class="prmDesc"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Attributes</h2>
+          <dl class="attributes" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
+            <dt><dfn><code>type</code></dfn> of type <span class="idlAttrType"><a>TrackDefaultType</a></span>, readonly       </dt>
+            <dd>
+              <p>The type of track that can be constructed using the information in this object.</p>
+            </dd>
+            <dt><dfn><code>byteStreamTrackID</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt>
+            <dd>
+              <p>The decimal string representation of the <a def-id="track-id"></a> that identifies the specific
+                track that this object SHOULD apply to. An empty string indicates that this object can be
+                used for any track of the appropriate type (e.g., any <a>AudioTrack</a> if
+                <a def-id="TrackDefault-type"></a> equals <a def-id="TrackDefaultType-audio"></a>).</p>
+            </dd>
+            <dt><dfn><code>language</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt>
+            <dd>
+              <p>The default language to use when an <a def-id="init-segment"></a> does not contain language
+              information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
+            </dd>
+            <dt><dfn><code>label</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt>
+            <dd>
+              <p>The default label to use when an <a def-id="init-segment"></a> does not contain label
+              information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
+            </dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Methods</h2>
+          <dl class="methods" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
+            <dt><dfn><code>getKinds</code></dfn></dt>
+            <dd>
+              <p>The default kinds used when an <a def-id="init-segment"></a> does not contain kind
+              information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
+              <div><em>No parameters.</em></div>
+              <div><em>Return type: </em><code>sequence&lt;<a>DOMString</a>&gt;</code></div>
+            </dd>
+          </dl>
+        </section>
+      </div>
     </section>
 
     <section id="trackdefaultlist">
@@ -2442,7 +2519,12 @@ interface TrackDefault {
 interface TrackDefaultList {
     readonly        attribute unsigned long length;
     getter TrackDefault (unsigned long index);
-};</pre><section><h2>Constructors</h2><dl class="constructors" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList"><dt><dfn><code>TrackDefaultList</code></dfn></dt><dd>
+};</pre>
+        <section>
+        <h2>Constructors</h2>
+        <dl class="constructors" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList">
+          <dt><dfn><code>TrackDefaultList(trackDefaults)</code></dfn></dt>
+          <dd>
           <ol class="method-algorithm">
             <li>If <var>trackDefaults</var> contains two or more <a>TrackDefault</a> objects with
               the same <a def-id="TrackDefault-type"></a> and the same
@@ -2457,7 +2539,7 @@ interface TrackDefaultList {
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">trackDefaults</td><td class="prmType"><code>sequence&lt;TrackDefault&gt; = []</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table></dd></dl></section><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList"><dt><dfn><code>length</code></dfn> of type <span class="idlAttrType"><a>unsigned long</a></span>, readonly       </dt><dd>
           <p>Indicates the number of <a>TrackDefault</a> objects in the list.</p>
 
-        </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList"><dt><dfn><code>TrackDefault</code></dfn></dt><dd>
+        </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList"><dt><dfn><code>getter</code></dfn></dt><dd>
           <p>Allows the TrackDefault objects in the list to be accessed with an array operator (i.e., []).</p>
 
           <ol class="method-algorithm">

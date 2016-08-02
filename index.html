@@ -2081,7 +2081,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                       <span class="idlParam">[<span class="extAttr"><span class="extAttrName">EnforceRange</span></span>] optional <span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long-long">unsigned long long</a></code></span> <span class="idlParamName">maxSize</span></span>);</span>
 <span class="idlMethod" id="idl-def-sourcebuffer-abort()" data-idl="" data-title="abort" data-dfn-for="sourcebuffer">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void">void</a></code></span> <span class="idlMethName"><a data-lt="abort" href="#dom-sourcebuffer-abort" class="internalDFN" data-link-type="dfn" data-for="SourceBuffer"><code>abort</code></a></span>();</span>
 <span class="idlMethod" id="idl-def-sourcebuffer-remove(double,unrestricted_double)" data-idl="" data-title="remove" data-dfn-for="sourcebuffer">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void">void</a></code></span> <span class="idlMethName"><a data-lt="remove" href="#dom-sourcebuffer-remove" class="internalDFN" data-link-type="dfn" data-for="SourceBuffer"><code>remove</code></a></span>(<span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-double">double</a></code></span> <span class="idlParamName">start</span></span>, <span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unrestricted-double">unrestricted double</a></code></span> <span class="idlParamName">end</span></span>);</span>
-<span class="idlAttribute" id="idl-def-sourcebuffer-trackdefaults" data-idl="" data-title="trackDefaults" data-dfn-for="sourcebuffer">             attribute <span class="idlAttrType"><a href="#dom-trackdefaultlist" class="internalDFN" data-link-type="dfn"><code>TrackDefaultList</code></a></span>    <span class="idlAttrName"><a data-lt="trackDefaults" href="#dom-sourcebuffer-trackdefaults" class="internalDFN" data-link-type="dfn" data-for="SourceBuffer"><code>trackDefaults</code></a></span>;</span>
+<span class="idlAttribute" id="idl-def-sourcebuffer-trackdefaults" data-idl="" data-title="trackDefaults" data-dfn-for="sourcebuffer">             attribute <span class="idlAttrType"><a href="#idl-def-trackdefaultlist" class="internalDFN" data-link-type="dfn"><code>TrackDefaultList</code></a></span>    <span class="idlAttrName"><a data-lt="trackDefaults" href="#dom-sourcebuffer-trackdefaults" class="internalDFN" data-link-type="dfn" data-for="SourceBuffer"><code>trackDefaults</code></a></span>;</span>
 };</span></pre>
 
       <section typeof="bibo:Chapter" resource="#attributes-1" property="bibo:hasPart">
@@ -2202,10 +2202,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </dd><dt><dfn data-dfn-for="sourcebuffer" data-dfn-type="dfn" id="dom-sourcebuffer-onabort" data-idl=""><code>onabort</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html51/webappapis.html#typedefdef-eventhandlernonnull-eventhandler">EventHandler</a></code></span></dt>
           <dd>
             <p>The event handler for the <code><a href="#dom-evt-abort">abort</a></code> event.</p>
-          </dd><dt><dfn data-dfn-for="sourcebuffer" data-dfn-type="dfn" id="dom-sourcebuffer-trackdefaults" data-idl=""><code>trackDefaults</code></dfn> of type <span class="idlAttrType"><a href="#dom-trackdefaultlist" class="internalDFN" data-link-type="dfn"><code>TrackDefaultList</code></a></span></dt>
+          </dd><dt><dfn data-dfn-for="sourcebuffer" data-dfn-type="dfn" id="dom-sourcebuffer-trackdefaults" data-idl=""><code>trackDefaults</code></dfn> of type <span class="idlAttrType"><a href="#idl-def-trackdefaultlist" class="internalDFN" data-link-type="dfn"><code>TrackDefaultList</code></a></span></dt>
           <dd>
             <p>Specifies the default values to use if kind, label, and/or language information is not available in the
-              <a href="#init-segment">initialization segment</a> when the <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> needs to create track objects. This attribute is initially set to an empty <a href="#dom-trackdefaultlist" class="internalDFN" data-link-type="dfn"><code>TrackDefaultList</code></a> object.</p>
+              <a href="#init-segment">initialization segment</a> when the <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> needs to create track objects. This attribute is initially set to an empty <a href="#idl-def-trackdefaultlist" class="internalDFN" data-link-type="dfn"><code>TrackDefaultList</code></a> object.</p>
             <p>On getting, Return the initial value or the last value that was successfully set.</p>
             <p>On setting, run the following steps:</p>
             <ol>
@@ -2899,14 +2899,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <p>The following steps are run when the <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> needs to determine what the default language for a new track should be. This algorithm is initialized with <var>byteStreamTrackID</var> and <var>type</var> parameters when invoked by the
           <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a>.</p>
         <ol>
-          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#dfn-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
+          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
             <code><a href="#dom-trackdefault-type">type</a></code> attribute equal to <var>type</var> and a
             <code><a href="#dom-trackdefault-bytestreamtrackid">byteStreamTrackID</a></code> attribute equal to
             <var>byteStreamTrackID</var>, then return the value of the
             <code><a href="#dom-trackdefault-language">language</a></code> attribute on this matching object and abort these steps.
           </li>
 
-          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#dfn-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
+          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
             <code><a href="#dom-trackdefault-type">type</a></code> attribute equal to <var>type</var> and a
             <code><a href="#dom-trackdefault-bytestreamtrackid">byteStreamTrackID</a></code> attribute equal to an empty string, then return the value of the
             <code><a href="#dom-trackdefault-language">language</a></code> attribute on this matching object and abort these steps.
@@ -2921,14 +2921,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <p>The following steps are run when the <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> needs to determine what the default label for a new track should be. This algorithm is initialized with <var>byteStreamTrackID</var> and <var>type</var> parameters when invoked by the
           <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a>.</p>
         <ol>
-          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#dfn-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
+          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
             <code><a href="#dom-trackdefault-type">type</a></code> attribute equal to <var>type</var> and a
             <code><a href="#dom-trackdefault-bytestreamtrackid">byteStreamTrackID</a></code> attribute equal to
             <var>byteStreamTrackID</var>, then return the value of the
             <code><a href="#dom-trackdefault-label">label</a></code> attribute on this matching object and abort these steps.
           </li>
 
-          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#dfn-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
+          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
             <code><a href="#dom-trackdefault-type">type</a></code> attribute equal to <var>type</var> and a
             <code><a href="#dom-trackdefault-bytestreamtrackid">byteStreamTrackID</a></code> attribute equal to an empty string, then return the value of the
             <code><a href="#dom-trackdefault-label">label</a></code> attribute on this matching object and abort these steps.
@@ -2943,14 +2943,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <p>The following steps are run when the <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> needs to determine what the default kinds for a new track should be. This algorithm is initialized with <var>byteStreamTrackID</var> and <var>type</var> parameters when invoked by the
           <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a>.</p>
         <ol>
-          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#dfn-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
+          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
             <code><a href="#dom-trackdefault-type">type</a></code> attribute equal to <var>type</var> and a
             <code><a href="#dom-trackdefault-bytestreamtrackid">byteStreamTrackID</a></code> attribute equal to
             <var>byteStreamTrackID</var>, then return the sequence returned by the
             <code><a href="#dom-trackdefault-getkinds">getKinds</a></code> method on this matching object and abort these steps.
           </li>
 
-          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#dfn-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
+          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
             <code><a href="#dom-trackdefault-type">type</a></code> attribute equal to <var>type</var> and a
             <code><a href="#dom-trackdefault-bytestreamtrackid">byteStreamTrackID</a></code> attribute equal to an empty string, then return the sequence returned by the
             <code><a href="#dom-trackdefault-getkinds">getKinds</a></code> method on this matching object and abort these steps.
@@ -3532,26 +3532,27 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <tr>
             <td><dfn data-dfn-for="trackdefaulttype" data-dfn-type="dfn" id="dom-trackdefaulttype-audio" data-idl=""><code id="idl-def-TrackDefaultType.audio">audio</code></dfn></td>
             <td>
-              Indicates that the information in the <a href="#dfn-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object <em class="rfc2119" title="SHOULD">SHOULD</em> only be used when creating <a href="#idl-def-audiotrack-partial-1" class="internalDFN" data-link-type="dfn"><code>AudioTrack</code></a> objects.
+              Indicates that the information in the <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object <em class="rfc2119" title="SHOULD">SHOULD</em> only be used when creating <a href="#idl-def-audiotrack-partial-1" class="internalDFN" data-link-type="dfn"><code>AudioTrack</code></a> objects.
             </td>
           </tr>
           <tr>
             <td><dfn data-dfn-for="trackdefaulttype" data-dfn-type="dfn" id="dom-trackdefaulttype-video" data-idl=""><code id="idl-def-TrackDefaultType.video">video</code></dfn></td>
             <td>
-              Indicates that the information in the <a href="#dfn-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object <em class="rfc2119" title="SHOULD">SHOULD</em> only be used when creating <a href="#idl-def-videotrack-partial-1" class="internalDFN" data-link-type="dfn"><code>VideoTrack</code></a> objects.
+              Indicates that the information in the <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object <em class="rfc2119" title="SHOULD">SHOULD</em> only be used when creating <a href="#idl-def-videotrack-partial-1" class="internalDFN" data-link-type="dfn"><code>VideoTrack</code></a> objects.
             </td>
           </tr>
           <tr>
             <td><dfn data-dfn-for="trackdefaulttype" data-dfn-type="dfn" id="dom-trackdefaulttype-text" data-idl=""><code id="idl-def-TrackDefaultType.text">text</code></dfn></td>
             <td>
-              Indicates that the information in the <a href="#dfn-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object <em class="rfc2119" title="SHOULD">SHOULD</em> only be used when creating <a href="#idl-def-texttrack-partial-1" class="internalDFN" data-link-type="dfn"><code>TextTrack</code></a> objects.
+              Indicates that the information in the <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object <em class="rfc2119" title="SHOULD">SHOULD</em> only be used when creating <a href="#idl-def-texttrack-partial-1" class="internalDFN" data-link-type="dfn"><code>TextTrack</code></a> objects.
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div><pre class="def idl"><span class="idlInterface" id="idl-def-trackdefault" data-idl="" data-title="TrackDefault">[<span class="idlCtor"><span class="extAttrName">Constructor</span>(<span class="idlParam"><span class="idlParamType"><a href="#idl-def-trackdefaulttype" class="internalDFN" data-link-type="dfn"><code>TrackDefaultType</code></a></span> <span class="idlParamName">type</span></span>, <span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span> <span class="idlParamName">language</span></span>, <span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span> <span class="idlParamName">label</span></span>, <span class="idlParam"><span class="idlParamType">sequence&lt;DOMString&gt;</span> <span class="idlParamName">kinds</span></span>, <span class="idlParam">optional <span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span> <span class="idlParamName">byteStreamTrackID</span> = <span class="idlDefaultValue">""</span></span>)</span>]
+    <div>
+      <pre class="def idl"><span class="idlInterface" id="idl-def-trackdefault" data-idl="" data-title="TrackDefault">[<span class="idlCtor"><span class="extAttrName">Constructor</span>(<span class="idlParam"><span class="idlParamType"><a href="#idl-def-trackdefaulttype" class="internalDFN" data-link-type="dfn"><code>TrackDefaultType</code></a></span> <span class="idlParamName">type</span></span>, <span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span> <span class="idlParamName">language</span></span>, <span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span> <span class="idlParamName">label</span></span>, <span class="idlParam"><span class="idlParamType">sequence&lt;DOMString&gt;</span> <span class="idlParamName">kinds</span></span>, <span class="idlParam">optional <span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span> <span class="idlParamName">byteStreamTrackID</span> = <span class="idlDefaultValue">""</span></span>)</span>]
 interface <span class="idlInterfaceID">TrackDefault</span> {
 <span class="idlAttribute" id="idl-def-trackdefault-type" data-idl="" data-title="type" data-dfn-for="trackdefault">    readonly attribute <span class="idlAttrType"><a href="#idl-def-trackdefaulttype" class="internalDFN" data-link-type="dfn"><code>TrackDefaultType</code></a></span> <span class="idlAttrName"><a data-lt="type" href="#dom-trackdefault-type" class="internalDFN" data-link-type="dfn" data-for="TrackDefault"><code>type</code></a></span>;</span>
 <span class="idlAttribute" id="idl-def-trackdefault-bytestreamtrackid" data-idl="" data-title="byteStreamTrackID" data-dfn-for="trackdefault">    readonly attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span>        <span class="idlAttrName"><a data-lt="byteStreamTrackID" href="#dom-trackdefault-bytestreamtrackid" class="internalDFN" data-link-type="dfn" data-for="TrackDefault"><code>byteStreamTrackID</code></a></span>;</span>
@@ -3562,7 +3563,8 @@ interface <span class="idlInterfaceID">TrackDefault</span> {
 
       <section typeof="bibo:Chapter" resource="#constructors" property="bibo:hasPart">
         <h3 id="constructors" resource="#constructors"><span property="xhv:role" resource="xhv:heading">Constructors</span></h3>
-        <dl class="constructors" data-dfn-for="TrackDefault" data-link-for="TrackDefault"><dt><dfn data-dfn-type="dfn" id="dfn-trackdefault"><code>TrackDefault</code></dfn></dt>
+        <dl class="constructors" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
+          <dt><dfn data-dfn-type="dfn" id="dfn-trackdefault-type-language-label-kinds-bytestreamtrackid"><code>TrackDefault(type,language,label,kinds,byteStreamTrackID)</code></dfn></dt>
           <dd>
 
             <table class="parameters">
@@ -3577,36 +3579,36 @@ interface <span class="idlInterfaceID">TrackDefault</span> {
                 <tr>
                   <td class="prmName">type</td>
                   <td class="prmType"><code>TrackDefaultType</code></td>
-                  <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
-                  <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
+                  <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
+                  <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
                   <td class="prmDesc"></td>
                 </tr>
                 <tr>
                   <td class="prmName">language</td>
                   <td class="prmType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></td>
-                  <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
-                  <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
+                  <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
+                  <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
                   <td class="prmDesc"></td>
                 </tr>
                 <tr>
                   <td class="prmName">label</td>
                   <td class="prmType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></td>
-                  <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
-                  <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
+                  <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
+                  <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
                   <td class="prmDesc"></td>
                 </tr>
                 <tr>
                   <td class="prmName">kinds</td>
                   <td class="prmType"><code>sequence&lt;DOMString&gt;</code></td>
-                  <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
-                  <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
+                  <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
+                  <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
                   <td class="prmDesc"></td>
                 </tr>
                 <tr>
                   <td class="prmName">byteStreamTrackID</td>
                   <td class="prmType"><code>DOMString = ""</code></td>
-                  <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
-                  <td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td>
+                  <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
+                  <td class="prmOptTrue"><span aria-label="True" role="img">✔</span></td>
                   <td class="prmDesc"></td>
                 </tr>
               </tbody>
@@ -3646,17 +3648,21 @@ interface <span class="idlInterfaceID">TrackDefault</span> {
 
       <section typeof="bibo:Chapter" resource="#attributes-4" property="bibo:hasPart">
         <h3 id="attributes-4" resource="#attributes-4"><span property="xhv:role" resource="xhv:heading">Attributes</span></h3>
-        <dl class="attributes" data-dfn-for="TrackDefault" data-link-for="TrackDefault"><dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-type" data-idl=""><code>type</code></dfn> of type <span class="idlAttrType"><a href="#idl-def-trackdefaulttype" class="internalDFN" data-link-type="dfn"><code>TrackDefaultType</code></a></span>, readonly       </dt>
+        <dl class="attributes" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
+          <dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-type" data-idl=""><code>type</code></dfn> of type <span class="idlAttrType"><a href="#idl-def-trackdefaulttype" class="internalDFN" data-link-type="dfn"><code>TrackDefaultType</code></a></span>, readonly       </dt>
           <dd>
             <p>The type of track that can be constructed using the information in this object.</p>
-          </dd><dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-bytestreamtrackid" data-idl=""><code>byteStreamTrackID</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span>, readonly       </dt>
+          </dd>
+          <dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-bytestreamtrackid" data-idl=""><code>byteStreamTrackID</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span>, readonly       </dt>
           <dd>
             <p>The decimal string representation of the <a href="#track-id">Track ID</a> that identifies the specific track that this object <em class="rfc2119" title="SHOULD">SHOULD</em> apply to. An empty string indicates that this object can be used for any track of the appropriate type (e.g., any <a href="#idl-def-audiotrack-partial-1" class="internalDFN" data-link-type="dfn"><code>AudioTrack</code></a> if
               <code><a href="#dom-trackdefault-type">type</a></code> equals <code><a href="#idl-def-TrackDefaultType.audio">"audio"</a></code>).</p>
-          </dd><dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-language" data-idl=""><code>language</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span>, readonly       </dt>
+          </dd>
+          <dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-language" data-idl=""><code>language</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span>, readonly       </dt>
           <dd>
             <p>The default language to use when an <a href="#init-segment">initialization segment</a> does not contain language information for a new track. See <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> for details.</p>
-          </dd><dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-label" data-idl=""><code>label</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span>, readonly       </dt>
+          </dd>
+          <dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-label" data-idl=""><code>label</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span>, readonly       </dt>
           <dd>
             <p>The default label to use when an <a href="#init-segment">initialization segment</a> does not contain label information for a new track. See <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> for details.</p>
           </dd>
@@ -3665,7 +3671,8 @@ interface <span class="idlInterfaceID">TrackDefault</span> {
 
       <section typeof="bibo:Chapter" resource="#methods-3" property="bibo:hasPart">
         <h3 id="methods-3" resource="#methods-3"><span property="xhv:role" resource="xhv:heading">Methods</span></h3>
-        <dl class="methods" data-dfn-for="TrackDefault" data-link-for="TrackDefault"><dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-getkinds" data-idl=""><code>getKinds</code></dfn></dt>
+        <dl class="methods" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
+          <dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-getkinds" data-idl=""><code>getKinds</code></dfn></dt>
           <dd>
             <p>The default kinds used when an <a href="#init-segment">initialization segment</a> does not contain kind information for a new track. See <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> for details.</p>
             <div><em>No parameters.</em></div>
@@ -3680,17 +3687,18 @@ interface <span class="idlInterfaceID">TrackDefault</span> {
   <section id="trackdefaultlist" typeof="bibo:Chapter" resource="#trackdefaultlist" property="bibo:hasPart">
     <!--OddPage-->
     <h2 id="h-trackdefaultlist" resource="#h-trackdefaultlist"><span property="xhv:role" resource="xhv:heading"><span class="secno">7. </span>TrackDefaultList Object</span></h2>
-    <p>TrackDefaultList is a simple container object for <a href="#dfn-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> objects. It provides read-only array access.</p>
+    <p>TrackDefaultList is a simple container object for <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> objects. It provides read-only array access.</p>
 
-    <div><pre class="def idl"><span class="idlInterface" id="idl-def-trackdefaultlist" data-idl="" data-title="TrackDefaultList">[<span class="idlCtor"><span class="extAttrName">Constructor</span>(<span class="idlParam">optional <span class="idlParamType">sequence&lt;<a href="#dfn-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a>&gt;</span> <span class="idlParamName">trackDefaults</span> = <span class="idlDefaultValue">[]</span></span>)</span>]
-interface <span class="idlInterfaceID"><a data-lt="TrackDefaultList" href="#dom-trackdefaultlist" class="internalDFN" data-link-type="dfn" data-for=""><code>TrackDefaultList</code></a></span> {
+    <div><pre class="def idl"><span class="idlInterface" id="idl-def-trackdefaultlist" data-idl="" data-title="TrackDefaultList">[<span class="idlCtor"><span class="extAttrName">Constructor</span>(<span class="idlParam">optional <span class="idlParamType">sequence&lt;<a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a>&gt;</span> <span class="idlParamName">trackDefaults</span> = <span class="idlDefaultValue">[]</span></span>)</span>]
+interface <span class="idlInterfaceID">TrackDefaultList</span> {
 <span class="idlAttribute" id="idl-def-trackdefaultlist-length" data-idl="" data-title="length" data-dfn-for="trackdefaultlist">    readonly attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span> <span class="idlAttrName"><a data-lt="length" href="#dom-trackdefaultlist-length" class="internalDFN" data-link-type="dfn" data-for="TrackDefaultList"><code>length</code></a></span>;</span>
-<span class="idlMethod" id="idl-def-trackdefaultlist-(unsigned_long)" data-idl="" data-title="" data-dfn-for="trackdefaultlist">    getter <span class="idlMethType"><a href="#dfn-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a></span> <span class="idlMethName"></span>(<span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span> <span class="idlParamName">index</span></span>);</span>
+<span class="idlMethod" id="idl-def-trackdefaultlist-(unsigned_long)" data-idl="" data-title="" data-dfn-for="trackdefaultlist">    getter <span class="idlMethType"><a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a></span> <span class="idlMethName"></span>(<span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span> <span class="idlParamName">index</span></span>);</span>
 };</span></pre>
 
       <section typeof="bibo:Chapter" resource="#constructors-1" property="bibo:hasPart">
         <h3 id="constructors-1" resource="#constructors-1"><span property="xhv:role" resource="xhv:heading">Constructors</span></h3>
-        <dl class="constructors" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList"><dt><dfn data-dfn-for="" data-dfn-type="dfn" id="dom-trackdefaultlist" data-idl=""><code>TrackDefaultList</code></dfn></dt>
+        <dl class="constructors" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList">
+          <dt><dfn data-dfn-type="dfn" id="dfn-trackdefaultlist-trackdefaults"><code>TrackDefaultList(trackDefaults)</code></dfn></dt>
           <dd>
 
             <table class="parameters">
@@ -3713,7 +3721,7 @@ interface <span class="idlInterfaceID"><a data-lt="TrackDefaultList" href="#dom-
             </table>
             <p>When this method is invoked, the user agent must run the following steps:</p>
             <ol class="method-algorithm">
-              <li>If <var>trackDefaults</var> contains two or more <a href="#dfn-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> objects with the same <code><a href="#dom-trackdefault-type">type</a></code> and the same
+              <li>If <var>trackDefaults</var> contains two or more <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> objects with the same <code><a href="#dom-trackdefault-type">type</a></code> and the same
                 <code><a href="#dom-trackdefault-bytestreamtrackid">byteStreamTrackID</a></code>, then throw a
                 <code>TypeError</code> and abort these steps.
                 <div class="note">
@@ -3731,7 +3739,7 @@ interface <span class="idlInterfaceID"><a data-lt="TrackDefaultList" href="#dom-
         <h3 id="attributes-5" resource="#attributes-5"><span property="xhv:role" resource="xhv:heading">Attributes</span></h3>
         <dl class="attributes" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList"><dt><dfn data-dfn-for="trackdefaultlist" data-dfn-type="dfn" id="dom-trackdefaultlist-length" data-idl=""><code>length</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span>, readonly       </dt>
           <dd>
-            <p>Indicates the number of <a href="#dfn-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> objects in the list.</p>
+            <p>Indicates the number of <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> objects in the list.</p>
 
           </dd>
         </dl>
@@ -3739,7 +3747,7 @@ interface <span class="idlInterfaceID"><a data-lt="TrackDefaultList" href="#dom-
 
       <section typeof="bibo:Chapter" resource="#methods-4" property="bibo:hasPart">
         <h3 id="methods-4" resource="#methods-4"><span property="xhv:role" resource="xhv:heading">Methods</span></h3>
-        <dl class="methods" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList"><dt><dfn data-dfn-type="dfn"><code>TrackDefault</code></dfn></dt>
+        <dl class="methods" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList"><dt><dfn data-dfn-type="dfn"><code>getter</code></dfn></dt>
           <dd>
             <p>Allows the TrackDefault objects in the list to be accessed with an array operator (i.e., []).</p>
 
@@ -3766,7 +3774,7 @@ interface <span class="idlInterfaceID"><a data-lt="TrackDefaultList" href="#dom-
             <p>When this method is invoked, the user agent must run the following steps:</p>
             <ol class="method-algorithm">
               <li>If <var>index</var> is greater than or equal to the <code><a href="#dom-trackdefaultlist-length">length</a></code> attribute then return undefined and abort these steps.</li>
-              <li>Return the <var>index</var>'th <a href="#dfn-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object in the list.</li>
+              <li>Return the <var>index</var>'th <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object in the list.</li>
             </ol>
           </dd>
         </dl>
