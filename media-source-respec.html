@@ -2279,7 +2279,8 @@ interface MediaSource : EventTarget {
         </section>
         <section>
           <h2>Methods</h2>
-          <dl class="methods" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList"><dt><dfn><code>getter</code></dfn></dt>
+          <dl class="methods" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList">
+            <dt><dfn data-lt-noDefault data-lt="sourcebufferlist-getter"><code>getter</code></dfn></dt>
             <dd>
               <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e., []).</p>
 
@@ -2299,7 +2300,7 @@ interface MediaSource : EventTarget {
                   </tr>
                 </tbody>
               </table>
-              <div><em>Return type: </em><a><code>getter</code></a></div>
+              <div><em>Return type: </em><a><code>SourceBuffer</code></a></div>
             </dd>
           </dl>
         </section>
@@ -2539,14 +2540,19 @@ interface TrackDefaultList {
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">trackDefaults</td><td class="prmType"><code>sequence&lt;TrackDefault&gt; = []</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table></dd></dl></section><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList"><dt><dfn><code>length</code></dfn> of type <span class="idlAttrType"><a>unsigned long</a></span>, readonly       </dt><dd>
           <p>Indicates the number of <a>TrackDefault</a> objects in the list.</p>
 
-        </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList"><dt><dfn><code>getter</code></dfn></dt><dd>
+        </dd></dl></section>
+        <section>
+        <h2>Methods</h2>
+        <dl class="methods" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList">
+          <dt><dfn data-lt-noDefault data-lt="trackdefaultlist-getter"><code>getter</code></dfn></dt><dd>
           <p>Allows the TrackDefault objects in the list to be accessed with an array operator (i.e., []).</p>
 
           <ol class="method-algorithm">
             <li>If <var>index</var> is greater than or equal to the <a def-id="TrackDefaultList-length"></a> attribute then return undefined and abort these steps.</li>
             <li>Return the <var>index</var>'th <a>TrackDefault</a> object in the list.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">index</td><td class="prmType"><code>unsigned long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a><code>getter</code></a></div></dd></dl></section></div>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">index</td><td class="prmType"><code>unsigned long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table>
+        <div><em>Return type: </em><a><code>TrackDefault</code></a></div></dd></dl></section></div>
     </section>
 
     <section id="url">
