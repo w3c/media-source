@@ -392,7 +392,7 @@
           <p class="note">JavaScript applications SHOULD use this status code to terminate playback with a decode error. For example, if a parsing error occurs while processing out-of-band media data.</p>
         </td></tr></tbody></table></div>
 
-      <div><pre class="idl">[Constructor]
+<pre class="idl">[Constructor]
 interface MediaSource : EventTarget {
     readonly        attribute SourceBufferList    sourceBuffers;
     readonly        attribute SourceBufferList    activeSourceBuffers;
@@ -407,7 +407,10 @@ interface MediaSource : EventTarget {
     void           setLiveSeekableRange (double start, double end);
     void           clearLiveSeekableRange ();
     static boolean isTypeSupported (DOMString type);
-};</pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="MediaSource" data-link-for="MediaSource"><dt><dfn><code>sourceBuffers</code></dfn> of type <span class="idlAttrType"><a>SourceBufferList</a></span>, readonly       </dt><dd>
+};</pre>
+      <section>
+        <h3>Attributes</h3>
+        <dl class="attributes" data-dfn-for="MediaSource" data-link-for="MediaSource"><dt><dfn><code>sourceBuffers</code></dfn> of type <span class="idlAttrType"><a>SourceBufferList</a></span>, readonly       </dt><dd>
           Contains the list of <a>SourceBuffer</a> objects associated with this <a>MediaSource</a>. When <a def-id="readyState"></a> equals <a def-id="closed"></a> this list will be empty. Once <a def-id="readyState"></a> transitions to <a def-id="open"></a> SourceBuffer objects can be added to this list by using <a def-id="addSourceBuffer"></a>.
         </dd><dt><dfn><code>activeSourceBuffers</code></dfn> of type <span class="idlAttrType"><a>SourceBufferList</a></span>, readonly       </dt><dd>
           <p>Contains the subset of <a def-id="sourceBuffers"></a> that are providing the
@@ -634,7 +637,8 @@ interface MediaSource : EventTarget {
           <p class="note">
             This method returning true implies that HTMLMediaElement.canPlayType() will return "maybe" or "probably" since it does not make sense for a <a>MediaSource</a> to support a type the HTMLMediaElement knows it cannot play.
           </p>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a><code>boolean</code></a></div></dd></dl></section></div>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType"><code>DOMString</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a><code>boolean</code></a></div></dd></dl>
+      </section>
 
       <section id="mediasource-events">
         <h3>Event Summary</h3>
@@ -950,7 +954,7 @@ interface MediaSource : EventTarget {
       <h2>SourceBuffer Object</h2>
 
 
-      <div><pre class="idl">enum AppendMode {
+<pre class="idl">enum AppendMode {
     "segments",
     "sequence"
 };</pre><table class="simple" data-dfn-for="AppendMode" data-link-for="AppendMode"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn><code id="idl-def-AppendMode.segments">segments</code></dfn></td><td>
@@ -961,9 +965,9 @@ interface MediaSource : EventTarget {
             Setting the <a def-id="timestampOffset"></a> attribute in <a def-id="AppendMode-sequence"></a> mode allows a media segment to be placed at a specific position in the timeline without any knowledge
             of the timestamps in the media segment.
           </p>
-        </td></tr></tbody></table></div>
+        </td></tr></tbody></table>
 
-      <div><pre class="idl">interface SourceBuffer : EventTarget {
+<pre class="idl">interface SourceBuffer : EventTarget {
                     attribute AppendMode          mode;
     readonly        attribute boolean             updating;
     readonly        attribute TimeRanges          buffered;
@@ -1188,7 +1192,9 @@ interface MediaSource : EventTarget {
           </tr>
         </tbody>
       </table>
-        <div><em>Return type: </em><a>void</a></div></dd></dl></section></div>
+        <div><em>Return type: </em><a>void</a></div>
+      </dd></dl>
+      </section>
 
       <section id="track-buffers">
         <h3>Track Buffers</h3>
@@ -2252,59 +2258,57 @@ interface MediaSource : EventTarget {
     <section id="sourcebufferlist">
       <h2>SourceBufferList Object</h2>
       <p>SourceBufferList is a simple container object for <a>SourceBuffer</a> objects. It provides read-only array access and fires events when the list is modified.</p>
-
-      <div>
 <pre class="idl">interface SourceBufferList : EventTarget {
     readonly        attribute unsigned long length;
                     attribute EventHandler  onaddsourcebuffer;
                     attribute EventHandler  onremovesourcebuffer;
     getter SourceBuffer (unsigned long index);
 };</pre>
-        <section>
-          <h2>Attributes</h2>
-          <dl class="attributes" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList">
-            <dt><dfn><code>length</code></dfn> of type <span class="idlAttrType"><a>unsigned long</a></span>, readonly       </dt>
-            <dd>
-              <p>Indicates the number of <a>SourceBuffer</a> objects in the list.</p>
-            </dd>
-            <dt><dfn><code>onaddsourcebuffer</code></dfn> of type <span class="idlAttrType"><a>EventHandler</a></span></dt>
-            <dd>
-              <p>The event handler for the <a def-id="addsourcebuffer"></a> event.</p>
-            </dd>
-            <dt><dfn><code>onremovesourcebuffer</code></dfn> of type <span class="idlAttrType"><a>EventHandler</a></span></dt>
-            <dd>
-              <p>The event handler for the <a def-id="removesourcebuffer"></a> event.</p>
-            </dd>
-          </dl>
-        </section>
-        <section>
-          <h2>Methods</h2>
-          <dl class="methods" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList">
-            <dt><dfn data-lt-noDefault data-lt="sourcebufferlist-getter"><code>getter</code></dfn></dt>
-            <dd>
-              <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e., []).</p>
+      <section>
+        <h2>Attributes</h2>
+        <dl class="attributes" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList">
+          <dt><dfn><code>length</code></dfn> of type <span class="idlAttrType"><a>unsigned long</a></span>, readonly       </dt>
+          <dd>
+            <p>Indicates the number of <a>SourceBuffer</a> objects in the list.</p>
+          </dd>
+          <dt><dfn><code>onaddsourcebuffer</code></dfn> of type <span class="idlAttrType"><a>EventHandler</a></span></dt>
+          <dd>
+            <p>The event handler for the <a def-id="addsourcebuffer"></a> event.</p>
+          </dd>
+          <dt><dfn><code>onremovesourcebuffer</code></dfn> of type <span class="idlAttrType"><a>EventHandler</a></span></dt>
+          <dd>
+            <p>The event handler for the <a def-id="removesourcebuffer"></a> event.</p>
+          </dd>
+        </dl>
+      </section>
+      <section>
+        <h2>Methods</h2>
+        <dl class="methods" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList">
+          <dt><dfn data-lt-noDefault data-lt="sourcebufferlist-getter"><code>getter</code></dfn></dt>
+          <dd>
+            <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e., []).</p>
 
-              <ol class="method-algorithm">
-                <li>If <var>index</var> is greater than or equal to the <a def-id="SourceBufferList-length"></a> attribute then return undefined and abort these steps.</li>
-                <li>Return the <var>index</var>'th <a>SourceBuffer</a> object in the list.</li>
-              </ol>
-              <table class="parameters">
-                <tbody>
-                  <tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr>
-                  <tr>
-                    <td class="prmName">index</td>
-                    <td class="prmType"><code>unsigned long</code></td>
-                    <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
-                    <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
-                    <td class="prmDesc"></td>
-                  </tr>
-                </tbody>
-              </table>
-              <div><em>Return type: </em><a><code>SourceBuffer</code></a></div>
-            </dd>
-          </dl>
-        </section>
-      </div>
+            <ol class="method-algorithm">
+              <li>If <var>index</var> is greater than or equal to the <a def-id="SourceBufferList-length"></a> attribute then return undefined and abort these steps.</li>
+              <li>Return the <var>index</var>'th <a>SourceBuffer</a> object in the list.</li>
+            </ol>
+            <table class="parameters">
+              <tbody>
+                <tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr>
+                <tr>
+                  <td class="prmName">index</td>
+                  <td class="prmType"><code>unsigned long</code></td>
+                  <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
+                  <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
+                  <td class="prmDesc"></td>
+                </tr>
+              </tbody>
+            </table>
+            <div><em>Return type: </em><a><code>SourceBuffer</code></a></div>
+          </dd>
+        </dl>
+      </section>
+
       <section id="sourcebufferlist-events">
         <h3>Event Summary</h3>
         <table class="old-table">
@@ -2335,7 +2339,7 @@ interface MediaSource : EventTarget {
       <h2>VideoPlaybackQuality Object</h2>
       <p>The following section is OPTIONAL. There are several implementations of the current specification, but it is subject to change because some feel it needs further work. The community is actively investigating alternate designs to provide feedback on media playback quality. See <a href="https://wicg.github.io/media-playback-quality/">Media Playback Quality</a>.
       </p>
-      <div><pre class="idl">interface VideoPlaybackQuality {
+<pre class="idl">interface VideoPlaybackQuality {
     readonly        attribute DOMHighResTimeStamp creationTime;
     readonly        attribute unsigned long       totalVideoFrames;
     readonly        attribute unsigned long       droppedVideoFrames;
@@ -2352,7 +2356,7 @@ interface MediaSource : EventTarget {
           <p>The total number of corrupted frames that have been detected.</p>
         </dd><dt><dfn><code>totalFrameDelay</code></dfn> of type <span class="idlAttrType"><a>double</a></span>, readonly       </dt><dd>
           <p>The sum of all <a def-id="displayed-frame-delays"></a> for all displayed frames. (i.e., frames included in the <a def-id="totalVideoFrames"></a> count, but not in the <a def-id="droppedVideoFrames"></a> count.</p>
-        </dd></dl></section></div>
+        </dd></dl></section>
     </section>
 
     <section id="trackdefault">
@@ -2361,7 +2365,7 @@ interface MediaSource : EventTarget {
         contain this information in the <a def-id="init-segments"></a>. This information is only consulted
         when the <a def-id="init-segment-received-algorithm"></a> creates track objects.</p>
 
-      <div><pre class="idl">enum TrackDefaultType {
+<pre class="idl">enum TrackDefaultType {
     "audio",
     "video",
     "text"
@@ -2374,9 +2378,8 @@ interface MediaSource : EventTarget {
         </td></tr><tr><td><dfn><code id="idl-def-TrackDefaultType.text">text</code></dfn></td><td>
           Indicates that the  information in the <a>TrackDefault</a> object SHOULD only be used when
           creating <a>TextTrack</a> objects.
-        </td></tr></tbody></table></div>
+        </td></tr></tbody></table>
 
-      <div>
 <pre class="idl">[ Constructor (TrackDefaultType type, DOMString language, DOMString label, sequence&lt;DOMString&gt; kinds, optional DOMString byteStreamTrackID = "")]
 interface TrackDefault {
     readonly        attribute TrackDefaultType type;
@@ -2385,138 +2388,138 @@ interface TrackDefault {
     readonly        attribute DOMString        label;
     sequence&lt;DOMString&gt; getKinds ();
 };</pre>
-        <section>
-          <h2>Constructors</h2>
-          <dl class="constructors" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
-            <dt><dfn data-lt-noDefault data-lt="TrackDefault-ctor"><code>TrackDefault</code></dfn></dt>
-            <dd>
-              <ol class="method-algorithm">
-                <li>If <var>language</var> is not an empty string and <var>language</var> is not a BCP 47
-                  language tag, then throw a <a def-id="type-error"></a> and abort these steps.</li>
-                <li>
-                  <dl class="switch">
-                    <dt>If <var>type</var> equals <a def-id="TrackDefaultType-audio"></a>:</dt>
-                    <dd>
-                      If any string in <var>kinds</var> contains a value that is not listed as applying to
-                      audio in the <a def-id="av-kind-categories-table"></a>, then throw a
-                      <a def-id="type-error"></a> and abort these steps.
-                    </dd>
-                    <dt>If <var>type</var> equals <a def-id="TrackDefaultType-video"></a>:</dt>
-                    <dd>
-                      If any string in <var>kinds</var> contains a value that is not listed as applying to
-                      video in the <a def-id="av-kind-categories-table"></a>, then throw a
-                      <a def-id="type-error"></a> and abort these steps.
-                    </dd>
+      <section>
+        <h3>Constructors</h3>
+        <dl class="constructors" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
+          <dt><dfn data-lt-noDefault data-lt="TrackDefault-ctor"><code>TrackDefault</code></dfn></dt>
+          <dd>
+            <ol class="method-algorithm">
+              <li>If <var>language</var> is not an empty string and <var>language</var> is not a BCP 47
+                language tag, then throw a <a def-id="type-error"></a> and abort these steps.</li>
+              <li>
+                <dl class="switch">
+                  <dt>If <var>type</var> equals <a def-id="TrackDefaultType-audio"></a>:</dt>
+                  <dd>
+                    If any string in <var>kinds</var> contains a value that is not listed as applying to
+                    audio in the <a def-id="av-kind-categories-table"></a>, then throw a
+                    <a def-id="type-error"></a> and abort these steps.
+                  </dd>
+                  <dt>If <var>type</var> equals <a def-id="TrackDefaultType-video"></a>:</dt>
+                  <dd>
+                    If any string in <var>kinds</var> contains a value that is not listed as applying to
+                    video in the <a def-id="av-kind-categories-table"></a>, then throw a
+                    <a def-id="type-error"></a> and abort these steps.
+                  </dd>
 
-                    <dt>If <var>type</var> equals <a def-id="TrackDefaultType-text"></a>:</dt>
-                    <dd>
-                      If any string in <var>kinds</var> contains a value that is not listed in the
-                      <a def-id="text-track-kind-list"></a>, then throw a <a def-id="type-error"></a>
-                      and abort these steps.
-                    </dd>
-                  </dl>
-                </li>
-                <li>Set the <a def-id="TrackDefault-type"></a> attribute on this new object to <var>type</var>.</li>
-                <li>Set the <a def-id="TrackDefault-language"></a> attribute on this new object to <var>language</var>.</li>
-                <li>Set the <a def-id="TrackDefault-label"></a> attribute on this new object to <var>label</var>.</li>
-                <li>Set the returned value of the <a def-id="TrackDefault-getkinds"></a> method to return this new object <var>kinds</var>.</li>
-                <li>Set the <a def-id="TrackDefault-byteStreamTrackID"></a> attribute on this new object to <var>byteStreamTrackID</var>.</li>
-              </ol>
-              <table class="parameters">
-                <tbody>
-                  <tr>
-                    <th>Parameter</th>
-                    <th>Type</th>
-                    <th>Nullable</th>
-                    <th>Optional</th>
-                    <th>Description</th>
-                  </tr>
-                  <tr>
-                    <td class="prmName">type</td>
-                    <td class="prmType"><code>TrackDefaultType</code></td>
-                    <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
-                    <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
-                    <td class="prmDesc"></td>
-                  </tr>
-                  <tr>
-                    <td class="prmName">language</td>
-                    <td class="prmType"><code>DOMString</code></td>
-                    <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
-                    <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
-                    <td class="prmDesc"></td>
-                  </tr>
-                  <tr>
-                    <td class="prmName">label</td>
-                    <td class="prmType"><code>DOMString</code></td>
-                    <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
-                    <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
-                    <td class="prmDesc"></td>
-                  </tr>
-                  <tr>
-                    <td class="prmName">kinds</td>
-                    <td class="prmType"><code>sequence&lt;DOMString&gt;</code></td>
-                    <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
-                    <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
-                    <td class="prmDesc"></td>
-                  </tr>
-                  <tr>
-                    <td class="prmName">byteStreamTrackID</td>
-                    <td class="prmType"><code>DOMString = ""</code></td>
-                    <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
-                    <td class="prmOptTrue"><span aria-label="True" role="img">✔</span></td>
-                    <td class="prmDesc"></td>
-                  </tr>
-                </tbody>
-              </table>
-            </dd>
-          </dl>
-        </section>
-        <section>
-          <h2>Attributes</h2>
-          <dl class="attributes" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
-            <dt><dfn><code>type</code></dfn> of type <span class="idlAttrType"><a>TrackDefaultType</a></span>, readonly       </dt>
-            <dd>
-              <p>The type of track that can be constructed using the information in this object.</p>
-            </dd>
-            <dt><dfn><code>byteStreamTrackID</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt>
-            <dd>
-              <p>The decimal string representation of the <a def-id="track-id"></a> that identifies the specific
-                track that this object SHOULD apply to. An empty string indicates that this object can be
-                used for any track of the appropriate type (e.g., any <a>AudioTrack</a> if
-                <a def-id="TrackDefault-type"></a> equals <a def-id="TrackDefaultType-audio"></a>).</p>
-            </dd>
-            <dt><dfn><code>language</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt>
-            <dd>
-              <p>The default language to use when an <a def-id="init-segment"></a> does not contain language
-              information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
-            </dd>
-            <dt><dfn><code>label</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt>
-            <dd>
-              <p>The default label to use when an <a def-id="init-segment"></a> does not contain label
-              information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
-            </dd>
-          </dl>
-        </section>
-        <section>
-          <h2>Methods</h2>
-          <dl class="methods" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
-            <dt><dfn><code>getKinds</code></dfn></dt>
-            <dd>
-              <p>The default kinds used when an <a def-id="init-segment"></a> does not contain kind
-              information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
-              <div><em>No parameters.</em></div>
-              <div><em>Return type: </em><code>sequence&lt;<a>DOMString</a>&gt;</code></div>
-            </dd>
-          </dl>
-        </section>
-      </div>
+                  <dt>If <var>type</var> equals <a def-id="TrackDefaultType-text"></a>:</dt>
+                  <dd>
+                    If any string in <var>kinds</var> contains a value that is not listed in the
+                    <a def-id="text-track-kind-list"></a>, then throw a <a def-id="type-error"></a>
+                    and abort these steps.
+                  </dd>
+                </dl>
+              </li>
+              <li>Set the <a def-id="TrackDefault-type"></a> attribute on this new object to <var>type</var>.</li>
+              <li>Set the <a def-id="TrackDefault-language"></a> attribute on this new object to <var>language</var>.</li>
+              <li>Set the <a def-id="TrackDefault-label"></a> attribute on this new object to <var>label</var>.</li>
+              <li>Set the returned value of the <a def-id="TrackDefault-getkinds"></a> method to return this new object <var>kinds</var>.</li>
+              <li>Set the <a def-id="TrackDefault-byteStreamTrackID"></a> attribute on this new object to <var>byteStreamTrackID</var>.</li>
+            </ol>
+            <table class="parameters">
+              <tbody>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Type</th>
+                  <th>Nullable</th>
+                  <th>Optional</th>
+                  <th>Description</th>
+                </tr>
+                <tr>
+                  <td class="prmName">type</td>
+                  <td class="prmType"><code>TrackDefaultType</code></td>
+                  <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
+                  <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
+                  <td class="prmDesc"></td>
+                </tr>
+                <tr>
+                  <td class="prmName">language</td>
+                  <td class="prmType"><code>DOMString</code></td>
+                  <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
+                  <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
+                  <td class="prmDesc"></td>
+                </tr>
+                <tr>
+                  <td class="prmName">label</td>
+                  <td class="prmType"><code>DOMString</code></td>
+                  <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
+                  <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
+                  <td class="prmDesc"></td>
+                </tr>
+                <tr>
+                  <td class="prmName">kinds</td>
+                  <td class="prmType"><code>sequence&lt;DOMString&gt;</code></td>
+                  <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
+                  <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
+                  <td class="prmDesc"></td>
+                </tr>
+                <tr>
+                  <td class="prmName">byteStreamTrackID</td>
+                  <td class="prmType"><code>DOMString = ""</code></td>
+                  <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
+                  <td class="prmOptTrue"><span aria-label="True" role="img">✔</span></td>
+                  <td class="prmDesc"></td>
+                </tr>
+              </tbody>
+            </table>
+          </dd>
+        </dl>
+      </section>
+      <section>
+        <h2>Attributes</h2>
+        <dl class="attributes" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
+          <dt><dfn><code>type</code></dfn> of type <span class="idlAttrType"><a>TrackDefaultType</a></span>, readonly       </dt>
+          <dd>
+            <p>The type of track that can be constructed using the information in this object.</p>
+          </dd>
+          <dt><dfn><code>byteStreamTrackID</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt>
+          <dd>
+            <p>The decimal string representation of the <a def-id="track-id"></a> that identifies the specific
+              track that this object SHOULD apply to. An empty string indicates that this object can be
+              used for any track of the appropriate type (e.g., any <a>AudioTrack</a> if
+              <a def-id="TrackDefault-type"></a> equals <a def-id="TrackDefaultType-audio"></a>).</p>
+          </dd>
+          <dt><dfn><code>language</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt>
+          <dd>
+            <p>The default language to use when an <a def-id="init-segment"></a> does not contain language
+            information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
+          </dd>
+          <dt><dfn><code>label</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt>
+          <dd>
+            <p>The default label to use when an <a def-id="init-segment"></a> does not contain label
+            information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
+          </dd>
+        </dl>
+      </section>
+      <section>
+        <h2>Methods</h2>
+        <dl class="methods" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
+          <dt><dfn><code>getKinds</code></dfn></dt>
+          <dd>
+            <p>The default kinds used when an <a def-id="init-segment"></a> does not contain kind
+            information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
+            <div><em>No parameters.</em></div>
+            <div><em>Return type: </em><code>sequence&lt;<a>DOMString</a>&gt;</code></div>
+          </dd>
+        </dl>
+      </section>
+
     </section>
 
     <section id="trackdefaultlist">
       <h2>TrackDefaultList Object</h2>
       <p>TrackDefaultList is a simple container object for <a>TrackDefault</a> objects. It provides read-only array access.</p>
 
-      <div><pre class="idl">[ Constructor (optional sequence&lt;TrackDefault&gt; trackDefaults = [])]
+<pre class="idl">[ Constructor (optional sequence&lt;TrackDefault&gt; trackDefaults = [])]
 interface TrackDefaultList {
     readonly        attribute unsigned long length;
     getter TrackDefault (unsigned long index);
@@ -2552,14 +2555,14 @@ interface TrackDefaultList {
             <li>Return the <var>index</var>'th <a>TrackDefault</a> object in the list.</li>
           </ol>
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">index</td><td class="prmType"><code>unsigned long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table>
-        <div><em>Return type: </em><a><code>TrackDefault</code></a></div></dd></dl></section></div>
+        <div><em>Return type: </em><a><code>TrackDefault</code></a></div></dd></dl></section>
     </section>
 
     <section id="url">
       <h2>URL Object Extensions</h2>
       <p>This section specifies extensions to the <a def-id="URL"></a>[[!FILE-API]] object definition.</p>
 
-      <div><pre class="idl">[Exposed=Window,DedicatedWorker,SharedWorker]
+<pre class="idl">[Exposed=Window,DedicatedWorker,SharedWorker]
 partial interface URL {
     static DOMString createObjectURL (MediaSource mediaSource);
 };</pre><section><h2>Methods</h2><dl class="methods" data-dfn-for="URL" data-link-for="URL"><dt><dfn><code>createObjectURL</code></dfn>, static</dt><dd>
@@ -2569,7 +2572,7 @@ partial interface URL {
             <li>Return a unique <a def-id="MediaSource-object-URL"></a> that can be used to dereference the <var>mediaSource</var> argument.</li>
           </ol>
           <p class="note">This algorithm is intended to mirror the behavior of the <a def-id="file-createObjectURL"></a>[[!FILE-API]] method, which does not auto-revoke the created URL. Web authors are encouraged to use <a def-id="file-revokeObjectURL"></a>[[!FILE-API]] for any <a def-id="MediaSource-object-URL"></a> that is no longer needed for attachment to a media element.</p>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">mediaSource</td><td class="prmType"><code>MediaSource</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a><code>DOMString</code></a></div></dd></dl></section></div>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">mediaSource</td><td class="prmType"><code>MediaSource</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a><code>DOMString</code></a></div></dd></dl></section>
     </section>
 
     <section id="htmlmediaelement-extensions">
