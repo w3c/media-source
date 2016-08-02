@@ -573,7 +573,31 @@
         console.log("def-id '" + k + "' from groupName '" + defGroupName + "' never used.");
       }
     }
-
+ 
+    // Work around ReSpec issue 893
+    $("a[href='#dom-readystate']").each( function() {
+    
+        var $ant = $(this);
+        if ( $ant.text() === "ReadyState" ) {
+            console.log("ReSpec#893: Fixing incorrect link for ReadyState");
+            
+            $ant.attr({href:"#idl-def-readystate"});
+        }
+    
+    });
+ 
+    $("span.idlAttrName").each(function() {
+    
+        var $ant = $(this);
+        if ( $ant.text() == "readyState" ) {
+            console.log("ReSpec#893: Fixing link for readyState IDL attribute");
+            
+            $ant.empty();
+            $ant.append($('<a href="#dom-readystate"><code>readyState</code></a>'));
+        }
+    
+    });
+ 
     $("a[href]").each(function () {
       var link = $(this);
       var href = link.attr('href');
