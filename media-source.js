@@ -404,6 +404,7 @@
       'unrestricted double': { spec: 'webidl', fragment: 'idl-unrestricted-double' },
       'unsigned long': { spec: 'webidl', fragment: 'idl-unsigned-long' },
       'unsigned long long': { spec: 'webidl', fragment: 'idl-unsigned-long-long' },
+      'BufferSource' : { spec: 'webidl', fragment: 'common-BufferSource' },
       'void': { spec: 'webidl', fragment: 'idl-void' },
       'ArrayBuffer': { spec: 'typed-array', fragment: 'ArrayBuffer' },
       'ArrayBufferView': { spec: 'typed-array', fragment: 'ArrayBufferView' },

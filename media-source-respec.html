@@ -978,8 +978,7 @@ interface MediaSource : EventTarget {
                     attribute EventHandler        onupdateend;
                     attribute EventHandler        onerror;
                     attribute EventHandler        onabort;
-    void appendBuffer (ArrayBuffer data);
-    void appendBuffer (ArrayBufferView data);
+    void appendBuffer (BufferSource data);
     void appendStream (ReadableStream stream, [EnforceRange] optional unsigned long long maxSize);
     void abort ();
     void remove (double start, unrestricted double end);
@@ -1103,11 +1102,8 @@ interface MediaSource : EventTarget {
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Update the attribute to the new value.</li>
           </ol>
-        </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="SourceBuffer" data-link-for="SourceBuffer"><dt><dfn id="dom-sourcebuffer-appendbuffer"><code>appendBuffer(ArrayBuffer)</code></dfn></dt><dd>
-          <p>Appends the segment data in an <a class="externalDFN">ArrayBuffer</a>[[!TYPED-ARRAYS]] to the source buffer.</p>
-          <p>The steps for this method are the same as the ArrayBufferView version of <a def-id="appendBuffer"></a>.</p>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType"><code>ArrayBuffer</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn id="dom-sourcebuffer-appendbuffer-arraybufferview"><code>appendBuffer(ArrayBufferView)</code></dfn></dt><dd>
-          <p>Appends the segment data in an <a class="externalDFN">ArrayBufferView</a>[[!TYPED-ARRAYS]] to the source buffer.</p>
+        </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="SourceBuffer" data-link-for="SourceBuffer"><dt><dfn id="dom-sourcebuffer-appendbuffer"><code>appendBuffer</code></dfn></dt><dd>
+          <p>Appends the segment data in an <a class="externalDFN">BufferSource</a>[[!WEBIDL]] to the source buffer.</p>
 
           <ol class="method-algorithm">
             <li>Run the <a def-id="prepare-append"></a> algorithm.</li>
@@ -1116,7 +1112,7 @@ interface MediaSource : EventTarget {
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
             <li>Asynchronously run the <a def-id="buffer-append"></a> algorithm.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType"><code>ArrayBufferView</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>appendStream</code></dfn></dt><dd>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType"><code>BufferSource</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>appendStream</code></dfn></dt><dd>
           <p>Appends segment data to the source buffer from a <a class="externalDFN">ReadableStream</a>[[!WHATWG-STREAMS-API]].</p>
 
           <ol class="method-algorithm">
