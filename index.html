@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr" typeof="bibo:Document " prefix="bibo: http://purl.org/ontology/bibo/ w3p: http://www.w3.org/2001/02pd/rec54#">
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta lang="" property="dc:language" content="en">
   <style>
@@ -693,7 +694,6 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
       }
     }
   </style>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title>Media Source Extensions</title>
 
   <!--<script src="respec-w3c-common.js" class="remove"></script>-->
@@ -711,7 +711,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
   <link rel="stylesheet" href="mse.css">
   <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED">
   <!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]-->
-  <meta name="generator" content="ReSpec 4.3.1">
+  <meta name="generator" content="ReSpec 4.3.2">
   <script id="initialUserConfig" type="application/json">
     {
       "specStatus": "ED",
@@ -1136,12 +1136,12 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
           <p>The <a href="#track-buffer">track buffers</a> that provide <a href="#coded-frame">coded frames</a> for the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-audiotrack-enabled">enabled</a></code>
             <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-audiotracks">audioTracks</a></code>, the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-videotrack-selected">selected</a></code> <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-videotracks">videoTracks</a></code>, and the
             <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-showing">"showing"</a></code> or <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-hidden">"hidden"</a></code> <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-texttracks">textTracks</a></code>. All these tracks are associated with
-            <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in the <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code> list.</p>
+            <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in the <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code> list.</p>
         </dd>
 
         <dt id="append-window">Append Window</dt>
         <dd>
-          <p>A <a href="#presentation-timestamp">presentation timestamp</a> range used to filter out <a href="#coded-frame">coded frames</a> while appending. The append window represents a single continuous time range with a single start time and end time. Coded frames with <a href="#presentation-timestamp">presentation timestamp</a> within this range are allowed to be appended to the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> while coded frames outside this range are filtered out. The append window start and end times are controlled by the <code><a href="#dom-sourcebuffer-appendwindowstart">appendWindowStart</a></code> and <code><a href="#dom-sourcebuffer-appendwindowend">appendWindowEnd</a></code> attributes respectively.</p>
+          <p>A <a href="#presentation-timestamp">presentation timestamp</a> range used to filter out <a href="#coded-frame">coded frames</a> while appending. The append window represents a single continuous time range with a single start time and end time. Coded frames with <a href="#presentation-timestamp">presentation timestamp</a> within this range are allowed to be appended to the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> while coded frames outside this range are filtered out. The append window start and end times are controlled by the <code><a href="#dom-sourcebuffer-appendwindowstart">appendWindowStart</a></code> and <code><a href="#dom-sourcebuffer-appendwindowend">appendWindowEnd</a></code> attributes respectively.</p>
         </dd>
 
         <dt id="coded-frame">Coded Frame</dt>
@@ -1206,7 +1206,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
         <dt id="parent-media-source">Parent Media Source</dt>
         <dd>
-          <p>The parent media source of a <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object is the <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> object that created it.</p>
+          <p>The parent media source of a <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object is the <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> object that created it.</p>
         </dd>
 
         <dt id="presentation-start-time">Presentation Start Time</dt>
@@ -1241,14 +1241,14 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
         <dt id="sourcebuffer-byte-stream-format-spec">SourceBuffer byte stream format specification</dt>
         <dd>
-          <p>The specific <a href="#byte-stream-format-specs">byte stream format specification</a> that describes the format of the byte stream accepted by a <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> instance. The
-            <a href="#byte-stream-format-specs">byte stream format specification</a>, for a <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object, is selected based on the <var>type</var> passed to the
+          <p>The specific <a href="#byte-stream-format-specs">byte stream format specification</a> that describes the format of the byte stream accepted by a <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> instance. The
+            <a href="#byte-stream-format-specs">byte stream format specification</a>, for a <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object, is selected based on the <var>type</var> passed to the
             <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code> call that created the object.</p>
         </dd>
 
         <dt id="sourcebuffer-configuration">SourceBuffer configuration</dt>
         <dd>
-          <p>A specific set of tracks distributed across one or more <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects owned by a single <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> instance.</p>
+          <p>A specific set of tracks distributed across one or more <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects owned by a single <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> instance.</p>
           <p>Implementations <em class="rfc2119" title="MUST">MUST</em> support at least 1 <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> object with the following configurations:
           </p>
           <ul>
@@ -1275,7 +1275,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
   <section id="mediasource" typeof="bibo:Chapter" resource="#mediasource" property="bibo:hasPart">
     <!--OddPage-->
     <h2 id="h-mediasource" resource="#h-mediasource"><span property="xhv:role" resource="xhv:heading"><span class="secno">2. </span>MediaSource Object</span></h2>
-    <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the <code><a href="#dom-readystate">readyState</a></code> for this source as well as a list of <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> to add media data to this source. The HTMLMediaElement fetches this media data from the <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> object when it is needed during playback.</p>
+    <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the <code><a href="#dom-readystate">readyState</a></code> for this source as well as a list of <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> to add media data to this source. The HTMLMediaElement fetches this media data from the <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> object when it is needed during playback.</p>
 
     <p>Each <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> object has a <dfn id="live-seekable-range" data-dfn-type="dfn">live seekable range</dfn> variable that stores a <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#normalized-timeranges-object">normalized TimeRanges object</a>. This variable is initialized to an empty <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code> object when the <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> object is created, is maintained by <code><a href="#dom-mediasource-setliveseekablerange">setLiveSeekableRange()</a></code> and <code><a href="#dom-mediasource-clearliveseekablerange">clearLiveSeekableRange()</a></code>, and is used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-seekable">HTMLMediaElement.seekable</a></code> behavior.</p>
 
@@ -1298,7 +1298,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
           <tr>
             <td><dfn data-dfn-for="readystate" data-dfn-type="dfn" id="dom-readystate-open" data-idl=""><code id="idl-def-ReadyState.open">open</code></dfn></td>
             <td>
-              The source has been opened by a media element and is ready for data to be appended to the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.
+              The source has been opened by a media element and is ready for data to be appended to the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.
             </td>
           </tr>
           <tr>
@@ -1353,8 +1353,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 <span class="idlAttribute" id="idl-def-mediasource-onsourceopen" data-idl="" data-title="onsourceopen" data-dfn-for="mediasource">             attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html51/webappapis.html#typedefdef-eventhandlernonnull-eventhandler">EventHandler</a></code></span>        <span class="idlAttrName"><a data-lt="onsourceopen" href="#dom-mediasource-onsourceopen" class="internalDFN" data-link-type="dfn" data-for="MediaSource"><code>onsourceopen</code></a></span>;</span>
 <span class="idlAttribute" id="idl-def-mediasource-onsourceended" data-idl="" data-title="onsourceended" data-dfn-for="mediasource">             attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html51/webappapis.html#typedefdef-eventhandlernonnull-eventhandler">EventHandler</a></code></span>        <span class="idlAttrName"><a data-lt="onsourceended" href="#dom-mediasource-onsourceended" class="internalDFN" data-link-type="dfn" data-for="MediaSource"><code>onsourceended</code></a></span>;</span>
 <span class="idlAttribute" id="idl-def-mediasource-onsourceclose" data-idl="" data-title="onsourceclose" data-dfn-for="mediasource">             attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html51/webappapis.html#typedefdef-eventhandlernonnull-eventhandler">EventHandler</a></code></span>        <span class="idlAttrName"><a data-lt="onsourceclose" href="#dom-mediasource-onsourceclose" class="internalDFN" data-link-type="dfn" data-for="MediaSource"><code>onsourceclose</code></a></span>;</span>
-<span class="idlMethod" id="idl-def-mediasource-addsourcebuffer(domstring)" data-idl="" data-title="addSourceBuffer" data-dfn-for="mediasource">    <span class="idlMethType"><a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a></span> <span class="idlMethName"><a data-lt="addSourceBuffer" href="#dom-mediasource-addsourcebuffer" class="internalDFN" data-link-type="dfn" data-for="MediaSource"><code>addSourceBuffer</code></a></span>(<span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span> <span class="idlParamName">type</span></span>);</span>
-<span class="idlMethod" id="idl-def-mediasource-removesourcebuffer(sourcebuffer)" data-idl="" data-title="removeSourceBuffer" data-dfn-for="mediasource">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void">void</a></code></span>         <span class="idlMethName"><a data-lt="removeSourceBuffer" href="#dom-mediasource-removesourcebuffer" class="internalDFN" data-link-type="dfn" data-for="MediaSource"><code>removeSourceBuffer</code></a></span>(<span class="idlParam"><span class="idlParamType"><a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a></span> <span class="idlParamName">sourceBuffer</span></span>);</span>
+<span class="idlMethod" id="idl-def-mediasource-addsourcebuffer(domstring)" data-idl="" data-title="addSourceBuffer" data-dfn-for="mediasource">    <span class="idlMethType"><a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a></span> <span class="idlMethName"><a data-lt="addSourceBuffer" href="#dom-mediasource-addsourcebuffer" class="internalDFN" data-link-type="dfn" data-for="MediaSource"><code>addSourceBuffer</code></a></span>(<span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span> <span class="idlParamName">type</span></span>);</span>
+<span class="idlMethod" id="idl-def-mediasource-removesourcebuffer(sourcebuffer)" data-idl="" data-title="removeSourceBuffer" data-dfn-for="mediasource">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void">void</a></code></span>         <span class="idlMethName"><a data-lt="removeSourceBuffer" href="#dom-mediasource-removesourcebuffer" class="internalDFN" data-link-type="dfn" data-for="MediaSource"><code>removeSourceBuffer</code></a></span>(<span class="idlParam"><span class="idlParamType"><a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a></span> <span class="idlParamName">sourceBuffer</span></span>);</span>
 <span class="idlMethod" id="idl-def-mediasource-endofstream(optional-endofstreamerror)" data-idl="" data-title="endOfStream" data-dfn-for="mediasource">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void">void</a></code></span>         <span class="idlMethName"><a data-lt="endOfStream" href="#dom-mediasource-endofstream" class="internalDFN" data-link-type="dfn" data-for="MediaSource"><code>endOfStream</code></a></span>(<span class="idlParam">optional <span class="idlParamType"><a href="#idl-def-endofstreamerror" class="internalDFN" data-link-type="dfn"><code>EndOfStreamError</code></a></span> <span class="idlParamName">error</span></span>);</span>
 <span class="idlMethod" id="idl-def-mediasource-setliveseekablerange(double,double)" data-idl="" data-title="setLiveSeekableRange" data-dfn-for="mediasource">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void">void</a></code></span>         <span class="idlMethName"><a data-lt="setLiveSeekableRange" href="#dom-mediasource-setliveseekablerange" class="internalDFN" data-link-type="dfn" data-for="MediaSource"><code>setLiveSeekableRange</code></a></span>(<span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-double">double</a></code></span> <span class="idlParamName">start</span></span>, <span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-double">double</a></code></span> <span class="idlParamName">end</span></span>);</span>
 <span class="idlMethod" id="idl-def-mediasource-clearliveseekablerange()" data-idl="" data-title="clearLiveSeekableRange" data-dfn-for="mediasource">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void">void</a></code></span>         <span class="idlMethName"><a data-lt="clearLiveSeekableRange" href="#dom-mediasource-clearliveseekablerange" class="internalDFN" data-link-type="dfn" data-for="MediaSource"><code>clearLiveSeekableRange</code></a></span>();</span>
@@ -1365,7 +1365,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <h3 id="attributes" resource="#attributes"><span property="xhv:role" resource="xhv:heading">Attributes</span></h3>
         <dl class="attributes" data-dfn-for="MediaSource" data-link-for="MediaSource"><dt><dfn data-dfn-for="mediasource" data-dfn-type="dfn" id="dom-mediasource-sourcebuffers" data-idl=""><code>sourceBuffers</code></dfn> of type <span class="idlAttrType"><a href="#idl-def-sourcebufferlist" class="internalDFN" data-link-type="dfn"><code>SourceBufferList</code></a></span>, readonly       </dt>
           <dd>
-            Contains the list of <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects associated with this <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a>. When <code><a href="#dom-readystate">readyState</a></code> equals <code><a href="#idl-def-ReadyState.closed">"closed"</a></code> this list will be empty. Once <code><a href="#dom-readystate">readyState</a></code> transitions to <code><a href="#idl-def-ReadyState.open">"open"</a></code> SourceBuffer objects can be added to this list by using <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code>.
+            Contains the list of <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects associated with this <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a>. When <code><a href="#dom-readystate">readyState</a></code> equals <code><a href="#idl-def-ReadyState.closed">"closed"</a></code> this list will be empty. Once <code><a href="#dom-readystate">readyState</a></code> transitions to <code><a href="#idl-def-ReadyState.open">"open"</a></code> SourceBuffer objects can be added to this list by using <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code>.
           </dd><dt><dfn data-dfn-for="mediasource" data-dfn-type="dfn" id="dom-mediasource-activesourcebuffers" data-idl=""><code>activeSourceBuffers</code></dfn> of type <span class="idlAttrType"><a href="#idl-def-sourcebufferlist" class="internalDFN" data-link-type="dfn"><code>SourceBufferList</code></a></span>, readonly       </dt>
           <dd>
             <p>Contains the subset of <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> that are providing the
@@ -1373,7 +1373,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-audiotrack-enabled">enabled audio track(s)</a>, and the
               <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-showing">"showing"</a></code> or <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-hidden">"hidden"</a></code> text track(s).
             </p>
-            <p><a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in this list <em class="rfc2119" title="MUST">MUST</em> appear in the same order as they appear in the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute; e.g., if only sourceBuffers[0] and sourceBuffers[3] are in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>, then activeSourceBuffers[0] <em class="rfc2119" title="MUST">MUST</em> equal sourceBuffers[0] and activeSourceBuffers[1] <em class="rfc2119" title="MUST">MUST</em> equal sourceBuffers[3].
+            <p><a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in this list <em class="rfc2119" title="MUST">MUST</em> appear in the same order as they appear in the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute; e.g., if only sourceBuffers[0] and sourceBuffers[3] are in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>, then activeSourceBuffers[0] <em class="rfc2119" title="MUST">MUST</em> equal sourceBuffers[0] and activeSourceBuffers[1] <em class="rfc2119" title="MUST">MUST</em> equal sourceBuffers[3].
             </p>
             <div class="note">
               <div class="note-title marker" aria-level="4" role="heading" id="h-note7"><span>Note</span></div>
@@ -1396,7 +1396,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <ol>
               <li>If the value being set is negative or NaN then throw a <code>TypeError</code> exception and abort these steps.</li>
               <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute is not <code><a href="#idl-def-ReadyState.open">"open"</a></code> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
-              <li>If the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute equals true on any <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+              <li>If the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute equals true on any <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
               <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the value being assigned to this attribute.
                 <div class="note">
                   <div class="note-title marker" aria-level="4" role="heading" id="h-note8"><span>Note</span></div>
@@ -1421,7 +1421,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <h3 id="methods" resource="#methods"><span property="xhv:role" resource="xhv:heading">Methods</span></h3>
         <dl class="methods" data-dfn-for="MediaSource" data-link-for="MediaSource"><dt><dfn data-dfn-for="mediasource" data-dfn-type="dfn" id="dom-mediasource-addsourcebuffer" data-idl=""><code>addSourceBuffer</code></dfn></dt>
           <dd>
-            <p>Adds a new <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> to <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.</p>
+            <p>Adds a new <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> to <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.</p>
 
             <table class="parameters">
               <tbody>
@@ -1441,11 +1441,11 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 </tr>
               </tbody>
             </table>
-            <div><em>Return type: </em><a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a></div>
+            <div><em>Return type: </em><a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a></div>
             <p>When this method is invoked, the user agent must run the following steps:</p>
             <ol class="method-algorithm">
               <li>If <var>type</var> is an empty string then throw a <code>TypeError</code> exception and abort these steps.</li>
-              <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>, then throw a <code><a href="https://www.w3.org/TR/WebIDL-1/#notsupportederror">NotSupportedError</a></code> exception and abort these steps.</li>
+              <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>, then throw a <code><a href="https://www.w3.org/TR/WebIDL-1/#notsupportederror">NotSupportedError</a></code> exception and abort these steps.</li>
               <li>If the user agent can't handle any more SourceBuffer objects or if creating a SourceBuffer based on <var>type</var> would result in an unsupported <a href="#sourcebuffer-configuration">SourceBuffer configuration</a>, then throw a <code><a href="https://www.w3.org/TR/WebIDL-1/#quotaexceedederror">QuotaExceededError</a></code> exception and abort these steps.
                 <div class="note">
                   <div class="note-title marker" aria-level="4" role="heading" id="h-note9"><span>Note</span></div>
@@ -1455,7 +1455,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 </div>
               </li>
               <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute is not in the <code><a href="#idl-def-ReadyState.open">"open"</a></code> state then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
-              <li>Create a new <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object and associated resources.</li>
+              <li>Create a new <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object and associated resources.</li>
               <li>Set the <var><a href="#sourcebuffer-generate-timestamps-flag">generate timestamps flag</a></var> on the new object to the value in the "Generate Timestamps Flag" column of the byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>] entry that is associated with <var>type</var>.
               </li>
               <li>
@@ -1477,7 +1477,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             </ol>
           </dd><dt><dfn data-dfn-for="mediasource" data-dfn-type="dfn" id="dom-mediasource-removesourcebuffer" data-idl=""><code>removeSourceBuffer</code></dfn></dt>
           <dd>
-            <p>Removes a <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> from <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.</p>
+            <p>Removes a <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> from <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.</p>
 
 
             <table class="parameters">
@@ -1605,7 +1605,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <p>When this method is invoked, the user agent must run the following steps:</p>
             <ol class="method-algorithm">
               <li>If the <code><a href="#dom-readystate">readyState</a></code> attribute is not in the <code><a href="#idl-def-ReadyState.open">"open"</a></code> state then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
-              <li>If the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute equals true on any <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+              <li>If the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute equals true on any <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
               <li>Run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <var>error</var>.</li>
             </ol>
           </dd><dt><dfn data-dfn-for="mediasource" data-dfn-type="dfn" id="dom-mediasource-setliveseekablerange" data-idl=""><code>setLiveSeekableRange</code></dfn></dt>
@@ -1661,13 +1661,13 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             </ol>
           </dd><dt><dfn data-dfn-for="mediasource" data-dfn-type="dfn" id="dom-mediasource-istypesupported" data-idl=""><code>isTypeSupported</code></dfn>, static</dt>
           <dd>
-            <p>Check to see whether the <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> is capable of creating <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects for the specified MIME type.</p>
+            <p>Check to see whether the <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> is capable of creating <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects for the specified MIME type.</p>
 
 
             <div class="note">
               <div class="note-title marker" aria-level="4" role="heading" id="h-note10"><span>Note</span></div>
               <p class="">
-                If true is returned from this method, it only indicates that the <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> implementation is capable of creating <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects for the specified MIME type. An <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code> call <em class="rfc2119" title="SHOULD">SHOULD</em> still fail if sufficient resources are not available to support the addition of a new <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>.
+                If true is returned from this method, it only indicates that the <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> implementation is capable of creating <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects for the specified MIME type. An <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code> call <em class="rfc2119" title="SHOULD">SHOULD</em> still fail if sufficient resources are not available to support the addition of a new <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>.
               </p>
             </div>
             <div class="note">
@@ -1776,10 +1776,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <ol>
           <li>Set the <code><a href="#dom-readystate">readyState</a></code> attribute to <code><a href="#idl-def-ReadyState.closed">"closed"</a></code>.</li>
           <li>Update <code><a href="#dom-mediasource-duration">duration</a></code> to NaN.</li>
-          <li>Remove all the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects from <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>.</li>
+          <li>Remove all the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects from <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>.</li>
           <li>
             <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>.</li>
-          <li>Remove all the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects from <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.</li>
+          <li>Remove all the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects from <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.</li>
           <li>
             <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.</li>
           <li>
@@ -1795,7 +1795,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <h4 id="h-mediasource-seeking" resource="#h-mediasource-seeking"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2.3 </span>Seeking</span></h4>
         <p>Run the following steps as part of the "<i>Wait until the user agent has established whether or not the media data for the new playback position is available, and, if it is, until it has decoded enough data to play back that position"</i> step of the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#seek">seek algorithm</a>:</p>
         <ol>
-          <li>The media element looks for <a href="#media-segment">media segments</a> containing the <var>new playback position</var> in each <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>.
+          <li>The media element looks for <a href="#media-segment">media segments</a> containing the <var>new playback position</var> in each <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>.
             <dl class="switch">
               <dt>If one or more of the objects in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code> is missing <a href="#media-segment">media segments</a> for the <var>new playback position</var>
                 </dt>
@@ -1823,7 +1823,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
       <section id="buffer-monitoring" typeof="bibo:Chapter" resource="#buffer-monitoring" property="bibo:hasPart">
         <h4 id="h-buffer-monitoring" resource="#h-buffer-monitoring"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2.4 </span>SourceBuffer Monitoring</span></h4>
-        <p>The following steps are periodically run during playback to make sure that all of the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code> have <a href="#enough-data">enough data to ensure uninterrupted playback</a>. Changes to <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code> also cause these steps to run because they affect the conditions that trigger state transitions.</p>
+        <p>The following steps are periodically run during playback to make sure that all of the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code> have <a href="#enough-data">enough data to ensure uninterrupted playback</a>. Changes to <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code> also cause these steps to run because they affect the conditions that trigger state transitions.</p>
 
         <p>Having <dfn id="enough-data" data-dfn-type="dfn">enough data to ensure uninterrupted playback</dfn> is an implementation specific condition where the user agent determines that it currently has enough data to play the presentation without stalling for a meaningful period of time. This condition is constantly evaluated to determine when to transition the media element into and out of the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_enough_data">HAVE_ENOUGH_DATA</a></code> ready state. These transitions indicate when the user agent believes it has enough data buffered or it needs more data respectively.</p>
 
@@ -1891,17 +1891,17 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <dt>If the selected video track changes, then run the following steps:</dt>
           <dd>
             <ol>
-              <li>If the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with the previously selected video track is not associated with any other enabled tracks, run the following steps:
+              <li>If the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with the previously selected video track is not associated with any other enabled tracks, run the following steps:
                 <ol>
-                  <li>Remove the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> from <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>.</li>
+                  <li>Remove the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> from <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>.</li>
                   <li>
                     <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>
                   </li>
                 </ol>
               </li>
-              <li>If the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with the newly selected video track is not already in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>, run the following steps:
+              <li>If the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with the newly selected video track is not already in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>, run the following steps:
                 <ol>
-                  <li>Add the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> to <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>.</li>
+                  <li>Add the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> to <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>.</li>
                   <li>
                     <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> at <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>
                   </li>
@@ -1909,42 +1909,42 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               </li>
             </ol>
           </dd>
-          <dt>If an audio track becomes disabled and the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with this track is not associated with any other enabled or selected track, then run the following steps:</dt>
+          <dt>If an audio track becomes disabled and the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with this track is not associated with any other enabled or selected track, then run the following steps:</dt>
           <dd>
             <ol>
-              <li>Remove the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with the audio track from <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>
+              <li>Remove the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with the audio track from <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>
               </li>
               <li>
                 <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>
               </li>
             </ol>
           </dd>
-          <dt>If an audio track becomes enabled and the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with this track is not already in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>, then run the following steps:
+          <dt>If an audio track becomes enabled and the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with this track is not already in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>, then run the following steps:
             </dt>
           <dd>
             <ol>
-              <li>Add the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with the audio track to <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>
+              <li>Add the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with the audio track to <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>
               </li>
               <li>
                 <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> at <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>
               </li>
             </ol>
           </dd>
-          <dt>If a text track <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrack-mode">mode</a> becomes <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-disabled">"disabled"</a></code> and the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with this track is not associated with any other enabled or selected track, then run the following steps:</dt>
+          <dt>If a text track <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrack-mode">mode</a> becomes <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-disabled">"disabled"</a></code> and the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with this track is not associated with any other enabled or selected track, then run the following steps:</dt>
           <dd>
             <ol>
-              <li>Remove the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with the text track from <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>
+              <li>Remove the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with the text track from <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>
               </li>
               <li>
                 <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> at <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>
               </li>
             </ol>
           </dd>
-          <dt>If a text track <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrack-mode">mode</a> becomes <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-showing">"showing"</a></code> or <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-hidden">"hidden"</a></code> and the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with this track is not already in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>, then run the following steps:
+          <dt>If a text track <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrack-mode">mode</a> becomes <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-showing">"showing"</a></code> or <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-hidden">"hidden"</a></code> and the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with this track is not already in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>, then run the following steps:
             </dt>
           <dd>
             <ol>
-              <li>Add the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with the text track to <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>
+              <li>Add the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> associated with the text track to <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>
               </li>
               <li>
                 <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> at <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>
@@ -1959,7 +1959,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <p>Follow these steps when <code><a href="#dom-mediasource-duration">duration</a></code> needs to change to a <var>new duration</var>.</p>
         <ol>
           <li>If the current value of <code><a href="#dom-mediasource-duration">duration</a></code> is equal to <var>new duration</var>, then return.</li>
-          <li>If <var>new duration</var> is less than the highest <a href="#presentation-timestamp">presentation timestamp</a> of any buffered <a href="#coded-frame">coded frames</a> for all <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+          <li>If <var>new duration</var> is less than the highest <a href="#presentation-timestamp">presentation timestamp</a> of any buffered <a href="#coded-frame">coded frames</a> for all <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
           <div class="note">
             <div class="note-title marker" aria-level="5" role="heading" id="h-note16"><span>Note</span></div>
             <p class="">Duration reductions that would truncate currently buffered media are disallowed. When truncation is necessary, use <code><a href="#dom-sourcebuffer-remove">remove()</a></code> to reduce the buffered range before updating <code><a href="#dom-mediasource-duration">duration</a></code>.</p>
@@ -1971,7 +1971,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <p class="">This condition can occur because the <a href="#sourcebuffer-coded-frame-removal">coded frame removal algorithm</a> preserves audio frames and text cues that start before and end after the <code><a href="#dom-mediasource-duration">duration</a></code>.</p>
           </div>
           <ol>
-            <li>Update <var>new duration</var> to the highest end time reported by the <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> attribute across all <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.</li>
+            <li>Update <var>new duration</var> to the highest end time reported by the <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> attribute across all <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.</li>
             <li>Update <code><a href="#dom-mediasource-duration">duration</a></code> to <var>new duration</var>.</li>
           </ol>
           <li>Update the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-duration">media duration</a></code> to <var>new duration</var> and run the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#durationChange">HTMLMediaElement duration change algorithm</a>.</li>
@@ -1990,7 +1990,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <dt>If <var>error</var> is not set</dt>
               <dd>
                 <ol>
-                  <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the highest end time reported by the <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> attribute across all <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.<br>
+                  <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the highest end time reported by the <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> attribute across all <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.<br>
                     <div class="note">
                       <div class="note-title marker" aria-level="5" role="heading" id="h-note18"><span>Note</span></div>
                       <p class="">This allows the duration to properly reflect the end of the appended media segments. For example, if the duration was explicitly set to 10 seconds and only media segments for 0 to 5 seconds were appended before endOfStream() was called, then the duration will get updated to 5 seconds.</p>
@@ -2113,14 +2113,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <p>Indicates whether the asynchronous continuation of an <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code>, <code><a href="#dom-sourcebuffer-appendstream">appendStream()</a></code>, or <code><a href="#dom-sourcebuffer-remove">remove()</a></code> operation is still being processed. This attribute is initially set to false when the object is created.</p>
           </dd><dt><dfn data-dfn-for="sourcebuffer" data-dfn-type="dfn" id="dom-sourcebuffer-buffered" data-idl=""><code>buffered</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code></span>, readonly       </dt>
           <dd>
-            <p>Indicates what <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code> are buffered in the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>. This attribute is initially set to an empty <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code> object when the object is created.
+            <p>Indicates what <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code> are buffered in the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>. This attribute is initially set to an empty <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code> object when the object is created.
             </p>
             <p>When the attribute is read the following steps <em class="rfc2119" title="MUST">MUST</em> occur:</p>
             <ol>
               <li>If this object has been removed from the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
-              <li>Let <var>highest end time</var> be the largest <a href="#track-buffer-ranges">track buffer ranges</a> end time across all the <a href="#track-buffer">track buffers</a> managed by this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+              <li>Let <var>highest end time</var> be the largest <a href="#track-buffer-ranges">track buffer ranges</a> end time across all the <a href="#track-buffer">track buffers</a> managed by this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
               <li>Let <var>intersection ranges</var> equal a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> object containing a single range from 0 to <var>highest end time</var>.</li>
-              <li>For each <a href="#track-buffer">track buffer</a> managed by this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>, run the following steps:
+              <li>For each <a href="#track-buffer">track buffer</a> managed by this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>, run the following steps:
                 <ol>
                   <li>Let <var>track ranges</var> equal the <a href="#track-buffer-ranges">track buffer ranges</a> for the current <a href="#track-buffer">track buffer</a>.</li>
                   <li>If <code><a href="#dom-readystate">readyState</a></code> is <code><a href="#idl-def-ReadyState.ended">"ended"</a></code>, then set the end time on the last range in <var>track ranges</var> to <var>highest end time</var>.</li>
@@ -2134,7 +2134,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             </ol>
           </dd><dt><dfn data-dfn-for="sourcebuffer" data-dfn-type="dfn" id="dom-sourcebuffer-timestampoffset" data-idl=""><code>timestampOffset</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-double">double</a></code></span></dt>
           <dd>
-            <p>Controls the offset applied to timestamps inside subsequent <a href="#media-segment">media segments</a> that are appended to this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>. The <code><a href="#dom-sourcebuffer-timestampoffset">timestampOffset</a></code> is initially set to 0 which indicates that no offset is being applied.</p>
+            <p>Controls the offset applied to timestamps inside subsequent <a href="#media-segment">media segments</a> that are appended to this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>. The <code><a href="#dom-sourcebuffer-timestampoffset">timestampOffset</a></code> is initially set to 0 which indicates that no offset is being applied.</p>
             <p>On getting, Return the initial value or the last value that was successfully set.</p>
             <p>On setting, run the following steps:</p>
             <ol>
@@ -2249,7 +2249,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <li>Run the <a href="#sourcebuffer-prepare-append">prepare append</a> algorithm.</li>
               <li>Add <var>data</var> to the end of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
               <li>Set the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute to true.</li>
-              <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updatestart">updatestart</a></code> at this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+              <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updatestart">updatestart</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
               <li>Asynchronously run the <a href="#sourcebuffer-buffer-append">buffer append</a> algorithm.</li>
             </ol>
           </dd><dt><dfn data-dfn-for="sourcebuffer" data-dfn-type="dfn" id="dom-sourcebuffer-appendstream" data-idl=""><code>appendStream</code></dfn></dt>
@@ -2287,7 +2287,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <ol class="method-algorithm">
               <li>Run the <a href="#sourcebuffer-prepare-append">prepare append</a> algorithm.</li>
               <li>Set the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute to true.</li>
-              <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updatestart">updatestart</a></code> at this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+              <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updatestart">updatestart</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
               <li>Asynchronously run the <a href="#sourcebuffer-stream-append-loop">stream append loop</a> algorithm with <var>stream</var> and <var>maxSize</var>.</li>
             </ol>
           </dd><dt><dfn data-dfn-for="sourcebuffer" data-dfn-type="dfn" id="dom-sourcebuffer-abort" data-idl=""><code>abort</code></dfn></dt>
@@ -2306,8 +2306,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <ol>
                   <li>Abort the <a href="#sourcebuffer-buffer-append">buffer append</a> and <a href="#sourcebuffer-stream-append-loop">stream append loop</a> algorithms if they are running.</li>
                   <li>Set the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute to false.</li>
-                  <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-abort">abort</a></code> at this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
-                  <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+                  <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-abort">abort</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+                  <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
                 </ol>
               </li>
               <li>Run the <a href="#sourcebuffer-reset-parser-state">reset parser state algorithm</a>.</li>
@@ -2369,7 +2369,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
     <section id="track-buffers" typeof="bibo:Chapter" resource="#track-buffers" property="bibo:hasPart">
       <h3 id="h-track-buffers" resource="#h-track-buffers"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.1 </span>Track Buffers</span></h3>
       <p>A <dfn id="track-buffer" data-dfn-type="dfn">track buffer</dfn> stores the <a href="#track-description">track descriptions</a> and <a href="#coded-frame">coded frames</a> for an individual track. The track buffer is updated as <a href="#init-segment">initialization segments</a> and <a href="#media-segment">media segments</a> are appended to the
-        <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>.</p>
+        <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>.</p>
 
       <p>Each <a href="#track-buffer">track buffer</a> has a <dfn id="last-decode-timestamp" data-dfn-type="dfn">last decode timestamp</dfn> variable that stores the decode timestamp of the last <a href="#coded-frame">coded frame</a> appended in the current <a href="#coded-frame-group">coded frame group</a>. The variable is initially unset to indicate that no <a href="#coded-frame">coded frames</a> have been appended yet.</p>
 
@@ -2384,14 +2384,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
       <div class="note">
         <div class="note-title marker" aria-level="4" role="heading" id="h-note19"><span>Note</span></div>
-        <p class="">For track buffer ranges, these presentation time ranges are based on <a href="#presentation-timestamp">presentation timestamps</a>, frame durations, and potentially coded frame group start times for coded frame groups across track buffers in a muxed <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>.</p>
+        <p class="">For track buffer ranges, these presentation time ranges are based on <a href="#presentation-timestamp">presentation timestamps</a>, frame durations, and potentially coded frame group start times for coded frame groups across track buffers in a muxed <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>.</p>
       </div>
 
       <p>For specification purposes, this information is treated as if it were stored in a <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#normalized-timeranges-object">normalized TimeRanges object</a>. Intersected <a href="#track-buffer-ranges">track buffer ranges</a> are used to report <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code>, and <em class="rfc2119" title="MUST">MUST</em> therefore support uninterrupted playback within each range of <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code>.</p>
 
       <div class="note">
         <div class="note-title marker" aria-level="4" role="heading" id="h-note20"><span>Note</span></div>
-        <p class="">These coded frame group start times differ slightly from those mentioned in the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> in that they are the earliest <a href="#presentation-timestamp">presentation timestamp</a> across all track buffers following a discontinuity. Discontinuities can occur within the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> or result from the <a href="#sourcebuffer-coded-frame-removal">coded frame removal algorithm</a>, regardless of <code><a href="#dom-sourcebuffer-mode">mode</a></code>. The threshold for determining disjointness of <a href="#track-buffer-ranges">track buffer ranges</a> is implementation-specific. For example, to reduce unexpected playback stalls, implementations <em class="rfc2119" title="MAY">MAY</em> approximate the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>'s discontinuity detection logic by coalescing adjacent ranges separated by a gap smaller than 2 times the maximum frame duration buffered so far in this <a href="#track-buffer">track buffer</a>. Implementations <em class="rfc2119" title="MAY">MAY</em> also use coded frame group start times as range start times across <a href="#track-buffer">track buffers</a> in a muxed <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> to further reduce unexpected playback stalls.</p>
+        <p class="">These coded frame group start times differ slightly from those mentioned in the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> in that they are the earliest <a href="#presentation-timestamp">presentation timestamp</a> across all track buffers following a discontinuity. Discontinuities can occur within the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> or result from the <a href="#sourcebuffer-coded-frame-removal">coded frame removal algorithm</a>, regardless of <code><a href="#dom-sourcebuffer-mode">mode</a></code>. The threshold for determining disjointness of <a href="#track-buffer-ranges">track buffer ranges</a> is implementation-specific. For example, to reduce unexpected playback stalls, implementations <em class="rfc2119" title="MAY">MAY</em> approximate the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>'s discontinuity detection logic by coalescing adjacent ranges separated by a gap smaller than 2 times the maximum frame duration buffered so far in this <a href="#track-buffer">track buffer</a>. Implementations <em class="rfc2119" title="MAY">MAY</em> also use coded frame group start times as range start times across <a href="#track-buffer">track buffers</a> in a muxed <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> to further reduce unexpected playback stalls.</p>
       </div>
     </section>
 
@@ -2478,7 +2478,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </p>
         <div class="note">
           <div class="note-title marker" aria-level="5" role="heading" id="h-note21"><span>Note</span></div>
-          <p class="">The <var><a href="#sourcebuffer-group-end-timestamp">group end timestamp</a></var> stores the highest <a href="#coded-frame-end-timestamp">coded frame end timestamp</a> across all <a href="#track-buffer">track buffers</a> in a <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>. Therefore, care should be taken in setting the <code><a href="#dom-sourcebuffer-mode">mode</a></code> attribute when appending multiplexed segments in which the timestamps are not aligned across tracks.
+          <p class="">The <var><a href="#sourcebuffer-group-end-timestamp">group end timestamp</a></var> stores the highest <a href="#coded-frame-end-timestamp">coded frame end timestamp</a> across all <a href="#track-buffer">track buffers</a> in a <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>. Therefore, care should be taken in setting the <code><a href="#dom-sourcebuffer-mode">mode</a></code> attribute when appending multiplexed segments in which the timestamps are not aligned across tracks.
           </p>
         </div>
 
@@ -2523,7 +2523,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   </p>
                 </div>
               </li>
-              <li>If this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> is full and cannot accept more media data, then set the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> to true.</li>
+              <li>If this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> is full and cannot accept more media data, then set the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> to true.</li>
               <li>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> does not contain a complete <a href="#media-segment">media segment</a>, then jump to the <i>need more data</i> step below.</li>
               <li>Remove the <a href="#media-segment">media segment</a> bytes from the beginning of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
               <li>Set <var><a href="#sourcebuffer-append-state">append state</a></var> to <a href="#sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</a>.</li>
@@ -2557,17 +2557,17 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <ol>
           <li>Run the <a href="#sourcebuffer-reset-parser-state">reset parser state algorithm</a>.</li>
           <li>Set the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute to false.</li>
-          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-error">error</a></code> at this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
-          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-error">error</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
           <li>If <var>decode error</var> is true, then run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code>.</li>
         </ol>
       </section>
 
       <section id="sourcebuffer-prepare-append" typeof="bibo:Chapter" resource="#sourcebuffer-prepare-append" property="bibo:hasPart">
         <h4 id="h-sourcebuffer-prepare-append" resource="#h-sourcebuffer-prepare-append"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.3.4 </span>Prepare Append Algorithm</span></h4>
-        <p>When an append operation begins, the follow steps are run to validate and prepare the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>.</p>
+        <p>When an append operation begins, the follow steps are run to validate and prepare the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>.</p>
         <ol>
-          <li>If the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> has been removed from the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+          <li>If the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> has been removed from the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
           <li>If the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
           <li>If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-error">HTMLMediaElement.error</a></code> attribute is not null, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
           <li>
@@ -2597,15 +2597,15 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <li>Run the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> algorithm.</li>
           <li>If the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> algorithm in the previous step was aborted, then abort this algorithm.</li>
           <li>Set the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute to false.</li>
-          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-update">update</a></code> at this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
-          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-update">update</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
         </ol>
       </section>
 
       <section id="sourcebuffer-stream-append-loop" typeof="bibo:Chapter" resource="#sourcebuffer-stream-append-loop" property="bibo:hasPart">
         <h4 id="h-sourcebuffer-stream-append-loop" resource="#h-sourcebuffer-stream-append-loop"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.3.6 </span>Stream Append Loop</span></h4>
         <p>This algorithm is invoked by <code><a href="#dom-sourcebuffer-appendstream">appendStream()</a></code>to transfer data from a
-          <code><a href="https://streams.spec.whatwg.org/#rs-class-definition" class="idlType">ReadableStream</a></code> to the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>. This algorithm is initialized with the <var>stream</var> and <var>maxSize</var> parameters from the
+          <code><a href="https://streams.spec.whatwg.org/#rs-class-definition" class="idlType">ReadableStream</a></code> to the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>. This algorithm is initialized with the <var>stream</var> and <var>maxSize</var> parameters from the
           <code><a href="#dom-sourcebuffer-appendstream">appendStream()</a></code> call.
         </p>
         <ol>
@@ -2663,7 +2663,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <p>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to false and abort this algorithm.</p>
             <div class="note">
               <div class="note-title marker" aria-level="5" role="heading" id="h-note27"><span>Note</span></div>
-              <p class="">The web application <em class="rfc2119" title="SHOULD">SHOULD</em> use <code><a href="#dom-sourcebuffer-remove">remove()</a></code> to free up space in the <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>.</p>
+              <p class="">The web application <em class="rfc2119" title="SHOULD">SHOULD</em> use <code><a href="#dom-sourcebuffer-remove">remove()</a></code> to free up space in the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>.</p>
             </div>
           </li>
           <li>Add <var>data</var> to the end of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
@@ -2671,8 +2671,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <li>If the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> algorithm in the previous step was aborted, then abort this algorithm.</li>
           <li>Jump to the <i>loop top</i> step above.</li>
           <li><i>Loop Done: </i>Set the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute to false.</li>
-          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-update">update</a></code> at this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
-          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-update">update</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
         </ol>
       </section>
 
@@ -2683,12 +2683,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <li>Let <var>start</var> equal the starting <a href="#presentation-timestamp">presentation timestamp</a> for the removal range, in seconds measured from <a href="#presentation-start-time">presentation start time</a>.</li>
           <li>Let <var>end</var> equal the end <a href="#presentation-timestamp">presentation timestamp</a> for the removal range, in seconds measured from <a href="#presentation-start-time">presentation start time</a>.</li>
           <li>Set the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute to true.</li>
-          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updatestart">updatestart</a></code> at this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updatestart">updatestart</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
           <li>Return control to the caller and run the rest of the steps asynchronously.</li>
           <li>Run the <a href="#sourcebuffer-coded-frame-removal">coded frame removal algorithm</a> with <var>start</var> and <var>end</var> as the start and end of the removal range.</li>
           <li>Set the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute to false.</li>
-          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-update">update</a></code> at this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
-          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-update">update</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
         </ol>
       </section>
 
@@ -2768,9 +2768,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                           <li>Set <var>active track flag</var> to true.</li>
                         </ol>
                       </li>
-                      <li>Add <var>new audio track</var> to the <code><a href="#dom-sourcebuffer-audiotracks">audioTracks</a></code> attribute on this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+                      <li>Add <var>new audio track</var> to the <code><a href="#dom-sourcebuffer-audiotracks">audioTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
                       <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> object referenced by the
-                        <code><a href="#dom-sourcebuffer-audiotracks">audioTracks</a></code> attribute on this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+                        <code><a href="#dom-sourcebuffer-audiotracks">audioTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
                       <li>Add <var>new audio track</var> to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-audiotracks">audioTracks</a></code> attribute on the HTMLMediaElement.</li>
                       <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> object referenced by the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-audiotracks">audioTracks</a></code> attribute on the HTMLMediaElement.</li>
                     </ol>
@@ -2814,8 +2814,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                           <li>Set <var>active track flag</var> to true.</li>
                         </ol>
                       </li>
-                      <li>Add <var>new video track</var> to the <code><a href="#dom-sourcebuffer-videotracks">videoTracks</a></code> attribute on this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
-                      <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> object referenced by the <code><a href="#dom-sourcebuffer-videotracks">videoTracks</a></code> attribute on this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+                      <li>Add <var>new video track</var> to the <code><a href="#dom-sourcebuffer-videotracks">videoTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+                      <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> object referenced by the <code><a href="#dom-sourcebuffer-videotracks">videoTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
                       <li>Add <var>new video track</var> to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-videotracks">videoTracks</a></code> attribute on the HTMLMediaElement.</li>
                       <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> object referenced by the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-videotracks">videoTracks</a></code> attribute on the HTMLMediaElement.
                       </li>
@@ -2858,8 +2858,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                         If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrack-mode">mode</a></code> property on <var>new text track</var> equals <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-showing">"showing"</a></code> or
                         <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-hidden">"hidden"</a></code>, then set <var>active track flag</var> to true.
                       </li>
-                      <li>Add <var>new text track</var> to the <code><a href="#dom-sourcebuffer-texttracks">textTracks</a></code> attribute on this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
-                      <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, at <code><a href="#dom-sourcebuffer-texttracks">textTracks</a></code> attribute on this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+                      <li>Add <var>new text track</var> to the <code><a href="#dom-sourcebuffer-texttracks">textTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+                      <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, at <code><a href="#dom-sourcebuffer-texttracks">textTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
                       <li>Add <var>new text track</var> to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-texttracks">textTracks</a></code> attribute on the HTMLMediaElement.</li>
                       <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> object referenced by the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-texttracks">textTracks</a></code> attribute on the HTMLMediaElement.
                       </li>
@@ -2871,7 +2871,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               </li>
               <li>If <var>active track flag</var> equals true, then run the following steps:
                 <ol>
-                  <li>Add this <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> to <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>.</li>
+                  <li>Add this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> to <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>.</li>
                   <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> at <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code></li>
                 </ol>
               </li>
@@ -3388,34 +3388,37 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
   <section id="sourcebufferlist" typeof="bibo:Chapter" resource="#sourcebufferlist" property="bibo:hasPart">
     <!--OddPage-->
     <h2 id="h-sourcebufferlist" resource="#h-sourcebufferlist"><span property="xhv:role" resource="xhv:heading"><span class="secno">4. </span>SourceBufferList Object</span></h2>
-    <p>SourceBufferList is a simple container object for <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects. It provides read-only array access and fires events when the list is modified.</p>
+    <p>SourceBufferList is a simple container object for <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects. It provides read-only array access and fires events when the list is modified.</p>
 
-    <div><pre class="def idl"><span class="idlInterface" id="idl-def-sourcebufferlist" data-idl="" data-title="SourceBufferList">interface <span class="idlInterfaceID">SourceBufferList</span> : <span class="idlSuperclass">EventTarget</span> {
+    <div>
+      <pre class="def idl"><span class="idlInterface" id="idl-def-sourcebufferlist" data-idl="" data-title="SourceBufferList">interface <span class="idlInterfaceID">SourceBufferList</span> : <span class="idlSuperclass">EventTarget</span> {
 <span class="idlAttribute" id="idl-def-sourcebufferlist-length" data-idl="" data-title="length" data-dfn-for="sourcebufferlist">    readonly attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span> <span class="idlAttrName"><a data-lt="length" href="#dom-sourcebufferlist-length" class="internalDFN" data-link-type="dfn" data-for="SourceBufferList"><code>length</code></a></span>;</span>
 <span class="idlAttribute" id="idl-def-sourcebufferlist-onaddsourcebuffer" data-idl="" data-title="onaddsourcebuffer" data-dfn-for="sourcebufferlist">             attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html51/webappapis.html#typedefdef-eventhandlernonnull-eventhandler">EventHandler</a></code></span>  <span class="idlAttrName"><a data-lt="onaddsourcebuffer" href="#dom-sourcebufferlist-onaddsourcebuffer" class="internalDFN" data-link-type="dfn" data-for="SourceBufferList"><code>onaddsourcebuffer</code></a></span>;</span>
 <span class="idlAttribute" id="idl-def-sourcebufferlist-onremovesourcebuffer" data-idl="" data-title="onremovesourcebuffer" data-dfn-for="sourcebufferlist">             attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html51/webappapis.html#typedefdef-eventhandlernonnull-eventhandler">EventHandler</a></code></span>  <span class="idlAttrName"><a data-lt="onremovesourcebuffer" href="#dom-sourcebufferlist-onremovesourcebuffer" class="internalDFN" data-link-type="dfn" data-for="SourceBufferList"><code>onremovesourcebuffer</code></a></span>;</span>
-<span class="idlMethod" id="idl-def-sourcebufferlist-(unsigned_long)" data-idl="" data-title="" data-dfn-for="sourcebufferlist">    getter <span class="idlMethType"><a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a></span> <span class="idlMethName"></span>(<span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span> <span class="idlParamName">index</span></span>);</span>
+<span class="idlMethod" id="idl-def-sourcebufferlist-(unsigned_long)" data-idl="" data-title="" data-dfn-for="sourcebufferlist">    getter <span class="idlMethType"><a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a></span> <span class="idlMethName"></span>(<span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span> <span class="idlParamName">index</span></span>);</span>
 };</span></pre>
 
       <section typeof="bibo:Chapter" resource="#attributes-2" property="bibo:hasPart">
         <h3 id="attributes-2" resource="#attributes-2"><span property="xhv:role" resource="xhv:heading">Attributes</span></h3>
-        <dl class="attributes" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList"><dt><dfn data-dfn-for="sourcebufferlist" data-dfn-type="dfn" id="dom-sourcebufferlist-length" data-idl=""><code>length</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span>, readonly       </dt>
+        <dl class="attributes" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList">
+          <dt><dfn data-dfn-for="sourcebufferlist" data-dfn-type="dfn" id="dom-sourcebufferlist-length" data-idl=""><code>length</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span>, readonly       </dt>
           <dd>
-            <p>Indicates the number of <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in the list.</p>
-          </dd><dt><dfn data-dfn-for="sourcebufferlist" data-dfn-type="dfn" id="dom-sourcebufferlist-onaddsourcebuffer" data-idl=""><code>onaddsourcebuffer</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html51/webappapis.html#typedefdef-eventhandlernonnull-eventhandler">EventHandler</a></code></span></dt>
+            <p>Indicates the number of <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in the list.</p>
+          </dd>
+          <dt><dfn data-dfn-for="sourcebufferlist" data-dfn-type="dfn" id="dom-sourcebufferlist-onaddsourcebuffer" data-idl=""><code>onaddsourcebuffer</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html51/webappapis.html#typedefdef-eventhandlernonnull-eventhandler">EventHandler</a></code></span></dt>
           <dd>
             <p>The event handler for the <code><a href="#dom-evt-addsourcebuffer">addsourcebuffer</a></code> event.</p>
-          </dd><dt><dfn data-dfn-for="sourcebufferlist" data-dfn-type="dfn" id="dom-sourcebufferlist-onremovesourcebuffer" data-idl=""><code>onremovesourcebuffer</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html51/webappapis.html#typedefdef-eventhandlernonnull-eventhandler">EventHandler</a></code></span></dt>
+          </dd>
+          <dt><dfn data-dfn-for="sourcebufferlist" data-dfn-type="dfn" id="dom-sourcebufferlist-onremovesourcebuffer" data-idl=""><code>onremovesourcebuffer</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html51/webappapis.html#typedefdef-eventhandlernonnull-eventhandler">EventHandler</a></code></span></dt>
           <dd>
             <p>The event handler for the <code><a href="#dom-evt-removesourcebuffer">removesourcebuffer</a></code> event.</p>
-
           </dd>
         </dl>
       </section>
 
       <section typeof="bibo:Chapter" resource="#methods-2" property="bibo:hasPart">
         <h3 id="methods-2" resource="#methods-2"><span property="xhv:role" resource="xhv:heading">Methods</span></h3>
-        <dl class="methods" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList"><dt><dfn data-dfn-type="dfn" id="dfn-sourcebuffer"><code>SourceBuffer</code></dfn></dt>
+        <dl class="methods" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList"><dt><dfn data-dfn-type="dfn" id="dfn-getter"><code>getter</code></dfn></dt>
           <dd>
             <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e., []).</p>
 
@@ -3438,11 +3441,11 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 </tr>
               </tbody>
             </table>
-            <div><em>Return type: </em><code>getter</code></div>
+            <div><em>Return type: </em><a href="#dfn-getter" class="internalDFN" data-link-type="dfn"><code><code>getter</code></code></a></div>
             <p>When this method is invoked, the user agent must run the following steps:</p>
             <ol class="method-algorithm">
               <li>If <var>index</var> is greater than or equal to the <code><a href="#dom-sourcebufferlist-length">length</a></code> attribute then return undefined and abort these steps.</li>
-              <li>Return the <var>index</var>'th <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object in the list.</li>
+              <li>Return the <var>index</var>'th <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object in the list.</li>
             </ol>
           </dd>
         </dl>
@@ -3463,12 +3466,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <tr>
             <td><dfn id="dom-evt-addsourcebuffer"><code>addsourcebuffer</code></dfn></td>
             <td><code>Event</code></td>
-            <td>When a <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> is added to the list.</td>
+            <td>When a <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> is added to the list.</td>
           </tr>
           <tr>
             <td><dfn id="dom-evt-removesourcebuffer"><code>removesourcebuffer</code></dfn></td>
             <td><code>Event</code></td>
-            <td>When a <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> is removed from the list.</td>
+            <td>When a <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> is removed from the list.</td>
           </tr>
         </tbody>
       </table>
@@ -3759,7 +3762,7 @@ interface <span class="idlInterfaceID"><a data-lt="TrackDefaultList" href="#dom-
                 </tr>
               </tbody>
             </table>
-            <div><em>Return type: </em><code>getter</code></div>
+            <div><em>Return type: </em><a href="#dfn-getter" class="internalDFN" data-link-type="dfn"><code><code>getter</code></code></a></div>
             <p>When this method is invoked, the user agent must run the following steps:</p>
             <ol class="method-algorithm">
               <li>If <var>index</var> is greater than or equal to the <code><a href="#dom-trackdefaultlist-length">length</a></code> attribute then return undefined and abort these steps.</li>
@@ -3855,12 +3858,12 @@ partial interface <span class="idlInterfaceID">URL</span> {
       <li>Let <var>intersection ranges</var> equal an empty <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code> object.</li>
       <li>If <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>.length does not equal 0 then run the following steps:
         <ol>
-          <li>Let <var>active ranges</var> be the ranges returned by <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> for each <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>.</li>
+          <li>Let <var>active ranges</var> be the ranges returned by <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> for each <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>.</li>
           <li>Let <var>highest end time</var> be the largest range end time in the <var>active ranges</var>.</li>
           <li>Let <var>intersection ranges</var> equal a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> object containing a single range from 0 to <var>highest end time</var>.</li>
-          <li>For each <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code> run the following steps:
+          <li>For each <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code> run the following steps:
             <ol>
-              <li>Let <var>source ranges</var> equal the ranges returned by the <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> attribute on the current <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>.</li>
+              <li>Let <var>source ranges</var> equal the ranges returned by the <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> attribute on the current <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>.</li>
               <li>If <code><a href="#dom-readystate">readyState</a></code> is <code><a href="#idl-def-ReadyState.ended">"ended"</a></code>, then set the end time on the last range in <var>source ranges</var> to
                 <var>highest end time</var>.</li>
               <li>Let <var>new intersection ranges</var> equal the intersection between the <var>intersection ranges</var> and the <var>source ranges</var>.</li>
@@ -3931,7 +3934,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
     <p>This section specifies extensions to the HTML <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> definition.</p>
 
     <div><pre class="def idl"><span class="idlInterface" id="idl-def-audiotrack-partial-1" data-idl="" data-title="AudioTrack">partial interface <span class="idlInterfaceID">AudioTrack</span> {
-<span class="idlAttribute" id="idl-def-audiotrack-sourcebuffer" data-idl="" data-title="sourceBuffer" data-dfn-for="audiotrack">    readonly attribute <span class="idlAttrType"><a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>?</span> <span class="idlAttrName"><a data-lt="sourceBuffer" href="#dom-audiotrack-sourcebuffer" class="internalDFN" data-link-type="dfn" data-for="AudioTrack"><code>sourceBuffer</code></a></span>;</span>
+<span class="idlAttribute" id="idl-def-audiotrack-sourcebuffer" data-idl="" data-title="sourceBuffer" data-dfn-for="audiotrack">    readonly attribute <span class="idlAttrType"><a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>?</span> <span class="idlAttrName"><a data-lt="sourceBuffer" href="#dom-audiotrack-sourcebuffer" class="internalDFN" data-link-type="dfn" data-for="AudioTrack"><code>sourceBuffer</code></a></span>;</span>
 };</span></pre>
 
       <section typeof="bibo:Chapter" resource="#attributes-6" property="bibo:hasPart">
@@ -3951,7 +3954,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
     <p>This section specifies extensions to the HTML <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> definition.</p>
 
     <div><pre class="def idl"><span class="idlInterface" id="idl-def-videotrack-partial-1" data-idl="" data-title="VideoTrack">partial interface <span class="idlInterfaceID">VideoTrack</span> {
-<span class="idlAttribute" id="idl-def-videotrack-sourcebuffer" data-idl="" data-title="sourceBuffer" data-dfn-for="videotrack">    readonly attribute <span class="idlAttrType"><a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>?</span> <span class="idlAttrName"><a data-lt="sourceBuffer" href="#dom-videotrack-sourcebuffer" class="internalDFN" data-link-type="dfn" data-for="VideoTrack"><code>sourceBuffer</code></a></span>;</span>
+<span class="idlAttribute" id="idl-def-videotrack-sourcebuffer" data-idl="" data-title="sourceBuffer" data-dfn-for="videotrack">    readonly attribute <span class="idlAttrType"><a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>?</span> <span class="idlAttrName"><a data-lt="sourceBuffer" href="#dom-videotrack-sourcebuffer" class="internalDFN" data-link-type="dfn" data-for="VideoTrack"><code>sourceBuffer</code></a></span>;</span>
 };</span></pre>
 
       <section typeof="bibo:Chapter" resource="#attributes-7" property="bibo:hasPart">
@@ -3971,7 +3974,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
     <p>This section specifies extensions to the HTML <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> definition.</p>
 
     <div><pre class="def idl"><span class="idlInterface" id="idl-def-texttrack-partial-1" data-idl="" data-title="TextTrack">partial interface <span class="idlInterfaceID">TextTrack</span> {
-<span class="idlAttribute" id="idl-def-texttrack-sourcebuffer" data-idl="" data-title="sourceBuffer" data-dfn-for="texttrack">    readonly attribute <span class="idlAttrType"><a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>?</span> <span class="idlAttrName"><a data-lt="sourceBuffer" href="#dom-texttrack-sourcebuffer" class="internalDFN" data-link-type="dfn" data-for="TextTrack"><code>sourceBuffer</code></a></span>;</span>
+<span class="idlAttribute" id="idl-def-texttrack-sourcebuffer" data-idl="" data-title="sourceBuffer" data-dfn-for="texttrack">    readonly attribute <span class="idlAttrType"><a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>?</span> <span class="idlAttrName"><a data-lt="sourceBuffer" href="#dom-texttrack-sourcebuffer" class="internalDFN" data-link-type="dfn" data-for="TextTrack"><code>sourceBuffer</code></a></span>;</span>
 };</span></pre>
 
       <section typeof="bibo:Chapter" resource="#attributes-8" property="bibo:hasPart">
@@ -3988,8 +3991,8 @@ partial interface <span class="idlInterfaceID">URL</span> {
   <section id="byte-stream-formats" typeof="bibo:Chapter" resource="#byte-stream-formats" property="bibo:hasPart">
     <!--OddPage-->
     <h2 id="h-byte-stream-formats" resource="#h-byte-stream-formats"><span property="xhv:role" resource="xhv:heading"><span class="secno">14. </span>Byte Stream Formats</span></h2>
-    <p>The bytes provided through <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> and <code><a href="#dom-sourcebuffer-appendstream">appendStream()</a></code> for a <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> form a logical byte stream. The format and semantics of these byte streams are defined in <dfn id="byte-stream-format-specs" data-dfn-type="dfn">byte stream format specifications</dfn>. The byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>] provides mappings between a MIME type that may be passed to <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code> or
-      <code><a href="#dom-mediasource-istypesupported">isTypeSupported()</a></code> and the byte stream format expected by a <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> created with that MIME type. Implementations are encouraged to register mappings for byte stream formats they support to facilitate interoperability. The byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>] is the authoritative source for these mappings. If an implementation claims to support a MIME type listed in the registry, its <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> implementation <em class="rfc2119" title="MUST">MUST</em> conform to the
+    <p>The bytes provided through <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> and <code><a href="#dom-sourcebuffer-appendstream">appendStream()</a></code> for a <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> form a logical byte stream. The format and semantics of these byte streams are defined in <dfn id="byte-stream-format-specs" data-dfn-type="dfn">byte stream format specifications</dfn>. The byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>] provides mappings between a MIME type that may be passed to <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code> or
+      <code><a href="#dom-mediasource-istypesupported">isTypeSupported()</a></code> and the byte stream format expected by a <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> created with that MIME type. Implementations are encouraged to register mappings for byte stream formats they support to facilitate interoperability. The byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>] is the authoritative source for these mappings. If an implementation claims to support a MIME type listed in the registry, its <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> implementation <em class="rfc2119" title="MUST">MUST</em> conform to the
       <a href="#byte-stream-format-specs">byte stream format specification</a> listed in the registry entry.</p>
     <div class="note">
       <div class="note-title marker" aria-level="3" role="heading" id="h-note49"><span>Note</span></div>
@@ -4024,7 +4027,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
             <p>Codecs changes across <a href="#init-segment">initialization segments</a>.</p>
             <div class="note">
               <div class="note-title marker" aria-level="3" role="heading" id="h-note53"><span>Note</span></div>
-              <p class="">For example, a byte stream that starts with an <a href="#init-segment">initialization segment</a> that specifies a single AAC track and later contains an <a href="#init-segment">initialization segment</a> that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a href="#dfn-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects.</p>
+              <p class="">For example, a byte stream that starts with an <a href="#init-segment">initialization segment</a> that specifies a single AAC track and later contains an <a href="#init-segment">initialization segment</a> that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects.</p>
             </div>
           </li>
         </ol>

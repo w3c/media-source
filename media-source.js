@@ -391,7 +391,7 @@
     // Update links to external type definitions.
     var externalClassInfo = {
       'ReadableStream': { spec: 'whatwg-streams-api', fragment: 'rs-class-definition' },
-      'SourceBuffer': { spec: 'mse', fragment: 'idl-def-SourceBuffer' },
+     // 'SourceBuffer': { spec: 'mse', fragment: 'idl-def-SourceBuffer' },
       'AudioTrackList': {spec: 'html5', fragment: 'audiotracklist-audiotracklist' },
       'TextTrackList': {spec: 'html5', fragment: 'texttracklist-texttracklist' },
       'TimeRanges': { spec: 'html5', fragment: 'timeranges-timeranges' },
@@ -598,6 +598,7 @@
         }
     
     });
+    // End workaround for ReSpec issue 893
  
     $("a[href]").each(function () {
       var link = $(this);
