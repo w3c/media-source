@@ -131,7 +131,6 @@
           SourceBuffer: function() {},
           SourceBufferList: function() {},
           AppendMode: function() {},
-          VideoPlaybackQuality: function() {},
           ReadableStream: function() {},
           ArrayBuffer: function() {},
           ArrayBufferView: function() {},
@@ -164,6 +163,12 @@
               href: "http://dev.w3.org/html5/html-sourcing-inband-tracks/",
               authors: ["Bob Lund", "Silvia Pfeiffer"],
               publisher: "W3C",
+          },
+          "MEDIA-PLAYBACK-QUALITY": {
+              title: "Media Playback Quality",
+              href: "https://wicg.github.io/media-playback-quality/",
+              authors: ["Mounir Lamouri"],
+              publisher: "W3C",
           }
        }
       };
@@ -188,8 +193,6 @@
         <p>The following features are <strong>at risk</strong> and may be removed:</p>
         <ul>
           <li><p>The <a def-id="appendStream">appendStream</a> method on the <a href="#sourcebuffer">sourceBuffer</a> object and algorithm steps that are used only by it.</p></li>
-          <li><p>The <a href="#videoplaybackquality">VideoPlaybackQuality</a> object and the <a href="#htmlvideoelement-extensions">HTMLVideoElement Extensions</a> that use it.</p></li>
-          <li><p>The <a def-id="totalFrameDelay">totalFrameDelay</a> attribute on the <a href="#videoplaybackquality">VideoPlaybackQuality</a> object.</p></li>
           <li><p>The <a href=#idl-def-TrackDefault>TrackDefault</a> object and its related objects, attributes, methods and algorithms, including: <a href=#idl-def-TrackDefaultList>TrackDefaultList</a>, <a href=#widl-SourceBuffer-trackDefaults>SourceBuffer.trackDefaults</a>, <a href=#sourcebuffer-default-track-language>Default track language</a>, <a href=#sourcebuffer-default-track-label>Default track label</a>, and <a href=#sourcebuffer-default-track-kinds>Default track kinds</a>. Implementations still MUST at least include trivial versions of these default track language/label/kinds algorithms that are used by the <a href=#sourcebuffer-init-segment-received>initialization segment received algorithm</a>. These trivial versions would behave as follows: Trivial default track language and Trivial default track label algorithms MUST return an empty string, and Trivial default kinds algorithm MUST return a sequence with a single empty string element in it.</p></li>
         </ul>
         <p>
@@ -213,7 +216,7 @@
     </section>
 
 
-    <section id="introduction">
+    <section id="introduction" class="informative">
       <h2>Introduction</h2>
       <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;.
         It defines objects that allow JavaScript to pass media segments to an <a def-id="htmlmediaelement">HTMLMediaElement</a> [[!HTML51]].
@@ -277,13 +280,6 @@
           <dt id="decode-timestamp">Decode Timestamp</dt>
           <dd>
             <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a def-id="presentation-timestamp"></a> of the earliest frame, in <a def-id="presentation-order"></a>, that is dependant on this frame). If frames can be decoded out of <a def-id="presentation-order"></a>, then the decode timestamp MUST be present in or derivable from the byte stream. The user agent MUST run the <a def-id="append-decode-error-algorithm"></a> if this is not the case. If frames cannot be decoded out of  <a def-id="presentation-order"></a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a def-id="presentation-timestamp"></a>.</p>
-          </dd>
-
-          <dt id="displayed-frame-delay">Displayed Frame Delay</dt>
-          <dd>
-            <p>The delay between a frame's presentation time and the actual time it was displayed, in a double-precision value in seconds and rounded to the nearest display refresh interval. This
-              delay is always greater than or equal to zero since frames MUST never be displayed before their presentation time. Non-zero delays are a sign of playback jitter
-              and possible loss of A/V sync.</p>
           </dd>
 
           <dt id="init-segment">Initialization Segment</dt>
@@ -1452,7 +1448,7 @@
             <li>Run the <a def-id="coded-frame-eviction-algorithm"></a>.</li>
             <li>
               <p>If the <a def-id="buffer-full-flag"></a> equals true, then throw a <a def-id="quota-exceeded-error"></a> exception and abort these step.</p>
-              <p class="note">This is the signal that the implementation was unable to evict enough data to accomodate the append or the append is too big. The web
+              <p class="note">This is the signal that the implementation was unable to evict enough data to accommodate the append or the append is too big. The web
                 application SHOULD use <a def-id="remove"></a> to explicitly free up space and/or reduce the size of the append.</p>
             </li>
             </ol>
@@ -2340,39 +2336,6 @@
       </section>
     </section>
 
-    <section id="videoplaybackquality">
-      <h2>VideoPlaybackQuality Object</h2>
-      <p>The following section is OPTIONAL. There are several implementations of the current specification, but it is subject to change because some feel it needs further work. The community is actively investigating alternate designs to provide feedback on media playback quality. See <a href="https://wicg.github.io/media-playback-quality/">Media Playback Quality</a>.
-      </p>
-      <dl title="interface VideoPlaybackQuality" class="idl">
-        <dt>readonly attribute DOMHighResTimeStamp creationTime</dt>
-        <dd>
-          <p>The timestamp returned by <a def-id="performance-now"></a> [[!HR-TIME]] when this object was created.</p>
-        </dd>
-
-        <dt>readonly attribute unsigned long totalVideoFrames</dt>
-        <dd>
-          <p>The total number of frames that would have been displayed if no frames are dropped.</p>
-        </dd>
-
-        <dt>readonly attribute unsigned long droppedVideoFrames</dt>
-        <dd>
-          <p>The total number of frames dropped predecode or dropped because the frame missed
-            its display deadline.</p>
-        </dd>
-
-        <dt>readonly attribute unsigned long corruptedVideoFrames</dt>
-        <dd>
-          <p>The total number of corrupted frames that have been detected.</p>
-        </dd>
-
-        <dt>readonly attribute double totalFrameDelay</dt>
-        <dd>
-          <p>The sum of all <a def-id="displayed-frame-delays"></a> for all displayed frames. (i.e., frames included in the <a def-id="totalVideoFrames"></a> count, but not in the <a def-id="droppedVideoFrames"></a> count).</p>
-        </dd>
-      </dl>
-    </section>
-
     <section id="trackdefault">
       <h2>TrackDefault Object</h2>
       <p>The TrackDefault object is used to provide kind, label, and language information for tracks that do not
@@ -2568,53 +2531,6 @@
           <var>intersection ranges</var>.
         <li>Return the current value of this attribute.</li>
       </ol>
-    </section>
-
-    <section id="htmlvideoelement-extensions">
-      <h2>HTMLVideoElement Extensions</h2>
-      <p>The following section uses <a>VideoPlaybackQuality</a> and is OPTIONAL. There are several implementations of the current specification, but it is subject to change because some feel it needs further work. The community is actively investigating alternate designs to provide feedback on media playback quality. See <a href="https://wicg.github.io/media-playback-quality/">Media Playback Quality</a>.
-      </p>
-
-      <p>This section specifies new attributes and internal state that are being added to the <a def-id="htmlvideoelement"></a>.</p>
-
-      <p>Each <a def-id="htmlvideoelement"></a> will maintain a <dfn id="total-video-frame-count">total video frame count</dfn> variable that keeps
-        track of the total number of frames that have been displayed and dropped. This variable is initialized to 0 when the
-        element is created and whenever the <a def-id="media-element-load-algorithm"></a> is invoked. It is incremented when a video frame is displayed
-        or when the <a def-id="dropped-video-frame-count"></a> is incremented.</p>
-
-      <p>Each <a def-id="htmlvideoelement"></a> will maintain a <dfn id="dropped-video-frame-count">dropped video frame count</dfn> variable that keeps
-        track of the total number of frames that have been dropped. This variable is initialized to 0 when the
-        element is created and whenever the <a def-id="media-element-load-algorithm"></a> is invoked. It is incremented when a video frame is dropped
-        predecode or when a frame is decoded but dropped because it missed a display deadline.</p>
-
-      <p>Each <a def-id="htmlvideoelement"></a> will maintain a <dfn id="corrupted-video-frame-count">corrupted video frame count</dfn> variable that keeps
-        track of the total number of corrupted frames detected. This variable is initialized to 0 when the element is created and whenever the
-        <a def-id="media-element-load-algorithm"></a> is invoked. It is incremented when a corrupted video frame is detected by the decoder. It is up to
-        the implementation to determine whether to display or drop a corrupted frame. Whichever choice is made, the <a def-id="total-video-frame-count"></a>
-        and <a def-id="dropped-video-frame-count"></a> MUST be updated appropriately.
-      </p>
-
-      <p>Each <a def-id="htmlvideoelement"></a> will maintain a <dfn id="displayed-frame-delay-sum">displayed frame delay sum</dfn> variable that keeps
-        track of the sum of all <a def-id="displayed-frame-delays"></a>. This variable is initialized to 0 when the element is created and whenever the
-        <a def-id="media-element-load-algorithm"></a> is invoked. When a frame is displayed, its <a def-id="displayed-frame-delay"></a> is computed and added
-        to this variable.
-      </p>
-
-      <dl title="partial interface HTMLVideoElement" class="idl">
-        <dt>VideoPlaybackQuality getVideoPlaybackQuality()</dt>
-        <dd>
-          <p>Provides the current the playback quality metrics.</p>
-          <ol class="method-algorithm">
-            <li>Let <var>playbackQuality</var> be a new instance of <a>VideoPlaybackQuality</a>.</li>
-            <li>Set <var>playbackQuality</var>.<a def-id="creationTime"></a> to the value returned by a call to <a def-id="performance-now"></a> [[!HR-TIME]].</li>
-            <li>Set <var>playbackQuality</var>.<a def-id="totalVideoFrames"></a> to the current value of the <a def-id="total-video-frame-count"></a>.</li>
-            <li>Set <var>playbackQuality</var>.<a def-id="droppedVideoFrames"></a> to the current value of the <a def-id="dropped-video-frame-count"></a>.</li>
-            <li>Set <var>playbackQuality</var>.<a def-id="corruptedVideoFrames"></a> to the current value of the <a def-id="corrupted-video-frame-count"></a>.</li>
-            <li>Set <var>playbackQuality</var>.<a def-id="totalFrameDelay"></a> to the current value of the <a def-id="displayed-frame-delay-sum"></a>.</li>
-            <li>Return <var>playbackQuality</var>.</li>
-          </ol>
-        </dd>
-      </dl>
     </section>
 
     <section id="audio-track-extensions">
@@ -2840,5 +2756,9 @@
       The editors would like to thank <a def-id="contributors"></a> for their contributions to this specification.
     </section>
 
+    <section id="VideoPlaybackQuality" class="appendix informative">
+      <h2>VideoPlaybackQuality</h2>
+      The video playback quality metrics described in previous revisions of this specification (e.g., sections 5 and 10 of the <a href="https://www.w3.org/TR/2016/CR-media-source-20160705/">Candidate Recommendation</a>) are now being developed as part of [[MEDIA-PLAYBACK-QUALITY]]. Some implementations may have implemented the earlier draft <code>VideoPlaybackQuality</code> object and the <a def-id="htmlvideoelement"></a> extension method <code>getVideoPlaybackQuality()</code> described in those previous revisions.
+    </section>
   </body>
 </html>

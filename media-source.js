@@ -167,11 +167,6 @@
     'TrackDefaultList-length': { func: idlref_helper, fragment: 'widl-TrackDefaultList-length', link_text: 'length',  },
 
     'SourceBufferList-length': { func: idlref_helper, fragment: 'widl-SourceBufferList-length', link_text: 'length',  },
-    'creationTime': { func: idlref_helper, fragment: 'widl-VideoPlaybackQuality-creationTime', link_text: 'creationTime',  },
-    'totalVideoFrames': { func: idlref_helper, fragment: 'widl-VideoPlaybackQuality-totalVideoFrames', link_text: 'totalVideoFrames',  },
-    'droppedVideoFrames': { func: idlref_helper, fragment: 'widl-VideoPlaybackQuality-droppedVideoFrames', link_text: 'droppedVideoFrames',  },
-    'corruptedVideoFrames': { func: idlref_helper, fragment: 'widl-VideoPlaybackQuality-corruptedVideoFrames', link_text: 'corruptedVideoFrames',  },
-    'totalFrameDelay': { func: idlref_helper, fragment: 'widl-VideoPlaybackQuality-totalFrameDelay', link_text: 'totalFrameDelay',  },
     'createObjectURL': { func: idlref_helper, fragment: 'widl-URL-createObjectURL-DOMString-MediaSource-mediaSource', link_text: 'createObjectURL()',  },
     'open': { func: idlref_helper, fragment: 'idl-def-ReadyState.open', link_text: '"open"',  },
     'closed': { func: idlref_helper, fragment: 'idl-def-ReadyState.closed', link_text: '"closed"',  },
@@ -211,8 +206,6 @@
     'coded-frame-group': { func: term_helper, fragment: 'coded-frame-group', link_text: 'coded frame group', },
     'decode-timestamp': { func: term_helper, fragment: 'decode-timestamp', link_text: 'decode timestamp', },
     'decode-timestamps': { func: term_helper, fragment: 'decode-timestamp', link_text: 'decode timestamps', },
-    'displayed-frame-delay': { func: term_helper, fragment: 'displayed-frame-delay', link_text: 'displayed frame delay', },
-    'displayed-frame-delays': { func: term_helper, fragment: 'displayed-frame-delay', link_text: 'displayed frame delays', },
     'presentation-interval': { func: term_helper, fragment: 'presentation-interval', link_text: 'presentation interval', },
     'presentation-order': { func: term_helper, fragment: 'presentation-order', link_text: 'presentation order', },
     'presentation-timestamp': { func: term_helper, fragment: 'presentation-timestamp', link_text: 'presentation timestamp', },
@@ -286,7 +279,6 @@
 
     'videoref': { func: videoref_helper, fragment: '', link_text: '', },
     'media-timeline': { func: videoref_helper, fragment: 'media-timeline', link_text: 'media timeline',  },
-    'media-element-load-algorithm': { func: videoref_helper, fragment: 'media-element-load-algorithm', link_text: 'media element load algorithm',  },
     'mediatracklist-change': { func: code_videoref_helper, fragment: 'dom-mediatracklist-onchange', link_text: 'change',  },
     'resource-fetch-algorithm': { func: videoref_helper, fragment: 'resource-fetch-algorithm', link_text: 'resource fetch algorithm',  },
     'delaying-the-load-event-flag': {func: videoref_helper, fragment: 'delaying-the-load-event-flag', link_text: 'delaying-the-load-event-flag', },
@@ -351,11 +343,6 @@
     'hme-duration-change-algorithm': { func: videoref_helper, fragment: 'durationChange', link_text: 'HTMLMediaElement duration change algorithm',  },
     'htmlvideoelement': { func: code_videoref_helper, fragment: 'htmlvideoelement-htmlvideoelement', link_text: 'HTMLVideoElement',  },
 
-    'total-video-frame-count': { func: var_helper, fragment: '#total-video-frame-count', link_text: 'total video frame count', },
-    'dropped-video-frame-count': { func: var_helper, fragment: '#dropped-video-frame-count', link_text: 'dropped video frame count', },
-    'corrupted-video-frame-count': { func: var_helper, fragment: '#corrupted-video-frame-count', link_text: 'corrupted video frame count', },
-    'displayed-frame-delay-sum': { func: var_helper, fragment: '#displayed-frame-delay-sum', link_text: 'displayed frame delay sum', },
-
     'invalid-access-error': { func: exception_helper, fragment: 'invalidaccesserror', link_text: 'InvalidAccessError',  },
     'invalid-state-error': { func: exception_helper, fragment: 'invalidstateerror', link_text: 'InvalidStateError',  },
     'not-found-error': { func: exception_helper, fragment: 'notfounderror', link_text: 'NotFoundError',  },
@@ -379,8 +366,6 @@
     'perform-potentially-cors-enabled-fetch': { func: fragment_helper, fragment: '', link_text: '&quot;<i>Perform a potentially CORS-enabled fetch</i>&quot;', },
 
     'contributors': { func: contributors_helper, fragment: '', link_text: '', },
-
-    'performance-now': { func: hrtime_helper, fragment: 'dom-performance-now', link_text: 'Performance.now()',  },
 
     'ReadableStream-read': { func: whatwg_streams_helper, fragment: 'rs-read', link_text:'read()', },
     'ReadableStream-ready': { func: whatwg_streams_helper, fragment: 'rs-ready', link_text:'ready', },
