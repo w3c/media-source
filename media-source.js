@@ -138,33 +138,33 @@
   var mseDefinitions = {
     'mse-spec': { func: link_helper, fragment: '#', link_text: 'Media Source Extensions', },
     'live-seekable-range': { func: var_helper, fragment: '#live-seekable-range', link_text: 'live seekable range', },
-    'sourceBuffers': { func: idlref_helper, fragment: 'widl-MediaSource-sourceBuffers', link_text: 'sourceBuffers',  },
-    'activeSourceBuffers': { func: idlref_helper, fragment: 'widl-MediaSource-activeSourceBuffers', link_text: 'activeSourceBuffers',  },
-    'addSourceBuffer': { func: idlref_helper, fragment: 'widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type', link_text: 'addSourceBuffer()',  },
-    'endOfStream': { func: idlref_helper, fragment: 'widl-MediaSource-endOfStream-void-EndOfStreamError-error', link_text: 'endOfStream()',  },
-    'readyState': { func: idlref_helper, fragment: 'widl-MediaSource-readyState', link_text: 'readyState',  },
-    'duration': { func: idlref_helper, fragment: 'widl-MediaSource-duration', link_text: 'duration',  },
-    'setLiveSeekableRange': { func: idlref_helper, fragment: 'widl-MediaSource-setLiveSeekableRange-void-double-start-double-end', link_text: 'setLiveSeekableRange()',  },
-    'clearLiveSeekableRange': { func: idlref_helper, fragment: 'widl-MediaSource-clearLiveSeekableRange-void', link_text: 'clearLiveSeekableRange()',  },
-    'isTypeSupported': { func: idlref_helper, fragment: 'widl-MediaSource-isTypeSupported-boolean-DOMString-type', link_text: 'isTypeSupported()',  },
+    'sourceBuffers': { func: idlref_helper, fragment: 'dom-mediasource-sourcebuffers', link_text: 'sourceBuffers',  },
+    'activeSourceBuffers': { func: idlref_helper, fragment: 'dom-mediasource-activesourcebuffers', link_text: 'activeSourceBuffers',  },
+    'addSourceBuffer': { func: idlref_helper, fragment: 'dom-mediasource-addsourcebuffer', link_text: 'addSourceBuffer()',  },
+    'endOfStream': { func: idlref_helper, fragment: 'dom-mediasource-endofstream', link_text: 'endOfStream()',  },
+    'readyState': { func: idlref_helper, fragment: 'dom-readystate', link_text: 'readyState',  },
+    'duration': { func: idlref_helper, fragment: 'dom-mediasource-duration', link_text: 'duration',  },
+    'setLiveSeekableRange': { func: idlref_helper, fragment: 'dom-mediasource-setliveseekablerange', link_text: 'setLiveSeekableRange()',  },
+    'clearLiveSeekableRange': { func: idlref_helper, fragment: 'dom-mediasource-clearliveseekablerange', link_text: 'clearLiveSeekableRange()',  },
+    'isTypeSupported': { func: idlref_helper, fragment: 'dom-mediasource-istypesupported', link_text: 'isTypeSupported()',  },
 
-    'appendBuffer': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data', link_text: 'appendBuffer()',  },
-    'abort': { func: idlref_helper, fragment: 'widl-SourceBuffer-abort-void', link_text: 'abort()',  },
-    'remove': { func: idlref_helper, fragment: 'widl-SourceBuffer-remove-void-double-start-unrestricted-double-end', link_text: 'remove()',  },
-    'updating': { func: idlref_helper, fragment: 'widl-SourceBuffer-updating', link_text: 'updating',  },
-    'sourcebuffer-audioTracks': { func: idlref_helper, fragment: 'widl-SourceBuffer-audioTracks', link_text: 'audioTracks',  },
-    'sourcebuffer-videoTracks': { func: idlref_helper, fragment: 'widl-SourceBuffer-videoTracks', link_text: 'videoTracks',  },
-    'sourcebuffer-textTracks': { func: idlref_helper, fragment: 'widl-SourceBuffer-textTracks', link_text: 'textTracks',  },
-    'buffered': { func: idlref_helper, fragment: 'widl-SourceBuffer-buffered', link_text: 'buffered',  },
-    'timestampOffset': { func: idlref_helper, fragment: 'widl-SourceBuffer-timestampOffset', link_text: 'timestampOffset',  },
-    'appendWindowStart': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendWindowStart', link_text: 'appendWindowStart', },
-    'appendWindowEnd': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendWindowEnd', link_text: 'appendWindowEnd', },
+    'appendBuffer': { func: idlref_helper, fragment: 'dom-sourcebuffer-appendbuffer', link_text: 'appendBuffer()',  },
+    'abort': { func: idlref_helper, fragment: 'dom-sourcebuffer-abort', link_text: 'abort()',  },
+    'remove': { func: idlref_helper, fragment: 'dom-sourcebuffer-remove', link_text: 'remove()',  },
+    'updating': { func: idlref_helper, fragment: 'dom-sourcebuffer-updating', link_text: 'updating',  },
+    'sourcebuffer-audioTracks': { func: idlref_helper, fragment: 'dom-sourcebuffer-audiotracks', link_text: 'audioTracks',  },
+    'sourcebuffer-videoTracks': { func: idlref_helper, fragment: 'dom-sourcebuffer-videotracks', link_text: 'videoTracks',  },
+    'sourcebuffer-textTracks': { func: idlref_helper, fragment: 'dom-sourcebuffer-texttracks', link_text: 'textTracks',  },
+    'buffered': { func: idlref_helper, fragment: 'dom-sourcebuffer-buffered', link_text: 'buffered',  },
+    'timestampOffset': { func: idlref_helper, fragment: 'dom-sourcebuffer-timestampoffset', link_text: 'timestampOffset',  },
+    'appendWindowStart': { func: idlref_helper, fragment: 'dom-sourcebuffer-appendwindowstart', link_text: 'appendWindowStart', },
+    'appendWindowEnd': { func: idlref_helper, fragment: 'dom-sourcebuffer-appendwindowend', link_text: 'appendWindowEnd', },
     'AppendMode-segments': { func: idlref_helper, fragment: 'idl-def-AppendMode.segments', link_text: '"segments"',  },
     'AppendMode-sequence': { func: idlref_helper, fragment: 'idl-def-AppendMode.sequence', link_text: '"sequence"',  },
-    'mode': { func: idlref_helper, fragment: 'widl-SourceBuffer-mode', link_text: 'mode',  },
+    'mode': { func: idlref_helper, fragment: 'dom-sourcebuffer-mode', link_text: 'mode',  },
 
-    'SourceBufferList-length': { func: idlref_helper, fragment: 'widl-SourceBufferList-length', link_text: 'length',  },
-    'createObjectURL': { func: idlref_helper, fragment: 'widl-URL-createObjectURL-DOMString-MediaSource-mediaSource', link_text: 'createObjectURL()',  },
+    'SourceBufferList-length': { func: idlref_helper, fragment: 'dom-sourcebufferlist-length', link_text: 'length',  },
+    'createObjectURL': { func: idlref_helper, fragment: 'dom-url-createobjecturl', link_text: 'createObjectURL()',  },
     'open': { func: idlref_helper, fragment: 'idl-def-ReadyState.open', link_text: '"open"',  },
     'closed': { func: idlref_helper, fragment: 'idl-def-ReadyState.closed', link_text: '"closed"',  },
     'ended': { func: idlref_helper, fragment: 'idl-def-ReadyState.ended', link_text: '"ended"',  },
@@ -281,7 +281,7 @@
     'videotrack-label': { func: code_videoref_helper, fragment: 'dom-videotrack-label', link_text: 'label', },
     'videotrack-language': { func: code_videoref_helper, fragment: 'dom-videotrack-language', link_text: 'language', },
     'videotrack-selected': { func: code_videoref_helper, fragment: 'dom-videotrack-selected', link_text: 'selected', },
-    'videotrack-sourceBuffer': { func: idlref_helper, fragment: 'widl-VideoTrack-sourceBuffer', link_text: 'sourceBuffer', },
+    'videotrack-sourceBuffer': { func: idlref_helper, fragment: 'dom-videotrack-sourcebuffer', link_text: 'sourceBuffer', },
     'videotracklist-length': { func: code_videoref_helper, fragment: 'dom-videotracklist-length', link_text: 'length',  },
     'videotracks': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-videotracks', link_text: 'videoTracks',  },
     'audio-track': { func: code_videoref_helper, fragment: 'audiotrack-audiotrack', link_text: 'AudioTrack',  },
@@ -293,7 +293,7 @@
     'audiotrack-label': { func: code_videoref_helper, fragment: 'dom-audiotrack-label', link_text: 'label', },
     'audiotrack-language': { func: code_videoref_helper, fragment: 'dom-audiotrack-language', link_text: 'language', },
     'audiotrack-enabled': { func: code_videoref_helper, fragment: 'dom-audiotrack-enabled', link_text: 'enabled', },
-    'audiotrack-sourceBuffer': { func: idlref_helper, fragment: 'widl-AudioTrack-sourceBuffer', link_text: 'sourceBuffer', },
+    'audiotrack-sourceBuffer': { func: idlref_helper, fragment: 'dom-audiotrack-sourcebuffer', link_text: 'sourceBuffer', },
     'text-track': { func: code_videoref_helper, fragment: 'texttrack-texttrack', link_text: 'TextTrack',  },
     'text-track-list': { func: code_videoref_helper, fragment: 'texttracklist-texttracklist', link_text: 'TextTrackList', },
     'texttracks': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-texttracks', link_text: 'textTracks', },
@@ -306,7 +306,7 @@
     'texttrackmode-showing': { func: code_videoref_helper, fragment: 'dom-texttrackmode-showing', link_text: '"showing"', },
     'texttrackmode-hidden': { func: code_videoref_helper, fragment: 'dom-texttrackmode-hidden', link_text: '"hidden"',  },
     'texttrackmode-disabled': { func: code_videoref_helper, fragment: 'dom-texttrackmode-disabled', link_text: '"disabled"', },
-    'texttrack-sourceBuffer': { func: idlref_helper, fragment: 'widl-TextTrack-sourceBuffer', link_text: 'sourceBuffer', },
+    'texttrack-sourceBuffer': { func: idlref_helper, fragment: 'dom-texttrack-sourcebuffer', link_text: 'sourceBuffer', },
     'ready-state': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-readystate', link_text: 'HTMLMediaElement.readyState',  },
     'ready-states' : { func: code_videoref_helper, fragment: 'ready-states', link_text: 'HTMLMediaElement ready states', },
     'have-nothing': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-have_nothing', link_text: 'HAVE_NOTHING',  },
@@ -348,6 +348,52 @@
 
     'contributors': { func: contributors_helper, fragment: '', link_text: '', },
   };
+ 
+    // Update links to external type definitions.
+    var externalClassInfo = {
+      'ReadableStream': { spec: 'whatwg-streams-api', fragment: 'rs-class-definition' },
+     // 'SourceBuffer': { spec: 'mse', fragment: 'idl-def-SourceBuffer' },
+      'AudioTrackList': {spec: 'html5', fragment: 'audiotracklist-audiotracklist' },
+      'TextTrackList': {spec: 'html5', fragment: 'texttracklist-texttracklist' },
+      'TimeRanges': { spec: 'html5', fragment: 'timeranges-timeranges' },
+      'VideoTrackList': {spec: 'html5', fragment: 'videotracklist-videotracklist' },
+      'EventHandler' : { spec: 'html5-webappapis', fragment: 'typedefdef-eventhandlernonnull-eventhandler' },
+      'EventTarget': { spec: 'dom', fragment: 'eventtarget' },
+      'DOMString': { spec: 'webidl', fragment: 'idl-DOMString' },
+      'boolean': { spec: 'webidl', fragment: 'idl-boolean' },
+      'double': { spec: 'webidl', fragment: 'idl-double' },
+      'unrestricted double': { spec: 'webidl', fragment: 'idl-unrestricted-double' },
+      'unsigned long': { spec: 'webidl', fragment: 'idl-unsigned-long' },
+      'unsigned long long': { spec: 'webidl', fragment: 'idl-unsigned-long-long' },
+      'BufferSource' : { spec: 'webidl', fragment: 'common-BufferSource' },
+      'void': { spec: 'webidl', fragment: 'idl-void' },
+      'ArrayBuffer': { spec: 'typed-array', fragment: 'ArrayBuffer' },
+      'ArrayBufferView': { spec: 'typed-array', fragment: 'ArrayBufferView' },
+      'DOMHighResTimeStamp': { spec: 'hr-time', fragment: 'dom-domhighrestimestamp'},
+    };
+ 
+    function lookupBaseUrlForSpec( info ) {
+        if (info.spec == 'w3c-streams-api') {
+          baseURL = W3C_STREAMS_spec_url;
+        } else if (info.spec == 'whatwg-streams-api') {
+          baseURL = WHATWG_STREAMS_spec_url;
+        } else if (info.spec == 'html5') {
+          baseURL = HTML5_spec_url;
+        } else if (info.spec == 'html5-webappapis') {
+          baseURL = HTML5_webappapis_spec_url;
+        } else if (info.spec == 'dom') {
+          baseURL = DOM_spec_url;
+        } else if (info.spec == 'webidl') {
+          baseURL = WEBIDL_spec_url;
+        } else if (info.spec == 'typed-array') {
+          baseURL = "http://www.khronos.org/registry/typedarray/specs/latest/";
+        } else if (info.spec == 'hr-time') {
+          baseURL = HRTIME_spec_url;
+        } else if (info.spec == 'mse') {
+          baseURL = MSE_spec_url;
+        }
+        return baseURL;
+    }
 
   var definitionInfo = {};
   var groupBaseURLs = {};
@@ -384,15 +430,34 @@
     $("a[def-id]").each(function () {
       $(this).addClass('externalDFN');
     });
+ 
+    // Process external links first, so ReSpec will leave them alone
+    $("a:not([href])").each( function() {
+      var $ant = $(this);
+      var className = $ant.text();
+      var info = externalClassInfo[className];
+      if (info) {
+        var id = info.fragment;
+        var df = document.createDocumentFragment();
+        var baseURL = lookupBaseUrlForSpec( info );
+ 
+        if (baseURL) {
+          df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: baseURL + "#" + id, 'class': 'idlType'}).text(className))[0]);
+          this.parentNode.replaceChild(df, this);
+        }
+      }
+    } );
 
     if (window.respecConfig.localBiblio) {
       var tmp = window.respecConfig.localBiblio["W3C-STREAMS-API"]
-      if (tmp && tmp.indexOf(W3C_STREAMS_spec_url) == -1) {
+      if (tmp && tmp.href !== W3C_STREAMS_spec_url ) {
+        W3C_STREAMS_spec_url = tmp.href;
         console.log("W3C_STREAMS_spec_url is out of sync with the localBiblio entry");
       }
 
       var tmp = window.respecConfig.localBiblio["WHATWG-STREAMS-API"]
-      if (tmp && tmp.indexOf(WHATWG_STREAMS_spec_url) == -1) {
+      if (tmp && tmp.href !== WHATWG_STREAMS_spec_url ) {
+        WHATWG_STREAMS_spec_url = tmp.href;
         console.log("WHATWG_STREAMS_spec_url is out of sync with the localBiblio entry");
       }
     }
@@ -437,62 +502,22 @@
         console.log("Found def-id '" + def_id + "' but it does not correspond to anything");
       }
     });
-
-    // Update links to external type definitions.
-    var externalClassInfo = {
-      'ReadableStream': { spec: 'whatwg-streams-api', fragment: 'rs-class-definition' },
-      'SourceBuffer': { spec: 'mse', fragment: 'idl-def-SourceBuffer' },
-      'AudioTrackList': {spec: 'html5', fragment: 'audiotracklist-audiotracklist' },
-      'TextTrackList': {spec: 'html5', fragment: 'texttracklist-texttracklist' },
-      'TimeRanges': { spec: 'html5', fragment: 'timeranges-timeranges' },
-      'VideoTrackList': {spec: 'html5', fragment: 'videotracklist-videotracklist' },
-      'EventHandler' : { spec: 'html5-webappapis', fragment: 'typedefdef-eventhandlernonnull-eventhandler' },
-      'EventTarget': { spec: 'dom', fragment: 'eventtarget' },
-      'DOMString': { spec: 'webidl', fragment: 'idl-DOMString' },
-      'boolean': { spec: 'webidl', fragment: 'idl-boolean' },
-      'double': { spec: 'webidl', fragment: 'idl-double' },
-      'unrestricted double': { spec: 'webidl', fragment: 'idl-unrestricted-double' },
-      'unsigned long': { spec: 'webidl', fragment: 'idl-unsigned-long' },
-      'unsigned long long': { spec: 'webidl', fragment: 'idl-unsigned-long-long' },
-      'void': { spec: 'webidl', fragment: 'idl-void' },
-      'ArrayBuffer': { spec: 'typed-array', fragment: 'ArrayBuffer' },
-      'ArrayBufferView': { spec: 'typed-array', fragment: 'ArrayBufferView' },
-      'DOMHighResTimeStamp': { spec: 'hr-time', fragment: 'dom-domhighrestimestamp'},
-    };
-    $("a:not([href])").each(function () {
+ 
+    // Link external references from IDL and method parameter tables
+    $("span.idlAttrType, span.idlMethType, span.idlParamType, td.prmType").each( function() {
       var $ant = $(this);
-      var className = this.innerHTML;
+      var className = $ant.text();
       var info = externalClassInfo[className];
       if (info) {
         var id = info.fragment;
-        var df = doc.createDocumentFragment();
-        var baseURL = null;
-        if (info.spec == 'w3c-streams-api') {
-          baseURL = W3C_STREAMS_spec_url;
-        } else if (info.spec == 'whatwg-streams-api') {
-          baseURL = WHATWG_STREAMS_spec_url;
-        } else if (info.spec == 'html5') {
-          baseURL = HTML5_spec_url;
-        } else if (info.spec == 'html5-webappapis') {
-          baseURL = HTML5_webappapis_spec_url;
-        } else if (info.spec == 'dom') {
-          baseURL = DOM_spec_url;
-        } else if (info.spec == 'webidl') {
-          baseURL = WEBIDL_spec_url;
-        } else if (info.spec == 'typed-array') {
-          baseURL = "http://www.khronos.org/registry/typedarray/specs/latest/";
-        } else if (info.spec == 'hr-time') {
-          baseURL = HRTIME_spec_url;
-        } else if (info.spec == 'mse') {
-          baseURL = MSE_spec_url;
-        }
-
+        var baseURL = lookupBaseUrlForSpec( info );
+ 
         if (baseURL) {
-          df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: baseURL + "#" + id, 'class': 'idlType'}).text(className))[0]);
-          this.parentNode.replaceChild(df, this);
+          $ant.empty();
+          $ant.append($("<code/>").wrapInner($("<a/>").attr({href: baseURL + "#" + id }).text(className)));
         }
       }
-    });
+    } );
 
     // Move algorithm text after method parameter & return value information.
     $("ol.method-algorithm").each(function() {
@@ -510,7 +535,32 @@
         console.log("def-id '" + k + "' from groupName '" + defGroupName + "' never used.");
       }
     }
-
+ 
+    // Work around ReSpec issue 893
+    $("a[href='#dom-readystate']").each( function() {
+    
+        var $ant = $(this);
+        if ( $ant.text() === "ReadyState" ) {
+            console.log("ReSpec#893: Fixing incorrect link for ReadyState");
+            
+            $ant.attr({href:"#idl-def-readystate"});
+        }
+    
+    });
+ 
+    $("span.idlAttrName").each(function() {
+    
+        var $ant = $(this);
+        if ( $ant.text() == "readyState" ) {
+            console.log("ReSpec#893: Fixing link for readyState IDL attribute");
+            
+            $ant.empty();
+            $ant.append($('<a href="#dom-readystate"><code>readyState</code></a>'));
+        }
+    
+    });
+    // End workaround for ReSpec issue 893
+ 
     $("a[href]").each(function () {
       var link = $(this);
       var href = link.attr('href');
