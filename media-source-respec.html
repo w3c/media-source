@@ -133,8 +133,6 @@
           SourceBuffer: function() {},
           SourceBufferList: function() {},
           AppendMode: function() {},
-          VideoPlaybackQuality: function() {},
-          ReadableStream: function() {},
           ArrayBuffer: function() {},
           ArrayBufferView: function() {},
       },
@@ -142,19 +140,6 @@
       postProcess: [ mediaSourcePostProcessor ],
 
       localBiblio: {
-          "W3C-STREAMS-API": {
-            title: "W3C Streams API",
-            href: "http://www.w3.org/TR/streams-api/",
-            authors: ["Feras Moussa", "Takeshi Yoshino"],
-            status: "WD",
-            publisher: "W3C",
-          },
-          "WHATWG-STREAMS-API": {
-            title: "WHATWG Streams API",
-            href: "https://streams.spec.whatwg.org/",
-            authors: ["Domenic Denicola", "Takeshi Yoshino"],
-            publisher: "WHATWG",
-          },
           "MSE-REGISTRY": {
               title: "Media Source Extensions Byte Stream Format Registry",
               href: "byte-stream-format-registry.html",
@@ -166,6 +151,12 @@
               title: "Sourcing In-band Media Resource Tracks from Media Containers into HTML",
               href: "http://dev.w3.org/html5/html-sourcing-inband-tracks/",
               authors: ["Bob Lund", "Silvia Pfeiffer"],
+              publisher: "W3C",
+          },
+          "MEDIA-PLAYBACK-QUALITY": {
+              title: "Media Playback Quality",
+              href: "https://wicg.github.io/media-playback-quality/",
+              authors: ["Mounir Lamouri"],
               publisher: "W3C",
           }
        }
@@ -188,13 +179,6 @@
       <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>; there may also be open bugs in the <a href="http://w3.org/brief/Mjcw">previous bug tracker</a>. This draft highlights some of the pending issues that are still to be discussed in the working group. No decision has been taken on the outcome of these issues including whether they are valid.</p>
         <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should join the mailing list mentioned below and take part in the discussions.</p>
 
-        <p>The following features are <strong>at risk</strong> and may be removed:</p>
-        <ul>
-          <li><p>The <a def-id="appendStream">appendStream</a> method on the <a href="#sourcebuffer">sourceBuffer</a> object and algorithm steps that are used only by it.</p></li>
-          <li><p>The <a href="#videoplaybackquality">VideoPlaybackQuality</a> object and the <a href="#htmlvideoelement-extensions">HTMLVideoElement Extensions</a> that use it.</p></li>
-          <li><p>The <a def-id="totalFrameDelay">totalFrameDelay</a> attribute on the <a href="#videoplaybackquality">VideoPlaybackQuality</a> object.</p></li>
-          <li><p>The <a href="#idl-def-trackdefault">TrackDefault</a> object and its related objects, attributes, methods and algorithms, including: <a href="#idl-def-trackdefaultlist">TrackDefaultList</a>, <a href="#dom-sourcebuffer-trackdefaults">SourceBuffer.trackDefaults</a>, <a href="#sourcebuffer-default-track-language">Default track language</a>, <a href="#sourcebuffer-default-track-label">Default track label</a>, and <a href="#sourcebuffer-default-track-kinds">Default track kinds</a>. Implementations still MUST at least include trivial versions of these default track language/label/kinds algorithms that are used by the <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a>. These trivial versions would behave as follows: Trivial default track language and Trivial default track label algorithms MUST return an empty string, and Trivial default kinds algorithm MUST return a sequence with a single empty string element in it.</p></li>
-		  </ul>
         <p>
           For this specification to exit the Candidate Recommendation stage,
           two independent implementations as detailed in the <a href="http://dev.w3.org/html5/decision-policy/public-permissive-exit-criteria.html">CR Exit Criteria (Public Permissive version 3)</a> document
@@ -205,7 +189,7 @@
     </section>
 
     <section id="abstract">
-      This specification extends <a def-id="htmlmediaelement">HTMLMediaElement</a> [[HTML51]] to allow
+      This specification extends <a def-id="htmlmediaelement">HTMLMediaElement</a> [[!HTML51]] to allow
       JavaScript to generate media streams for playback.
       Allowing JavaScript to generate streams facilitates a variety of use
       cases like adaptive streaming and time shifting live streams.
@@ -216,13 +200,10 @@
     </section>
 
 
-    <section id="introduction">
+    <section id="introduction" class="informative">
       <h2>Introduction</h2>
-      <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;.
-        It defines objects that allow JavaScript to pass media segments to an <a def-id="htmlmediaelement">HTMLMediaElement</a> [[!HTML51]].
-        A buffering model is also included to describe how the user agent acts when different media segments are
-        appended at different times. Byte stream specifications used with these extensions are available in the byte stream format registry [[MSE-REGISTRY]].</p>
-      <img src="pipeline_model.svg" alt="Media Source Pipeline Model Diagram" longdesc="pipeline_model_description.html#pipelinedesc">
+      <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;. It defines a MediaSource object that can serve as a source of media data for an HTMLMediaElement. MediaSource objects have one or more <a>SourceBuffer</a> objects.  Applications append data segments to the <a>SourceBuffer</a> objects, and can adapt the quality of appended data based on system performance and other factors. Data from the <a>SourceBuffer</a> objects is managed as track buffers for audio, video and text data that is decoded and played. Byte stream specifications used with these extensions are available in the byte stream format registry [[MSE-REGISTRY]].</p>
+      <img src="pipeline_model.svg" alt="Media Source Pipeline Model Diagram" longdesc='pipeline_model_description.html#pipelinedesc'>
       <section id="goals">
         <h3>Goals</h3>
         <p>This specification was designed with the following goals in mind:</p>
@@ -280,13 +261,6 @@
           <dt id="decode-timestamp">Decode Timestamp</dt>
           <dd>
             <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a def-id="presentation-timestamp"></a> of the earliest frame, in <a def-id="presentation-order"></a>, that is dependant on this frame). If frames can be decoded out of <a def-id="presentation-order"></a>, then the decode timestamp MUST be present in or derivable from the byte stream. The user agent MUST run the <a def-id="append-decode-error-algorithm"></a> if this is not the case. If frames cannot be decoded out of  <a def-id="presentation-order"></a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a def-id="presentation-timestamp"></a>.</p>
-          </dd>
-
-          <dt id="displayed-frame-delay">Displayed Frame Delay</dt>
-          <dd>
-            <p>The delay between a frame's presentation time and the actual time it was displayed, in a double-precision value in seconds and rounded to the nearest display refresh interval. This
-              delay is always greater than or equal to zero since frames MUST never be displayed before their presentation time. Non-zero delays are a sign of playback jitter
-              and possible loss of A/V sync.</p>
           </dd>
 
           <dt id="init-segment">Initialization Segment</dt>
@@ -440,7 +414,7 @@ interface MediaSource : EventTarget {
             <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the value being assigned to this attribute.
-              <p class="note"><a def-id="appendBuffer"></a>, <a def-id="appendStream"></a> and <a def-id="endOfStream"></a> can update the duration under certain circumstances.</p>
+              <p class="note"><a def-id="appendBuffer"></a> and <a def-id="endOfStream"></a> can update the duration under certain circumstances.</p>
             </li>
           </ol>
         </dd><dt><dfn><code>onsourceopen</code></dfn> of type <span class="idlAttrType"><a>EventHandler</a></span></dt><dd>
@@ -491,7 +465,7 @@ interface MediaSource : EventTarget {
             <li>If <var>sourceBuffer</var> specifies an object that is not in <a def-id="sourceBuffers"></a> then throw a <a def-id="not-found-error"></a> exception and abort these steps.</li>
             <li>If the <var>sourceBuffer</var>.<a def-id="updating"></a> attribute equals true, then run the following steps:
               <ol>
-                <li>Abort the <a def-id="buffer-append"></a> and <a def-id="stream-append-loop"></a> algorithms if they are running.</li>
+                <li>Abort the <a def-id="buffer-append"></a> algorithm if it is running.</li>
                 <li>Set the <var>sourceBuffer</var>.<a def-id="updating"></a> attribute to false.</li>
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateabort"></a> at <var>sourceBuffer</var>.</li>
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at <var>sourceBuffer</var>.</li>
@@ -694,7 +668,7 @@ interface MediaSource : EventTarget {
                   <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a>MediaSource</a>.</li>
                 <li>Continue the <a def-id="resource-fetch-algorithm"></a> by running the <a def-id="perform-potentially-cors-enabled-fetch"></a> step, with these clarifications:
                   <ol>
-                    <li>Text in the <a def-id="resource-fetch-algorithm"></a> that refers to "the download" or "bytes received" refers to data passed in via <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a>.</li>
+                    <li>Text in the <a def-id="resource-fetch-algorithm"></a> that refers to "the download" or "bytes received" refers to data passed in via <a def-id="appendBuffer"></a>.</li>
                     <li>References to HTTP in the <a def-id="resource-fetch-algorithm"></a> do not apply because the HTMLMediaElement does not fetch media data via HTTP when a <a>MediaSource</a> is attached.</li>
                     <li>Text in the <a def-id="resource-fetch-algorithm"></a> that refers to transitions to "NETWORK_IDLE" and firing "suspend" events, and the paragraph that begins with "User agents may decide to not download more content at any time", do not apply to a media element that has a <a>MediaSource</a> object attached by this algorithm.</li>
                   </ol>
@@ -737,7 +711,7 @@ interface MediaSource : EventTarget {
                       <a def-id="have-metadata"></a>, then set the <a def-id="ready-state"></a> attribute
                       to <a def-id="have-metadata"></a>.</li>
                     <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
-                    <li>The media element waits until an <a def-id="appendBuffer"></a> or an <a def-id="appendStream"></a> call causes the <a def-id="coded-frame-processing-algorithm"></a> to set
+                    <li>The media element waits until an <a def-id="appendBuffer"></a> call causes the <a def-id="coded-frame-processing-algorithm"></a> to set
                       the <a def-id="ready-state"></a> attribute to a value greater than <a def-id="have-metadata"></a>.
                       <p class="note">The web application can use <a def-id="buffered"></a> to determine what the media element needs to resume playback.</p>
                     </li>
@@ -987,10 +961,8 @@ interface MediaSource : EventTarget {
                     attribute EventHandler        onerror;
                     attribute EventHandler        onabort;
     void appendBuffer (BufferSource data);
-    void appendStream (ReadableStream stream, [EnforceRange] optional unsigned long long maxSize);
     void abort ();
     void remove (double start, unrestricted double end);
-                    attribute TrackDefaultList    trackDefaults;
 };</pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="SourceBuffer" data-link-for="SourceBuffer"><dt><dfn><code>mode</code></dfn> of type <span class="idlAttrType"><a>AppendMode</a></span></dt><dd>
           <p>Controls how a sequence of <a def-id="media-segments"></a> are handled. This attribute is initially set by <a def-id="addSourceBuffer"></a> after the object is created.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
@@ -1014,7 +986,7 @@ interface MediaSource : EventTarget {
             <li>Update the attribute to <var>new mode</var>.</li>
           </ol>
         </dd><dt><dfn><code>updating</code></dfn> of type <span class="idlAttrType"><a>boolean</a></span>, readonly       </dt><dd>
-          <p>Indicates whether the asynchronous continuation of an <a def-id="appendBuffer"></a>, <a def-id="appendStream"></a>, or <a def-id="remove"></a>
+          <p>Indicates whether the asynchronous continuation of an <a def-id="appendBuffer"></a> or <a def-id="remove"></a>
             operation is still being processed. This attribute is initially set to false when the object is created.</p>
         </dd><dt><dfn><code>buffered</code></dfn> of type <span class="idlAttrType"><a>TimeRanges</a></span>, readonly       </dt><dd>
           <p>Indicates what <a def-id="timeranges"></a> are buffered in the <a>SourceBuffer</a>. This
@@ -1098,18 +1070,6 @@ interface MediaSource : EventTarget {
           <p>The event handler for the <a def-id="updateerror"></a> event.</p>
         </dd><dt><dfn><code>onabort</code></dfn> of type <span class="idlAttrType"><a>EventHandler</a></span></dt><dd>
           <p>The event handler for the <a def-id="updateabort"></a> event.</p>
-        </dd><dt><dfn><code>trackDefaults</code></dfn> of type <span class="idlAttrType"><a>TrackDefaultList</a></span></dt><dd>
-          <p>Specifies the default values to use if kind, label, and/or language information is not available in the
-            <a def-id="init-segment"></a> when the <a def-id="init-segment-received-algorithm"></a> needs
-            to create track objects. This attribute is initially set to an empty <a>TrackDefaultList</a> object.</p>
-          <p>On getting, Return the initial value or the last value that was successfully set.</p>
-          <p>On setting, run the following steps:</p>
-          <ol>
-            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an
-              <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
-            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
-            <li>Update the attribute to the new value.</li>
-          </ol>
         </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="SourceBuffer" data-link-for="SourceBuffer"><dt><dfn id="dom-sourcebuffer-appendbuffer"><code>appendBuffer</code></dfn></dt><dd>
           <p>Appends the segment data in an <a class="externalDFN">BufferSource</a>[[!WEBIDL]] to the source buffer.</p>
 
@@ -1120,16 +1080,7 @@ interface MediaSource : EventTarget {
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
             <li>Asynchronously run the <a def-id="buffer-append"></a> algorithm.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType"><code>BufferSource</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>appendStream</code></dfn></dt><dd>
-          <p>Appends segment data to the source buffer from a <a class="externalDFN">ReadableStream</a>[[!WHATWG-STREAMS-API]].</p>
-
-          <ol class="method-algorithm">
-            <li>Run the <a def-id="prepare-append"></a> algorithm.</li>
-            <li>Set the <a def-id="updating"></a> attribute to true.</li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
-            <li>Asynchronously run the <a def-id="stream-append-loop"></a> algorithm with <var>stream</var> and <var>maxSize</var>.</li>
-          </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">stream</td><td class="prmType"><code>ReadableStream</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr><tr><td class="prmName">maxSize</td><td class="prmType"><code>unsigned long long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>abort</code></dfn></dt><dd>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType"><code>BufferSource</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>abort</code></dfn></dt><dd>
           <p>Aborts the current segment and resets the segment parser.</p>
 
           <ol class="method-algorithm">
@@ -1138,7 +1089,7 @@ interface MediaSource : EventTarget {
             <li>If the <a def-id="range-removal"></a> algorithm is running, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then run the following steps:
               <ol>
-                <li>Abort the <a def-id="buffer-append"></a> and <a def-id="stream-append-loop"></a> algorithms if they are running.</li>
+                <li>Abort the <a def-id="buffer-append"></a> algorithm if it is running.</li>
                 <li>Set the <a def-id="updating"></a> attribute to false.</li>
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateabort"></a> at this <a>SourceBuffer</a> object.</li>
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
@@ -1303,10 +1254,10 @@ interface MediaSource : EventTarget {
             </tbody>
           </table>
 
-          <p>The <dfn id="sourcebuffer-input-buffer">input buffer</dfn> is a byte buffer that is used to hold unparsed bytes across <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a> calls. The buffer is empty when the SourceBuffer object is created.</p>
+          <p>The <dfn id="sourcebuffer-input-buffer">input buffer</dfn> is a byte buffer that is used to hold unparsed bytes across <a def-id="appendBuffer"></a> calls. The buffer is empty when the SourceBuffer object is created.</p>
 
-          <p>The <dfn id="sourcebuffer-buffer-full-flag">buffer full flag</dfn> keeps track of whether <a def-id="appendBuffer"></a> or
-            <a def-id="appendStream"></a> is allowed to accept more bytes. It is set to false when the SourceBuffer object is created and gets updated
+          <p>The <dfn id="sourcebuffer-buffer-full-flag">buffer full flag</dfn> keeps track of whether <a def-id="appendBuffer"></a>
+            is allowed to accept more bytes. It is set to false when the SourceBuffer object is created and gets updated
             as data is appended and removed.</p>
 
           <p>The <dfn id="sourcebuffer-group-start-timestamp">group start timestamp</dfn> variable keeps track of the starting timestamp for a new
@@ -1427,7 +1378,7 @@ interface MediaSource : EventTarget {
             <li>Run the <a def-id="coded-frame-eviction-algorithm"></a>.</li>
             <li>
               <p>If the <a def-id="buffer-full-flag"></a> equals true, then throw a <a def-id="quota-exceeded-error"></a> exception and abort these step.</p>
-              <p class="note">This is the signal that the implementation was unable to evict enough data to accomodate the append or the append is too big. The web
+              <p class="note">This is the signal that the implementation was unable to evict enough data to accommodate the append or the append is too big. The web
                 application SHOULD use <a def-id="remove"></a> to explicitly free up space and/or reduce the size of the append.</p>
             </li>
             </ol>
@@ -1440,76 +1391,6 @@ interface MediaSource : EventTarget {
             <li>Run the <a def-id="segment-parser-loop"></a> algorithm.</li>
             <li>If the <a def-id="segment-parser-loop"></a> algorithm in the previous step was aborted, then abort this algorithm.</li>
             <li>Set the <a def-id="updating"></a> attribute to false.</li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="update"></a> at this <a>SourceBuffer</a> object.</li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
-          </ol>
-        </section>
-
-        <section id="sourcebuffer-stream-append-loop">
-          <h4>Stream Append Loop</h4>
-          <p>This algorithm is invoked by <a def-id="appendStream"></a>to transfer data from a
-            <a class="externalDFN">ReadableStream</a> to the <a>SourceBuffer</a>. This algorithm is
-            initialized with the  <var>stream</var> and <var>maxSize</var> parameters from the
-            <a def-id="appendStream"></a> call.
-          </p>
-          <ol>
-            <li>If <var>maxSize</var> is set, then let <var>bytesLeft</var> equal <var>maxSize</var>.</li>
-            <li><i>Loop Top: </i>If <var>maxSize</var> is set and <var>bytesLeft</var> equals 0, then jump to the <i>loop done</i> step below.</li>
-            <li>If <var>stream.state</var> equals <a def-id="ReadableStream-state-waiting"></a>, then run
-              the following steps:
-              <ol>
-                <li>Wait for either the <var>stream</var>.<a def-id="ReadableStream-ready"></a> promise or
-                  the <var>stream</var>.<a def-id="ReadableStream-closed"></a> promise to be resolved or
-                  rejected.
-                  <p class="note">This is intended to be similar to <code>Promise.race([<var>stream.ready</var>, <var>stream.closed</var>], continueAppendLoop, continueAppendLoop)</code>,
-                    where the <code>continueAppendLoop</code> function returns control to this algorithm and
-                    starts executing the step that follows this one. If the
-                    <a def-id="stream-append-loop"></a> algorithm is aborted while waiting for the promises,
-                    continueAppendLoop MUST NOT continue the algorithm when it is eventually called.
-                  </p>
-                  <p class="note">This step is only represented as a blocking wait to make it easier to
-                    describe the intended behavior. It SHOULD NOT block other JavaScript from executing.
-                  </p></li>
-                <li>Continue onto the next step.</li>
-            </ol>
-            </li>
-            <li>If <var>stream.state</var> equals <a def-id="ReadableStream-state-closed"></a>, then jump to the <i>loop done</i> step below.</li>
-            <li>If <var>stream.state</var> equals <a def-id="ReadableStream-state-errored"></a>, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</li>
-            <li>If <var>stream.state</var> does not equal <a def-id="ReadableStream-state-readable"></a>, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</li>
-            <li>Let <var>data</var> be the value returned by a call to
-              <var>stream</var>.<a def-id="ReadableStream-read"></a>.</li>
-            <li>If <var>data</var> is not an <a class="externalDFN">ArrayBuffer</a> or an
-              <a class="externalDFN">ArrayBufferView</a> then, run the
-              <a def-id="append-error-algorithm"></a> and abort this algorithm.</li>
-            <li>If <var>maxSize</var> is set, then run the following steps:
-              <ol>
-                <li>If <var>data.byteLength</var> is greater than <var>bytesLeft</var>, then run the
-                  following steps:
-                  <ol>
-                    <li>Let <var>new data</var> equal the value returned by calling <var>data</var>.slice(0, <var>bytesLeft</var>).
-                    <p class="note">This step and the next one are assuming <var>data</var> is an
-                      <a class="externalDFN">ArrayBuffer</a>. If <var>data</var> is an
-                      <a class="externalDFN">ArrayBufferView</a> subarray() SHOULD be called instead.</p></li>
-                    <li>Let <var>remaining data</var> equal the value returned by calling
-                      <var>data</var>.slice(<var>bytesLeft</var>).</li>
-                    <li>Push <var>remaining data</var> back onto the front of <var>stream</var> so it
-                      will be returned by the next <var>stream</var>.<a def-id="ReadableStream-read"></a> call.</li>
-                    <li>Assign <var>new data</var> to <var>data</var>.</li>
-                  </ol>
-                </li>
-                <li>Subtract <var>data.byteLength</var> from <var>bytesLeft</var>.</li>
-              </ol>
-            </li>
-            <li>Run the <a def-id="coded-frame-eviction-algorithm"></a>.</li>
-            <li>
-              <p>If the <a def-id="buffer-full-flag"></a> equals true, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</p>
-              <p class="note">The web application SHOULD use <a def-id="remove"></a> to free up space in the <a>SourceBuffer</a>.</p>
-            </li>
-            <li>Add <var>data</var> to the end of the <a def-id="input-buffer"></a>.</li>
-            <li>Run the <a def-id="segment-parser-loop"></a> algorithm.</li>
-            <li>If the <a def-id="segment-parser-loop"></a> algorithm in the previous step was aborted, then abort this algorithm.</li>
-            <li>Jump to the <i>loop top</i> step above.</li>
-            <li><i>Loop Done: </i>Set the <a def-id="updating"></a> attribute to false.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="update"></a> at this <a>SourceBuffer</a> object.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
           </ol>
@@ -1580,26 +1461,13 @@ interface MediaSource : EventTarget {
                     <li>Let <var>audio language</var> be a BCP 47 language tag for the language
                       specified in the <a def-id="init-segment"></a> for this track or an empty string if no
                       language info is present.</li>
-                    <li>If <var>audio language</var> equals an empty string or the 'und' BCP 47 value, then run the
-                      <a def-id="default-track-language-algorithm"></a> with <var>byteStreamTrackID</var>
-                      set to <var>audio byte stream track ID</var> and <var>type</var> set to
-                      <a def-id="TrackDefaultType-audio"></a> and assign the value returned by the
-                      algorithm to <var>audio language</var>.</li>
+                    <li>If <var>audio language</var> the 'und' BCP 47 value, then assign an empty string to <var>audio language</var>.</li>
                     <li>Let <var>audio label</var> be a label specified in the <a def-id="init-segment"></a> for this track or an empty string if no
                       label info is present.</li>
-                    <li>If <var>audio label</var> equals an empty string, then run the
-                      <a def-id="default-track-label-algorithm"></a> with <var>byteStreamTrackID</var>
-                      set to <var>audio byte stream track ID</var> and <var>type</var> set to
-                      <a def-id="TrackDefaultType-audio"></a> and assign the value returned by the
-                      algorithm to <var>audio label</var>.</li>
                     <li>Let <var>audio kinds</var> be a sequence of kind strings specified in the
-                      <a def-id="init-segment"></a> for this track or an empty sequence if no kind information
-                      is provided.</li>
-                    <li>If <var>audio kinds</var> equals an empty sequence, then run the
-                      <a def-id="default-track-kinds-algorithm"></a> with <var>byteStreamTrackID</var>
-                      set to <var>audio byte stream track ID</var> and <var>type</var> set to
-                      <a def-id="TrackDefaultType-audio"></a> and assign the value returned by the
-                      algorithm to <var>audio kinds</var>.</li>
+                      <a def-id="init-segment"></a> for this track
+                      or a sequence with a single empty string element in it
+                      if no kind information is provided.</li>
                     <li>For each value in <var>audio kinds</var>, run the following steps:
                       <ol>
                         <li>Let <var>current audio kind</var> equal the value from <var>audio kinds</var>
@@ -1644,26 +1512,13 @@ interface MediaSource : EventTarget {
                     <li>Let <var>video language</var> be a BCP 47 language tag for the language
                       specified in the <a def-id="init-segment"></a> for this track or an empty string if no
                       language info is present.</li>
-                    <li>If <var>video language</var> equals an empty string or the 'und' BCP 47 value, then run the
-                      <a def-id="default-track-language-algorithm"></a> with <var>byteStreamTrackID</var>
-                      set to <var>video byte stream track ID</var> and <var>type</var> set to
-                      <a def-id="TrackDefaultType-video"></a> and assign the value returned by the
-                      algorithm to <var>video language</var>.</li>
+                    <li>If <var>video language</var> equals the 'und' BCP 47 value, then assign an empty string to <var>video language</var>.</li>
                     <li>Let <var>video label</var> be a label specified in the <a def-id="init-segment"></a> for this track or an empty string if no
                       label info is present.</li>
-                    <li>If <var>video label</var> equals an empty string, then run the
-                      <a def-id="default-track-label-algorithm"></a> with <var>byteStreamTrackID</var>
-                      set to <var>video byte stream track ID</var> and <var>type</var> set to
-                      <a def-id="TrackDefaultType-video"></a> and assign the value returned by the
-                      algorithm to <var>video label</var>.</li>
                     <li>Let <var>video kinds</var> be a sequence of kind strings specified in the
-                      <a def-id="init-segment"></a> for this track or an empty sequence if no kind information
-                      is provided.</li>
-                    <li>If <var>video kinds</var> equals an empty sequence, then run the
-                      <a def-id="default-track-kinds-algorithm"></a> with <var>byteStreamTrackID</var>
-                      set to <var>video byte stream track ID</var> and <var>type</var> set to
-                      <a def-id="TrackDefaultType-video"></a> and assign the value returned by the
-                      algorithm to <var>video kinds</var>.</li>
+                      <a def-id="init-segment"></a> for this track
+                      or a sequence with a single empty string element in it
+                      if no kind information is provided.</li>
                     <li>For each value in <var>video kinds</var>, run the following steps:
                       <ol>
                         <li>Let <var>current video kind</var> equal the value from <var>video kinds</var>
@@ -1708,26 +1563,13 @@ interface MediaSource : EventTarget {
                     <li>Let <var>text language</var> be a BCP 47 language tag for the language
                       specified in the <a def-id="init-segment"></a> for this track or an empty string if no
                       language info is present.</li>
-                    <li>If <var>text language</var> equals an empty string or the 'und' BCP 47 value, then run the
-                      <a def-id="default-track-language-algorithm"></a> with <var>byteStreamTrackID</var>
-                      set to <var>text byte stream track ID</var> and <var>type</var> set to
-                      <a def-id="TrackDefaultType-text"></a> and assign the value returned by the
-                      algorithm to <var>text language</var>.</li>
+                    <li>If <var>text language</var> equals the 'und' BCP 47 value, then assign an empty string to <var>text language</var>.</li>
                     <li>Let <var>text label</var> be a label specified in the <a def-id="init-segment"></a> for this track or an empty string if no
                       label info is present.</li>
-                    <li>If <var>text label</var> equals an empty string, then run the
-                      <a def-id="default-track-label-algorithm"></a> with <var>byteStreamTrackID</var>
-                      set to <var>text byte stream track ID</var> and <var>type</var> set to
-                      <a def-id="TrackDefaultType-text"></a> and assign the value returned by the
-                      algorithm to <var>text label</var>.</li>
                     <li>Let <var>text kinds</var> be a sequence of kind strings specified in the
-                      <a def-id="init-segment"></a> for this track or an empty sequence if no kind information
-                      is provided.</li>
-                    <li>If <var>text kinds</var> equals an empty sequence, then run the
-                      <a def-id="default-track-kinds-algorithm"></a> with <var>byteStreamTrackID</var>
-                      set to <var>text byte stream track ID</var> and <var>type</var> set to
-                      <a def-id="TrackDefaultType-text"></a> and assign the value returned by the
-                      algorithm to <var>text kinds</var>.</li>
+                      <a def-id="init-segment"></a> for this track
+                      or a sequence with a single empty string element in it
+                      if no kind information is provided.</li>
                     <li>For each value in <var>text kinds</var>, run the following steps:
                       <ol>
                         <li>Let <var>current text kind</var> equal the value from <var>text kinds</var>
@@ -1787,81 +1629,6 @@ interface MediaSource : EventTarget {
               <a def-id="have-current-data"></a>, then set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.
             </li>
             <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
-          </ol>
-        </section>
-
-        <section id="sourcebuffer-default-track-language">
-          <h4>Default track language</h4>
-          <p>The following steps are run when the <a def-id="init-segment-received-algorithm"></a> needs
-            to determine what the default language for a new track should be. This algorithm is initialized
-            with <var>byteStreamTrackID</var> and <var>type</var> parameters when invoked by the
-            <a def-id="init-segment-received-algorithm"></a>.</p>
-          <ol>
-            <li>If <a def-id="trackDefaults"></a> contains a <a>TrackDefault</a> object with a
-              <a def-id="TrackDefault-type"></a> attribute equal to <var>type</var> and a
-              <a def-id="TrackDefault-byteStreamTrackID"></a> attribute equal to
-              <var>byteStreamTrackID</var>, then return the value of the
-              <a def-id="TrackDefault-language"></a> attribute on this matching object and abort these
-              steps.</li>
-
-            <li>If <a def-id="trackDefaults"></a> contains a <a>TrackDefault</a> object with a
-              <a def-id="TrackDefault-type"></a> attribute equal to <var>type</var> and a
-              <a def-id="TrackDefault-byteStreamTrackID"></a> attribute equal to
-              an empty string, then return the value of the
-              <a def-id="TrackDefault-language"></a> attribute on this matching object and abort these
-              steps.</li>
-
-            <li>Return an empty string to the caller.</li>
-          </ol>
-        </section>
-
-        <section id="sourcebuffer-default-track-label">
-          <h4>Default track label</h4>
-          <p>The following steps are run when the <a def-id="init-segment-received-algorithm"></a> needs
-            to determine what the default label for a new track should be. This algorithm is initialized
-            with <var>byteStreamTrackID</var> and <var>type</var> parameters when invoked by the
-            <a def-id="init-segment-received-algorithm"></a>.</p>
-          <ol>
-            <li>If <a def-id="trackDefaults"></a> contains a <a>TrackDefault</a> object with a
-              <a def-id="TrackDefault-type"></a> attribute equal to <var>type</var> and a
-              <a def-id="TrackDefault-byteStreamTrackID"></a> attribute equal to
-              <var>byteStreamTrackID</var>, then return the value of the
-              <a def-id="TrackDefault-label"></a> attribute on this matching object and abort these
-              steps.</li>
-
-            <li>If <a def-id="trackDefaults"></a> contains a <a>TrackDefault</a> object with a
-              <a def-id="TrackDefault-type"></a> attribute equal to <var>type</var> and a
-              <a def-id="TrackDefault-byteStreamTrackID"></a> attribute equal to
-              an empty string, then return the value of the
-              <a def-id="TrackDefault-label"></a> attribute on this matching object and abort these
-              steps.</li>
-
-            <li>Return an empty string to the caller.</li>
-          </ol>
-        </section>
-
-        <section id="sourcebuffer-default-track-kinds">
-          <h4>Default track kinds</h4>
-          <p>The following steps are run when the <a def-id="init-segment-received-algorithm"></a> needs
-            to determine what the default kinds for a new track should be. This algorithm is initialized
-            with <var>byteStreamTrackID</var> and <var>type</var> parameters when invoked by the
-            <a def-id="init-segment-received-algorithm"></a>.</p>
-          <ol>
-            <li>If <a def-id="trackDefaults"></a> contains a <a>TrackDefault</a> object with a
-              <a def-id="TrackDefault-type"></a> attribute equal to <var>type</var> and a
-              <a def-id="TrackDefault-byteStreamTrackID"></a> attribute equal to
-              <var>byteStreamTrackID</var>, then return the sequence returned by the
-              <a def-id="TrackDefault-getkinds"></a> method on this matching object and abort these
-              steps.</li>
-
-            <li>If <a def-id="trackDefaults"></a> contains a <a>TrackDefault</a> object with a
-              <a def-id="TrackDefault-type"></a> attribute equal to <var>type</var> and a
-              <a def-id="TrackDefault-byteStreamTrackID"></a> attribute equal to
-              an empty string, then return the sequence returned by the
-              <a def-id="TrackDefault-getkinds"></a> method on this matching object and abort these
-              steps.</li>
-
-            <li>Return a sequence with a single empty string element in it to the caller.</li>
           </ol>
         </section>
 
@@ -2338,229 +2105,6 @@ interface MediaSource : EventTarget {
       </section>
     </section>
 
-    <section id="videoplaybackquality">
-      <h2>VideoPlaybackQuality Object</h2>
-      <p>The following section is OPTIONAL. There are several implementations of the current specification, but it is subject to change because some feel it needs further work. The community is actively investigating alternate designs to provide feedback on media playback quality. See <a href="https://wicg.github.io/media-playback-quality/">Media Playback Quality</a>.
-      </p>
-<pre class="idl">interface VideoPlaybackQuality {
-    readonly        attribute DOMHighResTimeStamp creationTime;
-    readonly        attribute unsigned long       totalVideoFrames;
-    readonly        attribute unsigned long       droppedVideoFrames;
-    readonly        attribute unsigned long       corruptedVideoFrames;
-    readonly        attribute double              totalFrameDelay;
-};</pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="VideoPlaybackQuality" data-link-for="VideoPlaybackQuality"><dt><dfn><code>creationTime</code></dfn> of type <span class="idlAttrType"><a>DOMHighResTimeStamp</a></span>, readonly       </dt><dd>
-          <p>The timestamp returned by <a def-id="performance-now"></a> when this object was created.</p>
-        </dd><dt><dfn><code>totalVideoFrames</code></dfn> of type <span class="idlAttrType"><a>unsigned long</a></span>, readonly       </dt><dd>
-          <p>The total number of frames that would have been displayed if no frames are dropped.</p>
-        </dd><dt><dfn><code>droppedVideoFrames</code></dfn> of type <span class="idlAttrType"><a>unsigned long</a></span>, readonly       </dt><dd>
-          <p>The total number of frames dropped predecode or dropped because the frame missed
-            its display deadline.</p>
-        </dd><dt><dfn><code>corruptedVideoFrames</code></dfn> of type <span class="idlAttrType"><a>unsigned long</a></span>, readonly       </dt><dd>
-          <p>The total number of corrupted frames that have been detected.</p>
-        </dd><dt><dfn><code>totalFrameDelay</code></dfn> of type <span class="idlAttrType"><a>double</a></span>, readonly       </dt><dd>
-          <p>The sum of all <a def-id="displayed-frame-delays"></a> for all displayed frames. (i.e., frames included in the <a def-id="totalVideoFrames"></a> count, but not in the <a def-id="droppedVideoFrames"></a> count.</p>
-        </dd></dl></section>
-    </section>
-
-    <section id="trackdefault">
-      <h2>TrackDefault Object</h2>
-      <p>The TrackDefault object is used to provide kind, label, and language information for tracks that do not
-        contain this information in the <a def-id="init-segments"></a>. This information is only consulted
-        when the <a def-id="init-segment-received-algorithm"></a> creates track objects.</p>
-
-<pre class="idl">enum TrackDefaultType {
-    "audio",
-    "video",
-    "text"
-};</pre><table class="simple" data-dfn-for="TrackDefaultType" data-link-for="TrackDefaultType"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn><code id="idl-def-TrackDefaultType.audio">audio</code></dfn></td><td>
-          Indicates that the information in the <a>TrackDefault</a> object SHOULD only be used when
-          creating <a>AudioTrack</a> objects.
-        </td></tr><tr><td><dfn><code id="idl-def-TrackDefaultType.video">video</code></dfn></td><td>
-          Indicates that the information in the  <a>TrackDefault</a> object SHOULD only be used when
-          creating <a>VideoTrack</a> objects.
-        </td></tr><tr><td><dfn><code id="idl-def-TrackDefaultType.text">text</code></dfn></td><td>
-          Indicates that the  information in the <a>TrackDefault</a> object SHOULD only be used when
-          creating <a>TextTrack</a> objects.
-        </td></tr></tbody></table>
-
-<pre class="idl">[ Constructor (TrackDefaultType type, DOMString language, DOMString label, sequence&lt;DOMString&gt; kinds, optional DOMString byteStreamTrackID = "")]
-interface TrackDefault {
-    readonly        attribute TrackDefaultType type;
-    readonly        attribute DOMString        byteStreamTrackID;
-    readonly        attribute DOMString        language;
-    readonly        attribute DOMString        label;
-    sequence&lt;DOMString&gt; getKinds ();
-};</pre>
-      <section>
-        <h3>Constructors</h3>
-        <dl class="constructors" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
-          <dt><dfn data-lt-noDefault data-lt="TrackDefault-ctor"><code>TrackDefault</code></dfn></dt>
-          <dd>
-            <ol class="method-algorithm">
-              <li>If <var>language</var> is not an empty string and <var>language</var> is not a BCP 47
-                language tag, then throw a <a def-id="type-error"></a> and abort these steps.</li>
-              <li>
-                <dl class="switch">
-                  <dt>If <var>type</var> equals <a def-id="TrackDefaultType-audio"></a>:</dt>
-                  <dd>
-                    If any string in <var>kinds</var> contains a value that is not listed as applying to
-                    audio in the <a def-id="av-kind-categories-table"></a>, then throw a
-                    <a def-id="type-error"></a> and abort these steps.
-                  </dd>
-                  <dt>If <var>type</var> equals <a def-id="TrackDefaultType-video"></a>:</dt>
-                  <dd>
-                    If any string in <var>kinds</var> contains a value that is not listed as applying to
-                    video in the <a def-id="av-kind-categories-table"></a>, then throw a
-                    <a def-id="type-error"></a> and abort these steps.
-                  </dd>
-
-                  <dt>If <var>type</var> equals <a def-id="TrackDefaultType-text"></a>:</dt>
-                  <dd>
-                    If any string in <var>kinds</var> contains a value that is not listed in the
-                    <a def-id="text-track-kind-list"></a>, then throw a <a def-id="type-error"></a>
-                    and abort these steps.
-                  </dd>
-                </dl>
-              </li>
-              <li>Set the <a def-id="TrackDefault-type"></a> attribute on this new object to <var>type</var>.</li>
-              <li>Set the <a def-id="TrackDefault-language"></a> attribute on this new object to <var>language</var>.</li>
-              <li>Set the <a def-id="TrackDefault-label"></a> attribute on this new object to <var>label</var>.</li>
-              <li>Set the returned value of the <a def-id="TrackDefault-getkinds"></a> method to return this new object <var>kinds</var>.</li>
-              <li>Set the <a def-id="TrackDefault-byteStreamTrackID"></a> attribute on this new object to <var>byteStreamTrackID</var>.</li>
-            </ol>
-            <table class="parameters">
-              <tbody>
-                <tr>
-                  <th>Parameter</th>
-                  <th>Type</th>
-                  <th>Nullable</th>
-                  <th>Optional</th>
-                  <th>Description</th>
-                </tr>
-                <tr>
-                  <td class="prmName">type</td>
-                  <td class="prmType"><code>TrackDefaultType</code></td>
-                  <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
-                  <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
-                  <td class="prmDesc"></td>
-                </tr>
-                <tr>
-                  <td class="prmName">language</td>
-                  <td class="prmType"><code>DOMString</code></td>
-                  <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
-                  <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
-                  <td class="prmDesc"></td>
-                </tr>
-                <tr>
-                  <td class="prmName">label</td>
-                  <td class="prmType"><code>DOMString</code></td>
-                  <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
-                  <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
-                  <td class="prmDesc"></td>
-                </tr>
-                <tr>
-                  <td class="prmName">kinds</td>
-                  <td class="prmType"><code>sequence&lt;DOMString&gt;</code></td>
-                  <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
-                  <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
-                  <td class="prmDesc"></td>
-                </tr>
-                <tr>
-                  <td class="prmName">byteStreamTrackID</td>
-                  <td class="prmType"><code>DOMString = ""</code></td>
-                  <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
-                  <td class="prmOptTrue"><span aria-label="True" role="img">✔</span></td>
-                  <td class="prmDesc"></td>
-                </tr>
-              </tbody>
-            </table>
-          </dd>
-        </dl>
-      </section>
-      <section>
-        <h2>Attributes</h2>
-        <dl class="attributes" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
-          <dt><dfn><code>type</code></dfn> of type <span class="idlAttrType"><a>TrackDefaultType</a></span>, readonly       </dt>
-          <dd>
-            <p>The type of track that can be constructed using the information in this object.</p>
-          </dd>
-          <dt><dfn><code>byteStreamTrackID</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt>
-          <dd>
-            <p>The decimal string representation of the <a def-id="track-id"></a> that identifies the specific
-              track that this object SHOULD apply to. An empty string indicates that this object can be
-              used for any track of the appropriate type (e.g., any <a>AudioTrack</a> if
-              <a def-id="TrackDefault-type"></a> equals <a def-id="TrackDefaultType-audio"></a>).</p>
-          </dd>
-          <dt><dfn><code>language</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt>
-          <dd>
-            <p>The default language to use when an <a def-id="init-segment"></a> does not contain language
-            information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
-          </dd>
-          <dt><dfn><code>label</code></dfn> of type <span class="idlAttrType"><a>DOMString</a></span>, readonly       </dt>
-          <dd>
-            <p>The default label to use when an <a def-id="init-segment"></a> does not contain label
-            information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
-          </dd>
-        </dl>
-      </section>
-      <section>
-        <h2>Methods</h2>
-        <dl class="methods" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
-          <dt><dfn><code>getKinds</code></dfn></dt>
-          <dd>
-            <p>The default kinds used when an <a def-id="init-segment"></a> does not contain kind
-            information for a new track. See <a def-id="init-segment-received-algorithm"></a> for details.</p>
-            <div><em>No parameters.</em></div>
-            <div><em>Return type: </em><code>sequence&lt;<a>DOMString</a>&gt;</code></div>
-          </dd>
-        </dl>
-      </section>
-
-    </section>
-
-    <section id="trackdefaultlist">
-      <h2>TrackDefaultList Object</h2>
-      <p>TrackDefaultList is a simple container object for <a>TrackDefault</a> objects. It provides read-only array access.</p>
-
-<pre class="idl">[ Constructor (optional sequence&lt;TrackDefault&gt; trackDefaults = [])]
-interface TrackDefaultList {
-    readonly        attribute unsigned long length;
-    getter TrackDefault (unsigned long index);
-};</pre>
-        <section>
-        <h2>Constructors</h2>
-        <dl class="constructors" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList">
-          <dt><dfn data-lt-noDefault data-lt="TrackDefaultList-ctor"><code>TrackDefaultList</code></dfn></dt>
-          <dd>
-          <ol class="method-algorithm">
-            <li>If <var>trackDefaults</var> contains two or more <a>TrackDefault</a> objects with
-              the same <a def-id="TrackDefault-type"></a> and the same
-              <a def-id="TrackDefault-byteStreamTrackID"></a>, then throw a
-              <a def-id="type-error"></a> and abort these steps.
-              <p class="note">This also applies when <a def-id="TrackDefault-byteStreamTrackID"></a> contains
-                an empty string and ensures that there is only one "byteStreamTrackID independent" default
-                for each <a>TrackDefaultType</a> value.</p></li>
-            <li>Store a shallow copy of <var>trackDefaults</var> in this new object so the values can be returned
-              by the accessor methods.</li>
-          </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">trackDefaults</td><td class="prmType"><code>sequence&lt;TrackDefault&gt; = []</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table></dd></dl></section><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList"><dt><dfn><code>length</code></dfn> of type <span class="idlAttrType"><a>unsigned long</a></span>, readonly       </dt><dd>
-          <p>Indicates the number of <a>TrackDefault</a> objects in the list.</p>
-
-        </dd></dl></section>
-        <section>
-        <h2>Methods</h2>
-        <dl class="methods" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList">
-          <dt><dfn data-lt-noDefault data-lt="trackdefaultlist-getter"><code>getter</code></dfn></dt><dd>
-          <p>Allows the TrackDefault objects in the list to be accessed with an array operator (i.e., []).</p>
-
-          <ol class="method-algorithm">
-            <li>If <var>index</var> is greater than or equal to the <a def-id="TrackDefaultList-length"></a> attribute then return undefined and abort these steps.</li>
-            <li>Return the <var>index</var>'th <a>TrackDefault</a> object in the list.</li>
-          </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">index</td><td class="prmType"><code>unsigned long</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table>
-        <div><em>Return type: </em><a><code>TrackDefault</code></a></div></dd></dl></section>
-    </section>
-
     <section id="url">
       <h2>URL Object Extensions</h2>
       <p>This section specifies extensions to the <a def-id="URL"></a>[[!FILE-API]] object definition.</p>
@@ -2630,52 +2174,6 @@ partial interface URL {
       </ol>
     </section>
 
-    <section id="htmlvideoelement-extensions">
-      <h2>HTMLVideoElement Extensions</h2>
-      <p>The following section uses <a>VideoPlaybackQuality</a> and is OPTIONAL. There are several implementations of the current specification, but it is subject to change because some feel it needs further work. The community is actively investigating alternate designs to provide feedback on media playback quality. See <a href="https://wicg.github.io/media-playback-quality/">Media Playback Quality</a>.
-      </p>
-
-      <p>This section specifies new attributes and internal state that are being added to the <a def-id="htmlvideoelement"></a>.</p>
-
-      <p>Each <a def-id="htmlvideoelement"></a> will maintain a <dfn id="total-video-frame-count">total video frame count</dfn> variable that keeps
-        track of the total number of frames that have been displayed and dropped. This variable is initialized to 0 when the
-        element is created and whenever the <a def-id="media-element-load-algorithm"></a> is invoked. It is incremented when a video frame is displayed
-        or when the <a def-id="dropped-video-frame-count"></a> is incremented.</p>
-
-      <p>Each <a def-id="htmlvideoelement"></a> will maintain a <dfn id="dropped-video-frame-count">dropped video frame count</dfn> variable that keeps
-        track of the total number of frames that have been dropped. This variable is initialized to 0 when the
-        element is created and whenever the <a def-id="media-element-load-algorithm"></a> is invoked. It is incremented when a video frame is dropped
-        predecode or when a frame is decoded but dropped because it missed a display deadline.</p>
-
-      <p>Each <a def-id="htmlvideoelement"></a> will maintain a <dfn id="corrupted-video-frame-count">corrupted video frame count</dfn> variable that keeps
-        track of the total number of corrupted frames detected. This variable is initialized to 0 when the element is created and whenever the
-        <a def-id="media-element-load-algorithm"></a> is invoked. It is incremented when a corrupted video frame is detected by the decoder. It is up to
-        the implementation to determine whether to display or drop a corrupted frame. Whichever choice is made, the <a def-id="total-video-frame-count"></a>
-        and <a def-id="dropped-video-frame-count"></a> MUST be updated appropriately.
-      </p>
-
-      <p>Each <a def-id="htmlvideoelement"></a> will maintain a <dfn id="displayed-frame-delay-sum">displayed frame delay sum</dfn> variable that keeps
-        track of the sum of all <a def-id="displayed-frame-delays"></a>. This variable is initialized to 0 when the element is created and whenever the
-        <a def-id="media-element-load-algorithm"></a> is invoked. When a frame is displayed, its <a def-id="displayed-frame-delay"></a> is computed and added
-        to this variable.
-      </p>
-
-      <div><pre class="idl">partial interface HTMLVideoElement {
-    VideoPlaybackQuality getVideoPlaybackQuality ();
-};</pre><section><h2>Methods</h2><dl class="methods" data-dfn-for="HTMLVideoElement" data-link-for="HTMLVideoElement"><dt><dfn><code>getVideoPlaybackQuality</code></dfn></dt><dd>
-          <p>Provides the current the playback quality metrics.</p>
-          <ol class="method-algorithm">
-            <li>Let <var>playbackQuality</var> be a new instance of <a>VideoPlaybackQuality</a>.</li>
-            <li>Set <var>playbackQuality</var>.<a def-id="creationTime"></a> to the value returned by a call to <a def-id="performance-now"></a> [[!HR-TIME]].</li>
-            <li>Set <var>playbackQuality</var>.<a def-id="totalVideoFrames"></a> to the current value of the <a def-id="total-video-frame-count"></a>.</li>
-            <li>Set <var>playbackQuality</var>.<a def-id="droppedVideoFrames"></a> to the current value of the <a def-id="dropped-video-frame-count"></a>.</li>
-            <li>Set <var>playbackQuality</var>.<a def-id="corruptedVideoFrames"></a> to the current value of the <a def-id="corrupted-video-frame-count"></a>.</li>
-            <li>Set <var>playbackQuality</var>.<a def-id="totalFrameDelay"></a> to the current value of the <a def-id="displayed-frame-delay-sum"></a>.</li>
-            <li>Return <var>playbackQuality</var>.</li>
-          </ol>
-        <div><em>No parameters.</em></div><div><em>Return type: </em><a><code>VideoPlaybackQuality</code></a></div></dd></dl></section></div>
-    </section>
-
     <section id="audio-track-extensions">
       <h2>AudioTrack Extensions</h2>
       <p>This section specifies extensions to the HTML <a def-id="audio-track"></a> definition.</p>
@@ -2711,7 +2209,7 @@ partial interface URL {
 
     <section id="byte-stream-formats">
       <h2>Byte Stream Formats</h2>
-      <p>The bytes provided through <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format and
+      <p>The bytes provided through <a def-id="appendBuffer"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format and
         semantics of these byte streams are defined in <dfn id="byte-stream-format-specs">byte stream format specifications</dfn>.
         The byte stream format registry [[MSE-REGISTRY]] provides mappings between a MIME type that may be passed to <a def-id="addSourceBuffer"></a> or
         <a def-id="isTypeSupported"></a> and the byte stream format expected by a <a>SourceBuffer</a> created with that MIME type. Implementations are encouraged to register
@@ -2893,6 +2391,11 @@ partial interface URL {
     <section id="acknowledgements">
       <h2>Acknowledgments</h2>
       The editors would like to thank <a def-id="contributors"></a> for their contributions to this specification.
+    </section>
+
+    <section id="VideoPlaybackQuality" class="appendix informative">
+      <h2>VideoPlaybackQuality</h2>
+      The video playback quality metrics described in previous revisions of this specification (e.g., sections 5 and 10 of the <a href="https://www.w3.org/TR/2016/CR-media-source-20160705/">Candidate Recommendation</a>) are now being developed as part of [[MEDIA-PLAYBACK-QUALITY]]. Some implementations may have implemented the earlier draft <code>VideoPlaybackQuality</code> object and the <a def-id="htmlvideoelement"></a> extension method <code>getVideoPlaybackQuality()</code> described in those previous revisions.
     </section>
   </body>
 </html>

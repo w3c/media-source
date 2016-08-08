@@ -711,7 +711,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
   <link rel="stylesheet" href="mse.css">
   <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED">
   <!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]-->
-  <meta name="generator" content="ReSpec 4.3.2">
+  <meta name="generator" content="ReSpec 4.4.1">
   <script id="initialUserConfig" type="application/json">
     {
       "specStatus": "ED",
@@ -832,27 +832,6 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
       ],
       "localBiblio":
       {
-        "W3C-STREAMS-API":
-        {
-          "title": "W3C Streams API",
-          "href": "http://www.w3.org/TR/streams-api/",
-          "authors": [
-            "Feras Moussa",
-            "Takeshi Yoshino"
-          ],
-          "status": "WD",
-          "publisher": "W3C"
-        },
-        "WHATWG-STREAMS-API":
-        {
-          "title": "WHATWG Streams API",
-          "href": "https://streams.spec.whatwg.org/",
-          "authors": [
-            "Domenic Denicola",
-            "Takeshi Yoshino"
-          ],
-          "publisher": "WHATWG"
-        },
         "MSE-REGISTRY":
         {
           "title": "Media Source Extensions Byte Stream Format Registry",
@@ -873,18 +852,27 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
             "Silvia Pfeiffer"
           ],
           "publisher": "W3C"
+        },
+        "MEDIA-PLAYBACK-QUALITY":
+        {
+          "title": "Media Playback Quality",
+          "href": "https://wicg.github.io/media-playback-quality/",
+          "authors": [
+            "Mounir Lamouri"
+          ],
+          "publisher": "W3C"
         }
       }
     }
   </script>
 </head>
-<body class="h-entry" role="document" id="respecDocument">
+<body class="h-entry toc-inline" role="document" id="respecDocument">
   <div class="head" role="contentinfo" id="respecHeader">
     <p>
       <a class="logo" href="https://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" alt="W3C"></a>
     </p>
     <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
-    <h2 id="w3c-editor-s-draft-02-august-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-08-02">02 August 2016</time></h2>
+    <h2 id="w3c-editor-s-draft-08-august-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-08-08">08 August 2016</time></h2>
     <dl>
       <dt>This version:</dt>
       <dd><a class="u-url" href="http://w3c.github.io/media-source/">http://w3c.github.io/media-source/</a></dd>
@@ -980,21 +968,6 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
     <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>; there may also be open bugs in the <a href="http://w3.org/brief/Mjcw">previous bug tracker</a>. This draft highlights some of the pending issues that are still to be discussed in the working group. No decision has been taken on the outcome of these issues including whether they are valid.</p>
     <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should join the mailing list mentioned below and take part in the discussions.</p>
 
-    <p>The following features are <strong>at risk</strong> and may be removed:</p>
-    <ul>
-      <li>
-        <p>The <code><a href="#dom-sourcebuffer-appendstream">appendStream</a></code> method on the <a href="#sourcebuffer">sourceBuffer</a> object and algorithm steps that are used only by it.</p>
-      </li>
-      <li>
-        <p>The <a href="#videoplaybackquality">VideoPlaybackQuality</a> object and the <a href="#htmlvideoelement-extensions">HTMLVideoElement Extensions</a> that use it.</p>
-      </li>
-      <li>
-        <p>The <code><a href="#dom-videoplaybackquality-totalframedelay">totalFrameDelay</a></code> attribute on the <a href="#videoplaybackquality">VideoPlaybackQuality</a> object.</p>
-      </li>
-      <li>
-        <p>The <a href="#idl-def-trackdefault">TrackDefault</a> object and its related objects, attributes, methods and algorithms, including: <a href="#idl-def-trackdefaultlist">TrackDefaultList</a>, <a href="#dom-sourcebuffer-trackdefaults">SourceBuffer.trackDefaults</a>, <a href="#sourcebuffer-default-track-language">Default track language</a>, <a href="#sourcebuffer-default-track-label">Default track label</a>, and <a href="#sourcebuffer-default-track-kinds">Default track kinds</a>. Implementations still <em class="rfc2119" title="MUST">MUST</em> at least include trivial versions of these default track language/label/kinds algorithms that are used by the <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a>. These trivial versions would behave as follows: Trivial default track language and Trivial default track label algorithms <em class="rfc2119" title="MUST">MUST</em> return an empty string, and Trivial default kinds algorithm <em class="rfc2119" title="MUST">MUST</em> return a sequence with a single empty string element in it.</p>
-      </li>
-    </ul>
     <p>
       For this specification to exit the Candidate Recommendation stage, two independent implementations as detailed in the <a href="http://dev.w3.org/html5/decision-policy/public-permissive-exit-criteria.html">CR Exit Criteria (Public Permissive version 3)</a> document will be required to pass each test in the MSE test suite to be developed by the HTML Media Extensions WG.
     </p>
@@ -1025,20 +998,20 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
   </section>
   <nav id="toc">
     <h2 class="introductory" id="table-of-contents" resource="#table-of-contents"><span property="xhv:role" resource="xhv:heading">Table of Contents</span></h2>
-    <ul class="toc" role="directory">
+    <ol class="toc" role="directory">
       <li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a>
-        <ul class="toc">
+        <ol class="toc">
           <li class="tocline"><a href="#goals" class="tocxref"><span class="secno">1.1 </span>Goals</a></li>
           <li class="tocline"><a href="#definitions" class="tocxref"><span class="secno">1.2 </span>Definitions</a></li>
-        </ul>
+        </ol>
       </li>
       <li class="tocline"><a href="#mediasource" class="tocxref"><span class="secno">2. </span>MediaSource Object</a>
-        <ul class="toc">
+        <ol class="toc">
           <li class="tocline"><a href="#attributes" class="tocxref"><span class="secno">2.1 </span>Attributes</a></li>
           <li class="tocline"><a href="#methods" class="tocxref"><span class="secno">2.2 </span>Methods</a></li>
           <li class="tocline"><a href="#mediasource-events" class="tocxref"><span class="secno">2.3 </span>Event Summary</a></li>
           <li class="tocline"><a href="#mediasource-algorithms" class="tocxref"><span class="secno">2.4 </span>Algorithms</a>
-            <ul class="toc">
+            <ol class="toc">
               <li class="tocline"><a href="#mediasource-attach" class="tocxref"><span class="secno">2.4.1 </span>Attaching to a media element</a></li>
               <li class="tocline"><a href="#mediasource-detach" class="tocxref"><span class="secno">2.4.2 </span>Detaching from a media element</a></li>
               <li class="tocline"><a href="#mediasource-seeking" class="tocxref"><span class="secno">2.4.3 </span>Seeking</a></li>
@@ -1046,93 +1019,71 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
               <li class="tocline"><a href="#active-source-buffer-changes" class="tocxref"><span class="secno">2.4.5 </span>Changes to selected/enabled track state</a></li>
               <li class="tocline"><a href="#duration-change-algorithm" class="tocxref"><span class="secno">2.4.6 </span>Duration change</a></li>
               <li class="tocline"><a href="#end-of-stream-algorithm" class="tocxref"><span class="secno">2.4.7 </span>End of stream algorithm</a></li>
-            </ul>
+            </ol>
           </li>
-        </ul>
+        </ol>
       </li>
       <li class="tocline"><a href="#sourcebuffer" class="tocxref"><span class="secno">3. </span>SourceBuffer Object</a>
-        <ul class="toc">
+        <ol class="toc">
           <li class="tocline"><a href="#attributes-1" class="tocxref"><span class="secno">3.1 </span>Attributes</a></li>
           <li class="tocline"><a href="#methods-1" class="tocxref"><span class="secno">3.2 </span>Methods</a></li>
           <li class="tocline"><a href="#track-buffers" class="tocxref"><span class="secno">3.3 </span>Track Buffers</a></li>
           <li class="tocline"><a href="#sourcebuffer-events" class="tocxref"><span class="secno">3.4 </span>Event Summary</a></li>
           <li class="tocline"><a href="#sourcebuffer-algorithms" class="tocxref"><span class="secno">3.5 </span>Algorithms</a>
-            <ul class="toc">
+            <ol class="toc">
               <li class="tocline"><a href="#sourcebuffer-segment-parser-loop" class="tocxref"><span class="secno">3.5.1 </span>Segment Parser Loop</a></li>
               <li class="tocline"><a href="#sourcebuffer-reset-parser-state" class="tocxref"><span class="secno">3.5.2 </span>Reset Parser State</a></li>
               <li class="tocline"><a href="#sourcebuffer-append-error" class="tocxref"><span class="secno">3.5.3 </span>Append Error Algorithm</a></li>
               <li class="tocline"><a href="#sourcebuffer-prepare-append" class="tocxref"><span class="secno">3.5.4 </span>Prepare Append Algorithm</a></li>
               <li class="tocline"><a href="#sourcebuffer-buffer-append" class="tocxref"><span class="secno">3.5.5 </span>Buffer Append Algorithm</a></li>
-              <li class="tocline"><a href="#sourcebuffer-stream-append-loop" class="tocxref"><span class="secno">3.5.6 </span>Stream Append Loop</a></li>
-              <li class="tocline"><a href="#sourcebuffer-range-removal" class="tocxref"><span class="secno">3.5.7 </span>Range Removal</a></li>
-              <li class="tocline"><a href="#sourcebuffer-init-segment-received" class="tocxref"><span class="secno">3.5.8 </span>Initialization Segment Received</a></li>
-              <li class="tocline"><a href="#sourcebuffer-default-track-language" class="tocxref"><span class="secno">3.5.9 </span>Default track language</a></li>
-              <li class="tocline"><a href="#sourcebuffer-default-track-label" class="tocxref"><span class="secno">3.5.10 </span>Default track label</a></li>
-              <li class="tocline"><a href="#sourcebuffer-default-track-kinds" class="tocxref"><span class="secno">3.5.11 </span>Default track kinds</a></li>
-              <li class="tocline"><a href="#sourcebuffer-coded-frame-processing" class="tocxref"><span class="secno">3.5.12 </span>Coded Frame Processing</a></li>
-              <li class="tocline"><a href="#sourcebuffer-coded-frame-removal" class="tocxref"><span class="secno">3.5.13 </span>Coded Frame Removal Algorithm</a></li>
-              <li class="tocline"><a href="#sourcebuffer-coded-frame-eviction" class="tocxref"><span class="secno">3.5.14 </span>Coded Frame Eviction Algorithm</a></li>
-              <li class="tocline"><a href="#sourcebuffer-audio-splice-frame-algorithm" class="tocxref"><span class="secno">3.5.15 </span>Audio Splice Frame Algorithm</a></li>
-              <li class="tocline"><a href="#sourcebuffer-audio-splice-rendering-algorithm" class="tocxref"><span class="secno">3.5.16 </span>Audio Splice Rendering Algorithm</a></li>
-              <li class="tocline"><a href="#sourcebuffer-text-splice-frame-algorithm" class="tocxref"><span class="secno">3.5.17 </span>Text Splice Frame Algorithm</a></li>
-            </ul>
+              <li class="tocline"><a href="#sourcebuffer-range-removal" class="tocxref"><span class="secno">3.5.6 </span>Range Removal</a></li>
+              <li class="tocline"><a href="#sourcebuffer-init-segment-received" class="tocxref"><span class="secno">3.5.7 </span>Initialization Segment Received</a></li>
+              <li class="tocline"><a href="#sourcebuffer-coded-frame-processing" class="tocxref"><span class="secno">3.5.8 </span>Coded Frame Processing</a></li>
+              <li class="tocline"><a href="#sourcebuffer-coded-frame-removal" class="tocxref"><span class="secno">3.5.9 </span>Coded Frame Removal Algorithm</a></li>
+              <li class="tocline"><a href="#sourcebuffer-coded-frame-eviction" class="tocxref"><span class="secno">3.5.10 </span>Coded Frame Eviction Algorithm</a></li>
+              <li class="tocline"><a href="#sourcebuffer-audio-splice-frame-algorithm" class="tocxref"><span class="secno">3.5.11 </span>Audio Splice Frame Algorithm</a></li>
+              <li class="tocline"><a href="#sourcebuffer-audio-splice-rendering-algorithm" class="tocxref"><span class="secno">3.5.12 </span>Audio Splice Rendering Algorithm</a></li>
+              <li class="tocline"><a href="#sourcebuffer-text-splice-frame-algorithm" class="tocxref"><span class="secno">3.5.13 </span>Text Splice Frame Algorithm</a></li>
+            </ol>
           </li>
-        </ul>
+        </ol>
       </li>
       <li class="tocline"><a href="#sourcebufferlist" class="tocxref"><span class="secno">4. </span>SourceBufferList Object</a>
-        <ul class="toc">
+        <ol class="toc">
           <li class="tocline"><a href="#attributes-2" class="tocxref"><span class="secno">4.1 </span>Attributes</a></li>
           <li class="tocline"><a href="#methods-2" class="tocxref"><span class="secno">4.2 </span>Methods</a></li>
           <li class="tocline"><a href="#sourcebufferlist-events" class="tocxref"><span class="secno">4.3 </span>Event Summary</a></li>
-        </ul>
+        </ol>
       </li>
-      <li class="tocline"><a href="#videoplaybackquality" class="tocxref"><span class="secno">5. </span>VideoPlaybackQuality Object</a>
-        <ul class="toc">
-          <li class="tocline"><a href="#attributes-3" class="tocxref"><span class="secno">5.1 </span>Attributes</a></li>
-        </ul>
+      <li class="tocline"><a href="#url" class="tocxref"><span class="secno">5. </span>URL Object Extensions</a>
+        <ol class="toc">
+          <li class="tocline"><a href="#methods-3" class="tocxref"><span class="secno">5.1 </span>Methods</a></li>
+        </ol>
       </li>
-      <li class="tocline"><a href="#trackdefault" class="tocxref"><span class="secno">6. </span>TrackDefault Object</a>
-        <ul class="toc">
-          <li class="tocline"><a href="#constructors" class="tocxref"><span class="secno">6.1 </span>Constructors</a></li>
-          <li class="tocline"><a href="#attributes-4" class="tocxref"><span class="secno">6.2 </span>Attributes</a></li>
-          <li class="tocline"><a href="#methods-3" class="tocxref"><span class="secno">6.3 </span>Methods</a></li>
-        </ul>
+      <li class="tocline"><a href="#htmlmediaelement-extensions" class="tocxref"><span class="secno">6. </span>HTMLMediaElement Extensions</a></li>
+      <li class="tocline"><a href="#audio-track-extensions" class="tocxref"><span class="secno">7. </span>AudioTrack Extensions</a></li>
+      <li class="tocline"><a href="#video-track-extensions" class="tocxref"><span class="secno">8. </span>VideoTrack Extensions</a></li>
+      <li class="tocline"><a href="#text-track-extensions" class="tocxref"><span class="secno">9. </span>TextTrack Extensions</a></li>
+      <li class="tocline"><a href="#byte-stream-formats" class="tocxref"><span class="secno">10. </span>Byte Stream Formats</a></li>
+      <li class="tocline"><a href="#conformance" class="tocxref"><span class="secno">11. </span>Conformance</a></li>
+      <li class="tocline"><a href="#examples" class="tocxref"><span class="secno">12. </span>Examples</a></li>
+      <li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">13. </span>Acknowledgments</a></li>
+      <li class="tocline"><a href="#VideoPlaybackQuality" class="tocxref"><span class="secno">A. </span>VideoPlaybackQuality</a></li>
+      <li class="tocline"><a href="#references" class="tocxref"><span class="secno">B. </span>References</a>
+        <ol class="toc">
+          <li class="tocline"><a href="#normative-references" class="tocxref"><span class="secno">B.1 </span>Normative references</a></li>
+          <li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">B.2 </span>Informative references</a></li>
+        </ol>
       </li>
-      <li class="tocline"><a href="#trackdefaultlist" class="tocxref"><span class="secno">7. </span>TrackDefaultList Object</a>
-        <ul class="toc">
-          <li class="tocline"><a href="#constructors-1" class="tocxref"><span class="secno">7.1 </span>Constructors</a></li>
-          <li class="tocline"><a href="#attributes-5" class="tocxref"><span class="secno">7.2 </span>Attributes</a></li>
-          <li class="tocline"><a href="#methods-4" class="tocxref"><span class="secno">7.3 </span>Methods</a></li>
-        </ul>
-      </li>
-      <li class="tocline"><a href="#url" class="tocxref"><span class="secno">8. </span>URL Object Extensions</a>
-        <ul class="toc">
-          <li class="tocline"><a href="#methods-5" class="tocxref"><span class="secno">8.1 </span>Methods</a></li>
-        </ul>
-      </li>
-      <li class="tocline"><a href="#htmlmediaelement-extensions" class="tocxref"><span class="secno">9. </span>HTMLMediaElement Extensions</a></li>
-      <li class="tocline"><a href="#htmlvideoelement-extensions" class="tocxref"><span class="secno">10. </span>HTMLVideoElement Extensions</a></li>
-      <li class="tocline"><a href="#audio-track-extensions" class="tocxref"><span class="secno">11. </span>AudioTrack Extensions</a></li>
-      <li class="tocline"><a href="#video-track-extensions" class="tocxref"><span class="secno">12. </span>VideoTrack Extensions</a></li>
-      <li class="tocline"><a href="#text-track-extensions" class="tocxref"><span class="secno">13. </span>TextTrack Extensions</a></li>
-      <li class="tocline"><a href="#byte-stream-formats" class="tocxref"><span class="secno">14. </span>Byte Stream Formats</a></li>
-      <li class="tocline"><a href="#conformance" class="tocxref"><span class="secno">15. </span>Conformance</a></li>
-      <li class="tocline"><a href="#examples" class="tocxref"><span class="secno">16. </span>Examples</a></li>
-      <li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">17. </span>Acknowledgments</a></li>
-      <li class="tocline"><a href="#references" class="tocxref"><span class="secno">A. </span>References</a>
-        <ul class="toc">
-          <li class="tocline"><a href="#normative-references" class="tocxref"><span class="secno">A.1 </span>Normative references</a></li>
-          <li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">A.2 </span>Informative references</a></li>
-        </ul>
-      </li>
-    </ul>
+    </ol>
   </nav>
 
 
-  <section id="introduction" typeof="bibo:Chapter" resource="#introduction" property="bibo:hasPart">
+  <section id="introduction" class="informative" typeof="bibo:Chapter" resource="#introduction" property="bibo:hasPart">
     <!--OddPage-->
     <h2 id="h-introduction" resource="#h-introduction"><span property="xhv:role" resource="xhv:heading"><span class="secno">1. </span>Introduction</span></h2>
-    <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;. It defines objects that allow JavaScript to pass media segments to an <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#htmlmediaelement-htmlmediaelement">HTMLMediaElement</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>]. A buffering model is also included to describe how the user agent acts when different media segments are appended at different times. Byte stream specifications used with these extensions are available in the byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>].</p>
+    <p><em>This section is non-normative.</em></p>
+    <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;. It defines a MediaSource object that can serve as a source of media data for an HTMLMediaElement. MediaSource objects have one or more <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects. Applications append data segments to the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects, and can adapt the quality of appended data based on system performance and other factors. Data from the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects is managed as track buffers for audio, video and text data that is decoded and played. Byte stream specifications used with these extensions are available in the byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>].</p>
     <img src="pipeline_model.svg" alt="Media Source Pipeline Model Diagram" longdesc="pipeline_model_description.html#pipelinedesc">
 
     <section id="goals" typeof="bibo:Chapter" resource="#goals" property="bibo:hasPart">
@@ -1195,11 +1146,6 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         <dt id="decode-timestamp">Decode Timestamp</dt>
         <dd>
           <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a href="#presentation-timestamp">presentation timestamp</a> of the earliest frame, in <a href="#presentation-order">presentation order</a>, that is dependant on this frame). If frames can be decoded out of <a href="#presentation-order">presentation order</a>, then the decode timestamp <em class="rfc2119" title="MUST">MUST</em> be present in or derivable from the byte stream. The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if this is not the case. If frames cannot be decoded out of <a href="#presentation-order">presentation order</a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a href="#presentation-timestamp">presentation timestamp</a>.</p>
-        </dd>
-
-        <dt id="displayed-frame-delay">Displayed Frame Delay</dt>
-        <dd>
-          <p>The delay between a frame's presentation time and the actual time it was displayed, in a double-precision value in seconds and rounded to the nearest display refresh interval. This delay is always greater than or equal to zero since frames <em class="rfc2119" title="MUST">MUST</em> never be displayed before their presentation time. Non-zero delays are a sign of playback jitter and possible loss of A/V sync.</p>
         </dd>
 
         <dt id="init-segment">Initialization Segment</dt>
@@ -1426,7 +1372,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the value being assigned to this attribute.
               <div class="note">
                 <div class="note-title marker" aria-level="4" role="heading" id="h-note8"><span>Note</span></div>
-                <p class=""><code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code>, <code><a href="#dom-sourcebuffer-appendstream">appendStream()</a></code> and <code><a href="#dom-mediasource-endofstream">endOfStream()</a></code> can update the duration under certain circumstances.</p>
+                <p class=""><code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> and <code><a href="#dom-mediasource-endofstream">endOfStream()</a></code> can update the duration under certain circumstances.</p>
               </div>
             </li>
           </ol>
@@ -1530,7 +1476,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>If <var>sourceBuffer</var> specifies an object that is not in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> then throw a <code><a href="https://www.w3.org/TR/WebIDL-1/#notfounderror">NotFoundError</a></code> exception and abort these steps.</li>
             <li>If the <var>sourceBuffer</var>.<code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute equals true, then run the following steps:
               <ol>
-                <li>Abort the <a href="#sourcebuffer-buffer-append">buffer append</a> and <a href="#sourcebuffer-stream-append-loop">stream append loop</a> algorithms if they are running.</li>
+                <li>Abort the <a href="#sourcebuffer-buffer-append">buffer append</a> algorithm if it is running.</li>
                 <li>Set the <var>sourceBuffer</var>.<code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute to false.</li>
                 <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-abort">abort</a></code> at <var>sourceBuffer</var>.</li>
                 <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at <var>sourceBuffer</var>.</li>
@@ -1801,7 +1747,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-sourceopen">sourceopen</a></code> at the <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a>.</li>
               <li>Continue the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a> by running the <span>"<i>Perform a potentially CORS-enabled fetch</i>"</span> step, with these clarifications:
                 <ol>
-                  <li>Text in the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a> that refers to "the download" or "bytes received" refers to data passed in via <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> and <code><a href="#dom-sourcebuffer-appendstream">appendStream()</a></code>.</li>
+                  <li>Text in the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a> that refers to "the download" or "bytes received" refers to data passed in via <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code>.</li>
                   <li>References to HTTP in the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a> do not apply because the HTMLMediaElement does not fetch media data via HTTP when a <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> is attached.</li>
                   <li>Text in the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a> that refers to transitions to "NETWORK_IDLE" and firing "suspend" events, and the paragraph that begins with "User agents may decide to not download more content at any time", do not apply to a media element that has a <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> object attached by this algorithm.</li>
                 </ol>
@@ -1849,7 +1795,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                     <div class="note-title marker" aria-level="5" role="heading" id="h-note19"><span>Note</span></div>
                     <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
                   </div>
-                  <li>The media element waits until an <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> or an <code><a href="#dom-sourcebuffer-appendstream">appendStream()</a></code> call causes the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> to set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to a value greater than <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.
+                  <li>The media element waits until an <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> call causes the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> to set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to a value greater than <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.
                     <div class="note">
                       <div class="note-title marker" aria-level="5" role="heading" id="h-note20"><span>Note</span></div>
                       <p class="">The web application can use <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> to determine what the media element needs to resume playback.</p>
@@ -2134,11 +2080,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 <span class="idlAttribute" id="idl-def-sourcebuffer-onerror" data-idl="" data-title="onerror" data-dfn-for="sourcebuffer">             attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html51/webappapis.html#typedefdef-eventhandlernonnull-eventhandler">EventHandler</a></code></span>        <span class="idlAttrName"><a data-lt="onerror" href="#dom-sourcebuffer-onerror" class="internalDFN" data-link-type="dfn" data-for="SourceBuffer"><code>onerror</code></a></span>;</span>
 <span class="idlAttribute" id="idl-def-sourcebuffer-onabort" data-idl="" data-title="onabort" data-dfn-for="sourcebuffer">             attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html51/webappapis.html#typedefdef-eventhandlernonnull-eventhandler">EventHandler</a></code></span>        <span class="idlAttrName"><a data-lt="onabort" href="#dom-sourcebuffer-onabort" class="internalDFN" data-link-type="dfn" data-for="SourceBuffer"><code>onabort</code></a></span>;</span>
 <span class="idlMethod" id="idl-def-sourcebuffer-appendbuffer(buffersource)" data-idl="" data-title="appendBuffer" data-dfn-for="sourcebuffer">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void">void</a></code></span> <span class="idlMethName"><a data-lt="appendBuffer" href="#dom-sourcebuffer-appendbuffer" class="internalDFN" data-link-type="dfn" data-for="SourceBuffer"><code>appendBuffer</code></a></span>(<span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#common-BufferSource">BufferSource</a></code></span> <span class="idlParamName">data</span></span>);</span>
-<span class="idlMethod" id="idl-def-sourcebuffer-appendstream(readablestream,optional-unsigned_long_long)" data-idl="" data-title="appendStream" data-dfn-for="sourcebuffer">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void">void</a></code></span> <span class="idlMethName"><a data-lt="appendStream" href="#dom-sourcebuffer-appendstream" class="internalDFN" data-link-type="dfn" data-for="SourceBuffer"><code>appendStream</code></a></span>(<span class="idlParam"><span class="idlParamType"><code><a href="https://streams.spec.whatwg.org/#rs-class-definition">ReadableStream</a></code></span> <span class="idlParamName">stream</span></span>,
-                      <span class="idlParam">[<span class="extAttr"><span class="extAttrName">EnforceRange</span></span>] optional <span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long-long">unsigned long long</a></code></span> <span class="idlParamName">maxSize</span></span>);</span>
 <span class="idlMethod" id="idl-def-sourcebuffer-abort()" data-idl="" data-title="abort" data-dfn-for="sourcebuffer">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void">void</a></code></span> <span class="idlMethName"><a data-lt="abort" href="#dom-sourcebuffer-abort" class="internalDFN" data-link-type="dfn" data-for="SourceBuffer"><code>abort</code></a></span>();</span>
 <span class="idlMethod" id="idl-def-sourcebuffer-remove(double,unrestricted_double)" data-idl="" data-title="remove" data-dfn-for="sourcebuffer">    <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void">void</a></code></span> <span class="idlMethName"><a data-lt="remove" href="#dom-sourcebuffer-remove" class="internalDFN" data-link-type="dfn" data-for="SourceBuffer"><code>remove</code></a></span>(<span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-double">double</a></code></span> <span class="idlParamName">start</span></span>, <span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unrestricted-double">unrestricted double</a></code></span> <span class="idlParamName">end</span></span>);</span>
-<span class="idlAttribute" id="idl-def-sourcebuffer-trackdefaults" data-idl="" data-title="trackDefaults" data-dfn-for="sourcebuffer">             attribute <span class="idlAttrType"><a href="#idl-def-trackdefaultlist" class="internalDFN" data-link-type="dfn"><code>TrackDefaultList</code></a></span>    <span class="idlAttrName"><a data-lt="trackDefaults" href="#dom-sourcebuffer-trackdefaults" class="internalDFN" data-link-type="dfn" data-for="SourceBuffer"><code>trackDefaults</code></a></span>;</span>
 };</span></pre>
 
     <section id="attributes-1" typeof="bibo:Chapter" resource="#attributes-1" property="bibo:hasPart">
@@ -2167,7 +2110,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
         </dd><dt><dfn data-dfn-for="sourcebuffer" data-dfn-type="dfn" id="dom-sourcebuffer-updating" data-idl=""><code>updating</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-boolean">boolean</a></code></span>, readonly       </dt>
         <dd>
-          <p>Indicates whether the asynchronous continuation of an <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code>, <code><a href="#dom-sourcebuffer-appendstream">appendStream()</a></code>, or <code><a href="#dom-sourcebuffer-remove">remove()</a></code> operation is still being processed. This attribute is initially set to false when the object is created.</p>
+          <p>Indicates whether the asynchronous continuation of an <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> or <code><a href="#dom-sourcebuffer-remove">remove()</a></code> operation is still being processed. This attribute is initially set to false when the object is created.</p>
         </dd><dt><dfn data-dfn-for="sourcebuffer" data-dfn-type="dfn" id="dom-sourcebuffer-buffered" data-idl=""><code>buffered</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code></span>, readonly       </dt>
         <dd>
           <p>Indicates what <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code> are buffered in the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>. This attribute is initially set to an empty <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code> object when the object is created.
@@ -2259,18 +2202,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </dd><dt><dfn data-dfn-for="sourcebuffer" data-dfn-type="dfn" id="dom-sourcebuffer-onabort" data-idl=""><code>onabort</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/html51/webappapis.html#typedefdef-eventhandlernonnull-eventhandler">EventHandler</a></code></span></dt>
         <dd>
           <p>The event handler for the <code><a href="#dom-evt-abort">abort</a></code> event.</p>
-        </dd><dt><dfn data-dfn-for="sourcebuffer" data-dfn-type="dfn" id="dom-sourcebuffer-trackdefaults" data-idl=""><code>trackDefaults</code></dfn> of type <span class="idlAttrType"><a href="#idl-def-trackdefaultlist" class="internalDFN" data-link-type="dfn"><code>TrackDefaultList</code></a></span></dt>
-        <dd>
-          <p>Specifies the default values to use if kind, label, and/or language information is not available in the
-            <a href="#init-segment">initialization segment</a> when the <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> needs to create track objects. This attribute is initially set to an empty <a href="#idl-def-trackdefaultlist" class="internalDFN" data-link-type="dfn"><code>TrackDefaultList</code></a> object.</p>
-          <p>On getting, Return the initial value or the last value that was successfully set.</p>
-          <p>On setting, run the following steps:</p>
-          <ol>
-            <li>If this object has been removed from the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an
-              <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
-            <li>If the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
-            <li>Update the attribute to the new value.</li>
-          </ol>
         </dd>
       </dl>
     </section>
@@ -2309,44 +2240,6 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updatestart">updatestart</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
             <li>Asynchronously run the <a href="#sourcebuffer-buffer-append">buffer append</a> algorithm.</li>
           </ol>
-        </dd><dt><dfn data-dfn-for="sourcebuffer" data-dfn-type="dfn" id="dom-sourcebuffer-appendstream" data-idl=""><code>appendStream</code></dfn></dt>
-        <dd>
-          <p>Appends segment data to the source buffer from a <code><a href="https://streams.spec.whatwg.org/#rs-class-definition" class="idlType">ReadableStream</a></code>[<cite><a class="bibref" href="#bib-WHATWG-STREAMS-API">WHATWG-STREAMS-API</a></cite>].</p>
-
-
-          <table class="parameters">
-            <tbody>
-              <tr>
-                <th>Parameter</th>
-                <th>Type</th>
-                <th>Nullable</th>
-                <th>Optional</th>
-                <th>Description</th>
-              </tr>
-              <tr>
-                <td class="prmName">stream</td>
-                <td class="prmType"><code><a href="https://streams.spec.whatwg.org/#rs-class-definition">ReadableStream</a></code></td>
-                <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
-                <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
-                <td class="prmDesc"></td>
-              </tr>
-              <tr>
-                <td class="prmName">maxSize</td>
-                <td class="prmType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long-long">unsigned long long</a></code></td>
-                <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
-                <td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td>
-                <td class="prmDesc"></td>
-              </tr>
-            </tbody>
-          </table>
-          <div><em>Return type: </em><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></div>
-          <p>When this method is invoked, the user agent must run the following steps:</p>
-          <ol class="method-algorithm">
-            <li>Run the <a href="#sourcebuffer-prepare-append">prepare append</a> algorithm.</li>
-            <li>Set the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute to true.</li>
-            <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updatestart">updatestart</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
-            <li>Asynchronously run the <a href="#sourcebuffer-stream-append-loop">stream append loop</a> algorithm with <var>stream</var> and <var>maxSize</var>.</li>
-          </ol>
         </dd><dt><dfn data-dfn-for="sourcebuffer" data-dfn-type="dfn" id="dom-sourcebuffer-abort" data-idl=""><code>abort</code></dfn></dt>
         <dd>
           <p>Aborts the current segment and resets the segment parser.</p>
@@ -2361,7 +2254,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>If the <a href="#sourcebuffer-range-removal">range removal</a> algorithm is running, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute equals true, then run the following steps:
               <ol>
-                <li>Abort the <a href="#sourcebuffer-buffer-append">buffer append</a> and <a href="#sourcebuffer-stream-append-loop">stream append loop</a> algorithms if they are running.</li>
+                <li>Abort the <a href="#sourcebuffer-buffer-append">buffer append</a> algorithm if it is running.</li>
                 <li>Set the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute to false.</li>
                 <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-abort">abort</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
                 <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
@@ -2520,10 +2413,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </tbody>
         </table>
 
-        <p>The <dfn id="sourcebuffer-input-buffer" data-dfn-type="dfn">input buffer</dfn> is a byte buffer that is used to hold unparsed bytes across <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> and <code><a href="#dom-sourcebuffer-appendstream">appendStream()</a></code> calls. The buffer is empty when the SourceBuffer object is created.</p>
+        <p>The <dfn id="sourcebuffer-input-buffer" data-dfn-type="dfn">input buffer</dfn> is a byte buffer that is used to hold unparsed bytes across <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> calls. The buffer is empty when the SourceBuffer object is created.</p>
 
-        <p>The <dfn id="sourcebuffer-buffer-full-flag" data-dfn-type="dfn">buffer full flag</dfn> keeps track of whether <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> or
-          <code><a href="#dom-sourcebuffer-appendstream">appendStream()</a></code> is allowed to accept more bytes. It is set to false when the SourceBuffer object is created and gets updated as data is appended and removed.</p>
+        <p>The <dfn id="sourcebuffer-buffer-full-flag" data-dfn-type="dfn">buffer full flag</dfn> keeps track of whether <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> is allowed to accept more bytes. It is set to false when the SourceBuffer object is created and gets updated as data is appended and removed.</p>
 
         <p>The <dfn id="sourcebuffer-group-start-timestamp" data-dfn-type="dfn">group start timestamp</dfn> variable keeps track of the starting timestamp for a new
           <a href="#coded-frame-group">coded frame group</a> in the <code><a href="#idl-def-AppendMode.sequence">"sequence"</a></code> mode. It is unset when the SourceBuffer object is created and gets updated when the <code><a href="#dom-sourcebuffer-mode">mode</a></code> attribute equals <code><a href="#idl-def-AppendMode.sequence">"sequence"</a></code> and the
@@ -2640,7 +2532,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <p>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true, then throw a <code><a href="https://www.w3.org/TR/WebIDL-1/#quotaexceedederror">QuotaExceededError</a></code> exception and abort these step.</p>
             <div class="note">
               <div class="note-title marker" aria-level="5" role="heading" id="h-note34"><span>Note</span></div>
-              <p class="">This is the signal that the implementation was unable to evict enough data to accomodate the append or the append is too big. The web application <em class="rfc2119" title="SHOULD">SHOULD</em> use <code><a href="#dom-sourcebuffer-remove">remove()</a></code> to explicitly free up space and/or reduce the size of the append.</p>
+              <p class="">This is the signal that the implementation was unable to evict enough data to accommodate the append or the append is too big. The web application <em class="rfc2119" title="SHOULD">SHOULD</em> use <code><a href="#dom-sourcebuffer-remove">remove()</a></code> to explicitly free up space and/or reduce the size of the append.</p>
             </div>
           </li>
         </ol>
@@ -2658,82 +2550,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </ol>
       </section>
 
-      <section id="sourcebuffer-stream-append-loop" typeof="bibo:Chapter" resource="#sourcebuffer-stream-append-loop" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-stream-append-loop" resource="#h-sourcebuffer-stream-append-loop"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.6 </span>Stream Append Loop</span></h4>
-        <p>This algorithm is invoked by <code><a href="#dom-sourcebuffer-appendstream">appendStream()</a></code>to transfer data from a
-          <code><a href="https://streams.spec.whatwg.org/#rs-class-definition" class="idlType">ReadableStream</a></code> to the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>. This algorithm is initialized with the <var>stream</var> and <var>maxSize</var> parameters from the
-          <code><a href="#dom-sourcebuffer-appendstream">appendStream()</a></code> call.
-        </p>
-        <ol>
-          <li>If <var>maxSize</var> is set, then let <var>bytesLeft</var> equal <var>maxSize</var>.</li>
-          <li><i>Loop Top: </i>If <var>maxSize</var> is set and <var>bytesLeft</var> equals 0, then jump to the <i>loop done</i> step below.</li>
-          <li>If <var>stream.state</var> equals <a href="https://streams.spec.whatwg.org/#rs-state">"waiting"</a>, then run the following steps:
-            <ol>
-              <li>Wait for either the <var>stream</var>.<a href="https://streams.spec.whatwg.org/#rs-ready">ready</a> promise or the <var>stream</var>.<a href="https://streams.spec.whatwg.org/#rs-closed">closed</a> promise to be resolved or rejected.
-                <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note35"><span>Note</span></div>
-                  <p class="">This is intended to be similar to <code>Promise.race([<var>stream.ready</var>, <var>stream.closed</var>], continueAppendLoop, continueAppendLoop)</code>, where the <code>continueAppendLoop</code> function returns control to this algorithm and starts executing the step that follows this one. If the
-                    <a href="#sourcebuffer-stream-append-loop">stream append loop</a> algorithm is aborted while waiting for the promises, continueAppendLoop <em class="rfc2119" title="MUST NOT">MUST NOT</em> continue the algorithm when it is eventually called.
-                  </p>
-                </div>
-                <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note36"><span>Note</span></div>
-                  <p class="">This step is only represented as a blocking wait to make it easier to describe the intended behavior. It <em class="rfc2119" title="SHOULD NOT">SHOULD NOT</em> block other JavaScript from executing.
-                  </p>
-                </div>
-              </li>
-              <li>Continue onto the next step.</li>
-            </ol>
-          </li>
-          <li>If <var>stream.state</var> equals <a href="https://streams.spec.whatwg.org/#rs-state">"closed"</a>, then jump to the <i>loop done</i> step below.</li>
-          <li>If <var>stream.state</var> equals <a href="https://streams.spec.whatwg.org/#rs-state">"errored"</a>, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to false and abort this algorithm.</li>
-          <li>If <var>stream.state</var> does not equal <a href="https://streams.spec.whatwg.org/#rs-state">"readable"</a>, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to false and abort this algorithm.</li>
-          <li>Let <var>data</var> be the value returned by a call to
-            <var>stream</var>.<a href="https://streams.spec.whatwg.org/#rs-read">read()</a>.</li>
-          <li>If <var>data</var> is not an <code><a href="http://www.khronos.org/registry/typedarray/specs/latest/#ArrayBuffer" class="idlType">ArrayBuffer</a></code> or an
-            <code><a href="http://www.khronos.org/registry/typedarray/specs/latest/#ArrayBufferView" class="idlType">ArrayBufferView</a></code> then, run the
-            <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to false and abort this algorithm.</li>
-          <li>If <var>maxSize</var> is set, then run the following steps:
-            <ol>
-              <li>If <var>data.byteLength</var> is greater than <var>bytesLeft</var>, then run the following steps:
-                <ol>
-                  <li>Let <var>new data</var> equal the value returned by calling <var>data</var>.slice(0, <var>bytesLeft</var>).
-                    <div class="note">
-                      <div class="note-title marker" aria-level="5" role="heading" id="h-note37"><span>Note</span></div>
-                      <p class="">This step and the next one are assuming <var>data</var> is an
-                        <code><a href="http://www.khronos.org/registry/typedarray/specs/latest/#ArrayBuffer" class="idlType">ArrayBuffer</a></code>. If <var>data</var> is an
-                        <code><a href="http://www.khronos.org/registry/typedarray/specs/latest/#ArrayBufferView" class="idlType">ArrayBufferView</a></code> subarray() <em class="rfc2119" title="SHOULD">SHOULD</em> be called instead.</p>
-                    </div>
-                  </li>
-                  <li>Let <var>remaining data</var> equal the value returned by calling
-                    <var>data</var>.slice(<var>bytesLeft</var>).</li>
-                  <li>Push <var>remaining data</var> back onto the front of <var>stream</var> so it will be returned by the next <var>stream</var>.<a href="https://streams.spec.whatwg.org/#rs-read">read()</a> call.</li>
-                  <li>Assign <var>new data</var> to <var>data</var>.</li>
-                </ol>
-              </li>
-              <li>Subtract <var>data.byteLength</var> from <var>bytesLeft</var>.</li>
-            </ol>
-          </li>
-          <li>Run the <a href="#sourcebuffer-coded-frame-eviction">coded frame eviction algorithm</a>.</li>
-          <li>
-            <p>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to false and abort this algorithm.</p>
-            <div class="note">
-              <div class="note-title marker" aria-level="5" role="heading" id="h-note38"><span>Note</span></div>
-              <p class="">The web application <em class="rfc2119" title="SHOULD">SHOULD</em> use <code><a href="#dom-sourcebuffer-remove">remove()</a></code> to free up space in the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>.</p>
-            </div>
-          </li>
-          <li>Add <var>data</var> to the end of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
-          <li>Run the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> algorithm.</li>
-          <li>If the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> algorithm in the previous step was aborted, then abort this algorithm.</li>
-          <li>Jump to the <i>loop top</i> step above.</li>
-          <li><i>Loop Done: </i>Set the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute to false.</li>
-          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-update">update</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
-          <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
-        </ol>
-      </section>
-
       <section id="sourcebuffer-range-removal" typeof="bibo:Chapter" resource="#sourcebuffer-range-removal" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-range-removal" resource="#h-sourcebuffer-range-removal"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.7 </span>Range Removal</span></h4>
+        <h4 id="h-sourcebuffer-range-removal" resource="#h-sourcebuffer-range-removal"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.6 </span>Range Removal</span></h4>
         <p>Follow these steps when a caller needs to initiate a JavaScript visible range removal operation that blocks other SourceBuffer updates:</p>
         <ol>
           <li>Let <var>start</var> equal the starting <a href="#presentation-timestamp">presentation timestamp</a> for the removal range, in seconds measured from <a href="#presentation-start-time">presentation start time</a>.</li>
@@ -2749,7 +2567,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-init-segment-received" typeof="bibo:Chapter" resource="#sourcebuffer-init-segment-received" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-init-segment-received" resource="#h-sourcebuffer-init-segment-received"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.8 </span>Initialization Segment Received</span></h4>
+        <h4 id="h-sourcebuffer-init-segment-received" resource="#h-sourcebuffer-init-segment-received"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.7 </span>Initialization Segment Received</span></h4>
         <p>The following steps are run when the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> successfully parses a complete <a href="#init-segment">initialization segment</a>:</p>
         <p>Each SourceBuffer object has an internal <dfn id="first-init-segment-received-flag" data-dfn-type="dfn">first initialization segment received flag</dfn> that tracks whether the first <a href="#init-segment">initialization segment</a> has been appended and received by this algorithm. This flag is set to false when the SourceBuffer is created and updated by the algorithm below.</p>
         <ol>
@@ -2782,7 +2600,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <ol>
               <li>If the <a href="#init-segment">initialization segment</a> contains tracks with codecs the user agent does not support, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true and abort these steps.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note39"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note35"><span>Note</span></div>
                   <p class="">User agents <em class="rfc2119" title="MAY">MAY</em> consider codecs, that would otherwise be supported, as "not supported" here if the codecs were not specified in the <var>type</var> parameter passed to <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code>. <br> For example, MediaSource.isTypeSupported('video/webm;codecs="vp8,vorbis"') may return true, but if
                     <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code> was called with 'video/webm;codecs="vp8"' and a Vorbis track appears in the
                     <a href="#init-segment">initialization segment</a>, then the user agent <em class="rfc2119" title="MAY">MAY</em> use this step to trigger a decode error.
@@ -2795,18 +2613,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   <li>Let <var>audio byte stream track ID</var> be the
                     <a href="#track-id">Track ID</a> for the current track being processed.</li>
                   <li>Let <var>audio language</var> be a BCP 47 language tag for the language specified in the <a href="#init-segment">initialization segment</a> for this track or an empty string if no language info is present.</li>
-                  <li>If <var>audio language</var> equals an empty string or the 'und' BCP 47 value, then run the
-                    <a href="#sourcebuffer-default-track-language">default track language algorithm</a> with <var>byteStreamTrackID</var> set to <var>audio byte stream track ID</var> and <var>type</var> set to
-                    <code><a href="#idl-def-TrackDefaultType.audio">"audio"</a></code> and assign the value returned by the algorithm to <var>audio language</var>.</li>
+                  <li>If <var>audio language</var> the 'und' BCP 47 value, then assign an empty string to <var>audio language</var>.</li>
                   <li>Let <var>audio label</var> be a label specified in the <a href="#init-segment">initialization segment</a> for this track or an empty string if no label info is present.</li>
-                  <li>If <var>audio label</var> equals an empty string, then run the
-                    <a href="#sourcebuffer-default-track-label">default track label algorithm</a> with <var>byteStreamTrackID</var> set to <var>audio byte stream track ID</var> and <var>type</var> set to
-                    <code><a href="#idl-def-TrackDefaultType.audio">"audio"</a></code> and assign the value returned by the algorithm to <var>audio label</var>.</li>
                   <li>Let <var>audio kinds</var> be a sequence of kind strings specified in the
-                    <a href="#init-segment">initialization segment</a> for this track or an empty sequence if no kind information is provided.</li>
-                  <li>If <var>audio kinds</var> equals an empty sequence, then run the
-                    <a href="#sourcebuffer-default-track-kinds">default track kinds algorithm</a> with <var>byteStreamTrackID</var> set to <var>audio byte stream track ID</var> and <var>type</var> set to
-                    <code><a href="#idl-def-TrackDefaultType.audio">"audio"</a></code> and assign the value returned by the algorithm to <var>audio kinds</var>.</li>
+                    <a href="#init-segment">initialization segment</a> for this track or a sequence with a single empty string element in it if no kind information is provided.</li>
                   <li>For each value in <var>audio kinds</var>, run the following steps:
                     <ol>
                       <li>Let <var>current audio kind</var> equal the value from <var>audio kinds</var> for this iteration of the loop.</li>
@@ -2826,14 +2636,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                       </li>
                       <li>Add <var>new audio track</var> to the <code><a href="#dom-sourcebuffer-audiotracks">audioTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
                       <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note40"><span>Note</span></div>
+                        <div class="note-title marker" aria-level="5" role="heading" id="h-note36"><span>Note</span></div>
                         <p class="">
                           This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new audio track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> object referenced by the <code><a href="#dom-sourcebuffer-audiotracks">audioTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.
                         </p>
                       </div>
                       <li>Add <var>new audio track</var> to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-audiotracks">audioTracks</a></code> attribute on the HTMLMediaElement.</li>
                       <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note41"><span>Note</span></div>
+                        <div class="note-title marker" aria-level="5" role="heading" id="h-note37"><span>Note</span></div>
                         <p class="">
                           This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new audio track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> object referenced by the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-audiotracks">audioTracks</a></code> attribute on the HTMLMediaElement.
                         </p>
@@ -2850,18 +2660,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   <li>Let <var>video byte stream track ID</var> be the
                     <a href="#track-id">Track ID</a> for the current track being processed.</li>
                   <li>Let <var>video language</var> be a BCP 47 language tag for the language specified in the <a href="#init-segment">initialization segment</a> for this track or an empty string if no language info is present.</li>
-                  <li>If <var>video language</var> equals an empty string or the 'und' BCP 47 value, then run the
-                    <a href="#sourcebuffer-default-track-language">default track language algorithm</a> with <var>byteStreamTrackID</var> set to <var>video byte stream track ID</var> and <var>type</var> set to
-                    <code><a href="#idl-def-TrackDefaultType.video">"video"</a></code> and assign the value returned by the algorithm to <var>video language</var>.</li>
+                  <li>If <var>video language</var> equals the 'und' BCP 47 value, then assign an empty string to <var>video language</var>.</li>
                   <li>Let <var>video label</var> be a label specified in the <a href="#init-segment">initialization segment</a> for this track or an empty string if no label info is present.</li>
-                  <li>If <var>video label</var> equals an empty string, then run the
-                    <a href="#sourcebuffer-default-track-label">default track label algorithm</a> with <var>byteStreamTrackID</var> set to <var>video byte stream track ID</var> and <var>type</var> set to
-                    <code><a href="#idl-def-TrackDefaultType.video">"video"</a></code> and assign the value returned by the algorithm to <var>video label</var>.</li>
                   <li>Let <var>video kinds</var> be a sequence of kind strings specified in the
-                    <a href="#init-segment">initialization segment</a> for this track or an empty sequence if no kind information is provided.</li>
-                  <li>If <var>video kinds</var> equals an empty sequence, then run the
-                    <a href="#sourcebuffer-default-track-kinds">default track kinds algorithm</a> with <var>byteStreamTrackID</var> set to <var>video byte stream track ID</var> and <var>type</var> set to
-                    <code><a href="#idl-def-TrackDefaultType.video">"video"</a></code> and assign the value returned by the algorithm to <var>video kinds</var>.</li>
+                    <a href="#init-segment">initialization segment</a> for this track or a sequence with a single empty string element in it if no kind information is provided.</li>
                   <li>For each value in <var>video kinds</var>, run the following steps:
                     <ol>
                       <li>Let <var>current video kind</var> equal the value from <var>video kinds</var> for this iteration of the loop.</li>
@@ -2881,14 +2683,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                       </li>
                       <li>Add <var>new video track</var> to the <code><a href="#dom-sourcebuffer-videotracks">videoTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
                       <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note42"><span>Note</span></div>
+                        <div class="note-title marker" aria-level="5" role="heading" id="h-note38"><span>Note</span></div>
                         <p class="">
                           This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new video track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> object referenced by the <code><a href="#dom-sourcebuffer-videotracks">videoTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.
                         </p>
                       </div>
                       <li>Add <var>new video track</var> to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-videotracks">videoTracks</a></code> attribute on the HTMLMediaElement.</li>
                       <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note43"><span>Note</span></div>
+                        <div class="note-title marker" aria-level="5" role="heading" id="h-note39"><span>Note</span></div>
                         <p class="">
                           This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new video track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> object referenced by the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-videotracks">videoTracks</a></code> attribute on the HTMLMediaElement.
                         </p>
@@ -2905,18 +2707,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   <li>Let <var>text byte stream track ID</var> be the
                     <a href="#track-id">Track ID</a> for the current track being processed.</li>
                   <li>Let <var>text language</var> be a BCP 47 language tag for the language specified in the <a href="#init-segment">initialization segment</a> for this track or an empty string if no language info is present.</li>
-                  <li>If <var>text language</var> equals an empty string or the 'und' BCP 47 value, then run the
-                    <a href="#sourcebuffer-default-track-language">default track language algorithm</a> with <var>byteStreamTrackID</var> set to <var>text byte stream track ID</var> and <var>type</var> set to
-                    <code><a href="#idl-def-TrackDefaultType.text">"text"</a></code> and assign the value returned by the algorithm to <var>text language</var>.</li>
+                  <li>If <var>text language</var> equals the 'und' BCP 47 value, then assign an empty string to <var>text language</var>.</li>
                   <li>Let <var>text label</var> be a label specified in the <a href="#init-segment">initialization segment</a> for this track or an empty string if no label info is present.</li>
-                  <li>If <var>text label</var> equals an empty string, then run the
-                    <a href="#sourcebuffer-default-track-label">default track label algorithm</a> with <var>byteStreamTrackID</var> set to <var>text byte stream track ID</var> and <var>type</var> set to
-                    <code><a href="#idl-def-TrackDefaultType.text">"text"</a></code> and assign the value returned by the algorithm to <var>text label</var>.</li>
                   <li>Let <var>text kinds</var> be a sequence of kind strings specified in the
-                    <a href="#init-segment">initialization segment</a> for this track or an empty sequence if no kind information is provided.</li>
-                  <li>If <var>text kinds</var> equals an empty sequence, then run the
-                    <a href="#sourcebuffer-default-track-kinds">default track kinds algorithm</a> with <var>byteStreamTrackID</var> set to <var>text byte stream track ID</var> and <var>type</var> set to
-                    <code><a href="#idl-def-TrackDefaultType.text">"text"</a></code> and assign the value returned by the algorithm to <var>text kinds</var>.</li>
+                    <a href="#init-segment">initialization segment</a> for this track or a sequence with a single empty string element in it if no kind information is provided.</li>
                   <li>For each value in <var>text kinds</var>, run the following steps:
                     <ol>
                       <li>Let <var>current text kind</var> equal the value from <var>text kinds</var> for this iteration of the loop.</li>
@@ -2934,14 +2728,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                       </li>
                       <li>Add <var>new text track</var> to the <code><a href="#dom-sourcebuffer-texttracks">textTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
                       <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note44"><span>Note</span></div>
+                        <div class="note-title marker" aria-level="5" role="heading" id="h-note40"><span>Note</span></div>
                         <p class="">
                           This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new text track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> object referenced by the <code><a href="#dom-sourcebuffer-texttracks">textTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.
                         </p>
                       </div>
                       <li>Add <var>new text track</var> to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-texttracks">textTracks</a></code> attribute on the HTMLMediaElement.</li>
                       <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note45"><span>Note</span></div>
+                        <div class="note-title marker" aria-level="5" role="heading" id="h-note41"><span>Note</span></div>
                         <p class="">
                           This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new text track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> object referenced by the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-texttracks">textTracks</a></code> attribute on the HTMLMediaElement.
                         </p>
@@ -2968,7 +2762,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 If one or more objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> have <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> set to false, then abort these steps.</li>
               <li>Set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.</li>
               <div class="note">
-                <div class="note-title marker" aria-level="5" role="heading" id="h-note46"><span>Note</span></div>
+                <div class="note-title marker" aria-level="5" role="heading" id="h-note42"><span>Note</span></div>
                 <p class="">
                   Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement. This particular transition should trigger HTMLMediaElement logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#eventdef-media-loadedmetadata">loadedmetadata</a></code> at the media element.
                 </p>
@@ -2980,80 +2774,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_current_data">HAVE_CURRENT_DATA</a></code>, then set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.
           </li>
           <div class="note">
-            <div class="note-title marker" aria-level="5" role="heading" id="h-note47"><span>Note</span></div>
+            <div class="note-title marker" aria-level="5" role="heading" id="h-note43"><span>Note</span></div>
             <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
           </div>
         </ol>
       </section>
 
-      <section id="sourcebuffer-default-track-language" typeof="bibo:Chapter" resource="#sourcebuffer-default-track-language" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-default-track-language" resource="#h-sourcebuffer-default-track-language"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.9 </span>Default track language</span></h4>
-        <p>The following steps are run when the <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> needs to determine what the default language for a new track should be. This algorithm is initialized with <var>byteStreamTrackID</var> and <var>type</var> parameters when invoked by the
-          <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a>.</p>
-        <ol>
-          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
-            <code><a href="#dom-trackdefault-type">type</a></code> attribute equal to <var>type</var> and a
-            <code><a href="#dom-trackdefault-bytestreamtrackid">byteStreamTrackID</a></code> attribute equal to
-            <var>byteStreamTrackID</var>, then return the value of the
-            <code><a href="#dom-trackdefault-language">language</a></code> attribute on this matching object and abort these steps.
-          </li>
-
-          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
-            <code><a href="#dom-trackdefault-type">type</a></code> attribute equal to <var>type</var> and a
-            <code><a href="#dom-trackdefault-bytestreamtrackid">byteStreamTrackID</a></code> attribute equal to an empty string, then return the value of the
-            <code><a href="#dom-trackdefault-language">language</a></code> attribute on this matching object and abort these steps.
-          </li>
-
-          <li>Return an empty string to the caller.</li>
-        </ol>
-      </section>
-
-      <section id="sourcebuffer-default-track-label" typeof="bibo:Chapter" resource="#sourcebuffer-default-track-label" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-default-track-label" resource="#h-sourcebuffer-default-track-label"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.10 </span>Default track label</span></h4>
-        <p>The following steps are run when the <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> needs to determine what the default label for a new track should be. This algorithm is initialized with <var>byteStreamTrackID</var> and <var>type</var> parameters when invoked by the
-          <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a>.</p>
-        <ol>
-          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
-            <code><a href="#dom-trackdefault-type">type</a></code> attribute equal to <var>type</var> and a
-            <code><a href="#dom-trackdefault-bytestreamtrackid">byteStreamTrackID</a></code> attribute equal to
-            <var>byteStreamTrackID</var>, then return the value of the
-            <code><a href="#dom-trackdefault-label">label</a></code> attribute on this matching object and abort these steps.
-          </li>
-
-          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
-            <code><a href="#dom-trackdefault-type">type</a></code> attribute equal to <var>type</var> and a
-            <code><a href="#dom-trackdefault-bytestreamtrackid">byteStreamTrackID</a></code> attribute equal to an empty string, then return the value of the
-            <code><a href="#dom-trackdefault-label">label</a></code> attribute on this matching object and abort these steps.
-          </li>
-
-          <li>Return an empty string to the caller.</li>
-        </ol>
-      </section>
-
-      <section id="sourcebuffer-default-track-kinds" typeof="bibo:Chapter" resource="#sourcebuffer-default-track-kinds" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-default-track-kinds" resource="#h-sourcebuffer-default-track-kinds"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.11 </span>Default track kinds</span></h4>
-        <p>The following steps are run when the <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> needs to determine what the default kinds for a new track should be. This algorithm is initialized with <var>byteStreamTrackID</var> and <var>type</var> parameters when invoked by the
-          <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a>.</p>
-        <ol>
-          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
-            <code><a href="#dom-trackdefault-type">type</a></code> attribute equal to <var>type</var> and a
-            <code><a href="#dom-trackdefault-bytestreamtrackid">byteStreamTrackID</a></code> attribute equal to
-            <var>byteStreamTrackID</var>, then return the sequence returned by the
-            <code><a href="#dom-trackdefault-getkinds">getKinds</a></code> method on this matching object and abort these steps.
-          </li>
-
-          <li>If <code><a href="#dom-sourcebuffer-trackdefaults">trackDefaults</a></code> contains a <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object with a
-            <code><a href="#dom-trackdefault-type">type</a></code> attribute equal to <var>type</var> and a
-            <code><a href="#dom-trackdefault-bytestreamtrackid">byteStreamTrackID</a></code> attribute equal to an empty string, then return the sequence returned by the
-            <code><a href="#dom-trackdefault-getkinds">getKinds</a></code> method on this matching object and abort these steps.
-          </li>
-
-          <li>Return a sequence with a single empty string element in it to the caller.</li>
-        </ol>
-      </section>
-
       <section id="sourcebuffer-coded-frame-processing" typeof="bibo:Chapter" resource="#sourcebuffer-coded-frame-processing" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-coded-frame-processing" resource="#h-sourcebuffer-coded-frame-processing"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.12 </span>Coded Frame Processing</span></h4>
+        <h4 id="h-sourcebuffer-coded-frame-processing" resource="#h-sourcebuffer-coded-frame-processing"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.8 </span>Coded Frame Processing</span></h4>
         <p>When complete <a href="#coded-frame">coded frames</a> have been parsed by the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> then the following steps are run:</p>
         <ol>
           <li>
@@ -3073,13 +2801,13 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                     <ol>
                       <li>Let <var>presentation timestamp</var> be a double precision floating point representation of the coded frame's <a href="#presentation-timestamp">presentation timestamp</a> in seconds.
                         <div class="note">
-                          <div class="note-title marker" aria-level="5" role="heading" id="h-note48"><span>Note</span></div>
+                          <div class="note-title marker" aria-level="5" role="heading" id="h-note44"><span>Note</span></div>
                           <p class="">Special processing may be needed to determine the presentation and decode timestamps for timed text frames since this information may not be explicitly present in the underlying format or may be dependent on the order of the frames. Some metadata text tracks, like MPEG2-TS PSI data, may only have implied timestamps. Format specific rules for these situations <em class="rfc2119" title="SHOULD">SHOULD</em> be in the <a href="#byte-stream-format-specs">byte stream format specifications</a> or in separate extension specifications.</p>
                         </div>
                       </li>
                       <li>Let <var>decode timestamp</var> be a double precision floating point representation of the coded frame's decode timestamp in seconds.
                         <div class="note">
-                          <div class="note-title marker" aria-level="5" role="heading" id="h-note49"><span>Note</span></div>
+                          <div class="note-title marker" aria-level="5" role="heading" id="h-note45"><span>Note</span></div>
                           <p class="">Implementations don't have to internally store timestamps in a double precision floating point representation. This representation is used here because it is the represention for timestamps in the HTML spec. The intention here is to make the behavior clear without adding unnecessary complexity to the algorithm to deal with the fact that adding a timestampOffset may cause a timestamp rollover in the underlying timestamp representation used by the byte stream format. Implementations can use any internal timestamp representation they wish, but the addition of timestampOffset <em class="rfc2119" title="SHOULD">SHOULD</em> behave in a similar manner to what would happen if a double precision floating point representation was used.
                           </p>
                         </div>
@@ -3136,14 +2864,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
               <li>If <var>presentation timestamp</var> is less than <code><a href="#dom-sourcebuffer-appendwindowstart">appendWindowStart</a></code>, then set the <var><a href="#need-RAP-flag">need random access point flag</a></var> to true, drop the coded frame, and jump to the top of the loop to start processing the next coded frame.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note50"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note46"><span>Note</span></div>
                   <p class="">Some implementations <em class="rfc2119" title="MAY">MAY</em> choose to collect some of these coded frames with <var>presentation timestamp</var> less than <code><a href="#dom-sourcebuffer-appendwindowstart">appendWindowStart</a></code> and use them to generate a splice at the first coded frame that has a <a href="#presentation-timestamp">presentation timestamp</a> greater than or equal to <code><a href="#dom-sourcebuffer-appendwindowstart">appendWindowStart</a></code> even if that frame is not a <a href="#random-access-point">random access point</a>. Supporting this requires multiple decoders or faster than real-time decoding so for now this behavior will not be a normative requirement.
                   </p>
                 </div>
               </li>
               <li>If <var>frame end timestamp</var> is greater than <code><a href="#dom-sourcebuffer-appendwindowend">appendWindowEnd</a></code>, then set the <var><a href="#need-RAP-flag">need random access point flag</a></var> to true, drop the coded frame, and jump to the top of the loop to start processing the next coded frame.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note51"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note47"><span>Note</span></div>
                   <p class="">Some implementations <em class="rfc2119" title="MAY">MAY</em> choose to collect coded frames with <var>presentation timestamp</var> less than <code><a href="#dom-sourcebuffer-appendwindowend">appendWindowEnd</a></code> and <var>frame end timestamp</var> greater than <code><a href="#dom-sourcebuffer-appendwindowend">appendWindowEnd</a></code> and use them to generate a splice across the portion of the collected coded frames within the append window at time of collection, and the beginning portion of later processed frames which only partially overlap the end of the collected coded frames. Supporting this requires multiple decoders or faster than real-time decoding so for now this behavior will not be a normative requirement. In conjunction with collecting coded frames that span <code><a href="#dom-sourcebuffer-appendwindowstart">appendWindowStart</a></code>, implementations <em class="rfc2119" title="MAY">MAY</em> thus support gapless audio splicing.
                   </p>
                 </div>
@@ -3169,7 +2897,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                           <li>Let <var>remove window timestamp</var> equal the <var>overlapped frame</var> <a href="#presentation-timestamp">presentation timestamp</a> plus 1 microsecond.</li>
                           <li>If the <var>presentation timestamp</var> is less than the <var>remove window timestamp</var>, then remove <var>overlapped frame</var> from <var>track buffer</var>.
                             <div class="note">
-                              <div class="note-title marker" aria-level="5" role="heading" id="h-note52"><span>Note</span></div>
+                              <div class="note-title marker" aria-level="5" role="heading" id="h-note48"><span>Note</span></div>
                               <p class="">
                                 This is to compensate for minor errors in frame timestamp computations that can appear when converting back and forth between double precision floating point numbers and rationals. This tolerance allows a frame to replace an existing one as long as it is within 1 microsecond of the existing frame's start time. Frames that come slightly before an existing frame are handled by the removal step below.
                               </p>
@@ -3195,7 +2923,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <li>Remove all possible decoding dependencies on the <a href="#coded-frame">coded frames</a> removed in the previous two steps by removing all <a href="#coded-frame">coded frames</a> from <var>track buffer</var> between those frames removed in the previous two steps and the next
                 <a href="#random-access-point">random access point</a> after those removed frames.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note53"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note49"><span>Note</span></div>
                   <p class="">Removing all <a href="#coded-frame">coded frames</a> until the next <a href="#random-access-point">random access point</a> is a conservative estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point depended on the frames that were removed.
                   </p>
                 </div>
@@ -3215,7 +2943,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <li>Set <var><a href="#last-frame-duration">last frame duration</a></var> for <var>track buffer</var> to <var>frame duration</var>.</li>
               <li>If <var><a href="#highest-end-timestamp">highest end timestamp</a></var> for <var>track buffer</var> is unset or <var>frame end timestamp</var> is greater than <var><a href="#highest-end-timestamp">highest end timestamp</a></var>, then set <var><a href="#highest-end-timestamp">highest end timestamp</a></var> for <var>track buffer</var> to <var>frame end timestamp</var>.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note54"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note50"><span>Note</span></div>
                   <p class="">The greater than check is needed because bidirectional prediction between coded frames can cause
                     <var>presentation timestamp</var> to not be monotonically increasing even though the decode timestamps are monotonically increasing.</p>
                 </div>
@@ -3228,21 +2956,21 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <li>
             <p>If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute is <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code> and the new <a href="#coded-frame">coded frames</a> cause <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> to have a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> for the current playback position, then set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_current_data">HAVE_CURRENT_DATA</a></code>.</p>
             <div class="note">
-              <div class="note-title marker" aria-level="5" role="heading" id="h-note55"><span>Note</span></div>
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note51"><span>Note</span></div>
               <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
             </div>
           </li>
           <li>
             <p>If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute is <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_current_data">HAVE_CURRENT_DATA</a></code> and the new <a href="#coded-frame">coded frames</a> cause <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> to have a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> that includes the current playback position and some time beyond the current playback position, then set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_future_data">HAVE_FUTURE_DATA</a></code>.</p>
             <div class="note">
-              <div class="note-title marker" aria-level="5" role="heading" id="h-note56"><span>Note</span></div>
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note52"><span>Note</span></div>
               <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
             </div>
           </li>
           <li>
             <p>If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute is <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_future_data">HAVE_FUTURE_DATA</a></code> and the new <a href="#coded-frame">coded frames</a> cause <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> to have a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> that includes the current playback position and <a href="#enough-data">enough data to ensure uninterrupted playback</a>, then set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_enough_data">HAVE_ENOUGH_DATA</a></code>.</p>
             <div class="note">
-              <div class="note-title marker" aria-level="5" role="heading" id="h-note57"><span>Note</span></div>
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note53"><span>Note</span></div>
               <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
             </div>
           </li>
@@ -3251,7 +2979,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-coded-frame-removal" typeof="bibo:Chapter" resource="#sourcebuffer-coded-frame-removal" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-coded-frame-removal" resource="#h-sourcebuffer-coded-frame-removal"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.13 </span>Coded Frame Removal Algorithm</span></h4>
+        <h4 id="h-sourcebuffer-coded-frame-removal" resource="#h-sourcebuffer-coded-frame-removal"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.9 </span>Coded Frame Removal Algorithm</span></h4>
         <p>Follow these steps when <a href="#coded-frame">coded frames</a> for a specific time range need to be removed from the SourceBuffer:</p>
         <ol>
           <li>Let <var>start</var> be the starting <a href="#presentation-timestamp">presentation timestamp</a> for the removal range.</li>
@@ -3264,7 +2992,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <p>If this <a href="#track-buffer">track buffer</a> has a <a href="#random-access-point">random access point</a> timestamp that is greater than or equal to
                   <var>end</var>, then update <var>remove end timestamp</var> to that random access point timestamp.</p>
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note58"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note54"><span>Note</span></div>
                   <p class="">Random access point timestamps can be different across tracks because the dependencies between <a href="#coded-frame">coded frames</a> within a track are usually different than the dependencies in another track.</p>
                 </div>
               </li>
@@ -3287,7 +3015,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <li>Remove all possible decoding dependencies on the <a href="#coded-frame">coded frames</a> removed in the previous step by removing all <a href="#coded-frame">coded frames</a> from this <a href="#track-buffer">track buffer</a> between those frames removed in the previous step and the next
                 <a href="#random-access-point">random access point</a> after those removed frames.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note59"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note55"><span>Note</span></div>
                   <p class="">Removing all <a href="#coded-frame">coded frames</a> until the next <a href="#random-access-point">random access point</a> is a conservative estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point depended on the frames that were removed.
                   </p>
                 </div>
@@ -3297,11 +3025,11 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   <var>start</var> and less than the <var>remove end timestamp</var>, and <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> is greater than
                   <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>, then set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code> and stall playback.</p>
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note60"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note56"><span>Note</span></div>
                   <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
                 </div>
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note61"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note57"><span>Note</span></div>
                   <p class="">This transition occurs because media data for the current position has been removed. Playback cannot progress until media for the
                     <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#current-position">current playback position</a> is appended or the <a href="#active-source-buffer-changes">selected/enabled tracks change</a>.</p>
                 </div>
@@ -3313,7 +3041,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-coded-frame-eviction" typeof="bibo:Chapter" resource="#sourcebuffer-coded-frame-eviction" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-coded-frame-eviction" resource="#h-sourcebuffer-coded-frame-eviction"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.14 </span>Coded Frame Eviction Algorithm</span></h4>
+        <h4 id="h-sourcebuffer-coded-frame-eviction" resource="#h-sourcebuffer-coded-frame-eviction"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.10 </span>Coded Frame Eviction Algorithm</span></h4>
         <p>This algorithm is run to free up space in this source buffer when new data is appended.</p>
         <ol>
           <li>Let <var>new data</var> equal the data that is about to be appended to this SourceBuffer.</li>
@@ -3321,7 +3049,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <li>Let <var>removal ranges</var> equal a list of presentation time ranges that can be evicted from the presentation to make room for the
             <var>new data</var>.
             <div class="note">
-              <div class="note-title marker" aria-level="5" role="heading" id="h-note62"><span>Note</span></div>
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note58"><span>Note</span></div>
               <p class="">Implementations <em class="rfc2119" title="MAY">MAY</em> use different methods for selecting <var>removal ranges</var> so web applications <em class="rfc2119" title="SHOULD NOT">SHOULD NOT</em> depend on a specific behavior. The web application can use the <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> attribute to observe whether portions of the buffered data have been evicted.
               </p>
             </div>
@@ -3331,7 +3059,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-audio-splice-frame-algorithm" typeof="bibo:Chapter" resource="#sourcebuffer-audio-splice-frame-algorithm" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-audio-splice-frame-algorithm" resource="#h-sourcebuffer-audio-splice-frame-algorithm"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.15 </span>Audio Splice Frame Algorithm</span></h4>
+        <h4 id="h-sourcebuffer-audio-splice-frame-algorithm" resource="#h-sourcebuffer-audio-splice-frame-algorithm"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.11 </span>Audio Splice Frame Algorithm</span></h4>
         <p>Follow these steps when the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> needs to generate a splice frame for two overlapping audio
           <a href="#coded-frame">coded frames</a>:</p>
         <ol>
@@ -3345,7 +3073,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <li>Update <var>presentation timestamp</var> and <var>decode timestamp</var> to the nearest audio sample timestamp based on sample rate of the audio in <var>overlapped frame</var>. If a timestamp is equidistant from both audio sample timestamps, then use the higher timestamp (e.g.,
             <code>floor(x * sample_rate + 0.5) / sample_rate</code>).
             <div class="note">
-              <div class="note-title marker" aria-level="5" role="heading" id="h-note63"><span>Note</span></div>
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note59"><span>Note</span></div>
               <div class="">
                 <p>For example, given the following values:</p>
                 <ul>
@@ -3368,7 +3096,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   <li>The <a href="#coded-frame-duration">coded frame duration</a> set to difference between <var>presentation timestamp</var> and the <var>overlapped frame</var> <a href="#presentation-timestamp">presentation timestamp</a>.</li>
                 </ul>
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note64"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note60"><span>Note</span></div>
                   <p class="">
                     Some implementations <em class="rfc2119" title="MAY">MAY</em> apply fades to/from silence to coded frames on either side of the inserted silence to make the transition less jarring.
                   </p>
@@ -3376,7 +3104,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               </li>
               <li>Return to caller without providing a splice frame.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note65"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note61"><span>Note</span></div>
                   <p class="">
                     This is intended to allow <var>new coded frame</var> to be added to the <var>track buffer</var> as if
                     <var>overlapped frame</var> had not been in the <var>track buffer</var> to begin with.
@@ -3398,7 +3126,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <li>The fade out coded frames equals <var>fade-out coded frames</var>.</li>
               <li>The fade in coded frame equal <var>new coded frame</var>.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note66"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note62"><span>Note</span></div>
                   <p class="">If the <var>new coded frame</var> is less than 5 milliseconds in duration, then coded frames that are appended after the
                     <var>new coded frame</var> will be needed to properly render the splice.</p>
                 </div>
@@ -3406,7 +3134,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <li>The splice timestamp equals <var>presentation timestamp</var>.</li>
             </ul>
             <div class="note">
-              <div class="note-title marker" aria-level="5" role="heading" id="h-note67"><span>Note</span></div>
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note63"><span>Note</span></div>
               <p class="">See the <a href="#sourcebuffer-audio-splice-rendering-algorithm">audio splice rendering algorithm</a> for details on how this splice frame is rendered.</p>
             </div>
           </li>
@@ -3414,7 +3142,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-audio-splice-rendering-algorithm" typeof="bibo:Chapter" resource="#sourcebuffer-audio-splice-rendering-algorithm" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-audio-splice-rendering-algorithm" resource="#h-sourcebuffer-audio-splice-rendering-algorithm"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.16 </span>Audio Splice Rendering Algorithm</span></h4>
+        <h4 id="h-sourcebuffer-audio-splice-rendering-algorithm" resource="#h-sourcebuffer-audio-splice-rendering-algorithm"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.12 </span>Audio Splice Rendering Algorithm</span></h4>
         <p>The following steps are run when a spliced frame, generated by the <a href="#sourcebuffer-audio-splice-frame-algorithm">audio splice frame algorithm</a>, needs to be rendered by the media element:</p>
         <ol>
           <li>Let <var>fade out coded frames</var> be the <a href="#coded-frame">coded frames</a> that are faded out during the splice.</li>
@@ -3440,7 +3168,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <li>Render <var>output samples</var>.</li>
         </ol>
         <div class="note">
-          <div class="note-title marker" aria-level="5" role="heading" id="h-note68"><span>Note</span></div>
+          <div class="note-title marker" aria-level="5" role="heading" id="h-note64"><span>Note</span></div>
           <div class="">
             <p>Here is a graphical representation of this algorithm.</p>
             <img src="audio_splice.png" alt="Audio splice diagram">
@@ -3449,7 +3177,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-text-splice-frame-algorithm" typeof="bibo:Chapter" resource="#sourcebuffer-text-splice-frame-algorithm" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-text-splice-frame-algorithm" resource="#h-sourcebuffer-text-splice-frame-algorithm"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.17 </span>Text Splice Frame Algorithm</span></h4>
+        <h4 id="h-sourcebuffer-text-splice-frame-algorithm" resource="#h-sourcebuffer-text-splice-frame-algorithm"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.13 </span>Text Splice Frame Algorithm</span></h4>
         <p>Follow these steps when the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> needs to generate a splice frame for two overlapping timed text
           <a href="#coded-frame">coded frames</a>:</p>
         <ol>
@@ -3470,7 +3198,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </li>
           <li>Return to caller without providing a splice frame.
             <div class="note">
-              <div class="note-title marker" aria-level="5" role="heading" id="h-note69"><span>Note</span></div>
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note65"><span>Note</span></div>
               <p class="">This is intended to allow <var>new coded frame</var> to be added to the <var>track buffer</var> as if it hadn't overlapped any frames in <var>track buffer</var> to begin with.</p>
             </div>
           </li>
@@ -3570,310 +3298,9 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
     </section>
   </section>
 
-  <section id="videoplaybackquality" typeof="bibo:Chapter" resource="#videoplaybackquality" property="bibo:hasPart">
-    <!--OddPage-->
-    <h2 id="h-videoplaybackquality" resource="#h-videoplaybackquality"><span property="xhv:role" resource="xhv:heading"><span class="secno">5. </span>VideoPlaybackQuality Object</span></h2>
-    <p>The following section is <em class="rfc2119" title="OPTIONAL">OPTIONAL</em>. There are several implementations of the current specification, but it is subject to change because some feel it needs further work. The community is actively investigating alternate designs to provide feedback on media playback quality. See <a href="https://wicg.github.io/media-playback-quality/">Media Playback Quality</a>.
-    </p>
-    <pre class="def idl"><span class="idlInterface" id="idl-def-videoplaybackquality" data-idl="" data-title="VideoPlaybackQuality">interface <span class="idlInterfaceID">VideoPlaybackQuality</span> {
-<span class="idlAttribute" id="idl-def-videoplaybackquality-creationtime" data-idl="" data-title="creationTime" data-dfn-for="videoplaybackquality">    readonly attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/hr-time/#dom-domhighrestimestamp">DOMHighResTimeStamp</a></code></span> <span class="idlAttrName"><a data-lt="creationTime" href="#dom-videoplaybackquality-creationtime" class="internalDFN" data-link-type="dfn" data-for="VideoPlaybackQuality"><code>creationTime</code></a></span>;</span>
-<span class="idlAttribute" id="idl-def-videoplaybackquality-totalvideoframes" data-idl="" data-title="totalVideoFrames" data-dfn-for="videoplaybackquality">    readonly attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span>       <span class="idlAttrName"><a data-lt="totalVideoFrames" href="#dom-videoplaybackquality-totalvideoframes" class="internalDFN" data-link-type="dfn" data-for="VideoPlaybackQuality"><code>totalVideoFrames</code></a></span>;</span>
-<span class="idlAttribute" id="idl-def-videoplaybackquality-droppedvideoframes" data-idl="" data-title="droppedVideoFrames" data-dfn-for="videoplaybackquality">    readonly attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span>       <span class="idlAttrName"><a data-lt="droppedVideoFrames" href="#dom-videoplaybackquality-droppedvideoframes" class="internalDFN" data-link-type="dfn" data-for="VideoPlaybackQuality"><code>droppedVideoFrames</code></a></span>;</span>
-<span class="idlAttribute" id="idl-def-videoplaybackquality-corruptedvideoframes" data-idl="" data-title="corruptedVideoFrames" data-dfn-for="videoplaybackquality">    readonly attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span>       <span class="idlAttrName"><a data-lt="corruptedVideoFrames" href="#dom-videoplaybackquality-corruptedvideoframes" class="internalDFN" data-link-type="dfn" data-for="VideoPlaybackQuality"><code>corruptedVideoFrames</code></a></span>;</span>
-<span class="idlAttribute" id="idl-def-videoplaybackquality-totalframedelay" data-idl="" data-title="totalFrameDelay" data-dfn-for="videoplaybackquality">    readonly attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-double">double</a></code></span>              <span class="idlAttrName"><a data-lt="totalFrameDelay" href="#dom-videoplaybackquality-totalframedelay" class="internalDFN" data-link-type="dfn" data-for="VideoPlaybackQuality"><code>totalFrameDelay</code></a></span>;</span>
-};</span></pre>
-
-    <section id="attributes-3" typeof="bibo:Chapter" resource="#attributes-3" property="bibo:hasPart">
-      <h3 id="h-attributes-3" resource="#h-attributes-3"><span property="xhv:role" resource="xhv:heading"><span class="secno">5.1 </span>Attributes</span></h3>
-      <dl class="attributes" data-dfn-for="VideoPlaybackQuality" data-link-for="VideoPlaybackQuality"><dt><dfn data-dfn-for="videoplaybackquality" data-dfn-type="dfn" id="dom-videoplaybackquality-creationtime" data-idl=""><code>creationTime</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/hr-time/#dom-domhighrestimestamp">DOMHighResTimeStamp</a></code></span>, readonly       </dt>
-        <dd>
-          <p>The timestamp returned by <a href="https://www.w3.org/TR/hr-time/#dom-performance-now">Performance.now()</a> when this object was created.</p>
-        </dd><dt><dfn data-dfn-for="videoplaybackquality" data-dfn-type="dfn" id="dom-videoplaybackquality-totalvideoframes" data-idl=""><code>totalVideoFrames</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span>, readonly       </dt>
-        <dd>
-          <p>The total number of frames that would have been displayed if no frames are dropped.</p>
-        </dd><dt><dfn data-dfn-for="videoplaybackquality" data-dfn-type="dfn" id="dom-videoplaybackquality-droppedvideoframes" data-idl=""><code>droppedVideoFrames</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span>, readonly       </dt>
-        <dd>
-          <p>The total number of frames dropped predecode or dropped because the frame missed its display deadline.</p>
-        </dd><dt><dfn data-dfn-for="videoplaybackquality" data-dfn-type="dfn" id="dom-videoplaybackquality-corruptedvideoframes" data-idl=""><code>corruptedVideoFrames</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span>, readonly       </dt>
-        <dd>
-          <p>The total number of corrupted frames that have been detected.</p>
-        </dd><dt><dfn data-dfn-for="videoplaybackquality" data-dfn-type="dfn" id="dom-videoplaybackquality-totalframedelay" data-idl=""><code>totalFrameDelay</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-double">double</a></code></span>, readonly       </dt>
-        <dd>
-          <p>The sum of all <a href="#displayed-frame-delay">displayed frame delays</a> for all displayed frames. (i.e., frames included in the <code><a href="#dom-videoplaybackquality-totalvideoframes">totalVideoFrames</a></code> count, but not in the <code><a href="#dom-videoplaybackquality-droppedvideoframes">droppedVideoFrames</a></code> count.</p>
-        </dd>
-      </dl>
-    </section>
-  </section>
-
-  <section id="trackdefault" typeof="bibo:Chapter" resource="#trackdefault" property="bibo:hasPart">
-    <!--OddPage-->
-    <h2 id="h-trackdefault" resource="#h-trackdefault"><span property="xhv:role" resource="xhv:heading"><span class="secno">6. </span>TrackDefault Object</span></h2>
-    <p>The TrackDefault object is used to provide kind, label, and language information for tracks that do not contain this information in the <a href="#init-segment">initialization segments</a>. This information is only consulted when the <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> creates track objects.</p>
-
-    <pre class="def idl"><span class="idlEnum" id="idl-def-trackdefaulttype" data-idl="" data-title="TrackDefaultType">enum <span class="idlEnumID">TrackDefaultType</span> {
-    "<a href="#dom-trackdefaulttype-audio" class="idlEnumItem">audio</a>",
-    "<a href="#dom-trackdefaulttype-video" class="idlEnumItem">video</a>",
-    "<a href="#dom-trackdefaulttype-text" class="idlEnumItem">text</a>"
-};</span></pre>
-    <table class="simple" data-dfn-for="TrackDefaultType" data-link-for="TrackDefaultType">
-      <tbody>
-        <tr>
-          <th colspan="2">Enumeration description</th>
-        </tr>
-        <tr>
-          <td><dfn data-dfn-for="trackdefaulttype" data-dfn-type="dfn" id="dom-trackdefaulttype-audio" data-idl=""><code id="idl-def-TrackDefaultType.audio">audio</code></dfn></td>
-          <td>
-            Indicates that the information in the <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object <em class="rfc2119" title="SHOULD">SHOULD</em> only be used when creating <a href="#idl-def-audiotrack-partial-1" class="internalDFN" data-link-type="dfn"><code>AudioTrack</code></a> objects.
-          </td>
-        </tr>
-        <tr>
-          <td><dfn data-dfn-for="trackdefaulttype" data-dfn-type="dfn" id="dom-trackdefaulttype-video" data-idl=""><code id="idl-def-TrackDefaultType.video">video</code></dfn></td>
-          <td>
-            Indicates that the information in the <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object <em class="rfc2119" title="SHOULD">SHOULD</em> only be used when creating <a href="#idl-def-videotrack-partial-1" class="internalDFN" data-link-type="dfn"><code>VideoTrack</code></a> objects.
-          </td>
-        </tr>
-        <tr>
-          <td><dfn data-dfn-for="trackdefaulttype" data-dfn-type="dfn" id="dom-trackdefaulttype-text" data-idl=""><code id="idl-def-TrackDefaultType.text">text</code></dfn></td>
-          <td>
-            Indicates that the information in the <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object <em class="rfc2119" title="SHOULD">SHOULD</em> only be used when creating <a href="#idl-def-texttrack-partial-1" class="internalDFN" data-link-type="dfn"><code>TextTrack</code></a> objects.
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <pre class="def idl"><span class="idlInterface" id="idl-def-trackdefault" data-idl="" data-title="TrackDefault">[<span class="idlCtor"><span class="extAttrName">Constructor</span>(<span class="idlParam"><span class="idlParamType"><a href="#idl-def-trackdefaulttype" class="internalDFN" data-link-type="dfn"><code>TrackDefaultType</code></a></span> <span class="idlParamName">type</span></span>, <span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span> <span class="idlParamName">language</span></span>, <span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span> <span class="idlParamName">label</span></span>, <span class="idlParam"><span class="idlParamType">sequence&lt;DOMString&gt;</span> <span class="idlParamName">kinds</span></span>, <span class="idlParam">optional <span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span> <span class="idlParamName">byteStreamTrackID</span> = <span class="idlDefaultValue">""</span></span>)</span>]
-interface <span class="idlInterfaceID">TrackDefault</span> {
-<span class="idlAttribute" id="idl-def-trackdefault-type" data-idl="" data-title="type" data-dfn-for="trackdefault">    readonly attribute <span class="idlAttrType"><a href="#idl-def-trackdefaulttype" class="internalDFN" data-link-type="dfn"><code>TrackDefaultType</code></a></span> <span class="idlAttrName"><a data-lt="type" href="#dom-trackdefault-type" class="internalDFN" data-link-type="dfn" data-for="TrackDefault"><code>type</code></a></span>;</span>
-<span class="idlAttribute" id="idl-def-trackdefault-bytestreamtrackid" data-idl="" data-title="byteStreamTrackID" data-dfn-for="trackdefault">    readonly attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span>        <span class="idlAttrName"><a data-lt="byteStreamTrackID" href="#dom-trackdefault-bytestreamtrackid" class="internalDFN" data-link-type="dfn" data-for="TrackDefault"><code>byteStreamTrackID</code></a></span>;</span>
-<span class="idlAttribute" id="idl-def-trackdefault-language" data-idl="" data-title="language" data-dfn-for="trackdefault">    readonly attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span>        <span class="idlAttrName"><a data-lt="language" href="#dom-trackdefault-language" class="internalDFN" data-link-type="dfn" data-for="TrackDefault"><code>language</code></a></span>;</span>
-<span class="idlAttribute" id="idl-def-trackdefault-label" data-idl="" data-title="label" data-dfn-for="trackdefault">    readonly attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span>        <span class="idlAttrName"><a data-lt="label" href="#dom-trackdefault-label" class="internalDFN" data-link-type="dfn" data-for="TrackDefault"><code>label</code></a></span>;</span>
-<span class="idlMethod" id="idl-def-trackdefault-getkinds()" data-idl="" data-title="getKinds" data-dfn-for="trackdefault">    <span class="idlMethType">sequence&lt;DOMString&gt;</span> <span class="idlMethName"><a data-lt="getKinds" href="#dom-trackdefault-getkinds" class="internalDFN" data-link-type="dfn" data-for="TrackDefault"><code>getKinds</code></a></span>();</span>
-};</span></pre>
-
-    <section id="constructors" typeof="bibo:Chapter" resource="#constructors" property="bibo:hasPart">
-      <h3 id="h-constructors" resource="#h-constructors"><span property="xhv:role" resource="xhv:heading"><span class="secno">6.1 </span>Constructors</span></h3>
-      <dl class="constructors" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
-        <dt><dfn data-lt-nodefault="" data-dfn-type="dfn" id="dfn-trackdefault-ctor"><code>TrackDefault</code></dfn></dt>
-        <dd>
-
-          <table class="parameters">
-            <tbody>
-              <tr>
-                <th>Parameter</th>
-                <th>Type</th>
-                <th>Nullable</th>
-                <th>Optional</th>
-                <th>Description</th>
-              </tr>
-              <tr>
-                <td class="prmName">type</td>
-                <td class="prmType"><code>TrackDefaultType</code></td>
-                <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
-                <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
-                <td class="prmDesc"></td>
-              </tr>
-              <tr>
-                <td class="prmName">language</td>
-                <td class="prmType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></td>
-                <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
-                <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
-                <td class="prmDesc"></td>
-              </tr>
-              <tr>
-                <td class="prmName">label</td>
-                <td class="prmType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></td>
-                <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
-                <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
-                <td class="prmDesc"></td>
-              </tr>
-              <tr>
-                <td class="prmName">kinds</td>
-                <td class="prmType"><code>sequence&lt;DOMString&gt;</code></td>
-                <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
-                <td class="prmOptFalse"><span aria-label="False" role="img">✘</span></td>
-                <td class="prmDesc"></td>
-              </tr>
-              <tr>
-                <td class="prmName">byteStreamTrackID</td>
-                <td class="prmType"><code>DOMString = ""</code></td>
-                <td class="prmNullFalse"><span aria-label="False" role="img">✘</span></td>
-                <td class="prmOptTrue"><span aria-label="True" role="img">✔</span></td>
-                <td class="prmDesc"></td>
-              </tr>
-            </tbody>
-          </table>
-          <p>When this method is invoked, the user agent must run the following steps:</p>
-          <ol class="method-algorithm">
-            <li>If <var>language</var> is not an empty string and <var>language</var> is not a BCP 47 language tag, then throw a <code>TypeError</code> and abort these steps.</li>
-            <li>
-              <dl class="switch">
-                <dt>If <var>type</var> equals <code><a href="#idl-def-TrackDefaultType.audio">"audio"</a></code>:</dt>
-                <dd>
-                  If any string in <var>kinds</var> contains a value that is not listed as applying to audio in the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-TrackList-getKind-categories">kind categories table</a></code>, then throw a
-                  <code>TypeError</code> and abort these steps.
-                </dd>
-                <dt>If <var>type</var> equals <code><a href="#idl-def-TrackDefaultType.video">"video"</a></code>:</dt>
-                <dd>
-                  If any string in <var>kinds</var> contains a value that is not listed as applying to video in the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-TrackList-getKind-categories">kind categories table</a></code>, then throw a
-                  <code>TypeError</code> and abort these steps.
-                </dd>
-
-                <dt>If <var>type</var> equals <code><a href="#idl-def-TrackDefaultType.text">"text"</a></code>:</dt>
-                <dd>
-                  If any string in <var>kinds</var> contains a value that is not listed in the
-                  <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#kind-of-track">text track kind list</a></code>, then throw a <code>TypeError</code> and abort these steps.
-                </dd>
-              </dl>
-            </li>
-            <li>Set the <code><a href="#dom-trackdefault-type">type</a></code> attribute on this new object to <var>type</var>.</li>
-            <li>Set the <code><a href="#dom-trackdefault-language">language</a></code> attribute on this new object to <var>language</var>.</li>
-            <li>Set the <code><a href="#dom-trackdefault-label">label</a></code> attribute on this new object to <var>label</var>.</li>
-            <li>Set the returned value of the <code><a href="#dom-trackdefault-getkinds">getKinds</a></code> method to return this new object <var>kinds</var>.</li>
-            <li>Set the <code><a href="#dom-trackdefault-bytestreamtrackid">byteStreamTrackID</a></code> attribute on this new object to <var>byteStreamTrackID</var>.</li>
-          </ol>
-        </dd>
-      </dl>
-    </section>
-
-    <section id="attributes-4" typeof="bibo:Chapter" resource="#attributes-4" property="bibo:hasPart">
-      <h3 id="h-attributes-4" resource="#h-attributes-4"><span property="xhv:role" resource="xhv:heading"><span class="secno">6.2 </span>Attributes</span></h3>
-      <dl class="attributes" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
-        <dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-type" data-idl=""><code>type</code></dfn> of type <span class="idlAttrType"><a href="#idl-def-trackdefaulttype" class="internalDFN" data-link-type="dfn"><code>TrackDefaultType</code></a></span>, readonly       </dt>
-        <dd>
-          <p>The type of track that can be constructed using the information in this object.</p>
-        </dd>
-        <dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-bytestreamtrackid" data-idl=""><code>byteStreamTrackID</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span>, readonly       </dt>
-        <dd>
-          <p>The decimal string representation of the <a href="#track-id">Track ID</a> that identifies the specific track that this object <em class="rfc2119" title="SHOULD">SHOULD</em> apply to. An empty string indicates that this object can be used for any track of the appropriate type (e.g., any <a href="#idl-def-audiotrack-partial-1" class="internalDFN" data-link-type="dfn"><code>AudioTrack</code></a> if
-            <code><a href="#dom-trackdefault-type">type</a></code> equals <code><a href="#idl-def-TrackDefaultType.audio">"audio"</a></code>).</p>
-        </dd>
-        <dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-language" data-idl=""><code>language</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span>, readonly       </dt>
-        <dd>
-          <p>The default language to use when an <a href="#init-segment">initialization segment</a> does not contain language information for a new track. See <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> for details.</p>
-        </dd>
-        <dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-label" data-idl=""><code>label</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span>, readonly       </dt>
-        <dd>
-          <p>The default label to use when an <a href="#init-segment">initialization segment</a> does not contain label information for a new track. See <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> for details.</p>
-        </dd>
-      </dl>
-    </section>
-
-    <section id="methods-3" typeof="bibo:Chapter" resource="#methods-3" property="bibo:hasPart">
-      <h3 id="h-methods-3" resource="#h-methods-3"><span property="xhv:role" resource="xhv:heading"><span class="secno">6.3 </span>Methods</span></h3>
-      <dl class="methods" data-dfn-for="TrackDefault" data-link-for="TrackDefault">
-        <dt><dfn data-dfn-for="trackdefault" data-dfn-type="dfn" id="dom-trackdefault-getkinds" data-idl=""><code>getKinds</code></dfn></dt>
-        <dd>
-          <p>The default kinds used when an <a href="#init-segment">initialization segment</a> does not contain kind information for a new track. See <a href="#sourcebuffer-init-segment-received">initialization segment received algorithm</a> for details.</p>
-          <div><em>No parameters.</em></div>
-          <div><em>Return type: </em><code>sequence&lt;<code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString" class="idlType">DOMString</a></code>&gt;</code>
-          </div>
-        </dd>
-      </dl>
-    </section>
-
-  </section>
-
-  <section id="trackdefaultlist" typeof="bibo:Chapter" resource="#trackdefaultlist" property="bibo:hasPart">
-    <!--OddPage-->
-    <h2 id="h-trackdefaultlist" resource="#h-trackdefaultlist"><span property="xhv:role" resource="xhv:heading"><span class="secno">7. </span>TrackDefaultList Object</span></h2>
-    <p>TrackDefaultList is a simple container object for <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> objects. It provides read-only array access.</p>
-
-    <pre class="def idl"><span class="idlInterface" id="idl-def-trackdefaultlist" data-idl="" data-title="TrackDefaultList">[<span class="idlCtor"><span class="extAttrName">Constructor</span>(<span class="idlParam">optional <span class="idlParamType">sequence&lt;<a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a>&gt;</span> <span class="idlParamName">trackDefaults</span> = <span class="idlDefaultValue">[]</span></span>)</span>]
-interface <span class="idlInterfaceID">TrackDefaultList</span> {
-<span class="idlAttribute" id="idl-def-trackdefaultlist-length" data-idl="" data-title="length" data-dfn-for="trackdefaultlist">    readonly attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span> <span class="idlAttrName"><a data-lt="length" href="#dom-trackdefaultlist-length" class="internalDFN" data-link-type="dfn" data-for="TrackDefaultList"><code>length</code></a></span>;</span>
-<span class="idlMethod" id="idl-def-trackdefaultlist-(unsigned_long)" data-idl="" data-title="" data-dfn-for="trackdefaultlist">    getter <span class="idlMethType"><a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a></span> <span class="idlMethName"></span>(<span class="idlParam"><span class="idlParamType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span> <span class="idlParamName">index</span></span>);</span>
-};</span></pre>
-
-    <section id="constructors-1" typeof="bibo:Chapter" resource="#constructors-1" property="bibo:hasPart">
-      <h3 id="h-constructors-1" resource="#h-constructors-1"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.1 </span>Constructors</span></h3>
-      <dl class="constructors" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList">
-        <dt><dfn data-lt-nodefault="" data-dfn-type="dfn" id="dfn-trackdefaultlist-ctor"><code>TrackDefaultList</code></dfn></dt>
-        <dd>
-
-          <table class="parameters">
-            <tbody>
-              <tr>
-                <th>Parameter</th>
-                <th>Type</th>
-                <th>Nullable</th>
-                <th>Optional</th>
-                <th>Description</th>
-              </tr>
-              <tr>
-                <td class="prmName">trackDefaults</td>
-                <td class="prmType"><code>sequence&lt;TrackDefault&gt; = []</code></td>
-                <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
-                <td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td>
-                <td class="prmDesc"></td>
-              </tr>
-            </tbody>
-          </table>
-          <p>When this method is invoked, the user agent must run the following steps:</p>
-          <ol class="method-algorithm">
-            <li>If <var>trackDefaults</var> contains two or more <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> objects with the same <code><a href="#dom-trackdefault-type">type</a></code> and the same
-              <code><a href="#dom-trackdefault-bytestreamtrackid">byteStreamTrackID</a></code>, then throw a
-              <code>TypeError</code> and abort these steps.
-              <div class="note">
-                <div class="note-title marker" aria-level="4" role="heading" id="h-note70"><span>Note</span></div>
-                <p class="">This also applies when <code><a href="#dom-trackdefault-bytestreamtrackid">byteStreamTrackID</a></code> contains an empty string and ensures that there is only one "byteStreamTrackID independent" default for each <a href="#idl-def-trackdefaulttype" class="internalDFN" data-link-type="dfn"><code>TrackDefaultType</code></a> value.</p>
-              </div>
-            </li>
-            <li>Store a shallow copy of <var>trackDefaults</var> in this new object so the values can be returned by the accessor methods.</li>
-          </ol>
-        </dd>
-      </dl>
-    </section>
-
-    <section id="attributes-5" typeof="bibo:Chapter" resource="#attributes-5" property="bibo:hasPart">
-      <h3 id="h-attributes-5" resource="#h-attributes-5"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.2 </span>Attributes</span></h3>
-      <dl class="attributes" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList"><dt><dfn data-dfn-for="trackdefaultlist" data-dfn-type="dfn" id="dom-trackdefaultlist-length" data-idl=""><code>length</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span>, readonly       </dt>
-        <dd>
-          <p>Indicates the number of <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> objects in the list.</p>
-
-        </dd>
-      </dl>
-    </section>
-
-    <section id="methods-4" typeof="bibo:Chapter" resource="#methods-4" property="bibo:hasPart">
-      <h3 id="h-methods-4" resource="#h-methods-4"><span property="xhv:role" resource="xhv:heading"><span class="secno">7.3 </span>Methods</span></h3>
-      <dl class="methods" data-dfn-for="TrackDefaultList" data-link-for="TrackDefaultList">
-        <dt><dfn data-lt-nodefault="" data-dfn-type="dfn" id="dfn-trackdefaultlist-getter"><code>getter</code></dfn></dt>
-        <dd>
-          <p>Allows the TrackDefault objects in the list to be accessed with an array operator (i.e., []).</p>
-
-
-          <table class="parameters">
-            <tbody>
-              <tr>
-                <th>Parameter</th>
-                <th>Type</th>
-                <th>Nullable</th>
-                <th>Optional</th>
-                <th>Description</th>
-              </tr>
-              <tr>
-                <td class="prmName">index</td>
-                <td class="prmType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></td>
-                <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
-                <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
-                <td class="prmDesc"></td>
-              </tr>
-            </tbody>
-          </table>
-          <div><em>Return type: </em><a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code><code>TrackDefault</code></code></a></div>
-          <p>When this method is invoked, the user agent must run the following steps:</p>
-          <ol class="method-algorithm">
-            <li>If <var>index</var> is greater than or equal to the <code><a href="#dom-trackdefaultlist-length">length</a></code> attribute then return undefined and abort these steps.</li>
-            <li>Return the <var>index</var>'th <a href="#idl-def-trackdefault" class="internalDFN" data-link-type="dfn"><code>TrackDefault</code></a> object in the list.</li>
-          </ol>
-        </dd>
-      </dl>
-    </section>
-  </section>
-
   <section id="url" typeof="bibo:Chapter" resource="#url" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-url" resource="#h-url"><span property="xhv:role" resource="xhv:heading"><span class="secno">8. </span>URL Object Extensions</span></h2>
+    <h2 id="h-url" resource="#h-url"><span property="xhv:role" resource="xhv:heading"><span class="secno">5. </span>URL Object Extensions</span></h2>
     <p>This section specifies extensions to the <a href="https://www.w3.org/TR/FileAPI/#URL-object">URL</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] object definition.</p>
 
     <pre class="def idl"><span class="idlInterface" id="idl-def-url-partial-1" data-idl="" data-title="URL">[<span class="extAttr"><span class="extAttrName">Exposed</span>=<span class="extAttrRhs">Window</span></span>,
@@ -3883,15 +3310,15 @@ partial interface <span class="idlInterfaceID">URL</span> {
 <span class="idlMethod" id="idl-def-url-createobjecturl(mediasource)" data-idl="" data-title="createObjectURL" data-dfn-for="url">    static <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span> <span class="idlMethName"><a data-lt="createObjectURL" href="#dom-url-createobjecturl" class="internalDFN" data-link-type="dfn" data-for="URL"><code>createObjectURL</code></a></span>(<span class="idlParam"><span class="idlParamType"><a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a></span> <span class="idlParamName">mediaSource</span></span>);</span>
 };</span></pre>
 
-    <section id="methods-5" typeof="bibo:Chapter" resource="#methods-5" property="bibo:hasPart">
-      <h3 id="h-methods-5" resource="#h-methods-5"><span property="xhv:role" resource="xhv:heading"><span class="secno">8.1 </span>Methods</span></h3>
+    <section id="methods-3" typeof="bibo:Chapter" resource="#methods-3" property="bibo:hasPart">
+      <h3 id="h-methods-3" resource="#h-methods-3"><span property="xhv:role" resource="xhv:heading"><span class="secno">5.1 </span>Methods</span></h3>
       <dl class="methods" data-dfn-for="URL" data-link-for="URL"><dt><dfn data-dfn-for="url" data-dfn-type="dfn" id="dom-url-createobjecturl" data-idl=""><code>createObjectURL</code></dfn>, static</dt>
         <dd>
           <p>Creates URLs for <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> objects.</p>
 
 
           <div class="note">
-            <div class="note-title marker" aria-level="4" role="heading" id="h-note71"><span>Note</span></div>
+            <div class="note-title marker" aria-level="4" role="heading" id="h-note66"><span>Note</span></div>
             <p class="">This algorithm is intended to mirror the behavior of the <a href="https://www.w3.org/TR/FileAPI/#dfn-createObjectURL">createObjectURL()</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] method, which does not auto-revoke the created URL. Web authors are encouraged to use <a href="https://www.w3.org/TR/FileAPI/#dfn-revokeObjectURL">revokeObjectURL()</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] for any <a href="#mediasource-object-url">MediaSource object URL</a> that is no longer needed for attachment to a media element.</p>
           </div>
           <table class="parameters">
@@ -3924,7 +3351,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
 
   <section id="htmlmediaelement-extensions" typeof="bibo:Chapter" resource="#htmlmediaelement-extensions" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-htmlmediaelement-extensions" resource="#h-htmlmediaelement-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">9. </span>HTMLMediaElement Extensions</span></h2>
+    <h2 id="h-htmlmediaelement-extensions" resource="#h-htmlmediaelement-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">6. </span>HTMLMediaElement Extensions</span></h2>
     <p>This section specifies what existing attributes on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#htmlmediaelement-htmlmediaelement">HTMLMediaElement</a></code> <em class="rfc2119" title="MUST">MUST</em> return when a <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> is attached to the element.</p>
 
     <p>The <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-seekable">HTMLMediaElement.seekable</a></code> attribute returns a new static <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#normalized-timeranges-object">normalized TimeRanges object</a> created based on the following steps:</p>
@@ -3976,65 +3403,17 @@ partial interface <span class="idlInterfaceID">URL</span> {
     </ol>
   </section>
 
-  <section id="htmlvideoelement-extensions" typeof="bibo:Chapter" resource="#htmlvideoelement-extensions" property="bibo:hasPart">
-    <!--OddPage-->
-    <h2 id="h-htmlvideoelement-extensions" resource="#h-htmlvideoelement-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">10. </span>HTMLVideoElement Extensions</span></h2>
-    <p>The following section uses <a href="#idl-def-videoplaybackquality" class="internalDFN" data-link-type="dfn"><code>VideoPlaybackQuality</code></a> and is <em class="rfc2119" title="OPTIONAL">OPTIONAL</em>. There are several implementations of the current specification, but it is subject to change because some feel it needs further work. The community is actively investigating alternate designs to provide feedback on media playback quality. See <a href="https://wicg.github.io/media-playback-quality/">Media Playback Quality</a>.
-    </p>
-
-    <p>This section specifies new attributes and internal state that are being added to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#htmlvideoelement-htmlvideoelement">HTMLVideoElement</a></code>.</p>
-
-    <p>Each <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#htmlvideoelement-htmlvideoelement">HTMLVideoElement</a></code> will maintain a <dfn id="total-video-frame-count" data-dfn-type="dfn">total video frame count</dfn> variable that keeps track of the total number of frames that have been displayed and dropped. This variable is initialized to 0 when the element is created and whenever the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#media-element-load-algorithm">media element load algorithm</a> is invoked. It is incremented when a video frame is displayed or when the <var><a href="#dropped-video-frame-count">dropped video frame count</a></var> is incremented.</p>
-
-    <p>Each <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#htmlvideoelement-htmlvideoelement">HTMLVideoElement</a></code> will maintain a <dfn id="dropped-video-frame-count" data-dfn-type="dfn">dropped video frame count</dfn> variable that keeps track of the total number of frames that have been dropped. This variable is initialized to 0 when the element is created and whenever the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#media-element-load-algorithm">media element load algorithm</a> is invoked. It is incremented when a video frame is dropped predecode or when a frame is decoded but dropped because it missed a display deadline.</p>
-
-    <p>Each <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#htmlvideoelement-htmlvideoelement">HTMLVideoElement</a></code> will maintain a <dfn id="corrupted-video-frame-count" data-dfn-type="dfn">corrupted video frame count</dfn> variable that keeps track of the total number of corrupted frames detected. This variable is initialized to 0 when the element is created and whenever the
-      <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#media-element-load-algorithm">media element load algorithm</a> is invoked. It is incremented when a corrupted video frame is detected by the decoder. It is up to the implementation to determine whether to display or drop a corrupted frame. Whichever choice is made, the <var><a href="#total-video-frame-count">total video frame count</a></var> and <var><a href="#dropped-video-frame-count">dropped video frame count</a></var> <em class="rfc2119" title="MUST">MUST</em> be updated appropriately.
-    </p>
-
-    <p>Each <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#htmlvideoelement-htmlvideoelement">HTMLVideoElement</a></code> will maintain a <dfn id="displayed-frame-delay-sum" data-dfn-type="dfn">displayed frame delay sum</dfn> variable that keeps track of the sum of all <a href="#displayed-frame-delay">displayed frame delays</a>. This variable is initialized to 0 when the element is created and whenever the
-      <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#media-element-load-algorithm">media element load algorithm</a> is invoked. When a frame is displayed, its <a href="#displayed-frame-delay">displayed frame delay</a> is computed and added to this variable.
-    </p>
-
-    <div><pre class="def idl"><span class="idlInterface" id="idl-def-htmlvideoelement-partial-1" data-idl="" data-title="HTMLVideoElement">partial interface <span class="idlInterfaceID">HTMLVideoElement</span> {
-<span class="idlMethod" id="idl-def-htmlvideoelement-getvideoplaybackquality()" data-idl="" data-title="getVideoPlaybackQuality" data-dfn-for="htmlvideoelement">    <span class="idlMethType"><a href="#idl-def-videoplaybackquality" class="internalDFN" data-link-type="dfn"><code>VideoPlaybackQuality</code></a></span> <span class="idlMethName"><a data-lt="getVideoPlaybackQuality" href="#dom-htmlvideoelement-getvideoplaybackquality" class="internalDFN" data-link-type="dfn" data-for="HTMLVideoElement"><code>getVideoPlaybackQuality</code></a></span>();</span>
-};</span></pre>
-
-      <section typeof="bibo:Chapter" resource="#methods-6" property="bibo:hasPart">
-        <h3 id="methods-6" resource="#methods-6"><span property="xhv:role" resource="xhv:heading">Methods</span></h3>
-        <dl class="methods" data-dfn-for="HTMLVideoElement" data-link-for="HTMLVideoElement"><dt><dfn data-dfn-for="htmlvideoelement" data-dfn-type="dfn" id="dom-htmlvideoelement-getvideoplaybackquality" data-idl=""><code>getVideoPlaybackQuality</code></dfn></dt>
-          <dd>
-            <p>Provides the current the playback quality metrics.</p>
-
-            <div><em>No parameters.</em></div>
-            <div><em>Return type: </em><a href="#idl-def-videoplaybackquality" class="internalDFN" data-link-type="dfn"><code><code>VideoPlaybackQuality</code></code></a></div>
-            <p>When this method is invoked, the user agent must run the following steps:</p>
-            <ol class="method-algorithm">
-              <li>Let <var>playbackQuality</var> be a new instance of <a href="#idl-def-videoplaybackquality" class="internalDFN" data-link-type="dfn"><code>VideoPlaybackQuality</code></a>.</li>
-              <li>Set <var>playbackQuality</var>.<code><a href="#dom-videoplaybackquality-creationtime">creationTime</a></code> to the value returned by a call to <a href="https://www.w3.org/TR/hr-time/#dom-performance-now">Performance.now()</a> [<cite><a class="bibref" href="#bib-HR-TIME">HR-TIME</a></cite>].</li>
-              <li>Set <var>playbackQuality</var>.<code><a href="#dom-videoplaybackquality-totalvideoframes">totalVideoFrames</a></code> to the current value of the <var><a href="#total-video-frame-count">total video frame count</a></var>.</li>
-              <li>Set <var>playbackQuality</var>.<code><a href="#dom-videoplaybackquality-droppedvideoframes">droppedVideoFrames</a></code> to the current value of the <var><a href="#dropped-video-frame-count">dropped video frame count</a></var>.</li>
-              <li>Set <var>playbackQuality</var>.<code><a href="#dom-videoplaybackquality-corruptedvideoframes">corruptedVideoFrames</a></code> to the current value of the <var><a href="#corrupted-video-frame-count">corrupted video frame count</a></var>.</li>
-              <li>Set <var>playbackQuality</var>.<code><a href="#dom-videoplaybackquality-totalframedelay">totalFrameDelay</a></code> to the current value of the <var><a href="#displayed-frame-delay-sum">displayed frame delay sum</a></var>.</li>
-              <li>Return <var>playbackQuality</var>.</li>
-            </ol>
-          </dd>
-        </dl>
-      </section>
-    </div>
-  </section>
-
   <section id="audio-track-extensions" typeof="bibo:Chapter" resource="#audio-track-extensions" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-audio-track-extensions" resource="#h-audio-track-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">11. </span>AudioTrack Extensions</span></h2>
+    <h2 id="h-audio-track-extensions" resource="#h-audio-track-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">7. </span>AudioTrack Extensions</span></h2>
     <p>This section specifies extensions to the HTML <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> definition.</p>
 
     <div><pre class="def idl"><span class="idlInterface" id="idl-def-audiotrack-partial-1" data-idl="" data-title="AudioTrack">partial interface <span class="idlInterfaceID">AudioTrack</span> {
 <span class="idlAttribute" id="idl-def-audiotrack-sourcebuffer" data-idl="" data-title="sourceBuffer" data-dfn-for="audiotrack">    readonly attribute <span class="idlAttrType"><a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>?</span> <span class="idlAttrName"><a data-lt="sourceBuffer" href="#dom-audiotrack-sourcebuffer" class="internalDFN" data-link-type="dfn" data-for="AudioTrack"><code>sourceBuffer</code></a></span>;</span>
 };</span></pre>
 
-      <section typeof="bibo:Chapter" resource="#attributes-6" property="bibo:hasPart">
-        <h3 id="attributes-6" resource="#attributes-6"><span property="xhv:role" resource="xhv:heading">Attributes</span></h3>
+      <section typeof="bibo:Chapter" resource="#attributes-3" property="bibo:hasPart">
+        <h3 id="attributes-3" resource="#attributes-3"><span property="xhv:role" resource="xhv:heading">Attributes</span></h3>
         <dl class="attributes" data-dfn-for="AudioTrack" data-link-for="AudioTrack"><dt><dfn data-dfn-for="audiotrack" data-dfn-type="dfn" id="dom-audiotrack-sourcebuffer" data-idl=""><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a href="#dom-audiotrack-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a></span>, readonly       , nullable</dt>
           <dd>
             <p>Returns the <a href="#dom-audiotrack-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> that created this track. Returns null if this track was not created by a <a href="#dom-audiotrack-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> or the <a href="#dom-audiotrack-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> has been removed from the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute of its <a href="#parent-media-source">parent media source</a>.</p>
@@ -4046,15 +3425,15 @@ partial interface <span class="idlInterfaceID">URL</span> {
 
   <section id="video-track-extensions" typeof="bibo:Chapter" resource="#video-track-extensions" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-video-track-extensions" resource="#h-video-track-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">12. </span>VideoTrack Extensions</span></h2>
+    <h2 id="h-video-track-extensions" resource="#h-video-track-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">8. </span>VideoTrack Extensions</span></h2>
     <p>This section specifies extensions to the HTML <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> definition.</p>
 
     <div><pre class="def idl"><span class="idlInterface" id="idl-def-videotrack-partial-1" data-idl="" data-title="VideoTrack">partial interface <span class="idlInterfaceID">VideoTrack</span> {
 <span class="idlAttribute" id="idl-def-videotrack-sourcebuffer" data-idl="" data-title="sourceBuffer" data-dfn-for="videotrack">    readonly attribute <span class="idlAttrType"><a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>?</span> <span class="idlAttrName"><a data-lt="sourceBuffer" href="#dom-videotrack-sourcebuffer" class="internalDFN" data-link-type="dfn" data-for="VideoTrack"><code>sourceBuffer</code></a></span>;</span>
 };</span></pre>
 
-      <section typeof="bibo:Chapter" resource="#attributes-7" property="bibo:hasPart">
-        <h3 id="attributes-7" resource="#attributes-7"><span property="xhv:role" resource="xhv:heading">Attributes</span></h3>
+      <section typeof="bibo:Chapter" resource="#attributes-4" property="bibo:hasPart">
+        <h3 id="attributes-4" resource="#attributes-4"><span property="xhv:role" resource="xhv:heading">Attributes</span></h3>
         <dl class="attributes" data-dfn-for="VideoTrack" data-link-for="VideoTrack"><dt><dfn data-dfn-for="videotrack" data-dfn-type="dfn" id="dom-videotrack-sourcebuffer" data-idl=""><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a href="#dom-videotrack-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a></span>, readonly       , nullable</dt>
           <dd>
             <p>Returns the <a href="#dom-videotrack-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> that created this track. Returns null if this track was not created by a <a href="#dom-videotrack-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> or the <a href="#dom-videotrack-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> has been removed from the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute of its <a href="#parent-media-source">parent media source</a>.</p>
@@ -4066,15 +3445,15 @@ partial interface <span class="idlInterfaceID">URL</span> {
 
   <section id="text-track-extensions" typeof="bibo:Chapter" resource="#text-track-extensions" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-text-track-extensions" resource="#h-text-track-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">13. </span>TextTrack Extensions</span></h2>
+    <h2 id="h-text-track-extensions" resource="#h-text-track-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">9. </span>TextTrack Extensions</span></h2>
     <p>This section specifies extensions to the HTML <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> definition.</p>
 
     <div><pre class="def idl"><span class="idlInterface" id="idl-def-texttrack-partial-1" data-idl="" data-title="TextTrack">partial interface <span class="idlInterfaceID">TextTrack</span> {
 <span class="idlAttribute" id="idl-def-texttrack-sourcebuffer" data-idl="" data-title="sourceBuffer" data-dfn-for="texttrack">    readonly attribute <span class="idlAttrType"><a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>?</span> <span class="idlAttrName"><a data-lt="sourceBuffer" href="#dom-texttrack-sourcebuffer" class="internalDFN" data-link-type="dfn" data-for="TextTrack"><code>sourceBuffer</code></a></span>;</span>
 };</span></pre>
 
-      <section typeof="bibo:Chapter" resource="#attributes-8" property="bibo:hasPart">
-        <h3 id="attributes-8" resource="#attributes-8"><span property="xhv:role" resource="xhv:heading">Attributes</span></h3>
+      <section typeof="bibo:Chapter" resource="#attributes-5" property="bibo:hasPart">
+        <h3 id="attributes-5" resource="#attributes-5"><span property="xhv:role" resource="xhv:heading">Attributes</span></h3>
         <dl class="attributes" data-dfn-for="TextTrack" data-link-for="TextTrack"><dt><dfn data-dfn-for="texttrack" data-dfn-type="dfn" id="dom-texttrack-sourcebuffer" data-idl=""><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a href="#dom-texttrack-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a></span>, readonly       , nullable</dt>
           <dd>
             <p>Returns the <a href="#dom-texttrack-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> that created this track. Returns null if this track was not created by a <a href="#dom-texttrack-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> or the <a href="#dom-texttrack-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> has been removed from the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute of its <a href="#parent-media-source">parent media source</a>.</p>
@@ -4086,16 +3465,16 @@ partial interface <span class="idlInterfaceID">URL</span> {
 
   <section id="byte-stream-formats" typeof="bibo:Chapter" resource="#byte-stream-formats" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-byte-stream-formats" resource="#h-byte-stream-formats"><span property="xhv:role" resource="xhv:heading"><span class="secno">14. </span>Byte Stream Formats</span></h2>
-    <p>The bytes provided through <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> and <code><a href="#dom-sourcebuffer-appendstream">appendStream()</a></code> for a <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> form a logical byte stream. The format and semantics of these byte streams are defined in <dfn id="byte-stream-format-specs" data-dfn-type="dfn">byte stream format specifications</dfn>. The byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>] provides mappings between a MIME type that may be passed to <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code> or
+    <h2 id="h-byte-stream-formats" resource="#h-byte-stream-formats"><span property="xhv:role" resource="xhv:heading"><span class="secno">10. </span>Byte Stream Formats</span></h2>
+    <p>The bytes provided through <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> for a <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> form a logical byte stream. The format and semantics of these byte streams are defined in <dfn id="byte-stream-format-specs" data-dfn-type="dfn">byte stream format specifications</dfn>. The byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>] provides mappings between a MIME type that may be passed to <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code> or
       <code><a href="#dom-mediasource-istypesupported">isTypeSupported()</a></code> and the byte stream format expected by a <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> created with that MIME type. Implementations are encouraged to register mappings for byte stream formats they support to facilitate interoperability. The byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>] is the authoritative source for these mappings. If an implementation claims to support a MIME type listed in the registry, its <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> implementation <em class="rfc2119" title="MUST">MUST</em> conform to the
       <a href="#byte-stream-format-specs">byte stream format specification</a> listed in the registry entry.</p>
     <div class="note">
-      <div class="note-title marker" aria-level="3" role="heading" id="h-note72"><span>Note</span></div>
+      <div class="note-title marker" aria-level="3" role="heading" id="h-note67"><span>Note</span></div>
       <p class="">The byte stream format specifications in the registry are not intended to define new storage formats. They simply outline the subset of existing storage format structures that implementations of this specification will accept.</p>
     </div>
     <div class="note">
-      <div class="note-title marker" aria-level="3" role="heading" id="h-note73"><span>Note</span></div>
+      <div class="note-title marker" aria-level="3" role="heading" id="h-note68"><span>Note</span></div>
       <p class="">Byte stream format parsing and validation is implemented in the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> algorithm.</p>
     </div>
 
@@ -4104,7 +3483,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
       <li>A byte stream format specification <em class="rfc2119" title="MUST">MUST</em> define <a href="#init-segment">initialization segments</a> and <a href="#media-segment">media segments</a>.</li>
       <li>A byte stream format <em class="rfc2119" title="SHOULD">SHOULD</em> provide references for sourcing <a href="#idl-def-audiotrack-partial-1" class="internalDFN" data-link-type="dfn"><code>AudioTrack</code></a>, <a href="#idl-def-videotrack-partial-1" class="internalDFN" data-link-type="dfn"><code>VideoTrack</code></a>, and <a href="#idl-def-texttrack-partial-1" class="internalDFN" data-link-type="dfn"><code>TextTrack</code></a> attribute values from data in <a href="#init-segment">initialization segments</a>.
         <div class="note">
-          <div class="note-title marker" aria-level="3" role="heading" id="h-note74"><span>Note</span></div>
+          <div class="note-title marker" aria-level="3" role="heading" id="h-note69"><span>Note</span></div>
           <p class="">If the byte stream format covers a format similar to one covered in the in-band tracks spec [<cite><a class="bibref" href="#bib-INBANDTRACKS">INBANDTRACKS</a></cite>], then it <em class="rfc2119" title="SHOULD">SHOULD</em> try to use the same attribute mappings so that Media Source Extensions playback and non-Media Source Extensions playback provide the same track information.</p>
         </div>
       </li>
@@ -4114,7 +3493,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
           <li>
             <p>The number and type of tracks are not consistent.</p>
             <div class="note">
-              <div class="note-title marker" aria-level="3" role="heading" id="h-note75"><span>Note</span></div>
+              <div class="note-title marker" aria-level="3" role="heading" id="h-note70"><span>Note</span></div>
               <p class="">For example, if the first <a href="#init-segment">initialization segment</a> has 2 audio tracks and 1 video track, then all <a href="#init-segment">initialization segments</a> that follow it in the byte stream <em class="rfc2119" title="MUST">MUST</em> describe 2 audio tracks and 1 video track.</p>
             </div>
           </li>
@@ -4122,7 +3501,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
           <li>
             <p>Codecs changes across <a href="#init-segment">initialization segments</a>.</p>
             <div class="note">
-              <div class="note-title marker" aria-level="3" role="heading" id="h-note76"><span>Note</span></div>
+              <div class="note-title marker" aria-level="3" role="heading" id="h-note71"><span>Note</span></div>
               <p class="">For example, a byte stream that starts with an <a href="#init-segment">initialization segment</a> that specifies a single AAC track and later contains an <a href="#init-segment">initialization segment</a> that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects.</p>
             </div>
           </li>
@@ -4134,14 +3513,14 @@ partial interface <span class="idlInterfaceID">URL</span> {
           <li>
             <p>Video frame size changes. The user agent <em class="rfc2119" title="MUST">MUST</em> support seamless playback.</p>
             <div class="note">
-              <div class="note-title marker" aria-level="3" role="heading" id="h-note77"><span>Note</span></div>
+              <div class="note-title marker" aria-level="3" role="heading" id="h-note72"><span>Note</span></div>
               <p class="">This will cause the &lt;video&gt; display region to change size if the web application does not use CSS or HTML attributes (width/height) to constrain the element size.</p>
             </div>
           </li>
           <li>
             <p>Audio channel count changes. The user agent <em class="rfc2119" title="MAY">MAY</em> support this seamlessly and could trigger downmixing.</p>
             <div class="note">
-              <div class="note-title marker" aria-level="3" role="heading" id="h-note78"><span>Note</span></div>
+              <div class="note-title marker" aria-level="3" role="heading" id="h-note73"><span>Note</span></div>
               <p class="">This is a quality of implementation issue because changing the channel count may require reinitializing the audio device, resamplers, and channel mixers which tends to be audible.</p>
             </div>
           </li>
@@ -4152,7 +3531,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
           <li>Map all timestamps to the same <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#media-timeline">media timeline</a>.</li>
           <li>Support seamless playback of <a href="#media-segment">media segments</a> having a timestamp gap smaller than the audio frame size. User agents <em class="rfc2119" title="MUST NOT">MUST NOT</em> reflect these gaps in the <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> attribute.
             <div class="note">
-              <div class="note-title marker" aria-level="3" role="heading" id="h-note79"><span>Note</span></div>
+              <div class="note-title marker" aria-level="3" role="heading" id="h-note74"><span>Note</span></div>
               <p class="">This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g., Vorbis).</p>
             </div>
           </li>
@@ -4181,17 +3560,17 @@ partial interface <span class="idlInterfaceID">URL</span> {
 
   <section id="conformance" typeof="bibo:Chapter" resource="#conformance" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-conformance" resource="#h-conformance"><span property="xhv:role" resource="xhv:heading"><span class="secno">15. </span>Conformance</span></h2>
+    <h2 id="h-conformance" resource="#h-conformance"><span property="xhv:role" resource="xhv:heading"><span class="secno">11. </span>Conformance</span></h2>
     <p>
       As well as sections marked as non-normative, all authoring guidelines, diagrams, examples, and notes in this specification are non-normative. Everything else in this specification is normative.
     </p>
-    <p id="respecRFC2119">The key words <em class="rfc2119" title="MAY">MAY</em>, <em class="rfc2119" title="MUST">MUST</em>, <em class="rfc2119" title="MUST NOT">MUST NOT</em>, <em class="rfc2119" title="OPTIONAL">OPTIONAL</em>, <em class="rfc2119" title="SHOULD">SHOULD</em>, and <em class="rfc2119" title="SHOULD NOT">SHOULD NOT</em> are to be interpreted as described in [<cite><a class="bibref" href="#bib-RFC2119">RFC2119</a></cite>].
+    <p id="respecRFC2119">The key words <em class="rfc2119" title="MAY">MAY</em>, <em class="rfc2119" title="MUST">MUST</em>, <em class="rfc2119" title="MUST NOT">MUST NOT</em>, <em class="rfc2119" title="SHOULD">SHOULD</em>, and <em class="rfc2119" title="SHOULD NOT">SHOULD NOT</em> are to be interpreted as described in [<cite><a class="bibref" href="#bib-RFC2119">RFC2119</a></cite>].
     </p>
   </section>
 
   <section id="examples" typeof="bibo:Chapter" resource="#examples" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-examples" resource="#h-examples"><span property="xhv:role" resource="xhv:heading"><span class="secno">16. </span>Examples</span></h2>
+    <h2 id="h-examples" resource="#h-examples"><span property="xhv:role" resource="xhv:heading"><span class="secno">12. </span>Examples</span></h2>
     <p>Example use of the Media Source Extensions</p>
     <div class="block">
       <div class="blockContent">
@@ -4291,36 +3670,41 @@ partial interface <span class="idlInterfaceID">URL</span> {
 
   <section id="acknowledgements" typeof="bibo:Chapter" resource="#acknowledgements" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-acknowledgements" resource="#h-acknowledgements"><span property="xhv:role" resource="xhv:heading"><span class="secno">17. </span>Acknowledgments</span></h2> The editors would like to thank Alex Giladi, Bob Lund, Chris Poole, Cyril Concolato, David Dorwin, David Singer, Duncan Rowden, Frank Galligan, Glenn Adams, Jer Noble, Joe Steele, John Simmons, Kevin Streeter, Mark Vickers, Matt Ward, Matthew Gregan, Michael Thornburgh, Philip Jägenstedt, Pierre Lemieux, Ralph Giles, Steven Robertson, and Tatsuya Igarashi for their contributions to this specification.
+    <h2 id="h-acknowledgements" resource="#h-acknowledgements"><span property="xhv:role" resource="xhv:heading"><span class="secno">13. </span>Acknowledgments</span></h2> The editors would like to thank Alex Giladi, Bob Lund, Chris Poole, Cyril Concolato, David Dorwin, David Singer, Duncan Rowden, Frank Galligan, Glenn Adams, Jer Noble, Joe Steele, John Simmons, Kevin Streeter, Mark Vickers, Matt Ward, Matthew Gregan, Michael Thornburgh, Philip Jägenstedt, Pierre Lemieux, Ralph Giles, Steven Robertson, and Tatsuya Igarashi for their contributions to this specification.
+  </section>
+
+  <section id="VideoPlaybackQuality" class="appendix informative" typeof="bibo:Chapter" resource="#VideoPlaybackQuality" property="bibo:hasPart">
+    <!--OddPage-->
+    <h2 id="h-videoplaybackquality" resource="#h-videoplaybackquality"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>VideoPlaybackQuality</span></h2>
+    <p><em>This section is non-normative.</em></p>
+    The video playback quality metrics described in previous revisions of this specification (e.g., sections 5 and 10 of the <a href="https://www.w3.org/TR/2016/CR-media-source-20160705/">Candidate Recommendation</a>) are now being developed as part of [<cite><a class="bibref" href="#bib-MEDIA-PLAYBACK-QUALITY">MEDIA-PLAYBACK-QUALITY</a></cite>]. Some implementations may have implemented the earlier draft <code>VideoPlaybackQuality</code> object and the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#htmlvideoelement-htmlvideoelement">HTMLVideoElement</a></code> extension method <code>getVideoPlaybackQuality()</code> described in those previous revisions.
   </section>
 
 
   <section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>References</span></h2>
+    <h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B. </span>References</span></h2>
 
     <section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart">
-      <h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.1 </span>Normative references</span></h3>
+      <h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B.1 </span>Normative references</span></h3>
       <dl class="bibliography" resource=""><dt id="bib-FILE-API">[FILE-API]</dt>
         <dd>Arun Ranganathan; Jonas Sicking. W3C. <a href="https://www.w3.org/TR/FileAPI/" property="dc:requires"><cite>File API</cite></a>. 21 April 2015. W3C Working Draft. URL: <a href="https://www.w3.org/TR/FileAPI/" property="dc:requires">https://www.w3.org/TR/FileAPI/</a>
-        </dd><dt id="bib-HR-TIME">[HR-TIME]</dt>
-        <dd>Jatinder Mann. W3C. <a href="https://www.w3.org/TR/hr-time/" property="dc:requires"><cite>High Resolution Time</cite></a>. 17 December 2012. W3C Recommendation. URL: <a href="https://www.w3.org/TR/hr-time/" property="dc:requires">https://www.w3.org/TR/hr-time/</a>
         </dd><dt id="bib-HTML51">[HTML51]</dt>
         <dd>Steve Faulkner; Arron Eicholz; Travis Leithead; Alex Danilo. W3C. <a href="https://www.w3.org/TR/html51/" property="dc:requires"><cite>HTML 5.1</cite></a>. 21 June 2016. W3C Candidate Recommendation. URL: <a href="https://www.w3.org/TR/html51/" property="dc:requires">https://www.w3.org/TR/html51/</a>
         </dd><dt id="bib-RFC2119">[RFC2119]</dt>
         <dd>S. Bradner. IETF. <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires">https://tools.ietf.org/html/rfc2119</a>
         </dd><dt id="bib-WEBIDL">[WEBIDL]</dt>
         <dd>Cameron McCormack; Boris Zbarsky. W3C. <a href="https://www.w3.org/TR/WebIDL-1/" property="dc:requires"><cite>WebIDL Level 1</cite></a>. 8 March 2016. W3C Candidate Recommendation. URL: <a href="https://www.w3.org/TR/WebIDL-1/" property="dc:requires">https://www.w3.org/TR/WebIDL-1/</a>
-        </dd><dt id="bib-WHATWG-STREAMS-API">[WHATWG-STREAMS-API]</dt>
-        <dd>Domenic Denicola; Takeshi Yoshino. WHATWG. <a href="https://streams.spec.whatwg.org/" property="dc:requires"><cite>WHATWG Streams API</cite></a>. URL: <a href="https://streams.spec.whatwg.org/" property="dc:requires">https://streams.spec.whatwg.org/</a>
         </dd>
       </dl>
     </section>
 
     <section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart">
-      <h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.2 </span>Informative references</span></h3>
+      <h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B.2 </span>Informative references</span></h3>
       <dl class="bibliography" resource=""><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt>
         <dd>Bob Lund; Silvia Pfeiffer. W3C. <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. URL: <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references">http://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
+        </dd><dt id="bib-MEDIA-PLAYBACK-QUALITY">[MEDIA-PLAYBACK-QUALITY]</dt>
+        <dd>Mounir Lamouri. W3C. <a href="https://wicg.github.io/media-playback-quality/" property="dc:references"><cite>Media Playback Quality</cite></a>. URL: <a href="https://wicg.github.io/media-playback-quality/" property="dc:references">https://wicg.github.io/media-playback-quality/</a>
         </dd><dt id="bib-MSE-REGISTRY">[MSE-REGISTRY]</dt>
         <dd>Matthew Wolenetz; Jerry Smith; Aaron Colwell. W3C. <a href="byte-stream-format-registry.html" property="dc:references"><cite>Media Source Extensions Byte Stream Format Registry</cite></a>. URL: <a href="byte-stream-format-registry.html" property="dc:references">byte-stream-format-registry.html</a>
         </dd>
