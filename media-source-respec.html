@@ -131,26 +131,12 @@
           SourceBuffer: function() {},
           SourceBufferList: function() {},
           AppendMode: function() {},
-          ReadableStream: function() {},
           ArrayBuffer: function() {},
           ArrayBufferView: function() {},
       },
       postProcess: [ mediaSourcePostProcessor ],
 
       localBiblio: {
-          "W3C-STREAMS-API": {
-            title: "W3C Streams API",
-            href: "http://www.w3.org/TR/streams-api/",
-            authors: ["Feras Moussa", "Takeshi Yoshino"],
-            status: "WD",
-            publisher: "W3C",
-          },
-          "WHATWG-STREAMS-API": {
-            title: "WHATWG Streams API",
-            href: "https://streams.spec.whatwg.org/",
-            authors: ["Domenic Denicola", "Takeshi Yoshino"],
-            publisher: "WHATWG",
-          },
           "MSE-REGISTRY": {
               title: "Media Source Extensions Byte Stream Format Registry",
               href: "byte-stream-format-registry.html",
@@ -190,10 +176,6 @@
       <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>; there may also be open bugs in the <a href="http://w3.org/brief/Mjcw">previous bug tracker</a>. This draft highlights some of the pending issues that are still to be discussed in the working group. No decision has been taken on the outcome of these issues including whether they are valid.</p>
         <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should join the mailing list mentioned below and take part in the discussions.</p>
 
-        <p>The following feature is <strong>at risk</strong> and may be removed:</p>
-        <ul>
-          <li><p>The <a def-id="appendStream">appendStream</a> method on the <a href="#sourcebuffer">sourceBuffer</a> object and algorithm steps that are used only by it.</p></li>
-        </ul>
         <p>
           For this specification to exit the Candidate Recommendation stage,
           two independent implementations as detailed in the <a href="http://dev.w3.org/html5/decision-policy/public-permissive-exit-criteria.html">CR Exit Criteria (Public Permissive version 3)</a> document
@@ -427,7 +409,7 @@
             <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the value being assigned to this attribute.
-              <p class="note"><a def-id="appendBuffer"></a>, <a def-id="appendStream"></a> and <a def-id="endOfStream"></a> can update the duration under certain circumstances.</p>
+              <p class="note"><a def-id="appendBuffer"></a> and <a def-id="endOfStream"></a> can update the duration under certain circumstances.</p>
             </li>
           </ol>
         </dd>
@@ -493,7 +475,7 @@
             <li>If <var>sourceBuffer</var> specifies an object that is not in <a def-id="sourceBuffers"></a> then throw a <a def-id="not-found-error"></a> exception and abort these steps.</li>
             <li>If the <var>sourceBuffer</var>.<a def-id="updating"></a> attribute equals true, then run the following steps:
               <ol>
-                <li>Abort the <a def-id="buffer-append"></a> and <a def-id="stream-append-loop"></a> algorithms if they are running.</li>
+                <li>Abort the <a def-id="buffer-append"></a> algorithm if it is running.</li>
                 <li>Set the <var>sourceBuffer</var>.<a def-id="updating"></a> attribute to false.</li>
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateabort"></a> at <var>sourceBuffer</var>.</li>
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at <var>sourceBuffer</var>.</li>
@@ -688,7 +670,7 @@
                   <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a>MediaSource</a>.</li>
                 <li>Continue the <a def-id="resource-fetch-algorithm"></a> by running the <a def-id="perform-potentially-cors-enabled-fetch"></a> step, with these clarifications:
                   <ol>
-                    <li>Text in the <a def-id="resource-fetch-algorithm"></a> that refers to &quot;the download&quot; or &quot;bytes received&quot; refers to data passed in via <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a>.</li>
+                    <li>Text in the <a def-id="resource-fetch-algorithm"></a> that refers to &quot;the download&quot; or &quot;bytes received&quot; refers to data passed in via <a def-id="appendBuffer"></a>.</li>
                     <li>References to HTTP in the <a def-id="resource-fetch-algorithm"></a> do not apply because the HTMLMediaElement does not fetch media data via HTTP when a <a>MediaSource</a> is attached.</li>
                     <li>Text in the <a def-id="resource-fetch-algorithm"></a> that refers to transitions to &quot;NETWORK_IDLE&quot; and firing &quot;suspend&quot; events, and the paragraph that begins with &quot;User agents may decide to not download more content at any time&quot;, do not apply to a media element that has a <a>MediaSource</a> object attached by this algorithm.</li>
                   </ol>
@@ -731,7 +713,7 @@
                       <a def-id="have-metadata"></a>, then set the <a def-id="ready-state"></a> attribute
                       to <a def-id="have-metadata"></a>.</li>
                     <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
-                    <li>The media element waits until an <a def-id="appendBuffer"></a> or an <a def-id="appendStream"></a> call causes the <a def-id="coded-frame-processing-algorithm"></a> to set
+                    <li>The media element waits until an <a def-id="appendBuffer"></a> call causes the <a def-id="coded-frame-processing-algorithm"></a> to set
                       the <a def-id="ready-state"></a> attribute to a value greater than <a def-id="have-metadata"></a>.
                       <p class="note">The web application can use <a def-id="buffered"></a> to determine what the media element needs to resume playback.</p>
                     </li>
@@ -995,7 +977,7 @@
 
         <dt>readonly attribute boolean updating</dt>
         <dd>
-          <p>Indicates whether the asynchronous continuation of an <a def-id="appendBuffer"></a>, <a def-id="appendStream"></a>, or <a def-id="remove"></a>
+          <p>Indicates whether the asynchronous continuation of an <a def-id="appendBuffer"></a> or <a def-id="remove"></a>
             operation is still being processed. This attribute is initially set to false when the object is created.</p>
         </dd>
 
@@ -1136,18 +1118,6 @@
           </ol>
         </dd>
 
-        <dt>void appendStream(ReadableStream stream, [EnforceRange] optional unsigned long long maxSize)</dt>
-        <dd>
-          <p>Appends segment data to the source buffer from a <a class="externalDFN">ReadableStream</a>[[!WHATWG-STREAMS-API]].</p>
-
-          <ol class="method-algorithm">
-            <li>Run the <a def-id="prepare-append"></a> algorithm.</li>
-            <li>Set the <a def-id="updating"></a> attribute to true.</li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
-            <li>Asynchronously run the <a def-id="stream-append-loop"></a> algorithm with <var>stream</var> and <var>maxSize</var>.</li>
-          </ol>
-        </dd>
-
         <dt>void abort()</dt>
         <dd>
           <p>Aborts the current segment and resets the segment parser.</p>
@@ -1158,7 +1128,7 @@
             <li>If the <a def-id="range-removal"></a> algorithm is running, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then run the following steps:
               <ol>
-                <li>Abort the <a def-id="buffer-append"></a> and <a def-id="stream-append-loop"></a> algorithms if they are running.</li>
+                <li>Abort the <a def-id="buffer-append"></a> algorithm if it is running.</li>
                 <li>Set the <a def-id="updating"></a> attribute to false.</li>
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateabort"></a> at this <a>SourceBuffer</a> object.</li>
                 <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
@@ -1306,10 +1276,10 @@
             </tbody>
           </table>
 
-          <p>The <dfn id="sourcebuffer-input-buffer">input buffer</dfn> is a byte buffer that is used to hold unparsed bytes across <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a> calls. The buffer is empty when the SourceBuffer object is created.</p>
+          <p>The <dfn id="sourcebuffer-input-buffer">input buffer</dfn> is a byte buffer that is used to hold unparsed bytes across <a def-id="appendBuffer"></a> calls. The buffer is empty when the SourceBuffer object is created.</p>
 
-          <p>The <dfn id="sourcebuffer-buffer-full-flag">buffer full flag</dfn> keeps track of whether <a def-id="appendBuffer"></a> or
-            <a def-id="appendStream"></a> is allowed to accept more bytes. It is set to false when the SourceBuffer object is created and gets updated
+          <p>The <dfn id="sourcebuffer-buffer-full-flag">buffer full flag</dfn> keeps track of whether <a def-id="appendBuffer"></a>
+            is allowed to accept more bytes. It is set to false when the SourceBuffer object is created and gets updated
             as data is appended and removed.</p>
 
           <p>The <dfn id="sourcebuffer-group-start-timestamp">group start timestamp</dfn> variable keeps track of the starting timestamp for a new
@@ -1443,76 +1413,6 @@
             <li>Run the <a def-id="segment-parser-loop"></a> algorithm.</li>
             <li>If the <a def-id="segment-parser-loop"></a> algorithm in the previous step was aborted, then abort this algorithm.</li>
             <li>Set the <a def-id="updating"></a> attribute to false.</li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="update"></a> at this <a>SourceBuffer</a> object.</li>
-            <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
-          </ol>
-        </section>
-
-        <section id="sourcebuffer-stream-append-loop">
-          <h4>Stream Append Loop</h4>
-          <p>This algorithm is invoked by <a def-id="appendStream"></a>to transfer data from a
-            <a class="externalDFN">ReadableStream</a> to the <a>SourceBuffer</a>. This algorithm is
-            initialized with the  <var>stream</var> and <var>maxSize</var> parameters from the
-            <a def-id="appendStream"></a> call.
-          </p>
-          <ol>
-            <li>If <var>maxSize</var> is set, then let <var>bytesLeft</var> equal <var>maxSize</var>.</li>
-            <li><i>Loop Top: </i>If <var>maxSize</var> is set and <var>bytesLeft</var> equals 0, then jump to the <i>loop done</i> step below.</li>
-            <li>If <var>stream.state</var> equals <a def-id="ReadableStream-state-waiting"></a>, then run
-              the following steps:
-              <ol>
-                <li>Wait for either the <var>stream</var>.<a def-id="ReadableStream-ready"></a> promise or
-                  the <var>stream</var>.<a def-id="ReadableStream-closed"></a> promise to be resolved or
-                  rejected.
-                  <p class="note">This is intended to be similar to <code>Promise.race([<var>stream.ready</var>, <var>stream.closed</var>], continueAppendLoop, continueAppendLoop)</code>,
-                    where the <code>continueAppendLoop</code> function returns control to this algorithm and
-                    starts executing the step that follows this one. If the
-                    <a def-id="stream-append-loop"></a> algorithm is aborted while waiting for the promises,
-                    continueAppendLoop MUST NOT continue the algorithm when it is eventually called.
-                  </p>
-                  <p class="note">This step is only represented as a blocking wait to make it easier to
-                    describe the intended behavior. It SHOULD NOT block other JavaScript from executing.
-                  </p></li>
-                <li>Continue onto the next step.</li>
-            </ol>
-            </li>
-            <li>If <var>stream.state</var> equals <a def-id="ReadableStream-state-closed"></a>, then jump to the <i>loop done</i> step below.</li>
-            <li>If <var>stream.state</var> equals <a def-id="ReadableStream-state-errored"></a>, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</li>
-            <li>If <var>stream.state</var> does not equal <a def-id="ReadableStream-state-readable"></a>, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</li>
-            <li>Let <var>data</var> be the value returned by a call to
-              <var>stream</var>.<a def-id="ReadableStream-read"></a>.</li>
-            <li>If <var>data</var> is not an <a class="externalDFN">ArrayBuffer</a> or an
-              <a class="externalDFN">ArrayBufferView</a> then, run the
-              <a def-id="append-error-algorithm"></a> and abort this algorithm.</li>
-            <li>If <var>maxSize</var> is set, then run the following steps:
-              <ol>
-                <li>If <var>data.byteLength</var> is greater than <var>bytesLeft</var>, then run the
-                  following steps:
-                  <ol>
-                    <li>Let <var>new data</var> equal the value returned by calling <var>data</var>.slice(0, <var>bytesLeft</var>).
-                    <p class="note">This step and the next one are assuming <var>data</var> is an
-                      <a class="externalDFN">ArrayBuffer</a>. If <var>data</var> is an
-                      <a class="externalDFN">ArrayBufferView</a> subarray() SHOULD be called instead.</li>
-                    <li>Let <var>remaining data</var> equal the value returned by calling
-                      <var>data</var>.slice(<var>bytesLeft</var>).</li>
-                    <li>Push <var>remaining data</var> back onto the front of <var>stream</var> so it
-                      will be returned by the next <var>stream</var>.<a def-id="ReadableStream-read"></a> call.</li>
-                    <li>Assign <var>new data</var> to <var>data</var>.</li>
-                  </ol>
-                </li>
-                <li>Subtract <var>data.byteLength</var> from <var>bytesLeft</var>.</li>
-              </ol>
-            </li>
-            <li>Run the <a def-id="coded-frame-eviction-algorithm"></a>.</li>
-            <li>
-              <p>If the <a def-id="buffer-full-flag"></a> equals true, then run the <a def-id="append-error-algorithm"></a> and abort this algorithm.</p>
-              <p class="note">The web application SHOULD use <a def-id="remove"></a> to free up space in the <a>SourceBuffer</a>.</p>
-            </li>
-            <li>Add <var>data</var> to the end of the <a def-id="input-buffer"></a>.</li>
-            <li>Run the <a def-id="segment-parser-loop"></a> algorithm.</li>
-            <li>If the <a def-id="segment-parser-loop"></a> algorithm in the previous step was aborted, then abort this algorithm.</li>
-            <li>Jump to the <i>loop top</i> step above.</li>
-            <li><i>Loop Done: </i>Set the <a def-id="updating"></a> attribute to false.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="update"></a> at this <a>SourceBuffer</a> object.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
           </ol>
@@ -2311,7 +2211,7 @@
 
     <section id="byte-stream-formats">
       <h2>Byte Stream Formats</h2>
-      <p>The bytes provided through <a def-id="appendBuffer"></a> and <a def-id="appendStream"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format and
+      <p>The bytes provided through <a def-id="appendBuffer"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format and
         semantics of these byte streams are defined in <dfn id="byte-stream-format-specs">byte stream format specifications</dfn>.
         The byte stream format registry [[MSE-REGISTRY]] provides mappings between a MIME type that may be passed to <a def-id="addSourceBuffer"></a> or
         <a def-id="isTypeSupported"></a> and the byte stream format expected by a <a>SourceBuffer</a> created with that MIME type. Implementations are encouraged to register

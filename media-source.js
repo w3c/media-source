@@ -149,7 +149,6 @@
     'isTypeSupported': { func: idlref_helper, fragment: 'widl-MediaSource-isTypeSupported-boolean-DOMString-type', link_text: 'isTypeSupported()',  },
 
     'appendBuffer': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendBuffer-void-ArrayBufferView-data', link_text: 'appendBuffer()',  },
-    'appendStream': { func: idlref_helper, fragment: 'widl-SourceBuffer-appendStream-void-ReadableStream-stream-unsigned-long-long-maxSize', link_text: 'appendStream()',  },
     'abort': { func: idlref_helper, fragment: 'widl-SourceBuffer-abort-void', link_text: 'abort()',  },
     'remove': { func: idlref_helper, fragment: 'widl-SourceBuffer-remove-void-double-start-unrestricted-double-end', link_text: 'remove()',  },
     'updating': { func: idlref_helper, fragment: 'widl-SourceBuffer-updating', link_text: 'updating',  },
@@ -224,10 +223,8 @@
     'byte-stream-format-specs': { func: link_helper, fragment: '#byte-stream-format-specs', link_text: 'byte stream format specifications', },
     'sourcebuffer-byte-stream-format-spec': { func: link_helper, fragment: '#sourcebuffer-byte-stream-format-spec', link_text: 'SourceBuffer byte stream format specification', },
     'sourcebuffer-configuration': { func: link_helper, fragment: '#sourcebuffer-configuration', link_text: 'SourceBuffer configuration', },
-    'append-error-algorithm': { func: append_error_helper, fragment: '#sourcebuffer-append-error', link_text: 'false', },
     'append-decode-error-algorithm': { func: append_error_helper, fragment: '#sourcebuffer-append-error', link_text: 'true', },
     'reset-parser-state-algorithm': { func: link_helper, fragment: '#sourcebuffer-reset-parser-state', link_text: 'reset parser state algorithm', },
-    'stream-append-loop': { func: link_helper, fragment: '#sourcebuffer-stream-append-loop', link_text: 'stream append loop', },
     'prepare-append': { func: link_helper, fragment: '#sourcebuffer-prepare-append', link_text: 'prepare append', },
     'buffer-append': { func: link_helper, fragment: '#sourcebuffer-buffer-append', link_text: 'buffer append', },
     'range-removal': { func: link_helper, fragment: '#sourcebuffer-range-removal', link_text: 'range removal', },
@@ -350,14 +347,6 @@
     'perform-potentially-cors-enabled-fetch': { func: fragment_helper, fragment: '', link_text: '&quot;<i>Perform a potentially CORS-enabled fetch</i>&quot;', },
 
     'contributors': { func: contributors_helper, fragment: '', link_text: '', },
-
-    'ReadableStream-read': { func: whatwg_streams_helper, fragment: 'rs-read', link_text:'read()', },
-    'ReadableStream-ready': { func: whatwg_streams_helper, fragment: 'rs-ready', link_text:'ready', },
-    'ReadableStream-closed': { func: whatwg_streams_helper, fragment: 'rs-closed', link_text:'closed', },
-    'ReadableStream-state-waiting': { func: whatwg_streams_helper, fragment: 'rs-state', link_text:'"waiting"', },
-    'ReadableStream-state-readable': { func: whatwg_streams_helper, fragment: 'rs-state', link_text:'"readable"', },
-    'ReadableStream-state-closed': { func: whatwg_streams_helper, fragment: 'rs-state', link_text:'"closed"', },
-    'ReadableStream-state-errored': { func: whatwg_streams_helper, fragment: 'rs-state', link_text:'"errored"', },
   };
 
   var definitionInfo = {};
