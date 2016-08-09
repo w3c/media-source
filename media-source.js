@@ -264,6 +264,7 @@
     'media-timeline': { func: videoref_helper, fragment: 'media-timeline', link_text: 'media timeline',  },
     'mediatracklist-change': { func: code_videoref_helper, fragment: 'dom-mediatracklist-onchange', link_text: 'change',  },
     'resource-fetch-algorithm': { func: videoref_helper, fragment: 'resource-fetch-algorithm', link_text: 'resource fetch algorithm',  },
+    'media-data-processing-steps-list': { func: videoref_helper, fragment: 'media-data-processing-steps-list', link_text: 'media data processing steps list', },
     'delaying-the-load-event-flag': {func: videoref_helper, fragment: 'delaying-the-load-event-flag', link_text: 'delaying-the-load-event-flag', },
     'intrinsic-width-and-height': { func: videoref_helper, fragment: 'video-intrinsic-width', link_text: 'intrinsic width and height',  },
     'normalized-timeranges-object': { func: videoref_helper, fragment: 'normalized-timeranges-object', link_text: 'normalized TimeRanges object',  },
