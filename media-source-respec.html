@@ -653,9 +653,9 @@ interface MediaSource : EventTarget {
         <section id="mediasource-attach">
           <h4>Attaching to a media element</h4>
           <p> A <a>MediaSource</a> object can be attached to a media element by assigning a <a def-id="MediaSource-object-URL"></a> to the media element <a def-id="media-src"></a> attribute or the src attribute of a &lt;source&gt; inside a media element. A <a def-id="MediaSource-object-URL"></a> is created by passing a MediaSource object to <a def-id="createObjectURL"></a>.</p>
-          <p>If the <a def-id="resource-fetch-algorithm"></a> absolute URL matches the MediaSource object URL, ignore any <a def-id="preload"></a> attribute of the media element, skip any optional steps for when <a def-id="preload"></a> equals <a def-id="preload-none"></a>, and run the following steps right before the <a def-id="perform-potentially-cors-enabled-fetch"></a>
-            step in the <a def-id="resource-fetch-algorithm"></a>.</p>
 
+          <p>If the <a def-id="resource-fetch-algorithm"></a> was invoked with a media provider object or a URL record whose object is a media provider object that is a MediaSource object, then let mode be local, skip the first step in the <a def-id="resource-fetch-algorithm"></a> which may set mode differently to remote, and run the following steps at the beginning of the <a def-id="Otherwise-mode-is-local"></a> section of the <a def-id="resource-fetch-algorithm"></a>.
+          <p class="note">The <a def-id="resource-fetch-algorithm"></a>[[HTML51]]'s first step is expected to eventually align with selecting local mode for URL records whose objects are media provider objects. The intent is that if the HTMLMediaElement's <code>src</code> attribute or selected child <code>&lt;source&gt;</code>'s <code>src</code> attribute is an absolute URL matching a <a def-id="MediaSource-object-URL"></a> when the respective <code>src</code> attribute was last changed, then that MediaSource object is used as the media provider object and current media resource in the local mode logic in the <a def-id="resource-fetch-algorithm"></a>. This also means that the remote mode logic that includes observance of any preload attribute is skipped when a MediaSource object is attached. Even with that eventual change to [[HTML51]], the execution of the following steps at the beginning of the local mode logic is still required when the current media resource is a MediaSource object.</p>
           <dl class="switch">
             <dt>If <a def-id="readyState"></a> is NOT set to <a def-id="closed"></a></dt>
             <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
@@ -666,11 +666,11 @@ interface MediaSource : EventTarget {
                 <li>Set the <a def-id="readyState"></a> attribute to <a def-id="open"></a>.</li>
                 <li>
                   <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a>MediaSource</a>.</li>
-                <li>Continue the <a def-id="resource-fetch-algorithm"></a> by running the <a def-id="perform-potentially-cors-enabled-fetch"></a> step, with these clarifications:
+                <li>Continue the <a def-id="resource-fetch-algorithm"></a> by running the remaining <a def-id="Otherwise-mode-is-local"></a> steps, with these clarifications:
                   <ol>
-                    <li>Text in the <a def-id="resource-fetch-algorithm"></a> that refers to "the download" or "bytes received" refers to data passed in via <a def-id="appendBuffer"></a>.</li>
+                    <li>Text in the <a def-id="resource-fetch-algorithm"></a> that refers to "the download", "bytes received", or "whenever new data for the current media resource becomes available" refers to data passed in via <a def-id="appendBuffer"></a>.</li>
                     <li>References to HTTP in the <a def-id="resource-fetch-algorithm"></a> do not apply because the HTMLMediaElement does not fetch media data via HTTP when a <a>MediaSource</a> is attached.</li>
-                    <li>Text in the <a def-id="resource-fetch-algorithm"></a> that refers to transitions to "NETWORK_IDLE" and firing "suspend" events, and the paragraph that begins with "User agents may decide to not download more content at any time", do not apply to a media element that has a <a>MediaSource</a> object attached by this algorithm.</li>
+                    <p class="note">An attached MediaSource does not use the remote mode steps in the <a def-id="resource-fetch-algorithm"></a>, so the media element will not fire "suspend" events. User agents MAY still fire "stalled" events as these [[HTML51]] references changed after implementations of this specification stabilized.</p>
                   </ol>
                 </li>
               </ol>

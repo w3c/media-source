@@ -269,8 +269,6 @@
     'normalized-timeranges-object': { func: videoref_helper, fragment: 'normalized-timeranges-object', link_text: 'normalized TimeRanges object',  },
     'current-playback-position': { func: videoref_helper, fragment: 'current-position', link_text: 'current playback position',  },
     'media-data-is-corrupted': { func: videoref_helper, fragment: 'fatal-decode-error', link_text: 'media data is corrupted',  },
-    'preload': { func: code_videoref_helper, fragment: 'element-attrdef-media-preload', link_text: 'preload', },
-    'preload-none': {func: code_videoref_helper, fragment: 'valdef-htmlmediaelement-preload-none', link_text: 'none', },
     'media-src': { func: code_videoref_helper, fragment: 'element-attrdef-media-src', link_text: 'src',  },
     'timerange': { func: code_videoref_helper, fragment: 'timeranges-timeranges', link_text: 'TimeRange',  },
     'timeranges': { func: code_videoref_helper, fragment: 'timeranges-timeranges', link_text: 'TimeRanges',  },
@@ -344,7 +342,7 @@
 
 
     'media-data-cannot-be-fetched': { func: fragment_helper, fragment: '', link_text: '&quot;<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>&quot;', },
-    'perform-potentially-cors-enabled-fetch': { func: fragment_helper, fragment: '', link_text: '&quot;<i>Perform a potentially CORS-enabled fetch</i>&quot;', },
+    'Otherwise-mode-is-local': { func: fragment_helper, fragment: '', link_text: '&quot;<i>Otherwise (mode is local)</i>&quot;', },
 
     'contributors': { func: contributors_helper, fragment: '', link_text: '', },
   };
