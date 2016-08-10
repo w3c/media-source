@@ -352,7 +352,6 @@
     // Update links to external type definitions.
     var externalClassInfo = {
       'ReadableStream': { spec: 'whatwg-streams-api', fragment: 'rs-class-definition' },
-     // 'SourceBuffer': { spec: 'mse', fragment: 'idl-def-SourceBuffer' },
       'AudioTrackList': {spec: 'html5', fragment: 'audiotracklist-audiotracklist' },
       'TextTrackList': {spec: 'html5', fragment: 'texttracklist-texttracklist' },
       'TimeRanges': { spec: 'html5', fragment: 'timeranges-timeranges' },
@@ -416,6 +415,14 @@
       }
       definitionInfo[def_id] = info;
     }
+  }
+
+  function mediaSourceAddMainSpecDefinitionInfos() {
+    // References from byte stream format registry and byte stream specs to the
+    // main MSE spec, which would otherwise conflict if included in the main MSE
+    // spec, are added in this utility function. Don't call this function from
+    // the main MSE respec.
+    externalClassInfo.SourceBuffer = { spec: 'mse', fragment: 'idl-def-SourceBuffer' };
   }
 
   function mediaSourcePreProcessor() {
@@ -581,4 +588,5 @@
   window.mediaSourceAddDefinitionInfo = mediaSourceAddDefinitionInfo;
   window.mediaSourcePreProcessor = mediaSourcePreProcessor;
   window.mediaSourcePostProcessor = mediaSourcePostProcessor;
+  window.mediaSourceAddMainSpecDefinitionInfos = mediaSourceAddMainSpecDefinitionInfos;
 })();
