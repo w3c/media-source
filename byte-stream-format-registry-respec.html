@@ -78,7 +78,7 @@
         }]
       }],
 
-      preProcess: [ mediaSourcePreProcessor ],
+      preProcess: [ mediaSourceAddMainSpecDefinitionInfos, mediaSourcePreProcessor ],
 
       // Empty definitions for objects declared in the document are here to
       // prevent error messages from being displayed for references to these objects.
@@ -86,6 +86,7 @@
 
       postProcess: [ mediaSourcePostProcessor ]
       };
+
     </script>
     <!-- script to register bugs -->
     <!-- Disabled unless/until it supports GitHub issues.
