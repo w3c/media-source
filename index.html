@@ -1754,19 +1754,19 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <ol>
                   <li>Text in the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a> or the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#media-data-processing-steps-list">media data processing steps list</a> that refers to "the download", "bytes received", or "whenever new data for the current media resource becomes available" refers to data passed in via <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code>.</li>
                   <li>References to HTTP in the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a> and the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#media-data-processing-steps-list">media data processing steps list</a> do not apply because the HTMLMediaElement does not fetch media data via HTTP when a <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> is attached.</li>
-                  <div class="note">
-                    <div class="note-title marker" aria-level="5" role="heading" id="h-note19"><span>Note</span></div>
-                    <p class="">An attached MediaSource does not use the remote mode steps in the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a>, so the media element will not fire "suspend" events. User agents <em class="rfc2119" title="MAY">MAY</em> still fire "stalled" events as these [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] references changed after implementations of this specification stabilized.</p>
-                  </div>
-                  <div class="note">
-                    <div class="note-title marker" aria-level="5" role="heading" id="h-note20"><span>Note</span></div>
-                    <p class="">When a MediaSource is attached via <code>src</code> attribute or selected child <code>&lt;source&gt;</code>'s <code>src</code> attribute set to a <a href="#mediasource-object-url">MediaSource object URL</a>, then the <code>srcObject</code> attribute of the HTMLMediaElement <em class="rfc2119" title="MAY">MAY</em> not reflect this as these [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] references changed after implementations of this specification stabilized.</p>
-                  </div>
                 </ol>
               </li>
             </ol>
           </dd>
         </dl>
+        <div class="note">
+          <div class="note-title marker" aria-level="5" role="heading" id="h-note19"><span>Note</span></div>
+          <p class="">An attached MediaSource does not use the remote mode steps in the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a>, so the media element will not fire "suspend" events. User agents <em class="rfc2119" title="MAY">MAY</em> still fire "stalled" events as these [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] references changed after implementations of this specification stabilized.</p>
+        </div>
+        <div class="note">
+          <div class="note-title marker" aria-level="5" role="heading" id="h-note20"><span>Note</span></div>
+          <p class="">When a MediaSource is attached via <code>src</code> attribute or selected child <code>&lt;source&gt;</code>'s <code>src</code> attribute set to a <a href="#mediasource-object-url">MediaSource object URL</a>, then the <code>srcObject</code> attribute of the HTMLMediaElement <em class="rfc2119" title="MAY">MAY</em> not reflect this as these [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] references changed after implementations of this specification stabilized.</p>
+        </div>
       </section>
 
       <section id="mediasource-detach" typeof="bibo:Chapter" resource="#mediasource-detach" property="bibo:hasPart">

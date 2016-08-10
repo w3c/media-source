@@ -670,13 +670,13 @@ interface MediaSource : EventTarget {
                   <ol>
                     <li>Text in the <a def-id="resource-fetch-algorithm"></a> or the <a def-id="media-data-processing-steps-list"></a> that refers to "the download", "bytes received", or "whenever new data for the current media resource becomes available" refers to data passed in via <a def-id="appendBuffer"></a>.</li>
                     <li>References to HTTP in the <a def-id="resource-fetch-algorithm"></a> and the <a def-id="media-data-processing-steps-list"></a> do not apply because the HTMLMediaElement does not fetch media data via HTTP when a <a>MediaSource</a> is attached.</li>
-                    <p class="note">An attached MediaSource does not use the remote mode steps in the <a def-id="resource-fetch-algorithm"></a>, so the media element will not fire "suspend" events. User agents MAY still fire "stalled" events as these [[HTML51]] references changed after implementations of this specification stabilized.</p>
-                    <p class="note">When a MediaSource is attached via <code>src</code> attribute or selected child <code>&lt;source&gt;</code>'s <code>src</code> attribute set to a <a def-id="MediaSource-object-URL"></a>, then the <code>srcObject</code> attribute of the HTMLMediaElement MAY not reflect this as these [[HTML51]] references changed after implementations of this specification stabilized.</p>
                   </ol>
                 </li>
               </ol>
             </dd>
           </dl>
+          <p class="note">An attached MediaSource does not use the remote mode steps in the <a def-id="resource-fetch-algorithm"></a>, so the media element will not fire "suspend" events. User agents MAY still fire "stalled" events as these [[HTML51]] references changed after implementations of this specification stabilized.</p>
+          <p class="note">When a MediaSource is attached via <code>src</code> attribute or selected child <code>&lt;source&gt;</code>'s <code>src</code> attribute set to a <a def-id="MediaSource-object-URL"></a>, then the <code>srcObject</code> attribute of the HTMLMediaElement MAY not reflect this as these [[HTML51]] references changed after implementations of this specification stabilized.</p>
         </section>
 
         <section id="mediasource-detach">
