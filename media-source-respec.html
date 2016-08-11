@@ -657,6 +657,7 @@ interface MediaSource : EventTarget {
             step in the <a def-id="resource-fetch-algorithm"></a>.</p>
 
           <dl class="switch">
+            <p class="note">Relative to the action which triggered the media element's resource selection algorithm, these steps are already asynchronous. The resource fetch algorithm is run after the task that invoked the resource selection algorithm is allowed to continue and a stable state is reached. Implementations may delay the steps in the Otherwise clause, below, until the MediaSource object is ready for use.</p>
             <dt>If <a def-id="readyState"></a> is NOT set to <a def-id="closed"></a></dt>
             <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
             <dt>Otherwise</dt>
