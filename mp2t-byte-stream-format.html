@@ -284,6 +284,7 @@ table.simple {
     }
   ],
   "preProcess": [
+    null,
     null
   ],
   "definitionMap": {
@@ -318,7 +319,7 @@ table.simple {
   </p>
   <h1 class="title p-name" id="title" property="dcterms:title">MPEG-2 TS Byte Stream Format</h1>
   
-  <h2 id="w3c-editor-s-draft-20-july-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-07-20">20 July 2016</time></h2>
+  <h2 id="w3c-editor-s-draft-10-august-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-08-10">10 August 2016</time></h2>
   <dl>
     
       <dt>This version:</dt>
@@ -536,7 +537,7 @@ table.simple {
       <p>The MIME-type/subtype pair of "video/MP2T", as specified in <a href="http://tools.ietf.org/html/rfc3551">RFC 3551</a>, <em class="rfc2119" title="MUST">MUST</em> be used for byte streams that conform
         to this specification.</p>
 
-      <p>This following parameters can be used in the MIME-type passed to <code><a href="index.html#widl-MediaSource-isTypeSupported-boolean-DOMString-type">isTypeSupported()</a></code> or <code><a href="index.html#widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type">addSourceBuffer()</a></code>.</p>
+      <p>This following parameters can be used in the MIME-type passed to <code><a href="index.html#dom-mediasource-istypesupported">isTypeSupported()</a></code> or <code><a href="index.html#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code>.</p>
       <dl>
         <dt>codecs</dt>
         <dd>
@@ -607,8 +608,8 @@ table.simple {
         <li>Each time a timestamp rollover is detected, 2^33 <em class="rfc2119" title="MUST">MUST</em> be added to <var><a href="#mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</a></var>.</li>
         <li>When a discontinuity is detected, <var><a href="#mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</a></var> <em class="rfc2119" title="MUST">MUST</em> be adjusted to make the timestamps after the discontinuity appear
           to come immediately after the timestamps before the discontinuity.</li>
-        <li>When <code><a href="index.html#widl-SourceBuffer-abort-void">abort()</a></code> is called, <var><a href="#mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</a></var> <em class="rfc2119" title="MUST">MUST</em> be set to 0.</li>
-        <li>When <code><a href="index.html#widl-SourceBuffer-timestampOffset">timestampOffset</a></code> is successfully set, <var><a href="#mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</a></var> <em class="rfc2119" title="MUST">MUST</em> be set to 0.</li>
+        <li>When <code><a href="index.html#dom-sourcebuffer-abort">abort()</a></code> is called, <var><a href="#mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</a></var> <em class="rfc2119" title="MUST">MUST</em> be set to 0.</li>
+        <li>When <code><a href="index.html#dom-sourcebuffer-timestampoffset">timestampOffset</a></code> is successfully set, <var><a href="#mpeg2ts-timestampOffset">MPEG2TS_timestampOffset</a></var> <em class="rfc2119" title="MUST">MUST</em> be set to 0.</li>
       </ul>
     </section>
 
