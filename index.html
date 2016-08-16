@@ -1743,7 +1743,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <dl class="switch">
           <div class="note">
             <div class="note-title marker" aria-level="5" role="heading" id="h-note19"><span>Note</span></div>
-            <p class="">Relative to the action which triggered the media element's resource selection algorithm, these steps are already asynchronous. The resource fetch algorithm is run after the task that invoked the resource selection algorithm is allowed to continue and a stable state is reached. Implementations may delay the steps in the Otherwise clause, below, until the MediaSource object is ready for use.</p>
+            <p class="">Relative to the action which triggered the media element's resource selection algorithm, these steps are asynchronous. The resource fetch algorithm is run after the task that invoked the resource selection algorithm is allowed to continue and a stable state is reached. Implementations may delay the steps in the "<i>Otherwise</i>" clause, below, until the MediaSource object is ready for use.</p>
           </div>
           <dt>If <code><a href="#dom-readystate">readyState</a></code> is NOT set to <code><a href="#idl-def-ReadyState.closed">"closed"</a></code></dt>
           <dd>Run the <span>"<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>"</span> steps of the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a>'s <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#media-data-processing-steps-list">media data processing steps list</a>.</dd>
