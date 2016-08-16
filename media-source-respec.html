@@ -653,13 +653,16 @@ interface MediaSource : EventTarget {
         <section id="mediasource-attach">
           <h4>Attaching to a media element</h4>
           <p> A <a>MediaSource</a> object can be attached to a media element by assigning a <a def-id="MediaSource-object-URL"></a> to the media element <a def-id="media-src"></a> attribute or the src attribute of a &lt;source&gt; inside a media element. A <a def-id="MediaSource-object-URL"></a> is created by passing a MediaSource object to <a def-id="createObjectURL"></a>.</p>
-          <p>If the <a def-id="resource-fetch-algorithm"></a> absolute URL matches the MediaSource object URL, ignore any <a def-id="preload"></a> attribute of the media element, skip any optional steps for when <a def-id="preload"></a> equals <a def-id="preload-none"></a>, and run the following steps right before the <a def-id="perform-potentially-cors-enabled-fetch"></a>
-            step in the <a def-id="resource-fetch-algorithm"></a>.</p>
 
+          <p>If the <a def-id="resource-fetch-algorithm"></a> was invoked with
+          a media provider object that is a MediaSource object or a URL record whose object is a MediaSource object,
+          then let mode be local, skip the first step in the <a def-id="resource-fetch-algorithm"></a>
+          (which may otherwise set mode to remote) and add the steps and clarifications below to the <a def-id="Otherwise-mode-is-local"></a> section of the <a def-id="resource-fetch-algorithm"></a>.
+          <p class="note">The <a def-id="resource-fetch-algorithm"></a>'s first step is expected to eventually align with selecting local mode for URL records whose objects are media provider objects. The intent is that if the HTMLMediaElement's <code>src</code> attribute or selected child <code>&lt;source&gt;</code>'s <code>src</code> attribute is a <code>blob:</code> URL matching a <a def-id="MediaSource-object-URL"></a> when the respective <code>src</code> attribute was last changed, then that MediaSource object is used as the media provider object and current media resource in the local mode logic in the <a def-id="resource-fetch-algorithm"></a>. This also means that the remote mode logic that includes observance of any preload attribute is skipped when a MediaSource object is attached. Even with that eventual change to [[HTML51]], the execution of the following steps at the beginning of the local mode logic is still required when the current media resource is a MediaSource object.</p>
           <dl class="switch">
             <p class="note">Relative to the action which triggered the media element's resource selection algorithm, these steps are already asynchronous. The resource fetch algorithm is run after the task that invoked the resource selection algorithm is allowed to continue and a stable state is reached. Implementations may delay the steps in the Otherwise clause, below, until the MediaSource object is ready for use.</p>
             <dt>If <a def-id="readyState"></a> is NOT set to <a def-id="closed"></a></dt>
-            <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
+            <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the <a def-id="resource-fetch-algorithm"></a>'s <a def-id="media-data-processing-steps-list"></a>.</dd>
             <dt>Otherwise</dt>
             <dd>
               <ol>
@@ -667,16 +670,16 @@ interface MediaSource : EventTarget {
                 <li>Set the <a def-id="readyState"></a> attribute to <a def-id="open"></a>.</li>
                 <li>
                   <a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a>MediaSource</a>.</li>
-                <li>Continue the <a def-id="resource-fetch-algorithm"></a> by running the <a def-id="perform-potentially-cors-enabled-fetch"></a> step, with these clarifications:
+                <li>Continue the <a def-id="resource-fetch-algorithm"></a> by running the remaining <a def-id="Otherwise-mode-is-local"></a> steps, with these clarifications:
                   <ol>
-                    <li>Text in the <a def-id="resource-fetch-algorithm"></a> that refers to "the download" or "bytes received" refers to data passed in via <a def-id="appendBuffer"></a>.</li>
-                    <li>References to HTTP in the <a def-id="resource-fetch-algorithm"></a> do not apply because the HTMLMediaElement does not fetch media data via HTTP when a <a>MediaSource</a> is attached.</li>
-                    <li>Text in the <a def-id="resource-fetch-algorithm"></a> that refers to transitions to "NETWORK_IDLE" and firing "suspend" events, and the paragraph that begins with "User agents may decide to not download more content at any time", do not apply to a media element that has a <a>MediaSource</a> object attached by this algorithm.</li>
+                    <li>Text in the <a def-id="resource-fetch-algorithm"></a> or the <a def-id="media-data-processing-steps-list"></a> that refers to "the download", "bytes received", or "whenever new data for the current media resource becomes available" refers to data passed in via <a def-id="appendBuffer"></a>.</li>
+                    <li>References to HTTP in the <a def-id="resource-fetch-algorithm"></a> and the <a def-id="media-data-processing-steps-list"></a> do not apply because the HTMLMediaElement does not fetch media data via HTTP when a <a>MediaSource</a> is attached.</li>
                   </ol>
                 </li>
               </ol>
             </dd>
           </dl>
+          <p class="note">An attached MediaSource does not use the remote mode steps in the <a def-id="resource-fetch-algorithm"></a>, so the media element will not fire "suspend" events. Though future versions of this specification will likely remove "progress" and "stalled" events from a media element with an attached MediaSource, user agents conforming to this version of the specification may still fire these two events as these [[HTML51]] references changed after implementations of this specification stabilized.</p>
         </section>
 
         <section id="mediasource-detach">
@@ -904,10 +907,10 @@ interface MediaSource : EventTarget {
                   <dl class="switch">
                     <dt>If the <a def-id="ready-state"></a> attribute equals <a def-id="have-nothing"></a>
                     </dt>
-                    <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
+                    <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the <a def-id="resource-fetch-algorithm"></a>'s <a def-id="media-data-processing-steps-list"></a>.</dd>
                     <dt>If the <a def-id="ready-state"></a> attribute is greater than <a def-id="have-nothing"></a>
                     </dt>
-                    <dd>Run the "<i>If the connection is interrupted after some media data has been received, causing the user agent to give up trying to fetch the resource</i>" steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
+                    <dd>Run the "<i>If the connection is interrupted after some media data has been received, causing the user agent to give up trying to fetch the resource</i>" steps of the <a def-id="resource-fetch-algorithm"></a>'s <a def-id="media-data-processing-steps-list"></a>.</dd>
                   </dl>
                 </dd>
                 <dt>If <var>error</var> is set to <a def-id="decode"></a>
@@ -916,10 +919,10 @@ interface MediaSource : EventTarget {
                   <dl class="switch">
                     <dt>If the <a def-id="ready-state"></a> attribute equals <a def-id="have-nothing"></a>
                     </dt>
-                    <dd>Run the "<i>If the media data can be fetched but is found by inspection to be in an unsupported format, or can otherwise not be rendered at all</i>" steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
+                    <dd>Run the "<i>If the media data can be fetched but is found by inspection to be in an unsupported format, or can otherwise not be rendered at all</i>" steps of the <a def-id="resource-fetch-algorithm"></a>'s <a def-id="media-data-processing-steps-list"></a>.</dd>
                     <dt>If the <a def-id="ready-state"></a> attribute is greater than <a def-id="have-nothing"></a>
                     </dt>
-                    <dd>Run the <a def-id="media-data-is-corrupted"></a> steps of the <a def-id="resource-fetch-algorithm"></a>.</dd>
+                    <dd>Run the <a def-id="media-data-is-corrupted"></a> steps of the <a def-id="resource-fetch-algorithm"></a>'s <a def-id="media-data-processing-steps-list"></a>.</dd>
                   </dl>
                 </dd>
               </dl>
