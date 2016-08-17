@@ -705,7 +705,8 @@ interface MediaSource : EventTarget {
           <h4>Seeking</h4>
           <p>Run the following steps as part of the "<i>Wait until the user agent has established whether or not the media data for the new playback position is available, and, if it is, until it has decoded enough data to play back that position"</i> step of the <a def-id="hme-seek-algorithm"></a>:</p>
           <ol>
-            <li>The media element looks for <a def-id="media-segments"></a> containing the <var>new playback position</var> in each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a>.
+            <li>The media element looks for <a def-id="media-segments"></a> containing the <var>new playback position</var> in each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a>. Any position within a <a def-id="timerange"></a> in the current value of the <a def-id="hme-buffered"></a> attribute MUST have a buffered media segment for that position.
+              <p class="note">If the <a def-id="readyState"></a> attribute is <a def-id="ended"></a>, then the last <a def-id="timerange"></a> in a non-empty <a def-id="hme-buffered"></a> may have an end time beyond coded frame presentation intervals in one or more of the currently selected or enabled <a def-id="track-buffers"></a>. Seeks must still complete to all times within that range.</p>
               <dl class="switch">
                 <dt>If one or more of the objects in <a def-id="activeSourceBuffers"></a> is missing <a def-id="media-segments"></a> for the <var>new playback position</var>
                 </dt>

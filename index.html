@@ -872,7 +872,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
       <a class="logo" href="https://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" alt="W3C"></a>
     </p>
     <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
-    <h2 id="w3c-editor-s-draft-16-august-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-08-16">16 August 2016</time></h2>
+    <h2 id="w3c-editor-s-draft-17-august-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-08-17">17 August 2016</time></h2>
     <dl>
       <dt>This version:</dt>
       <dd><a class="u-url" href="http://w3c.github.io/media-source/">http://w3c.github.io/media-source/</a></dd>
@@ -1795,7 +1795,11 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <h4 id="h-mediasource-seeking" resource="#h-mediasource-seeking"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4.3 </span>Seeking</span></h4>
         <p>Run the following steps as part of the "<i>Wait until the user agent has established whether or not the media data for the new playback position is available, and, if it is, until it has decoded enough data to play back that position"</i> step of the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#seek">seek algorithm</a>:</p>
         <ol>
-          <li>The media element looks for <a href="#media-segment">media segments</a> containing the <var>new playback position</var> in each <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>.
+          <li>The media element looks for <a href="#media-segment">media segments</a> containing the <var>new playback position</var> in each <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>. Any position within a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> in the current value of the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> attribute <em class="rfc2119" title="MUST">MUST</em> have a buffered media segment for that position.
+            <div class="note">
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note22"><span>Note</span></div>
+              <p class="">If the <code><a href="#dom-readystate">readyState</a></code> attribute is <code><a href="#idl-def-ReadyState.ended">"ended"</a></code>, then the last <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> in a non-empty <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> may have an end time beyond coded frame presentation intervals in one or more of the currently selected or enabled <a href="#track-buffer">track buffers</a>. Seeks must still complete to all times within that range.</p>
+            </div>
             <dl class="switch">
               <dt>If one or more of the objects in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code> is missing <a href="#media-segment">media segments</a> for the <var>new playback position</var>
                 </dt>
@@ -1804,12 +1808,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   <li>If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute is greater than
                     <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>, then set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.</li>
                   <div class="note">
-                    <div class="note-title marker" aria-level="5" role="heading" id="h-note22"><span>Note</span></div>
+                    <div class="note-title marker" aria-level="5" role="heading" id="h-note23"><span>Note</span></div>
                     <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
                   </div>
                   <li>The media element waits until an <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> call causes the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> to set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to a value greater than <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.
                     <div class="note">
-                      <div class="note-title marker" aria-level="5" role="heading" id="h-note23"><span>Note</span></div>
+                      <div class="note-title marker" aria-level="5" role="heading" id="h-note24"><span>Note</span></div>
                       <p class="">The web application can use <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> to determine what the media element needs to resume playback.</p>
                     </div>
                   </li>
@@ -1832,13 +1836,13 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <p>Having <dfn id="enough-data" data-dfn-type="dfn">enough data to ensure uninterrupted playback</dfn> is an implementation specific condition where the user agent determines that it currently has enough data to play the presentation without stalling for a meaningful period of time. This condition is constantly evaluated to determine when to transition the media element into and out of the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_enough_data">HAVE_ENOUGH_DATA</a></code> ready state. These transitions indicate when the user agent believes it has enough data buffered or it needs more data respectively.</p>
 
         <div class="note">
-          <div class="note-title marker" aria-level="5" role="heading" id="h-note24"><span>Note</span></div>
+          <div class="note-title marker" aria-level="5" role="heading" id="h-note25"><span>Note</span></div>
           <p class="">An implementation <em class="rfc2119" title="MAY">MAY</em> choose to use bytes buffered, time buffered, the append rate, or any other metric it sees fit to determine when it has enough data. The metrics used <em class="rfc2119" title="MAY">MAY</em> change during playback so web applications <em class="rfc2119" title="SHOULD">SHOULD</em> only rely on the value of
             <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> to determine whether more data is needed or not.</p>
         </div>
 
         <div class="note">
-          <div class="note-title marker" aria-level="5" role="heading" id="h-note25"><span>Note</span></div>
+          <div class="note-title marker" aria-level="5" role="heading" id="h-note26"><span>Note</span></div>
           <p class="">When the media element needs more data, the user agent <em class="rfc2119" title="SHOULD">SHOULD</em> transition it from <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_enough_data">HAVE_ENOUGH_DATA</a></code> to
             <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_future_data">HAVE_FUTURE_DATA</a></code> early enough for a web application to be able to respond without causing an interruption in playback. For example, transitioning when the current playback position is 500ms before the end of the buffered data gives the application roughly 500ms to append more data before playback stalls.</p>
         </div>
@@ -1855,7 +1859,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <ol>
               <li>Set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.</li>
               <div class="note">
-                <div class="note-title marker" aria-level="5" role="heading" id="h-note26"><span>Note</span></div>
+                <div class="note-title marker" aria-level="5" role="heading" id="h-note27"><span>Note</span></div>
                 <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
               </div>
               <li>Abort these steps.</li>
@@ -1866,7 +1870,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <ol>
               <li>Set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_enough_data">HAVE_ENOUGH_DATA</a></code>.</li>
               <div class="note">
-                <div class="note-title marker" aria-level="5" role="heading" id="h-note27"><span>Note</span></div>
+                <div class="note-title marker" aria-level="5" role="heading" id="h-note28"><span>Note</span></div>
                 <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
               </div>
               <li>Playback may resume at this point if it was previously suspended by a transition to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_current_data">HAVE_CURRENT_DATA</a></code>.</li>
@@ -1878,7 +1882,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <ol>
               <li>Set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_future_data">HAVE_FUTURE_DATA</a></code>.</li>
               <div class="note">
-                <div class="note-title marker" aria-level="5" role="heading" id="h-note28"><span>Note</span></div>
+                <div class="note-title marker" aria-level="5" role="heading" id="h-note29"><span>Note</span></div>
                 <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
               </div>
               <li>Playback may resume at this point if it was previously suspended by a transition to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_current_data">HAVE_CURRENT_DATA</a></code>.</li>
@@ -1890,7 +1894,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <ol>
               <li>Set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_current_data">HAVE_CURRENT_DATA</a></code>.</li>
               <div class="note">
-                <div class="note-title marker" aria-level="5" role="heading" id="h-note29"><span>Note</span></div>
+                <div class="note-title marker" aria-level="5" role="heading" id="h-note30"><span>Note</span></div>
                 <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
               </div>
               <li>Playback is suspended at this point since the media element doesn't have enough data to advance the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#media-timeline">media timeline</a>.</li>
@@ -1977,13 +1981,13 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <li>If the current value of <code><a href="#dom-mediasource-duration">duration</a></code> is equal to <var>new duration</var>, then return.</li>
           <li>If <var>new duration</var> is less than the highest <a href="#presentation-timestamp">presentation timestamp</a> of any buffered <a href="#coded-frame">coded frames</a> for all <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
           <div class="note">
-            <div class="note-title marker" aria-level="5" role="heading" id="h-note30"><span>Note</span></div>
+            <div class="note-title marker" aria-level="5" role="heading" id="h-note31"><span>Note</span></div>
             <p class="">Duration reductions that would truncate currently buffered media are disallowed. When truncation is necessary, use <code><a href="#dom-sourcebuffer-remove">remove()</a></code> to reduce the buffered range before updating <code><a href="#dom-mediasource-duration">duration</a></code>.</p>
           </div>
           <li>Update <code><a href="#dom-mediasource-duration">duration</a></code> to <var>new duration</var>.</li>
           <li>If a user agent is unable to partially render audio frames or text cues that start before and end after the <code><a href="#dom-mediasource-duration">duration</a></code>, then run the following steps:</li>
           <div class="note">
-            <div class="note-title marker" aria-level="5" role="heading" id="h-note31"><span>Note</span></div>
+            <div class="note-title marker" aria-level="5" role="heading" id="h-note32"><span>Note</span></div>
             <p class="">This condition can occur because the <a href="#sourcebuffer-coded-frame-removal">coded frame removal algorithm</a> preserves audio frames and text cues that start before and end after the <code><a href="#dom-mediasource-duration">duration</a></code>.</p>
           </div>
           <ol>
@@ -2008,7 +2012,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <ol>
                   <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the highest end time reported by the <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> attribute across all <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.<br>
                     <div class="note">
-                      <div class="note-title marker" aria-level="5" role="heading" id="h-note32"><span>Note</span></div>
+                      <div class="note-title marker" aria-level="5" role="heading" id="h-note33"><span>Note</span></div>
                       <p class="">This allows the duration to properly reflect the end of the appended media segments. For example, if the duration was explicitly set to 10 seconds and only media segments for 0 to 5 seconds were appended before endOfStream() was called, then the duration will get updated to 5 seconds.</p>
                     </div>
                   </li>
@@ -2344,14 +2348,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       <p>Each <a href="#track-buffer">track buffer</a> has a <dfn id="track-buffer-ranges" data-dfn-type="dfn">track buffer ranges</dfn> variable that represents the presentation time ranges occupied by the <a href="#coded-frame">coded frames</a> currently stored in the track buffer.</p>
 
       <div class="note">
-        <div class="note-title marker" aria-level="4" role="heading" id="h-note33"><span>Note</span></div>
+        <div class="note-title marker" aria-level="4" role="heading" id="h-note34"><span>Note</span></div>
         <p class="">For track buffer ranges, these presentation time ranges are based on <a href="#presentation-timestamp">presentation timestamps</a>, frame durations, and potentially coded frame group start times for coded frame groups across track buffers in a muxed <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>.</p>
       </div>
 
       <p>For specification purposes, this information is treated as if it were stored in a <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#normalized-timeranges-object">normalized TimeRanges object</a>. Intersected <a href="#track-buffer-ranges">track buffer ranges</a> are used to report <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code>, and <em class="rfc2119" title="MUST">MUST</em> therefore support uninterrupted playback within each range of <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code>.</p>
 
       <div class="note">
-        <div class="note-title marker" aria-level="4" role="heading" id="h-note34"><span>Note</span></div>
+        <div class="note-title marker" aria-level="4" role="heading" id="h-note35"><span>Note</span></div>
         <p class="">These coded frame group start times differ slightly from those mentioned in the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> in that they are the earliest <a href="#presentation-timestamp">presentation timestamp</a> across all track buffers following a discontinuity. Discontinuities can occur within the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> or result from the <a href="#sourcebuffer-coded-frame-removal">coded frame removal algorithm</a>, regardless of <code><a href="#dom-sourcebuffer-mode">mode</a></code>. The threshold for determining disjointness of <a href="#track-buffer-ranges">track buffer ranges</a> is implementation-specific. For example, to reduce unexpected playback stalls, implementations <em class="rfc2119" title="MAY">MAY</em> approximate the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>'s discontinuity detection logic by coalescing adjacent ranges separated by a gap smaller than 2 times the maximum frame duration buffered so far in this <a href="#track-buffer">track buffer</a>. Implementations <em class="rfc2119" title="MAY">MAY</em> also use coded frame group start times as range start times across <a href="#track-buffer">track buffers</a> in a muxed <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> to further reduce unexpected playback stalls.</p>
       </div>
     </section>
@@ -2437,7 +2441,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <p>The <dfn id="sourcebuffer-group-end-timestamp" data-dfn-type="dfn">group end timestamp</dfn> variable stores the highest <a href="#coded-frame-end-timestamp">coded frame end timestamp</a> across all <a href="#coded-frame">coded frames</a> in the current <a href="#coded-frame-group">coded frame group</a>. It is set to 0 when the SourceBuffer object is created and gets updated by the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>.
         </p>
         <div class="note">
-          <div class="note-title marker" aria-level="5" role="heading" id="h-note35"><span>Note</span></div>
+          <div class="note-title marker" aria-level="5" role="heading" id="h-note36"><span>Note</span></div>
           <p class="">The <var><a href="#sourcebuffer-group-end-timestamp">group end timestamp</a></var> stores the highest <a href="#coded-frame-end-timestamp">coded frame end timestamp</a> across all <a href="#track-buffer">track buffers</a> in a <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>. Therefore, care should be taken in setting the <code><a href="#dom-sourcebuffer-mode">mode</a></code> attribute when appending multiplexed segments in which the timestamps are not aligned across tracks.
           </p>
         </div>
@@ -2477,7 +2481,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <li>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> contains one or more complete <a href="#coded-frame">coded frames</a>, then run the
                 <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note36"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note37"><span>Note</span></div>
                   <p class="">
                     The frequency at which the coded frame processing algorithm is run is implementation-specific. The coded frame processing algorithm <em class="rfc2119" title="MAY">MAY</em> be called when the input buffer contains the complete media segment or it <em class="rfc2119" title="MAY">MAY</em> be called multiple times as complete coded frames are added to the input buffer.
                   </p>
@@ -2543,7 +2547,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <li>
             <p>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true, then throw a <code><a href="https://www.w3.org/TR/WebIDL-1/#quotaexceedederror">QuotaExceededError</a></code> exception and abort these step.</p>
             <div class="note">
-              <div class="note-title marker" aria-level="5" role="heading" id="h-note37"><span>Note</span></div>
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note38"><span>Note</span></div>
               <p class="">This is the signal that the implementation was unable to evict enough data to accommodate the append or the append is too big. The web application <em class="rfc2119" title="SHOULD">SHOULD</em> use <code><a href="#dom-sourcebuffer-remove">remove()</a></code> to explicitly free up space and/or reduce the size of the append.</p>
             </div>
           </li>
@@ -2612,7 +2616,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <ol>
               <li>If the <a href="#init-segment">initialization segment</a> contains tracks with codecs the user agent does not support, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true and abort these steps.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note38"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note39"><span>Note</span></div>
                   <p class="">User agents <em class="rfc2119" title="MAY">MAY</em> consider codecs, that would otherwise be supported, as "not supported" here if the codecs were not specified in the <var>type</var> parameter passed to <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code>. <br> For example, MediaSource.isTypeSupported('video/webm;codecs="vp8,vorbis"') may return true, but if
                     <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code> was called with 'video/webm;codecs="vp8"' and a Vorbis track appears in the
                     <a href="#init-segment">initialization segment</a>, then the user agent <em class="rfc2119" title="MAY">MAY</em> use this step to trigger a decode error.
@@ -2648,14 +2652,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                       </li>
                       <li>Add <var>new audio track</var> to the <code><a href="#dom-sourcebuffer-audiotracks">audioTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
                       <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note39"><span>Note</span></div>
+                        <div class="note-title marker" aria-level="5" role="heading" id="h-note40"><span>Note</span></div>
                         <p class="">
                           This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new audio track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> object referenced by the <code><a href="#dom-sourcebuffer-audiotracks">audioTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.
                         </p>
                       </div>
                       <li>Add <var>new audio track</var> to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-audiotracks">audioTracks</a></code> attribute on the HTMLMediaElement.</li>
                       <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note40"><span>Note</span></div>
+                        <div class="note-title marker" aria-level="5" role="heading" id="h-note41"><span>Note</span></div>
                         <p class="">
                           This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new audio track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> object referenced by the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-audiotracks">audioTracks</a></code> attribute on the HTMLMediaElement.
                         </p>
@@ -2695,14 +2699,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                       </li>
                       <li>Add <var>new video track</var> to the <code><a href="#dom-sourcebuffer-videotracks">videoTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
                       <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note41"><span>Note</span></div>
+                        <div class="note-title marker" aria-level="5" role="heading" id="h-note42"><span>Note</span></div>
                         <p class="">
                           This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new video track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> object referenced by the <code><a href="#dom-sourcebuffer-videotracks">videoTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.
                         </p>
                       </div>
                       <li>Add <var>new video track</var> to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-videotracks">videoTracks</a></code> attribute on the HTMLMediaElement.</li>
                       <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note42"><span>Note</span></div>
+                        <div class="note-title marker" aria-level="5" role="heading" id="h-note43"><span>Note</span></div>
                         <p class="">
                           This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new video track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> object referenced by the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-videotracks">videoTracks</a></code> attribute on the HTMLMediaElement.
                         </p>
@@ -2740,14 +2744,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                       </li>
                       <li>Add <var>new text track</var> to the <code><a href="#dom-sourcebuffer-texttracks">textTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
                       <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note43"><span>Note</span></div>
+                        <div class="note-title marker" aria-level="5" role="heading" id="h-note44"><span>Note</span></div>
                         <p class="">
                           This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new text track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> object referenced by the <code><a href="#dom-sourcebuffer-texttracks">textTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.
                         </p>
                       </div>
                       <li>Add <var>new text track</var> to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-texttracks">textTracks</a></code> attribute on the HTMLMediaElement.</li>
                       <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note44"><span>Note</span></div>
+                        <div class="note-title marker" aria-level="5" role="heading" id="h-note45"><span>Note</span></div>
                         <p class="">
                           This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new text track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> object referenced by the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-texttracks">textTracks</a></code> attribute on the HTMLMediaElement.
                         </p>
@@ -2774,7 +2778,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 If one or more objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> have <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> set to false, then abort these steps.</li>
               <li>Set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.</li>
               <div class="note">
-                <div class="note-title marker" aria-level="5" role="heading" id="h-note45"><span>Note</span></div>
+                <div class="note-title marker" aria-level="5" role="heading" id="h-note46"><span>Note</span></div>
                 <p class="">
                   Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement. This particular transition should trigger HTMLMediaElement logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#eventdef-media-loadedmetadata">loadedmetadata</a></code> at the media element.
                 </p>
@@ -2786,7 +2790,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_current_data">HAVE_CURRENT_DATA</a></code>, then set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.
           </li>
           <div class="note">
-            <div class="note-title marker" aria-level="5" role="heading" id="h-note46"><span>Note</span></div>
+            <div class="note-title marker" aria-level="5" role="heading" id="h-note47"><span>Note</span></div>
             <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
           </div>
         </ol>
@@ -2813,13 +2817,13 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                     <ol>
                       <li>Let <var>presentation timestamp</var> be a double precision floating point representation of the coded frame's <a href="#presentation-timestamp">presentation timestamp</a> in seconds.
                         <div class="note">
-                          <div class="note-title marker" aria-level="5" role="heading" id="h-note47"><span>Note</span></div>
+                          <div class="note-title marker" aria-level="5" role="heading" id="h-note48"><span>Note</span></div>
                           <p class="">Special processing may be needed to determine the presentation and decode timestamps for timed text frames since this information may not be explicitly present in the underlying format or may be dependent on the order of the frames. Some metadata text tracks, like MPEG2-TS PSI data, may only have implied timestamps. Format specific rules for these situations <em class="rfc2119" title="SHOULD">SHOULD</em> be in the <a href="#byte-stream-format-specs">byte stream format specifications</a> or in separate extension specifications.</p>
                         </div>
                       </li>
                       <li>Let <var>decode timestamp</var> be a double precision floating point representation of the coded frame's decode timestamp in seconds.
                         <div class="note">
-                          <div class="note-title marker" aria-level="5" role="heading" id="h-note48"><span>Note</span></div>
+                          <div class="note-title marker" aria-level="5" role="heading" id="h-note49"><span>Note</span></div>
                           <p class="">Implementations don't have to internally store timestamps in a double precision floating point representation. This representation is used here because it is the represention for timestamps in the HTML spec. The intention here is to make the behavior clear without adding unnecessary complexity to the algorithm to deal with the fact that adding a timestampOffset may cause a timestamp rollover in the underlying timestamp representation used by the byte stream format. Implementations can use any internal timestamp representation they wish, but the addition of timestampOffset <em class="rfc2119" title="SHOULD">SHOULD</em> behave in a similar manner to what would happen if a double precision floating point representation was used.
                           </p>
                         </div>
@@ -2876,14 +2880,14 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
               <li>If <var>presentation timestamp</var> is less than <code><a href="#dom-sourcebuffer-appendwindowstart">appendWindowStart</a></code>, then set the <var><a href="#need-RAP-flag">need random access point flag</a></var> to true, drop the coded frame, and jump to the top of the loop to start processing the next coded frame.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note49"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note50"><span>Note</span></div>
                   <p class="">Some implementations <em class="rfc2119" title="MAY">MAY</em> choose to collect some of these coded frames with <var>presentation timestamp</var> less than <code><a href="#dom-sourcebuffer-appendwindowstart">appendWindowStart</a></code> and use them to generate a splice at the first coded frame that has a <a href="#presentation-timestamp">presentation timestamp</a> greater than or equal to <code><a href="#dom-sourcebuffer-appendwindowstart">appendWindowStart</a></code> even if that frame is not a <a href="#random-access-point">random access point</a>. Supporting this requires multiple decoders or faster than real-time decoding so for now this behavior will not be a normative requirement.
                   </p>
                 </div>
               </li>
               <li>If <var>frame end timestamp</var> is greater than <code><a href="#dom-sourcebuffer-appendwindowend">appendWindowEnd</a></code>, then set the <var><a href="#need-RAP-flag">need random access point flag</a></var> to true, drop the coded frame, and jump to the top of the loop to start processing the next coded frame.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note50"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note51"><span>Note</span></div>
                   <p class="">Some implementations <em class="rfc2119" title="MAY">MAY</em> choose to collect coded frames with <var>presentation timestamp</var> less than <code><a href="#dom-sourcebuffer-appendwindowend">appendWindowEnd</a></code> and <var>frame end timestamp</var> greater than <code><a href="#dom-sourcebuffer-appendwindowend">appendWindowEnd</a></code> and use them to generate a splice across the portion of the collected coded frames within the append window at time of collection, and the beginning portion of later processed frames which only partially overlap the end of the collected coded frames. Supporting this requires multiple decoders or faster than real-time decoding so for now this behavior will not be a normative requirement. In conjunction with collecting coded frames that span <code><a href="#dom-sourcebuffer-appendwindowstart">appendWindowStart</a></code>, implementations <em class="rfc2119" title="MAY">MAY</em> thus support gapless audio splicing.
                   </p>
                 </div>
@@ -2909,7 +2913,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                           <li>Let <var>remove window timestamp</var> equal the <var>overlapped frame</var> <a href="#presentation-timestamp">presentation timestamp</a> plus 1 microsecond.</li>
                           <li>If the <var>presentation timestamp</var> is less than the <var>remove window timestamp</var>, then remove <var>overlapped frame</var> from <var>track buffer</var>.
                             <div class="note">
-                              <div class="note-title marker" aria-level="5" role="heading" id="h-note51"><span>Note</span></div>
+                              <div class="note-title marker" aria-level="5" role="heading" id="h-note52"><span>Note</span></div>
                               <p class="">
                                 This is to compensate for minor errors in frame timestamp computations that can appear when converting back and forth between double precision floating point numbers and rationals. This tolerance allows a frame to replace an existing one as long as it is within 1 microsecond of the existing frame's start time. Frames that come slightly before an existing frame are handled by the removal step below.
                               </p>
@@ -2935,7 +2939,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <li>Remove all possible decoding dependencies on the <a href="#coded-frame">coded frames</a> removed in the previous two steps by removing all <a href="#coded-frame">coded frames</a> from <var>track buffer</var> between those frames removed in the previous two steps and the next
                 <a href="#random-access-point">random access point</a> after those removed frames.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note52"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note53"><span>Note</span></div>
                   <p class="">Removing all <a href="#coded-frame">coded frames</a> until the next <a href="#random-access-point">random access point</a> is a conservative estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point depended on the frames that were removed.
                   </p>
                 </div>
@@ -2955,7 +2959,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <li>Set <var><a href="#last-frame-duration">last frame duration</a></var> for <var>track buffer</var> to <var>frame duration</var>.</li>
               <li>If <var><a href="#highest-end-timestamp">highest end timestamp</a></var> for <var>track buffer</var> is unset or <var>frame end timestamp</var> is greater than <var><a href="#highest-end-timestamp">highest end timestamp</a></var>, then set <var><a href="#highest-end-timestamp">highest end timestamp</a></var> for <var>track buffer</var> to <var>frame end timestamp</var>.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note53"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note54"><span>Note</span></div>
                   <p class="">The greater than check is needed because bidirectional prediction between coded frames can cause
                     <var>presentation timestamp</var> to not be monotonically increasing even though the decode timestamps are monotonically increasing.</p>
                 </div>
@@ -2968,21 +2972,21 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <li>
             <p>If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute is <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code> and the new <a href="#coded-frame">coded frames</a> cause <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> to have a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> for the current playback position, then set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_current_data">HAVE_CURRENT_DATA</a></code>.</p>
             <div class="note">
-              <div class="note-title marker" aria-level="5" role="heading" id="h-note54"><span>Note</span></div>
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note55"><span>Note</span></div>
               <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
             </div>
           </li>
           <li>
             <p>If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute is <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_current_data">HAVE_CURRENT_DATA</a></code> and the new <a href="#coded-frame">coded frames</a> cause <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> to have a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> that includes the current playback position and some time beyond the current playback position, then set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_future_data">HAVE_FUTURE_DATA</a></code>.</p>
             <div class="note">
-              <div class="note-title marker" aria-level="5" role="heading" id="h-note55"><span>Note</span></div>
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note56"><span>Note</span></div>
               <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
             </div>
           </li>
           <li>
             <p>If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute is <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_future_data">HAVE_FUTURE_DATA</a></code> and the new <a href="#coded-frame">coded frames</a> cause <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> to have a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> that includes the current playback position and <a href="#enough-data">enough data to ensure uninterrupted playback</a>, then set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_enough_data">HAVE_ENOUGH_DATA</a></code>.</p>
             <div class="note">
-              <div class="note-title marker" aria-level="5" role="heading" id="h-note56"><span>Note</span></div>
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note57"><span>Note</span></div>
               <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
             </div>
           </li>
@@ -3004,7 +3008,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <p>If this <a href="#track-buffer">track buffer</a> has a <a href="#random-access-point">random access point</a> timestamp that is greater than or equal to
                   <var>end</var>, then update <var>remove end timestamp</var> to that random access point timestamp.</p>
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note57"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note58"><span>Note</span></div>
                   <p class="">Random access point timestamps can be different across tracks because the dependencies between <a href="#coded-frame">coded frames</a> within a track are usually different than the dependencies in another track.</p>
                 </div>
               </li>
@@ -3027,7 +3031,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <li>Remove all possible decoding dependencies on the <a href="#coded-frame">coded frames</a> removed in the previous step by removing all <a href="#coded-frame">coded frames</a> from this <a href="#track-buffer">track buffer</a> between those frames removed in the previous step and the next
                 <a href="#random-access-point">random access point</a> after those removed frames.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note58"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note59"><span>Note</span></div>
                   <p class="">Removing all <a href="#coded-frame">coded frames</a> until the next <a href="#random-access-point">random access point</a> is a conservative estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point depended on the frames that were removed.
                   </p>
                 </div>
@@ -3037,11 +3041,11 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   <var>start</var> and less than the <var>remove end timestamp</var>, and <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> is greater than
                   <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>, then set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code> and stall playback.</p>
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note59"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note60"><span>Note</span></div>
                   <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
                 </div>
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note60"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note61"><span>Note</span></div>
                   <p class="">This transition occurs because media data for the current position has been removed. Playback cannot progress until media for the
                     <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#current-position">current playback position</a> is appended or the <a href="#active-source-buffer-changes">selected/enabled tracks change</a>.</p>
                 </div>
@@ -3061,7 +3065,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <li>Let <var>removal ranges</var> equal a list of presentation time ranges that can be evicted from the presentation to make room for the
             <var>new data</var>.
             <div class="note">
-              <div class="note-title marker" aria-level="5" role="heading" id="h-note61"><span>Note</span></div>
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note62"><span>Note</span></div>
               <p class="">Implementations <em class="rfc2119" title="MAY">MAY</em> use different methods for selecting <var>removal ranges</var> so web applications <em class="rfc2119" title="SHOULD NOT">SHOULD NOT</em> depend on a specific behavior. The web application can use the <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> attribute to observe whether portions of the buffered data have been evicted.
               </p>
             </div>
@@ -3085,7 +3089,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <li>Update <var>presentation timestamp</var> and <var>decode timestamp</var> to the nearest audio sample timestamp based on sample rate of the audio in <var>overlapped frame</var>. If a timestamp is equidistant from both audio sample timestamps, then use the higher timestamp (e.g.,
             <code>floor(x * sample_rate + 0.5) / sample_rate</code>).
             <div class="note">
-              <div class="note-title marker" aria-level="5" role="heading" id="h-note62"><span>Note</span></div>
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note63"><span>Note</span></div>
               <div class="">
                 <p>For example, given the following values:</p>
                 <ul>
@@ -3108,7 +3112,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   <li>The <a href="#coded-frame-duration">coded frame duration</a> set to difference between <var>presentation timestamp</var> and the <var>overlapped frame</var> <a href="#presentation-timestamp">presentation timestamp</a>.</li>
                 </ul>
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note63"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note64"><span>Note</span></div>
                   <p class="">
                     Some implementations <em class="rfc2119" title="MAY">MAY</em> apply fades to/from silence to coded frames on either side of the inserted silence to make the transition less jarring.
                   </p>
@@ -3116,7 +3120,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               </li>
               <li>Return to caller without providing a splice frame.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note64"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note65"><span>Note</span></div>
                   <p class="">
                     This is intended to allow <var>new coded frame</var> to be added to the <var>track buffer</var> as if
                     <var>overlapped frame</var> had not been in the <var>track buffer</var> to begin with.
@@ -3138,7 +3142,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <li>The fade out coded frames equals <var>fade-out coded frames</var>.</li>
               <li>The fade in coded frame equal <var>new coded frame</var>.
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note65"><span>Note</span></div>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note66"><span>Note</span></div>
                   <p class="">If the <var>new coded frame</var> is less than 5 milliseconds in duration, then coded frames that are appended after the
                     <var>new coded frame</var> will be needed to properly render the splice.</p>
                 </div>
@@ -3146,7 +3150,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <li>The splice timestamp equals <var>presentation timestamp</var>.</li>
             </ul>
             <div class="note">
-              <div class="note-title marker" aria-level="5" role="heading" id="h-note66"><span>Note</span></div>
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note67"><span>Note</span></div>
               <p class="">See the <a href="#sourcebuffer-audio-splice-rendering-algorithm">audio splice rendering algorithm</a> for details on how this splice frame is rendered.</p>
             </div>
           </li>
@@ -3180,7 +3184,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <li>Render <var>output samples</var>.</li>
         </ol>
         <div class="note">
-          <div class="note-title marker" aria-level="5" role="heading" id="h-note67"><span>Note</span></div>
+          <div class="note-title marker" aria-level="5" role="heading" id="h-note68"><span>Note</span></div>
           <div class="">
             <p>Here is a graphical representation of this algorithm.</p>
             <img src="audio_splice.png" alt="Audio splice diagram">
@@ -3210,7 +3214,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </li>
           <li>Return to caller without providing a splice frame.
             <div class="note">
-              <div class="note-title marker" aria-level="5" role="heading" id="h-note68"><span>Note</span></div>
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note69"><span>Note</span></div>
               <p class="">This is intended to allow <var>new coded frame</var> to be added to the <var>track buffer</var> as if it hadn't overlapped any frames in <var>track buffer</var> to begin with.</p>
             </div>
           </li>
@@ -3330,7 +3334,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
 
 
           <div class="note">
-            <div class="note-title marker" aria-level="4" role="heading" id="h-note69"><span>Note</span></div>
+            <div class="note-title marker" aria-level="4" role="heading" id="h-note70"><span>Note</span></div>
             <p class="">This algorithm is intended to mirror the behavior of the <a href="https://www.w3.org/TR/FileAPI/#dfn-createObjectURL">createObjectURL()</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] method, which does not auto-revoke the created URL. Web authors are encouraged to use <a href="https://www.w3.org/TR/FileAPI/#dfn-revokeObjectURL">revokeObjectURL()</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] for any <a href="#mediasource-object-url">MediaSource object URL</a> that is no longer needed for attachment to a media element.</p>
           </div>
           <table class="parameters">
@@ -3482,11 +3486,11 @@ partial interface <span class="idlInterfaceID">URL</span> {
       <code><a href="#dom-mediasource-istypesupported">isTypeSupported()</a></code> and the byte stream format expected by a <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> created with that MIME type. Implementations are encouraged to register mappings for byte stream formats they support to facilitate interoperability. The byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>] is the authoritative source for these mappings. If an implementation claims to support a MIME type listed in the registry, its <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> implementation <em class="rfc2119" title="MUST">MUST</em> conform to the
       <a href="#byte-stream-format-specs">byte stream format specification</a> listed in the registry entry.</p>
     <div class="note">
-      <div class="note-title marker" aria-level="3" role="heading" id="h-note70"><span>Note</span></div>
+      <div class="note-title marker" aria-level="3" role="heading" id="h-note71"><span>Note</span></div>
       <p class="">The byte stream format specifications in the registry are not intended to define new storage formats. They simply outline the subset of existing storage format structures that implementations of this specification will accept.</p>
     </div>
     <div class="note">
-      <div class="note-title marker" aria-level="3" role="heading" id="h-note71"><span>Note</span></div>
+      <div class="note-title marker" aria-level="3" role="heading" id="h-note72"><span>Note</span></div>
       <p class="">Byte stream format parsing and validation is implemented in the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> algorithm.</p>
     </div>
 
@@ -3495,7 +3499,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
       <li>A byte stream format specification <em class="rfc2119" title="MUST">MUST</em> define <a href="#init-segment">initialization segments</a> and <a href="#media-segment">media segments</a>.</li>
       <li>A byte stream format <em class="rfc2119" title="SHOULD">SHOULD</em> provide references for sourcing <a href="#idl-def-audiotrack-partial-1" class="internalDFN" data-link-type="dfn"><code>AudioTrack</code></a>, <a href="#idl-def-videotrack-partial-1" class="internalDFN" data-link-type="dfn"><code>VideoTrack</code></a>, and <a href="#idl-def-texttrack-partial-1" class="internalDFN" data-link-type="dfn"><code>TextTrack</code></a> attribute values from data in <a href="#init-segment">initialization segments</a>.
         <div class="note">
-          <div class="note-title marker" aria-level="3" role="heading" id="h-note72"><span>Note</span></div>
+          <div class="note-title marker" aria-level="3" role="heading" id="h-note73"><span>Note</span></div>
           <p class="">If the byte stream format covers a format similar to one covered in the in-band tracks spec [<cite><a class="bibref" href="#bib-INBANDTRACKS">INBANDTRACKS</a></cite>], then it <em class="rfc2119" title="SHOULD">SHOULD</em> try to use the same attribute mappings so that Media Source Extensions playback and non-Media Source Extensions playback provide the same track information.</p>
         </div>
       </li>
@@ -3505,7 +3509,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
           <li>
             <p>The number and type of tracks are not consistent.</p>
             <div class="note">
-              <div class="note-title marker" aria-level="3" role="heading" id="h-note73"><span>Note</span></div>
+              <div class="note-title marker" aria-level="3" role="heading" id="h-note74"><span>Note</span></div>
               <p class="">For example, if the first <a href="#init-segment">initialization segment</a> has 2 audio tracks and 1 video track, then all <a href="#init-segment">initialization segments</a> that follow it in the byte stream <em class="rfc2119" title="MUST">MUST</em> describe 2 audio tracks and 1 video track.</p>
             </div>
           </li>
@@ -3513,7 +3517,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
           <li>
             <p>Codecs changes across <a href="#init-segment">initialization segments</a>.</p>
             <div class="note">
-              <div class="note-title marker" aria-level="3" role="heading" id="h-note74"><span>Note</span></div>
+              <div class="note-title marker" aria-level="3" role="heading" id="h-note75"><span>Note</span></div>
               <p class="">For example, a byte stream that starts with an <a href="#init-segment">initialization segment</a> that specifies a single AAC track and later contains an <a href="#init-segment">initialization segment</a> that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects.</p>
             </div>
           </li>
@@ -3525,14 +3529,14 @@ partial interface <span class="idlInterfaceID">URL</span> {
           <li>
             <p>Video frame size changes. The user agent <em class="rfc2119" title="MUST">MUST</em> support seamless playback.</p>
             <div class="note">
-              <div class="note-title marker" aria-level="3" role="heading" id="h-note75"><span>Note</span></div>
+              <div class="note-title marker" aria-level="3" role="heading" id="h-note76"><span>Note</span></div>
               <p class="">This will cause the &lt;video&gt; display region to change size if the web application does not use CSS or HTML attributes (width/height) to constrain the element size.</p>
             </div>
           </li>
           <li>
             <p>Audio channel count changes. The user agent <em class="rfc2119" title="MAY">MAY</em> support this seamlessly and could trigger downmixing.</p>
             <div class="note">
-              <div class="note-title marker" aria-level="3" role="heading" id="h-note76"><span>Note</span></div>
+              <div class="note-title marker" aria-level="3" role="heading" id="h-note77"><span>Note</span></div>
               <p class="">This is a quality of implementation issue because changing the channel count may require reinitializing the audio device, resamplers, and channel mixers which tends to be audible.</p>
             </div>
           </li>
@@ -3543,7 +3547,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
           <li>Map all timestamps to the same <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#media-timeline">media timeline</a>.</li>
           <li>Support seamless playback of <a href="#media-segment">media segments</a> having a timestamp gap smaller than the audio frame size. User agents <em class="rfc2119" title="MUST NOT">MUST NOT</em> reflect these gaps in the <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> attribute.
             <div class="note">
-              <div class="note-title marker" aria-level="3" role="heading" id="h-note77"><span>Note</span></div>
+              <div class="note-title marker" aria-level="3" role="heading" id="h-note78"><span>Note</span></div>
               <p class="">This is intended to simplify switching between audio streams where the frame boundaries don't always line up across encodings (e.g., Vorbis).</p>
             </div>
           </li>
