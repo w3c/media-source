@@ -873,12 +873,7 @@ interface MediaSource : EventTarget {
             <li>If <var>new duration</var> is less than the highest <a def-id="presentation-timestamp"></a> of any buffered <a def-id="coded-frames"></a> for all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <p class="note">Duration reductions that would truncate currently buffered media are disallowed. When truncation is necessary, use <a def-id="remove"></a> to reduce the buffered range before updating <a def-id="duration"></a>.</p>
             <li>Update <a def-id="duration"></a> to <var>new duration</var>.</li>
-            <li>If a user agent is unable to partially render audio frames or text cues that start before and end after the <a def-id="duration"></a>, then run the following steps:</li>
-            <p class="note">This condition can occur because the <a def-id="coded-frame-removal-algorithm"></a> preserves audio frames and text cues that start before and end after the <a def-id="duration"></a>.</p>
-              <ol>
-                <li>Update <var>new duration</var> to the highest end time reported by the <a def-id="buffered"></a> attribute across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.</li>
-                <li>Update <a def-id="duration"></a> to <var>new duration</var>.</li>
-              </ol>
+            <p class="note">Partial coded frames can occur because both this algorithm and the <a def-id="coded-frame-removal-algorithm"></a> preserve audio frames and text cues that start before and end after the <a def-id="duration"></a>. Implementations that do not support partial audio coded frame rendering may play decoded audio data beyond duration for the entirety of the presentation interval of audio coded frames that start before and end after the <a def-id="duration"></a>. HTMLMediaElement currentTime and buffered range end times should not exceed duration, even with this allowance.
             <li>Update the <a def-id="hme-duration"></a> to <var>new duration</var> and run the <a def-id="hme-duration-change-algorithm"></a>.</li>
           </ol>
         </section>
@@ -1000,6 +995,8 @@ interface MediaSource : EventTarget {
           <ol>
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Let <var>highest end time</var> be the largest <a def-id="track-buffer-ranges"></a> end time across all the <a def-id="track-buffers"></a> managed by this <a>SourceBuffer</a> object.</li>
+            <li>If <a def-id="duration"></a> does not equal NaN, and <var>highest end time</var> is greater than <a def-id="duration"></a>, then update <var>highest end time</var> to be <a def-id="duration"></a>.
+            <p class="note">Clamping the reported buffered ranges to within the duration allows for implementations to appear to support partial audio coded frame rendering, which may result from the <a def-id="duration-change-algorithm"></a>.</p>
             <li>Let <var>intersection ranges</var> equal a <a def-id="timerange"></a> object containing a single range from 0 to <var>highest end time</var>.</li>
             <li>For each <a def-id="track-buffer"></a> managed by this <a>SourceBuffer</a>, run the following steps:
               <ol>
