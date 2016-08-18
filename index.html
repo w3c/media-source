@@ -1981,15 +1981,11 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <p class="">Duration reductions that would truncate currently buffered media are disallowed. When truncation is necessary, use <code><a href="#dom-sourcebuffer-remove">remove()</a></code> to reduce the buffered range before updating <code><a href="#dom-mediasource-duration">duration</a></code>.</p>
           </div>
           <li>Update <code><a href="#dom-mediasource-duration">duration</a></code> to <var>new duration</var>.</li>
-          <li>If a user agent is unable to partially render audio frames or text cues that start before and end after the <code><a href="#dom-mediasource-duration">duration</a></code>, then run the following steps:</li>
           <div class="note">
             <div class="note-title marker" aria-level="5" role="heading" id="h-note31"><span>Note</span></div>
-            <p class="">This condition can occur because the <a href="#sourcebuffer-coded-frame-removal">coded frame removal algorithm</a> preserves audio frames and text cues that start before and end after the <code><a href="#dom-mediasource-duration">duration</a></code>.</p>
+            <p class="">Partial coded frames can occur because both this algorithm and the <a href="#sourcebuffer-coded-frame-removal">coded frame removal algorithm</a> preserve audio frames and text cues that start before and end after the <code><a href="#dom-mediasource-duration">duration</a></code>. Implementations that do not support partial audio coded frame rendering may play decoded audio data beyond duration for the entirety of the presentation interval of audio coded frames that start before and end after the <code><a href="#dom-mediasource-duration">duration</a></code>. HTMLMediaElement currentTime and buffered range end times should not exceed duration, even with this allowance.
+            </p>
           </div>
-          <ol>
-            <li>Update <var>new duration</var> to the highest end time reported by the <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> attribute across all <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.</li>
-            <li>Update <code><a href="#dom-mediasource-duration">duration</a></code> to <var>new duration</var>.</li>
-          </ol>
           <li>Update the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-duration">media duration</a></code> to <var>new duration</var> and run the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#durationChange">HTMLMediaElement duration change algorithm</a>.</li>
         </ol>
       </section>
@@ -2131,6 +2127,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <ol>
             <li>If this object has been removed from the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>Let <var>highest end time</var> be the largest <a href="#track-buffer-ranges">track buffer ranges</a> end time across all the <a href="#track-buffer">track buffers</a> managed by this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
+            <li>If <code><a href="#dom-mediasource-duration">duration</a></code> does not equal NaN, and <var>highest end time</var> is greater than <code><a href="#dom-mediasource-duration">duration</a></code>, then update <var>highest end time</var> to be <code><a href="#dom-mediasource-duration">duration</a></code>.
+              <div class="note">
+                <div class="note-title marker" aria-level="4" role="heading" id="h-note33"><span>Note</span></div>
+                <p class="">Clamping the reported buffered ranges to within the duration allows for implementations to appear to support partial audio coded frame rendering, which may result from the <a href="#duration-change-algorithm">duration change algorithm</a>.</p>
+              </div>
+            </li>
             <li>Let <var>intersection ranges</var> equal a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> object containing a single range from 0 to <var>highest end time</var>.</li>
             <li>For each audio and video <a href="#track-buffer">track buffer</a> managed by this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>, run the following steps:
               <ol>
