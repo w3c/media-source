@@ -705,10 +705,10 @@ interface MediaSource : EventTarget {
           <h4>Seeking</h4>
           <p>Run the following steps as part of the "<i>Wait until the user agent has established whether or not the media data for the new playback position is available, and, if it is, until it has decoded enough data to play back that position"</i> step of the <a def-id="hme-seek-algorithm"></a>:</p>
           <ol>
-            <li>The media element looks for <a def-id="media-segments"></a> containing the <var>new playback position</var> in each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a>.
+            <p class="note">The media element looks for <a def-id="media-segments"></a> containing the <var>new playback position</var> in each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a>.
+            Any position within a <a def-id="timerange"></a> in the current value of the <a def-id="hme-buffered"></a> attribute has all necessary media segments buffered for that position.</p>
               <dl class="switch">
-                <dt>If one or more of the objects in <a def-id="activeSourceBuffers"></a> is missing <a def-id="media-segments"></a> for the <var>new playback position</var>
-                </dt>
+                <dt>If <var>new playback position</var> is not in any <a def-id="timerange"></a> of <a def-id="hme-buffered"></a></dt>
                   <dd>
                   <ol>
                     <li>If the <a def-id="ready-state"></a> attribute is greater than
@@ -717,12 +717,14 @@ interface MediaSource : EventTarget {
                     <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
                     <li>The media element waits until an <a def-id="appendBuffer"></a> call causes the <a def-id="coded-frame-processing-algorithm"></a> to set
                       the <a def-id="ready-state"></a> attribute to a value greater than <a def-id="have-metadata"></a>.
-                      <p class="note">The web application can use <a def-id="buffered"></a> to determine what the media element needs to resume playback.</p>
+                      <p class="note">The web application can use <a def-id="buffered"></a> and <a def-id="hme-buffered"></a> to determine what the media element needs to resume playback.</p>
                     </li>
                   </ol>
                 </dd>
                 <dt>Otherwise</dt>
-                <dd>Continue</dd>
+                <dd>Continue
+                <p class="note">If the <a def-id="readyState"></a> attribute is <a def-id="ended"></a> and the <var>new playback position</var> is within a <a def-id="timerange"></a> currently in <a def-id="hme-buffered"></a>, then the seek operation must continue to completion here even if one or more currently selected or enabled track buffers has a <a def-id="highest-end-timestamp"></a> less than <var>new playback position</var>. This condition should only occur due to logic in <a def-id="buffered"></a> when <a def-id="readyState"></a> is <a def-id="ended"></a>.</p>
+                </dd>
               </dl>
             </li>
             <li>The media element resets all decoders and initializes each one with data from the appropriate <a def-id="init-segment"></a>.</li>
