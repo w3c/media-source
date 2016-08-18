@@ -2136,8 +2136,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>If this object has been removed from the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>Let <var>highest end time</var> be the largest <a href="#track-buffer-ranges">track buffer ranges</a> end time across all the <a href="#track-buffer">track buffers</a> managed by this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
             <li>Let <var>intersection ranges</var> equal a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> object containing a single range from 0 to <var>highest end time</var>.</li>
-            <li>For each <a href="#track-buffer">track buffer</a> managed by this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>, run the following steps:
+            <li>For each audio and video <a href="#track-buffer">track buffer</a> managed by this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>, run the following steps:
               <ol>
+                <div class="note">
+                  <div class="note-title marker" aria-level="4" role="heading" id="h-note33"><span>Note</span></div>
+                  <p class="">Text <a href="#track-buffer">track-buffers</a> are excluded from the buffered range calculation. They are not necessarily continuous, nor should any discontinuity within them trigger playback stall when the other media tracks are continuous over the same time range.</p>
+                </div>
                 <li>Let <var>track ranges</var> equal the <a href="#track-buffer-ranges">track buffer ranges</a> for the current <a href="#track-buffer">track buffer</a>.</li>
                 <li>If <code><a href="#dom-readystate">readyState</a></code> is <code><a href="#idl-def-ReadyState.ended">"ended"</a></code>, then set the end time on the last range in <var>track ranges</var> to <var>highest end time</var>.</li>
                 <li>Let <var>new intersection ranges</var> equal the intersection between the <var>intersection ranges</var> and the <var>track ranges</var>.</li>
