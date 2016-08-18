@@ -1004,7 +1004,7 @@ interface MediaSource : EventTarget {
             <li>Let <var>intersection ranges</var> equal a <a def-id="timerange"></a> object containing a single range from 0 to <var>highest end time</var>.</li>
             <li>For each audio and video <a def-id="track-buffer"></a> managed by this <a>SourceBuffer</a>, run the following steps:
               <ol>
-                <p class="note">Text <a def-id="track-buffer">track-buffers</a> are excluded from the buffered range calculation. They are not necessarily continuous, nor should any discontinuity within them trigger playback stall when the other media tracks are continuous over the same time range.</p>
+                <p class="note">Text <a def-id="track-buffer">track-buffers</a> are included in the calculation of <var>highest end time</var>, above, but excluded from the buffered range calculation here. They are not necessarily continuous, nor should any discontinuity within them trigger playback stall when the other media tracks are continuous over the same time range.</p>
                 <li>Let <var>track ranges</var> equal the <a def-id="track-buffer-ranges"></a> for the current <a def-id="track-buffer"></a>.</li>
                 <li>If <a def-id="readyState"></a> is <a def-id="ended"></a>, then set the end time on the last range in <var>track ranges</var> to <var>highest end time</var>.</li>
                 <li>Let <var>new intersection ranges</var> equal the intersection between the <var>intersection ranges</var> and the <var>track ranges</var>.</li>
