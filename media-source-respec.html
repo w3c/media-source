@@ -414,6 +414,7 @@ interface MediaSource : EventTarget {
             <li>If the <a def-id="readyState"></a> attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the value being assigned to this attribute.
+              <p class="note">The <a def-id="duration-change-algorithm"></a> will adjust <var>new duration</var> higher if there is any currently buffered coded frame with a higher end time.</p>
               <p class="note"><a def-id="appendBuffer"></a> and <a def-id="endOfStream"></a> can update the duration under certain circumstances.</p>
             </li>
           </ol>
@@ -874,13 +875,14 @@ interface MediaSource : EventTarget {
             <li>If the current value of <a def-id="duration"></a> is equal to <var>new duration</var>, then return.</li>
             <li>If <var>new duration</var> is less than the highest <a def-id="presentation-timestamp"></a> of any buffered <a def-id="coded-frames"></a> for all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <p class="note">Duration reductions that would truncate currently buffered media are disallowed. When truncation is necessary, use <a def-id="remove"></a> to reduce the buffered range before updating <a def-id="duration"></a>.</p>
-            <li>Update <a def-id="duration"></a> to <var>new duration</var>.</li>
-            <li>If a user agent is unable to partially render audio frames or text cues that start before and end after the <a def-id="duration"></a>, then run the following steps:</li>
-            <p class="note">This condition can occur because the <a def-id="coded-frame-removal-algorithm"></a> preserves audio frames and text cues that start before and end after the <a def-id="duration"></a>.</p>
+            <li>Let <var>highest end time</var> be the largest <a def-id="track-buffer-ranges"></a> end time across all the <a def-id="track-buffers"></a> across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.</li>
+            <li>If <var>new duration</var> is less than <var>highest end time</var>, then
               <ol>
-                <li>Update <var>new duration</var> to the highest end time reported by the <a def-id="buffered"></a> attribute across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.</li>
-                <li>Update <a def-id="duration"></a> to <var>new duration</var>.</li>
+                <p class="note">This condition can occur because the <a def-id="coded-frame-removal-algorithm"></a> preserves coded frames that start before the start of the removal range.</p>
+                <li>Update <var>new duration</var> to equal <var>highest end time</var>.</li>
               </ol>
+            </li>
+            <li>Update <a def-id="duration"></a> to <var>new duration</var>.</li>
             <li>Update the <a def-id="hme-duration"></a> to <var>new duration</var> and run the <a def-id="hme-duration-change-algorithm"></a>.</li>
           </ol>
         </section>
@@ -897,7 +899,8 @@ interface MediaSource : EventTarget {
                 <dt>If <var>error</var> is not set</dt>
                 <dd>
                   <ol>
-                    <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to the highest end time reported by the <a def-id="buffered"></a> attribute across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.<br>
+                    <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to
+                      the largest <a def-id="track-buffer-ranges"></a> end time across all the <a def-id="track-buffers"></a> across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.</li>
                       <p class="note">This allows the duration to properly reflect the end of the appended media segments. For example, if the duration was explicitly set to 10 seconds and only media segments for 0 to 5 seconds were appended before endOfStream() was called, then the duration will get updated to 5 seconds.</p>
                     </li>
                     <li>Notify the media element that it now has all of the media data.</li>
