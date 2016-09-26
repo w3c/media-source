@@ -130,9 +130,6 @@
 
   function append_error_helper(doc, df, id, text) {
     link_helper(doc, df, id, 'append error algorithm');
-    df.appendChild(doc.createTextNode(' with the '));
-    df.appendChild($("<var/>").text('decode error')[0]);
-    df.appendChild(doc.createTextNode(' parameter set to ' + text));
   }
 
   var mseDefinitions = {
