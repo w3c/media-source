@@ -1356,15 +1356,13 @@ interface MediaSource : EventTarget {
 
         <section id="sourcebuffer-append-error">
           <h4>Append Error Algorithm</h4>
-          <p>This algorithm is called when an error occurs during an append. This algorithm takes a
-            <var>decode error</var> parameter that indicates whether <a def-id="endOfStream"></a>
-            should be called.</p>
+          <p>This algorithm is called when an error occurs during an append. 
           <ol>
             <li>Run the <a def-id="reset-parser-state-algorithm"></a>.</li>
             <li>Set the <a def-id="updating"></a> attribute to false.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateerror"></a> at this <a>SourceBuffer</a> object.</li>
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updateend"></a> at this <a>SourceBuffer</a> object.</li>
-            <li>If <var>decode error</var> is true, then run the <a def-id="end-of-stream-algorithm"></a>
+            <li>Run the <a def-id="end-of-stream-algorithm"></a>
               with the <var>error</var> parameter set to <a def-id="decode"></a>.</li>
           </ol>
         </section>
