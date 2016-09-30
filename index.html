@@ -145,10 +145,10 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
       margin-bottom: 1em;
     }
     
-    .note> p:first-child,
-    .ednote> p:first-child,
-    .issue> p:first-child,
-    .warning> p:first-child {
+    .note>p:first-child,
+    .ednote>p:first-child,
+    .issue>p:first-child,
+    .warning>p:first-child {
       margin-top: 0
     }
     
@@ -667,11 +667,11 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
     }
     /* --- DL --- */
     
-    .section dd> p:first-child {
+    .section dd>p:first-child {
       margin-top: 0;
     }
     
-    .section dd> p:last-child {
+    .section dd>p:last-child {
       margin-bottom: 0;
     }
     
@@ -711,7 +711,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
   <link rel="stylesheet" href="mse.css">
   <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED">
   <!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]-->
-  <meta name="generator" content="ReSpec 5.0.0">
+  <meta name="generator" content="ReSpec 5.0.4">
   <script id="initialUserConfig" type="application/json">
     {
       "specStatus": "ED",
@@ -777,9 +777,9 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         "Matthew Gregan"
       ],
       "wg": "HTML Media Extensions Working Group",
-      "wgURI": "http://www.w3.org/html/wg/",
+      "wgURI": "https://www.w3.org/html/wg/",
       "wgPublicList": "public-html-media",
-      "wgPatentURI": "http://www.w3.org/2004/01/pp-impl/40318/status",
+      "wgPatentURI": "https://www.w3.org/2004/01/pp-impl/40318/status",
       "crEnd": "2016-06-7",
       "noIDLIn": true,
       "scheme": "https",
@@ -872,7 +872,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
       <a class="logo" href="https://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" alt="W3C"></a>
     </p>
     <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
-    <h2 id="w3c-editor-s-draft-18-august-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-08-18">18 August 2016</time></h2>
+    <h2 id="w3c-editor-s-draft-30-september-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-09-30">30 September 2016</time></h2>
     <dl>
       <dt>This version:</dt>
       <dd><a class="u-url" href="http://w3c.github.io/media-source/">http://w3c.github.io/media-source/</a></dd>
@@ -952,7 +952,8 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
 
   <section id="abstract" class="introductory" property="dc:abstract">
-    <h2 id="h-abstract" resource="#h-abstract"><span property="xhv:role" resource="xhv:heading">Abstract</span></h2> This specification extends <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#htmlmediaelement-htmlmediaelement">HTMLMediaElement</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] to allow JavaScript to generate media streams for playback. Allowing JavaScript to generate streams facilitates a variety of use cases like adaptive streaming and time shifting live streams.
+    <h2 id="h-abstract" resource="#h-abstract"><span property="xhv:role" resource="xhv:heading">Abstract</span></h2>
+    This specification extends <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#htmlmediaelement-htmlmediaelement">HTMLMediaElement</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] to allow JavaScript to generate media streams for playback. Allowing JavaScript to generate streams facilitates a variety of use cases like adaptive streaming and time shifting live streams.
 
     <p>If you wish to make comments or file bugs regarding this document in a manner that is tracked by the editors, please submit them via
       <a href="https://github.com/w3c/media-source/issues/new">our public bug database</a>.
@@ -974,7 +975,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
 
     <p>
-      This document was published by the <a href="http://www.w3.org/html/wg/">HTML Media Extensions Working Group</a> as an Editor's Draft. If you wish to make comments regarding this document, please send them to
+      This document was published by the <a href="https://www.w3.org/html/wg/">HTML Media Extensions Working Group</a> as an Editor's Draft. If you wish to make comments regarding this document, please send them to
       <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a> (<a href="mailto:public-html-media-request@w3.org?subject=subscribe">subscribe</a>,
       <a href="https://lists.w3.org/Archives/Public/public-html-media/">archives</a>). All comments are welcome.
     </p>
@@ -985,7 +986,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
       This document was produced by a group operating under the
       <a id="sotd_patent" property="w3p:patentRules" href="https://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent
               Policy</a>.
-      <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="http://www.w3.org/2004/01/pp-impl/40318/status" rel="disclosure">public list of any patent
+      <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="https://www.w3.org/2004/01/pp-impl/40318/status" rel="disclosure">public list of any patent
                 disclosures</a> made in connection with the deliverables of the group; that page also includes instructions for disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains
       <a href="https://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential
               Claim(s)</a> must disclose the information in accordance with
@@ -1081,13 +1082,15 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
   <section id="introduction" class="informative" typeof="bibo:Chapter" resource="#introduction" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-introduction" resource="#h-introduction"><span property="xhv:role" resource="xhv:heading"><span class="secno">1. </span>Introduction</span></h2>
+    <h2 id="h-introduction" resource="#h-introduction"><span property="xhv:role" resource="xhv:heading"><span class="secno">1. </span>Introduction</span>
+    </h2>
     <p><em>This section is non-normative.</em></p>
     <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;. It defines a MediaSource object that can serve as a source of media data for an HTMLMediaElement. MediaSource objects have one or more <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects. Applications append data segments to the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects, and can adapt the quality of appended data based on system performance and other factors. Data from the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects is managed as track buffers for audio, video and text data that is decoded and played. Byte stream specifications used with these extensions are available in the byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>].</p>
     <img src="pipeline_model.svg" alt="Media Source Pipeline Model Diagram" longdesc="pipeline_model_description.html#pipelinedesc">
 
     <section id="goals" typeof="bibo:Chapter" resource="#goals" property="bibo:hasPart">
-      <h3 id="h-goals" resource="#h-goals"><span property="xhv:role" resource="xhv:heading"><span class="secno">1.1 </span>Goals</span></h3>
+      <h3 id="h-goals" resource="#h-goals"><span property="xhv:role" resource="xhv:heading"><span class="secno">1.1 </span>Goals</span>
+      </h3>
       <p>This specification was designed with the following goals in mind:</p>
       <ul>
         <li>Allow JavaScript to construct media streams independent of how the media is fetched.</li>
@@ -1105,7 +1108,8 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
     </section>
 
     <section id="definitions" typeof="bibo:Chapter" resource="#definitions" property="bibo:hasPart">
-      <h3 id="h-definitions" resource="#h-definitions"><span property="xhv:role" resource="xhv:heading"><span class="secno">1.2 </span>Definitions</span></h3>
+      <h3 id="h-definitions" resource="#h-definitions"><span property="xhv:role" resource="xhv:heading"><span class="secno">1.2 </span>Definitions</span>
+      </h3>
 
       <dl>
         <dt id="active-track-buffers">Active Track Buffers</dt>
@@ -1145,7 +1149,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
         <dt id="decode-timestamp">Decode Timestamp</dt>
         <dd>
-          <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a href="#presentation-timestamp">presentation timestamp</a> of the earliest frame, in <a href="#presentation-order">presentation order</a>, that is dependant on this frame). If frames can be decoded out of <a href="#presentation-order">presentation order</a>, then the decode timestamp <em class="rfc2119" title="MUST">MUST</em> be present in or derivable from the byte stream. The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if this is not the case. If frames cannot be decoded out of <a href="#presentation-order">presentation order</a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a href="#presentation-timestamp">presentation timestamp</a>.</p>
+          <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a href="#presentation-timestamp">presentation timestamp</a> of the earliest frame, in <a href="#presentation-order">presentation order</a>, that is dependant on this frame). If frames can be decoded out of <a href="#presentation-order">presentation order</a>, then the decode timestamp <em class="rfc2119" title="MUST">MUST</em> be present in or derivable from the byte stream. The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="#sourcebuffer-append-error">append error algorithm</a> if this is not the case. If frames cannot be decoded out of <a href="#presentation-order">presentation order</a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a href="#presentation-timestamp">presentation timestamp</a>.</p>
         </dd>
 
         <dt id="init-segment">Initialization Segment</dt>
@@ -1232,7 +1236,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
         <dt id="track-description">Track Description</dt>
         <dd>
-          <p>A byte stream format specific structure that provides the <a href="#track-id">Track ID</a>, codec configuration, and other metadata for a single track. Each track description inside a single <a href="#init-segment">initialization segment</a> has a unique <a href="#track-id">Track ID</a>. The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true if the <a href="#track-id">Track ID</a> is not unique within the <a href="#init-segment">initialization segment</a>.</p>
+          <p>A byte stream format specific structure that provides the <a href="#track-id">Track ID</a>, codec configuration, and other metadata for a single track. Each track description inside a single <a href="#init-segment">initialization segment</a> has a unique <a href="#track-id">Track ID</a>. The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="#sourcebuffer-append-error">append error algorithm</a> if the <a href="#track-id">Track ID</a> is not unique within the <a href="#init-segment">initialization segment</a>.</p>
         </dd>
 
         <dt id="track-id">Track ID</dt>
@@ -1246,7 +1250,8 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
   <section id="mediasource" typeof="bibo:Chapter" resource="#mediasource" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-mediasource" resource="#h-mediasource"><span property="xhv:role" resource="xhv:heading"><span class="secno">2. </span>MediaSource Object</span></h2>
+    <h2 id="h-mediasource" resource="#h-mediasource"><span property="xhv:role" resource="xhv:heading"><span class="secno">2. </span>MediaSource Object</span>
+    </h2>
     <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the <code><a href="#dom-readystate">readyState</a></code> for this source as well as a list of <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> to add media data to this source. The HTMLMediaElement fetches this media data from the <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> object when it is needed during playback.</p>
 
     <p>Each <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> object has a <dfn id="live-seekable-range" data-dfn-type="dfn">live seekable range</dfn> variable that stores a <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#normalized-timeranges-object">normalized TimeRanges object</a>. This variable is initialized to an empty <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code> object when the <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> object is created, is maintained by <code><a href="#dom-mediasource-setliveseekablerange">setLiveSeekableRange()</a></code> and <code><a href="#dom-mediasource-clearliveseekablerange">clearLiveSeekableRange()</a></code>, and is used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-seekable">HTMLMediaElement.seekable</a></code> behavior.</p>
@@ -1334,7 +1339,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 };</span></pre>
 
     <section id="attributes" typeof="bibo:Chapter" resource="#attributes" property="bibo:hasPart">
-      <h3 id="h-attributes" resource="#h-attributes"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.1 </span>Attributes</span></h3>
+      <h3 id="h-attributes" resource="#h-attributes"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.1 </span>Attributes</span>
+      </h3>
       <dl class="attributes" data-dfn-for="MediaSource" data-link-for="MediaSource"><dt><dfn data-dfn-for="mediasource" data-dfn-type="dfn" id="dom-mediasource-sourcebuffers" data-idl=""><code>sourceBuffers</code></dfn> of type <span class="idlAttrType"><a href="#idl-def-sourcebufferlist" class="internalDFN" data-link-type="dfn"><code>SourceBufferList</code></a></span>, readonly       </dt>
         <dd>
           Contains the list of <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects associated with this <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a>. When <code><a href="#dom-readystate">readyState</a></code> equals <code><a href="#idl-def-ReadyState.closed">"closed"</a></code> this list will be empty. Once <code><a href="#dom-readystate">readyState</a></code> transitions to <code><a href="#idl-def-ReadyState.open">"open"</a></code> SourceBuffer objects can be added to this list by using <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code>.
@@ -1394,7 +1400,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
     </section>
 
     <section id="methods" typeof="bibo:Chapter" resource="#methods" property="bibo:hasPart">
-      <h3 id="h-methods" resource="#h-methods"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2 </span>Methods</span></h3>
+      <h3 id="h-methods" resource="#h-methods"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.2 </span>Methods</span>
+      </h3>
       <dl class="methods" data-dfn-for="MediaSource" data-link-for="MediaSource"><dt><dfn data-dfn-for="mediasource" data-dfn-type="dfn" id="dom-mediasource-addsourcebuffer" data-idl=""><code>addSourceBuffer</code></dfn></dt>
         <dd>
           <p>Adds a new <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> to <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.</p>
@@ -1702,7 +1709,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
     </section>
 
     <section id="mediasource-events" typeof="bibo:Chapter" resource="#mediasource-events" property="bibo:hasPart">
-      <h3 id="h-mediasource-events" resource="#h-mediasource-events"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.3 </span>Event Summary</span></h3>
+      <h3 id="h-mediasource-events" resource="#h-mediasource-events"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.3 </span>Event Summary</span>
+      </h3>
       <table class="old-table">
         <thead>
           <tr>
@@ -1732,10 +1740,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
     </section>
 
     <section id="mediasource-algorithms" typeof="bibo:Chapter" resource="#mediasource-algorithms" property="bibo:hasPart">
-      <h3 id="h-mediasource-algorithms" resource="#h-mediasource-algorithms"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4 </span>Algorithms</span></h3>
+      <h3 id="h-mediasource-algorithms" resource="#h-mediasource-algorithms"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4 </span>Algorithms</span>
+      </h3>
 
       <section id="mediasource-attach" typeof="bibo:Chapter" resource="#mediasource-attach" property="bibo:hasPart">
-        <h4 id="h-mediasource-attach" resource="#h-mediasource-attach"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4.1 </span>Attaching to a media element</span></h4>
+        <h4 id="h-mediasource-attach" resource="#h-mediasource-attach"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4.1 </span>Attaching to a media element</span>
+        </h4>
         <p> A <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> object can be attached to a media element by assigning a <a href="#mediasource-object-url">MediaSource object URL</a> to the media element <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#element-attrdef-media-src">src</a></code> attribute or the src attribute of a &lt;source&gt; inside a media element. A <a href="#mediasource-object-url">MediaSource object URL</a> is created by passing a MediaSource object to <code><a href="#dom-url-createobjecturl">createObjectURL()</a></code>.</p>
 
         <p>If the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a> was invoked with a media provider object that is a MediaSource object or a URL record whose object is a MediaSource object, then let mode be local, skip the first step in the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a> (which may otherwise set mode to remote) and add the steps and clarifications below to the <span>"<i>Otherwise (mode is local)</i>"</span> section of the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a>.
@@ -1774,7 +1784,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="mediasource-detach" typeof="bibo:Chapter" resource="#mediasource-detach" property="bibo:hasPart">
-        <h4 id="h-mediasource-detach" resource="#h-mediasource-detach"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4.2 </span>Detaching from a media element</span></h4>
+        <h4 id="h-mediasource-detach" resource="#h-mediasource-detach"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4.2 </span>Detaching from a media element</span>
+        </h4>
         <p>The following steps are run in any case where the media element is going to transition to <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-network_empty">NETWORK_EMPTY</a> and <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#eventdef-media-emptied">emptied</a> at the media element. These steps <em class="rfc2119" title="SHOULD">SHOULD</em> be run right before the transition.</p>
 
         <ol>
@@ -1796,7 +1807,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="mediasource-seeking" typeof="bibo:Chapter" resource="#mediasource-seeking" property="bibo:hasPart">
-        <h4 id="h-mediasource-seeking" resource="#h-mediasource-seeking"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4.3 </span>Seeking</span></h4>
+        <h4 id="h-mediasource-seeking" resource="#h-mediasource-seeking"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4.3 </span>Seeking</span>
+        </h4>
         <p>Run the following steps as part of the "<i>Wait until the user agent has established whether or not the media data for the new playback position is available, and, if it is, until it has decoded enough data to play back that position"</i> step of the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#seek">seek algorithm</a>:</p>
         <ol>
           <div class="note">
@@ -1837,7 +1849,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="buffer-monitoring" typeof="bibo:Chapter" resource="#buffer-monitoring" property="bibo:hasPart">
-        <h4 id="h-buffer-monitoring" resource="#h-buffer-monitoring"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4.4 </span>SourceBuffer Monitoring</span></h4>
+        <h4 id="h-buffer-monitoring" resource="#h-buffer-monitoring"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4.4 </span>SourceBuffer Monitoring</span>
+        </h4>
         <p>The following steps are periodically run during playback to make sure that all of the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code> have <a href="#enough-data">enough data to ensure uninterrupted playback</a>. Changes to <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code> also cause these steps to run because they affect the conditions that trigger state transitions.</p>
 
         <p>Having <dfn id="enough-data" data-dfn-type="dfn">enough data to ensure uninterrupted playback</dfn> is an implementation specific condition where the user agent determines that it currently has enough data to play the presentation without stalling for a meaningful period of time. This condition is constantly evaluated to determine when to transition the media element into and out of the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_enough_data">HAVE_ENOUGH_DATA</a></code> ready state. These transitions indicate when the user agent believes it has enough data buffered or it needs more data respectively.</p>
@@ -1912,7 +1925,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="active-source-buffer-changes" typeof="bibo:Chapter" resource="#active-source-buffer-changes" property="bibo:hasPart">
-        <h4 id="h-active-source-buffer-changes" resource="#h-active-source-buffer-changes"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4.5 </span>Changes to selected/enabled track state</span></h4>
+        <h4 id="h-active-source-buffer-changes" resource="#h-active-source-buffer-changes"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4.5 </span>Changes to selected/enabled track state</span>
+        </h4>
         <p>During playback <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code> needs to be updated if the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-videotrack-selected">selected video track</a>, the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-audiotrack-enabled">enabled audio track(s)</a>, or a text track <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrack-mode">mode</a> changes. When one or more of these changes occur the following steps need to be followed.</p>
         <dl class="switch">
           <dt>If the selected video track changes, then run the following steps:</dt>
@@ -1982,7 +1996,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="duration-change-algorithm" typeof="bibo:Chapter" resource="#duration-change-algorithm" property="bibo:hasPart">
-        <h4 id="h-duration-change-algorithm" resource="#h-duration-change-algorithm"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4.6 </span>Duration change</span></h4>
+        <h4 id="h-duration-change-algorithm" resource="#h-duration-change-algorithm"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4.6 </span>Duration change</span>
+        </h4>
         <p>Follow these steps when <code><a href="#dom-mediasource-duration">duration</a></code> needs to change to a <var>new duration</var>.</p>
         <ol>
           <li>If the current value of <code><a href="#dom-mediasource-duration">duration</a></code> is equal to <var>new duration</var>, then return.</li>
@@ -2007,7 +2022,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="end-of-stream-algorithm" typeof="bibo:Chapter" resource="#end-of-stream-algorithm" property="bibo:hasPart">
-        <h4 id="h-end-of-stream-algorithm" resource="#h-end-of-stream-algorithm"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4.7 </span>End of stream algorithm</span></h4>
+        <h4 id="h-end-of-stream-algorithm" resource="#h-end-of-stream-algorithm"><span property="xhv:role" resource="xhv:heading"><span class="secno">2.4.7 </span>End of stream algorithm</span>
+        </h4>
         <p>This algorithm gets called when the application signals the end of stream via an <code><a href="#dom-mediasource-endofstream">endOfStream()</a></code> call or an algorithm needs to signal a decode error. This algorithm takes an <var>error</var> parameter that indicates whether an error will be signalled.</p>
         <ol>
           <li>Change the <code><a href="#dom-readystate">readyState</a></code> attribute value to <code><a href="#idl-def-ReadyState.ended">"ended"</a></code>.</li>
@@ -2060,7 +2076,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
   <section id="sourcebuffer" typeof="bibo:Chapter" resource="#sourcebuffer" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-sourcebuffer" resource="#h-sourcebuffer"><span property="xhv:role" resource="xhv:heading"><span class="secno">3. </span>SourceBuffer Object</span></h2>
+    <h2 id="h-sourcebuffer" resource="#h-sourcebuffer"><span property="xhv:role" resource="xhv:heading"><span class="secno">3. </span>SourceBuffer Object</span>
+    </h2>
 
 
     <pre class="def idl"><span class="idlEnum" id="idl-def-appendmode" data-idl="" data-title="AppendMode">enum <span class="idlEnumID">AppendMode</span> {
@@ -2109,7 +2126,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 };</span></pre>
 
     <section id="attributes-1" typeof="bibo:Chapter" resource="#attributes-1" property="bibo:hasPart">
-      <h3 id="h-attributes-1" resource="#h-attributes-1"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.1 </span>Attributes</span></h3>
+      <h3 id="h-attributes-1" resource="#h-attributes-1"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.1 </span>Attributes</span>
+      </h3>
       <dl class="attributes" data-dfn-for="SourceBuffer" data-link-for="SourceBuffer"><dt><dfn data-dfn-for="sourcebuffer" data-dfn-type="dfn" id="dom-sourcebuffer-mode" data-idl=""><code>mode</code></dfn> of type <span class="idlAttrType"><a href="#idl-def-appendmode" class="internalDFN" data-link-type="dfn"><code>AppendMode</code></a></span></dt>
         <dd>
           <p>Controls how a sequence of <a href="#media-segment">media segments</a> are handled. This attribute is initially set by <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code> after the object is created.</p>
@@ -2235,7 +2253,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
     </section>
 
     <section id="methods-1" typeof="bibo:Chapter" resource="#methods-1" property="bibo:hasPart">
-      <h3 id="h-methods-1" resource="#h-methods-1"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.2 </span>Methods</span></h3>
+      <h3 id="h-methods-1" resource="#h-methods-1"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.2 </span>Methods</span>
+      </h3>
       <dl class="methods" data-dfn-for="SourceBuffer" data-link-for="SourceBuffer"><dt><dfn id="dom-sourcebuffer-appendbuffer" data-dfn-for="sourcebuffer" data-dfn-type="dfn" data-idl=""><code>appendBuffer</code></dfn></dt>
         <dd>
           <p>Appends the segment data in an <code><a href="https://www.w3.org/TR/WebIDL-1/#common-BufferSource" class="idlType">BufferSource</a></code>[<cite><a class="bibref" href="#bib-WEBIDL">WEBIDL</a></cite>] to the source buffer.</p>
@@ -2344,7 +2363,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
     </section>
 
     <section id="track-buffers" typeof="bibo:Chapter" resource="#track-buffers" property="bibo:hasPart">
-      <h3 id="h-track-buffers" resource="#h-track-buffers"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.3 </span>Track Buffers</span></h3>
+      <h3 id="h-track-buffers" resource="#h-track-buffers"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.3 </span>Track Buffers</span>
+      </h3>
       <p>A <dfn id="track-buffer" data-dfn-type="dfn">track buffer</dfn> stores the <a href="#track-description">track descriptions</a> and <a href="#coded-frame">coded frames</a> for an individual track. The track buffer is updated as <a href="#init-segment">initialization segments</a> and <a href="#media-segment">media segments</a> are appended to the
         <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>.</p>
 
@@ -2373,7 +2393,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
     </section>
 
     <section id="sourcebuffer-events" typeof="bibo:Chapter" resource="#sourcebuffer-events" property="bibo:hasPart">
-      <h3 id="h-sourcebuffer-events" resource="#h-sourcebuffer-events"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.4 </span>Event Summary</span></h3>
+      <h3 id="h-sourcebuffer-events" resource="#h-sourcebuffer-events"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.4 </span>Event Summary</span>
+      </h3>
       <table class="old-table">
         <thead>
           <tr>
@@ -2413,10 +2434,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
     </section>
 
     <section id="sourcebuffer-algorithms" typeof="bibo:Chapter" resource="#sourcebuffer-algorithms" property="bibo:hasPart">
-      <h3 id="h-sourcebuffer-algorithms" resource="#h-sourcebuffer-algorithms"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5 </span>Algorithms</span></h3>
+      <h3 id="h-sourcebuffer-algorithms" resource="#h-sourcebuffer-algorithms"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5 </span>Algorithms</span>
+      </h3>
 
       <section id="sourcebuffer-segment-parser-loop" typeof="bibo:Chapter" resource="#sourcebuffer-segment-parser-loop" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-segment-parser-loop" resource="#h-sourcebuffer-segment-parser-loop"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.1 </span>Segment Parser Loop</span></h4>
+        <h4 id="h-sourcebuffer-segment-parser-loop" resource="#h-sourcebuffer-segment-parser-loop"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.1 </span>Segment Parser Loop</span>
+        </h4>
         <p>All SourceBuffer objects have an internal <dfn id="sourcebuffer-append-state" data-dfn-type="dfn">append state</dfn> variable that keeps track of the high-level segment parsing state. It is initially set to <a href="#sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</a> and can transition to the following states as data is appended.</p>
         <table class="old-table">
           <thead>
@@ -2466,7 +2489,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <ol>
           <li><i>Loop Top:</i> If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> is empty, then jump to the <i>need more data</i> step below.</li>
           <li>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> contains bytes that violate the <a href="#sourcebuffer-byte-stream-format-spec">SourceBuffer byte stream format specification</a>, then run the
-            <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true and abort this algorithm.</li>
+            <a href="#sourcebuffer-append-error">append error algorithm</a> and abort this algorithm.</li>
           <li>Remove any bytes that the <a href="#byte-stream-format-specs">byte stream format specifications</a> say <em class="rfc2119" title="MUST">MUST</em> be ignored from the start of the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var>.</li>
           <li>
             <p>If the <var><a href="#sourcebuffer-append-state">append state</a></var> equals <a href="#sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</a>, then run the following steps:</p>
@@ -2489,7 +2512,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <li>
             <p>If the <var><a href="#sourcebuffer-append-state">append state</a></var> equals <a href="#sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</a>, then run the following steps:</p>
             <ol>
-              <li>If the <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> is false, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true and abort this algorithm.</li>
+              <li>If the <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> is false, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> and abort this algorithm.</li>
               <li>If the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> contains one or more complete <a href="#coded-frame">coded frames</a>, then run the
                 <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a>.
                 <div class="note">
@@ -2511,7 +2534,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-reset-parser-state" typeof="bibo:Chapter" resource="#sourcebuffer-reset-parser-state" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-reset-parser-state" resource="#h-sourcebuffer-reset-parser-state"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.2 </span>Reset Parser State</span></h4>
+        <h4 id="h-sourcebuffer-reset-parser-state" resource="#h-sourcebuffer-reset-parser-state"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.2 </span>Reset Parser State</span>
+        </h4>
         <p>When the parser state needs to be reset, run the following steps:</p>
         <ol>
           <li>If the <var><a href="#sourcebuffer-append-state">append state</a></var> equals <a href="#sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</a> and the <var><a href="#sourcebuffer-input-buffer">input buffer</a></var> contains some complete <a href="#coded-frame">coded frames</a>, then run the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> until all of these complete
@@ -2527,20 +2551,22 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-append-error" typeof="bibo:Chapter" resource="#sourcebuffer-append-error" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-append-error" resource="#h-sourcebuffer-append-error"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.3 </span>Append Error Algorithm</span></h4>
-        <p>This algorithm is called when an error occurs during an append. This algorithm takes a
-          <var>decode error</var> parameter that indicates whether <code><a href="#dom-mediasource-endofstream">endOfStream()</a></code> should be called.</p>
+        <h4 id="h-sourcebuffer-append-error" resource="#h-sourcebuffer-append-error"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.3 </span>Append Error Algorithm</span>
+        </h4>
+        <p>This algorithm is called when an error occurs during an append.
+        </p>
         <ol>
           <li>Run the <a href="#sourcebuffer-reset-parser-state">reset parser state algorithm</a>.</li>
           <li>Set the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute to false.</li>
           <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-error">error</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
           <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-updateend">updateend</a></code> at this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
-          <li>If <var>decode error</var> is true, then run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code>.</li>
+          <li>Run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <code><a href="#idl-def-EndOfStreamError.decode">"decode"</a></code>.</li>
         </ol>
       </section>
 
       <section id="sourcebuffer-prepare-append" typeof="bibo:Chapter" resource="#sourcebuffer-prepare-append" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-prepare-append" resource="#h-sourcebuffer-prepare-append"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.4 </span>Prepare Append Algorithm</span></h4>
+        <h4 id="h-sourcebuffer-prepare-append" resource="#h-sourcebuffer-prepare-append"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.4 </span>Prepare Append Algorithm</span>
+        </h4>
         <p>When an append operation begins, the follow steps are run to validate and prepare the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>.</p>
         <ol>
           <li>If the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> has been removed from the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
@@ -2567,7 +2593,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-buffer-append" typeof="bibo:Chapter" resource="#sourcebuffer-buffer-append" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-buffer-append" resource="#h-sourcebuffer-buffer-append"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.5 </span>Buffer Append Algorithm</span></h4>
+        <h4 id="h-sourcebuffer-buffer-append" resource="#h-sourcebuffer-buffer-append"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.5 </span>Buffer Append Algorithm</span>
+        </h4>
         <p>When <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> is called, the following steps are run to process the appended data.</p>
         <ol>
           <li>Run the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> algorithm.</li>
@@ -2579,7 +2606,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-range-removal" typeof="bibo:Chapter" resource="#sourcebuffer-range-removal" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-range-removal" resource="#h-sourcebuffer-range-removal"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.6 </span>Range Removal</span></h4>
+        <h4 id="h-sourcebuffer-range-removal" resource="#h-sourcebuffer-range-removal"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.6 </span>Range Removal</span>
+        </h4>
         <p>Follow these steps when a caller needs to initiate a JavaScript visible range removal operation that blocks other SourceBuffer updates:</p>
         <ol>
           <li>Let <var>start</var> equal the starting <a href="#presentation-timestamp">presentation timestamp</a> for the removal range, in seconds measured from <a href="#presentation-start-time">presentation start time</a>.</li>
@@ -2595,7 +2623,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-init-segment-received" typeof="bibo:Chapter" resource="#sourcebuffer-init-segment-received" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-init-segment-received" resource="#h-sourcebuffer-init-segment-received"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.7 </span>Initialization Segment Received</span></h4>
+        <h4 id="h-sourcebuffer-init-segment-received" resource="#h-sourcebuffer-init-segment-received"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.7 </span>Initialization Segment Received</span>
+        </h4>
         <p>The following steps are run when the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> successfully parses a complete <a href="#init-segment">initialization segment</a>:</p>
         <p>Each SourceBuffer object has an internal <dfn id="first-init-segment-received-flag" data-dfn-type="dfn">first initialization segment received flag</dfn> that tracks whether the first <a href="#init-segment">initialization segment</a> has been appended and received by this algorithm. This flag is set to false when the SourceBuffer is created and updated by the algorithm below.</p>
         <ol>
@@ -2607,10 +2636,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <dd>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to positive Infinity.</dd>
             </dl>
           </li>
-          <li>If the <a href="#init-segment">initialization segment</a> has no audio, video, or text tracks, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true and abort these steps.</li>
+          <li>If the <a href="#init-segment">initialization segment</a> has no audio, video, or text tracks, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> and abort these steps.</li>
           <li>If the <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> is true, then run the following steps:
             <ol>
-              <li>Verify the following properties. If any of the checks fail then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true and abort these steps.
+              <li>Verify the following properties. If any of the checks fail then run the <a href="#sourcebuffer-append-error">append error algorithm</a> and abort these steps.
                 <ul>
                   <li>The number of audio, video, and text tracks match what was in the first <a href="#init-segment">initialization segment</a>.</li>
                   <li>The codecs for each track, match what was specified in the first <a href="#init-segment">initialization segment</a>.</li>
@@ -2626,7 +2655,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <li>
             <p>If the <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> is false, then run the following steps:</p>
             <ol>
-              <li>If the <a href="#init-segment">initialization segment</a> contains tracks with codecs the user agent does not support, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true and abort these steps.
+              <li>If the <a href="#init-segment">initialization segment</a> contains tracks with codecs the user agent does not support, then run the <a href="#sourcebuffer-append-error">append error algorithm</a> and abort these steps.
                 <div class="note">
                   <div class="note-title marker" aria-level="5" role="heading" id="h-note42"><span>Note</span></div>
                   <p class="">User agents <em class="rfc2119" title="MAY">MAY</em> consider codecs, that would otherwise be supported, as "not supported" here if the codecs were not specified in the <var>type</var> parameter passed to <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code>. <br> For example, MediaSource.isTypeSupported('video/webm;codecs="vp8,vorbis"') may return true, but if
@@ -2809,7 +2838,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-coded-frame-processing" typeof="bibo:Chapter" resource="#sourcebuffer-coded-frame-processing" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-coded-frame-processing" resource="#h-sourcebuffer-coded-frame-processing"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.8 </span>Coded Frame Processing</span></h4>
+        <h4 id="h-sourcebuffer-coded-frame-processing" resource="#h-sourcebuffer-coded-frame-processing"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.8 </span>Coded Frame Processing</span>
+        </h4>
         <p>When complete <a href="#coded-frame">coded frames</a> have been parsed by the <a href="#sourcebuffer-segment-parser-loop">segment parser loop</a> then the following steps are run:</p>
         <ol>
           <li>
@@ -3007,7 +3037,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-coded-frame-removal" typeof="bibo:Chapter" resource="#sourcebuffer-coded-frame-removal" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-coded-frame-removal" resource="#h-sourcebuffer-coded-frame-removal"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.9 </span>Coded Frame Removal Algorithm</span></h4>
+        <h4 id="h-sourcebuffer-coded-frame-removal" resource="#h-sourcebuffer-coded-frame-removal"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.9 </span>Coded Frame Removal Algorithm</span>
+        </h4>
         <p>Follow these steps when <a href="#coded-frame">coded frames</a> for a specific time range need to be removed from the SourceBuffer:</p>
         <ol>
           <li>Let <var>start</var> be the starting <a href="#presentation-timestamp">presentation timestamp</a> for the removal range.</li>
@@ -3069,7 +3100,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-coded-frame-eviction" typeof="bibo:Chapter" resource="#sourcebuffer-coded-frame-eviction" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-coded-frame-eviction" resource="#h-sourcebuffer-coded-frame-eviction"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.10 </span>Coded Frame Eviction Algorithm</span></h4>
+        <h4 id="h-sourcebuffer-coded-frame-eviction" resource="#h-sourcebuffer-coded-frame-eviction"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.10 </span>Coded Frame Eviction Algorithm</span>
+        </h4>
         <p>This algorithm is run to free up space in this source buffer when new data is appended.</p>
         <ol>
           <li>Let <var>new data</var> equal the data that is about to be appended to this SourceBuffer.</li>
@@ -3087,7 +3119,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-audio-splice-frame-algorithm" typeof="bibo:Chapter" resource="#sourcebuffer-audio-splice-frame-algorithm" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-audio-splice-frame-algorithm" resource="#h-sourcebuffer-audio-splice-frame-algorithm"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.11 </span>Audio Splice Frame Algorithm</span></h4>
+        <h4 id="h-sourcebuffer-audio-splice-frame-algorithm" resource="#h-sourcebuffer-audio-splice-frame-algorithm"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.11 </span>Audio Splice Frame Algorithm</span>
+        </h4>
         <p>Follow these steps when the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> needs to generate a splice frame for two overlapping audio
           <a href="#coded-frame">coded frames</a>:</p>
         <ol>
@@ -3170,7 +3203,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-audio-splice-rendering-algorithm" typeof="bibo:Chapter" resource="#sourcebuffer-audio-splice-rendering-algorithm" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-audio-splice-rendering-algorithm" resource="#h-sourcebuffer-audio-splice-rendering-algorithm"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.12 </span>Audio Splice Rendering Algorithm</span></h4>
+        <h4 id="h-sourcebuffer-audio-splice-rendering-algorithm" resource="#h-sourcebuffer-audio-splice-rendering-algorithm"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.12 </span>Audio Splice Rendering Algorithm</span>
+        </h4>
         <p>The following steps are run when a spliced frame, generated by the <a href="#sourcebuffer-audio-splice-frame-algorithm">audio splice frame algorithm</a>, needs to be rendered by the media element:</p>
         <ol>
           <li>Let <var>fade out coded frames</var> be the <a href="#coded-frame">coded frames</a> that are faded out during the splice.</li>
@@ -3205,7 +3239,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
       </section>
 
       <section id="sourcebuffer-text-splice-frame-algorithm" typeof="bibo:Chapter" resource="#sourcebuffer-text-splice-frame-algorithm" property="bibo:hasPart">
-        <h4 id="h-sourcebuffer-text-splice-frame-algorithm" resource="#h-sourcebuffer-text-splice-frame-algorithm"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.13 </span>Text Splice Frame Algorithm</span></h4>
+        <h4 id="h-sourcebuffer-text-splice-frame-algorithm" resource="#h-sourcebuffer-text-splice-frame-algorithm"><span property="xhv:role" resource="xhv:heading"><span class="secno">3.5.13 </span>Text Splice Frame Algorithm</span>
+        </h4>
         <p>Follow these steps when the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> needs to generate a splice frame for two overlapping timed text
           <a href="#coded-frame">coded frames</a>:</p>
         <ol>
@@ -3237,7 +3272,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
   <section id="sourcebufferlist" typeof="bibo:Chapter" resource="#sourcebufferlist" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-sourcebufferlist" resource="#h-sourcebufferlist"><span property="xhv:role" resource="xhv:heading"><span class="secno">4. </span>SourceBufferList Object</span></h2>
+    <h2 id="h-sourcebufferlist" resource="#h-sourcebufferlist"><span property="xhv:role" resource="xhv:heading"><span class="secno">4. </span>SourceBufferList Object</span>
+    </h2>
     <p>SourceBufferList is a simple container object for <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects. It provides read-only array access and fires events when the list is modified.</p>
     <pre class="def idl"><span class="idlInterface" id="idl-def-sourcebufferlist" data-idl="" data-title="SourceBufferList">interface <span class="idlInterfaceID">SourceBufferList</span> : <span class="idlSuperclass">EventTarget</span> {
 <span class="idlAttribute" id="idl-def-sourcebufferlist-length" data-idl="" data-title="length" data-dfn-for="sourcebufferlist">    readonly attribute <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span> <span class="idlAttrName"><a data-lt="length" href="#dom-sourcebufferlist-length" class="internalDFN" data-link-type="dfn" data-for="SourceBufferList"><code>length</code></a></span>;</span>
@@ -3247,7 +3283,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 };</span></pre>
 
     <section id="attributes-2" typeof="bibo:Chapter" resource="#attributes-2" property="bibo:hasPart">
-      <h3 id="h-attributes-2" resource="#h-attributes-2"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.1 </span>Attributes</span></h3>
+      <h3 id="h-attributes-2" resource="#h-attributes-2"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.1 </span>Attributes</span>
+      </h3>
       <dl class="attributes" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList">
         <dt><dfn data-dfn-for="sourcebufferlist" data-dfn-type="dfn" id="dom-sourcebufferlist-length" data-idl=""><code>length</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unsigned-long">unsigned long</a></code></span>, readonly       </dt>
         <dd>
@@ -3265,7 +3302,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
     </section>
 
     <section id="methods-2" typeof="bibo:Chapter" resource="#methods-2" property="bibo:hasPart">
-      <h3 id="h-methods-2" resource="#h-methods-2"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.2 </span>Methods</span></h3>
+      <h3 id="h-methods-2" resource="#h-methods-2"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.2 </span>Methods</span>
+      </h3>
       <dl class="methods" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList">
         <dt><dfn data-lt-nodefault="" data-dfn-type="dfn" id="dfn-sourcebufferlist-getter"><code>getter</code></dfn></dt>
         <dd>
@@ -3301,7 +3339,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
     </section>
 
     <section id="sourcebufferlist-events" typeof="bibo:Chapter" resource="#sourcebufferlist-events" property="bibo:hasPart">
-      <h3 id="h-sourcebufferlist-events" resource="#h-sourcebufferlist-events"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.3 </span>Event Summary</span></h3>
+      <h3 id="h-sourcebufferlist-events" resource="#h-sourcebufferlist-events"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.3 </span>Event Summary</span>
+      </h3>
       <table class="old-table">
         <thead>
           <tr>
@@ -3328,7 +3367,8 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
 
   <section id="url" typeof="bibo:Chapter" resource="#url" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-url" resource="#h-url"><span property="xhv:role" resource="xhv:heading"><span class="secno">5. </span>URL Object Extensions</span></h2>
+    <h2 id="h-url" resource="#h-url"><span property="xhv:role" resource="xhv:heading"><span class="secno">5. </span>URL Object Extensions</span>
+    </h2>
     <p>This section specifies extensions to the <a href="https://www.w3.org/TR/FileAPI/#URL-object">URL</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] object definition.</p>
 
     <pre class="def idl"><span class="idlInterface" id="idl-def-url-partial-1" data-idl="" data-title="URL">[<span class="extAttr"><span class="extAttrName">Exposed</span>=<span class="extAttrRhs">Window</span></span>,
@@ -3339,7 +3379,8 @@ partial interface <span class="idlInterfaceID">URL</span> {
 };</span></pre>
 
     <section id="methods-3" typeof="bibo:Chapter" resource="#methods-3" property="bibo:hasPart">
-      <h3 id="h-methods-3" resource="#h-methods-3"><span property="xhv:role" resource="xhv:heading"><span class="secno">5.1 </span>Methods</span></h3>
+      <h3 id="h-methods-3" resource="#h-methods-3"><span property="xhv:role" resource="xhv:heading"><span class="secno">5.1 </span>Methods</span>
+      </h3>
       <dl class="methods" data-dfn-for="URL" data-link-for="URL"><dt><dfn data-dfn-for="url" data-dfn-type="dfn" id="dom-url-createobjecturl" data-idl=""><code>createObjectURL</code></dfn>, static</dt>
         <dd>
           <p>Creates URLs for <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> objects.</p>
@@ -3379,7 +3420,8 @@ partial interface <span class="idlInterfaceID">URL</span> {
 
   <section id="htmlmediaelement-extensions" typeof="bibo:Chapter" resource="#htmlmediaelement-extensions" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-htmlmediaelement-extensions" resource="#h-htmlmediaelement-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">6. </span>HTMLMediaElement Extensions</span></h2>
+    <h2 id="h-htmlmediaelement-extensions" resource="#h-htmlmediaelement-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">6. </span>HTMLMediaElement Extensions</span>
+    </h2>
     <p>This section specifies what existing attributes on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#htmlmediaelement-htmlmediaelement">HTMLMediaElement</a></code> <em class="rfc2119" title="MUST">MUST</em> return when a <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> is attached to the element.</p>
 
     <p>The <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-seekable">HTMLMediaElement.seekable</a></code> attribute returns a new static <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#normalized-timeranges-object">normalized TimeRanges object</a> created based on the following steps:</p>
@@ -3433,7 +3475,8 @@ partial interface <span class="idlInterfaceID">URL</span> {
 
   <section id="audio-track-extensions" typeof="bibo:Chapter" resource="#audio-track-extensions" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-audio-track-extensions" resource="#h-audio-track-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">7. </span>AudioTrack Extensions</span></h2>
+    <h2 id="h-audio-track-extensions" resource="#h-audio-track-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">7. </span>AudioTrack Extensions</span>
+    </h2>
     <p>This section specifies extensions to the HTML <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> definition.</p>
 
     <div><pre class="def idl"><span class="idlInterface" id="idl-def-audiotrack-partial-1" data-idl="" data-title="AudioTrack">partial interface <span class="idlInterfaceID">AudioTrack</span> {
@@ -3453,7 +3496,8 @@ partial interface <span class="idlInterfaceID">URL</span> {
 
   <section id="video-track-extensions" typeof="bibo:Chapter" resource="#video-track-extensions" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-video-track-extensions" resource="#h-video-track-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">8. </span>VideoTrack Extensions</span></h2>
+    <h2 id="h-video-track-extensions" resource="#h-video-track-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">8. </span>VideoTrack Extensions</span>
+    </h2>
     <p>This section specifies extensions to the HTML <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> definition.</p>
 
     <div><pre class="def idl"><span class="idlInterface" id="idl-def-videotrack-partial-1" data-idl="" data-title="VideoTrack">partial interface <span class="idlInterfaceID">VideoTrack</span> {
@@ -3473,7 +3517,8 @@ partial interface <span class="idlInterfaceID">URL</span> {
 
   <section id="text-track-extensions" typeof="bibo:Chapter" resource="#text-track-extensions" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-text-track-extensions" resource="#h-text-track-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">9. </span>TextTrack Extensions</span></h2>
+    <h2 id="h-text-track-extensions" resource="#h-text-track-extensions"><span property="xhv:role" resource="xhv:heading"><span class="secno">9. </span>TextTrack Extensions</span>
+    </h2>
     <p>This section specifies extensions to the HTML <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> definition.</p>
 
     <div><pre class="def idl"><span class="idlInterface" id="idl-def-texttrack-partial-1" data-idl="" data-title="TextTrack">partial interface <span class="idlInterfaceID">TextTrack</span> {
@@ -3493,7 +3538,8 @@ partial interface <span class="idlInterfaceID">URL</span> {
 
   <section id="byte-stream-formats" typeof="bibo:Chapter" resource="#byte-stream-formats" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-byte-stream-formats" resource="#h-byte-stream-formats"><span property="xhv:role" resource="xhv:heading"><span class="secno">10. </span>Byte Stream Formats</span></h2>
+    <h2 id="h-byte-stream-formats" resource="#h-byte-stream-formats"><span property="xhv:role" resource="xhv:heading"><span class="secno">10. </span>Byte Stream Formats</span>
+    </h2>
     <p>The bytes provided through <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> for a <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> form a logical byte stream. The format and semantics of these byte streams are defined in <dfn id="byte-stream-format-specs" data-dfn-type="dfn">byte stream format specifications</dfn>. The byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>] provides mappings between a MIME type that may be passed to <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code> or
       <code><a href="#dom-mediasource-istypesupported">isTypeSupported()</a></code> and the byte stream format expected by a <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> created with that MIME type. Implementations are encouraged to register mappings for byte stream formats they support to facilitate interoperability. The byte stream format registry [<cite><a class="bibref" href="#bib-MSE-REGISTRY">MSE-REGISTRY</a></cite>] is the authoritative source for these mappings. If an implementation claims to support a MIME type listed in the registry, its <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> implementation <em class="rfc2119" title="MUST">MUST</em> conform to the
       <a href="#byte-stream-format-specs">byte stream format specification</a> listed in the registry entry.</p>
@@ -3516,7 +3562,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
         </div>
       </li>
       <li>It <em class="rfc2119" title="MUST">MUST</em> be possible to identify segment boundaries and segment type (initialization or media) by examining the byte stream alone.</li>
-      <li>The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true when any of the following conditions are met:
+      <li>The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="#sourcebuffer-append-error">append error algorithm</a> when any of the following conditions are met:
         <ol>
           <li>
             <p>The number and type of tracks are not consistent.</p>
@@ -3565,7 +3611,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
           </li>
         </ol>
       </li>
-      <li>The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="#sourcebuffer-append-error">append error algorithm</a> with the <var>decode error</var> parameter set to true when any combination of an <a href="#init-segment">initialization segment</a> and any contiguous sequence of <a href="#media-segment">media segments</a> satisfies the following conditions:
+      <li>The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="#sourcebuffer-append-error">append error algorithm</a> when any combination of an <a href="#init-segment">initialization segment</a> and any contiguous sequence of <a href="#media-segment">media segments</a> satisfies the following conditions:
         <ol>
           <li>The number and type (audio, video, text, etc.) of all tracks in the <a href="#media-segment">media segments</a> are not identified.</li>
           <li>The decoding capabilities needed to decode each track (i.e., codec and codec parameters) are not provided.</li>
@@ -3588,7 +3634,8 @@ partial interface <span class="idlInterfaceID">URL</span> {
 
   <section id="conformance" typeof="bibo:Chapter" resource="#conformance" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-conformance" resource="#h-conformance"><span property="xhv:role" resource="xhv:heading"><span class="secno">11. </span>Conformance</span></h2>
+    <h2 id="h-conformance" resource="#h-conformance"><span property="xhv:role" resource="xhv:heading"><span class="secno">11. </span>Conformance</span>
+    </h2>
     <p>
       As well as sections marked as non-normative, all authoring guidelines, diagrams, examples, and notes in this specification are non-normative. Everything else in this specification is normative.
     </p>
@@ -3598,7 +3645,8 @@ partial interface <span class="idlInterfaceID">URL</span> {
 
   <section id="examples" typeof="bibo:Chapter" resource="#examples" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-examples" resource="#h-examples"><span property="xhv:role" resource="xhv:heading"><span class="secno">12. </span>Examples</span></h2>
+    <h2 id="h-examples" resource="#h-examples"><span property="xhv:role" resource="xhv:heading"><span class="secno">12. </span>Examples</span>
+    </h2>
     <p>Example use of the Media Source Extensions</p>
     <div class="block">
       <div class="blockContent">
@@ -3698,12 +3746,15 @@ partial interface <span class="idlInterfaceID">URL</span> {
 
   <section id="acknowledgements" typeof="bibo:Chapter" resource="#acknowledgements" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-acknowledgements" resource="#h-acknowledgements"><span property="xhv:role" resource="xhv:heading"><span class="secno">13. </span>Acknowledgments</span></h2> The editors would like to thank Alex Giladi, Bob Lund, Chris Poole, Cyril Concolato, David Dorwin, David Singer, Duncan Rowden, Frank Galligan, Glenn Adams, Jer Noble, Joe Steele, John Simmons, Kevin Streeter, Mark Vickers, Matt Ward, Matthew Gregan, Michael Thornburgh, Philip Jägenstedt, Pierre Lemieux, Ralph Giles, Steven Robertson, and Tatsuya Igarashi for their contributions to this specification.
+    <h2 id="h-acknowledgements" resource="#h-acknowledgements"><span property="xhv:role" resource="xhv:heading"><span class="secno">13. </span>Acknowledgments</span>
+    </h2>
+    The editors would like to thank Alex Giladi, Bob Lund, Chris Poole, Cyril Concolato, David Dorwin, David Singer, Duncan Rowden, Frank Galligan, Glenn Adams, Jer Noble, Joe Steele, John Simmons, Kevin Streeter, Mark Vickers, Matt Ward, Matthew Gregan, Michael Thornburgh, Philip Jägenstedt, Pierre Lemieux, Ralph Giles, Steven Robertson, and Tatsuya Igarashi for their contributions to this specification.
   </section>
 
   <section id="VideoPlaybackQuality" class="appendix informative" typeof="bibo:Chapter" resource="#VideoPlaybackQuality" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-videoplaybackquality" resource="#h-videoplaybackquality"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>VideoPlaybackQuality</span></h2>
+    <h2 id="h-videoplaybackquality" resource="#h-videoplaybackquality"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>VideoPlaybackQuality</span>
+    </h2>
     <p><em>This section is non-normative.</em></p>
     The video playback quality metrics described in previous revisions of this specification (e.g., sections 5 and 10 of the <a href="https://www.w3.org/TR/2016/CR-media-source-20160705/">Candidate Recommendation</a>) are now being developed as part of [<cite><a class="bibref" href="#bib-MEDIA-PLAYBACK-QUALITY">MEDIA-PLAYBACK-QUALITY</a></cite>]. Some implementations may have implemented the earlier draft <code>VideoPlaybackQuality</code> object and the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#htmlvideoelement-htmlvideoelement">HTMLVideoElement</a></code> extension method <code>getVideoPlaybackQuality()</code> described in those previous revisions.
   </section>
@@ -3711,24 +3762,27 @@ partial interface <span class="idlInterfaceID">URL</span> {
 
   <section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart">
     <!--OddPage-->
-    <h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B. </span>References</span></h2>
+    <h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B. </span>References</span>
+    </h2>
 
     <section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart">
-      <h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B.1 </span>Normative references</span></h3>
+      <h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B.1 </span>Normative references</span>
+      </h3>
       <dl class="bibliography" resource=""><dt id="bib-FILE-API">[FILE-API]</dt>
         <dd>Arun Ranganathan; Jonas Sicking. W3C. <a href="https://www.w3.org/TR/FileAPI/" property="dc:requires"><cite>File API</cite></a>. 21 April 2015. W3C Working Draft. URL: <a href="https://www.w3.org/TR/FileAPI/" property="dc:requires">https://www.w3.org/TR/FileAPI/</a>
         </dd><dt id="bib-HTML51">[HTML51]</dt>
-        <dd>Steve Faulkner; Arron Eicholz; Travis Leithead; Alex Danilo. W3C. <a href="https://www.w3.org/TR/html51/" property="dc:requires"><cite>HTML 5.1</cite></a>. 21 June 2016. W3C Candidate Recommendation. URL: <a href="https://www.w3.org/TR/html51/" property="dc:requires">https://www.w3.org/TR/html51/</a>
+        <dd>Steve Faulkner; Arron Eicholz; Travis Leithead; Alex Danilo. W3C. <a href="https://www.w3.org/TR/html51/" property="dc:requires"><cite>HTML 5.1</cite></a>. 15 September 2016. W3C Proposed Recommendation. URL: <a href="https://www.w3.org/TR/html51/" property="dc:requires">https://www.w3.org/TR/html51/</a>
         </dd><dt id="bib-RFC2119">[RFC2119]</dt>
         <dd>S. Bradner. IETF. <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires">https://tools.ietf.org/html/rfc2119</a>
         </dd><dt id="bib-WEBIDL">[WEBIDL]</dt>
-        <dd>Cameron McCormack; Boris Zbarsky. W3C. <a href="https://www.w3.org/TR/WebIDL-1/" property="dc:requires"><cite>WebIDL Level 1</cite></a>. 8 March 2016. W3C Candidate Recommendation. URL: <a href="https://www.w3.org/TR/WebIDL-1/" property="dc:requires">https://www.w3.org/TR/WebIDL-1/</a>
+        <dd>Cameron McCormack; Boris Zbarsky. W3C. <a href="https://www.w3.org/TR/WebIDL-1/" property="dc:requires"><cite>WebIDL Level 1</cite></a>. 15 September 2016. W3C Proposed Recommendation. URL: <a href="https://www.w3.org/TR/WebIDL-1/" property="dc:requires">https://www.w3.org/TR/WebIDL-1/</a>
         </dd>
       </dl>
     </section>
 
     <section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart">
-      <h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B.2 </span>Informative references</span></h3>
+      <h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B.2 </span>Informative references</span>
+      </h3>
       <dl class="bibliography" resource=""><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt>
         <dd>Bob Lund; Silvia Pfeiffer. W3C. <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. URL: <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references">http://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
         </dd><dt id="bib-MEDIA-PLAYBACK-QUALITY">[MEDIA-PLAYBACK-QUALITY]</dt>
