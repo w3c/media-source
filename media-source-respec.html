@@ -724,7 +724,7 @@ interface MediaSource : EventTarget {
                 </dd>
                 <dt>Otherwise</dt>
                 <dd>Continue
-                <p class="note">If the <a def-id="readyState"></a> attribute is <a def-id="ended"></a> and the <var>new playback position</var> is within a <a def-id="timerange"></a> currently in <a def-id="hme-buffered"></a>, then the seek operation must continue to completion here even if one or more currently selected or enabled track buffers has a <a def-id="highest-end-timestamp"></a> less than <var>new playback position</var>. This condition should only occur due to logic in <a def-id="buffered"></a> when <a def-id="readyState"></a> is <a def-id="ended"></a>.</p>
+                <p class="note">If the <a def-id="readyState"></a> attribute is <a def-id="ended"></a> and the <var>new playback position</var> is within a <a def-id="timerange"></a> currently in <a def-id="hme-buffered"></a>, then the seek operation must continue to completion here even if one or more currently selected or enabled track buffers' largest range end timestamp is less than <var>new playback position</var>. This condition should only occur due to logic in <a def-id="buffered"></a> when <a def-id="readyState"></a> is <a def-id="ended"></a>.</p>
                 </dd>
               </dl>
             </li>
