@@ -3,7 +3,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>MPEG Audio Byte Stream Format</title>
-    <script src="respec-w3c-common.js" class="remove"></script>
+    <script src="https://www.w3.org/Tools/respec/respec-w3c-common" class="remove"></script>
+    <!--<script src="respec-w3c-common.js" class="remove"></script>-->
     <script src="media-source.js" class="remove"></script>
     <script class="remove">
       (function() {
@@ -31,7 +32,7 @@
       specStatus: "ED",
 
       // the specification's short name, as in http://www.w3.org/TR/short-name/
-      shortName: "media-source", <!-- The registry does not have its own short name. -->
+      shortName: "byte-stream-format-mpeg-audio",
 
       // if there a publicly available Editor's Draft, this is the link
       edDraftURI: "https://w3c.github.io/media-source/mpeg-audio-byte-stream-format.html",
@@ -114,11 +115,10 @@
     -->
 
     <link rel="stylesheet" href="mse.css">
-
   </head>
   <body>
     <section id="abstract">
-      This specification defines a <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> byte stream format specification based on MPEG audio streams.
+      This specification defines a <a def-id="mse-spec"></a> [[!MEDIA-SOURCE]] byte stream format specification based on MPEG audio streams.
     </section>
 
     <section id="sotd">
@@ -137,7 +137,7 @@
       <p>This section specifies the MIME-types that may be passed to <a def-id="isTypeSupported"></a> or <a def-id="addSourceBuffer"></a> for byte streams that conform to this specification.</p>
       <ul>
         <li>"audio/aac" for sequences of ADTS frames, as specified in <a def-id="iso-14496-3"></a>.</li>
-        <li>"audio/mpeg" for MPEG-1/2/2.5 Layer I/II/III streams, as specified in <a href="http://tools.ietf.org/html/rfc3003">RFC 3003</a>.</li>
+        <li>"audio/mpeg" for MPEG-1/2/2.5 Layer I/II/III streams, as specified in <a href="http://tools.ietf.org/html/rfc3003">RFC 3003</a> [[!RFC3003]].</li>
       </ul>
       <p>The "codecs" MIME-type parameter MUST NOT be used with these MIME-types.</p>
     </section>

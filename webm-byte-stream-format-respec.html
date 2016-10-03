@@ -3,7 +3,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>WebM Byte Stream Format</title>
-    <script src="respec-w3c-common.js" class="remove"></script>
+    <script src="https://www.w3.org/Tools/respec/respec-w3c-common" class="remove"></script>
+    <!--<script src="respec-w3c-common.js" class="remove"></script>-->
     <script src="media-source.js" class="remove"></script>
     <script class="remove">
       (function() {
@@ -34,7 +35,7 @@
       specStatus: "ED",
 
       // the specification's short name, as in http://www.w3.org/TR/short-name/
-      shortName: "media-source", <!-- The registry does not have its own short name. -->
+      shortName: "byte-stream-format-webm",
 
       // if there a publicly available Editor's Draft, this is the link
       edDraftURI: "https://w3c.github.io/media-source/webm-byte-stream-format.html",
@@ -114,7 +115,7 @@
       localBiblio: {
           "INBANDTRACKS": {
               title: "Sourcing In-band Media Resource Tracks from Media Containers into HTML",
-              href: "http://dev.w3.org/html5/html-sourcing-inband-tracks/",
+              href: "https://dev.w3.org/html5/html-sourcing-inband-tracks/",
               authors: ["Bob Lund", "Silvia Pfeiffer"],
               publisher: "W3C",
           }
@@ -134,7 +135,7 @@
   </head>
   <body>
     <section id="abstract">
-      This specification defines a <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> byte stream format specification based on the WebM container format.
+      This specification defines a <a def-id="mse-spec"></a> [[!MEDIA-SOURCE]] byte stream format specification based on the WebM container format.
     </section>
 
     <section id="sotd">
@@ -144,7 +145,7 @@
 
     <section id="introduction">
       <h2>Introduction</h2>
-      <p>This specification describes a byte stream format based on the WebM container format. It defines the MIME-type parameters used to signal codecs, and provides
+      <p>This specification describes a byte stream format based on the WebM container format [[!WEBM]]. It defines the MIME-type parameters used to signal codecs, and provides
       the necessary format specific definitions for <a def-id="init-segments"></a>, <a def-id="media-segments"></a>, and <a def-id="random-access-points"></a> required by
       the <a def-id="byte-stream-formats-section"></a> of the Media Source Extensions spec.</p>
     </section>

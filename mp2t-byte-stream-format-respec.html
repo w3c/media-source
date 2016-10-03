@@ -3,7 +3,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>MPEG-2 TS Byte Stream Format</title>
-    <script src="respec-w3c-common.js" class="remove"></script>
+    <script src="https://www.w3.org/Tools/respec/respec-w3c-common" class="remove"></script>
+    <!--<script src="respec-w3c-common.js" class="remove"></script>-->
     <script src="media-source.js" class="remove"></script>
     <script class="remove">
       (function() {
@@ -23,7 +24,7 @@
       specStatus: "ED",
 
       // the specification's short name, as in http://www.w3.org/TR/short-name/
-      shortName: "media-source", <!-- The registry does not have its own short name. -->
+      shortName: "byte-stream-format-mp2t",
 
       // if there a publicly available Editor's Draft, this is the link
       edDraftURI: "https://w3c.github.io/media-source/mp2t-byte-stream-format.html",
@@ -107,7 +108,7 @@
       localBiblio: {
           "INBANDTRACKS": {
               title: "Sourcing In-band Media Resource Tracks from Media Containers into HTML",
-              href: "http://dev.w3.org/html5/html-sourcing-inband-tracks/",
+              href: "https://dev.w3.org/html5/html-sourcing-inband-tracks/",
               authors: ["Bob Lund", "Silvia Pfeiffer"],
               publisher: "W3C",
           }
@@ -124,11 +125,10 @@
     -->
 
     <link rel="stylesheet" href="mse.css">
-
   </head>
   <body>
     <section id="abstract">
-      This specification defines a <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> byte stream format specification based on MPEG-2 Transport Streams.
+      This specification defines a <a def-id="mse-spec"></a> [[!MEDIA-SOURCE]] byte stream format specification based on MPEG-2 Transport Streams.
     </section>
 
     <section id="sotd">
@@ -139,7 +139,7 @@
     <section id="introduction">
       <h2>Introduction</h2>
       <p>This specification defines segment formats for implementations that choose to support MPEG-2 Transport Streams
-        (MPEG-2 TS) specified in <a def-id="iso-13818-1"></a>.</p> It defines the MIME-type parameters used to signal codecs, and provides
+        [[!MPEG2TS]].</p> It defines the MIME-type parameters used to signal codecs, and provides
         the necessary format specific definitions for <a def-id="init-segments"></a>, <a def-id="media-segments"></a>, and <a def-id="random-access-points"></a> required by
         the <a def-id="byte-stream-formats-section"></a> of the Media Source Extensions spec. This document also defines extra behaviors and state that only apply to this
         byte stream format.</p>
@@ -147,15 +147,14 @@
 
     <section id="mime-parameters">
       <h2>MIME-type info</h2>
-      <p>The MIME-type/subtype pair of "video/MP2T", as specified in <a href="http://tools.ietf.org/html/rfc3551">RFC 3551</a>, MUST be used for byte streams that conform
+      <p>The MIME-type/subtype pair of "video/MP2T", as specified in [[!RFC3551]], MUST be used for byte streams that conform
         to this specification.</p>
 
       <p>This following parameters can be used in the MIME-type passed to <a def-id="isTypeSupported"></a> or <a def-id="addSourceBuffer"></a>.</p>
       <dl>
         <dt>codecs</dt>
         <dd>
-          A comma separated list of codec IDs used to specify what codecs will be used in the byte stream. Implementations SHOULD accept IDs in the form specified by
-          <a href="http://tools.ietf.org/html/rfc6381">RFC 6381</a>.
+          A comma separated list of codec IDs used to specify what codecs will be used in the byte stream. Implementations SHOULD accept IDs in the form specified by [[!RFC6381]].
           <div class="note">Implementations MAY only implement a subset of the codecs and profiles mentioned in the RFC.</div>
         </dd>
       </dl>
@@ -203,7 +202,7 @@
     <section id="mpeg2ts-random-access-points">
       <h4>Random Access Points</h4>
       <p>A random access point as defined in this specification corresponds to Elementary Stream Random Access Point as defined in
-        <a def-id="iso-13818-1"></a>.</p>
+        [[!MPEG2TS]].</p>
     </section>
     <section id="mpeg2ts-discontinuities">
       <h4>Timestamp Rollover &amp; Discontinuities</h4>

@@ -3,7 +3,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>ISO BMFF Byte Stream Format</title>
-    <script src="respec-w3c-common.js" class="remove"></script>
+    <script src="https://www.w3.org/Tools/respec/respec-w3c-common" class="remove"></script>
+    <!--<script src="respec-w3c-common.js" class="remove"></script>-->
     <script src="media-source.js" class="remove"></script>
     <script class="remove">
       (function() {
@@ -22,7 +23,7 @@
       specStatus: "ED",
 
       // the specification's short name, as in http://www.w3.org/TR/short-name/
-      shortName: "media-source", <!-- The registry does not have its own short name -->
+      shortName: "byte-stream-format-isobmff",
 
       // if there a publicly available Editor's Draft, this is the link
       edDraftURI: "https://w3c.github.io/media-source/isobmff-byte-stream-format.html",
@@ -109,7 +110,7 @@
       localBiblio: {
           "INBANDTRACKS": {
               title: "Sourcing In-band Media Resource Tracks from Media Containers into HTML",
-              href: "http://dev.w3.org/html5/html-sourcing-inband-tracks/",
+              href: "https://dev.w3.org/html5/html-sourcing-inband-tracks/",
               authors: ["Bob Lund", "Silvia Pfeiffer"],
               publisher: "W3C",
           }
@@ -134,7 +135,7 @@
   </head>
   <body>
     <section id="abstract">
-      This specification defines a <a href="http://www.w3.org/TR/media-source/">Media Source Extensions</a> byte stream format specification based on the ISO Base Media
+      This specification defines a <a def-id="mse-spec"></a> [[!MEDIA-SOURCE]] byte stream format specification based on the ISO Base Media
       File Format.
     </section>
 
@@ -146,7 +147,7 @@
     <section id="introduction">
       <h2>Introduction</h2>
       <p>This specification defines segment formats for implementations that choose to support the ISO Base Media File Format
-	<a def-id="iso-14496-12"></a> (ISO BMFF).</p> It defines the MIME-type parameters used to signal codecs, and provides
+	<a def-id="iso-14496-12"></a> [[!ISOBMFF]].</p> It defines the MIME-type parameters used to signal codecs, and provides
       the necessary format specific definitions for <a def-id="init-segments"></a>, <a def-id="media-segments"></a>, and <a def-id="random-access-points"></a> required by
       the <a def-id="byte-stream-formats-section"></a> of the Media Source Extensions spec.</p>
     </section>
@@ -192,7 +193,7 @@
       <h4>Media Segments</h4>
       <p>An ISO BMFF <a def-id="media-segment"></a> is defined in this specification as one optional
         Segment Type Box (<span class="iso-box">styp</span>) followed by a single Movie Fragment Box
-        (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>). 
+        (<span class="iso-box">moof</span>) followed by one or more Media Data Boxes (<span class="iso-box">mdat</span>).
         If the Segment Type Box is not present, the segment MUST conform to the brands listed in the
         File Type Box (<span class="iso-box">ftyp</span>) in the <a def-id="init-segment"></a>.</p>
       <p>Valid top-level boxes defined in <a def-id="iso-14496-12"></a> other than <span class="iso-box">ftyp</span>,
@@ -219,7 +220,7 @@
 	<li>Inband parameter sets are not present in the appropriate samples and parameter sets are not present in the last initialization segment appended.</li>
       </ol>
 
-      <p>A Movie Fragment Box uses <dfn id="movie-fragment-relative-addressing">movie-fragment relative addressing</dfn> 
+      <p>A Movie Fragment Box uses <dfn id="movie-fragment-relative-addressing">movie-fragment relative addressing</dfn>
         when the first Track Fragment Run(<span class="iso-box">trun</span>) box in each Track Fragment Box
         has the <span class="iso-var">data-offset-present</span> flag set and either of the following
         conditions are met:</p>
