@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Media Source Extensions</title>
+    <title>Media Source Extensions™</title>
     <script src="https://www.w3.org/Tools/respec/respec-w3c-common" class="remove"></script>
     <!--<script src="respec-w3c-common.js" class="remove"></script>-->
     <script src="media-source.js" class="remove"></script>
@@ -26,7 +26,7 @@
       */
 
       previousMaturity: "CR",
-      previousPublishDate: "2015-07-05",
+      previousPublishDate: "2016-07-05",
 
       // editors, add as many as you like
       // only "name" is required
@@ -85,7 +85,9 @@
       // Team Contact.
       wgPatentURI: "https://www.w3.org/2004/01/pp-impl/40318/status",
 
-      crEnd: "2016-06-7",
+      lcEnd: "2016-08-10",
+      prEnd: "2016-11-01",
+      implementationReportURI: "http://tidoust.github.io/media-source-testcoverage/",
 
       noIDLIn: true,
 
@@ -149,7 +151,7 @@
           },
           "INBANDTRACKS": {
               title: "Sourcing In-band Media Resource Tracks from Media Containers into HTML",
-              href: "http://dev.w3.org/html5/html-sourcing-inband-tracks/",
+              href: "https://dev.w3.org/html5/html-sourcing-inband-tracks/",
               authors: ["Bob Lund", "Silvia Pfeiffer"],
               publisher: "W3C",
           },
@@ -286,10 +288,10 @@
           <dd><p>The parent media source of a <a>SourceBuffer</a> object is the <a>MediaSource</a> object that created it.</p></dd>
 
           <dt id="presentation-start-time">Presentation Start Time</dt>
-          <dd><p>The presentation start time is the earliest time point in the presentation and specifies the <a def-id="videoref" name="initial-playback-position">initial playback position</a> and <a def-id="videoref" name="earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0.</p></dd>
+          <dd><p>The presentation start time is the earliest time point in the presentation and specifies the <a def-id="videoref" name="initial-playback-position">initial playback position</a> and <a def-id="videoref" name="earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0.</p>
 
           <p class="note">For the purposes of determining if <a def-id="hme-buffered"></a> contains a <a def-id="timerange"></a> that includes the current playback position, implementations MAY choose to allow a current playback position at or after <a def-id="presentation-start-time"></a> and before the first <a def-id="timerange"></a> to play the first <a def-id="timerange"></a> if that <a def-id="timerange"></a> starts within a reasonably short time, like 1 second, after <a def-id="presentation-start-time"></a>. This allowance accommodates the reality that muxed streams commonly do not begin all tracks precisely at <a def-id="presentation-start-time"></a>. Implementations MUST report the actual buffered range, regardless of this allowance.</p>
-
+          </dd>
           <dt id="presentation-interval">Presentation Interval</dt>
           <dd>
             <p>The presentation interval of a <a def-id="coded-frame"></a> is the time interval from its <a def-id="presentation-timestamp"></a> to the <a def-id="presentation-timestamp"></a> plus the <a def-id="coded-frames-duration"></a>. For example, if a coded frame has a presentation timestamp of 10 seconds and a <a def-id="coded-frame-duration"></a> of 100 milliseconds, then the presentation interval would be [10-10.1). Note that the start of the range is inclusive, but the end of the range is exclusive.</p>
@@ -480,16 +482,18 @@ interface MediaSource : EventTarget {
                 <li>For each <a def-id="audio-track"></a> object in the <var>SourceBuffer audioTracks list</var>, run the following steps:
                   <ol>
                     <li>Set the <a def-id="audiotrack-sourceBuffer"></a> attribute on the <a def-id="audio-track"></a> object to null.</li>
-                    <li>Remove the <a def-id="audio-track"></a> object from the <var>HTMLMediaElement audioTracks list</var>.</li>
+                    <li>Remove the <a def-id="audio-track"></a> object from the <var>HTMLMediaElement audioTracks list</var>.
                     <p class="note">
                       This should trigger <a def-id="audio-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the <a def-id="audio-track"></a> object, at the <var>HTMLMediaElement audioTracks list</var>.
                       If the <a def-id="audiotrack-enabled"></a> attribute on the <a def-id="audio-track"></a> object was true at the beginning of this removal step, then this should also trigger <a def-id="audio-track-list"></a> [[HTML51]] logic to <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="mediatracklist-change"></a> at the <var>HTMLMediaElement audioTracks list</var>
                     </p>
-                    <li>Remove the <a def-id="audio-track"></a> object from the <var>SourceBuffer audioTracks list</var>.</li>
+                    </li>
+                    <li>Remove the <a def-id="audio-track"></a> object from the <var>SourceBuffer audioTracks list</var>.
                     <p class="note">
                       This should trigger <a def-id="audio-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the <a def-id="audio-track"></a> object, at the <var>SourceBuffer audioTracks list</var>.
                       If the <a def-id="audiotrack-enabled"></a> attribute on the <a def-id="audio-track"></a> object was true at the beginning of this removal step, then this should also trigger <a def-id="audio-track-list"></a> [[HTML51]] logic to <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="mediatracklist-change"></a> at the <var>SourceBuffer audioTracks list</var>
                     </p>
+                    </li>
                   </ol>
                 </li>
               </ol>
@@ -502,16 +506,18 @@ interface MediaSource : EventTarget {
                 <li>For each <a def-id="video-track"></a> object in the <var>SourceBuffer videoTracks list</var>, run the following steps:
                   <ol>
                     <li>Set the <a def-id="videotrack-sourceBuffer"></a> attribute on the <a def-id="video-track"></a> object to null.</li>
-                    <li>Remove the <a def-id="video-track"></a> object from the <var>HTMLMediaElement videoTracks list</var>.</li>
+                    <li>Remove the <a def-id="video-track"></a> object from the <var>HTMLMediaElement videoTracks list</var>.
                     <p class="note">
                       This should trigger <a def-id="video-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the <a def-id="video-track"></a> object, at the <var>HTMLMediaElement videoTracks list</var>.
                       If the <a def-id="videotrack-selected"></a> attribute on the <a def-id="video-track"></a> object was true at the beginning of this removal step, then this should also trigger <a def-id="video-track-list"></a> [[HTML51]] logic to <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="mediatracklist-change"></a> at the <var>HTMLMediaElement videoTracks list</var>
                     </p>
-                    <li>Remove the <a def-id="video-track"></a> object from the <var>SourceBuffer videoTracks list</var>.</li>
+                    </li>
+                    <li>Remove the <a def-id="video-track"></a> object from the <var>SourceBuffer videoTracks list</var>.
                     <p class="note">
                       This should trigger <a def-id="video-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the <a def-id="video-track"></a> object, at the <var>SourceBuffer videoTracks list</var>.
                       If the <a def-id="videotrack-selected"></a> attribute on the <a def-id="video-track"></a> object was true at the beginning of this removal step, then this should also trigger <a def-id="video-track-list"></a> [[HTML51]] logic to <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="mediatracklist-change"></a> at the <var>SourceBuffer videoTracks list</var>
                     </p>
+                    </li>
                   </ol>
                 </li>
               </ol>
@@ -525,16 +531,18 @@ interface MediaSource : EventTarget {
                 <li>For each <a def-id="text-track"></a> object in the <var>SourceBuffer textTracks list</var>, run the following steps:
                   <ol>
                     <li>Set the <a def-id="texttrack-sourceBuffer"></a> attribute on the <a def-id="text-track"></a> object to null.</li>
-                    <li>Remove the <a def-id="text-track"></a> object from the <var>HTMLMediaElement textTracks list</var>.</li>
+                    <li>Remove the <a def-id="text-track"></a> object from the <var>HTMLMediaElement textTracks list</var>.
                     <p class="note">
                       This should trigger <a def-id="text-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-text-removetrack-with-track-attr-initialized-to"></a> the <a def-id="text-track"></a> object, at the <var>HTMLMediaElement textTracks list</var>.
                       If the <a def-id="texttrack-mode"></a> attribute on the <a def-id="text-track"></a> object was <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> at the beginning of this removal step, then this should also trigger <a def-id="text-track-list"></a> [[HTML51]] logic to <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="texttracklist-change"></a> at the <var>HTMLMediaElement textTracks list</var>.
                     </p>
-                    <li>Remove the <a def-id="text-track"></a> object from the <var>SourceBuffer textTracks list</var>.</li>
+                    </li>
+                    <li>Remove the <a def-id="text-track"></a> object from the <var>SourceBuffer textTracks list</var>.
                     <p class="note">
                       This should trigger <a def-id="text-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-text-removetrack-with-track-attr-initialized-to"></a> the <a def-id="text-track"></a> object, at the <var>SourceBuffer textTracks list</var>.
                       If the <a def-id="texttrack-mode"></a> attribute on the <a def-id="text-track"></a> object was <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> at the beginning of this removal step, then this should also trigger <a def-id="text-track-list"></a> [[HTML51]] logic to <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="texttracklist-change"></a> at the <var>SourceBuffer textTracks list</var>.
                     </p>
+                    </li>
                   </ol>
                 </li>
               </ol>
@@ -660,8 +668,8 @@ interface MediaSource : EventTarget {
           then let mode be local, skip the first step in the <a def-id="resource-fetch-algorithm"></a>
           (which may otherwise set mode to remote) and add the steps and clarifications below to the <a def-id="Otherwise-mode-is-local"></a> section of the <a def-id="resource-fetch-algorithm"></a>.
           <p class="note">The <a def-id="resource-fetch-algorithm"></a>'s first step is expected to eventually align with selecting local mode for URL records whose objects are media provider objects. The intent is that if the HTMLMediaElement's <code>src</code> attribute or selected child <code>&lt;source&gt;</code>'s <code>src</code> attribute is a <code>blob:</code> URL matching a <a def-id="MediaSource-object-URL"></a> when the respective <code>src</code> attribute was last changed, then that MediaSource object is used as the media provider object and current media resource in the local mode logic in the <a def-id="resource-fetch-algorithm"></a>. This also means that the remote mode logic that includes observance of any preload attribute is skipped when a MediaSource object is attached. Even with that eventual change to [[HTML51]], the execution of the following steps at the beginning of the local mode logic is still required when the current media resource is a MediaSource object.</p>
+          <p class="note">Relative to the action which triggered the media element's resource selection algorithm, these steps are asynchronous. The resource fetch algorithm is run after the task that invoked the resource selection algorithm is allowed to continue and a stable state is reached. Implementations may delay the steps in the "<i>Otherwise</i>" clause, below, until the MediaSource object is ready for use.</p>
           <dl class="switch">
-            <p class="note">Relative to the action which triggered the media element's resource selection algorithm, these steps are asynchronous. The resource fetch algorithm is run after the task that invoked the resource selection algorithm is allowed to continue and a stable state is reached. Implementations may delay the steps in the "<i>Otherwise</i>" clause, below, until the MediaSource object is ready for use.</p>
             <dt>If <a def-id="readyState"></a> is NOT set to <a def-id="closed"></a></dt>
             <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the <a def-id="resource-fetch-algorithm"></a>'s <a def-id="media-data-processing-steps-list"></a>.</dd>
             <dt>Otherwise</dt>
@@ -706,6 +714,7 @@ interface MediaSource : EventTarget {
           <h4>Seeking</h4>
           <p>Run the following steps as part of the "<i>Wait until the user agent has established whether or not the media data for the new playback position is available, and, if it is, until it has decoded enough data to play back that position"</i> step of the <a def-id="hme-seek-algorithm"></a>:</p>
           <ol>
+            <li>
             <p class="note">The media element looks for <a def-id="media-segments"></a> containing the <var>new playback position</var> in each <a>SourceBuffer</a> object in <a def-id="activeSourceBuffers"></a>.
             Any position within a <a def-id="timerange"></a> in the current value of the <a def-id="hme-buffered"></a> attribute has all necessary media segments buffered for that position.</p>
               <dl class="switch">
@@ -714,8 +723,9 @@ interface MediaSource : EventTarget {
                   <ol>
                     <li>If the <a def-id="ready-state"></a> attribute is greater than
                       <a def-id="have-metadata"></a>, then set the <a def-id="ready-state"></a> attribute
-                      to <a def-id="have-metadata"></a>.</li>
+                      to <a def-id="have-metadata"></a>.
                     <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
+                    </li>
                     <li>The media element waits until an <a def-id="appendBuffer"></a> call causes the <a def-id="coded-frame-processing-algorithm"></a> to set
                       the <a def-id="ready-state"></a> attribute to a value greater than <a def-id="have-metadata"></a>.
                       <p class="note">The web application can use <a def-id="buffered"></a> and <a def-id="hme-buffered"></a> to determine what the media element needs to resume playback.</p>
@@ -763,16 +773,16 @@ interface MediaSource : EventTarget {
             <dt>If <a def-id="hme-buffered"></a> does not contain a <a def-id="timerange"></a> for the current playback position:</dt>
             <dd>
               <ol>
-                <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.</li>
-                <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
+                <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.
+                <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p></li>
                 <li>Abort these steps.</li>
               </ol>
             </dd>
             <dt>If <a def-id="hme-buffered"></a> contains a <a def-id="timerange"></a> that includes the current playback position and <a def-id="enough-data"></a>:</dt>
             <dd>
               <ol>
-                <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-enough-data"></a>.</li>
-                <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
+                <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-enough-data"></a>.
+                <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p></li>
                 <li>Playback may resume at this point if it was previously suspended by a transition to <a def-id="have-current-data"></a>.</li>
                 <li>Abort these steps.</li>
               </ol>
@@ -780,8 +790,9 @@ interface MediaSource : EventTarget {
             <dt>If <a def-id="hme-buffered"></a> contains a <a def-id="timerange"></a> that includes the current playback position and some time beyond the current playback position, then run the following steps:</dt>
             <dd>
               <ol>
-                <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-future-data"></a>.</li>
+                <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-future-data"></a>.
                 <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
+                </li>
                 <li>Playback may resume at this point if it was previously suspended by a transition to <a def-id="have-current-data"></a>.</li>
                 <li>Abort these steps.</li>
               </ol>
@@ -789,8 +800,9 @@ interface MediaSource : EventTarget {
             <dt>If <a def-id="hme-buffered"></a> contains a <a def-id="timerange"></a> that ends at the current playback position and does not have a range covering the time immediately after the current position:</dt>
             <dd>
               <ol>
-                <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-current-data"></a>.</li>
+                <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-current-data"></a>.
                 <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
+                </li>
                 <li>Playback is suspended at this point since the media element doesn't have enough data to advance the <a def-id="media-timeline"></a>.</li>
                 <li>Abort these steps.</li>
               </ol>
@@ -873,12 +885,14 @@ interface MediaSource : EventTarget {
           <p>Follow these steps when <a def-id="duration"></a> needs to change to a <var>new duration</var>.</p>
           <ol>
             <li>If the current value of <a def-id="duration"></a> is equal to <var>new duration</var>, then return.</li>
-            <li>If <var>new duration</var> is less than the highest <a def-id="presentation-timestamp"></a> of any buffered <a def-id="coded-frames"></a> for all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If <var>new duration</var> is less than the highest <a def-id="presentation-timestamp"></a> of any buffered <a def-id="coded-frames"></a> for all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.
             <p class="note">Duration reductions that would truncate currently buffered media are disallowed. When truncation is necessary, use <a def-id="remove"></a> to reduce the buffered range before updating <a def-id="duration"></a>.</p>
+            </li>
             <li>Let <var>highest end time</var> be the largest <a def-id="track-buffer-ranges"></a> end time across all the <a def-id="track-buffers"></a> across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.</li>
             <li>If <var>new duration</var> is less than <var>highest end time</var>, then
+              <p class="note">This condition can occur because the <a def-id="coded-frame-removal-algorithm"></a> preserves coded frames that start before the start of the removal range.</p>
               <ol>
-                <p class="note">This condition can occur because the <a def-id="coded-frame-removal-algorithm"></a> preserves coded frames that start before the start of the removal range.</p>
+
                 <li>Update <var>new duration</var> to equal <var>highest end time</var>.</li>
               </ol>
             </li>
@@ -900,7 +914,7 @@ interface MediaSource : EventTarget {
                 <dd>
                   <ol>
                     <li>Run the <a def-id="duration-change-algorithm"></a> with <var>new duration</var> set to
-                      the largest <a def-id="track-buffer-ranges"></a> end time across all the <a def-id="track-buffers"></a> across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.</li>
+                      the largest <a def-id="track-buffer-ranges"></a> end time across all the <a def-id="track-buffers"></a> across all <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.
                       <p class="note">This allows the duration to properly reflect the end of the appended media segments. For example, if the duration was explicitly set to 10 seconds and only media segments for 0 to 5 seconds were appended before endOfStream() was called, then the duration will get updated to 5 seconds.</p>
                     </li>
                     <li>Notify the media element that it now has all of the media data.</li>
@@ -1007,8 +1021,8 @@ interface MediaSource : EventTarget {
             <li>Let <var>highest end time</var> be the largest <a def-id="track-buffer-ranges"></a> end time across all the <a def-id="track-buffers"></a> managed by this <a>SourceBuffer</a> object.</li>
             <li>Let <var>intersection ranges</var> equal a <a def-id="timerange"></a> object containing a single range from 0 to <var>highest end time</var>.</li>
             <li>For each audio and video <a def-id="track-buffer"></a> managed by this <a>SourceBuffer</a>, run the following steps:
-              <ol>
                 <p class="note">Text <a def-id="track-buffer">track-buffers</a> are included in the calculation of <var>highest end time</var>, above, but excluded from the buffered range calculation here. They are not necessarily continuous, nor should any discontinuity within them trigger playback stall when the other media tracks are continuous over the same time range.</p>
+              <ol>
                 <li>Let <var>track ranges</var> equal the <a def-id="track-buffer-ranges"></a> for the current <a def-id="track-buffer"></a>.</li>
                 <li>If <a def-id="readyState"></a> is <a def-id="ended"></a>, then set the end time on the last range in <var>track ranges</var> to <var>highest end time</var>.</li>
                 <li>Let <var>new intersection ranges</var> equal the intersection between the <var>intersection ranges</var> and the <var>track ranges</var>.</li>
@@ -1356,7 +1370,7 @@ interface MediaSource : EventTarget {
 
         <section id="sourcebuffer-append-error">
           <h4>Append Error Algorithm</h4>
-          <p>This algorithm is called when an error occurs during an append. 
+          <p>This algorithm is called when an error occurs during an append.
           <ol>
             <li>Run the <a def-id="reset-parser-state-algorithm"></a>.</li>
             <li>Set the <a def-id="updating"></a> attribute to false.</li>
@@ -1498,14 +1512,16 @@ interface MediaSource : EventTarget {
                             <li>Set <var>active track flag</var> to true.</li>
                           </ol>
                         </li>
-                        <li>Add <var>new audio track</var> to the <a def-id="sourcebuffer-audioTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
+                        <li>Add <var>new audio track</var> to the <a def-id="sourcebuffer-audioTracks"></a> attribute on this <a>SourceBuffer</a> object.
                         <p class="note">
                           This should trigger <a def-id="audio-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a> <var>new audio track</var>, at the <a def-id="audio-track-list"></a> object referenced by the <a def-id="sourcebuffer-audioTracks"></a> attribute on this <a>SourceBuffer</a> object.
                         </p>
-                        <li>Add <var>new audio track</var> to the <a def-id="audiotracks"></a> attribute on the HTMLMediaElement.</li>
+                        </li>
+                        <li>Add <var>new audio track</var> to the <a def-id="audiotracks"></a> attribute on the HTMLMediaElement.
                         <p class="note">
                           This should trigger <a def-id="audio-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a> <var>new audio track</var>, at the <a def-id="audio-track-list"></a> object referenced by the <a def-id="audiotracks"></a> attribute on the HTMLMediaElement.
                         </p>
+                        </li>
                       </ol>
                     </li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
@@ -1549,14 +1565,16 @@ interface MediaSource : EventTarget {
                             <li>Set <var>active track flag</var> to true.</li>
                           </ol>
                         </li>
-                        <li>Add <var>new video track</var> to the <a def-id="sourcebuffer-videoTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
+                        <li>Add <var>new video track</var> to the <a def-id="sourcebuffer-videoTracks"></a> attribute on this <a>SourceBuffer</a> object.
                         <p class="note">
                           This should trigger <a def-id="video-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a> <var>new video track</var>, at the <a def-id="video-track-list"></a> object referenced by the <a def-id="sourcebuffer-videoTracks"></a> attribute on this <a>SourceBuffer</a> object.
                         </p>
-                        <li>Add <var>new video track</var> to the <a def-id="videotracks"></a> attribute on the HTMLMediaElement.</li>
+                        </li>
+                        <li>Add <var>new video track</var> to the <a def-id="videotracks"></a> attribute on the HTMLMediaElement.
                         <p class="note">
                           This should trigger <a def-id="video-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a> <var>new video track</var>, at the <a def-id="video-track-list"></a> object referenced by the <a def-id="videotracks"></a> attribute on the HTMLMediaElement.
                         </p>
+                        </li>
                       </ol>
                     </li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
@@ -1597,14 +1615,16 @@ interface MediaSource : EventTarget {
                           If the <a def-id="texttrack-mode"></a> property on <var>new text track</var> equals <a def-id="texttrackmode-showing"></a> or
                           <a def-id="texttrackmode-hidden"></a>, then set <var>active track flag</var> to true.
                         </li>
-                        <li>Add <var>new text track</var> to the <a def-id="sourcebuffer-textTracks"></a> attribute on this <a>SourceBuffer</a> object.</li>
+                        <li>Add <var>new text track</var> to the <a def-id="sourcebuffer-textTracks"></a> attribute on this <a>SourceBuffer</a> object.
                         <p class="note">
                           This should trigger <a def-id="text-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-text-addtrack-with-track-attr-initialized-to"></a> <var>new text track</var>, at the <a def-id="text-track-list"></a> object referenced by the <a def-id="sourcebuffer-textTracks"></a> attribute on this <a>SourceBuffer</a> object.
                         </p>
-                        <li>Add <var>new text track</var> to the <a def-id="texttracks"></a> attribute on the HTMLMediaElement.</li>
+                        </li>
+                        <li>Add <var>new text track</var> to the <a def-id="texttracks"></a> attribute on the HTMLMediaElement.
                         <p class="note">
                           This should trigger <a def-id="text-track-list"></a> [[HTML51]] logic to <a def-id="queue-and-fire-text-addtrack-with-track-attr-initialized-to"></a> <var>new text track</var>, at the <a def-id="text-track-list"></a> object referenced by the <a def-id="texttracks"></a> attribute on the HTMLMediaElement.
                         </p>
+                        </li>
                       </ol>
                     </li>
                     <li>Create a new <a def-id="track-buffer"></a> to store <a def-id="coded-frames"></a> for this track.</li>
@@ -1626,17 +1646,18 @@ interface MediaSource : EventTarget {
                 <li>
                   If one or more objects in <a def-id="sourceBuffers"></a> have <a def-id="first-init-segment-received-flag"></a> set to false, then abort
                   these steps.</li>
-                <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.</li>
+                <li>Set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.
                 <p class="note">
                   Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement. This particular transition should trigger HTMLMediaElement logic to <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="loadedmetadata"></a> at the media element.
                 </p>
+                </li>
               </ol>
             </li>
             <li>
               If the <var>active track flag</var> equals true and the <a def-id="ready-state"></a> attribute is greater than
               <a def-id="have-current-data"></a>, then set the <a def-id="ready-state"></a> attribute to <a def-id="have-metadata"></a>.
-            </li>
             <p class="note">Per <a def-id="ready-states"></a> [[HTML51]] logic, <a def-id="ready-state"></a> changes may trigger events on the HTMLMediaElement.</p>
+            </li>
           </ol>
         </section>
 
@@ -1847,7 +1868,7 @@ interface MediaSource : EventTarget {
                   <p class="note">Random access point timestamps can be different across tracks because the dependencies between <a def-id="coded-frames"></a> within a
                     track are usually different than the dependencies in another track.</p>
                 </li>
-                <li>Remove all media data, from this <a def-id="track-buffer"></a>, that contain starting timestamps greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>.</li>
+                <li>Remove all media data, from this <a def-id="track-buffer"></a>, that contain starting timestamps greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>.
                 <ol>
                   <li><p>For each removed frame, if the frame has a <a def-id="decode-timestamp"></a> equal to the <a def-id="last-decode-timestamp"></a> for the frame's track, run the following steps:</p>
                     <dl class="switch">
@@ -1862,6 +1883,7 @@ interface MediaSource : EventTarget {
                   <li>Unset the <a def-id="highest-end-timestamp"></a> on all <a def-id="track-buffers"></a>.</li>
                   <li>Set the <a def-id="need-RAP-flag"></a> on all <a def-id="track-buffers"></a> to true.</li>
                 </ol>
+                </li>
                 <li>Remove all possible decoding dependencies on the <a def-id="coded-frames"></a> removed in the previous step
                   by removing all <a def-id="coded-frames"></a> from this <a def-id="track-buffer"></a> between those frames removed in the previous step and the next
                   <a def-id="random-access-point"></a> after those removed frames.

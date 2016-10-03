@@ -335,7 +335,7 @@
     'queue-and-fire-text-removetrack-with-track-attr-initialized-to': { func: queue_and_fire_track_event_helper_with_track_attr_initialized_to, fragment: 'text', link_text: 'removetrack', },
     'provide-a-stable-state': { func: webappapis_helper, fragment: 'provide-a-stable-state', link_text: 'provide a stable state',  },
 
-    'origin': { func: browsers_helper, fragment: 'origin', link_text: 'origin', },
+    'origin': { func: browsers_helper, fragment: 'section-origin', link_text: 'origin', },
     'relevant-settings-object': { func: webappapis_helper, fragment: 'relevant-settings-object', link_text: 'relevant settings object', },
 
 
