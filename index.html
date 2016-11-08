@@ -688,13 +688,137 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
       display: none;
     }
     
+    #respec-ui {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 202px;
+      text-align: right;
+    }
+    
+    #respec-pill,
+    .respec-info-button {
+      background: #fff;
+      height: 2.5em;
+      color: rgb(120, 120, 120);
+      border: 1px solid #ccc;
+      box-shadow: 1px 1px 8px 0 rgba(100, 100, 100, .5);
+    }
+    
+    .respec-info-button {
+      border: none;
+      border-radius: 2em;
+      margin-right: 1em;
+      min-width: 3.5em;
+    }
+    
+    #respec-pill:disabled {
+      margin: 10px auto;
+      font-size: 2.8px;
+      position: relative;
+      text-indent: -9999em;
+      border-top: 1.1em solid rgba(40, 40, 40, 0.2);
+      border-right: 1.1em solid rgba(40, 40, 40, 0.2);
+      border-bottom: 1.1em solid rgba(40, 40, 40, 0.2);
+      border-left: 1.1em solid #ffffff;
+      transform: translateZ(0);
+      animation: respec-spin 1.1s infinite linear;
+      box-shadow: none;
+    }
+    
+    #respec-pill:disabled,
+    #respec-pill:disabled:after {
+      border-radius: 50%;
+      width: 10em;
+      height: 10em;
+    }
+    
+    @keyframes respec-spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    
+    #respec-pill:hover,
+    #respec-pill:focus {
+      color: rgb(0, 0, 0);
+      transition: color .2s
+    }
+    
+    #respec-menu {
+      font-family: sans-serif;
+      background: #fff;
+      box-shadow: 1px 1px 8px 0 rgba(100, 100, 100, .5);
+      width: 200px;
+      display: none;
+      text-align: left;
+      margin-top: 5px;
+      font-size: .8em;
+    }
+    
+    .respec-save-button {
+      background: #fff;
+      border: 1px solid #000;
+      border-radius: 5px;
+      padding: 5px;
+      margin: 5px;
+      display: block;
+      width: 100%;
+      color: #000;
+      text-decoration: none;
+      text-align: center;
+      font-size: inherit;
+    }
+    
+    #respec-ui button:focus,
+    #respec-pill:focus,
+    .respec-option:focus {
+      outline: 0;
+      outline-style: none;
+    }
+    
+    #respec-ui button.respec-pill-error {
+      background-color: red;
+      color: white;
+    }
+    
+    #respec-ui button.respec-pill-warning {
+      background-color: orange;
+      color: white;
+    }
+    
+    #respec-menu button.respec-option {
+      background: white;
+      border: none;
+      width: 100%;
+      text-align: left;
+      font-size: inherit;
+      padding: 1.2em 1.2em;
+    }
+    
+    #respec-menu button.respec-option:hover {
+      background-color: #eeeeee;
+    }
+    
+    .respec-cmd-icon {
+      padding-right: .5em;
+    }
+    
+    #respec-ui button.respec-option:last-child {
+      border: none;
+      border-radius: inherit;
+    }
+    
     @media print {
       .removeOnSave {
         display: none;
       }
     }
   </style>
-  <title>Media Source Extensions</title>
+  <title>Media Source Extensions™</title>
 
   <!--<script src="respec-w3c-common.js" class="remove"></script>-->
 
@@ -711,15 +835,16 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
   <link rel="stylesheet" href="mse.css">
   <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED">
   <!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]-->
-  <meta name="generator" content="ReSpec 5.0.4">
+  <link rel="canonical" href="https://www.w3.org/TR/media-source/">
+  <meta name="generator" content="ReSpec 6.1.1">
   <script id="initialUserConfig" type="application/json">
     {
       "specStatus": "ED",
       "useExperimentalStyles": true,
       "shortName": "media-source",
       "edDraftURI": "http://w3c.github.io/media-source/",
-      "previousMaturity": "CR",
-      "previousPublishDate": "2015-07-05",
+      "previousMaturity": "PR",
+      "previousPublishDate": "2016-10-04",
       "editors": [
       {
         "name": "Matthew Wolenetz",
@@ -780,7 +905,9 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
       "wgURI": "https://www.w3.org/html/wg/",
       "wgPublicList": "public-html-media",
       "wgPatentURI": "https://www.w3.org/2004/01/pp-impl/40318/status",
-      "crEnd": "2016-06-7",
+      "lcEnd": "2016-08-10",
+      "prEnd": "2016-11-01",
+      "implementationReportURI": "http://tidoust.github.io/media-source-testcoverage/",
       "noIDLIn": true,
       "scheme": "https",
       "otherLinks": [
@@ -846,7 +973,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         "INBANDTRACKS":
         {
           "title": "Sourcing In-band Media Resource Tracks from Media Containers into HTML",
-          "href": "http://dev.w3.org/html5/html-sourcing-inband-tracks/",
+          "href": "https://dev.w3.org/html5/html-sourcing-inband-tracks/",
           "authors": [
             "Bob Lund",
             "Silvia Pfeiffer"
@@ -866,13 +993,13 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
     }
   </script>
 </head>
-<body class="h-entry toc-inline" role="document" id="respecDocument">
+<body class="h-entry" role="document" id="respecDocument">
   <div class="head" role="contentinfo" id="respecHeader">
     <p>
       <a class="logo" href="https://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" alt="W3C"></a>
     </p>
-    <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions</h1>
-    <h2 id="w3c-editor-s-draft-30-september-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-09-30">30 September 2016</time></h2>
+    <h1 class="title p-name" id="title" property="dcterms:title">Media Source Extensions™</h1>
+    <h2 id="w3c-editor-s-draft-08-november-2016"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2016-11-08">08 November 2016</time></h2>
     <dl>
       <dt>This version:</dt>
       <dd><a class="u-url" href="http://w3c.github.io/media-source/">http://w3c.github.io/media-source/</a></dd>
@@ -880,6 +1007,8 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
       <dd><a href="https://www.w3.org/TR/media-source/">https://www.w3.org/TR/media-source/</a></dd>
       <dt>Latest editor's draft:</dt>
       <dd><a href="http://w3c.github.io/media-source/">http://w3c.github.io/media-source/</a></dd>
+      <dt>Implementation report:</dt>
+      <dd><a href="http://tidoust.github.io/media-source-testcoverage/">http://tidoust.github.io/media-source-testcoverage/</a></dd>
       <dt>Editors:</dt>
       <dd class="p-author h-card vcard" property="bibo:editor" resource="_:editor0"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Matthew Wolenetz</span>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.google.com/">Google Inc.</a></span>
         <span property="rdf:rest" resource="_:editor1"></span>
@@ -978,6 +1107,10 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
       This document was published by the <a href="https://www.w3.org/html/wg/">HTML Media Extensions Working Group</a> as an Editor's Draft. If you wish to make comments regarding this document, please send them to
       <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a> (<a href="mailto:public-html-media-request@w3.org?subject=subscribe">subscribe</a>,
       <a href="https://lists.w3.org/Archives/Public/public-html-media/">archives</a>). All comments are welcome.
+    </p>
+    <p>
+      Please see the Working Group's <a href="http://tidoust.github.io/media-source-testcoverage/">implementation
+              report</a>.
     </p>
     <p>
       Publication as an Editor's Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr> Membership. This is a draft document and may be updated, replaced or obsoleted by other documents at any time. It is inappropriate to cite this document as other than work in progress.
@@ -1173,10 +1306,10 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         <dd>
           <p>A MediaSource object URL is a unique <a href="https://www.w3.org/TR/FileAPI/#url">Blob URI</a> [<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] created by <code><a href="#dom-url-createobjecturl">createObjectURL()</a></code>. It is used to attach a <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> object to an HTMLMediaElement.</p>
           <p>These URLs are the same as a <a href="https://www.w3.org/TR/FileAPI/#url">Blob URI</a>, except that anything in the definition of that feature that refers to <a href="https://www.w3.org/TR/FileAPI/#dfn-file">File</a> and <a href="https://www.w3.org/TR/FileAPI/#dfn-Blob">Blob</a> objects is hereby extended to also apply to <a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a> objects.</p>
-          <p>The <a href="https://www.w3.org/TR/html51/browsers.html#origin">origin</a> of the MediaSource object URL is the <a href="https://www.w3.org/TR/html51/webappapis.html#relevant-settings-object">relevant settings object</a> of <code>this</code> during the call to <code><a href="#dom-url-createobjecturl">createObjectURL()</a></code>.</p>
+          <p>The <a href="https://www.w3.org/TR/html51/browsers.html#section-origin">origin</a> of the MediaSource object URL is the <a href="https://www.w3.org/TR/html51/webappapis.html#relevant-settings-object">relevant settings object</a> of <code>this</code> during the call to <code><a href="#dom-url-createobjecturl">createObjectURL()</a></code>.</p>
           <div class="note">
             <div class="note-title marker" aria-level="4" role="heading" id="h-note3"><span>Note</span></div>
-            <p class="">For example, the <a href="https://www.w3.org/TR/html51/browsers.html#origin">origin</a> of the MediaSource object URL affects the way that the media element is <a href="https://www.w3.org/TR/html51/semantics-scripting.html#security-with-canvas-elements">consumed by canvas</a>.</p>
+            <p class="">For example, the <a href="https://www.w3.org/TR/html51/browsers.html#section-origin">origin</a> of the MediaSource object URL affects the way that the media element is <a href="https://www.w3.org/TR/html51/semantics-scripting.html#security-with-canvas-elements">consumed by canvas</a>.</p>
           </div>
         </dd>
 
@@ -1188,13 +1321,12 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         <dt id="presentation-start-time">Presentation Start Time</dt>
         <dd>
           <p>The presentation start time is the earliest time point in the presentation and specifies the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#initial-playback-position">initial playback position</a> and <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0.</p>
+
+          <div class="note">
+            <div class="note-title marker" aria-level="4" role="heading" id="h-note4"><span>Note</span></div>
+            <p class="">For the purposes of determining if <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> contains a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> that includes the current playback position, implementations <em class="rfc2119" title="MAY">MAY</em> choose to allow a current playback position at or after <a href="#presentation-start-time">presentation start time</a> and before the first <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> to play the first <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> if that <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> starts within a reasonably short time, like 1 second, after <a href="#presentation-start-time">presentation start time</a>. This allowance accommodates the reality that muxed streams commonly do not begin all tracks precisely at <a href="#presentation-start-time">presentation start time</a>. Implementations <em class="rfc2119" title="MUST">MUST</em> report the actual buffered range, regardless of this allowance.</p>
+          </div>
         </dd>
-
-        <div class="note">
-          <div class="note-title marker" aria-level="4" role="heading" id="h-note4"><span>Note</span></div>
-          <p class="">For the purposes of determining if <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> contains a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> that includes the current playback position, implementations <em class="rfc2119" title="MAY">MAY</em> choose to allow a current playback position at or after <a href="#presentation-start-time">presentation start time</a> and before the first <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> to play the first <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> if that <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> starts within a reasonably short time, like 1 second, after <a href="#presentation-start-time">presentation start time</a>. This allowance accommodates the reality that muxed streams commonly do not begin all tracks precisely at <a href="#presentation-start-time">presentation start time</a>. Implementations <em class="rfc2119" title="MUST">MUST</em> report the actual buffered range, regardless of this allowance.</p>
-        </div>
-
         <dt id="presentation-interval">Presentation Interval</dt>
         <dd>
           <p>The presentation interval of a <a href="#coded-frame">coded frame</a> is the time interval from its <a href="#presentation-timestamp">presentation timestamp</a> to the <a href="#presentation-timestamp">presentation timestamp</a> plus the <a href="#coded-frame-duration">coded frame's duration</a>. For example, if a coded frame has a presentation timestamp of 10 seconds and a <a href="#coded-frame-duration">coded frame duration</a> of 100 milliseconds, then the presentation interval would be [10-10.1). Note that the start of the range is inclusive, but the end of the range is exclusive.</p>
@@ -1501,20 +1633,22 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <li>For each <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> object in the <var>SourceBuffer audioTracks list</var>, run the following steps:
                   <ol>
                     <li>Set the <code><a href="#dom-audiotrack-sourcebuffer">sourceBuffer</a></code> attribute on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> object to null.</li>
-                    <li>Remove the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> object from the <var>HTMLMediaElement audioTracks list</var>.</li>
-                    <div class="note">
-                      <div class="note-title marker" aria-level="4" role="heading" id="h-note11"><span>Note</span></div>
-                      <p class="">
-                        This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onremovetrack">removetrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> object, at the <var>HTMLMediaElement audioTracks list</var>. If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-audiotrack-enabled">enabled</a></code> attribute on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> object was true at the beginning of this removal step, then this should also trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onchange">change</a></code> at the <var>HTMLMediaElement audioTracks list</var>
-                      </p>
-                    </div>
-                    <li>Remove the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> object from the <var>SourceBuffer audioTracks list</var>.</li>
-                    <div class="note">
-                      <div class="note-title marker" aria-level="4" role="heading" id="h-note12"><span>Note</span></div>
-                      <p class="">
-                        This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onremovetrack">removetrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> object, at the <var>SourceBuffer audioTracks list</var>. If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-audiotrack-enabled">enabled</a></code> attribute on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> object was true at the beginning of this removal step, then this should also trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onchange">change</a></code> at the <var>SourceBuffer audioTracks list</var>
-                      </p>
-                    </div>
+                    <li>Remove the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> object from the <var>HTMLMediaElement audioTracks list</var>.
+                      <div class="note">
+                        <div class="note-title marker" aria-level="4" role="heading" id="h-note11"><span>Note</span></div>
+                        <p class="">
+                          This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onremovetrack">removetrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> object, at the <var>HTMLMediaElement audioTracks list</var>. If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-audiotrack-enabled">enabled</a></code> attribute on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> object was true at the beginning of this removal step, then this should also trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onchange">change</a></code> at the <var>HTMLMediaElement audioTracks list</var>
+                        </p>
+                      </div>
+                    </li>
+                    <li>Remove the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> object from the <var>SourceBuffer audioTracks list</var>.
+                      <div class="note">
+                        <div class="note-title marker" aria-level="4" role="heading" id="h-note12"><span>Note</span></div>
+                        <p class="">
+                          This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onremovetrack">removetrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> object, at the <var>SourceBuffer audioTracks list</var>. If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-audiotrack-enabled">enabled</a></code> attribute on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code> object was true at the beginning of this removal step, then this should also trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onchange">change</a></code> at the <var>SourceBuffer audioTracks list</var>
+                        </p>
+                      </div>
+                    </li>
                   </ol>
                 </li>
               </ol>
@@ -1527,20 +1661,22 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <li>For each <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> object in the <var>SourceBuffer videoTracks list</var>, run the following steps:
                   <ol>
                     <li>Set the <code><a href="#dom-videotrack-sourcebuffer">sourceBuffer</a></code> attribute on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> object to null.</li>
-                    <li>Remove the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> object from the <var>HTMLMediaElement videoTracks list</var>.</li>
-                    <div class="note">
-                      <div class="note-title marker" aria-level="4" role="heading" id="h-note13"><span>Note</span></div>
-                      <p class="">
-                        This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onremovetrack">removetrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> object, at the <var>HTMLMediaElement videoTracks list</var>. If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-videotrack-selected">selected</a></code> attribute on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> object was true at the beginning of this removal step, then this should also trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onchange">change</a></code> at the <var>HTMLMediaElement videoTracks list</var>
-                      </p>
-                    </div>
-                    <li>Remove the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> object from the <var>SourceBuffer videoTracks list</var>.</li>
-                    <div class="note">
-                      <div class="note-title marker" aria-level="4" role="heading" id="h-note14"><span>Note</span></div>
-                      <p class="">
-                        This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onremovetrack">removetrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> object, at the <var>SourceBuffer videoTracks list</var>. If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-videotrack-selected">selected</a></code> attribute on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> object was true at the beginning of this removal step, then this should also trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onchange">change</a></code> at the <var>SourceBuffer videoTracks list</var>
-                      </p>
-                    </div>
+                    <li>Remove the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> object from the <var>HTMLMediaElement videoTracks list</var>.
+                      <div class="note">
+                        <div class="note-title marker" aria-level="4" role="heading" id="h-note13"><span>Note</span></div>
+                        <p class="">
+                          This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onremovetrack">removetrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> object, at the <var>HTMLMediaElement videoTracks list</var>. If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-videotrack-selected">selected</a></code> attribute on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> object was true at the beginning of this removal step, then this should also trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onchange">change</a></code> at the <var>HTMLMediaElement videoTracks list</var>
+                        </p>
+                      </div>
+                    </li>
+                    <li>Remove the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> object from the <var>SourceBuffer videoTracks list</var>.
+                      <div class="note">
+                        <div class="note-title marker" aria-level="4" role="heading" id="h-note14"><span>Note</span></div>
+                        <p class="">
+                          This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onremovetrack">removetrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> object, at the <var>SourceBuffer videoTracks list</var>. If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-videotrack-selected">selected</a></code> attribute on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> object was true at the beginning of this removal step, then this should also trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onchange">change</a></code> at the <var>SourceBuffer videoTracks list</var>
+                        </p>
+                      </div>
+                    </li>
                   </ol>
                 </li>
               </ol>
@@ -1554,20 +1690,22 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                 <li>For each <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> object in the <var>SourceBuffer textTracks list</var>, run the following steps:
                   <ol>
                     <li>Set the <code><a href="#dom-texttrack-sourcebuffer">sourceBuffer</a></code> attribute on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> object to null.</li>
-                    <li>Remove the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> object from the <var>HTMLMediaElement textTracks list</var>.</li>
-                    <div class="note">
-                      <div class="note-title marker" aria-level="4" role="heading" id="h-note15"><span>Note</span></div>
-                      <p class="">
-                        This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttracklist-onremovetrack">removetrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> object, at the <var>HTMLMediaElement textTracks list</var>. If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrack-mode">mode</a></code> attribute on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> object was <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-showing">"showing"</a></code> or <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-hidden">"hidden"</a></code> at the beginning of this removal step, then this should also trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttracklist-onchange">change</a></code> at the <var>HTMLMediaElement textTracks list</var>.
-                      </p>
-                    </div>
-                    <li>Remove the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> object from the <var>SourceBuffer textTracks list</var>.</li>
-                    <div class="note">
-                      <div class="note-title marker" aria-level="4" role="heading" id="h-note16"><span>Note</span></div>
-                      <p class="">
-                        This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttracklist-onremovetrack">removetrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> object, at the <var>SourceBuffer textTracks list</var>. If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrack-mode">mode</a></code> attribute on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> object was <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-showing">"showing"</a></code> or <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-hidden">"hidden"</a></code> at the beginning of this removal step, then this should also trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttracklist-onchange">change</a></code> at the <var>SourceBuffer textTracks list</var>.
-                      </p>
-                    </div>
+                    <li>Remove the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> object from the <var>HTMLMediaElement textTracks list</var>.
+                      <div class="note">
+                        <div class="note-title marker" aria-level="4" role="heading" id="h-note15"><span>Note</span></div>
+                        <p class="">
+                          This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttracklist-onremovetrack">removetrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> object, at the <var>HTMLMediaElement textTracks list</var>. If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrack-mode">mode</a></code> attribute on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> object was <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-showing">"showing"</a></code> or <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-hidden">"hidden"</a></code> at the beginning of this removal step, then this should also trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttracklist-onchange">change</a></code> at the <var>HTMLMediaElement textTracks list</var>.
+                        </p>
+                      </div>
+                    </li>
+                    <li>Remove the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> object from the <var>SourceBuffer textTracks list</var>.
+                      <div class="note">
+                        <div class="note-title marker" aria-level="4" role="heading" id="h-note16"><span>Note</span></div>
+                        <p class="">
+                          This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttracklist-onremovetrack">removetrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> object, at the <var>SourceBuffer textTracks list</var>. If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrack-mode">mode</a></code> attribute on the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> object was <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-showing">"showing"</a></code> or <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-hidden">"hidden"</a></code> at the beginning of this removal step, then this should also trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttracklist-onchange">change</a></code> at the <var>SourceBuffer textTracks list</var>.
+                        </p>
+                      </div>
+                    </li>
                   </ol>
                 </li>
               </ol>
@@ -1754,11 +1892,11 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <div class="note-title marker" aria-level="5" role="heading" id="h-note19"><span>Note</span></div>
           <p class="">The <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a>'s first step is expected to eventually align with selecting local mode for URL records whose objects are media provider objects. The intent is that if the HTMLMediaElement's <code>src</code> attribute or selected child <code>&lt;source&gt;</code>'s <code>src</code> attribute is a <code>blob:</code> URL matching a <a href="#mediasource-object-url">MediaSource object URL</a> when the respective <code>src</code> attribute was last changed, then that MediaSource object is used as the media provider object and current media resource in the local mode logic in the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a>. This also means that the remote mode logic that includes observance of any preload attribute is skipped when a MediaSource object is attached. Even with that eventual change to [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>], the execution of the following steps at the beginning of the local mode logic is still required when the current media resource is a MediaSource object.</p>
         </div>
+        <div class="note">
+          <div class="note-title marker" aria-level="5" role="heading" id="h-note20"><span>Note</span></div>
+          <p class="">Relative to the action which triggered the media element's resource selection algorithm, these steps are asynchronous. The resource fetch algorithm is run after the task that invoked the resource selection algorithm is allowed to continue and a stable state is reached. Implementations may delay the steps in the "<i>Otherwise</i>" clause, below, until the MediaSource object is ready for use.</p>
+        </div>
         <dl class="switch">
-          <div class="note">
-            <div class="note-title marker" aria-level="5" role="heading" id="h-note20"><span>Note</span></div>
-            <p class="">Relative to the action which triggered the media element's resource selection algorithm, these steps are asynchronous. The resource fetch algorithm is run after the task that invoked the resource selection algorithm is allowed to continue and a stable state is reached. Implementations may delay the steps in the "<i>Otherwise</i>" clause, below, until the MediaSource object is ready for use.</p>
-          </div>
           <dt>If <code><a href="#dom-readystate">readyState</a></code> is NOT set to <code><a href="#idl-def-ReadyState.closed">"closed"</a></code></dt>
           <dd>Run the <span>"<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>"</span> steps of the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a>'s <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#media-data-processing-steps-list">media data processing steps list</a>.</dd>
           <dt>Otherwise</dt>
@@ -1811,37 +1949,39 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         </h4>
         <p>Run the following steps as part of the "<i>Wait until the user agent has established whether or not the media data for the new playback position is available, and, if it is, until it has decoded enough data to play back that position"</i> step of the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#seek">seek algorithm</a>:</p>
         <ol>
-          <div class="note">
-            <div class="note-title marker" aria-level="5" role="heading" id="h-note23"><span>Note</span></div>
-            <p class="">The media element looks for <a href="#media-segment">media segments</a> containing the <var>new playback position</var> in each <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>. Any position within a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> in the current value of the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> attribute has all necessary media segments buffered for that position.</p>
-          </div>
-          <dl class="switch">
-            <dt>If <var>new playback position</var> is not in any <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> of <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code></dt>
-            <dd>
-              <ol>
-                <li>If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute is greater than
-                  <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>, then set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.</li>
+          <li>
+            <div class="note">
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note23"><span>Note</span></div>
+              <p class="">The media element looks for <a href="#media-segment">media segments</a> containing the <var>new playback position</var> in each <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>. Any position within a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> in the current value of the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> attribute has all necessary media segments buffered for that position.</p>
+            </div>
+            <dl class="switch">
+              <dt>If <var>new playback position</var> is not in any <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> of <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code></dt>
+              <dd>
+                <ol>
+                  <li>If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute is greater than
+                    <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>, then set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.
+                    <div class="note">
+                      <div class="note-title marker" aria-level="5" role="heading" id="h-note24"><span>Note</span></div>
+                      <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
+                    </div>
+                  </li>
+                  <li>The media element waits until an <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> call causes the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> to set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to a value greater than <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.
+                    <div class="note">
+                      <div class="note-title marker" aria-level="5" role="heading" id="h-note25"><span>Note</span></div>
+                      <p class="">The web application can use <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> and <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> to determine what the media element needs to resume playback.</p>
+                    </div>
+                  </li>
+                </ol>
+              </dd>
+              <dt>Otherwise</dt>
+              <dd>Continue
                 <div class="note">
-                  <div class="note-title marker" aria-level="5" role="heading" id="h-note24"><span>Note</span></div>
-                  <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note26"><span>Note</span></div>
+                  <p class="">If the <code><a href="#dom-readystate">readyState</a></code> attribute is <code><a href="#idl-def-ReadyState.ended">"ended"</a></code> and the <var>new playback position</var> is within a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> currently in <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code>, then the seek operation must continue to completion here even if one or more currently selected or enabled track buffers' largest range end timestamp is less than <var>new playback position</var>. This condition should only occur due to logic in <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> when <code><a href="#dom-readystate">readyState</a></code> is <code><a href="#idl-def-ReadyState.ended">"ended"</a></code>.</p>
                 </div>
-                <li>The media element waits until an <code><a href="#dom-sourcebuffer-appendbuffer">appendBuffer()</a></code> call causes the <a href="#sourcebuffer-coded-frame-processing">coded frame processing algorithm</a> to set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to a value greater than <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.
-                  <div class="note">
-                    <div class="note-title marker" aria-level="5" role="heading" id="h-note25"><span>Note</span></div>
-                    <p class="">The web application can use <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> and <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> to determine what the media element needs to resume playback.</p>
-                  </div>
-                </li>
-              </ol>
-            </dd>
-            <dt>Otherwise</dt>
-            <dd>Continue
-              <div class="note">
-                <div class="note-title marker" aria-level="5" role="heading" id="h-note26"><span>Note</span></div>
-                <p class="">If the <code><a href="#dom-readystate">readyState</a></code> attribute is <code><a href="#idl-def-ReadyState.ended">"ended"</a></code> and the <var>new playback position</var> is within a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> currently in <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code>, then the seek operation must continue to completion here even if one or more currently selected or enabled track buffers' largest range end timestamp is less than <var>new playback position</var>. This condition should only occur due to logic in <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> when <code><a href="#dom-readystate">readyState</a></code> is <code><a href="#idl-def-ReadyState.ended">"ended"</a></code>.</p>
-              </div>
-            </dd>
-          </dl>
-
+              </dd>
+            </dl>
+          </li>
           <li>The media element resets all decoders and initializes each one with data from the appropriate <a href="#init-segment">initialization segment</a>.</li>
           <li>The media element feeds <a href="#coded-frame">coded frames</a> from the <a href="#active-track-buffers">active track buffers</a> into the decoders starting with the closest <a href="#random-access-point">random access point</a> before the <var>new playback position</var>.</li>
           <li>Resume the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#seek">seek algorithm</a> at the "<i>Await a stable state</i>" step.</li>
@@ -1877,22 +2017,24 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <dt>If <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> does not contain a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> for the current playback position:</dt>
           <dd>
             <ol>
-              <li>Set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.</li>
-              <div class="note">
-                <div class="note-title marker" aria-level="5" role="heading" id="h-note29"><span>Note</span></div>
-                <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
-              </div>
+              <li>Set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.
+                <div class="note">
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note29"><span>Note</span></div>
+                  <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
+                </div>
+              </li>
               <li>Abort these steps.</li>
             </ol>
           </dd>
           <dt>If <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> contains a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> that includes the current playback position and <a href="#enough-data">enough data to ensure uninterrupted playback</a>:</dt>
           <dd>
             <ol>
-              <li>Set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_enough_data">HAVE_ENOUGH_DATA</a></code>.</li>
-              <div class="note">
-                <div class="note-title marker" aria-level="5" role="heading" id="h-note30"><span>Note</span></div>
-                <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
-              </div>
+              <li>Set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_enough_data">HAVE_ENOUGH_DATA</a></code>.
+                <div class="note">
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note30"><span>Note</span></div>
+                  <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
+                </div>
+              </li>
               <li>Playback may resume at this point if it was previously suspended by a transition to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_current_data">HAVE_CURRENT_DATA</a></code>.</li>
               <li>Abort these steps.</li>
             </ol>
@@ -1900,11 +2042,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <dt>If <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> contains a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> that includes the current playback position and some time beyond the current playback position, then run the following steps:</dt>
           <dd>
             <ol>
-              <li>Set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_future_data">HAVE_FUTURE_DATA</a></code>.</li>
-              <div class="note">
-                <div class="note-title marker" aria-level="5" role="heading" id="h-note31"><span>Note</span></div>
-                <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
-              </div>
+              <li>Set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_future_data">HAVE_FUTURE_DATA</a></code>.
+                <div class="note">
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note31"><span>Note</span></div>
+                  <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
+                </div>
+              </li>
               <li>Playback may resume at this point if it was previously suspended by a transition to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_current_data">HAVE_CURRENT_DATA</a></code>.</li>
               <li>Abort these steps.</li>
             </ol>
@@ -1912,11 +2055,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           <dt>If <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code> contains a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> that ends at the current playback position and does not have a range covering the time immediately after the current position:</dt>
           <dd>
             <ol>
-              <li>Set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_current_data">HAVE_CURRENT_DATA</a></code>.</li>
-              <div class="note">
-                <div class="note-title marker" aria-level="5" role="heading" id="h-note32"><span>Note</span></div>
-                <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
-              </div>
+              <li>Set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_current_data">HAVE_CURRENT_DATA</a></code>.
+                <div class="note">
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note32"><span>Note</span></div>
+                  <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
+                </div>
+              </li>
               <li>Playback is suspended at this point since the media element doesn't have enough data to advance the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#media-timeline">media timeline</a>.</li>
               <li>Abort these steps.</li>
             </ol>
@@ -2001,18 +2145,20 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
         <p>Follow these steps when <code><a href="#dom-mediasource-duration">duration</a></code> needs to change to a <var>new duration</var>.</p>
         <ol>
           <li>If the current value of <code><a href="#dom-mediasource-duration">duration</a></code> is equal to <var>new duration</var>, then return.</li>
-          <li>If <var>new duration</var> is less than the highest <a href="#presentation-timestamp">presentation timestamp</a> of any buffered <a href="#coded-frame">coded frames</a> for all <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
-          <div class="note">
-            <div class="note-title marker" aria-level="5" role="heading" id="h-note33"><span>Note</span></div>
-            <p class="">Duration reductions that would truncate currently buffered media are disallowed. When truncation is necessary, use <code><a href="#dom-sourcebuffer-remove">remove()</a></code> to reduce the buffered range before updating <code><a href="#dom-mediasource-duration">duration</a></code>.</p>
-          </div>
+          <li>If <var>new duration</var> is less than the highest <a href="#presentation-timestamp">presentation timestamp</a> of any buffered <a href="#coded-frame">coded frames</a> for all <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.
+            <div class="note">
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note33"><span>Note</span></div>
+              <p class="">Duration reductions that would truncate currently buffered media are disallowed. When truncation is necessary, use <code><a href="#dom-sourcebuffer-remove">remove()</a></code> to reduce the buffered range before updating <code><a href="#dom-mediasource-duration">duration</a></code>.</p>
+            </div>
+          </li>
           <li>Let <var>highest end time</var> be the largest <a href="#track-buffer-ranges">track buffer ranges</a> end time across all the <a href="#track-buffer">track buffers</a> across all <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.</li>
           <li>If <var>new duration</var> is less than <var>highest end time</var>, then
+            <div class="note">
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note34"><span>Note</span></div>
+              <p class="">This condition can occur because the <a href="#sourcebuffer-coded-frame-removal">coded frame removal algorithm</a> preserves coded frames that start before the start of the removal range.</p>
+            </div>
             <ol>
-              <div class="note">
-                <div class="note-title marker" aria-level="5" role="heading" id="h-note34"><span>Note</span></div>
-                <p class="">This condition can occur because the <a href="#sourcebuffer-coded-frame-removal">coded frame removal algorithm</a> preserves coded frames that start before the start of the removal range.</p>
-              </div>
+
               <li>Update <var>new duration</var> to equal <var>highest end time</var>.</li>
             </ol>
           </li>
@@ -2034,12 +2180,12 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
               <dt>If <var>error</var> is not set</dt>
               <dd>
                 <ol>
-                  <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the largest <a href="#track-buffer-ranges">track buffer ranges</a> end time across all the <a href="#track-buffer">track buffers</a> across all <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.</li>
-                  <div class="note">
-                    <div class="note-title marker" aria-level="5" role="heading" id="h-note35"><span>Note</span></div>
-                    <p class="">This allows the duration to properly reflect the end of the appended media segments. For example, if the duration was explicitly set to 10 seconds and only media segments for 0 to 5 seconds were appended before endOfStream() was called, then the duration will get updated to 5 seconds.</p>
-                  </div>
-
+                  <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the largest <a href="#track-buffer-ranges">track buffer ranges</a> end time across all the <a href="#track-buffer">track buffers</a> across all <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.
+                    <div class="note">
+                      <div class="note-title marker" aria-level="5" role="heading" id="h-note35"><span>Note</span></div>
+                      <p class="">This allows the duration to properly reflect the end of the appended media segments. For example, if the duration was explicitly set to 10 seconds and only media segments for 0 to 5 seconds were appended before endOfStream() was called, then the duration will get updated to 5 seconds.</p>
+                    </div>
+                  </li>
                   <li>Notify the media element that it now has all of the media data.</li>
                 </ol>
               </dd>
@@ -2163,11 +2309,11 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <li>Let <var>highest end time</var> be the largest <a href="#track-buffer-ranges">track buffer ranges</a> end time across all the <a href="#track-buffer">track buffers</a> managed by this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
             <li>Let <var>intersection ranges</var> equal a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> object containing a single range from 0 to <var>highest end time</var>.</li>
             <li>For each audio and video <a href="#track-buffer">track buffer</a> managed by this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a>, run the following steps:
+              <div class="note">
+                <div class="note-title marker" aria-level="4" role="heading" id="h-note36"><span>Note</span></div>
+                <p class="">Text <a href="#track-buffer">track-buffers</a> are included in the calculation of <var>highest end time</var>, above, but excluded from the buffered range calculation here. They are not necessarily continuous, nor should any discontinuity within them trigger playback stall when the other media tracks are continuous over the same time range.</p>
+              </div>
               <ol>
-                <div class="note">
-                  <div class="note-title marker" aria-level="4" role="heading" id="h-note36"><span>Note</span></div>
-                  <p class="">Text <a href="#track-buffer">track-buffers</a> are included in the calculation of <var>highest end time</var>, above, but excluded from the buffered range calculation here. They are not necessarily continuous, nor should any discontinuity within them trigger playback stall when the other media tracks are continuous over the same time range.</p>
-                </div>
                 <li>Let <var>track ranges</var> equal the <a href="#track-buffer-ranges">track buffer ranges</a> for the current <a href="#track-buffer">track buffer</a>.</li>
                 <li>If <code><a href="#dom-readystate">readyState</a></code> is <code><a href="#idl-def-ReadyState.ended">"ended"</a></code>, then set the end time on the last range in <var>track ranges</var> to <var>highest end time</var>.</li>
                 <li>Let <var>new intersection ranges</var> equal the intersection between the <var>intersection ranges</var> and the <var>track ranges</var>.</li>
@@ -2691,20 +2837,22 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                           <li>Set <var>active track flag</var> to true.</li>
                         </ol>
                       </li>
-                      <li>Add <var>new audio track</var> to the <code><a href="#dom-sourcebuffer-audiotracks">audioTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
-                      <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note43"><span>Note</span></div>
-                        <p class="">
-                          This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new audio track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> object referenced by the <code><a href="#dom-sourcebuffer-audiotracks">audioTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.
-                        </p>
-                      </div>
-                      <li>Add <var>new audio track</var> to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-audiotracks">audioTracks</a></code> attribute on the HTMLMediaElement.</li>
-                      <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note44"><span>Note</span></div>
-                        <p class="">
-                          This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new audio track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> object referenced by the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-audiotracks">audioTracks</a></code> attribute on the HTMLMediaElement.
-                        </p>
-                      </div>
+                      <li>Add <var>new audio track</var> to the <code><a href="#dom-sourcebuffer-audiotracks">audioTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.
+                        <div class="note">
+                          <div class="note-title marker" aria-level="5" role="heading" id="h-note43"><span>Note</span></div>
+                          <p class="">
+                            This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new audio track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> object referenced by the <code><a href="#dom-sourcebuffer-audiotracks">audioTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.
+                          </p>
+                        </div>
+                      </li>
+                      <li>Add <var>new audio track</var> to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-audiotracks">audioTracks</a></code> attribute on the HTMLMediaElement.
+                        <div class="note">
+                          <div class="note-title marker" aria-level="5" role="heading" id="h-note44"><span>Note</span></div>
+                          <p class="">
+                            This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new audio track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotracklist-audiotracklist">AudioTrackList</a></code> object referenced by the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-audiotracks">audioTracks</a></code> attribute on the HTMLMediaElement.
+                          </p>
+                        </div>
+                      </li>
                     </ol>
                   </li>
                   <li>Create a new <a href="#track-buffer">track buffer</a> to store <a href="#coded-frame">coded frames</a> for this track.</li>
@@ -2738,20 +2886,22 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                           <li>Set <var>active track flag</var> to true.</li>
                         </ol>
                       </li>
-                      <li>Add <var>new video track</var> to the <code><a href="#dom-sourcebuffer-videotracks">videoTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
-                      <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note45"><span>Note</span></div>
-                        <p class="">
-                          This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new video track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> object referenced by the <code><a href="#dom-sourcebuffer-videotracks">videoTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.
-                        </p>
-                      </div>
-                      <li>Add <var>new video track</var> to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-videotracks">videoTracks</a></code> attribute on the HTMLMediaElement.</li>
-                      <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note46"><span>Note</span></div>
-                        <p class="">
-                          This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new video track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> object referenced by the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-videotracks">videoTracks</a></code> attribute on the HTMLMediaElement.
-                        </p>
-                      </div>
+                      <li>Add <var>new video track</var> to the <code><a href="#dom-sourcebuffer-videotracks">videoTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.
+                        <div class="note">
+                          <div class="note-title marker" aria-level="5" role="heading" id="h-note45"><span>Note</span></div>
+                          <p class="">
+                            This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new video track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> object referenced by the <code><a href="#dom-sourcebuffer-videotracks">videoTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.
+                          </p>
+                        </div>
+                      </li>
+                      <li>Add <var>new video track</var> to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-videotracks">videoTracks</a></code> attribute on the HTMLMediaElement.
+                        <div class="note">
+                          <div class="note-title marker" aria-level="5" role="heading" id="h-note46"><span>Note</span></div>
+                          <p class="">
+                            This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-mediatracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new video track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotracklist-videotracklist">VideoTrackList</a></code> object referenced by the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-videotracks">videoTracks</a></code> attribute on the HTMLMediaElement.
+                          </p>
+                        </div>
+                      </li>
                     </ol>
                   </li>
                   <li>Create a new <a href="#track-buffer">track buffer</a> to store <a href="#coded-frame">coded frames</a> for this track.</li>
@@ -2783,20 +2933,22 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                         If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrack-mode">mode</a></code> property on <var>new text track</var> equals <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-showing">"showing"</a></code> or
                         <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttrackmode-hidden">"hidden"</a></code>, then set <var>active track flag</var> to true.
                       </li>
-                      <li>Add <var>new text track</var> to the <code><a href="#dom-sourcebuffer-texttracks">textTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.</li>
-                      <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note47"><span>Note</span></div>
-                        <p class="">
-                          This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new text track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> object referenced by the <code><a href="#dom-sourcebuffer-texttracks">textTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.
-                        </p>
-                      </div>
-                      <li>Add <var>new text track</var> to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-texttracks">textTracks</a></code> attribute on the HTMLMediaElement.</li>
-                      <div class="note">
-                        <div class="note-title marker" aria-level="5" role="heading" id="h-note48"><span>Note</span></div>
-                        <p class="">
-                          This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new text track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> object referenced by the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-texttracks">textTracks</a></code> attribute on the HTMLMediaElement.
-                        </p>
-                      </div>
+                      <li>Add <var>new text track</var> to the <code><a href="#dom-sourcebuffer-texttracks">textTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.
+                        <div class="note">
+                          <div class="note-title marker" aria-level="5" role="heading" id="h-note47"><span>Note</span></div>
+                          <p class="">
+                            This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new text track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> object referenced by the <code><a href="#dom-sourcebuffer-texttracks">textTracks</a></code> attribute on this <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object.
+                          </p>
+                        </div>
+                      </li>
+                      <li>Add <var>new text track</var> to the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-texttracks">textTracks</a></code> attribute on the HTMLMediaElement.
+                        <div class="note">
+                          <div class="note-title marker" aria-level="5" role="heading" id="h-note48"><span>Note</span></div>
+                          <p class="">
+                            This should trigger <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to fire a <a href="https://www.w3.org/TR/html51/infrastructure.html#trusted">trusted event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-texttracklist-onaddtrack">addtrack</a></code>, that does not bubble and is not cancelable, and that uses the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#trackevent-trackevent">TrackEvent</a></code> interface, with the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-trackevent-track">track</a></code> attribute initialized to <var>new text track</var>, at the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttracklist-texttracklist">TextTrackList</a></code> object referenced by the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-texttracks">textTracks</a></code> attribute on the HTMLMediaElement.
+                          </p>
+                        </div>
+                      </li>
                     </ol>
                   </li>
                   <li>Create a new <a href="#track-buffer">track buffer</a> to store <a href="#coded-frame">coded frames</a> for this track.</li>
@@ -2817,23 +2969,24 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
             <ol>
               <li>
                 If one or more objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> have <var><a href="#first-init-segment-received-flag">first initialization segment received flag</a></var> set to false, then abort these steps.</li>
-              <li>Set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.</li>
-              <div class="note">
-                <div class="note-title marker" aria-level="5" role="heading" id="h-note49"><span>Note</span></div>
-                <p class="">
-                  Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement. This particular transition should trigger HTMLMediaElement logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#eventdef-media-loadedmetadata">loadedmetadata</a></code> at the media element.
-                </p>
-              </div>
+              <li>Set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.
+                <div class="note">
+                  <div class="note-title marker" aria-level="5" role="heading" id="h-note49"><span>Note</span></div>
+                  <p class="">
+                    Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement. This particular transition should trigger HTMLMediaElement logic to <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#eventdef-media-loadedmetadata">loadedmetadata</a></code> at the media element.
+                  </p>
+                </div>
+              </li>
             </ol>
           </li>
           <li>
             If the <var>active track flag</var> equals true and the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute is greater than
             <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_current_data">HAVE_CURRENT_DATA</a></code>, then set the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> attribute to <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-have_metadata">HAVE_METADATA</a></code>.
+            <div class="note">
+              <div class="note-title marker" aria-level="5" role="heading" id="h-note50"><span>Note</span></div>
+              <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
+            </div>
           </li>
-          <div class="note">
-            <div class="note-title marker" aria-level="5" role="heading" id="h-note50"><span>Note</span></div>
-            <p class="">Per <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#ready-states">HTMLMediaElement ready states</a></code> [<cite><a class="bibref" href="#bib-HTML51">HTML51</a></cite>] logic, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-readystate">HTMLMediaElement.readyState</a></code> changes may trigger events on the HTMLMediaElement.</p>
-          </div>
         </ol>
       </section>
 
@@ -3055,22 +3208,23 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                   <p class="">Random access point timestamps can be different across tracks because the dependencies between <a href="#coded-frame">coded frames</a> within a track are usually different than the dependencies in another track.</p>
                 </div>
               </li>
-              <li>Remove all media data, from this <a href="#track-buffer">track buffer</a>, that contain starting timestamps greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>.</li>
-              <ol>
-                <li>
-                  <p>For each removed frame, if the frame has a <a href="#decode-timestamp">decode timestamp</a> equal to the <var><a href="#last-decode-timestamp">last decode timestamp</a></var> for the frame's track, run the following steps:</p>
-                  <dl class="switch">
-                    <dt>If <code><a href="#dom-sourcebuffer-mode">mode</a></code> equals <code><a href="#idl-def-AppendMode.segments">"segments"</a></code>:</dt>
-                    <dd>Set <var><a href="#sourcebuffer-group-end-timestamp">group end timestamp</a></var> to <a href="#presentation-timestamp">presentation timestamp</a>.</dd>
-                    <dt>If <code><a href="#dom-sourcebuffer-mode">mode</a></code> equals <code><a href="#idl-def-AppendMode.sequence">"sequence"</a></code>:</dt>
-                    <dd>Set <var><a href="#sourcebuffer-group-start-timestamp">group start timestamp</a></var> equal to the <var><a href="#sourcebuffer-group-end-timestamp">group end timestamp</a></var>.</dd>
-                  </dl>
-                </li>
-                <li>Unset the <var><a href="#last-decode-timestamp">last decode timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
-                <li>Unset the <var><a href="#last-frame-duration">last frame duration</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
-                <li>Unset the <var><a href="#highest-end-timestamp">highest end timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
-                <li>Set the <var><a href="#need-RAP-flag">need random access point flag</a></var> on all <a href="#track-buffer">track buffers</a> to true.</li>
-              </ol>
+              <li>Remove all media data, from this <a href="#track-buffer">track buffer</a>, that contain starting timestamps greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>.
+                <ol>
+                  <li>
+                    <p>For each removed frame, if the frame has a <a href="#decode-timestamp">decode timestamp</a> equal to the <var><a href="#last-decode-timestamp">last decode timestamp</a></var> for the frame's track, run the following steps:</p>
+                    <dl class="switch">
+                      <dt>If <code><a href="#dom-sourcebuffer-mode">mode</a></code> equals <code><a href="#idl-def-AppendMode.segments">"segments"</a></code>:</dt>
+                      <dd>Set <var><a href="#sourcebuffer-group-end-timestamp">group end timestamp</a></var> to <a href="#presentation-timestamp">presentation timestamp</a>.</dd>
+                      <dt>If <code><a href="#dom-sourcebuffer-mode">mode</a></code> equals <code><a href="#idl-def-AppendMode.sequence">"sequence"</a></code>:</dt>
+                      <dd>Set <var><a href="#sourcebuffer-group-start-timestamp">group start timestamp</a></var> equal to the <var><a href="#sourcebuffer-group-end-timestamp">group end timestamp</a></var>.</dd>
+                    </dl>
+                  </li>
+                  <li>Unset the <var><a href="#last-decode-timestamp">last decode timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
+                  <li>Unset the <var><a href="#last-frame-duration">last frame duration</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
+                  <li>Unset the <var><a href="#highest-end-timestamp">highest end timestamp</a></var> on all <a href="#track-buffer">track buffers</a>.</li>
+                  <li>Set the <var><a href="#need-RAP-flag">need random access point flag</a></var> on all <a href="#track-buffer">track buffers</a> to true.</li>
+                </ol>
+              </li>
               <li>Remove all possible decoding dependencies on the <a href="#coded-frame">coded frames</a> removed in the previous step by removing all <a href="#coded-frame">coded frames</a> from this <a href="#track-buffer">track buffer</a> between those frames removed in the previous step and the next
                 <a href="#random-access-point">random access point</a> after those removed frames.
                 <div class="note">
@@ -3371,9 +3525,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
     </h2>
     <p>This section specifies extensions to the <a href="https://www.w3.org/TR/FileAPI/#URL-object">URL</a>[<cite><a class="bibref" href="#bib-FILE-API">FILE-API</a></cite>] object definition.</p>
 
-    <pre class="def idl"><span class="idlInterface" id="idl-def-url-partial-1" data-idl="" data-title="URL">[<span class="extAttr"><span class="extAttrName">Exposed</span>=<span class="extAttrRhs">Window</span></span>,
- <span class="extAttr"><span class="extAttrName">DedicatedWorker</span></span>,
- <span class="extAttr"><span class="extAttrName">SharedWorker</span></span>]
+    <pre class="def idl"><span class="idlInterface" id="idl-def-url-partial-1" data-idl="" data-title="URL">[<span class="extAttr"><span class="extAttrName">Exposed</span>=<span class="extAttrRhs">Window</span></span>]
 partial interface <span class="idlInterfaceID">URL</span> {
 <span class="idlMethod" id="idl-def-url-createobjecturl(mediasource)" data-idl="" data-title="createObjectURL" data-dfn-for="url">    static <span class="idlMethType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-DOMString">DOMString</a></code></span> <span class="idlMethName"><a data-lt="createObjectURL" href="#dom-url-createobjecturl" class="internalDFN" data-link-type="dfn" data-for="URL"><code>createObjectURL</code></a></span>(<span class="idlParam"><span class="idlParamType"><a href="#idl-def-mediasource" class="internalDFN" data-link-type="dfn"><code>MediaSource</code></a></span> <span class="idlParamName">mediaSource</span></span>);</span>
 };</span></pre>
@@ -3771,11 +3923,11 @@ partial interface <span class="idlInterfaceID">URL</span> {
       <dl class="bibliography" resource=""><dt id="bib-FILE-API">[FILE-API]</dt>
         <dd>Arun Ranganathan; Jonas Sicking. W3C. <a href="https://www.w3.org/TR/FileAPI/" property="dc:requires"><cite>File API</cite></a>. 21 April 2015. W3C Working Draft. URL: <a href="https://www.w3.org/TR/FileAPI/" property="dc:requires">https://www.w3.org/TR/FileAPI/</a>
         </dd><dt id="bib-HTML51">[HTML51]</dt>
-        <dd>Steve Faulkner; Arron Eicholz; Travis Leithead; Alex Danilo. W3C. <a href="https://www.w3.org/TR/html51/" property="dc:requires"><cite>HTML 5.1</cite></a>. 15 September 2016. W3C Proposed Recommendation. URL: <a href="https://www.w3.org/TR/html51/" property="dc:requires">https://www.w3.org/TR/html51/</a>
+        <dd>Steve Faulkner; Arron Eicholz; Travis Leithead; Alex Danilo. W3C. <a href="https://www.w3.org/TR/html51/" property="dc:requires"><cite>HTML 5.1</cite></a>. 1 November 2016. W3C Recommendation. URL: <a href="https://www.w3.org/TR/html51/" property="dc:requires">https://www.w3.org/TR/html51/</a>
         </dd><dt id="bib-RFC2119">[RFC2119]</dt>
         <dd>S. Bradner. IETF. <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires">https://tools.ietf.org/html/rfc2119</a>
         </dd><dt id="bib-WEBIDL">[WEBIDL]</dt>
-        <dd>Cameron McCormack; Boris Zbarsky. W3C. <a href="https://www.w3.org/TR/WebIDL-1/" property="dc:requires"><cite>WebIDL Level 1</cite></a>. 15 September 2016. W3C Proposed Recommendation. URL: <a href="https://www.w3.org/TR/WebIDL-1/" property="dc:requires">https://www.w3.org/TR/WebIDL-1/</a>
+        <dd>Cameron McCormack; Boris Zbarsky; Tobie Langel. W3C. <a href="https://www.w3.org/TR/WebIDL-1/" property="dc:requires"><cite>Web IDL</cite></a>. 15 September 2016. W3C Working Draft. URL: <a href="https://www.w3.org/TR/WebIDL-1/" property="dc:requires">https://www.w3.org/TR/WebIDL-1/</a>
         </dd>
       </dl>
     </section>
@@ -3784,7 +3936,7 @@ partial interface <span class="idlInterfaceID">URL</span> {
       <h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">B.2 </span>Informative references</span>
       </h3>
       <dl class="bibliography" resource=""><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt>
-        <dd>Bob Lund; Silvia Pfeiffer. W3C. <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. URL: <a href="http://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references">http://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
+        <dd>Bob Lund; Silvia Pfeiffer. W3C. <a href="https://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. URL: <a href="https://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references">https://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
         </dd><dt id="bib-MEDIA-PLAYBACK-QUALITY">[MEDIA-PLAYBACK-QUALITY]</dt>
         <dd>Mounir Lamouri. W3C. <a href="https://wicg.github.io/media-playback-quality/" property="dc:references"><cite>Media Playback Quality</cite></a>. URL: <a href="https://wicg.github.io/media-playback-quality/" property="dc:references">https://wicg.github.io/media-playback-quality/</a>
         </dd><dt id="bib-MSE-REGISTRY">[MSE-REGISTRY]</dt>
