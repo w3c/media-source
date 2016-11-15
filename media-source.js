@@ -454,8 +454,8 @@
 
         // Refer to the local file rather than the published path.
         var file = "index.html";
-        EME_spec_url = file;
-        groupBaseURLs[x] = EME_spec_url;
+        MSE_spec_url = file;
+        groupBaseURLs[x] = MSE_spec_url;
         // Refer to the Web IDL Editor’s Draft from Editor’s Drafts of this spec.
         IDL_spec_url = "https://heycam.github.io/webidl/";
         break;
