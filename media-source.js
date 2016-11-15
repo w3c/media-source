@@ -1,5 +1,5 @@
 (function() {
-  var MSE_spec_url = "http://www.w3.org/TR/media-source/";
+  var MSE_spec_url = "https://www.w3.org/TR/media-source/";
   var HTML5_spec_url = "https://www.w3.org/TR/html51/semantics-embedded-content.html";
   var HTML5_infrastructure_spec_url = "https://www.w3.org/TR/html51/infrastructure.html";
   var HTML5_browsers_spec_url = "https://www.w3.org/TR/html51/browsers.html";
@@ -133,27 +133,27 @@
   }
 
   var mseDefinitions = {
-    'mse-spec': { func: link_helper, fragment: '#', link_text: 'Media Source Extensions', },
+    'mse-spec': { func: link_helper, fragment: '#', link_text: 'Media Source Extensions™', },
     'live-seekable-range': { func: var_helper, fragment: '#live-seekable-range', link_text: 'live seekable range', },
     'sourceBuffers': { func: idlref_helper, fragment: 'dom-mediasource-sourcebuffers', link_text: 'sourceBuffers',  },
     'activeSourceBuffers': { func: idlref_helper, fragment: 'dom-mediasource-activesourcebuffers', link_text: 'activeSourceBuffers',  },
-    'addSourceBuffer': { func: idlref_helper, fragment: 'dom-mediasource-addsourcebuffer', link_text: 'addSourceBuffer()',  },
+    'addSourceBuffer': { func: idlref_helper, fragment: 'widl-MediaSource-addSourceBuffer-SourceBuffer-DOMString-type', link_text: 'addSourceBuffer()',  },
     'endOfStream': { func: idlref_helper, fragment: 'dom-mediasource-endofstream', link_text: 'endOfStream()',  },
     'readyState': { func: idlref_helper, fragment: 'dom-readystate', link_text: 'readyState',  },
     'duration': { func: idlref_helper, fragment: 'dom-mediasource-duration', link_text: 'duration',  },
     'setLiveSeekableRange': { func: idlref_helper, fragment: 'dom-mediasource-setliveseekablerange', link_text: 'setLiveSeekableRange()',  },
     'clearLiveSeekableRange': { func: idlref_helper, fragment: 'dom-mediasource-clearliveseekablerange', link_text: 'clearLiveSeekableRange()',  },
-    'isTypeSupported': { func: idlref_helper, fragment: 'dom-mediasource-istypesupported', link_text: 'isTypeSupported()',  },
+    'isTypeSupported': { func: idlref_helper, fragment: 'widl-MediaSource-isTypeSupported-boolean-DOMString-type', link_text: 'isTypeSupported()',  },
 
     'appendBuffer': { func: idlref_helper, fragment: 'dom-sourcebuffer-appendbuffer', link_text: 'appendBuffer()',  },
-    'abort': { func: idlref_helper, fragment: 'dom-sourcebuffer-abort', link_text: 'abort()',  },
+    'abort': { func: idlref_helper, fragment: 'widl-SourceBuffer-abort-void', link_text: 'abort()',  },
     'remove': { func: idlref_helper, fragment: 'dom-sourcebuffer-remove', link_text: 'remove()',  },
     'updating': { func: idlref_helper, fragment: 'dom-sourcebuffer-updating', link_text: 'updating',  },
     'sourcebuffer-audioTracks': { func: idlref_helper, fragment: 'dom-sourcebuffer-audiotracks', link_text: 'audioTracks',  },
     'sourcebuffer-videoTracks': { func: idlref_helper, fragment: 'dom-sourcebuffer-videotracks', link_text: 'videoTracks',  },
     'sourcebuffer-textTracks': { func: idlref_helper, fragment: 'dom-sourcebuffer-texttracks', link_text: 'textTracks',  },
     'buffered': { func: idlref_helper, fragment: 'dom-sourcebuffer-buffered', link_text: 'buffered',  },
-    'timestampOffset': { func: idlref_helper, fragment: 'dom-sourcebuffer-timestampoffset', link_text: 'timestampOffset',  },
+    'timestampOffset': { func: idlref_helper, fragment: 'widl-SourceBuffer-timestampOffset', link_text: 'timestampOffset',  },
     'appendWindowStart': { func: idlref_helper, fragment: 'dom-sourcebuffer-appendwindowstart', link_text: 'appendWindowStart', },
     'appendWindowEnd': { func: idlref_helper, fragment: 'dom-sourcebuffer-appendwindowend', link_text: 'appendWindowEnd', },
     'AppendMode-segments': { func: idlref_helper, fragment: 'idl-def-AppendMode.segments', link_text: '"segments"',  },
@@ -344,7 +344,17 @@
 
     'contributors': { func: contributors_helper, fragment: '', link_text: '', },
   };
- 
+
+  // These definitions are only referenced from the registries.
+  // The URL fragment will get adjusted to the proper links in mediaSourcePreProcessor.
+  var mseRegistryReferencesDefinitions = {
+    'byte-stream-format-registry': { func: link_helper, fragment: 'MSE-REGISTRY', link_text: 'Media Source Extensions™ Byte Stream Format Registry', },
+    'byte-stream-format-registry-webm': { func: link_helper, fragment: 'MSE-FORMAT-WEBM', link_text: 'WebM Byte Stream Format', },
+    'byte-stream-format-registry-isobmff': { func: link_helper, fragment: 'MSE-FORMAT-ISOBMFF', link_text: 'ISO BMFF Byte Stream Format', },
+    'byte-stream-format-registry-mp2t': { func: link_helper, fragment: 'MSE-FORMAT-MP2T', link_text: 'MPEG-2 Transport Streams Byte Stream Format', },
+    'byte-stream-format-registry-mpeg-audio': { func: link_helper, fragment: 'MSE-FORMAT-MPEG-AUDIO', link_text: 'MPEG Audio Byte Stream Format', },
+  };
+
     // Update links to external type definitions.
     var externalClassInfo = {
       'ReadableStream': { spec: 'whatwg-streams-api', fragment: 'rs-class-definition' },
@@ -366,7 +376,7 @@
       'ArrayBufferView': { spec: 'typed-array', fragment: 'ArrayBufferView' },
       'DOMHighResTimeStamp': { spec: 'hr-time', fragment: 'dom-domhighrestimestamp'},
     };
- 
+
     function lookupBaseUrlForSpec( info ) {
         if (info.spec == 'w3c-streams-api') {
           baseURL = W3C_STREAMS_spec_url;
@@ -422,10 +432,32 @@
   }
 
   function mediaSourcePreProcessor() {
+    var original_MSE_spec_url = MSE_spec_url; // The loop may change multiple groupBaseURLs.
+    var is_registry_file = window.respecConfig.edDraftURI.includes("byte-stream");
+    var specStatus = window.respecConfig.specStatus;
+    var specStatusIndex = location.search.indexOf("specStatus");
+    if (specStatusIndex !== -1) {
+      var status = location.search.substring(specStatusIndex);
+      specStatusIndex = status.indexOf('=');
+      status = status.substring(specStatusIndex+1);
+      var semicolon = status.indexOf(';');
+      if (semicolon !== -1) {
+        status = status.substring(0, semicolon);
+      }
+      specStatus = status;
+    }
+
     for (var x in groupBaseURLs) {
-      if (groupBaseURLs[x] == MSE_spec_url && window.respecConfig.specStatus == "ED") {
+      if (groupBaseURLs[x] == original_MSE_spec_url && specStatus == "ED") {
         MSE_spec_url = "index.html";
         groupBaseURLs[x] = MSE_spec_url;
+
+        // Refer to the local file rather than the published path.
+        var file = "index.html";
+        MSE_spec_url = file;
+        groupBaseURLs[x] = MSE_spec_url;
+        // Refer to the Web IDL Editor’s Draft from Editor’s Drafts of this spec.
+        IDL_spec_url = "https://heycam.github.io/webidl/";
         break;
       }
     }
@@ -451,6 +483,8 @@
       }
     } );
 
+    var registry_biblio_entries =
+     getMediaSourceRegistryBibioEntries(specStatus);
     if (window.respecConfig.localBiblio) {
       var tmp = window.respecConfig.localBiblio["W3C-STREAMS-API"]
       if (tmp && tmp.href !== W3C_STREAMS_spec_url ) {
@@ -463,6 +497,32 @@
         WHATWG_STREAMS_spec_url = tmp.href;
         console.log("WHATWG_STREAMS_spec_url is out of sync with the localBiblio entry");
       }
+      for (var property_name in registry_biblio_entries)
+        window.respecConfig.localBiblio[property_name] = registry_biblio_entries[property_name];
+    } else {
+      window.respecConfig.localBiblio = registry_biblio_entries;
+    }
+
+    // adjust emeRegistryReferencesDefinitions to use proper links
+    // def-id are then replaced in encryptedMediaPostProcessor
+    function adjustFragments(key) {
+      var entry = mseRegistryReferencesDefinitions[key];
+      var fragment = entry.fragment;
+      var anchor = "";
+      var anchorStart = fragment.indexOf('#');
+      if (anchorStart !== -1) {
+        anchor = fragment.substring(anchorStart);
+        fragment = fragment.substring(0, anchorStart);
+      }
+      var specref = registry_biblio_entries[fragment];
+      // not all fragments are associated with a specref
+      if (specref === undefined) return;
+      if (entry !== undefined) {
+        entry.fragment = specref.href + anchor;
+      }
+    }
+    for (var key in mseRegistryReferencesDefinitions) {
+      adjustFragments(key);
     }
   }
 
@@ -579,7 +639,52 @@
     return;
   }
 
+  function getMediaSourceRegistryBibioEntries(status) {
+    var stream_path = "byte-stream-format";
+    var postfix = ".html";
+    var separator = "";
+    if (status !== "ED") {
+      stream_path = "https://www.w3.org/TR/mse-byte-stream-format";
+      postfix = "/";
+      separator = "-";
+    }
+
+    return {
+    "MSE-REGISTRY": {
+        title: "Media Source Extensions™ Byte Stream Format Registry",
+        href: stream_path + "-registry" + postfix,
+        authors: ["Matthew Wolenetz", "Jerry Smith", "Aaron Colwell"],
+        publisher: "W3C"
+    },
+    "MSE-FORMAT-WEBM": {
+        title: "WebM Byte Stream Format",
+        href: ((postfix == "/")?(stream_path+"-webm"):"webm-"+stream_path) + postfix,
+        authors: ["Matthew Wolenetz", "Jerry Smith", "Aaron Colwell"],
+        publisher: "W3C"
+    },
+    "MSE-FORMAT-ISOBMFF": {
+        title: "ISO BMFF Byte Stream Format",
+        href: ((postfix == "/")?(stream_path+"-isobmff"):"isobmff-"+stream_path) + postfix,
+        authors: ["Matthew Wolenetz", "Jerry Smith", "Mark Watson", "Aaron Colwell", "Adrian Bateman"],
+        publisher: "W3C"
+    },
+    "MSE-FORMAT-MP2T": {
+        title: "MPEG-2 Transport Streams Byte Stream Format",
+        href: ((postfix == "/")?(stream_path+"-mp2t"):"mp2t-"+stream_path) + postfix,
+        authors: ["Matthew Wolenetz", "Jerry Smith", "Mark Watson", "Aaron Colwell", "Adrian Bateman"],
+        publisher: "W3C"
+    },
+    "MSE-FORMAT-MPEG-AUDIO": {
+        title: "MPEG Audio Byte Stream Format",
+        href: ((postfix == "/")?(stream_path+"-mpeg-audio"):"mpeg-audio-"+stream_path) + postfix,
+        authors: ["Dale Curtis", "Matthew Wolenetz", "Aaron Colwell"],
+        publisher: "W3C"
+    },
+  }
+  };
+
   mediaSourceAddDefinitionInfo("media-source", MSE_spec_url, mseDefinitions);
+  mediaSourceAddDefinitionInfo("mse-references-from-registry", MSE_spec_url, mseRegistryReferencesDefinitions);
 
   window.mediaSourceAddDefinitionInfo = mediaSourceAddDefinitionInfo;
   window.mediaSourcePreProcessor = mediaSourcePreProcessor;
