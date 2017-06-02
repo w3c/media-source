@@ -118,7 +118,13 @@
               href: "https://dev.w3.org/html5/html-sourcing-inband-tracks/",
               authors: ["Bob Lund", "Silvia Pfeiffer"],
               publisher: "W3C",
-          }
+          },
+          "VP09CODECSPARAMETERSTRING": {
+              title: "VP Codec ISO Media File Format Binding",
+              href: "http://www.webmproject.org/vp9/mp4/#codecs-parameter-string",
+              authors: ["Frank Galligan", "Kilroy Hughes", "Thomás Inskip", "David Ronca"],
+              publisher: "WebM Project",
+          },
        }
 
       };
@@ -186,10 +192,18 @@
                 <td>false</td>
                 <td>true</td>
               </tr>
+              <tr>
+                <td>vp09... as described in the VP Codec ISO Media File Format Binding document[[VP09CODECSPARAMETERSTRING]]</td>
+                <td>false</td>
+                <td>true</td>
+              </tr>
             </tbody>
           </table>
           <div class="note">
             Implementations SHOULD support all of the codec IDs mentioned in the table above.
+          </div>
+          <div class="note">
+            Implementations SHOULD encourage applications to prefer the "vp09..." codec ID over "vp9". The "vp09..." format provides detailed profile and color information, enabling implementations to give more accurate answers for codec support.
           </div>
 
           <p>Examples of valid MIME-types with a codecs parameter.</p>
@@ -199,6 +213,8 @@
             <li>video/webm;codecs="vp8"</li>
             <li>video/webm;codecs="vp8,vorbis"</li>
             <li>video/webm;codecs="vp9,opus"</li>
+            <li>video/webm;codecs="vp09.00.10.08"</li>
+            <li>video/webm;codecs="vp09.02.10.10.01.09.16.09.01,opus"</li>
           </ul>
         </dd>
       </dl>
