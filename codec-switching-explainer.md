@@ -1,12 +1,13 @@
-# Codec Switching Feature Proposal
+# Media Source Extensions: Codec Switching Explainer
 
 ## tl;dr
 
-We propose adding a `changeType` method on `SourceBuffer` that allows the
-_type_ of media bytes subsequently appended to the `SourceBuffer` to be changed.
-We plan to incubate this idea via the WICG, with goal of eventually working with
-WebPlatformWG to get the result of WICG incubation as part of the next version
-of the [Media Source Extensions API](https://www.w3.org/TR/media-source/).
+We propose adding a `changeType` method on `SourceBuffer` that allows the _type_
+(bytestream and codec(s)) of media bytes subsequently appended to the
+`SourceBuffer` to be changed.  We plan to incubate this idea via the WICG, with
+goal of eventually working with WebPlatformWG to get the result of WICG
+incubation as part of the next version of the [Media Source Extensions
+API](https://www.w3.org/TR/media-source/) (MSE).
 
 ## Background
 
@@ -57,12 +58,12 @@ With the addition of a proposed `changeType` method on `SourceBuffer`, with a
 _type_ parameter similar to that in the existing `addSourceBuffer` method on
 `MediaSource`, a SourceBuffer could buffer and support playback across different
 bytestream formats and codecs. This new method would retain previously buffered
-media modulo future MSE coded frame eviction, and leverage the splicing and
-buffering logic in the existing MSE coded frame processing algorithm. If _type_
-is not supported by the user agent for the `SourceBuffer` and `MediaSource`,
-`changeType` would synchronously return false (modulo the API would be unaware
-of potentially unsupported encrypted/unencrypted content transitions when
-processing `changeType` - see related thoughts, below).
+media modulo future MSE coded frame eviction or removal, and leverage the
+splicing and buffering logic in the existing MSE coded frame processing
+algorithm. If _type_ is not supported by the user agent for the `SourceBuffer`
+and `MediaSource`, `changeType` would synchronously return false (modulo the API
+would be unaware of potentially unsupported encrypted/unencrypted content
+transitions when processing `changeType` - see related thoughts, below).
 
 ## Open Questions and Thoughts
 
@@ -70,34 +71,42 @@ processing `changeType` - see related thoughts, below).
   same number of audio, video and text tracks - and if more than one of a
   particular type, that the set of track IDs for that type be the same?
 
- * Pros:
-  * For a long time, user agents (including Chrome) chose the route of allowing
-    a maximum of one audio and one video track across all `SourceBuffer`s in a
+** Pros:
+*** For a long time, user agents (such as Chrome) chose the route of allowing
+    a maximum of one audio and one video track across all `SourceBuffers` in a
     `MediaSource` instance. Practically, this met the REC MSE requirement;
     further, it intended to improve the user experience such that only the
     expected media would be fetched and incur resource utilization.
- * Cons:
-  * Retaining this restriction precludes one of the [Implementation Use Cases](https://www.w3.org/wiki/HTML/Media_Task_Force/MSE_Ad_Insertion_Use_Cases#Implementation_Use_Cases).
+** Cons:
+*** Retaining this restriction precludes one of the [Implementation Use Cases](https://www.w3.org/wiki/HTML/Media_Task_Force/MSE_Ad_Insertion_Use_Cases#Implementation_Use_Cases).
 
 * Other than the existing `MEDIA_ERR_DECODE` and `MediaError.message` error
   reporting mechanism, is there a way applications could (ideally proactively,
   before fetching and buffering) determine whether or not the user agent has the
   capability of supporting playback across various levels of mixed encrypted and
-  unencrypted content?
+  unencrypted content along with bytestream and codec changes?
 
- * Thoughts:
-  * This proposal is focused on the MSE API alone.
+** Thoughts:
+*** This proposal is focused on the MSE API alone.
     [Media Capabilities](https://wicg.github.io/media-capabilities/) and
     [Encrypted Media Extensions](https://www.w3.org/TR/encrypted-media/) may need work to
     support such proactive queries.
 
 * Should the proposed `changeType` method implicitly perform the _reset parser
   state algorithm_, or should it instead require the application to ensure the
-  parser is reset (via `abort()`, if necessary) and not PARSING\_MEDIA\_SEGMENT
-  _append state_?
+  parser is reset (via `abort()`, if necessary)?
 
- * Thoughts:
-  * As there is no way currently for an application to be certain of the
+** Thoughts:
+*** As there is no way currently for an application to be certain of the
     `SourceBuffer`'s current _append state_, `changeType` should probably run
     the _reset parser state algorithm_.
 
+* To what level should we specify "seamless" playback across bytestream, codec
+  (and perhaps encryption) changes?
+
+** Thoughts:
+*** This is likely a quality-of-implementation output, rather than a specified
+input. Decoder reconfiguration, for instance, may not be sufficient in all
+implementation instances, to support precision across a transition. This is
+analogous to the same treatment of playback quality across adaptations allowed
+by REC MSE today: implicitly quality-of-implementation.
