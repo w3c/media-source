@@ -67,45 +67,43 @@ transitions when processing `changeType` - see related thoughts, below).
 
 ## Open Questions and Thoughts
 
-* Should the initialization segment received algorithm continue to require the
-  same number of audio, video and text tracks - and if more than one of a
-  particular type, that the set of track IDs for that type be the same?
+##### Should the initialization segment received algorithm continue to require the same number of audio, video and text tracks - and if more than one of a particular type, that the set of track IDs for that type be the same?
 
-** Pros:
-*** For a long time, user agents (such as Chrome) chose the route of allowing
-    a maximum of one audio and one video track across all `SourceBuffers` in a
-    `MediaSource` instance. Practically, this met the REC MSE requirement;
-    further, it intended to improve the user experience such that only the
-    expected media would be fetched and incur resource utilization.
-** Cons:
-*** Retaining this restriction precludes one of the [Implementation Use Cases](https://www.w3.org/wiki/HTML/Media_Task_Force/MSE_Ad_Insertion_Use_Cases#Implementation_Use_Cases).
+###### Pros:
 
-* Other than the existing `MEDIA_ERR_DECODE` and `MediaError.message` error
-  reporting mechanism, is there a way applications could (ideally proactively,
-  before fetching and buffering) determine whether or not the user agent has the
-  capability of supporting playback across various levels of mixed encrypted and
-  unencrypted content along with bytestream and codec changes?
+For a long time, user agents (such as Chrome) chose the route of allowing a
+maximum of one audio and one video track across all `SourceBuffers` in a
+`MediaSource` instance. Practically, this met the REC MSE requirement; further,
+it intended to improve the user experience such that only the expected media
+would be fetched and incur resource utilization.
 
-** Thoughts:
-*** This proposal is focused on the MSE API alone.
-    [Media Capabilities](https://wicg.github.io/media-capabilities/) and
-    [Encrypted Media Extensions](https://www.w3.org/TR/encrypted-media/) may need work to
-    support such proactive queries.
+###### Cons:
 
-* Should the proposed `changeType` method implicitly perform the _reset parser
-  state algorithm_, or should it instead require the application to ensure the
-  parser is reset (via `abort()`, if necessary)?
+Retaining this restriction precludes one of the
+[Implementation Use Cases](https://www.w3.org/wiki/HTML/Media_Task_Force/MSE_Ad_Insertion_Use_Cases#Implementation_Use_Cases).
 
-** Thoughts:
-*** As there is no way currently for an application to be certain of the
-    `SourceBuffer`'s current _append state_, `changeType` should probably run
-    the _reset parser state algorithm_.
+#### Other than the existing `MEDIA_ERR_DECODE` and `MediaError.message` error reporting mechanism, is there a way applications could (ideally proactively, before fetching and buffering) determine whether or not the user agent has the capability of supporting playback across various levels of mixed encrypted and unencrypted content along with bytestream and codec changes?
 
-* To what level should we specify "seamless" playback across bytestream, codec
-  (and perhaps encryption) changes?
+###### Thoughts:
 
-** Thoughts:
-*** This is likely a quality-of-implementation output, rather than a specified
+This proposal is focused on the MSE API alone.  [Media
+Capabilities](https://wicg.github.io/media-capabilities/) and [Encrypted Media
+Extensions](https://www.w3.org/TR/encrypted-media/) may need work to support
+such proactive queries.
+
+#### Should the proposed `changeType` method implicitly perform the _reset parser state algorithm_, or should it instead require the application to ensure the parser is reset (via `abort()`, if necessary)?
+
+###### Thoughts:
+
+As there is no way currently for an application to be certain of the
+`SourceBuffer`'s current _append state_, `changeType` should probably run the
+_reset parser state algorithm_.
+
+#### To what level should we specify "seamless" playback across bytestream, codec (and perhaps encryption) changes?
+
+###### Thoughts:
+
+This is likely a quality-of-implementation output, rather than a specified
 input. Decoder reconfiguration, for instance, may not be sufficient in all
 implementation instances, to support precision across a transition. This is
 analogous to the same treatment of playback quality across adaptations allowed
