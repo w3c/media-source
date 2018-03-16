@@ -1,5 +1,7 @@
 # Media Source Extensions: Codec Switching Explainer
 
+###### Author: Matthew Wolenetz, [Google Inc.](www.google.com) - March 15, 2018
+
 ## tl;dr
 
 We propose adding a `changeType` method on `SourceBuffer` that allows the _type_
