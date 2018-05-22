@@ -1,429 +1,325 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr" typeof="bibo:Document " prefix="bibo: http://purl.org/ontology/bibo/ w3p: http://www.w3.org/2001/02pd/rec54#">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta lang="" property="dc:language" content="en">
-  <style>
-    /*
+<!DOCTYPE html SYSTEM "about:legacy-compat"><html lang="en" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="generator" content="ReSpec 20.11.1"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><style>/* --- ISSUES/NOTES --- */
+div.issue-title, div.note-title , div.ednote-title, div.warning-title {
+    padding-right:  1em;
+    min-width: 7.5em;
+    color: #b9ab2d;
+}
+div.issue-title { color: #e05252; }
+div.note-title, div.ednote-title { color: #2b2; }
+div.warning-title { color: #f22; }
+div.issue-title span, div.note-title span, div.ednote-title span, div.warning-title span {
+    text-transform: uppercase;
+}
+div.note, div.issue, div.ednote, div.warning {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.note > p:first-child, .ednote > p:first-child, .issue > p:first-child, .warning > p:first-child { margin-top: 0 }
+.issue, .note, .ednote, .warning {
+    padding: .5em;
+    border-left-width: .5em;
+    border-left-style: solid;
+}
+div.issue, div.note , div.ednote,  div.warning {
+    padding: 1em 1.2em 0.5em;
+    margin: 1em 0;
+    position: relative;
+    clear: both;
+}
+span.note, span.ednote, span.issue, span.warning { padding: .1em .5em .15em; }
 
-github.com style (c) Vasily Polovnyov <vast@whiteants.net>
+.issue {
+    border-color: #e05252;
+    background: #fbe9e9;
+}
+.note, .ednote {
+    border-color: #52e052;
+    background: #e9fbe9;
+}
 
-*/
+.warning {
+    border-color: #f11;
+    border-width: .2em;
+    border-style: solid;
+    background: #fbe9e9;
+}
 
-    .hljs {
-      display: block;
-      overflow-x: auto;
-      padding: 0.5em;
-      color: #333;
-      background: #f8f8f8;
-    }
+.warning-title:before{
+    content: "⚠"; /*U+26A0 WARNING SIGN*/
+    font-size: 3em;
+    float: left;
+    height: 100%;
+    padding-right: .3em;
+    vertical-align: top;
+    margin-top: -0.5em;
+}
 
-    .hljs-comment,
-    .hljs-quote {
-      color: #998;
-      font-style: italic;
-    }
+li.task-list-item {
+    list-style: none;
+}
 
-    .hljs-keyword,
-    .hljs-selector-tag,
-    .hljs-subst {
-      color: #333;
-      font-weight: bold;
-    }
+input.task-list-item-checkbox {
+    margin: 0 0.35em 0.25em -1.6em;
+    vertical-align: middle;
+}
 
-    .hljs-number,
-    .hljs-literal,
-    .hljs-variable,
-    .hljs-template-variable,
-    .hljs-tag .hljs-attr {
-      color: #008080;
-    }
+.issue a.respec-gh-label {
+  padding: 5px;
+  margin: 0 2px 0 2px;
+  font-size: 10px;
+  text-transform: none;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 4px;
+  position: relative;
+  bottom: 2px;
+}
 
-    .hljs-string,
-    .hljs-doctag {
-      color: #d14;
-    }
+.issue a.respec-label-dark {
+  color: #fff;
+  background-color: #000;
+}
 
-    .hljs-title,
-    .hljs-section,
-    .hljs-selector-id {
-      color: #900;
-      font-weight: bold;
-    }
+.issue a.respec-label-light {
+  color: #000;
+  background-color: #fff;
+}
+</style>
+    
+    <title>WebM Byte Stream Format</title>
+    
+    <!--<script src="respec-w3c-common.js" class="remove"></script>-->
+    
+    
 
-    .hljs-subst {
-      font-weight: normal;
-    }
-
-    .hljs-type,
-    .hljs-class .hljs-title {
-      color: #458;
-      font-weight: bold;
-    }
-
-    .hljs-tag,
-    .hljs-name,
-    .hljs-attribute {
-      color: #000080;
-      font-weight: normal;
-    }
-
-    .hljs-regexp,
-    .hljs-link {
-      color: #009926;
-    }
-
-    .hljs-symbol,
-    .hljs-bullet {
-      color: #990073;
-    }
-
-    .hljs-built_in,
-    .hljs-builtin-name {
-      color: #0086b3;
-    }
-
-    .hljs-meta {
-      color: #999;
-      font-weight: bold;
-    }
-
-    .hljs-deletion {
-      background: #fdd;
-    }
-
-    .hljs-addition {
-      background: #dfd;
-    }
-
-    .hljs-emphasis {
-      font-style: italic;
-    }
-
-    .hljs-strong {
-      font-weight: bold;
-    }
-  </style>
-  <style>
-    /* --- ISSUES/NOTES --- */
-
-    div.issue-title,
-    div.note-title,
-    div.ednote-title,
-    div.warning-title {
-      padding-right: 1em;
-      min-width: 7.5em;
-      color: #b9ab2d;
-    }
-
-    div.issue-title {
-      color: #e05252;
-    }
-
-    div.note-title,
-    div.ednote-title {
-      color: #2b2;
-    }
-
-    div.warning-title {
-      color: #f22;
-    }
-
-    div.issue-title span,
-    div.note-title span,
-    div.ednote-title span,
-    div.warning-title span {
-      text-transform: uppercase;
-    }
-
-    div.note,
-    div.issue,
-    div.ednote,
-    div.warning {
-      margin-top: 1em;
-      margin-bottom: 1em;
-    }
-
-    .note>p:first-child,
-    .ednote>p:first-child,
-    .issue>p:first-child,
-    .warning>p:first-child {
-      margin-top: 0
-    }
-
-    .issue,
-    .note,
-    .ednote,
-    .warning {
-      padding: .5em;
-      border-left-width: .5em;
-      border-left-style: solid;
-    }
-
-    div.issue,
-    div.note,
-    div.ednote,
-    div.warning {
-      padding: 1em 1.2em 0.5em;
-      margin: 1em 0;
-      position: relative;
-      clear: both;
-    }
-
-    span.note,
-    span.ednote,
-    span.issue,
-    span.warning {
-      padding: .1em .5em .15em;
-    }
-
-    .issue {
-      border-color: #e05252;
-      background: #fbe9e9;
-    }
-
-    .note,
-    .ednote {
-      border-color: #52e052;
-      background: #e9fbe9;
-    }
-
-    .warning {
-      border-color: #f11;
-      border-width: .2em;
-      border-style: solid;
-      background: #fbe9e9;
-    }
-
-    .warning-title:before {
-      content: "⚠";
-      /*U+26A0 WARNING SIGN*/
-      font-size: 3em;
-      float: left;
-      height: 100%;
-      padding-right: .3em;
-      vertical-align: top;
-      margin-top: -0.5em;
-    }
-
-    li.task-list-item {
-      list-style: none;
-    }
-
-    input.task-list-item-checkbox {
-      margin: 0 0.35em 0.25em -1.6em;
-      vertical-align: middle;
-    }
-  </style>
-
-  <title>WebM Byte Stream Format</title>
-
-  <!--<script src="respec-w3c-common.js" class="remove"></script>-->
-
-
-
-
-  <!-- script to register bugs -->
-  <!-- Disabled unless/until it supports GitHub issues.
+    
+    <!-- script to register bugs -->
+    <!-- Disabled unless/until it supports GitHub issues.
     <script src="https://w3c.github.io/webcomponents/assets/scripts/bug-assist.js"></script>
     <meta name="bug.short_desc" content="[MSE] ">
     <meta name="bug.product" content="HTML WG">
     <meta name="bug.component" content="Media Source Extensions">
     -->
 
-  <link rel="stylesheet" href="mse.css">
-  <style id="respec-mainstyle">
-    /*****************************************************************
+    <link rel="stylesheet" href="mse.css">
+  <style id="respec-mainstyle">/*****************************************************************
  * ReSpec 3 CSS
  * Robin Berjon - http://berjon.com/
  *****************************************************************/
-    /* Override code highlighter background */
 
-    .hljs {
-      background: transparent !important;
-    }
-    /* --- INLINES --- */
+/* Override code highlighter background */
+.hljs {
+  background: transparent !important;
+}
 
-    em.rfc2119 {
-      text-transform: lowercase;
-      font-style: normal;
-      color: #900;
-    }
+/* --- INLINES --- */
+h1 abbr,
+h2 abbr,
+h3 abbr,
+h4 abbr,
+h5 abbr,
+h6 abbr,
+a abbr {
+  border: none;
+}
 
-    h1 abbr,
-    h2 abbr,
-    h3 abbr,
-    h4 abbr,
-    h5 abbr,
-    h6 abbr,
-    a abbr {
-      border: none;
-    }
+dfn {
+  font-weight: bold;
+}
 
-    dfn {
-      font-weight: bold;
-    }
+a.internalDFN {
+  color: inherit;
+  border-bottom: 1px solid #99c;
+  text-decoration: none;
+}
 
-    a.internalDFN {
-      color: inherit;
-      border-bottom: 1px solid #99c;
-      text-decoration: none;
-    }
+a.externalDFN {
+  color: inherit;
+  border-bottom: 1px dotted #ccc;
+  text-decoration: none;
+}
 
-    a.externalDFN {
-      color: inherit;
-      border-bottom: 1px dotted #ccc;
-      text-decoration: none;
-    }
+a.bibref {
+  text-decoration: none;
+}
 
-    a.bibref {
-      text-decoration: none;
-    }
+cite .bibref {
+  font-style: normal;
+}
 
-    cite .bibref {
-      font-style: normal;
-    }
+code {
+  color: #c83500;
+}
 
-    code {
-      color: #C83500;
-    }
+th code {
+  color: inherit;
+}
 
-    th code {
-      color: inherit;
-    }
-    /* --- TOC --- */
+/* --- TOC --- */
 
-    .toc a,
-    .tof a {
-      text-decoration: none;
-    }
+.toc a,
+.tof a {
+  text-decoration: none;
+}
 
-    a .secno,
-    a .figno {
-      color: #000;
-    }
+a .secno,
+a .figno {
+  color: #000;
+}
 
-    ul.tof,
-    ol.tof {
-      list-style: none outside none;
-    }
+ul.tof,
+ol.tof {
+  list-style: none outside none;
+}
 
-    .caption {
-      margin-top: 0.5em;
-      font-style: italic;
-    }
-    /* --- TABLE --- */
+.caption {
+  margin-top: 0.5em;
+  font-style: italic;
+}
 
-    table.simple {
-      border-spacing: 0;
-      border-collapse: collapse;
-      border-bottom: 3px solid #005a9c;
-    }
+/* --- TABLE --- */
 
-    .simple th {
-      background: #005a9c;
-      color: #fff;
-      padding: 3px 5px;
-      text-align: left;
-    }
+table.simple {
+  border-spacing: 0;
+  border-collapse: collapse;
+  border-bottom: 3px solid #005a9c;
+}
 
-    .simple th[scope="row"] {
-      background: inherit;
-      color: inherit;
-      border-top: 1px solid #ddd;
-    }
+.simple th {
+  background: #005a9c;
+  color: #fff;
+  padding: 3px 5px;
+  text-align: left;
+}
 
-    .simple td {
-      padding: 3px 10px;
-      border-top: 1px solid #ddd;
-    }
+.simple th[scope="row"] {
+  background: inherit;
+  color: inherit;
+  border-top: 1px solid #ddd;
+}
 
-    .simple tr:nth-child(even) {
-      background: #f0f6ff;
-    }
-    /* --- DL --- */
+.simple td {
+  padding: 3px 10px;
+  border-top: 1px solid #ddd;
+}
 
-    .section dd>p:first-child {
-      margin-top: 0;
-    }
+.simple tr:nth-child(even) {
+  background: #f0f6ff;
+}
 
-    .section dd>p:last-child {
-      margin-bottom: 0;
-    }
+/* --- DL --- */
 
-    .section dd {
-      margin-bottom: 1em;
-    }
+.section dd > p:first-child {
+  margin-top: 0;
+}
 
-    .section dl.attrs dd,
-    .section dl.eldef dd {
-      margin-bottom: 0;
-    }
+.section dd > p:last-child {
+  margin-bottom: 0;
+}
 
-    #issue-summary>ul,
-    .respec-dfn-list {
-      column-count: 2;
-    }
+.section dd {
+  margin-bottom: 1em;
+}
 
-    #issue-summary li,
-    .respec-dfn-list li {
-      list-style: none;
-    }
+.section dl.attrs dd,
+.section dl.eldef dd {
+  margin-bottom: 0;
+}
 
-    @media print {
-      .removeOnSave {
-        display: none;
-      }
-    }
-  </style>
-  <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED">
-  <link rel="canonical" href="https://www.w3.org/TR/mse-byte-stream-format-webm/">
-  <meta name="generator" content="ReSpec 12.2.3">
-  <script id="initialUserConfig" type="application/json">
+#issue-summary > ul,
+.respec-dfn-list {
+  column-count: 2;
+}
+
+#issue-summary li,
+.respec-dfn-list li {
+  list-style: none;
+}
+
+details.respec-tests-details {
+  margin-left: 1em;
+  display: inline-block;
+  vertical-align: top;
+}
+
+details.respec-tests-details > * {
+  padding-right: 2em;
+}
+
+details.respec-tests-details[open] {
+  z-index: 999999;
+  position: absolute;
+  border: thin solid #cad3e2;
+  border-radius: .3em;
+  background-color: white;
+  padding-bottom: .5em;
+}
+
+details.respec-tests-details[open] > summary {
+  border-bottom: thin solid #cad3e2;
+  padding-left: 1em;
+  margin-bottom: 1em;
+  line-height: 2em;
+}
+
+details.respec-tests-details > ul {
+  width: 100%;
+  margin-top: -0.3em;
+}
+
+details.respec-tests-details > li {
+  padding-left: 1em;
+}
+
+@media print {
+  .removeOnSave {
+    display: none;
+  }
+}
+</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED"><link rel="canonical" href="https://www.w3.org/TR/mse-byte-stream-format-webm/"><script id="initialUserConfig" type="application/json">{
+  "specStatus": "ED",
+  "shortName": "mse-byte-stream-format-webm",
+  "edDraftURI": "https://w3c.github.io/media-source/webm-byte-stream-format.html",
+  "prevVersion": "https://www.w3.org/2013/12/byte-stream-format-registry/webm-byte-stream-format.html",
+  "editors": [
     {
-      "specStatus": "ED",
-      "shortName": "mse-byte-stream-format-webm",
-      "edDraftURI": "https://w3c.github.io/media-source/webm-byte-stream-format.html",
-      "prevVersion": "https://www.w3.org/2013/12/byte-stream-format-registry/webm-byte-stream-format.html",
-      "editors": [
-      {
-        "name": "Matthew Wolenetz",
-        "url": "",
-        "company": "Google Inc.",
-        "companyURL": "http://www.google.com/"
-      },
-      {
-        "name": "Jerry Smith",
-        "url": "",
-        "company": "Microsoft Corporation",
-        "companyURL": "http://www.microsoft.com/"
-      },
-      {
-        "name": "Aaron Colwell (until April 2015)",
-        "url": "",
-        "company": "Google Inc.",
-        "companyURL": "http://www.google.com/"
-      }],
-      "mseDefGroupName": "webm-byte-stream-format",
-      "mseUnusedGroupNameExcludeList": [
-        "media-source"
-      ],
-      "mseContributors": [
-        "Chris Cunningham",
-        "Frank Galligan",
-        "Philip Jägenstedt"
-      ],
-      "wg": "HTML Media Extensions Working Group",
-      "wgURI": "https://www.w3.org/html/wg/",
-      "wgPublicList": "public-html-media",
-      "wgPatentURI": "https://www.w3.org/2004/01/pp-impl/40318/status",
-      "noIDLIn": true,
-      "scheme": "https",
-      "otherLinks": [
-      {
-        "key": "Repository",
-        "data": [
+      "name": "Matthew Wolenetz",
+      "url": "",
+      "company": "Google Inc.",
+      "companyURL": "http://www.google.com/"
+    },
+    {
+      "name": "Jerry Smith",
+      "url": "",
+      "company": "Microsoft Corporation",
+      "companyURL": "http://www.microsoft.com/"
+    },
+    {
+      "name": "Aaron Colwell (until April 2015)",
+      "url": "",
+      "company": "Google Inc.",
+      "companyURL": "http://www.google.com/"
+    }
+  ],
+  "mseDefGroupName": "webm-byte-stream-format",
+  "mseUnusedGroupNameExcludeList": [
+    "media-source"
+  ],
+  "mseContributors": [
+    "Chris Cunningham",
+    "Frank Galligan",
+    "Philip Jägenstedt"
+  ],
+  "wg": "HTML Media Extensions Working Group",
+  "wgURI": "https://www.w3.org/html/wg/",
+  "wgPublicList": "public-html-media",
+  "wgPatentURI": "https://www.w3.org/2004/01/pp-impl/40318/status",
+  "noIDLIn": true,
+  "scheme": "https",
+  "otherLinks": [
+    {
+      "key": "Repository",
+      "data": [
         {
           "value": "We are on GitHub",
           "href": "https://github.com/w3c/media-source/"
@@ -435,411 +331,336 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
         {
           "value": "Commit history",
           "href": "https://github.com/w3c/media-source/commits/gh-pages/webm-byte-stream-format-respec.html"
-        }]
-      },
-      {
-        "key": "Mailing list",
-        "data": [
+        }
+      ]
+    },
+    {
+      "key": "Mailing list",
+      "data": [
         {
           "value": "public-html-media@w3.org",
           "href": "https://lists.w3.org/Archives/Public/public-html-media/"
-        }]
-      }],
-      "preProcess": [
-        null,
-        null
-      ],
-      "definitionMap":
-      {},
-      "postProcess": [
-        null
-      ],
-      "localBiblio":
-      {
-        "INBANDTRACKS":
-        {
-          "title": "Sourcing In-band Media Resource Tracks from Media Containers into HTML",
-          "href": "https://dev.w3.org/html5/html-sourcing-inband-tracks/",
-          "authors": [
-            "Bob Lund",
-            "Silvia Pfeiffer"
-          ],
-          "publisher": "W3C"
-        },
-        "VP09CODECSPARAMETERSTRING":
-        {
-          "title": "VP Codec ISO Media File Format Binding",
-          "href": "http://www.webmproject.org/vp9/mp4/#codecs-parameter-string",
-          "authors": [
-            "Frank Galligan",
-            "Kilroy Hughes",
-            "Thomás Inskip",
-            "David Ronca"
-          ],
-          "publisher": "WebM Project"
-        },
-        "MSE-REGISTRY":
-        {
-          "title": "Media Source Extensions™ Byte Stream Format Registry",
-          "href": "byte-stream-format-registry.html",
-          "authors": [
-            "Matthew Wolenetz",
-            "Jerry Smith",
-            "Aaron Colwell"
-          ],
-          "publisher": "W3C"
-        },
-        "MSE-FORMAT-WEBM":
-        {
-          "title": "WebM Byte Stream Format",
-          "href": "webm-byte-stream-format.html",
-          "authors": [
-            "Matthew Wolenetz",
-            "Jerry Smith",
-            "Aaron Colwell"
-          ],
-          "publisher": "W3C"
-        },
-        "MSE-FORMAT-ISOBMFF":
-        {
-          "title": "ISO BMFF Byte Stream Format",
-          "href": "isobmff-byte-stream-format.html",
-          "authors": [
-            "Matthew Wolenetz",
-            "Jerry Smith",
-            "Mark Watson",
-            "Aaron Colwell",
-            "Adrian Bateman"
-          ],
-          "publisher": "W3C"
-        },
-        "MSE-FORMAT-MP2T":
-        {
-          "title": "MPEG-2 Transport Streams Byte Stream Format",
-          "href": "mp2t-byte-stream-format.html",
-          "authors": [
-            "Matthew Wolenetz",
-            "Jerry Smith",
-            "Mark Watson",
-            "Aaron Colwell",
-            "Adrian Bateman"
-          ],
-          "publisher": "W3C"
-        },
-        "MSE-FORMAT-MPEG-AUDIO":
-        {
-          "title": "MPEG Audio Byte Stream Format",
-          "href": "mpeg-audio-byte-stream-format.html",
-          "authors": [
-            "Dale Curtis",
-            "Matthew Wolenetz",
-            "Aaron Colwell"
-          ],
-          "publisher": "W3C"
         }
-      }
+      ]
     }
-  </script>
-</head>
-<body aria-busy="false" class="h-entry" id="respecDocument">
-  <div class="head" role="contentinfo" id="respecHeader">
-    <p>
-      <a class="logo" href="https://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" alt="W3C"></a>
-    </p>
-    <h1 class="title p-name" id="title" property="dcterms:title">WebM Byte Stream Format</h1>
-    <h2 id="w3c-editor-s-draft-02-june-2017"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time property="dcterms:issued" class="dt-published" datetime="2017-06-02">02 June 2017</time></h2>
-    <dl>
-      <dt>This version:</dt>
-      <dd><a class="u-url" href="https://w3c.github.io/media-source/webm-byte-stream-format.html">https://w3c.github.io/media-source/webm-byte-stream-format.html</a></dd>
-      <dt>Latest published version:</dt>
-      <dd><a href="https://www.w3.org/TR/mse-byte-stream-format-webm/">https://www.w3.org/TR/mse-byte-stream-format-webm/</a></dd>
-      <dt>Latest editor's draft:</dt>
-      <dd><a href="https://w3c.github.io/media-source/webm-byte-stream-format.html">https://w3c.github.io/media-source/webm-byte-stream-format.html</a></dd>
-      <dt>Editors:</dt>
-      <dd class="p-author h-card vcard" property="bibo:editor" resource="_:editor0"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Matthew Wolenetz</span>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.google.com/">Google Inc.</a></span>
-        <span property="rdf:rest" resource="_:editor1"></span>
-      </dd>
-      <dd class="p-author h-card vcard" resource="_:editor1"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Jerry Smith</span>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.microsoft.com/">Microsoft Corporation</a></span>
-        <span property="rdf:rest" resource="_:editor2"></span>
-      </dd>
-      <dd class="p-author h-card vcard" resource="_:editor2"><span property="rdf:first" typeof="foaf:Person"><span property="foaf:name" class="p-name fn">Aaron Colwell (until April 2015)</span>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.google.com/">Google Inc.</a></span>
-        <span property="rdf:rest" resource="rdf:nil"></span>
-      </dd>
-
-      <dt>Repository:</dt>
-      <dd>
-        <a href="https://github.com/w3c/media-source/">
-                      We are on GitHub
-                    </a>
-      </dd>
-      <dd>
-        <a href="https://github.com/w3c/media-source/issues">
-                      File a bug
-                    </a>
-      </dd>
-      <dd>
-        <a href="https://github.com/w3c/media-source/commits/gh-pages/webm-byte-stream-format-respec.html">
-                      Commit history
-                    </a>
-      </dd>
-      <dt>Mailing list:</dt>
-      <dd>
-        <a href="https://lists.w3.org/Archives/Public/public-html-media/">
-                      public-html-media@w3.org
-                    </a>
-      </dd>
-    </dl>
-    <p class="copyright">
-      <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2017
-
-      <a href="https://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="https://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
-      <a href="https://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>,
-      <a href="https://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>).
-      <abbr title="World Wide Web Consortium">W3C</abbr> <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
-      <a href="https://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
-      <a rel="license" href="https://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.
-    </p>
-    <hr title="Separator for header">
-  </div>
-
-  <section id="abstract" class="introductory" property="dc:abstract">
-    <h2 id="h-abstract" resource="#h-abstract"><span property="xhv:role" resource="xhv:heading">Abstract</span></h2>
-    <p>
+  ],
+  "preProcess": [
+    null,
+    null
+  ],
+  "definitionMap": {},
+  "postProcess": [
+    null
+  ],
+  "localBiblio": {
+    "INBANDTRACKS": {
+      "title": "Sourcing In-band Media Resource Tracks from Media Containers into HTML",
+      "href": "https://dev.w3.org/html5/html-sourcing-inband-tracks/",
+      "authors": [
+        "Bob Lund",
+        "Silvia Pfeiffer"
+      ],
+      "publisher": "W3C"
+    },
+    "VP09CODECSPARAMETERSTRING": {
+      "title": "VP Codec ISO Media File Format Binding",
+      "href": "http://www.webmproject.org/vp9/mp4/#codecs-parameter-string",
+      "authors": [
+        "Frank Galligan",
+        "Kilroy Hughes",
+        "Thomás Inskip",
+        "David Ronca"
+      ],
+      "publisher": "WebM Project"
+    },
+    "MSE-REGISTRY": {
+      "title": "Media Source Extensions™ Byte Stream Format Registry",
+      "href": "byte-stream-format-registry.html",
+      "authors": [
+        "Matthew Wolenetz",
+        "Jerry Smith",
+        "Aaron Colwell"
+      ],
+      "publisher": "W3C"
+    },
+    "MSE-FORMAT-WEBM": {
+      "title": "WebM Byte Stream Format",
+      "href": "webm-byte-stream-format.html",
+      "authors": [
+        "Matthew Wolenetz",
+        "Jerry Smith",
+        "Aaron Colwell"
+      ],
+      "publisher": "W3C"
+    },
+    "MSE-FORMAT-ISOBMFF": {
+      "title": "ISO BMFF Byte Stream Format",
+      "href": "isobmff-byte-stream-format.html",
+      "authors": [
+        "Matthew Wolenetz",
+        "Jerry Smith",
+        "Mark Watson",
+        "Aaron Colwell",
+        "Adrian Bateman"
+      ],
+      "publisher": "W3C"
+    },
+    "MSE-FORMAT-MP2T": {
+      "title": "MPEG-2 Transport Streams Byte Stream Format",
+      "href": "mp2t-byte-stream-format.html",
+      "authors": [
+        "Matthew Wolenetz",
+        "Jerry Smith",
+        "Mark Watson",
+        "Aaron Colwell",
+        "Adrian Bateman"
+      ],
+      "publisher": "W3C"
+    },
+    "MSE-FORMAT-MPEG-AUDIO": {
+      "title": "MPEG Audio Byte Stream Format",
+      "href": "mpeg-audio-byte-stream-format.html",
+      "authors": [
+        "Dale Curtis",
+        "Matthew Wolenetz",
+        "Aaron Colwell"
+      ],
+      "publisher": "W3C"
+    }
+  },
+  "publishISODate": "2018-05-22T00:00:00.000Z",
+  "generatedSubtitle": "Editor's Draft 22 May 2018"
+}</script></head>
+  <body class="h-entry"><div class="head">
+  <a href="https://www.w3.org/" class="logo">
+      <img alt="W3C" width="72" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C">
+  </a>
+  <h1 id="title" class="title p-name">WebM Byte Stream Format</h1>
+  
+  <h2 id="w3c-editor-s-draft-22-may-2018"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2018-05-22">22 May 2018</time></h2>
+  <dl>
+    <dt>This version:</dt><dd><a class="u-url" href="https://w3c.github.io/media-source/webm-byte-stream-format.html">https://w3c.github.io/media-source/webm-byte-stream-format.html</a></dd><dt>Latest published version:</dt><dd><a href="https://www.w3.org/TR/mse-byte-stream-format-webm/">https://www.w3.org/TR/mse-byte-stream-format-webm/</a></dd>
+    <dt>Latest editor's draft:</dt><dd><a href="https://w3c.github.io/media-source/webm-byte-stream-format.html">https://w3c.github.io/media-source/webm-byte-stream-format.html</a></dd>
+    
+    
+    
+    
+    
+    
+    <dt>Editors:</dt>
+    <dd class="p-author h-card vcard"><span class="p-name fn">Matthew Wolenetz</span> (<a class="p-org org h-org h-card" href="http://www.google.com/">Google Inc.</a>)</dd><dd class="p-author h-card vcard"><span class="p-name fn">Jerry Smith</span> (<a class="p-org org h-org h-card" href="http://www.microsoft.com/">Microsoft Corporation</a>)</dd><dd class="p-author h-card vcard"><span class="p-name fn">Aaron Colwell (until April 2015)</span> (<a class="p-org org h-org h-card" href="http://www.google.com/">Google Inc.</a>)</dd>
+    
+    
+    <dt>Repository:</dt><dd>
+      <a href="https://github.com/w3c/media-source/">We are on GitHub</a>
+    </dd><dd>
+      <a href="https://github.com/w3c/media-source/issues">File a bug</a>
+    </dd><dd>
+      <a href="https://github.com/w3c/media-source/commits/gh-pages/webm-byte-stream-format-respec.html">Commit history</a>
+    </dd><dt>Mailing list:</dt><dd>
+      <a href="https://lists.w3.org/Archives/Public/public-html-media/">public-html-media@w3.org</a>
+    </dd>
+  </dl>
+  
+  
+  
+  <p class="copyright">
+        <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> ©
+        2018
+        
+        <a href="https://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup>
+        (<a href="https://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
+        <a href="https://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>,
+        <a href="https://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>).
+        
+        <abbr title="World Wide Web Consortium">W3C</abbr> <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
+        <a href="https://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
+        <a rel="license" href="https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document">permissive document license</a>
+        rules apply.
+      </p>
+  <hr title="Separator for header">
+</div>
+    <section id="abstract" class="introductory"><h2 id="abstract-0">Abstract</h2>
       This specification defines a <a href="index.html#">Media Source Extensions™</a> [<cite><a class="bibref" href="#bib-MEDIA-SOURCE">MEDIA-SOURCE</a></cite>] byte stream format specification based on the WebM container format.
-    </p>
-  </section>
+    </section>
 
-  <section id="sotd" class="introductory">
-    <h2 id="h-sotd" resource="#h-sotd"><span property="xhv:role" resource="xhv:heading">Status of This Document</span></h2>
-    <p>
-      <em>This section describes the status of this document at the time of its publication. Other documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the latest revision of this technical report can be found in the <a href="https://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at https://www.w3.org/TR/.</em>
-    </p>
+    <section id="sotd" class="introductory"><h2 id="status-of-this-document">Status of This Document</h2><p>
+        <em>This section describes the status of this document at the time of its publication. Other documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the latest revision of this technical report can be found in the <a href="https://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at https://www.w3.org/TR/.</em>
+      </p><p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>; there may also be open bugs in the <a href="http://w3.org/brief/Mjcw">previous bug tracker</a>.</p><p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should join the mailing list mentioned below and take part in the discussions.</p><p>
+          This document was published by the <a href="https://www.w3.org/html/wg/">HTML Media Extensions Working Group</a> as an Editor's Draft.
+          
+          
+            Comments regarding this document are welcome. Please send them to
+            <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a>
+            (<a href="mailto:public-html-media-request@w3.org?subject=subscribe">subscribe</a>,
+            <a href="https://lists.w3.org/Archives/Public/public-html-media/">archives</a>).
+          
+          
+          
+          
+        </p><p>
+            Publication as an Editor's Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr>
+            Membership. This is a draft document and may be updated, replaced or obsoleted by other
+            documents at any time. It is inappropriate to cite this document as other than work in
+            progress.
+          </p><p>
+          
+            This document was produced by
+            a group
+            operating under the
+            <a href="https://www.w3.org/Consortium/Patent-Policy/"><abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+          
+          
+          
+              <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a rel="disclosure" href="https://www.w3.org/2004/01/pp-impl/40318/status">public list of any patent
+              disclosures</a>
+            made in connection with the deliverables of
+            the group; that page also includes
+            instructions for disclosing a patent. An individual who has actual knowledge of a patent
+            which the individual believes contains
+            <a href="https://www.w3.org/Consortium/Patent-Policy/#def-essential">Essential
+            Claim(s)</a> must disclose the information in accordance with
+            <a href="https://www.w3.org/Consortium/Patent-Policy/#sec-Disclosure">section
+            6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+          
+          
+        </p><p>This document is governed by the <a id="w3c_process_revision" href="https://www.w3.org/2018/Process-20180201/">1 February 2018 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
+        </p></section><nav id="toc"><h2 class="introductory" id="table-of-contents">Table of Contents</h2><ol class="toc"><li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li><li class="tocline"><a href="#webm-mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li><li class="tocline"><a href="#webm-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li><li class="tocline"><a href="#webm-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li><li class="tocline"><a href="#webm-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li><li class="tocline"><a href="#conformance" class="tocxref"><span class="secno">6. </span>Conformance</a></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">7. </span>Acknowledgments</a></li><li class="tocline"><a href="#references" class="tocxref"><span class="secno">A. </span>References</a><ol class="toc"><li class="tocline"><a href="#normative-references" class="tocxref"><span class="secno">A.1 </span>Normative references</a></li><li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">A.2 </span>Informative references</a></li></ol></li></ol></nav>
 
-    <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>; there may also be open bugs in the <a href="http://w3.org/brief/Mjcw">previous bug tracker</a>.</p>
-    <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should join the mailing list mentioned below and take part in the discussions.</p>
+    <section id="introduction">
+      <!--OddPage--><h2 id="x1-introduction"><span class="secno">1. </span>Introduction</h2>
+      <p>This specification describes a byte stream format based on the WebM container format [<cite><a class="bibref" href="#bib-WEBM">WEBM</a></cite>]. It defines the MIME-type parameters used to signal codecs, and provides
+      the necessary format specific definitions for <a href="index.html#init-segment">initialization segments</a>, <a href="index.html#media-segment">media segments</a>, and <a href="index.html#random-access-point">random access points</a> required by
+      the <a href="index.html#byte-stream-formats">byte stream formats section</a> of the Media Source Extensions spec.</p>
+    </section>
 
-    <p>
-      This document was published by the <a href="https://www.w3.org/html/wg/">HTML Media Extensions Working Group</a> as an Editor's Draft. Comments regarding this document are welcome. Please send them to
-      <a href="mailto:public-html-media@w3.org">public-html-media@w3.org</a> (<a href="mailto:public-html-media-request@w3.org?subject=subscribe">subscribe</a>,
-      <a href="https://lists.w3.org/Archives/Public/public-html-media/">archives</a>).
-    </p>
-    <p>
-      Publication as an Editor's Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr> Membership. This is a draft document and may be updated, replaced or obsoleted by other documents at any time. It is inappropriate to cite this document as other than work in progress.
-    </p>
-    <p>
-      This document was produced by a group operating under the
-      <a id="sotd_patent" property="w3p:patentRules" href="https://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent
-              Policy</a>.
-      <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="https://www.w3.org/2004/01/pp-impl/40318/status" rel="disclosure">public list of any patent
-                disclosures</a> made in connection with the deliverables of the group; that page also includes instructions for disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains
-      <a href="https://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential
-              Claim(s)</a> must disclose the information in accordance with
-      <a href="https://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section
-              6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
-    </p>
-    <p>This document is governed by the <a id="w3c_process_revision" href="https://www.w3.org/2017/Process-20170301/">1 March 2017 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
-    </p>
-
-  </section>
-  <nav id="toc">
-    <h2 class="introductory" id="table-of-contents" resource="#table-of-contents"><span property="xhv:role" resource="xhv:heading">Table of Contents</span></h2>
-    <ol class="toc" role="directory">
-      <li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a></li>
-      <li class="tocline"><a href="#webm-mime-parameters" class="tocxref"><span class="secno">2. </span>MIME-type parameters</a></li>
-      <li class="tocline"><a href="#webm-init-segments" class="tocxref"><span class="secno">3. </span>Initialization Segments</a></li>
-      <li class="tocline"><a href="#webm-media-segments" class="tocxref"><span class="secno">4. </span>Media Segments</a></li>
-      <li class="tocline"><a href="#webm-random-access-points" class="tocxref"><span class="secno">5. </span>Random Access Points</a></li>
-      <li class="tocline"><a href="#conformance" class="tocxref"><span class="secno">6. </span>Conformance</a></li>
-      <li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">7. </span>Acknowledgments</a></li>
-      <li class="tocline"><a href="#references" class="tocxref"><span class="secno">A. </span>References</a>
-        <ol class="toc">
-          <li class="tocline"><a href="#normative-references" class="tocxref"><span class="secno">A.1 </span>Normative references</a></li>
-          <li class="tocline"><a href="#informative-references" class="tocxref"><span class="secno">A.2 </span>Informative references</a></li>
-        </ol>
-      </li>
-    </ol>
-  </nav>
-
-
-
-  <section id="introduction" typeof="bibo:Chapter" resource="#introduction" property="bibo:hasPart">
-    <!--OddPage-->
-    <h2 id="h-introduction" resource="#h-introduction"><span property="xhv:role" resource="xhv:heading"><span class="secno">1. </span>Introduction</span>
-    </h2>
-    <p>This specification describes a byte stream format based on the WebM container format [<cite><a class="bibref" href="#bib-WEBM">WEBM</a></cite>]. It defines the MIME-type parameters used to signal codecs, and provides the necessary format specific definitions for <a href="index.html#init-segment">initialization segments</a>, <a href="index.html#media-segment">media segments</a>, and <a href="index.html#random-access-point">random access points</a> required by the <a href="index.html#byte-stream-formats">byte stream formats section</a> of the Media Source Extensions spec.</p>
-  </section>
-
-  <section id="webm-mime-parameters" typeof="bibo:Chapter" resource="#webm-mime-parameters" property="bibo:hasPart">
-    <!--OddPage-->
-    <h2 id="h-webm-mime-parameters" resource="#h-webm-mime-parameters"><span property="xhv:role" resource="xhv:heading"><span class="secno">2. </span>MIME-type parameters</span>
-    </h2>
-    <p>This section specifies the parameters that can be used in the MIME-type passed to <code><a href="index.html#dom-mediasource-istypesupported">isTypeSupported()</a></code> or <code><a href="index.html#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code>.</p>
-    <dl>
-      <dt>codecs</dt>
-      <dd>
-        A comma separated list of codec IDs used to specify what codecs will be used in the byte stream.
-        <table class="old-table">
-          <thead>
-            <tr>
-              <th>Codec ID</th>
-              <th>Valid with "audio/webm"</th>
-              <th>Valid with "video/webm"</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>vorbis</td>
-              <td>true</td>
-              <td>true</td>
-            </tr>
-            <tr>
-              <td>opus</td>
-              <td>true</td>
-              <td>true</td>
-            </tr>
-            <tr>
-              <td>vp8</td>
-              <td>false</td>
-              <td>true</td>
-            </tr>
-            <tr>
-              <td>vp9</td>
-              <td>false</td>
-              <td>true</td>
-            </tr>
-            <tr>
-              <td>vp09... as described in the VP Codec ISO Media File Format Binding document[<cite><a class="bibref" href="#bib-VP09CODECSPARAMETERSTRING">VP09CODECSPARAMETERSTRING</a></cite>]</td>
-              <td>false</td>
-              <td>true</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="note">
-          <div class="note-title marker" aria-level="3" role="heading" id="h-note1"><span>Note</span></div>
-          <div class="">
+    <section id="webm-mime-parameters">
+      <!--OddPage--><h2 id="x2-mime-type-parameters"><span class="secno">2. </span>MIME-type parameters</h2>
+      <p>This section specifies the parameters that can be used in the MIME-type passed to <code><a href="index.html#dom-mediasource-istypesupported">isTypeSupported()</a></code> or <code><a href="index.html#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code>.</p>
+      <dl>
+        <dt>codecs</dt>
+        <dd>
+          A comma separated list of codec IDs used to specify what codecs will be used in the byte stream.
+          <table class="old-table">
+            <thead>
+              <tr>
+                <th>Codec ID</th>
+                <th>Valid with "audio/webm"</th>
+                <th>Valid with "video/webm"</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>vorbis</td>
+                <td>true</td>
+                <td>true</td>
+              </tr>
+              <tr>
+                <td>opus</td>
+                <td>true</td>
+                <td>true</td>
+              </tr>
+              <tr>
+                <td>vp8</td>
+                <td>false</td>
+                <td>true</td>
+              </tr>
+              <tr>
+                <td>vp9</td>
+                <td>false</td>
+                <td>true</td>
+              </tr>
+              <tr>
+                <td>vp09... as described in the VP Codec ISO Media File Format Binding document[<cite><a class="bibref" href="#bib-VP09CODECSPARAMETERSTRING">VP09CODECSPARAMETERSTRING</a></cite>]</td>
+                <td>false</td>
+                <td>true</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="note" id="issue-container-generatedID"><div role="heading" class="note-title marker" id="h-note" aria-level="3"><span>Note</span></div><div class="">
             Implementations <em class="rfc2119" title="SHOULD">SHOULD</em> support all of the codec IDs mentioned in the table above.
-          </div>
-        </div>
-        <div class="note">
-          <div class="note-title marker" aria-level="3" role="heading" id="h-note2"><span>Note</span></div>
-          <div class="">
+          </div></div>
+          <div class="note" id="issue-container-generatedID-0"><div role="heading" class="note-title marker" id="h-note-0" aria-level="3"><span>Note</span></div><div class="">
             Implementations <em class="rfc2119" title="SHOULD">SHOULD</em> encourage applications to prefer the "vp09..." codec ID over "vp9". The "vp09..." format provides detailed profile and color information, enabling implementations to give more accurate answers for codec support.
-          </div>
-        </div>
+          </div></div>
 
-        <p>Examples of valid MIME-types with a codecs parameter.</p>
-        <ul>
-          <li>audio/webm;codecs="vorbis"</li>
-          <li>video/webm;codecs="vorbis"</li>
-          <li>video/webm;codecs="vp8"</li>
-          <li>video/webm;codecs="vp8,vorbis"</li>
-          <li>video/webm;codecs="vp9,opus"</li>
-          <li>video/webm;codecs="vp09.00.10.08"</li>
-          <li>video/webm;codecs="vp09.02.10.10.01.09.16.09.01,opus"</li>
-        </ul>
-      </dd>
-    </dl>
-  </section>
+          <p>Examples of valid MIME-types with a codecs parameter.</p>
+          <ul>
+            <li>audio/webm;codecs="vorbis"</li>
+            <li>video/webm;codecs="vorbis"</li>
+            <li>video/webm;codecs="vp8"</li>
+            <li>video/webm;codecs="vp8,vorbis"</li>
+            <li>video/webm;codecs="vp9,opus"</li>
+            <li>video/webm;codecs="vp09.00.10.08"</li>
+            <li>video/webm;codecs="vp09.02.10.10.01.09.16.09.01,opus"</li>
+          </ul>
+        </dd>
+      </dl>
+    </section>
 
-  <section id="webm-init-segments" typeof="bibo:Chapter" resource="#webm-init-segments" property="bibo:hasPart">
-    <!--OddPage-->
-    <h2 id="h-webm-init-segments" resource="#h-webm-init-segments"><span property="xhv:role" resource="xhv:heading"><span class="secno">3. </span>Initialization Segments</span>
-    </h2>
-    <p>A WebM <a href="index.html#init-segment">initialization segment</a> <em class="rfc2119" title="MUST">MUST</em> contain a subset of the elements at the start of a typical WebM file.</p>
+    <section id="webm-init-segments">
+      <!--OddPage--><h2 id="x3-initialization-segments"><span class="secno">3. </span>Initialization Segments</h2>
+      <p>A WebM <a href="index.html#init-segment">initialization segment</a> <em class="rfc2119" title="MUST">MUST</em> contain a subset of the elements at the start of a typical WebM file.</p>
 
-    <p>The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> if any of the following conditions are not met:</p>
-    <ol>
-      <li>The <a href="index.html#init-segment">initialization segment</a> <em class="rfc2119" title="MUST">MUST</em> start with an <a href="http://www.webmproject.org/docs/container/#ebml-basics">EBML Header</a> element, followed by a <a href="http://www.webmproject.org/docs/container/#segment">Segment</a> header.</li>
-      <li>The size value in the <a href="http://www.webmproject.org/docs/container/#segment">Segment</a> header <em class="rfc2119" title="MUST">MUST</em> signal an "unknown size" or contain a value large enough to include the <a href="http://www.webmproject.org/docs/container/#segment-information">Segment Information</a> and <a href="http://www.webmproject.org/docs/container/#track">Tracks</a> elements that follow.</li>
-      <li>A <a href="http://www.webmproject.org/docs/container/#segment-information">Segment Information</a> element and a <a href="http://www.webmproject.org/docs/container/#track">Tracks</a> element <em class="rfc2119" title="MUST">MUST</em> appear, in that order, after the <a href="http://www.webmproject.org/docs/container/#segment">Segment</a> header and before any further <a href="http://www.webmproject.org/docs/container/#ebml-basics">EBML Header</a> or <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> elements.
-      </li>
-    </ol>
-    <p>The user agent <em class="rfc2119" title="MUST">MUST</em> accept and ignore any elements other than an <a href="http://www.webmproject.org/docs/container/#ebml-basics">EBML Header</a> or a <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> that occur before, in between, or after the <a href="http://www.webmproject.org/docs/container/#segment-information">Segment Information</a> and
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> if any of the following conditions are not met:</p>
+      <ol>
+	<li>The <a href="index.html#init-segment">initialization segment</a> <em class="rfc2119" title="MUST">MUST</em> start with an <a href="http://www.webmproject.org/docs/container/#ebml-basics">EBML Header</a> element, followed by a <a href="http://www.webmproject.org/docs/container/#segment">Segment</a> header.</li>
+	<li>The size value in the <a href="http://www.webmproject.org/docs/container/#segment">Segment</a> header <em class="rfc2119" title="MUST">MUST</em> signal an "unknown size" or contain a value large enough to include the <a href="http://www.webmproject.org/docs/container/#segment-information">Segment Information</a> and <a href="http://www.webmproject.org/docs/container/#track">Tracks</a> elements that follow.</li>
+	<li>A <a href="http://www.webmproject.org/docs/container/#segment-information">Segment Information</a> element and a <a href="http://www.webmproject.org/docs/container/#track">Tracks</a> element <em class="rfc2119" title="MUST">MUST</em> appear, in that order, after the <a href="http://www.webmproject.org/docs/container/#segment">Segment</a> header and before any further <a href="http://www.webmproject.org/docs/container/#ebml-basics">EBML Header</a> or <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> elements.
+        </li>
+      </ol>
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> accept and ignore any elements other than an <a href="http://www.webmproject.org/docs/container/#ebml-basics">EBML Header</a> or a <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> that occur before, in between, or after the <a href="http://www.webmproject.org/docs/container/#segment-information">Segment Information</a> and
       <a href="http://www.webmproject.org/docs/container/#track">Tracks</a> elements.</p>
 
-    <p>The user agent <em class="rfc2119" title="MUST">MUST</em> source attribute values for id, kind, label and language for <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code>, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> and
-      <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> objects as described for WebM in the in-band tracks spec [<cite><a class="bibref" href="#bib-INBANDTRACKS">INBANDTRACKS</a></cite>].</p>
-  </section>
-
-  <section id="webm-media-segments" typeof="bibo:Chapter" resource="#webm-media-segments" property="bibo:hasPart">
-    <!--OddPage-->
-    <h2 id="h-webm-media-segments" resource="#h-webm-media-segments"><span property="xhv:role" resource="xhv:heading"><span class="secno">4. </span>Media Segments</span>
-    </h2>
-    <p>A WebM <a href="index.html#media-segment">media segment</a> is a single <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> element.</p>
-
-    <p>The user agent uses the following rules when interpreting content in a <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a>:</p>
-    <ol>
-      <li>The TimecodeScale in the <a href="#webm-init-segments">WebM initialization segment</a> most recently appended applies to all timestamps in the <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a></li>
-      <li>The Timecode element in the <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> contains a <a href="index.html#presentation-timestamp">presentation timestamp</a> in TimecodeScale units.</li>
-      <li>The Cluster header <em class="rfc2119" title="MAY">MAY</em> contain an "unknown" size value. If it does then the end of the cluster is reached when another <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> header or an element header that indicates the start of an <a href="#webm-init-segments">WebM initialization segment</a> is encountered.</li>
-    </ol>
-
-    <p>The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> if any of the following conditions are not met:</p>
-    <ol>
-      <li>The Timecode element <em class="rfc2119" title="MUST">MUST</em> appear before any Block &amp; SimpleBlock elements in a <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a>.</li>
-      <li>Block &amp; SimpleBlock elements are in time increasing order consistent with the <a href="http://www.webmproject.org/docs/container/#webm-guidelines">WebM spec</a>.</li>
-      <li>If the most recent <a href="#webm-init-segments">WebM initialization segment</a> describes multiple tracks, then blocks from all the tracks <em class="rfc2119" title="MUST">MUST</em> be interleaved in time increasing order. At least one block from all audio and video tracks <em class="rfc2119" title="MUST">MUST</em> be present.</li>
-    </ol>
-
-    <p>The user agent <em class="rfc2119" title="MUST">MUST</em> accept and ignore <a href="http://www.webmproject.org/docs/container/#cueing-data">Cues</a> or <a href="http://www.webmproject.org/docs/container/#chapters">Chapters</a> elements that follow a <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> element.</p>
-  </section>
-
-  <section id="webm-random-access-points" typeof="bibo:Chapter" resource="#webm-random-access-points" property="bibo:hasPart">
-    <!--OddPage-->
-    <h2 id="h-webm-random-access-points" resource="#h-webm-random-access-points"><span property="xhv:role" resource="xhv:heading"><span class="secno">5. </span>Random Access Points</span>
-    </h2>
-    <p>Either a SimpleBlock element with its Keyframe flag set, or a BlockGroup element having no ReferenceBlock elements, signals the location of a <a href="index.html#random-access-point">random access point</a> for that track. The order of multiplexed blocks within a <a href="index.html#media-segment">media segment</a> <em class="rfc2119" title="MUST">MUST</em> conform to the <a href="http://www.webmproject.org/docs/container/#muxer-guidelines">WebM Muxer Guidelines</a>.</p>
-  </section>
-
-  <section id="conformance" typeof="bibo:Chapter" resource="#conformance" property="bibo:hasPart">
-    <!--OddPage-->
-    <h2 id="h-conformance" resource="#h-conformance"><span property="xhv:role" resource="xhv:heading"><span class="secno">6. </span>Conformance</span>
-    </h2>
-    <p>
-      As well as sections marked as non-normative, all authoring guidelines, diagrams, examples, and notes in this specification are non-normative. Everything else in this specification is normative.
-    </p>
-    <p id="respecRFC2119">The key words <em class="rfc2119">MAY</em>, <em class="rfc2119">MUST</em>, and <em class="rfc2119">SHOULD</em> are to be interpreted as described in [<cite><a class="bibref" href="#bib-RFC2119">RFC2119</a></cite>].
-    </p>
-  </section>
-
-  <section id="acknowledgements" typeof="bibo:Chapter" resource="#acknowledgements" property="bibo:hasPart">
-    <!--OddPage-->
-    <h2 id="h-acknowledgements" resource="#h-acknowledgements"><span property="xhv:role" resource="xhv:heading"><span class="secno">7. </span>Acknowledgments</span>
-    </h2>
-    The editors would like to thank Chris Cunningham, Frank Galligan, and Philip Jägenstedt for their contributions to this specification.
-  </section>
-
-
-  <section id="references" class="appendix" typeof="bibo:Chapter" resource="#references" property="bibo:hasPart">
-    <!--OddPage-->
-    <h2 id="h-references" resource="#h-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>References</span>
-    </h2>
-
-    <section id="normative-references" typeof="bibo:Chapter" resource="#normative-references" property="bibo:hasPart">
-      <h3 id="h-normative-references" resource="#h-normative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.1 </span>Normative references</span>
-      </h3>
-      <dl class="bibliography" resource=""><dt id="bib-MEDIA-SOURCE">[MEDIA-SOURCE]</dt>
-        <dd><a href="https://www.w3.org/TR/media-source/" property="dc:requires"><cite>Media Source Extensions™</cite></a>. Matthew Wolenetz; Jerry Smith; Mark Watson; Aaron Colwell; Adrian Bateman. W3C. 17 November 2016. W3C Recommendation. URL: <a href="https://www.w3.org/TR/media-source/" property="dc:requires">https://www.w3.org/TR/media-source/</a>
-        </dd><dt id="bib-RFC2119">[RFC2119]</dt>
-        <dd><a href="https://tools.ietf.org/html/rfc2119" property="dc:requires"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. S. Bradner. IETF. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119" property="dc:requires">https://tools.ietf.org/html/rfc2119</a>
-        </dd><dt id="bib-WEBM">[WEBM]</dt>
-        <dd><a href="https://www.webmproject.org/docs/container/" property="dc:requires"><cite>WebM Container Guidelines</cite></a>. The WebM Project. 26 April 2016. URL: <a href="https://www.webmproject.org/docs/container/" property="dc:requires">https://www.webmproject.org/docs/container/</a>
-        </dd>
-      </dl>
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> source attribute values for id, kind, label and language for <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#audiotrack-audiotrack">AudioTrack</a></code>, <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#videotrack-videotrack">VideoTrack</a></code> and
+        <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#texttrack-texttrack">TextTrack</a></code> objects as described for WebM in the in-band tracks spec [<cite><a class="bibref" href="#bib-INBANDTRACKS">INBANDTRACKS</a></cite>].</p>
     </section>
 
-    <section id="informative-references" typeof="bibo:Chapter" resource="#informative-references" property="bibo:hasPart">
-      <h3 id="h-informative-references" resource="#h-informative-references"><span property="xhv:role" resource="xhv:heading"><span class="secno">A.2 </span>Informative references</span>
-      </h3>
-      <dl class="bibliography" resource=""><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt>
-        <dd><a href="https://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. Bob Lund; Silvia Pfeiffer. W3C. URL: <a href="https://dev.w3.org/html5/html-sourcing-inband-tracks/" property="dc:references">https://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
-        </dd><dt id="bib-VP09CODECSPARAMETERSTRING">[VP09CODECSPARAMETERSTRING]</dt>
-        <dd><a href="http://www.webmproject.org/vp9/mp4/#codecs-parameter-string" property="dc:references"><cite>VP Codec ISO Media File Format Binding</cite></a>. Frank Galligan; Kilroy Hughes; Thomás Inskip; David Ronca. WebM Project. URL: <a href="http://www.webmproject.org/vp9/mp4/#codecs-parameter-string" property="dc:references">http://www.webmproject.org/vp9/mp4/#codecs-parameter-string</a>
-        </dd>
-      </dl>
+    <section id="webm-media-segments">
+      <!--OddPage--><h2 id="x4-media-segments"><span class="secno">4. </span>Media Segments</h2>
+      <p>A WebM <a href="index.html#media-segment">media segment</a> is a single <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> element.</p>
+
+      <p>The user agent uses the following rules when interpreting content in a <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a>:</p>
+      <ol>
+        <li>The TimecodeScale in the <a href="#webm-init-segments">WebM initialization segment</a> most recently appended applies to all timestamps in the <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a></li>
+        <li>The Timecode element in the <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> contains a <a href="index.html#presentation-timestamp">presentation timestamp</a> in TimecodeScale units.</li>
+        <li>The Cluster header <em class="rfc2119" title="MAY">MAY</em> contain an "unknown" size value. If it does then the end of the cluster is reached when another <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> header or an element header that indicates the start
+          of an <a href="#webm-init-segments">WebM initialization segment</a> is encountered.</li>
+      </ol>
+
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> run the <a href="index.html#sourcebuffer-append-error">append error algorithm</a> if any of the following conditions are not met:</p>
+      <ol>
+        <li>The Timecode element <em class="rfc2119" title="MUST">MUST</em> appear before any Block &amp; SimpleBlock elements in a <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a>.</li>
+        <li>Block &amp; SimpleBlock elements are in time increasing order consistent with the <a href="http://www.webmproject.org/docs/container/#webm-guidelines">WebM spec</a>.</li>
+        <li>If the most recent <a href="#webm-init-segments">WebM initialization segment</a> describes multiple tracks, then blocks from all the tracks <em class="rfc2119" title="MUST">MUST</em> be interleaved in time increasing order. At least one block from all audio and video
+          tracks <em class="rfc2119" title="MUST">MUST</em> be present.</li>
+      </ol>
+
+      <p>The user agent <em class="rfc2119" title="MUST">MUST</em> accept and ignore <a href="http://www.webmproject.org/docs/container/#cueing-data">Cues</a> or <a href="http://www.webmproject.org/docs/container/#chapters">Chapters</a> elements that follow a <a href="http://www.webmproject.org/docs/container/#cluster">Cluster</a> element.</p>
     </section>
-  </section>
-  <p role="navigation" id="back-to-top"><a href="#toc"><abbr title="Back to Top">↑</abbr></a></p>
-  <script src="https://www.w3.org/scripts/TR/2016/fixup.js"></script>
-</body>
-</html>
+
+    <section id="webm-random-access-points">
+      <!--OddPage--><h2 id="x5-random-access-points"><span class="secno">5. </span>Random Access Points</h2>
+      <p>Either a SimpleBlock element with its Keyframe flag set, or a BlockGroup element having no ReferenceBlock elements, signals the location of a <a href="index.html#random-access-point">random access point</a> for that track. The order of multiplexed blocks within a <a href="index.html#media-segment">media segment</a> <em class="rfc2119" title="MUST">MUST</em> conform to the <a href="http://www.webmproject.org/docs/container/#muxer-guidelines">WebM Muxer Guidelines</a>.</p>
+    </section>
+
+    <section id="conformance"><!--OddPage--><h2 id="x6-conformance"><span class="secno">6. </span>Conformance</h2><p>
+  As well as sections marked as non-normative, all authoring guidelines, diagrams, examples,
+  and notes in this specification are non-normative. Everything else in this specification is
+  normative.
+</p><p id="respecRFC2119">The key words  <em class="rfc2119">MAY</em>, <em class="rfc2119">MUST</em>, and <em class="rfc2119">SHOULD</em> are 
+  to be interpreted as described in [<cite><a class="bibref" href="#bib-RFC2119">RFC2119</a></cite>].
+</p></section>
+
+    <section id="acknowledgements">
+      <!--OddPage--><h2 id="x7-acknowledgments"><span class="secno">7. </span>Acknowledgments</h2>
+      The editors would like to thank Chris Cunningham, Frank Galligan, and Philip Jägenstedt for their contributions to this specification.
+    </section>
+  
+
+<section id="references" class="appendix"><!--OddPage--><h2 id="a-references"><span class="secno">A. </span>References</h2><section id="normative-references"><h3 id="a-1-normative-references"><span class="secno">A.1 </span>Normative references</h3><dl class="bibliography"><dt id="bib-MEDIA-SOURCE">[MEDIA-SOURCE]</dt><dd><a href="https://www.w3.org/TR/media-source/"><cite>Media Source Extensions™</cite></a>. Matthew Wolenetz; Jerry Smith; Mark Watson; Aaron Colwell; Adrian Bateman. W3C. 17 November 2016. W3C Recommendation. URL: <a href="https://www.w3.org/TR/media-source/">https://www.w3.org/TR/media-source/</a>
+</dd><dt id="bib-RFC2119">[RFC2119]</dt><dd><a href="https://tools.ietf.org/html/rfc2119"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. S. Bradner. IETF. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119">https://tools.ietf.org/html/rfc2119</a>
+</dd><dt id="bib-WEBM">[WEBM]</dt><dd><a href="https://www.webmproject.org/docs/container/"><cite>WebM Container Guidelines</cite></a>.  The WebM Project. 26 April 2016. URL: <a href="https://www.webmproject.org/docs/container/">https://www.webmproject.org/docs/container/</a>
+</dd></dl></section><section id="informative-references"><h3 id="a-2-informative-references"><span class="secno">A.2 </span>Informative references</h3><dl class="bibliography"><dt id="bib-INBANDTRACKS">[INBANDTRACKS]</dt><dd><a href="https://dev.w3.org/html5/html-sourcing-inband-tracks/"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. Bob Lund; Silvia Pfeiffer. W3C. URL: <a href="https://dev.w3.org/html5/html-sourcing-inband-tracks/">https://dev.w3.org/html5/html-sourcing-inband-tracks/</a>
+</dd><dt id="bib-VP09CODECSPARAMETERSTRING">[VP09CODECSPARAMETERSTRING]</dt><dd><a href="http://www.webmproject.org/vp9/mp4/#codecs-parameter-string"><cite>VP Codec ISO Media File Format Binding</cite></a>. Frank Galligan; Kilroy Hughes; Thomás Inskip; David Ronca. WebM Project. URL: <a href="http://www.webmproject.org/vp9/mp4/#codecs-parameter-string">http://www.webmproject.org/vp9/mp4/#codecs-parameter-string</a>
+</dd></dl></section></section><p role="navigation" id="back-to-top"><a href="#title"><abbr title="Back to Top">↑</abbr></a></p><script src="https://www.w3.org/scripts/TR/2016/fixup.js"></script></body></html>
