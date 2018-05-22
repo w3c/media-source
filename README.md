@@ -23,3 +23,7 @@ The following is the list of current feature incubation branches:
     [w3c/media-source/issues/155](https://github.com/w3c/media-source/issues/155)
   * [Feature
     explainer](https://github.com/wicg/media-source/blob/codec-switching/codec-switching-explainer.md)
+  * [HTML Diff versus REC
+    spec](https://services.w3.org/htmldiff?doc1=https%3A%2F%2Fwww.w3.org%2FTR%2Fmedia-source%2F&doc2=https%3A%2F%2Frawgit.com%2FWICG%2Fmedia-source%2Fcodec-switching%2Findex.html)
+  * [HTML Diff versus upstream W3C Editor's
+    Draft](https://services.w3.org/htmldiff?doc1=https%3A%2F%2Frawgit.com%2FW3C%2Fmedia-source%2Fgh-pages%2Findex.html&doc2=https%3A%2F%2Frawgit.com%2FWICG%2Fmedia-source%2Fcodec-switching%2Findex.html)
