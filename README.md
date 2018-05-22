@@ -19,8 +19,7 @@ discussion beyond pull-requests.
 The following is the list of current feature incubation branches:
 
 * [codec-switching](https://github.com/WICG/media-source/tree/codec-switching)
- * Tracking issue:
-   [w3c/media-source/issues/155](https://github.com/w3c/media-source/issues/155)
- * [Feature
-   explainer](https://github.com/wicg/media-source/blob/codec-switching/codec-switching-explainer.md)
- 
+  * Tracking issue:
+    [w3c/media-source/issues/155](https://github.com/w3c/media-source/issues/155)
+  * [Feature
+    explainer](https://github.com/wicg/media-source/blob/codec-switching/codec-switching-explainer.md)
