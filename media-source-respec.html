@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Media Source Extensions™</title>
+    <title>Media Source Extensions™ - Codec Switching feature incubation</title>
     <script src="https://www.w3.org/Tools/respec/respec-w3c-common" class="remove"></script>
     <!--<script src="respec-w3c-common.js" class="remove"></script>-->
     <script src="media-source.js" class="remove"></script>
@@ -180,10 +180,13 @@
     </section>
 
     <section id="abstract">
-      This specification extends <a def-id="htmlmediaelement">HTMLMediaElement</a> [[!HTML51]] to allow
+      <p>This specification extends <a def-id="htmlmediaelement">HTMLMediaElement</a> [[!HTML51]] to allow
       JavaScript to generate media streams for playback.
       Allowing JavaScript to generate streams facilitates a variety of use
-      cases like adaptive streaming and time shifting live streams.
+      cases like adaptive streaming and time shifting live streams.</p>
+
+      <p>This version of the specification is intended for incubating a new codec switching feature, as
+      outlined in <a href='https://github.com/wicg/media-source/blob/codec-switching/codec-switching-explainer.md'>the Codec Switching Explainer</a>.</p>
     </section>
 
     <section id="introduction" class="informative">
@@ -296,8 +299,8 @@
 
           <dt id="sourcebuffer-byte-stream-format-spec">SourceBuffer byte stream format specification</dt>
           <dd><p>The specific <a def-id="byte-stream-format-spec"></a> that describes the format of the byte stream accepted by a <a>SourceBuffer</a> instance. The
-              <a def-id="byte-stream-format-spec"></a>, for a <a>SourceBuffer</a> object, is selected based on the <var>type</var> passed to the
-              <a def-id="addSourceBuffer"></a> call that created the object.</p></dd>
+              <a def-id="byte-stream-format-spec"></a>, for a <a>SourceBuffer</a> object, is initially selected based on the <var>type</var> passed to the
+              <a def-id="addSourceBuffer"></a> call that created the object, and can be updated by <a def-id="changeType"></a> calls on the object.</p></dd>
 
           <dt id="sourcebuffer-configuration">SourceBuffer configuration</dt>
           <dd><p>A specific set of tracks distributed across one or more <a>SourceBuffer</a>
@@ -969,9 +972,12 @@ interface MediaSource : EventTarget {
                     attribute EventHandler        onabort;
     void appendBuffer (BufferSource data);
     void abort ();
+    void changeType (DOMString type);
     void remove (double start, unrestricted double end);
-};</pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="SourceBuffer" data-link-for="SourceBuffer"><dt><dfn><code>mode</code></dfn> of type <span class="idlAttrType"><a>AppendMode</a></span></dt><dd>
-          <p>Controls how a sequence of <a def-id="media-segments"></a> are handled. This attribute is initially set by <a def-id="addSourceBuffer"></a> after the object is created.</p>
+};</pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="SourceBuffer" data-link-for="SourceBuffer">
+        <dt><dfn><code>mode</code></dfn> of type <span class="idlAttrType"><a>AppendMode</a></span></dt>
+        <dd>
+          <p>Controls how a sequence of <a def-id="media-segments"></a> are handled. This attribute is initially set by <a def-id="addSourceBuffer"></a> after the object is created, and can be updated by <a def-id="changeType"></a> or setting this attribute.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
@@ -1107,7 +1113,58 @@ interface MediaSource : EventTarget {
             <li>Set <a def-id="appendWindowStart"></a> to the <a def-id="presentation-start-time"></a>.</li>
             <li>Set <a def-id="appendWindowEnd"></a> to positive Infinity.</li>
           </ol>
-        <div><em>No parameters.</em></div><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>remove</code></dfn></dt><dd>
+        <div>
+          <dt><dfn><code>changeType</code></dfn></dt><dd>
+          <p>Changes the MIME type associated with this object. Subsequent <a def-id="appendBuffer"></a> calls will expect the newly appended bytes to conform to the new type.</a>
+          <ol class="method-algorithm">
+            <li>If <var>type</var> is an empty string then throw a <a def-id="type-error"></a> exception and abort these steps.</li>
+            <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
+            <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified (currently or previously) of <a>SourceBuffer</a> objects in the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a>, then throw a <a def-id="not-supported-error"></a> exception and abort these steps.</li>
+            <li>
+              <p>If the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> is in the <a def-id="ended"></a> state then run the following steps:</p>
+              <ol>
+                <li>Set the <a def-id="readyState"></a> attribute of the <a def-id="parent-media-source"></a> to <a def-id="open"></a></li>
+                <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="sourceopen"></a> at the <a def-id="parent-media-source"></a>.</li>
+              </ol>
+            </li>
+            <li>Run the <a def-id="reset-parser-state-algorithm"></a>.</li>
+            <li>Update the <a def-id="generate-timestamps-flag"></a> on this <a>SourceBuffer</a> object to the value in the
+                 "Generate Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry
+                 that is associated with <var>type</var>.</li>
+            <li>
+                <dl class="switch">
+                  <dt>If the <a def-id="generate-timestamps-flag"></a> equals true:</dt>
+                  <dd>
+                    Set the <a def-id="mode"></a> attribute on this <a>SourceBuffer</a> object to <a def-id="AppendMode-sequence"></a>, including running the associated steps for that attribute being set.
+                  </dd>
+                  <dt>Otherwise:</dt>
+                  <dd>
+                    Keep the previous value of the <a def-id="mode"></a> attribute on this <a>SourceBuffer</a> object, without running any associated steps for that attribute being set.
+                  </dd>
+                </dl>
+            </li>
+            <li>Set <a def-id="pending-init-segment-for-changetype-flag"></a> to true.
+          </ol>
+          <table class="parameters">
+            <tbody>
+              <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Nullable</th>
+                <th>Optional</th>
+                <th>Description</th>
+              </tr>
+              <tr>
+                <td class="prmName">type</td>
+                <td class="prmType"><code>DOMString</code></td>
+                <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
+                <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
+                <td class="prmDesc"></td>
+              </tr>
+            </tbody>
+          </table>
+        <dt><dfn><code>remove</code></dfn></dt><dd>
         <p>Removes media for a specific time range.</p>
         <ol class="method-algorithm">
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
@@ -1315,7 +1372,7 @@ interface MediaSource : EventTarget {
             <li>
               <p>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a>, then run the following steps:</p>
               <ol>
-                <li>If the <a def-id="first-init-segment-received-flag"></a> is false, then run the <a def-id="append-decode-error-algorithm"></a> and abort this algorithm.</li>
+                <li>If the <a def-id="first-init-segment-received-flag"></a> is false or the <a def-id="pending-init-segment-for-changetype-flag"></a> is true, then run the <a def-id="append-decode-error-algorithm"></a> and abort this algorithm.</li>
                 <li>If the <a def-id="input-buffer"></a> contains one or more complete <a def-id="coded-frames"></a>, then run the
                   <a def-id="coded-frame-processing-algorithm"></a>.
                   <p class="note">
@@ -1421,7 +1478,15 @@ interface MediaSource : EventTarget {
         <section id="sourcebuffer-init-segment-received">
           <h4>Initialization Segment Received</h4>
           <p>The following steps are run when the <a def-id="segment-parser-loop"></a> successfully parses a complete <a def-id="init-segment"></a>:</p>
-          <p>Each SourceBuffer object has an internal <dfn id="first-init-segment-received-flag">first initialization segment received flag</dfn> that tracks whether the first <a def-id="init-segment"></a> has been appended and received by this algorithm. This flag is set to false when the SourceBuffer is created and updated by the algorithm below.</p>
+          <p>Each <a>SourceBuffer</a> object has an internal <dfn id="first-init-segment-received-flag">
+            first initialization segment received flag</dfn> that tracks whether the first <a def-id="init-segment"></a>
+            has been appended and received by this algorithm.
+            This flag is set to false when the SourceBuffer is created and is updated by the algorithm below.</p>
+          <p>Each <a>SourceBuffer</a> object has an internal <dfn id="pending-init-segment-for-changetype-flag">
+            pending initialization segment for changeType flag</dfn> that tracks whether an <a def-id="init-segment"></a>
+            is needed since the most recent <a def-id="changeType"></a>.
+            This flag is set to false when the SourceBuffer is created, set to true by <a def-id="changeType"></a> and reset to false
+            by the algorithm below.</p>
           <ol>
             <li>Update the <a def-id="duration"></a> attribute if it currently equals NaN:
               <dl class="switch">
@@ -1437,9 +1502,20 @@ interface MediaSource : EventTarget {
                 <li>Verify the following properties. If any of the checks fail then run the <a def-id="append-decode-error-algorithm"></a> and abort these steps.
                   <ul>
                     <li>The number of audio, video, and text tracks match what was in the first <a def-id="init-segment"></a>.</li>
-                    <li>The codecs for each track, match what was specified in the first <a def-id="init-segment"></a>.</li>
                     <li>If more than one track for a single type are present (e.g., 2 audio tracks), then the <a def-id="track-ids"></a> match the ones in the
                       first <a def-id="init-segment"></a>.</li>
+                    <li>The codecs for each track are supported by the user agent.
+                      <p class="note">User agents MAY consider codecs, that would otherwise be supported, as "not supported" here if the codecs were not
+                        specified in <var>type</var> parameter passed to
+                        (a) the most recently successful <a def-id="changeType"></a> on this <a>SourceBuffer</a> object, or
+                        (b) if no successful <a def-id="changeType"></a> has yet occurred on this object, the <a def-id="addSourceBuffer"></a> that created this <a>SourceBuffer</a> object.
+                        For example, if the most recently successful <a def-id="changeType"></a> was called with 'video/webm'
+                        or 'video/webm; codecs="vp8"', and a video track containing vp9 appears in the initialization segment,
+                        then the user agent MAY use this step to trigger a decode error even if the other two properties'
+                        checks, above, pass. Implementations are encouraged to trigger error in such cases only when the codec
+                        is indeed not supported or the other two properties' checks fail.
+                      </p>
+                    </li>
                   </ul>
                 </li>
                 <li>Add the appropriate <a def-id="track-descriptions"></a> from this <a def-id="init-segment"></a> to each of the
@@ -1453,10 +1529,13 @@ interface MediaSource : EventTarget {
               <ol>
                 <li>If the <a def-id="init-segment"></a> contains tracks with codecs the user agent does not support, then run the <a def-id="append-decode-error-algorithm"></a> and abort these steps.
                   <p class="note">User agents MAY consider codecs, that would otherwise be supported, as "not supported" here if the codecs were not
-                    specified in the <var>type</var> parameter passed to <a def-id="addSourceBuffer"></a>. <br>
+                    specified in <var>type</var> parameter passed to
+                    (a) the most recently successful <a def-id="changeType"></a> on this <a>SourceBuffer</a> object, or
+                    (b) if no successful <a def-id="changeType"></a> has yet occurred on this object, the <a def-id="addSourceBuffer"></a> that created this <a>SourceBuffer</a> object.
                     For example, MediaSource.isTypeSupported('video/webm;codecs="vp8,vorbis"') may return true, but if
                     <a def-id="addSourceBuffer"></a> was called with 'video/webm;codecs="vp8"' and a Vorbis track appears in the
                     <a def-id="init-segment"></a>, then the user agent MAY use this step to trigger a decode error.
+                    Implementations are encouraged to trigger error in such cases only when the codec is indeed not supported.
                   </p>
                 </li>
                 <li>
@@ -1624,6 +1703,7 @@ interface MediaSource : EventTarget {
                 <li>Set <a def-id="first-init-segment-received-flag"></a> to true.</li>
               </ol>
             </li>
+            <li>Set <a def-id="pending-init-segment-for-changetype-flag"></a> to false.</li>
             <li>
               <p>If the <a def-id="ready-state"></a> attribute is <a def-id="have-nothing"></a>, then run the following steps:</p>
               <ol>
@@ -2225,8 +2305,8 @@ partial interface URL {
       <h2>Byte Stream Formats</h2>
       <p>The bytes provided through <a def-id="appendBuffer"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format and
         semantics of these byte streams are defined in <dfn id="byte-stream-format-specs">byte stream format specifications</dfn>.
-        The byte stream format registry [[MSE-REGISTRY]] provides mappings between a MIME type that may be passed to <a def-id="addSourceBuffer"></a> or
-        <a def-id="isTypeSupported"></a> and the byte stream format expected by a <a>SourceBuffer</a> created with that MIME type. Implementations are encouraged to register
+        The byte stream format registry [[MSE-REGISTRY]] provides mappings between a MIME type that may be passed to <a def-id="addSourceBuffer"></a>, 
+        <a def-id="isTypeSupported"></a> or <a def-id="changeType"></a> and the byte stream format expected by a <a>SourceBuffer</a> using that MIME type for parsing newly appended data. Implementations are encouraged to register
         mappings for byte stream formats they support to facilitate interoperability. The byte stream format registry [[MSE-REGISTRY]] is the authoritative source for these
         mappings. If an implementation claims to support a MIME type listed in the registry, its <a>SourceBuffer</a> implementation MUST conform to the
         <a def-id="byte-stream-format-spec"></a> listed in the registry entry.</p>
@@ -2252,8 +2332,8 @@ partial interface URL {
             </li>
             <li><a def-id="track-ids"></a> are not the same across <a def-id="init-segments"></a>, for segments describing multiple tracks of a single type (e.g., 2 audio tracks).</li>
             <li>
-              <p>Codecs changes across <a def-id="init-segments"></a>.</p>
-              <p class="note">For example, a byte stream that starts with an <a def-id="init-segment"></a> that specifies a single AAC track and later contains an <a def-id="init-segment"></a> that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a>SourceBuffer</a> objects.</p>
+              <p>Unsupported codec changes occur across <a def-id="init-segments"></a>.</p>
+              <p class="note">See the <a def-id="init-segment-received-algorithm"></a>, <a def-id="addSourceBuffer"></a> and <a def-id="changeType"></a> for details and examples of codec changes.</p>
             </li>
           </ol>
         </li>
