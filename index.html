@@ -980,8 +980,8 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
       "publisher": "W3C"
     }
   },
-  "publishISODate": "2018-05-29T00:00:00.000Z",
-  "generatedSubtitle": "Editor's Draft 29 May 2018"
+  "publishISODate": "2018-05-30T00:00:00.000Z",
+  "generatedSubtitle": "Editor's Draft 30 May 2018"
 }</script><meta name="description" content="This specification extends HTMLMediaElement [HTML51] to allow
       JavaScript to generate media streams for playback.
       Allowing JavaScript to generate streams facilitates a variety of use
@@ -992,7 +992,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
   </a>
   <h1 id="title" class="title p-name">Media Source Extensions™ - Codec Switching feature incubation</h1>
   
-  <h2 id="w3c-editor-s-draft-29-may-2018"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2018-05-29">29 May 2018</time></h2>
+  <h2 id="w3c-editor-s-draft-30-may-2018"><abbr title="World Wide Web Consortium">W3C</abbr> Editor's Draft <time class="dt-published" datetime="2018-05-30">30 May 2018</time></h2>
   <dl>
     <dt>This version:</dt><dd><a class="u-url" href="https://w3c.github.io/media-source/">https://w3c.github.io/media-source/</a></dd><dt>Latest published version:</dt><dd><a href="https://www.w3.org/TR/media-source/">https://www.w3.org/TR/media-source/</a></dd>
     <dt>Latest editor's draft:</dt><dd><a href="https://w3c.github.io/media-source/">https://w3c.github.io/media-source/</a></dd>
@@ -2420,6 +2420,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                         then the user agent <em class="rfc2119" title="MAY">MAY</em> use this step to trigger a decode error even if the other two properties'
                         checks, above, pass. Implementations are encouraged to trigger error in such cases only when the codec
                         is indeed not supported or the other two properties' checks fail.
+                        Web authors are encouraged to use <code><a href="#dom-sourcebuffer-changetype">changeType()</a></code>, <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code> and
+                        <code><a href="#dom-mediasource-istypesupported">isTypeSupported()</a></code> with precise codec parameters to more proactively detect user agent
+                        support. <code><a href="#dom-sourcebuffer-changetype">changeType()</a></code> is required if the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object's bytestream format
+                        is changing.
                       </p></div>
                     </li>
                   </ul>
@@ -2442,6 +2446,10 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
                     <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code> was called with 'video/webm;codecs="vp8"' and a Vorbis track appears in the
                     <a href="#init-segment">initialization segment</a>, then the user agent <em class="rfc2119" title="MAY">MAY</em> use this step to trigger a decode error.
                     Implementations are encouraged to trigger error in such cases only when the codec is indeed not supported.
+                    Web authors are encouraged to use <code><a href="#dom-sourcebuffer-changetype">changeType()</a></code>, <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code> and
+                    <code><a href="#dom-mediasource-istypesupported">isTypeSupported()</a></code> with precise codec parameters to more proactively detect user agent
+                    support. <code><a href="#dom-sourcebuffer-changetype">changeType()</a></code> is required if the <a href="#idl-def-sourcebuffer" class="internalDFN" data-link-type="dfn"><code>SourceBuffer</code></a> object's bytestream format
+                    is changing.
                   </p></div>
                 </li>
                 <li>
@@ -2994,7 +3002,7 @@ interface <span class="idlInterfaceID">MediaSource</span> : <span class="idlSupe
           </ol>
           <div class="note" id="issue-container-generatedID-70"><div role="heading" class="note-title marker" id="h-note-70" aria-level="5"><span>Note</span></div><div class="">
             <p>Here is a graphical representation of this algorithm.</p>
-            <img src="audio_splice.png" alt="Audio splice diagram" height="0" width="0">
+            <img src="audio_splice.png" alt="Audio splice diagram" height="225" width="360">
           </div></div>
         </section>
         <section id="sourcebuffer-text-splice-frame-algorithm">

@@ -1514,6 +1514,10 @@ interface MediaSource : EventTarget {
                         then the user agent MAY use this step to trigger a decode error even if the other two properties'
                         checks, above, pass. Implementations are encouraged to trigger error in such cases only when the codec
                         is indeed not supported or the other two properties' checks fail.
+                        Web authors are encouraged to use <a def-id="changeType"></a>, <a def-id="addSourceBuffer"></a> and
+                        <a def-id="isTypeSupported"></a> with precise codec parameters to more proactively detect user agent
+                        support. <a def-id="changeType"></a> is required if the <a>SourceBuffer</a> object's bytestream format
+                        is changing.
                       </p>
                     </li>
                   </ul>
@@ -1536,6 +1540,10 @@ interface MediaSource : EventTarget {
                     <a def-id="addSourceBuffer"></a> was called with 'video/webm;codecs="vp8"' and a Vorbis track appears in the
                     <a def-id="init-segment"></a>, then the user agent MAY use this step to trigger a decode error.
                     Implementations are encouraged to trigger error in such cases only when the codec is indeed not supported.
+                    Web authors are encouraged to use <a def-id="changeType"></a>, <a def-id="addSourceBuffer"></a> and
+                    <a def-id="isTypeSupported"></a> with precise codec parameters to more proactively detect user agent
+                    support. <a def-id="changeType"></a> is required if the <a>SourceBuffer</a> object's bytestream format
+                    is changing.
                   </p>
                 </li>
                 <li>
