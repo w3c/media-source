@@ -147,6 +147,7 @@
 
     'appendBuffer': { func: idlref_helper, fragment: 'dom-sourcebuffer-appendbuffer', link_text: 'appendBuffer()',  },
     'abort': { func: idlref_helper, fragment: 'dom-sourcebuffer-abort', link_text: 'abort()',  },
+    'changeType': {func: idlref_helper, fragment: 'dom-sourcebuffer-changetype', link_text: 'changeType()',  },
     'remove': { func: idlref_helper, fragment: 'dom-sourcebuffer-remove', link_text: 'remove()',  },
     'updating': { func: idlref_helper, fragment: 'dom-sourcebuffer-updating', link_text: 'updating',  },
     'sourcebuffer-audioTracks': { func: idlref_helper, fragment: 'dom-sourcebuffer-audiotracks', link_text: 'audioTracks',  },
@@ -239,6 +240,7 @@
     'generate-timestamps-flag': { func: var_helper, fragment: '#sourcebuffer-generate-timestamps-flag', link_text: 'generate timestamps flag', },
     'MediaSource-object-URL': { func: link_helper, fragment: '#mediasource-object-url', link_text: 'MediaSource object URL', },
     'first-init-segment-received-flag': { func: var_helper, fragment: '#first-init-segment-received-flag', link_text: 'first initialization segment received flag', },
+    'pending-init-segment-for-changetype-flag': { func: var_helper, fragment: '#pending-init-segment-for-changetype-flag', link_text: 'pending initialization segment for changeType flag', },
 
     'track-buffer': { func: term_helper, fragment: 'track-buffer', link_text: 'track buffer', },
     'track-buffers': { func: term_helper, fragment: 'track-buffer', link_text: 'track buffers', },
