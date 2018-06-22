@@ -13,8 +13,8 @@ the upstream w3c repository.
 per-feature branch off of gh-pages in this repository. Please base your
 pull-requests accordingly.
 
-We will use the upstream w3c/media-source repository's issue tracker for feature
-discussion beyond pull-requests.
+We will use the [upstream w3c/media-source repository's issue tracker](https://github.com/w3c/media-source/issues)
+for feature discussion beyond pull-requests.
 
 The following is the list of current feature incubation branches:
 
