@@ -64,7 +64,7 @@ While the REC version of [Media Source Extensions
 API](https://www.w3.org/TR/media-source/) (MSE) supports adaptive playback of media,
 that adaptation requires that any media appended to a `SourceBuffer` must
 conform to the mimetype provided when initially creating the `SourceBuffer` via
-`MediaSource.addSourceBuffer(_type_)`.
+`MediaSource.addSourceBuffer(`_type_`)`.
 
 With the addition of a proposed `changeType` method on `SourceBuffer`, with a
 _type_ parameter similar to that in the existing `addSourceBuffer` method on
@@ -72,8 +72,16 @@ _type_ parameter similar to that in the existing `addSourceBuffer` method on
 bytestream formats and codecs. This new method would retain previously buffered
 media modulo future MSE coded frame eviction or removal, and leverage the
 splicing and buffering logic in the existing MSE coded frame processing
-algorithm. If _type_ is not supported by the user agent for the `SourceBuffer`
-and `MediaSource`, `changeType` would throw a `NotSupportedError` exception.
+algorithm.
+
+If _type_ is not supported by the user agent for the `SourceBuffer`
+and `MediaSource`, `changeType` would synchronously throw a `NotSupportedError`
+exception (modulo the API would be unaware of potentially unsupported content
+transitions, including those implicitly occurring via codec changes in
+subsequent initialization segments when the codecs parameter of the
+`SourceBuffer`'s MIME type is ambiguous, and including transitions involving
+encrypted content - see also the Media Capabilities API's stream transitioning
+work referenced in Resolved Questions, below.)
 
 ## Resolved Questions
 
@@ -100,11 +108,12 @@ adaptation of each independently, the _initialization segment received algorithm
 continues to require the same number of audio, video and text tracks - and if
 more than one of a particular type, that the set of track IDs for that type
 remain the same.  The algorithm is adjusted to allow codecs to change in the
-initialization segment, even without explicitly signalling `changeType()`. In this
-latter "implicit codec change" situation, there is new non-normative text guiding
-both the API users and user agent implementors, as some user
-agents may in short-term continue to disallow implicit codec switching until
-they relax their codec-strictness for `addSourceBuffer()` and `changeType()`.
+initialization segment when the bytestream format does not change, even without
+explicitly signalling `changeType()`. In this latter "implicit codec change"
+situation, there is new non-normative text guiding both the API users and user
+agent implementors, as some user agents may in short-term continue to disallow
+implicit codec switching until they relax their codec-strictness for
+`addSourceBuffer()` and `changeType()`.
 
 
 ##### Other than the existing `MEDIA_ERR_DECODE` and `MediaError.message` error reporting mechanism, is there a way applications could (ideally proactively, before fetching and buffering) determine whether or not the user agent has the capability of supporting playback across various levels of mixed encrypted and unencrypted content along with bytestream and codec changes?
