@@ -1,6 +1,6 @@
 # Media Source Extensions: Codec Switching Explainer
 
-###### Author: Matthew Wolenetz, [Google Inc.](www.google.com) - March 15, 2018
+###### Author: Matthew Wolenetz, [Google Inc.](www.google.com) - March 15, 2018.  Last update September 17, 2018.
 
 ## tl;dr
 
@@ -10,6 +10,16 @@ We propose adding a `changeType` method on `SourceBuffer` that allows the _type_
 goal of eventually working with WebPlatformWG to get the result of WICG
 incubation as part of the next version of the [Media Source Extensions
 API](https://www.w3.org/TR/media-source/) (MSE).
+
+
+### Implementation status as of last update
+
+* Chrome [M70 shipped SourceBuffer.changeType()](https://www.chromestatus.com/features/5719220952236032).
+* Firefox [63 shipped SourceBuffer.changeType()](https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/63).
+* Safari Technical Preview [Release 64 added Experimental Feature support for SourceBuffer.changeType()](https://developer.apple.com/safari/technology-preview/release-notes/)
+* Current experimental web-platform-test results:
+  * [mediasource-changetype](https://wpt.fyi/results/media-source/mediasource-changetype.html?label=experimental)
+  * [mediasource-changetype-play](https://wpt.fyi/results/media-source/mediasource-changetype-play.html?label=experimental)
 
 ## Background
 
@@ -63,13 +73,11 @@ bytestream formats and codecs. This new method would retain previously buffered
 media modulo future MSE coded frame eviction or removal, and leverage the
 splicing and buffering logic in the existing MSE coded frame processing
 algorithm. If _type_ is not supported by the user agent for the `SourceBuffer`
-and `MediaSource`, `changeType` would synchronously return false (modulo the API
-would be unaware of potentially unsupported encrypted/unencrypted content
-transitions when processing `changeType` - see related thoughts, below).
+and `MediaSource`, `changeType` would throw a `NotSupportedError` exception.
 
-## Open Questions and Thoughts
+## Resolved Questions
 
-##### Should the initialization segment received algorithm continue to require the same number of audio, video and text tracks - and if more than one of a particular type, that the set of track IDs for that type be the same?
+##### Should the _initialization segment received algorithm_ continue to require the same number of audio, video and text tracks - and if more than one of a particular type, that the set of track IDs for that type be the same?
 
 ###### Pros:
 
@@ -84,26 +92,53 @@ would be fetched and incur resource utilization.
 Retaining this restriction precludes one of the
 [Implementation Use Cases](https://www.w3.org/wiki/HTML/Media_Task_Force/MSE_Ad_Insertion_Use_Cases#Implementation_Use_Cases).
 
-#### Other than the existing `MEDIA_ERR_DECODE` and `MediaError.message` error reporting mechanism, is there a way applications could (ideally proactively, before fetching and buffering) determine whether or not the user agent has the capability of supporting playback across various levels of mixed encrypted and unencrypted content along with bytestream and codec changes?
+###### Route taken:
 
-###### Thoughts:
+For simplicity, and due to the prevalence of MSE apps that use single-track
+bytestreams and up to two `SourceBuffer`s (one each for audio and video) to manage
+adaptation of each independently, the _initialization segment received algorithm_
+continues to require the same number of audio, video and text tracks - and if
+more than one of a particular type, that the set of track IDs for that type
+remain the same.  The algorithm is adjusted to allow codecs to change in the
+initialization segment, even without explicitly signalling `changeType()`. In this
+latter "implicit codec change" situation, there is new non-normative text guiding
+both the API users and user agent implementors, as some user
+agents may in short-term continue to disallow implicit codec switching until
+they relax their codec-strictness for `addSourceBuffer()` and `changeType()`.
+
+
+##### Other than the existing `MEDIA_ERR_DECODE` and `MediaError.message` error reporting mechanism, is there a way applications could (ideally proactively, before fetching and buffering) determine whether or not the user agent has the capability of supporting playback across various levels of mixed encrypted and unencrypted content along with bytestream and codec changes?
+
+###### Initial Thoughts:
 
 This proposal is focused on the MSE API alone.  [Media
 Capabilities](https://wicg.github.io/media-capabilities/) and [Encrypted Media
 Extensions](https://www.w3.org/TR/encrypted-media/) may need work to support
 such proactive queries.
 
-#### Should the proposed `changeType` method implicitly perform the _reset parser state algorithm_, or should it instead require the application to ensure the parser is reset (via `abort()`, if necessary)?
+###### Route taken:
 
-###### Thoughts:
+Proactive codec and bytestream switching capability detection is being worked on
+as part of the [Media Capabilities API: Transitioning between stream configurations proposal](https://github.com/WICG/media-capabilities/blob/master/explainer.md#transitioning-between-stream-configurations).
+
+
+##### Should the proposed `changeType` method implicitly perform the _reset parser state algorithm_, or should it instead require the application to ensure the parser is reset (via `abort()`, if necessary)?
+
+###### Initial Thoughts:
 
 As there is no way currently for an application to be certain of the
 `SourceBuffer`'s current _append state_, `changeType` should probably run the
 _reset parser state algorithm_.
 
-#### To what level should we specify "seamless" playback across bytestream, codec (and perhaps encryption) changes?
+###### Route taken:
 
-###### Thoughts:
+`changeType` includes running the _reset parser state algorithm_ once
+preliminary state and support checks have passed.
+
+
+##### To what level should we specify "seamless" playback across bytestream, codec (and perhaps encryption) changes?
+
+###### Initial Thoughts and Route Taken:
 
 This is likely a quality-of-implementation output, rather than a specified
 input. Decoder reconfiguration, for instance, may not be sufficient in all
