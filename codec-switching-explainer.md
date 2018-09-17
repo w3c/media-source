@@ -103,7 +103,7 @@ Retaining this restriction precludes one of the
 ###### Route taken:
 
 For simplicity, and due to the prevalence of MSE apps that use single-track
-bytestreams and up to two `SourceBuffer`s (one each for audio and video) to manage
+bytestreams and up to two `SourceBuffers` (one each for audio and video) to manage
 adaptation of each independently, the _initialization segment received algorithm_
 continues to require the same number of audio, video and text tracks - and if
 more than one of a particular type, that the set of track IDs for that type
