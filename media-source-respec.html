@@ -352,7 +352,7 @@
           <p class="note">JavaScript applications SHOULD use this status code to terminate playback with a decode error. For example, if a parsing error occurs while processing out-of-band media data.</p>
         </td></tr></tbody></table></div>
 
-<pre class="idl">[Constructor]
+<pre class="idl">[Constructor, Exposed=Window]
 interface MediaSource : EventTarget {
     readonly        attribute SourceBufferList    sourceBuffers;
     readonly        attribute SourceBufferList    activeSourceBuffers;
@@ -952,7 +952,8 @@ interface MediaSource : EventTarget {
           </p>
         </td></tr></tbody></table>
 
-<pre class="idl">interface SourceBuffer : EventTarget {
+<pre class="idl">[Exposed=Window]
+interface SourceBuffer : EventTarget {
                     attribute AppendMode          mode;
     readonly        attribute boolean             updating;
     readonly        attribute TimeRanges          buffered;
@@ -2042,7 +2043,8 @@ interface MediaSource : EventTarget {
     <section id="sourcebufferlist">
       <h2>SourceBufferList Object</h2>
       <p>SourceBufferList is a simple container object for <a>SourceBuffer</a> objects. It provides read-only array access and fires events when the list is modified.</p>
-<pre class="idl">interface SourceBufferList : EventTarget {
+<pre class="idl">[Exposed=Window]
+interface SourceBufferList : EventTarget {
     readonly        attribute unsigned long length;
                     attribute EventHandler  onaddsourcebuffer;
                     attribute EventHandler  onremovesourcebuffer;
