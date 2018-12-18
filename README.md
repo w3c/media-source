@@ -27,3 +27,9 @@ The following is the list of current feature incubation branches:
     spec](https://services.w3.org/htmldiff?doc1=https%3A%2F%2Fwww.w3.org%2FTR%2Fmedia-source%2F&doc2=https%3A%2F%2Frawgit.com%2FWICG%2Fmedia-source%2Fcodec-switching%2Findex.html)
   * [HTML Diff versus upstream W3C Editor's
     Draft](https://services.w3.org/htmldiff?doc1=https%3A%2F%2Frawgit.com%2FW3C%2Fmedia-source%2Fgh-pages%2Findex.html&doc2=https%3A%2F%2Frawgit.com%2FWICG%2Fmedia-source%2Fcodec-switching%2Findex.html)
+
+* [mse-in-workers-using-handle](https://github.com/WICG/media-source/tree/mse-in-workers-using-handle)
+  * Tracking issue:
+    [w3c/media-source/issues/175](https://github.com/w3c/media-source/issues/175)
+  * [Feature
+    explainer](https://github.com/wicg/media-source/blob/mse-in-workers-using-handle/mse-in-workers-using-handle-explainer.md)
