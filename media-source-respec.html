@@ -207,120 +207,120 @@
           <li>Normative requirements to enable other specifications to define media formats to be used within this specification.</li>
         </ul>
       </section>
+    </section>
 
-      <section id="definitions">
-        <h3>Definitions</h3>
+    <section id="definitions">
+      <h3>Definitions</h3>
 
-        <dl>
-          <dt id="active-track-buffers">Active Track Buffers</dt>
-          <dd><p>The <a def-id="track-buffers"></a> that provide <a def-id="coded-frames"></a> for the <a def-id="audiotrack-enabled"></a>
-              <a def-id="audiotracks"></a>, the <a def-id="videotrack-selected"></a> <a def-id="videotracks"></a>, and the
-              <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> <a def-id="texttracks"></a>. All these tracks are associated with
-            <a>SourceBuffer</a> objects in the <a def-id="activeSourceBuffers"></a> list.</p>
-          </dd>
+      <dl>
+        <dt id="active-track-buffers">Active Track Buffers</dt>
+        <dd><p>The <a def-id="track-buffers"></a> that provide <a def-id="coded-frames"></a> for the <a def-id="audiotrack-enabled"></a>
+            <a def-id="audiotracks"></a>, the <a def-id="videotrack-selected"></a> <a def-id="videotracks"></a>, and the
+            <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> <a def-id="texttracks"></a>. All these tracks are associated with
+          <a>SourceBuffer</a> objects in the <a def-id="activeSourceBuffers"></a> list.</p>
+        </dd>
 
-          <dt id="append-window">Append Window</dt>
-          <dd><p>A <a def-id="presentation-timestamp"></a> range used to filter out <a def-id="coded-frames"></a> while appending. The append window represents a single
-            continuous time range with a single start time and end time. Coded frames with <a def-id="presentation-timestamp"></a> within this range are allowed to be appended
-            to the <a>SourceBuffer</a> while coded frames outside this range are filtered out. The append window start and end times are controlled by
-            the <a def-id="appendWindowStart"></a> and <a def-id="appendWindowEnd"></a> attributes respectively.</p></dd>
+        <dt id="append-window">Append Window</dt>
+        <dd><p>A <a def-id="presentation-timestamp"></a> range used to filter out <a def-id="coded-frames"></a> while appending. The append window represents a single
+          continuous time range with a single start time and end time. Coded frames with <a def-id="presentation-timestamp"></a> within this range are allowed to be appended
+          to the <a>SourceBuffer</a> while coded frames outside this range are filtered out. The append window start and end times are controlled by
+          the <a def-id="appendWindowStart"></a> and <a def-id="appendWindowEnd"></a> attributes respectively.</p></dd>
 
-          <dt id="coded-frame">Coded Frame</dt>
-          <dd><p>A unit of media data that has a <a def-id="presentation-timestamp"></a>, a <a def-id="decode-timestamp"></a>, and a <a def-id="coded-frame-duration"></a>.</p></dd>
+        <dt id="coded-frame">Coded Frame</dt>
+        <dd><p>A unit of media data that has a <a def-id="presentation-timestamp"></a>, a <a def-id="decode-timestamp"></a>, and a <a def-id="coded-frame-duration"></a>.</p></dd>
 
-          <dt id="coded-frame-duration">Coded Frame Duration</dt>
-          <dd>
-            <p>The duration of a <a def-id="coded-frame"></a>. For video and text, the duration indicates how long the video frame or text SHOULD be displayed. For audio, the duration represents the sum of all the samples contained within the coded frame. For example, if an audio frame contained 441 samples @44100Hz the frame duration would be 10 milliseconds.</p>
-          </dd>
+        <dt id="coded-frame-duration">Coded Frame Duration</dt>
+        <dd>
+          <p>The duration of a <a def-id="coded-frame"></a>. For video and text, the duration indicates how long the video frame or text SHOULD be displayed. For audio, the duration represents the sum of all the samples contained within the coded frame. For example, if an audio frame contained 441 samples @44100Hz the frame duration would be 10 milliseconds.</p>
+        </dd>
 
-          <dt id="coded-frame-end-timestamp">Coded Frame End Timestamp</dt>
-          <dd>
-            <p>The sum of a <a def-id="coded-frame"></a> <a def-id="presentation-timestamp"></a> and its
-                <a def-id="coded-frame-duration"></a>. It represents the <a def-id="presentation-timestamp"></a> that immediately follows the coded frame.</p>
-          </dd>
+        <dt id="coded-frame-end-timestamp">Coded Frame End Timestamp</dt>
+        <dd>
+          <p>The sum of a <a def-id="coded-frame"></a> <a def-id="presentation-timestamp"></a> and its
+              <a def-id="coded-frame-duration"></a>. It represents the <a def-id="presentation-timestamp"></a> that immediately follows the coded frame.</p>
+        </dd>
 
-          <dt id="coded-frame-group">Coded Frame Group</dt>
-          <dd><p>A group of <a def-id="coded-frames"></a> that are adjacent and have monotonically increasing <a def-id="decode-timestamps"></a> without any gaps. Discontinuities detected by the
-              <a def-id="coded-frame-processing-algorithm"></a> and <a def-id="abort"></a> calls trigger the start of a new coded frame group.</p>
-          </dd>
+        <dt id="coded-frame-group">Coded Frame Group</dt>
+        <dd><p>A group of <a def-id="coded-frames"></a> that are adjacent and have monotonically increasing <a def-id="decode-timestamps"></a> without any gaps. Discontinuities detected by the
+            <a def-id="coded-frame-processing-algorithm"></a> and <a def-id="abort"></a> calls trigger the start of a new coded frame group.</p>
+        </dd>
 
-          <dt id="decode-timestamp">Decode Timestamp</dt>
-          <dd>
-            <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a def-id="presentation-timestamp"></a> of the earliest frame, in <a def-id="presentation-order"></a>, that is dependant on this frame). If frames can be decoded out of <a def-id="presentation-order"></a>, then the decode timestamp MUST be present in or derivable from the byte stream. The user agent MUST run the <a def-id="append-decode-error-algorithm"></a> if this is not the case. If frames cannot be decoded out of  <a def-id="presentation-order"></a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a def-id="presentation-timestamp"></a>.</p>
-          </dd>
+        <dt id="decode-timestamp">Decode Timestamp</dt>
+        <dd>
+          <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a def-id="presentation-timestamp"></a> of the earliest frame, in <a def-id="presentation-order"></a>, that is dependant on this frame). If frames can be decoded out of <a def-id="presentation-order"></a>, then the decode timestamp MUST be present in or derivable from the byte stream. The user agent MUST run the <a def-id="append-decode-error-algorithm"></a> if this is not the case. If frames cannot be decoded out of  <a def-id="presentation-order"></a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a def-id="presentation-timestamp"></a>.</p>
+        </dd>
 
-          <dt id="init-segment">Initialization Segment</dt>
-          <dd>
-            <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of <a def-id="media-segments"></a>. This includes codec initialization data, <a def-id="track-id"></a> mappings for multiplexed segments, and timestamp offsets (e.g., edit lists).</p>
-            <p class="note">The <a def-id="byte-stream-format-specs"></a> in the byte stream format registry [[MSE-REGISTRY]] contain format specific examples.</p>
+        <dt id="init-segment">Initialization Segment</dt>
+        <dd>
+          <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of <a def-id="media-segments"></a>. This includes codec initialization data, <a def-id="track-id"></a> mappings for multiplexed segments, and timestamp offsets (e.g., edit lists).</p>
+          <p class="note">The <a def-id="byte-stream-format-specs"></a> in the byte stream format registry [[MSE-REGISTRY]] contain format specific examples.</p>
 
-          </dd><dt id="media-segment">Media Segment</dt>
-          <dd>
-            <p>A sequence of bytes that contain packetized &amp; timestamped media data for a portion of the <a def-id="media-timeline"></a>. Media segments are always associated with the most recently appended <a def-id="init-segment"></a>.</p>
-            <p class="note">The <a def-id="byte-stream-format-specs"></a> in the byte stream format registry [[MSE-REGISTRY]] contain format specific examples.</p>
-          </dd>
+        </dd><dt id="media-segment">Media Segment</dt>
+        <dd>
+          <p>A sequence of bytes that contain packetized &amp; timestamped media data for a portion of the <a def-id="media-timeline"></a>. Media segments are always associated with the most recently appended <a def-id="init-segment"></a>.</p>
+          <p class="note">The <a def-id="byte-stream-format-specs"></a> in the byte stream format registry [[MSE-REGISTRY]] contain format specific examples.</p>
+        </dd>
 
-          <dt id="mediasource-object-url">MediaSource object URL</dt>
-          <dd>
-            <p>A MediaSource object URL is a unique <a def-id="blob-uri"></a> [[!FILE-API]] created by <a def-id="createObjectURL"></a>. It is used to attach a <a>MediaSource</a> object to an HTMLMediaElement.</p>
-            <p>These URLs are the same as a <a def-id="blob-uri"></a>, except that anything in the definition of that feature that refers to <a def-id="File"></a> and <a def-id="Blob"></a> objects is hereby extended to also apply to <a>MediaSource</a> objects.</p>
-            <p>The <a def-id="origin">origin</a> of the MediaSource object URL is the <a def-id="relevant-settings-object"></a> of <code>this</code> during the call to <a def-id="createObjectURL"></a>.</p>
-            <p class="note">For example, the <a def-id="origin"></a> of the MediaSource object URL affects the way that the media element is <a href="https://www.w3.org/TR/html51/semantics-scripting.html#security-with-canvas-elements">consumed by canvas</a>.</p>
-          </dd>
+        <dt id="mediasource-object-url">MediaSource object URL</dt>
+        <dd>
+          <p>A MediaSource object URL is a unique <a def-id="blob-uri"></a> [[!FILE-API]] created by <a def-id="createObjectURL"></a>. It is used to attach a <a>MediaSource</a> object to an HTMLMediaElement.</p>
+          <p>These URLs are the same as a <a def-id="blob-uri"></a>, except that anything in the definition of that feature that refers to <a def-id="File"></a> and <a def-id="Blob"></a> objects is hereby extended to also apply to <a>MediaSource</a> objects.</p>
+          <p>The <a def-id="origin">origin</a> of the MediaSource object URL is the <a def-id="relevant-settings-object"></a> of <code>this</code> during the call to <a def-id="createObjectURL"></a>.</p>
+          <p class="note">For example, the <a def-id="origin"></a> of the MediaSource object URL affects the way that the media element is <a href="https://www.w3.org/TR/html51/semantics-scripting.html#security-with-canvas-elements">consumed by canvas</a>.</p>
+        </dd>
 
-          <dt id="parent-media-source">Parent Media Source</dt>
-          <dd><p>The parent media source of a <a>SourceBuffer</a> object is the <a>MediaSource</a> object that created it.</p></dd>
+        <dt id="parent-media-source">Parent Media Source</dt>
+        <dd><p>The parent media source of a <a>SourceBuffer</a> object is the <a>MediaSource</a> object that created it.</p></dd>
 
-          <dt id="presentation-start-time">Presentation Start Time</dt>
-          <dd><p>The presentation start time is the earliest time point in the presentation and specifies the <a def-id="videoref" name="initial-playback-position">initial playback position</a> and <a def-id="videoref" name="earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0.</p>
+        <dt id="presentation-start-time">Presentation Start Time</dt>
+        <dd><p>The presentation start time is the earliest time point in the presentation and specifies the <a def-id="videoref" name="initial-playback-position">initial playback position</a> and <a def-id="videoref" name="earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0.</p>
 
-          <p class="note">For the purposes of determining if <a def-id="hme-buffered"></a> contains a <a def-id="timerange"></a> that includes the current playback position, implementations MAY choose to allow a current playback position at or after <a def-id="presentation-start-time"></a> and before the first <a def-id="timerange"></a> to play the first <a def-id="timerange"></a> if that <a def-id="timerange"></a> starts within a reasonably short time, like 1 second, after <a def-id="presentation-start-time"></a>. This allowance accommodates the reality that muxed streams commonly do not begin all tracks precisely at <a def-id="presentation-start-time"></a>. Implementations MUST report the actual buffered range, regardless of this allowance.</p>
-          </dd>
-          <dt id="presentation-interval">Presentation Interval</dt>
-          <dd>
-            <p>The presentation interval of a <a def-id="coded-frame"></a> is the time interval from its <a def-id="presentation-timestamp"></a> to the <a def-id="presentation-timestamp"></a> plus the <a def-id="coded-frames-duration"></a>. For example, if a coded frame has a presentation timestamp of 10 seconds and a <a def-id="coded-frame-duration"></a> of 100 milliseconds, then the presentation interval would be [10-10.1). Note that the start of the range is inclusive, but the end of the range is exclusive.</p>
-          </dd>
+        <p class="note">For the purposes of determining if <a def-id="hme-buffered"></a> contains a <a def-id="timerange"></a> that includes the current playback position, implementations MAY choose to allow a current playback position at or after <a def-id="presentation-start-time"></a> and before the first <a def-id="timerange"></a> to play the first <a def-id="timerange"></a> if that <a def-id="timerange"></a> starts within a reasonably short time, like 1 second, after <a def-id="presentation-start-time"></a>. This allowance accommodates the reality that muxed streams commonly do not begin all tracks precisely at <a def-id="presentation-start-time"></a>. Implementations MUST report the actual buffered range, regardless of this allowance.</p>
+        </dd>
+        <dt id="presentation-interval">Presentation Interval</dt>
+        <dd>
+          <p>The presentation interval of a <a def-id="coded-frame"></a> is the time interval from its <a def-id="presentation-timestamp"></a> to the <a def-id="presentation-timestamp"></a> plus the <a def-id="coded-frames-duration"></a>. For example, if a coded frame has a presentation timestamp of 10 seconds and a <a def-id="coded-frame-duration"></a> of 100 milliseconds, then the presentation interval would be [10-10.1). Note that the start of the range is inclusive, but the end of the range is exclusive.</p>
+        </dd>
 
-          <dt id="presentation-order">Presentation Order</dt>
-          <dd>
-            <p>The order that <a def-id="coded-frames"></a> are rendered in the presentation. The presentation order is achieved by ordering <a def-id="coded-frames"></a> in monotonically increasing order by their <a def-id="presentation-timestamps"></a>.</p>
-          </dd>
+        <dt id="presentation-order">Presentation Order</dt>
+        <dd>
+          <p>The order that <a def-id="coded-frames"></a> are rendered in the presentation. The presentation order is achieved by ordering <a def-id="coded-frames"></a> in monotonically increasing order by their <a def-id="presentation-timestamps"></a>.</p>
+        </dd>
 
-          <dt id="presentation-timestamp">Presentation Timestamp</dt>
-          <dd>
-             <p>A reference to a specific time in the presentation. The presentation timestamp in a <a def-id="coded-frame"></a> indicates when the frame SHOULD be rendered.</p>
-          </dd>
+        <dt id="presentation-timestamp">Presentation Timestamp</dt>
+        <dd>
+            <p>A reference to a specific time in the presentation. The presentation timestamp in a <a def-id="coded-frame"></a> indicates when the frame SHOULD be rendered.</p>
+        </dd>
 
-          <dt id="random-access-point">Random Access Point</dt>
-          <dd><p>A position in a <a def-id="media-segment"></a> where decoding and continuous playback can begin without relying on any previous data in the segment. For video this tends to be the location of I-frames. In the case of audio, most audio frames can be treated as a random access point. Since video tracks tend to have a more sparse distribution of random access points, the location of these points are usually considered the random access points for multiplexed streams.</p></dd>
+        <dt id="random-access-point">Random Access Point</dt>
+        <dd><p>A position in a <a def-id="media-segment"></a> where decoding and continuous playback can begin without relying on any previous data in the segment. For video this tends to be the location of I-frames. In the case of audio, most audio frames can be treated as a random access point. Since video tracks tend to have a more sparse distribution of random access points, the location of these points are usually considered the random access points for multiplexed streams.</p></dd>
 
-          <dt id="sourcebuffer-byte-stream-format-spec">SourceBuffer byte stream format specification</dt>
-          <dd><p>The specific <a def-id="byte-stream-format-spec"></a> that describes the format of the byte stream accepted by a <a>SourceBuffer</a> instance. The
-              <a def-id="byte-stream-format-spec"></a>, for a <a>SourceBuffer</a> object, is selected based on the <var>type</var> passed to the
-              <a def-id="addSourceBuffer"></a> call that created the object.</p></dd>
+        <dt id="sourcebuffer-byte-stream-format-spec">SourceBuffer byte stream format specification</dt>
+        <dd><p>The specific <a def-id="byte-stream-format-spec"></a> that describes the format of the byte stream accepted by a <a>SourceBuffer</a> instance. The
+            <a def-id="byte-stream-format-spec"></a>, for a <a>SourceBuffer</a> object, is selected based on the <var>type</var> passed to the
+            <a def-id="addSourceBuffer"></a> call that created the object.</p></dd>
 
-          <dt id="sourcebuffer-configuration">SourceBuffer configuration</dt>
-          <dd><p>A specific set of tracks distributed across one or more <a>SourceBuffer</a>
-              objects owned by a single <a>MediaSource</a> instance.</p>
-            <p>Implementations MUST support at least 1 <a>MediaSource</a> object with the following
-            configurations:</p>
-            <ul>
-              <li>A single SourceBuffer with 1 audio track and/or 1 video track.</li>
-              <li>Two SourceBuffers with one handling a single audio track and the other handling a single video track.</li>
-            </ul>
-            <p>MediaSource objects MUST support each of the configurations above, but they are only
-              required to support one configuration at a time. Supporting multiple configurations at once
-              or additional configurations is a quality of implementation issue.</p>
-          </dd>
+        <dt id="sourcebuffer-configuration">SourceBuffer configuration</dt>
+        <dd><p>A specific set of tracks distributed across one or more <a>SourceBuffer</a>
+            objects owned by a single <a>MediaSource</a> instance.</p>
+          <p>Implementations MUST support at least 1 <a>MediaSource</a> object with the following
+          configurations:</p>
+          <ul>
+            <li>A single SourceBuffer with 1 audio track and/or 1 video track.</li>
+            <li>Two SourceBuffers with one handling a single audio track and the other handling a single video track.</li>
+          </ul>
+          <p>MediaSource objects MUST support each of the configurations above, but they are only
+            required to support one configuration at a time. Supporting multiple configurations at once
+            or additional configurations is a quality of implementation issue.</p>
+        </dd>
 
-          <dt id="track-description">Track Description</dt>
-          <dd><p>A byte stream format specific structure that provides the <a def-id="track-id"></a>, codec configuration, and other metadata for a single track. Each track description inside a single <a def-id="init-segment"></a> has a unique <a def-id="track-id"></a>. The user agent MUST run the <a def-id="append-decode-error-algorithm"></a> if the <a def-id="track-id"></a> is not unique within the <a def-id="init-segment"></a>.</p></dd>
+        <dt id="track-description">Track Description</dt>
+        <dd><p>A byte stream format specific structure that provides the <a def-id="track-id"></a>, codec configuration, and other metadata for a single track. Each track description inside a single <a def-id="init-segment"></a> has a unique <a def-id="track-id"></a>. The user agent MUST run the <a def-id="append-decode-error-algorithm"></a> if the <a def-id="track-id"></a> is not unique within the <a def-id="init-segment"></a>.</p></dd>
 
-          <dt id="track-id">Track ID</dt>
-          <dd><p>A Track ID is a byte stream format specific identifier that marks sections of the byte stream as being part of a specific track. The Track ID in a <a def-id="track-description"></a> identifies which sections of a <a def-id="media-segment"></a> belong to that track.</p></dd>
+        <dt id="track-id">Track ID</dt>
+        <dd><p>A Track ID is a byte stream format specific identifier that marks sections of the byte stream as being part of a specific track. The Track ID in a <a def-id="track-description"></a> identifies which sections of a <a def-id="media-segment"></a> belong to that track.</p></dd>
 
-        </dl>
-      </section>
+      </dl>
     </section>
 
     <section id="mediasource">
