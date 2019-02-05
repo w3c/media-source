@@ -2119,23 +2119,6 @@ interface MediaSource : EventTarget {
       </section>
     </section>
 
-    <section id="url">
-      <h2>URL Object Extensions</h2>
-      <p>This section specifies extensions to the <a def-id="URL"></a>[[!FILE-API]] object definition.</p>
-
-<pre class="idl">[Exposed=Window]
-partial interface URL {
-    static DOMString createObjectURL (MediaSource mediaSource);
-};</pre><section><h2>Methods</h2><dl class="methods" data-dfn-for="URL" data-link-for="URL"><dt><dfn><code>createObjectURL</code></dfn>, static</dt><dd>
-          <p>Creates URLs for <a>MediaSource</a> objects.</p>
-
-          <ol class="method-algorithm">
-            <li>Return a unique <a def-id="MediaSource-object-URL"></a> that can be used to dereference the <var>mediaSource</var> argument.</li>
-          </ol>
-          <p class="note">This algorithm is intended to mirror the behavior of the <a def-id="file-createObjectURL"></a>[[!FILE-API]] method, which does not auto-revoke the created URL. Web authors are encouraged to use <a def-id="file-revokeObjectURL"></a>[[!FILE-API]] for any <a def-id="MediaSource-object-URL"></a> that is no longer needed for attachment to a media element.</p>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">mediaSource</td><td class="prmType"><code>MediaSource</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a><code>DOMString</code></a></div></dd></dl></section>
-    </section>
-
     <section id="htmlmediaelement-extensions">
       <h2>HTMLMediaElement Extensions</h2>
       <p>This section specifies what existing attributes on the <a def-id="htmlmediaelement"></a> MUST return when a <a>MediaSource</a> is attached to the element.</p>
