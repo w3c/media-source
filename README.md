@@ -33,3 +33,10 @@ The following is the list of current feature incubation branches:
     [w3c/media-source/issues/175](https://github.com/w3c/media-source/issues/175)
   * [Feature
     explainer](https://github.com/wicg/media-source/blob/mse-in-workers-using-handle/mse-in-workers-using-handle-explainer.md)
+
+* [eviction
+  policies](https://github.com/WICG/media-source/tree/mse-eviction-policies)
+  * Tracking issue:
+    [w3c/media-source/issues/232](https://github.com/w3c/media-source/issues/232)
+  * [Feature
+    explainer](https://github.com/wicg/media-source/blob/mse-eviction-policies/mse-eviction-policies-explainer.md)
