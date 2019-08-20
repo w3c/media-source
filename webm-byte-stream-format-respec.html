@@ -251,6 +251,24 @@
           of an <a def-id="webm-init-segment"></a> is encountered.</li>
       </ol>
 
+      <div class="note">
+        Implementations MAY guess the coded frame presentation duration for
+        SimpleBlocks at the end of a <a def-id="webm-cluster"></a>.
+        Content providers are recommended to use BlockGroups with explicit
+        BlockDurations, instead of SimpleBlocks, for the last block for each
+        track in a <a def-id="webm-cluster"></a> to avoid variance in
+        buffering behavior across implementations.
+      </div>
+
+      <div class="note">
+        Implementations MAY introduce buffering latency for each SimpleBlock
+        encountered in a <a def-id="webm-cluster"></a>, since such a block's
+        coded frame presentation duration may not be determinable until the
+        next block is parsed. To avoid such latency, content providers are
+        recommended to use BlockGroups with explicit BlockDuration instead
+        of SimpleBlocks within a <a def-id="webm-cluster"></a>.
+      </div>
+
       <p>The user agent MUST run the <a def-id="append-decode-error-algorithm"></a> if any of the following conditions are not met:</p>
       <ol>
         <li>The Timecode element MUST appear before any Block &amp; SimpleBlock elements in a <a def-id="webm-cluster"></a>.</li>
