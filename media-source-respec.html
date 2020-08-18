@@ -353,10 +353,10 @@ interface MediaSource : EventTarget {
                     attribute EventHandler        onsourceended;
                     attribute EventHandler        onsourceclose;
     SourceBuffer   addSourceBuffer (DOMString type);
-    void           removeSourceBuffer (SourceBuffer sourceBuffer);
-    void           endOfStream (optional EndOfStreamError error);
-    void           setLiveSeekableRange (double start, double end);
-    void           clearLiveSeekableRange ();
+    undefined           removeSourceBuffer (SourceBuffer sourceBuffer);
+    undefined           endOfStream (optional EndOfStreamError error);
+    undefined           setLiveSeekableRange (double start, double end);
+    undefined           clearLiveSeekableRange ();
     static boolean isTypeSupported (DOMString type);
 };
 </pre>
@@ -960,9 +960,9 @@ interface SourceBuffer : EventTarget {
                     attribute EventHandler        onupdateend;
                     attribute EventHandler        onerror;
                     attribute EventHandler        onabort;
-    void appendBuffer (BufferSource data);
-    void abort ();
-    void remove (double start, unrestricted double end);
+    undefined appendBuffer (BufferSource data);
+    undefined abort ();
+    undefined remove (double start, unrestricted double end);
 };
 </pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="SourceBuffer" data-link-for="SourceBuffer"><dt><dfn><code>mode</code></dfn> of type <span class="idlAttrType"><a>AppendMode</a></span></dt><dd>
           <p>Controls how a sequence of <a def-id="media-segments"></a> are handled. This attribute is initially set by <a def-id="addSourceBuffer"></a> after the object is created.</p>
@@ -2042,8 +2042,7 @@ interface SourceBufferList : EventTarget {
                     attribute EventHandler  onaddsourcebuffer;
                     attribute EventHandler  onremovesourcebuffer;
     getter SourceBuffer (unsigned long index);
-};
-</pre>
+};</pre>
       <section>
         <h2>Attributes</h2>
         <dl class="attributes" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList">
