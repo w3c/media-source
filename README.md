@@ -1,27 +1,17 @@
 
-# Specification 'media-source'
+# Media Source Extensions™ Specification
 
-This is the repository for media-source. You're welcome to contribute! Let's make the Web rock our socks
-off!
+This is the repository for the [Media Source Extensions™](https://w3c.github.io/media-source/) specification. You're welcome to contribute! Let's make the Web rock our socks off!
 
-Media Source Extensions:
- http://w3c.github.io/media-source/
+## Byte Stream Format specifications
 
+The Byte Stream Format Registry and related specifications that used to be developed in this repository have moved to dedicated repositories end of November 2020:
 
-Media Source Extensions Byte Stream Format Registry:
- http://w3c.github.io/media-source/byte-stream-format-registry.html
-
-WebM Byte Stream Format
- http://w3c.github.io/media-source/webm-byte-stream-format.html
-
-ISO BMFF Byte Stream Format:
- http://w3c.github.io/media-source/isobmff-byte-stream-format.html
-
-MPEG-2 Transport Streams Byte Stream Format:
-http://w3c.github.io/media-source/mp2t-byte-stream-format.html
-
-MPEG Audio Byte Stream Format:
- http://w3c.github.io/media-source/mpeg-audio-byte-stream-format.html
+- [Media Source Extensions Byte Stream Format Registry](https://w3c.github.io/mse-byte-stream-format-registry/) in [w3c/mse-byte-stream-format-registry](https://github.com/w3c/mse-byte-stream-format-registry/)
+- [WebM Byte Stream Format](https://w3c.github.io/mse-byte-stream-format-webm/) in [w3c/mse-byte-stream-format-webm](https://github.com/w3c/mse-byte-stream-format-webm/)
+- [ISO BMFF Byte Stream Format](https://w3c.github.io/mse-byte-stream-format-isobmff/) in [w3c/mse-byte-stream-format-isobmff](https://github.com/w3c/mse-byte-stream-format-isobmff/)
+- [MPEG-2 Transport Streams Byte Stream Format](https://w3c.github.io/mse-byte-stream-format-mp2t/) in [w3c/mse-byte-stream-format-mp2t](https://github.com/w3c/mse-byte-stream-format-mp2t/)
+- [MPEG Audio Byte Stream Format](https://w3c.github.io/mse-byte-stream-format-mpeg-audio/) in [w3c/mse-byte-stream-format-mpeg-audio](https://github.com/w3c/mse-byte-stream-format-mpeg-audio/)
 
 # Issue labeling and milestone guidance
 

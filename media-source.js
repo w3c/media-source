@@ -156,17 +156,17 @@
     'timestampOffset': { func: idlref_helper, fragment: 'dom-sourcebuffer-timestampoffset', link_text: 'timestampOffset',  },
     'appendWindowStart': { func: idlref_helper, fragment: 'dom-sourcebuffer-appendwindowstart', link_text: 'appendWindowStart', },
     'appendWindowEnd': { func: idlref_helper, fragment: 'dom-sourcebuffer-appendwindowend', link_text: 'appendWindowEnd', },
-    'AppendMode-segments': { func: idlref_helper, fragment: 'idl-def-AppendMode.segments', link_text: '"segments"',  },
-    'AppendMode-sequence': { func: idlref_helper, fragment: 'idl-def-AppendMode.sequence', link_text: '"sequence"',  },
+    'AppendMode-segments': { func: idlref_helper, fragment: 'dom-appendmode-segments', link_text: '"segments"',  },
+    'AppendMode-sequence': { func: idlref_helper, fragment: 'dom-appendmode-sequence', link_text: '"sequence"',  },
     'mode': { func: idlref_helper, fragment: 'dom-sourcebuffer-mode', link_text: 'mode',  },
 
     'SourceBufferList-length': { func: idlref_helper, fragment: 'dom-sourcebufferlist-length', link_text: 'length',  },
     'createObjectURL': { func: fileapi_helper, fragment: 'dfn-createObjectURL', link_text: 'createObjectURL()',  },
-    'open': { func: idlref_helper, fragment: 'idl-def-ReadyState.open', link_text: '"open"',  },
-    'closed': { func: idlref_helper, fragment: 'idl-def-ReadyState.closed', link_text: '"closed"',  },
-    'ended': { func: idlref_helper, fragment: 'idl-def-ReadyState.ended', link_text: '"ended"',  },
-    'network': { func: idlref_helper, fragment: 'idl-def-EndOfStreamError.network', link_text: '"network"',  },
-    'decode': { func: idlref_helper, fragment: 'idl-def-EndOfStreamError.decode', link_text: '"decode"',  },
+    'open': { func: idlref_helper, fragment: 'dom-readystate-open', link_text: '"open"',  },
+    'closed': { func: idlref_helper, fragment: 'dom-readystate-closed', link_text: '"closed"',  },
+    'ended': { func: idlref_helper, fragment: 'dom-readystate-ended', link_text: '"ended"',  },
+    'network': { func: idlref_helper, fragment: 'dom-endofstreamerror-network', link_text: '"network"',  },
+    'decode': { func: idlref_helper, fragment: 'dom-endofstreamerror-decode', link_text: '"decode"',  },
 
     'updatestart': { func: eventref_helper, fragment: 'updatestart', link_text: 'updatestart',  },
     'update': { func: eventref_helper, fragment: 'update', link_text: 'update', },
@@ -428,7 +428,7 @@
     // main MSE spec, which would otherwise conflict if included in the main MSE
     // spec, are added in this utility function. Don't call this function from
     // the main MSE respec.
-    externalClassInfo.SourceBuffer = { spec: 'mse', fragment: 'idl-def-SourceBuffer' };
+    externalClassInfo.SourceBuffer = { spec: 'mse', fragment: 'idl-def-sourcebuffer' };
   }
 
   function mediaSourcePreProcessor() {
@@ -449,11 +449,8 @@
 
     for (var x in groupBaseURLs) {
       if (groupBaseURLs[x] == original_MSE_spec_url && specStatus == "ED") {
-        MSE_spec_url = "index.html";
-        groupBaseURLs[x] = MSE_spec_url;
-
         // Refer to the local file rather than the published path.
-        var file = "index.html";
+        var file = "https://w3c.github.io/media-source/index.html";
         MSE_spec_url = file;
         groupBaseURLs[x] = MSE_spec_url;
         // Refer to the Web IDL Editor’s Draft from Editor’s Drafts of this spec.
@@ -640,13 +637,10 @@
   }
 
   function getMediaSourceRegistryBibioEntries(status) {
-    var stream_path = "byte-stream-format";
-    var postfix = ".html";
-    var separator = "";
+    var stream_path = "https://w3c.github.io/mse-byte-stream-format";
+    var postfix = "/";
     if (status !== "ED") {
       stream_path = "https://www.w3.org/TR/mse-byte-stream-format";
-      postfix = "/";
-      separator = "-";
     }
 
     return {
@@ -658,25 +652,25 @@
     },
     "MSE-FORMAT-WEBM": {
         title: "WebM Byte Stream Format",
-        href: ((postfix == "/")?(stream_path+"-webm"):"webm-"+stream_path) + postfix,
+        href: stream_path + "-webm" + postfix,
         authors: ["Matthew Wolenetz", "Jerry Smith", "Aaron Colwell"],
         publisher: "W3C"
     },
     "MSE-FORMAT-ISOBMFF": {
         title: "ISO BMFF Byte Stream Format",
-        href: ((postfix == "/")?(stream_path+"-isobmff"):"isobmff-"+stream_path) + postfix,
+        href: stream_path + "-isobmff" + postfix,
         authors: ["Matthew Wolenetz", "Jerry Smith", "Mark Watson", "Aaron Colwell", "Adrian Bateman"],
         publisher: "W3C"
     },
     "MSE-FORMAT-MP2T": {
         title: "MPEG-2 Transport Streams Byte Stream Format",
-        href: ((postfix == "/")?(stream_path+"-mp2t"):"mp2t-"+stream_path) + postfix,
+        href: stream_path + "-mp2t" + postfix,
         authors: ["Matthew Wolenetz", "Jerry Smith", "Mark Watson", "Aaron Colwell", "Adrian Bateman"],
         publisher: "W3C"
     },
     "MSE-FORMAT-MPEG-AUDIO": {
         title: "MPEG Audio Byte Stream Format",
-        href: ((postfix == "/")?(stream_path+"-mpeg-audio"):"mpeg-audio-"+stream_path) + postfix,
+        href: stream_path + "-mpeg-audio" + postfix,
         authors: ["Dale Curtis", "Matthew Wolenetz", "Aaron Colwell"],
         publisher: "W3C"
     },
