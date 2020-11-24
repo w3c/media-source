@@ -637,13 +637,10 @@
   }
 
   function getMediaSourceRegistryBibioEntries(status) {
-    var stream_path = "byte-stream-format";
-    var postfix = ".html";
-    var separator = "";
+    var stream_path = "https://w3c.github.io/mse-byte-stream-format";
+    var postfix = "/";
     if (status !== "ED") {
       stream_path = "https://www.w3.org/TR/mse-byte-stream-format";
-      postfix = "/";
-      separator = "-";
     }
 
     return {
@@ -655,25 +652,25 @@
     },
     "MSE-FORMAT-WEBM": {
         title: "WebM Byte Stream Format",
-        href: ((postfix == "/")?(stream_path+"-webm"):"webm-"+stream_path) + postfix,
+        href: stream_path + "-webm" + postfix,
         authors: ["Matthew Wolenetz", "Jerry Smith", "Aaron Colwell"],
         publisher: "W3C"
     },
     "MSE-FORMAT-ISOBMFF": {
         title: "ISO BMFF Byte Stream Format",
-        href: ((postfix == "/")?(stream_path+"-isobmff"):"isobmff-"+stream_path) + postfix,
+        href: stream_path + "-isobmff" + postfix,
         authors: ["Matthew Wolenetz", "Jerry Smith", "Mark Watson", "Aaron Colwell", "Adrian Bateman"],
         publisher: "W3C"
     },
     "MSE-FORMAT-MP2T": {
         title: "MPEG-2 Transport Streams Byte Stream Format",
-        href: ((postfix == "/")?(stream_path+"-mp2t"):"mp2t-"+stream_path) + postfix,
+        href: stream_path + "-mp2t" + postfix,
         authors: ["Matthew Wolenetz", "Jerry Smith", "Mark Watson", "Aaron Colwell", "Adrian Bateman"],
         publisher: "W3C"
     },
     "MSE-FORMAT-MPEG-AUDIO": {
         title: "MPEG Audio Byte Stream Format",
-        href: ((postfix == "/")?(stream_path+"-mpeg-audio"):"mpeg-audio-"+stream_path) + postfix,
+        href: stream_path + "-mpeg-audio" + postfix,
         authors: ["Dale Curtis", "Matthew Wolenetz", "Aaron Colwell"],
         publisher: "W3C"
     },
