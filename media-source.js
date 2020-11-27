@@ -19,15 +19,30 @@
   }
 
   function eventdfn_helper(doc, df, id, text) {
-    df.appendChild($("<dfn/>").attr({id: 'dom-evt-' + text.toLowerCase()}).wrapInner($("<code/>").text(text))[0]);
+    const code = doc.createElement('code');
+    code.appendChild(doc.createTextNode(text));
+    const dfn = doc.createElement('dfn');
+    dfn.setAttribute('id', 'dom-evt-' + text.toLowerCase());
+    dfn.appendChild(code);
+    df.appendChild(dfn);
   }
 
   function idlref_helper(doc, df, id, text) {
-    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: url_helper(doc, "#" + id)}).text(text))[0]);
+    const anchor = doc.createElement('a');
+    anchor.setAttribute('href', url_helper(doc, '#' + id));
+    anchor.appendChild(doc.createTextNode(text));
+    const code = doc.createElement('code');
+    code.appendChild(anchor);
+    df.appendChild(code);
   }
 
   function eventref_helper(doc, df, id, text) {
-    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: url_helper(doc, "#dom-evt-" + id)}).text(text))[0]);
+    const anchor = doc.createElement('a');
+    anchor.setAttribute('href', url_helper(doc, '#dom-evt-' + id));
+    anchor.appendChild(doc.createTextNode(text));
+    const code = doc.createElement('code');
+    code.appendChild(anchor);
+    df.appendChild(code);
   }
 
   function videoref_helper(doc, df, id, text) {
@@ -35,7 +50,12 @@
   }
 
   function code_videoref_helper(doc, df, id, text) {
-    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: HTML5_spec_url + "#" + id}).text(text))[0]);
+    const anchor = doc.createElement('a');
+    anchor.setAttribute('href', url_helper(doc, HTML5_spec_url + '#' + id));
+    anchor.appendChild(doc.createTextNode(text));
+    const code = doc.createElement('code');
+    code.appendChild(anchor);
+    df.appendChild(code);
   }
 
   function fileapi_helper(doc, df, id, text) {
@@ -63,19 +83,34 @@
   }
 
   function var_helper(doc, df, id, text) {
-    df.appendChild($("<var/>").wrapInner($("<a/>").attr({href: url_helper(doc, id)}).text(text))[0]);
+    const anchor = doc.createElement('a');
+    anchor.setAttribute('href', url_helper(doc, url_helper(doc, id)));
+    anchor.appendChild(doc.createTextNode(text));
+    const varEl = doc.createElement('var');
+    varEl.appendChild(anchor);
+    df.appendChild(varEl);
   }
 
   function link_helper(doc, df, id, text) {
-    df.appendChild($("<a/>").attr({href: url_helper(doc, id)}).text(text)[0]);
+    const anchor = doc.createElement('a');
+    anchor.setAttribute('href', url_helper(doc, url_helper(doc, id)));
+    anchor.appendChild(doc.createTextNode(text));
+    df.appendChild(anchor);
   }
 
   function exception_helper(doc, df, id, text) {
-    df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: WEBIDL_spec_url + '#' + id}).text(text))[0]);
+    const anchor = doc.createElement('a');
+    anchor.setAttribute('href', url_helper(doc, WEBIDL_spec_url + '#' + id));
+    anchor.appendChild(doc.createTextNode(text));
+    const code = doc.createElement('code');
+    code.appendChild(anchor);
+    df.appendChild(code);
   }
 
   function typeerror_helper(doc, df, id, text) {
-    df.appendChild($("<code/>").text(text)[0]);
+    const code = doc.createElement('code');
+    code.appendChild(doc.createTextNode(text));
+    df.appendChild(code);
   }
 
   function webmref_helper(doc, df, id, text) {
@@ -459,14 +494,12 @@
       }
     }
 
-    $("a[def-id]").each(function () {
-      $(this).addClass('externalDFN');
-    });
+    [...document.querySelectorAll('a[def-id]')].forEach(el =>
+      el.classList.add('externalDFN'));
  
     // Process external links first, so ReSpec will leave them alone
-    $("a:not([href])").each( function() {
-      var $ant = $(this);
-      var className = $ant.text();
+    [...document.querySelectorAll('a:not([href])')].forEach(el => {
+      var className = el.textContent;
       var info = externalClassInfo[className];
       if (info) {
         var id = info.fragment;
@@ -474,11 +507,17 @@
         var baseURL = lookupBaseUrlForSpec( info );
  
         if (baseURL) {
-          df.appendChild($("<code/>").wrapInner($("<a/>").attr({href: baseURL + "#" + id, 'class': 'idlType'}).text(className))[0]);
-          this.parentNode.replaceChild(df, this);
+          const anchor = document.createElement('a');
+          anchor.setAttribute('href', baseURL + "#" + id);
+          anchor.className = 'idlType';
+          anchor.appendChild(document.createTextNode(className));
+          const code = document.createElement('code');
+          code.appendChild(anchor);
+          df.appendChild(code);
+          el.parentNode.replaceChild(df, el);
         }
       }
-    } );
+    });
 
     var registry_biblio_entries =
      getMediaSourceRegistryBibioEntries(specStatus);
@@ -529,9 +568,8 @@
 
     var usedMap = {};
 
-    $("a[def-id]").each(function () {
-      var $ant = $(this);
-      var def_id = $ant.attr('def-id');
+    [...document.querySelectorAll('a[def-id]')].forEach(el => {
+      var def_id = el.getAttribute('def-id');
       var info = definitionInfo[def_id];
       if (info) {
         if (!usedMap[def_id]) {
@@ -543,11 +581,11 @@
         var id = info.fragment;
         var text = info.link_text;
 
-        if ($ant.attr('name')) {
-          id = $ant.attr('name');
+        if (el.getAttribute('name')) {
+          id = el.getAttribute('name');
         }
 
-        var element_text = this.innerHTML;
+        var element_text = el.textContent;
         if (element_text) {
           text = element_text;
         }
@@ -556,7 +594,7 @@
         doc.mseDefGroupName = info.groupName;
         info.func(doc, df, id, text);
         doc.mseDefGroupName = "";
-        this.parentNode.replaceChild(df, this);
+        el.parentNode.replaceChild(df, el);
 
       } else {
         console.log("Found def-id '" + def_id + "' but it does not correspond to anything");
@@ -564,27 +602,33 @@
     });
  
     // Link external references from IDL and method parameter tables
-    $("span.idlAttrType, span.idlMethType, span.idlParamType, td.prmType").each( function() {
-      var $ant = $(this);
-      var className = $ant.text();
+    [...document.querySelectorAll('span.idlAttrType, span.idlMethType, span.idlParamType, td.prmType')].forEach(el => {
+      var className = el.textContent;
       var info = externalClassInfo[className];
       if (info) {
         var id = info.fragment;
         var baseURL = lookupBaseUrlForSpec( info );
  
         if (baseURL) {
-          $ant.empty();
-          $ant.append($("<code/>").wrapInner($("<a/>").attr({href: baseURL + "#" + id }).text(className)));
+          el.innerHTML = '';
+          const anchor = document.createElement('a');
+          anchor.setAttribute('href', baseURL + "#" + id);
+          anchor.appendChild(document.createTextNode(className));
+          const code = document.createElement('code');
+          code.appendChild(anchor);
+          el.appendChild(code);
         }
       }
     } );
 
     // Move algorithm text after method parameter & return value information.
-    $("ol.method-algorithm").each(function() {
-      var parent = this.parentNode;
-      parent.removeChild(this);
-      parent.appendChild($("<p/>").text("When this method is invoked, the user agent must run the following steps:")[0]);
-      parent.appendChild(this);
+    [...document.querySelectorAll('ol.method-algorithm')].forEach(el => {
+      var parent = el.parentNode;
+      parent.removeChild(el);
+      const p = document.createElement('p');
+      p.appendChild(document.createTextNode('When this method is invoked, the user agent must run the following steps:'));
+      parent.appendChild(p);
+      parent.appendChild(el);
     });
 
     // Validate that all defined def-ids are actually used.
@@ -596,9 +640,8 @@
       }
     }
  
-    $("a[href]").each(function () {
-      var link = $(this);
-      var href = link.attr('href');
+    [...document.querySelectorAll('a[href]')].forEach(el => {
+      var href = el.getAttribute('href');
       var matched = /^#(.+)$/.exec(href);
       if (matched) {
         var id = matched[1];
