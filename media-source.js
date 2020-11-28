@@ -601,26 +601,6 @@
       }
     });
  
-    // Link external references from IDL and method parameter tables
-    [...document.querySelectorAll('span.idlAttrType, span.idlMethType, span.idlParamType, td.prmType')].forEach(el => {
-      var className = el.textContent;
-      var info = externalClassInfo[className];
-      if (info) {
-        var id = info.fragment;
-        var baseURL = lookupBaseUrlForSpec( info );
- 
-        if (baseURL) {
-          el.innerHTML = '';
-          const anchor = document.createElement('a');
-          anchor.setAttribute('href', baseURL + "#" + id);
-          anchor.appendChild(document.createTextNode(className));
-          const code = document.createElement('code');
-          code.appendChild(anchor);
-          el.appendChild(code);
-        }
-      }
-    } );
-
     // Move algorithm text after method parameter & return value information.
     [...document.querySelectorAll('ol.method-algorithm')].forEach(el => {
       var parent = el.parentNode;

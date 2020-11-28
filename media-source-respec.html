@@ -167,55 +167,55 @@
         <h3>Definitions</h3>
 
         <dl>
-          <dt id="active-track-buffers">Active Track Buffers</dt>
+          <dt><dfn id="active-track-buffers">Active Track Buffers</dfn></dt>
           <dd><p>The <a def-id="track-buffers"></a> that provide <a def-id="coded-frames"></a> for the <a def-id="audiotrack-enabled"></a>
               <a def-id="audiotracks"></a>, the <a def-id="videotrack-selected"></a> <a def-id="videotracks"></a>, and the
               <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> <a def-id="texttracks"></a>. All these tracks are associated with
             <a>SourceBuffer</a> objects in the <a def-id="activeSourceBuffers"></a> list.</p>
           </dd>
 
-          <dt id="append-window">Append Window</dt>
+          <dt><dfn id="append-window">Append Window</dfn></dt>
           <dd><p>A <a def-id="presentation-timestamp"></a> range used to filter out <a def-id="coded-frames"></a> while appending. The append window represents a single
             continuous time range with a single start time and end time. Coded frames with <a def-id="presentation-timestamp"></a> within this range are allowed to be appended
             to the <a>SourceBuffer</a> while coded frames outside this range are filtered out. The append window start and end times are controlled by
             the <a def-id="appendWindowStart"></a> and <a def-id="appendWindowEnd"></a> attributes respectively.</p></dd>
 
-          <dt id="coded-frame">Coded Frame</dt>
+          <dt><dfn id="coded-frame" data-export="">Coded Frame</dfn></dt>
           <dd><p>A unit of media data that has a <a def-id="presentation-timestamp"></a>, a <a def-id="decode-timestamp"></a>, and a <a def-id="coded-frame-duration"></a>.</p></dd>
 
-          <dt id="coded-frame-duration">Coded Frame Duration</dt>
+          <dt><dfn id="coded-frame-duration">Coded Frame Duration</dfn></dt>
           <dd>
             <p>The duration of a <a def-id="coded-frame"></a>. For video and text, the duration indicates how long the video frame or text SHOULD be displayed. For audio, the duration represents the sum of all the samples contained within the coded frame. For example, if an audio frame contained 441 samples @44100Hz the frame duration would be 10 milliseconds.</p>
           </dd>
 
-          <dt id="coded-frame-end-timestamp">Coded Frame End Timestamp</dt>
+          <dt><dfn id="coded-frame-end-timestamp">Coded Frame End Timestamp</dfn></dt>
           <dd>
             <p>The sum of a <a def-id="coded-frame"></a> <a def-id="presentation-timestamp"></a> and its
                 <a def-id="coded-frame-duration"></a>. It represents the <a def-id="presentation-timestamp"></a> that immediately follows the coded frame.</p>
           </dd>
 
-          <dt id="coded-frame-group">Coded Frame Group</dt>
+          <dt><dfn id="coded-frame-group">Coded Frame Group</dfn></dt>
           <dd><p>A group of <a def-id="coded-frames"></a> that are adjacent and have monotonically increasing <a def-id="decode-timestamps"></a> without any gaps. Discontinuities detected by the
               <a def-id="coded-frame-processing-algorithm"></a> and <a def-id="abort"></a> calls trigger the start of a new coded frame group.</p>
           </dd>
 
-          <dt id="decode-timestamp">Decode Timestamp</dt>
+          <dt><dfn id="decode-timestamp">Decode Timestamp</dfn></dt>
           <dd>
             <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the <a def-id="presentation-timestamp"></a> of the earliest frame, in <a def-id="presentation-order"></a>, that is dependant on this frame). If frames can be decoded out of <a def-id="presentation-order"></a>, then the decode timestamp MUST be present in or derivable from the byte stream. The user agent MUST run the <a def-id="append-decode-error-algorithm"></a> if this is not the case. If frames cannot be decoded out of  <a def-id="presentation-order"></a> and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the <a def-id="presentation-timestamp"></a>.</p>
           </dd>
 
-          <dt id="init-segment">Initialization Segment</dt>
+          <dt><dfn id="init-segment" data-export="">Initialization Segment</dfn></dt>
           <dd>
             <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of <a def-id="media-segments"></a>. This includes codec initialization data, <a def-id="track-id"></a> mappings for multiplexed segments, and timestamp offsets (e.g., edit lists).</p>
             <p class="note">The <a def-id="byte-stream-format-specs"></a> in the byte stream format registry [[MSE-REGISTRY]] contain format specific examples.</p>
 
-          </dd><dt id="media-segment">Media Segment</dt>
+          </dd><dt><dfn id="media-segment" data-export="">Media Segment</dfn></dt>
           <dd>
             <p>A sequence of bytes that contain packetized &amp; timestamped media data for a portion of the <a def-id="media-timeline"></a>. Media segments are always associated with the most recently appended <a def-id="init-segment"></a>.</p>
             <p class="note">The <a def-id="byte-stream-format-specs"></a> in the byte stream format registry [[MSE-REGISTRY]] contain format specific examples.</p>
           </dd>
 
-          <dt id="mediasource-object-url">MediaSource object URL</dt>
+          <dt><dfn id="mediasource-object-url">MediaSource object URL</dfn></dt>
           <dd>
             <p>A MediaSource object URL is a unique <a def-id="blob-uri"></a> [[FILE-API]] created by <a def-id="createObjectURL"></a>. It is used to attach a <a>MediaSource</a> object to an HTMLMediaElement.</p>
             <p>These URLs are the same as a <a def-id="blob-uri"></a>, except that anything in the definition of that feature that refers to <a def-id="File"></a> and <a def-id="Blob"></a> objects is hereby extended to also apply to <a>MediaSource</a> objects.</p>
@@ -223,38 +223,38 @@
             <p class="note">For example, the <a def-id="origin"></a> of the MediaSource object URL affects the way that the media element is <a href="https://html.spec.whatwg.org/multipage/canvas.html#security-with-canvas-elements">consumed by canvas</a>.</p>
           </dd>
 
-          <dt id="parent-media-source">Parent Media Source</dt>
+          <dt><dfn id="parent-media-source">Parent Media Source</dfn></dt>
           <dd><p>The parent media source of a <a>SourceBuffer</a> object is the <a>MediaSource</a> object that created it.</p></dd>
 
-          <dt id="presentation-start-time">Presentation Start Time</dt>
+          <dt><dfn id="presentation-start-time">Presentation Start Time</dfn></dt>
           <dd><p>The presentation start time is the earliest time point in the presentation and specifies the <a def-id="videoref" name="initial-playback-position">initial playback position</a> and <a def-id="videoref" name="earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0.</p>
 
           <p class="note">For the purposes of determining if <a def-id="hme-buffered"></a> contains a <a def-id="timerange"></a> that includes the current playback position, implementations MAY choose to allow a current playback position at or after <a def-id="presentation-start-time"></a> and before the first <a def-id="timerange"></a> to play the first <a def-id="timerange"></a> if that <a def-id="timerange"></a> starts within a reasonably short time, like 1 second, after <a def-id="presentation-start-time"></a>. This allowance accommodates the reality that muxed streams commonly do not begin all tracks precisely at <a def-id="presentation-start-time"></a>. Implementations MUST report the actual buffered range, regardless of this allowance.</p>
           </dd>
-          <dt id="presentation-interval">Presentation Interval</dt>
+          <dt><dfn id="presentation-interval">Presentation Interval</dfn></dt>
           <dd>
             <p>The presentation interval of a <a def-id="coded-frame"></a> is the time interval from its <a def-id="presentation-timestamp"></a> to the <a def-id="presentation-timestamp"></a> plus the <a def-id="coded-frames-duration"></a>. For example, if a coded frame has a presentation timestamp of 10 seconds and a <a def-id="coded-frame-duration"></a> of 100 milliseconds, then the presentation interval would be [10-10.1). Note that the start of the range is inclusive, but the end of the range is exclusive.</p>
           </dd>
 
-          <dt id="presentation-order">Presentation Order</dt>
+          <dt><dfn id="presentation-order">Presentation Order</dfn></dt>
           <dd>
             <p>The order that <a def-id="coded-frames"></a> are rendered in the presentation. The presentation order is achieved by ordering <a def-id="coded-frames"></a> in monotonically increasing order by their <a def-id="presentation-timestamps"></a>.</p>
           </dd>
 
-          <dt id="presentation-timestamp">Presentation Timestamp</dt>
+          <dt><dfn id="presentation-timestamp" data-export="">Presentation Timestamp</dfn></dt>
           <dd>
              <p>A reference to a specific time in the presentation. The presentation timestamp in a <a def-id="coded-frame"></a> indicates when the frame SHOULD be rendered.</p>
           </dd>
 
-          <dt id="random-access-point">Random Access Point</dt>
+          <dt><dfn id="random-access-point" data-export="">Random Access Point</dfn></dt>
           <dd><p>A position in a <a def-id="media-segment"></a> where decoding and continuous playback can begin without relying on any previous data in the segment. For video this tends to be the location of I-frames. In the case of audio, most audio frames can be treated as a random access point. Since video tracks tend to have a more sparse distribution of random access points, the location of these points are usually considered the random access points for multiplexed streams.</p></dd>
 
-          <dt id="sourcebuffer-byte-stream-format-spec">SourceBuffer byte stream format specification</dt>
+          <dt><dfn id="sourcebuffer-byte-stream-format-spec">SourceBuffer byte stream format specification</dfn></dt>
           <dd><p>The specific <a def-id="byte-stream-format-spec"></a> that describes the format of the byte stream accepted by a <a>SourceBuffer</a> instance. The
               <a def-id="byte-stream-format-spec"></a>, for a <a>SourceBuffer</a> object, is selected based on the <var>type</var> passed to the
               <a def-id="addSourceBuffer"></a> call that created the object.</p></dd>
 
-          <dt id="sourcebuffer-configuration">SourceBuffer configuration</dt>
+          <dt><dfn id="sourcebuffer-configuration">SourceBuffer configuration</dfn></dt>
           <dd><p>A specific set of tracks distributed across one or more <a>SourceBuffer</a>
               objects owned by a single <a>MediaSource</a> instance.</p>
             <p>Implementations MUST support at least 1 <a>MediaSource</a> object with the following
@@ -268,10 +268,10 @@
               or additional configurations is a quality of implementation issue.</p>
           </dd>
 
-          <dt id="track-description">Track Description</dt>
+          <dt><dfn id="track-description">Track Description</dfn></dt>
           <dd><p>A byte stream format specific structure that provides the <a def-id="track-id"></a>, codec configuration, and other metadata for a single track. Each track description inside a single <a def-id="init-segment"></a> has a unique <a def-id="track-id"></a>. The user agent MUST run the <a def-id="append-decode-error-algorithm"></a> if the <a def-id="track-id"></a> is not unique within the <a def-id="init-segment"></a>.</p></dd>
 
-          <dt id="track-id">Track ID</dt>
+          <dt><dfn id="track-id">Track ID</dfn></dt>
           <dd><p>A Track ID is a byte stream format specific identifier that marks sections of the byte stream as being part of a specific track. The Track ID in a <a def-id="track-description"></a> identifies which sections of a <a def-id="media-segment"></a> belong to that track.</p></dd>
 
         </dl>
@@ -288,7 +288,7 @@
     "closed",
     "open",
     "ended"
-};</pre><table class="simple" data-dfn-for="ReadyState" data-link-for="ReadyState"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn><code id="idl-def-ReadyState.closed">closed</code></dfn></td><td>
+};</pre><table class="simple" data-dfn-for="ReadyState"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn><code id="idl-def-ReadyState.closed">closed</code></dfn></td><td>
           Indicates the source is not currently attached to a media element.
         </td></tr><tr><td><dfn><code id="idl-def-ReadyState.open">open</code></dfn></td><td>
           The source has been opened by a media element and is ready for data to be appended to the <a>SourceBuffer</a> objects in <a def-id="sourceBuffers"></a>.
@@ -299,7 +299,7 @@
       <div><pre class="idl">enum EndOfStreamError {
     "network",
     "decode"
-};</pre><table class="simple" data-dfn-for="EndOfStreamError" data-link-for="EndOfStreamError"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn><code id="idl-def-EndOfStreamError.network">network</code></dfn></td><td>
+};</pre><table class="simple" data-dfn-for="EndOfStreamError"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn><code id="idl-def-EndOfStreamError.network">network</code></dfn></td><td>
           <p>Terminates playback and signals that a network error has occurred.</p>
           <p class="note">JavaScript applications SHOULD use this status code to terminate playback with a network error. For example, if a network error occurs while fetching media data.</p>
         </td></tr><tr><td><dfn><code id="idl-def-EndOfStreamError.decode">decode</code></dfn></td><td>
@@ -366,7 +366,7 @@ interface MediaSource : EventTarget {
           <p>The event handler for the <a def-id="sourceended"></a> event.</p>
         </dd><dt><dfn><code>onsourceclose</code></dfn> of type <span class="idlAttrType"><a>EventHandler</a></span></dt><dd>
           <p>The event handler for the <a def-id="sourceclose"></a> event.</p>
-        </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="MediaSource" data-link-for="MediaSource"><dt><dfn><code>addSourceBuffer</code></dfn></dt><dd>
+        </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="MediaSource"><dt><dfn><code>addSourceBuffer</code></dfn></dt><dd>
           <p>Adds a new <a>SourceBuffer</a> to <a def-id="sourceBuffers"></a>.</p>
           <ol class="method-algorithm">
             <li>If <var>type</var> is an empty string then throw a <a def-id="type-error"></a> exception and abort these steps.</li>
@@ -494,7 +494,7 @@ interface MediaSource : EventTarget {
               the <a>SourceBufferList</a> returned by <a def-id="sourceBuffers"></a>.</li>
             <li>Destroy all resources for <var>sourceBuffer</var>.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">sourceBuffer</td><td class="prmType"><code>SourceBuffer</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>endOfStream</code></dfn></dt><dd>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">sourceBuffer</td><td class="prmType"><code>SourceBuffer</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>endOfStream</code></dfn></dt><dd>
           <p>Signals the end of the stream.</p>
 
           <ol class="method-algorithm">
@@ -502,7 +502,7 @@ interface MediaSource : EventTarget {
             <li>If the <a def-id="updating"></a> attribute equals true on any <a>SourceBuffer</a> in <a def-id="sourceBuffers"></a>, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>Run the <a def-id="end-of-stream-algorithm"></a> with the <var>error</var> parameter set to <var>error</var>.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">error</td><td class="prmType"><code>EndOfStreamError</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>setLiveSeekableRange</code></dfn></dt><dd>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">error</td><td class="prmType"><code>EndOfStreamError</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>setLiveSeekableRange</code></dfn></dt><dd>
 
           <p>Updates the <a def-id="live-seekable-range"></a> variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <a def-id="hme-seekable"></a> behavior.</p>
           <ol class="method-algorithm">
@@ -539,14 +539,14 @@ interface MediaSource : EventTarget {
               </tr>
             </tbody>
           </table>
-        <div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>clearLiveSeekableRange</code></dfn></dt><dd>
+        <div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>clearLiveSeekableRange</code></dfn></dt><dd>
           <p>Updates the <a def-id="live-seekable-range"></a> variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <a def-id="hme-seekable"></a> behavior.</p>
 
           <ol class="method-algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not <a def-id="open"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If <a def-id="live-seekable-range"></a> contains a range, then set <a def-id="live-seekable-range"></a> to be a new empty <a def-id="timeranges"></a> object.
           </li></ol>
-        <div><em>No parameters.</em></div><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>isTypeSupported</code></dfn>, static</dt><dd>
+        <div><em>No parameters.</em></div><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>isTypeSupported</code></dfn>, static</dt><dd>
           <p>Check to see whether the <a>MediaSource</a> is capable of creating <a>SourceBuffer</a> objects for the specified MIME type.</p>
 
           <ol class="method-algorithm">
@@ -578,17 +578,17 @@ interface MediaSource : EventTarget {
           </thead>
           <tbody>
             <tr>
-              <td><a def-id="eventdfn">sourceopen</a></td>
+              <td><dfn><code>sourceopen</code></dfn></td>
               <td><code>Event</code></td>
               <td>{{MediaSource/readyState}} transitions from <a def-id="closed"></a> to <a def-id="open"></a> or from <a def-id="ended"></a> to <a def-id="open"></a>.</td>
             </tr>
             <tr>
-              <td><a def-id="eventdfn">sourceended</a></td>
+              <td><dfn><code>sourceended</code></dfn></td>
               <td><code>Event</code></td>
               <td>{{MediaSource/readyState}} transitions from <a def-id="open"></a> to <a def-id="ended"></a>.</td>
             </tr>
             <tr>
-              <td><a def-id="eventdfn">sourceclose</a></td>
+              <td><dfn><code>sourceclose</code></dfn></td>
               <td><code>Event</code></td>
               <td>{{MediaSource/readyState}} transitions from <a def-id="open"></a> to <a def-id="closed"></a> or <a def-id="ended"></a> to <a def-id="closed"></a>.</td>
             </tr>
@@ -600,7 +600,7 @@ interface MediaSource : EventTarget {
         <h3>Algorithms</h3>
 
         <section id="mediasource-attach">
-          <h4>Attaching to a media element</h4>
+          <h4><dfn>Attaching to a media element</dfn></h4>
           <p> A <a>MediaSource</a> object can be attached to a media element by assigning a <a def-id="MediaSource-object-URL"></a> to the media element <a def-id="media-src"></a> attribute or the src attribute of a &lt;source&gt; inside a media element. A <a def-id="MediaSource-object-URL"></a> is created by passing a MediaSource object to <a def-id="createObjectURL"></a>.</p>
 
           <p>If the <a def-id="resource-fetch-algorithm"></a> was invoked with
@@ -632,7 +632,7 @@ interface MediaSource : EventTarget {
         </section>
 
         <section id="mediasource-detach">
-          <h4>Detaching from a media element</h4>
+          <h4><dfn>Detaching from a media element</dfn></h4>
           <p>The following steps are run in any case where the media element is going to transition to <a def-id="videoref" name="dom-htmlmediaelement-network_empty">NETWORK_EMPTY</a> and <a def-id="queue-a-task-to-fire-an-event-named"></a> <a def-id="videoref" name="eventdef-media-emptied">emptied</a> at the media element. These steps SHOULD be run right before the transition.</p>
 
           <ol>
@@ -651,7 +651,7 @@ interface MediaSource : EventTarget {
         </section>
 
         <section id="mediasource-seeking">
-          <h4>Seeking</h4>
+          <h4><dfn>Seeking</dfn></h4>
           <p>Run the following steps as part of the "<i>Wait until the user agent has established whether or not the media data for the new playback position is available, and, if it is, until it has decoded enough data to play back that position"</i> step of the <a def-id="hme-seek-algorithm"></a>:</p>
           <ol>
             <li>
@@ -686,7 +686,7 @@ interface MediaSource : EventTarget {
         </section>
 
         <section id="buffer-monitoring">
-          <h4>SourceBuffer Monitoring</h4>
+          <h4><dfn>SourceBuffer Monitoring</dfn></h4>
           <p>The following steps are periodically run during playback to make sure that all of the <a>SourceBuffer</a> objects in <a def-id="activeSourceBuffers"></a> have <a def-id="enough-data"></a>. Changes to <a def-id="activeSourceBuffers"></a> also cause these steps to run because they affect the conditions that trigger state transitions.</p>
 
           <p>Having <dfn id="enough-data">enough data to ensure uninterrupted playback</dfn> is an implementation specific condition where the user agent
@@ -751,7 +751,7 @@ interface MediaSource : EventTarget {
         </section>
 
         <section id="active-source-buffer-changes">
-          <h4>Changes to selected/enabled track state</h4>
+          <h4><dfn>Changes to selected/enabled track state</dfn></h4>
           <p>During playback <a def-id="activeSourceBuffers"></a> needs to be updated if the <a def-id="videoref" name="dom-videotrack-selected">selected video track</a>, the <a def-id="videoref" name="dom-audiotrack-enabled">enabled audio track(s)</a>, or a text track <a def-id="videoref" name="dom-texttrack-mode">mode</a> changes. When one or more of these changes occur the following steps need to be followed.</p>
           <dl class="switch">
             <dt>If the selected video track changes, then run the following steps:</dt>
@@ -821,7 +821,7 @@ interface MediaSource : EventTarget {
         </section>
 
         <section id="duration-change-algorithm">
-          <h4>Duration change</h4>
+          <h4><dfn>Duration change</dfn></h4>
           <p>Follow these steps when <a def-id="duration"></a> needs to change to a <var>new duration</var>.</p>
           <ol>
             <li>If the current value of <a def-id="duration"></a> is equal to <var>new duration</var>, then return.</li>
@@ -842,7 +842,7 @@ interface MediaSource : EventTarget {
         </section>
 
         <section id="end-of-stream-algorithm">
-          <h4>End of stream algorithm</h4>
+          <h4><dfn>End of stream</dfn></h4>
           <p>This algorithm gets called when the application signals the end of stream via an <a def-id="endOfStream"></a> call or an algorithm needs to
             signal a decode error. This algorithm takes an <var>error</var> parameter that indicates whether an error will be signalled.</p>
           <ol>
@@ -898,7 +898,7 @@ interface MediaSource : EventTarget {
 <pre class="idl">enum AppendMode {
     "segments",
     "sequence"
-};</pre><table class="simple" data-dfn-for="AppendMode" data-link-for="AppendMode"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn><code id="idl-def-AppendMode.segments">segments</code></dfn></td><td>
+};</pre><table class="simple" data-dfn-for="AppendMode"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn><code id="idl-def-AppendMode.segments">segments</code></dfn></td><td>
           <p>The timestamps in the media segment determine where the <a def-id="coded-frames"></a> are placed in the presentation. Media segments can be appended in any order.</p>
         </td></tr><tr><td><dfn><code id="idl-def-AppendMode.sequence">sequence</code></dfn></td><td>
           <p>Media segments will be treated as adjacent in time independent of the timestamps in the media segment. Coded frames in a new media segment will be placed immediately after the coded
@@ -962,7 +962,7 @@ interface SourceBuffer : EventTarget {
             <li>Let <var>highest end time</var> be the largest <a def-id="track-buffer-ranges"></a> end time across all the <a def-id="track-buffers"></a> managed by this <a>SourceBuffer</a> object.</li>
             <li>Let <var>intersection ranges</var> equal a <a def-id="timerange"></a> object containing a single range from 0 to <var>highest end time</var>.</li>
             <li>For each audio and video <a def-id="track-buffer"></a> managed by this <a>SourceBuffer</a>, run the following steps:
-                <p class="note">Text <a def-id="track-buffer">track-buffers</a> are included in the calculation of <var>highest end time</var>, above, but excluded from the buffered range calculation here. They are not necessarily continuous, nor should any discontinuity within them trigger playback stall when the other media tracks are continuous over the same time range.</p>
+                <p class="note">Text <a def-id="track-buffer">track buffers</a> are included in the calculation of <var>highest end time</var>, above, but excluded from the buffered range calculation here. They are not necessarily continuous, nor should any discontinuity within them trigger playback stall when the other media tracks are continuous over the same time range.</p>
               <ol>
                 <li>Let <var>track ranges</var> equal the <a def-id="track-buffer-ranges"></a> for the current <a def-id="track-buffer"></a>.</li>
                 <li>If {{MediaSource/readyState}} is <a def-id="ended"></a>, then set the end time on the last range in <var>track ranges</var> to <var>highest end time</var>.</li>
@@ -1035,7 +1035,7 @@ interface SourceBuffer : EventTarget {
           <p>The event handler for the <a def-id="updateerror"></a> event.</p>
         </dd><dt><dfn><code>onabort</code></dfn> of type <span class="idlAttrType"><a>EventHandler</a></span></dt><dd>
           <p>The event handler for the <a def-id="updateabort"></a> event.</p>
-        </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="SourceBuffer" data-link-for="SourceBuffer"><dt><dfn id="dom-sourcebuffer-appendbuffer"><code>appendBuffer</code></dfn></dt><dd>
+        </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="SourceBuffer"><dt><dfn id="dom-sourcebuffer-appendbuffer"><code>appendBuffer</code></dfn></dt><dd>
           <p>Appends the segment data in an <a class="externalDFN">BufferSource</a>[[!WEBIDL]] to the source buffer.</p>
 
           <ol class="method-algorithm">
@@ -1045,7 +1045,7 @@ interface SourceBuffer : EventTarget {
             <li><a def-id="Queue-a-task-to-fire-an-event-named"></a> <a def-id="updatestart"></a> at this <a>SourceBuffer</a> object.</li>
             <li>Asynchronously run the <a def-id="buffer-append"></a> algorithm.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType"><code>BufferSource</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>abort</code></dfn></dt><dd>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType"><code>BufferSource</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>abort</code></dfn></dt><dd>
           <p>Aborts the current segment and resets the segment parser.</p>
 
           <ol class="method-algorithm">
@@ -1064,7 +1064,7 @@ interface SourceBuffer : EventTarget {
             <li>Set <a def-id="appendWindowStart"></a> to the <a def-id="presentation-start-time"></a>.</li>
             <li>Set <a def-id="appendWindowEnd"></a> to positive Infinity.</li>
           </ol>
-        <div><em>No parameters.</em></div><div><em>Return type: </em><a>void</a></div></dd><dt><dfn><code>remove</code></dfn></dt><dd>
+        <div><em>No parameters.</em></div><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>remove</code></dfn></dt><dd>
         <p>Removes media for a specific time range.</p>
         <ol class="method-algorithm">
             <li>If this object has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
@@ -1112,7 +1112,7 @@ interface SourceBuffer : EventTarget {
           </tr>
         </tbody>
       </table>
-        <div><em>Return type: </em><a>void</a></div>
+        <div><em>Return type: </em>{{undefined}}</div>
       </dd></dl>
       </section>
 
@@ -1162,27 +1162,27 @@ interface SourceBuffer : EventTarget {
           </thead>
           <tbody>
             <tr>
-              <td><a def-id="eventdfn">updatestart</a></td>
+              <td><dfn><code>updatestart</code></dfn></td>
               <td><code>Event</code></td>
               <td><a def-id="updating"></a> transitions from false to true.</td>
             </tr>
             <tr>
-              <td><a def-id="eventdfn">update</a></td>
+              <td><dfn><code>update</code></dfn></td>
               <td><code>Event</code></td>
               <td>The append or remove has successfully completed. <a def-id="updating"></a> transitions from true to false.</td>
             </tr>
             <tr>
-              <td><a def-id="eventdfn">updateend</a></td>
+              <td><dfn><code>updateend</code></dfn></td>
               <td><code>Event</code></td>
               <td>The append or remove has ended.</td>
             </tr>
             <tr>
-              <td><a def-id="eventdfn">error</a></td>
+              <td><dfn><code>error</code></dfn></td>
               <td><code>Event</code></td>
               <td>An error occurred during the append. <a def-id="updating"></a> transitions from true to false.</td>
             </tr>
             <tr>
-              <td><a def-id="eventdfn">abort</a></td>
+              <td><dfn><code>abort</code></dfn></td>
               <td><code>Event</code></td>
               <td>The append or remove was aborted by an <a def-id="abort"></a> call. <a def-id="updating"></a> transitions from true to false.</td>
             </tr>
@@ -1194,7 +1194,7 @@ interface SourceBuffer : EventTarget {
         <h3>Algorithms</h3>
 
         <section id="sourcebuffer-segment-parser-loop">
-          <h4>Segment Parser Loop</h4>
+          <h4><dfn>Segment Parser Loop</dfn></h4>
           <p>All SourceBuffer objects have an internal <dfn id="sourcebuffer-append-state">append state</dfn> variable that keeps track of the high-level segment parsing state. It is initially set to <a def-id="waiting-for-segment"></a> and can transition to the following states as data is appended.</p>
           <table class="old-table">
             <thead>
@@ -1205,15 +1205,15 @@ interface SourceBuffer : EventTarget {
             </thead>
             <tbody>
               <tr>
-                <td><dfn id="sourcebuffer-waiting-for-segment">WAITING_FOR_SEGMENT</dfn></td>
+                <td><dfn id="sourcebuffer-waiting-for-segment"><code>WAITING_FOR_SEGMENT</code></dfn></td>
                 <td>Waiting for the start of an <a def-id="init-segment"></a> or <a def-id="media-segment"></a> to be appended.</td>
               </tr>
               <tr>
-                <td><dfn id="sourcebuffer-parsing-init-segment">PARSING_INIT_SEGMENT</dfn></td>
+                <td><dfn id="sourcebuffer-parsing-init-segment"><code>PARSING_INIT_SEGMENT</code></dfn></td>
                 <td>Currently parsing an <a def-id="init-segment"></a>.</td>
               </tr>
               <tr>
-                <td><dfn id="sourcebuffer-parsing-media-segment">PARSING_MEDIA_SEGMENT</dfn></td>
+                <td><dfn id="sourcebuffer-parsing-media-segment"><code>PARSING_MEDIA_SEGMENT</code></dfn></td>
                 <td>Currently parsing a <a def-id="media-segment"></a>.</td>
               </tr>
             </tbody>
@@ -1239,7 +1239,7 @@ interface SourceBuffer : EventTarget {
           <p class="note">The <a def-id="group-end-timestamp"></a> stores the highest <a def-id="coded-frame-end-timestamp"></a> across all <a def-id="track-buffers"></a> in a <a>SourceBuffer</a>. Therefore, care should be taken in setting the <a def-id="mode"></a> attribute when appending multiplexed segments in which the timestamps are not aligned across tracks.
           </p>
 
-          <p>The <dfn id="sourcebuffer-generate-timestamps-flag">generate timestamps flag</dfn> is a
+          <p>The <dfn id="sourcebuffer-generate-timestamps-flag" data-export="">generate timestamps flag</dfn> is a
             boolean variable that keeps track of whether timestamps need to be generated for the
             <a def-id="coded-frames"></a> passed to the <a def-id="coded-frame-processing-algorithm"></a>.
             This flag is set by <a def-id="addSourceBuffer"></a> when the SourceBuffer object is created.
@@ -1293,7 +1293,7 @@ interface SourceBuffer : EventTarget {
         </section>
 
         <section id="sourcebuffer-reset-parser-state">
-          <h4>Reset Parser State</h4>
+          <h4><dfn>Reset Parser State</dfn></h4>
           <p>When the parser state needs to be reset, run the following steps:</p>
           <ol>
             <li>If the <a def-id="append-state"></a> equals <a def-id="parsing-media-segment"></a> and the <a def-id="input-buffer"></a> contains some
@@ -1310,7 +1310,7 @@ interface SourceBuffer : EventTarget {
         </section>
 
         <section id="sourcebuffer-append-error">
-          <h4>Append Error Algorithm</h4>
+          <h4><dfn data-export="">Append Error</dfn></h4>
           <p>This algorithm is called when an error occurs during an append.
           <ol>
             <li>Run the <a def-id="reset-parser-state-algorithm"></a>.</li>
@@ -1323,7 +1323,7 @@ interface SourceBuffer : EventTarget {
         </section>
 
         <section id="sourcebuffer-prepare-append">
-            <h4>Prepare Append Algorithm</h4>
+            <h4><dfn>Prepare Append</dfn></h4>
             <p>When an append operation begins, the following steps are run to validate and prepare the <a>SourceBuffer</a>.</p>
             <ol>
             <li>If the <a>SourceBuffer</a> has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
@@ -1348,7 +1348,7 @@ interface SourceBuffer : EventTarget {
         </section>
 
         <section id="sourcebuffer-buffer-append">
-          <h4>Buffer Append Algorithm</h4>
+          <h4><dfn>Buffer Append</dfn></h4>
           <p>When <a def-id="appendBuffer"></a> is called, the following steps are run to process the appended data.</p>
           <ol>
             <li>Run the <a def-id="segment-parser-loop"></a> algorithm.</li>
@@ -1360,7 +1360,7 @@ interface SourceBuffer : EventTarget {
         </section>
 
         <section id="sourcebuffer-range-removal">
-          <h4>Range Removal</h4>
+          <h4><dfn>Range Removal</dfn></h4>
           <p>Follow these steps when a caller needs to initiate a JavaScript visible range removal
             operation that blocks other SourceBuffer updates:</p>
           <ol>
@@ -1376,7 +1376,7 @@ interface SourceBuffer : EventTarget {
           </ol>
         </section>
         <section id="sourcebuffer-init-segment-received">
-          <h4>Initialization Segment Received</h4>
+          <h4><dfn>Initialization Segment Received</dfn></h4>
           <p>The following steps are run when the <a def-id="segment-parser-loop"></a> successfully parses a complete <a def-id="init-segment"></a>:</p>
           <p>Each SourceBuffer object has an internal <dfn id="first-init-segment-received-flag">first initialization segment received flag</dfn> that tracks whether the first <a def-id="init-segment"></a> has been appended and received by this algorithm. This flag is set to false when the SourceBuffer is created and updated by the algorithm below.</p>
           <ol>
@@ -1603,7 +1603,7 @@ interface SourceBuffer : EventTarget {
         </section>
 
         <section id="sourcebuffer-coded-frame-processing">
-          <h4>Coded Frame Processing</h4>
+          <h4><dfn data-export="">Coded Frame Processing</dfn></h4>
           <p>When complete <a def-id="coded-frames"></a> have been parsed by the <a def-id="segment-parser-loop"></a> then the following steps are run:</p>
           <ol>
             <li>
@@ -1795,7 +1795,7 @@ interface SourceBuffer : EventTarget {
         </section>
 
         <section id="sourcebuffer-coded-frame-removal">
-          <h4>Coded Frame Removal Algorithm</h4>
+          <h4><dfn>Coded Frame Removal</dfn></h4>
           <p>Follow these steps when <a def-id="coded-frames"></a> for a specific time range need to be removed from the SourceBuffer:</p>
           <ol>
             <li>Let <var>start</var> be the starting <a def-id="presentation-timestamp"></a> for the removal range.</li>
@@ -1849,7 +1849,7 @@ interface SourceBuffer : EventTarget {
         </section>
 
         <section id="sourcebuffer-coded-frame-eviction">
-          <h4>Coded Frame Eviction Algorithm</h4>
+          <h4><dfn>Coded Frame Eviction</dfn></h4>
           <p>This algorithm is run to free up space in this source buffer when new data is appended.</p>
           <ol>
             <li>Let <var>new data</var> equal the data that is about to be appended to this SourceBuffer.</li>
@@ -1866,7 +1866,7 @@ interface SourceBuffer : EventTarget {
         </section>
 
         <section id="sourcebuffer-audio-splice-frame-algorithm">
-          <h4>Audio Splice Frame Algorithm</h4>
+          <h4><dfn>Audio Splice Frame</dfn></h4>
           <p>Follow these steps when the <a def-id="coded-frame-processing-algorithm"></a> needs to generate a splice frame for two overlapping audio
             <a def-id="coded-frames"></a>:</p>
           <ol>
@@ -1936,7 +1936,7 @@ interface SourceBuffer : EventTarget {
           </ol>
         </section>
         <section id="sourcebuffer-audio-splice-rendering-algorithm">
-          <h4>Audio Splice Rendering Algorithm</h4>
+          <h4><dfn>Audio Splice Rendering</dfn></h4>
           <p>The following steps are run when a spliced frame, generated by the <a def-id="audio-splice-frame-algorithm"></a>, needs to be rendered by the
             media element:</p>
           <ol>
@@ -1969,7 +1969,7 @@ interface SourceBuffer : EventTarget {
           </div>
         </section>
         <section id="sourcebuffer-text-splice-frame-algorithm">
-          <h4>Text Splice Frame Algorithm</h4>
+          <h4><dfn>Text Splice Frame</dfn></h4>
           <p>Follow these steps when the <a def-id="coded-frame-processing-algorithm"></a> needs to generate a splice frame for two overlapping timed text
             <a def-id="coded-frames"></a>:</p>
           <ol>
@@ -2008,7 +2008,7 @@ interface SourceBufferList : EventTarget {
 };</pre>
       <section>
         <h2>Attributes</h2>
-        <dl class="attributes" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList">
+        <dl class="attributes" data-dfn-for="SourceBufferList">
           <dt><dfn><code>length</code></dfn> of type <span class="idlAttrType"><a>unsigned long</a></span>, readonly       </dt>
           <dd>
             <p>Indicates the number of <a>SourceBuffer</a> objects in the list.</p>
@@ -2025,7 +2025,7 @@ interface SourceBufferList : EventTarget {
       </section>
       <section>
         <h2>Methods</h2>
-        <dl class="methods" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList">
+        <dl class="methods" data-dfn-for="SourceBufferList">
           <dt><dfn data-lt-noDefault data-lt="sourcebufferlist-getter"><code>getter</code></dfn></dt>
           <dd>
             <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e., []).</p>
@@ -2063,12 +2063,12 @@ interface SourceBufferList : EventTarget {
           </thead>
           <tbody>
             <tr>
-              <td><a def-id="eventdfn">addsourcebuffer</a></td>
+              <td><dfn><code>addsourcebuffer</code></dfn></td>
               <td><code>Event</code></td>
               <td>When a <a>SourceBuffer</a> is added to the list.</td>
             </tr>
             <tr>
-              <td><a def-id="eventdfn">removesourcebuffer</a></td>
+              <td><dfn><code>removesourcebuffer</code></dfn></td>
               <td><code>Event</code></td>
               <td>When a <a>SourceBuffer</a> is removed from the list.</td>
             </tr>
@@ -2135,7 +2135,7 @@ interface SourceBufferList : EventTarget {
 
       <div><pre class="idl">partial interface AudioTrack {
     readonly        attribute SourceBuffer? sourceBuffer;
-};</pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="AudioTrack" data-link-for="AudioTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a>SourceBuffer</a></span>, readonly       , nullable</dt><dd>
+};</pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="AudioTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a>SourceBuffer</a></span>, readonly       , nullable</dt><dd>
           <p>Returns the <a>SourceBuffer</a> that created this track. Returns null if this track was not created by a <a>SourceBuffer</a> or the <a>SourceBuffer</a> has been removed from the <a def-id="sourceBuffers"></a> attribute of its <a def-id="parent-media-source"></a>.</p>
         </dd></dl></section></div>
     </section>
@@ -2146,7 +2146,7 @@ interface SourceBufferList : EventTarget {
 
       <div><pre class="idl">partial interface VideoTrack {
     readonly        attribute SourceBuffer? sourceBuffer;
-};</pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="VideoTrack" data-link-for="VideoTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a>SourceBuffer</a></span>, readonly       , nullable</dt><dd>
+};</pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="VideoTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a>SourceBuffer</a></span>, readonly       , nullable</dt><dd>
           <p>Returns the <a>SourceBuffer</a> that created this track. Returns null if this track was not created by a <a>SourceBuffer</a> or the <a>SourceBuffer</a> has been removed from the <a def-id="sourceBuffers"></a> attribute of its <a def-id="parent-media-source"></a>.</p>
         </dd></dl></section></div>
     </section>
@@ -2157,13 +2157,13 @@ interface SourceBufferList : EventTarget {
 
       <div><pre class="idl">partial interface TextTrack {
     readonly        attribute SourceBuffer? sourceBuffer;
-};</pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="TextTrack" data-link-for="TextTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a>SourceBuffer</a></span>, readonly       , nullable</dt><dd>
+};</pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="TextTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a>SourceBuffer</a></span>, readonly       , nullable</dt><dd>
           <p>Returns the <a>SourceBuffer</a> that created this track. Returns null if this track was not created by a <a>SourceBuffer</a> or the <a>SourceBuffer</a> has been removed from the <a def-id="sourceBuffers"></a> attribute of its <a def-id="parent-media-source"></a>.</p>
         </dd></dl></section></div>
     </section>
 
     <section id="byte-stream-formats">
-      <h2>Byte Stream Formats</h2>
+      <h2><dfn data-export="">Byte Stream Formats</dfn></h2>
       <p>The bytes provided through <a def-id="appendBuffer"></a> for a <a>SourceBuffer</a> form a logical byte stream. The format and
         semantics of these byte streams are defined in <dfn id="byte-stream-format-specs">byte stream format specifications</dfn>.
         The byte stream format registry [[MSE-REGISTRY]] provides mappings between a MIME type that may be passed to <a def-id="addSourceBuffer"></a> or
@@ -2292,6 +2292,69 @@ interface SourceBufferList : EventTarget {
     }
 
     // Make sure the previous append is not still pending.
+    if (mediaSource.sourceBuffers[0].updating)
+        return;
+
+    var mediaSegment = GetNextMediaSegment();
+
+    if (!mediaSegment) {
+      // Error fetching the next media segment.
+      mediaSource.endOfStream("network");
+      return;
+    }
+
+    // NOTE: If mediaSource.readyState == “ended”, this appendBuffer() call will
+    // cause mediaSource.readyState to transition to "open". The web application
+    // should be prepared to handle multiple “sourceopen” events.
+    mediaSource.sourceBuffers[0].appendBuffer(mediaSegment);
+  }
+
+  function onSeeking(mediaSource, e) {
+    var video = e.target;
+
+    if (mediaSource.readyState == "open") {
+      // Abort current segment append.
+      mediaSource.sourceBuffers[0].abort();
+    }
+
+    // Notify the media segment loading code to start fetching data at the
+    // new playback position.
+    SeekToMediaSegmentAt(video.currentTime);
+
+    // Append a media segment from the new playback position.
+    appendNextMediaSegment(mediaSource);
+  }
+
+  function onProgress(mediaSource, e) {
+    appendNextMediaSegment(mediaSource);
+  }
+&lt;/script&gt;
+
+&lt;video id="v" autoplay&gt; &lt;/video&gt;
+
+&lt;script&gt;
+  var video = document.getElementById('v');
+  var mediaSource = new MediaSource();
+  mediaSource.addEventListener('sourceopen', onSourceOpen.bind(this, video));
+  video.src = window.URL.createObjectURL(mediaSource);
+&lt;/script&gt;
+          </pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="acknowledgements">
+      <h2>Acknowledgments</h2>
+      The editors would like to thank <a def-id="contributors"></a> for their contributions to this specification.
+    </section>
+
+    <section id="VideoPlaybackQuality" class="appendix informative">
+      <h2>VideoPlaybackQuality</h2>
+      The video playback quality metrics described in previous revisions of this specification (e.g., sections 5 and 10 of the <a href="https://www.w3.org/TR/2016/CR-media-source-20160705/">Candidate Recommendation</a>) are now being developed as part of [[MEDIA-PLAYBACK-QUALITY]]. Some implementations may have implemented the earlier draft <code>VideoPlaybackQuality</code> object and the <a def-id="htmlvideoelement"></a> extension method <code>getVideoPlaybackQuality()</code> described in those previous revisions.
+    </section>
+  </body>
+</html>
+  // Make sure the previous append is not still pending.
     if (mediaSource.sourceBuffers[0].updating)
         return;
 
