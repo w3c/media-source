@@ -1,7 +1,7 @@
 
 # Media Source Extensions™ Specification
 
-This is the repository for the [Media Source Extensions™](https://w3c.github.io/media-source/) specification. You're welcome to contribute! Let's make the Web rock our socks off!
+This is the repository for the [Media Source Extensions™](https://w3c.github.io/media-source/) (MSE) specification. You're welcome to contribute! Let's make the Web rock our socks off!
 
 ## Byte Stream Format specifications
 
@@ -55,17 +55,17 @@ Issues with these labels should always be closed (unless they were re-opened at 
 
 
 ## Milestones
-For greater detail, see our V1 triage process announcement in [the archive](https://lists.w3.org/Archives/Public/public-html-media/2016Mar/0003.html).
 
-### “V#”:
-A bug in version # of the spec.
-Currently, V1 is the first version of MSE (in CR in Q4 2015).
+See [milestones](https://github.com/w3c/media-source/milestones) for the full list. Milestones “V1”, “V1Editorial” and “V1NonBlocking” were reached with the publication of the first version of MSE as a W3C Recommendation in 2016 and are no longer current. The following milestones are used to track issues:
 
-### "V#NonBlocking"
-A bug in version # of the spec, which is an editorial change to improve spec language. These should not be treated as blocking on the WG timeline, so the clock may run out before all are fixed.
+### “V2”
+Issues flagged with a [V2](https://github.com/w3c/media-source/milestone/6) milestone describe new features in scope of the second version of MSE. Immediate work on these issues is expected.
 
-### “VNext”:
-Perhaps to be addressed by some later version of the spec; not currently expected to be in scope of specific version of the spec. Typically, this milestone is correlated with issues labeled “feature request”. This is equivalent to Bugzilla’s RESOLVED LATER status. As such and to keep the issue tracker focused, issues with this milestone will generally be closed. When work on a new version of the spec starts, the V.Next issues, including those that are closed, should be reviewed and considered for the new version.
+### “V2BugFixes”
+Issues flagged with a [V2BugFixes](https://github.com/w3c/media-source/milestone/7) describe bugs raised against the first version of MSE that need to be fixed before the second version gets published as a W3C Recommendation. These bugs do not introduce new features.
 
-### (no milestone):
-The issue has not been triaged or the editors are currently discussing.
+### “Backlog”
+Issues flagged with a [BackLog](https://github.com/w3c/media-source/milestone/1) milestone describe features, questions, bugfixes, editorial changes that are not yet in scope for the current version of the specification. Perhaps to be addressed by some later version of the spec.
+
+### (no milestone)
+Issues that are not associated with any milestone have not been triaged yet.
