@@ -298,10 +298,10 @@
     "network",
     "decode"
 };</pre><table class="simple" data-dfn-for="EndOfStreamError" data-link-for="EndOfStreamError"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn><code id="idl-def-EndOfStreamError.network">network</code></dfn></td><td>
-          <p>Terminates playback and signals that a network error has occured.</p>
+          <p>Terminates playback and signals that a network error has occurred.</p>
           <p class="note">JavaScript applications SHOULD use this status code to terminate playback with a network error. For example, if a network error occurs while fetching media data.</p>
         </td></tr><tr><td><dfn><code id="idl-def-EndOfStreamError.decode">decode</code></dfn></td><td>
-          <p>Terminates playback and signals that a decoding error has occured.</p>
+          <p>Terminates playback and signals that a decoding error has occurred.</p>
           <p class="note">JavaScript applications SHOULD use this status code to terminate playback with a decode error. For example, if a parsing error occurs while processing out-of-band media data.</p>
         </td></tr></tbody></table></div>
 
@@ -1322,7 +1322,7 @@ interface SourceBuffer : EventTarget {
 
         <section id="sourcebuffer-prepare-append">
             <h4>Prepare Append Algorithm</h4>
-            <p>When an append operation begins, the follow steps are run to validate and prepare the <a>SourceBuffer</a>.</p>
+            <p>When an append operation begins, the following steps are run to validate and prepare the <a>SourceBuffer</a>.</p>
             <ol>
             <li>If the <a>SourceBuffer</a> has been removed from the <a def-id="sourceBuffers"></a> attribute of the <a def-id="parent-media-source"></a> then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
             <li>If the <a def-id="updating"></a> attribute equals true, then throw an <a def-id="invalid-state-error"></a> exception and abort these steps.</li>
@@ -1338,7 +1338,7 @@ interface SourceBuffer : EventTarget {
             </li>
             <li>Run the <a def-id="coded-frame-eviction-algorithm"></a>.</li>
             <li>
-              <p>If the <a def-id="buffer-full-flag"></a> equals true, then throw a <a def-id="quota-exceeded-error"></a> exception and abort these step.</p>
+              <p>If the <a def-id="buffer-full-flag"></a> equals true, then throw a <a def-id="quota-exceeded-error"></a> exception and abort these steps.</p>
               <p class="note">This is the signal that the implementation was unable to evict enough data to accommodate the append or the append is too big. The web
                 application SHOULD use <a def-id="remove"></a> to explicitly free up space and/or reduce the size of the append.</p>
             </li>
@@ -1393,7 +1393,7 @@ interface SourceBuffer : EventTarget {
                   <ul>
                     <li>The number of audio, video, and text tracks match what was in the first <a def-id="init-segment"></a>.</li>
                     <li>The codecs for each track, match what was specified in the first <a def-id="init-segment"></a>.</li>
-                    <li>If more than one track for a single type are present (e.g., 2 audio tracks), then the <a def-id="track-ids"></a> match the ones in the
+                    <li>If more than one track for a single type is present (e.g., 2 audio tracks), then the <a def-id="track-ids"></a> match the ones in the
                       first <a def-id="init-segment"></a>.</li>
                   </ul>
                 </li>
@@ -1625,7 +1625,7 @@ interface SourceBuffer : EventTarget {
                         </li>
                         <li>Let <var>decode timestamp</var> be a double precision floating point representation of the coded frame's decode timestamp in seconds.
                           <p class="note">Implementations don't have to internally store timestamps in a double precision floating point representation. This
-                            representation is used here because it is the represention for timestamps in the HTML spec. The intention here is to make the
+                            representation is used here because it is the representation for timestamps in the HTML spec. The intention here is to make the
                             behavior clear without adding unnecessary complexity to the algorithm to deal with the fact that adding a timestampOffset may
                             cause a timestamp rollover in the underlying timestamp representation used by the byte stream format. Implementations can use any
                             internal timestamp representation they wish, but the addition of timestampOffset SHOULD behave in a similar manner to what would happen
@@ -2215,7 +2215,7 @@ partial interface URL {
         </li>
         <li>The user agent MUST support the following:
           <ol>
-            <li><a def-id="track-ids"></a> changing across <a def-id="init-segments"></a> if the segments describes only one track of each type.</li>
+            <li><a def-id="track-ids"></a> changing across <a def-id="init-segments"></a> if the segments describe only one track of each type.</li>
             <li>
               <p>Video frame size changes. The user agent MUST support seamless playback.</p>
               <p class="note">This will cause the &lt;video&gt; display region to change size if the web application does not use CSS or HTML attributes (width/height) to constrain the element size.</p>
