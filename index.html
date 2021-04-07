@@ -1,6 +1,6 @@
-<!DOCTYPE html><html dir="ltr" lang="en"><head>
+<!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="generator" content="ReSpec 25.18.4">
+<meta name="generator" content="ReSpec 26.5.0">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <style>
 .issue-label{text-transform:initial}
@@ -16,6 +16,7 @@ input.task-list-item-checkbox{margin:0 .35em .25em -1.6em;vertical-align:middle}
 </style>
 <style>
 pre.idl{padding:1em;position:relative}
+pre.idl>code{color:#000}
 @media print{
 pre.idl{white-space:pre-wrap}
 }
@@ -124,8 +125,6 @@ h2>a.self-link,h3>a.self-link,h4>a.self-link,h5>a.self-link,h6>a.self-link{left:
 .removeOnSave{display:none}
 }
 </style>
-    
-<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     
     
 
@@ -281,16 +280,16 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
   "postProcess": [
     null
   ],
-  "publishISODate": "2020-11-25T00:00:00.000Z",
-  "generatedSubtitle": "Editor's Draft 25 November 2020"
+  "publishISODate": "2021-04-07T00:00:00.000Z",
+  "generatedSubtitle": "Editor's Draft 07 April 2021"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED"></head>
   <body data-cite="WebIDL html dom url" class="h-entry"><div class="head">
-    <a class="logo" href="https://www.w3.org/"><img alt="W3C" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72" height="48"></a> <h1 id="title" class="title">Media Source Extensions™</h1>
+    <a class="logo" href="https://www.w3.org/"><img alt="W3C" width="72" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C"></a> <h1 id="title" class="title">Media Source Extensions™</h1>
     
     <h2>
       W3C Editor's Draft
-      <time class="dt-published" datetime="2020-11-25">25 November 2020</time>
+      <time class="dt-published" datetime="2021-04-07">07 April 2021</time>
     </h2>
     <dl>
       <dt>This version:</dt><dd>
@@ -322,15 +321,15 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
             (<a class="p-org org h-org h-card" href="http://www.microsoft.com/">Microsoft Corporation</a>)
            (Until April 2015)</dd>
       
-      <dt>Repository:</dt><dd>
+      <dt>Repository</dt><dd>
     <a href="https://github.com/w3c/media-source/">We are on GitHub</a>
   </dd><dd>
     <a href="https://github.com/w3c/media-source/issues">File a bug</a>
   </dd><dd>
     <a href="https://github.com/w3c/media-source/commits/gh-pages/media-source-respec.html">Commit history</a>
-  </dd><dt>Mailing list:</dt><dd>
+  </dd><dt>Mailing list</dt><dd>
     <a href="https://lists.w3.org/Archives/Public/public-media-wg/">public-media-wg@w3.org</a>
-  </dd><dt>Implementation:</dt><dd>
+  </dd><dt>Implementation</dt><dd>
     <a href="http://caniuse.com/#feat=mediasource">Can I use Media Source Extensions?</a>
   </dd><dd>
     <a href="http://w3c-test.org/media-source/">Test Suite</a>
@@ -348,7 +347,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <p class="copyright">
     <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a>
     ©
-    2020
+    2021
     
     <a href="https://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="https://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
     <a href="https://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="https://www.keio.ac.jp/">Keio</a>,
@@ -412,7 +411,9 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <section id="introduction" class="informative">
       <h2 id="x1-introduction"><bdi class="secno">1. </bdi>Introduction<a class="self-link" aria-label="§" href="#introduction"></a></h2><p><em>This section is non-normative.</em></p>
       <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;. It defines a MediaSource object that can serve as a source of media data for an HTMLMediaElement. MediaSource objects have one or more <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-1"><code>SourceBuffer</code></a> objects.  Applications append data segments to the <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-2"><code>SourceBuffer</code></a> objects, and can adapt the quality of appended data based on system performance and other factors. Data from the <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-3"><code>SourceBuffer</code></a> objects is managed as track buffers for audio, video and text data that is decoded and played. Byte stream specifications used with these extensions are available in the byte stream format registry [<cite><a class="bibref" data-link-type="biblio" href="#bib-mse-registry" title="Media Source Extensions™ Byte Stream Format Registry">MSE-REGISTRY</a></cite>].</p>
-      <img src="pipeline_model.svg" alt="Media Source Pipeline Model Diagram" longdesc="pipeline_model_description.html#pipelinedesc">
+      <a href="pipeline_model_description.html#pipelinedesc">
+        <picture><img src="pipeline_model.svg" alt="Media Source Pipeline Model Diagram"></picture>
+      </a>
       <section id="goals">
         <h3 id="x1-1-goals"><bdi class="secno">1.1 </bdi>Goals<a class="self-link" aria-label="§" href="#goals"></a></h3>
         <p>This specification was designed with the following goals in mind:</p>
@@ -548,15 +549,15 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
 
     <section id="mediasource">
       <h2 id="x2-mediasource-object"><bdi class="secno">2. </bdi><dfn data-export="" data-dfn-type="interface" id="dom-mediasource" data-idl="interface" data-title="MediaSource" data-dfn-for=""><code>MediaSource</code></dfn> Object<a class="self-link" aria-label="§" href="#mediasource"></a></h2>
-      <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-1"><code><code>readyState</code></code></a> for this source as well as a list of <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-10"><code>SourceBuffer</code></a> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-11"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> to add media data to this source. The HTMLMediaElement fetches this media data from the <a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-6"><code>MediaSource</code></a> object when it is needed during playback.</p>
+      <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-1"><code>readyState</code></a> for this source as well as a list of <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-10"><code>SourceBuffer</code></a> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-11"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> to add media data to this source. The HTMLMediaElement fetches this media data from the <a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-6"><code>MediaSource</code></a> object when it is needed during playback.</p>
 
       <p>Each <a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-7"><code>MediaSource</code></a> object has a <dfn id="live-seekable-range">live seekable range</dfn> variable that stores a <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#normalized-timeranges-object">normalized TimeRanges object</a>.  This variable is initialized to an empty <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code> object when the <a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-8"><code>MediaSource</code></a> object is created, is maintained by <code><a href="#dom-mediasource-setliveseekablerange">setLiveSeekableRange()</a></code> and <code><a href="#dom-mediasource-clearliveseekablerange">clearLiveSeekableRange()</a></code>, and is used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-seekable">HTMLMediaElement.seekable</a></code> behavior.</p>
 
-      <div><pre class="idl def" id="webidl-1246068066"><span class="idlHeader"><a class="self-link" href="#webidl-1246068066">WebIDL</a></span><span data-idl="" class="idlEnum" id="idl-def-readystate" data-title="ReadyState">enum <dfn data-export="" data-dfn-type="enum" id="dom-readystate" data-idl="enum" data-title="ReadyState" data-dfn-for="ReadyState" class="idlID"><code>ReadyState</code></dfn> {
+      <div><pre class="idl def" id="webidl-1246068066"><span class="idlHeader"><a class="self-link" href="#webidl-1246068066">WebIDL</a></span><code><span data-idl="" class="idlEnum" id="idl-def-readystate" data-title="ReadyState">enum <dfn data-export="" data-dfn-type="enum" id="dom-readystate" data-idl="enum" data-title="ReadyState" data-dfn-for="ReadyState" class="idlID"><code>ReadyState</code></dfn> {
     <span class="idlEnumItem">"<a class="internalDFN" data-link-type="enum-value" href="#dom-readystate-closed" id="ref-for-dom-readystate-closed-1"><code>closed</code></a>"</span>,
     <span class="idlEnumItem">"<a class="internalDFN" data-link-type="enum-value" href="#dom-readystate-open" id="ref-for-dom-readystate-open-1"><code>open</code></a>"</span>,
     <span class="idlEnumItem">"<a class="internalDFN" data-link-type="enum-value" href="#dom-readystate-ended" id="ref-for-dom-readystate-ended-1"><code>ended</code></a>"</span>
-};</span></pre><table class="simple" data-dfn-for="ReadyState" data-link-for="ReadyState"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn data-export="" data-dfn-type="enum-value" id="dom-readystate-closed" data-idl="enum-value" data-title="closed" data-dfn-for="ReadyState"><code id="idl-def-ReadyState.closed">closed</code></dfn></td><td>
+};</span></code></pre><table class="simple" data-dfn-for="ReadyState" data-link-for="ReadyState"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn data-export="" data-dfn-type="enum-value" id="dom-readystate-closed" data-idl="enum-value" data-title="closed" data-dfn-for="ReadyState"><code id="idl-def-ReadyState.closed">closed</code></dfn></td><td>
           Indicates the source is not currently attached to a media element.
         </td></tr><tr><td><dfn data-export="" data-dfn-type="enum-value" id="dom-readystate-open" data-idl="enum-value" data-title="open" data-dfn-for="ReadyState"><code id="idl-def-ReadyState.open">open</code></dfn></td><td>
           The source has been opened by a media element and is ready for data to be appended to the <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-12"><code>SourceBuffer</code></a> objects in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>.
@@ -564,18 +565,18 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
           The source is still attached to a media element, but <code><a href="#dom-mediasource-endofstream">endOfStream()</a></code> has been called.
         </td></tr></tbody></table></div>
 
-      <div><pre class="idl def" id="webidl-1490762926"><span class="idlHeader"><a class="self-link" href="#webidl-1490762926">WebIDL</a></span><span data-idl="" class="idlEnum" id="idl-def-endofstreamerror" data-title="EndOfStreamError">enum <dfn data-export="" data-dfn-type="enum" id="dom-endofstreamerror" data-idl="enum" data-title="EndOfStreamError" data-dfn-for="EndOfStreamError" class="idlID"><code>EndOfStreamError</code></dfn> {
+      <div><pre class="idl def" id="webidl-1490762926"><span class="idlHeader"><a class="self-link" href="#webidl-1490762926">WebIDL</a></span><code><span data-idl="" class="idlEnum" id="idl-def-endofstreamerror" data-title="EndOfStreamError">enum <dfn data-export="" data-dfn-type="enum" id="dom-endofstreamerror" data-idl="enum" data-title="EndOfStreamError" data-dfn-for="EndOfStreamError" class="idlID"><code>EndOfStreamError</code></dfn> {
     <span class="idlEnumItem">"<a class="internalDFN" data-link-type="enum-value" href="#dom-endofstreamerror-network" id="ref-for-dom-endofstreamerror-network-1"><code>network</code></a>"</span>,
     <span class="idlEnumItem">"<a class="internalDFN" data-link-type="enum-value" href="#dom-endofstreamerror-decode" id="ref-for-dom-endofstreamerror-decode-1"><code>decode</code></a>"</span>
-};</span></pre><table class="simple" data-dfn-for="EndOfStreamError" data-link-for="EndOfStreamError"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn data-export="" data-dfn-type="enum-value" id="dom-endofstreamerror-network" data-idl="enum-value" data-title="network" data-dfn-for="EndOfStreamError"><code id="idl-def-EndOfStreamError.network">network</code></dfn></td><td>
-          <p>Terminates playback and signals that a network error has occured.</p>
+};</span></code></pre><table class="simple" data-dfn-for="EndOfStreamError" data-link-for="EndOfStreamError"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn data-export="" data-dfn-type="enum-value" id="dom-endofstreamerror-network" data-idl="enum-value" data-title="network" data-dfn-for="EndOfStreamError"><code id="idl-def-EndOfStreamError.network">network</code></dfn></td><td>
+          <p>Terminates playback and signals that a network error has occurred.</p>
           <div class="note" role="note" id="issue-container-generatedID-3"><div role="heading" class="note-title marker" id="h-note-3" aria-level="3"><span>Note</span></div><p class="">JavaScript applications <em class="rfc2119">SHOULD</em> use this status code to terminate playback with a network error. For example, if a network error occurs while fetching media data.</p></div>
         </td></tr><tr><td><dfn data-export="" data-dfn-type="enum-value" id="dom-endofstreamerror-decode" data-idl="enum-value" data-title="decode" data-dfn-for="EndOfStreamError"><code id="idl-def-EndOfStreamError.decode">decode</code></dfn></td><td>
-          <p>Terminates playback and signals that a decoding error has occured.</p>
+          <p>Terminates playback and signals that a decoding error has occurred.</p>
           <div class="note" role="note" id="issue-container-generatedID-4"><div role="heading" class="note-title marker" id="h-note-4" aria-level="3"><span>Note</span></div><p class="">JavaScript applications <em class="rfc2119">SHOULD</em> use this status code to terminate playback with a decode error. For example, if a parsing error occurs while processing out-of-band media data.</p></div>
         </td></tr></tbody></table></div>
 
-<pre class="idl def" id="webidl-709154601"><span class="idlHeader"><a class="self-link" href="#webidl-709154601">WebIDL</a></span><span data-idl="" class="idlInterface" id="idl-def-mediasource" data-title="MediaSource">[<span class="extAttr"><a data-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<a data-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window">Window</a></span>]
+<pre class="idl def" id="webidl-709154601"><span class="idlHeader"><a class="self-link" href="#webidl-709154601">WebIDL</a></span><code><span data-idl="" class="idlInterface" id="idl-def-mediasource" data-title="MediaSource">[<span class="extAttr"><a data-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<a data-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window">Window</a></span>]
 interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-mediasource" id="ref-for-dom-mediasource-9"><code>MediaSource</code></a> : <span class="idlSuperclass"><a data-type="interface" href="https://dom.spec.whatwg.org/#eventtarget">EventTarget</a></span> {<span data-idl="" class="idlConstructor" id="idl-def-mediasource-constructor" data-title="constructor" data-dfn-for="MediaSource">
     <dfn data-export="" data-dfn-type="constructor" id="dom-mediasource-constructor" data-idl="constructor" data-title="constructor" data-dfn-for="MediaSource" data-lt="constructor()" data-local-lt="MediaSource.constructor|MediaSource.constructor()|constructor"><code>constructor</code></dfn>();</span><span data-idl="" class="idlAttribute" id="idl-def-mediasource-sourcebuffers" data-title="sourceBuffers" data-dfn-for="MediaSource">
     readonly        attribute<span class="idlType"> <a href="#dom-sourcebufferlist" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebufferlist-1"><code>SourceBufferList</code></a></span>    <a class="internalDFN idlName" data-link-type="attribute" href="#dom-mediasource-sourcebuffers" id="ref-for-dom-mediasource-sourcebuffers-1"><code>sourceBuffers</code></a>;</span><span data-idl="" class="idlAttribute" id="idl-def-mediasource-activesourcebuffers" data-title="activeSourceBuffers" data-dfn-for="MediaSource">
@@ -591,11 +592,11 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
     <a data-type="interface" href="https://heycam.github.io/webidl/#idl-undefined">undefined</a></span>           <a class="internalDFN idlName" data-link-type="method" href="#dom-mediasource-setliveseekablerange" id="ref-for-dom-mediasource-setliveseekablerange-1"><code>setLiveSeekableRange</code></a> (<span class="idlType"><a data-type="interface" href="https://heycam.github.io/webidl/#idl-double">double</a></span> <span class="idlParamName">start</span>,<span class="idlType"> <a data-type="interface" href="https://heycam.github.io/webidl/#idl-double">double</a></span> <span class="idlParamName">end</span>);</span><span data-idl="" class="idlMethod" id="idl-def-mediasource-clearliveseekablerange" data-title="clearLiveSeekableRange" data-dfn-for="MediaSource"><span class="idlType">
     <a data-type="interface" href="https://heycam.github.io/webidl/#idl-undefined">undefined</a></span>           <a class="internalDFN idlName" data-link-type="method" href="#dom-mediasource-clearliveseekablerange" id="ref-for-dom-mediasource-clearliveseekablerange-1"><code>clearLiveSeekableRange</code></a> ();</span><span data-idl="" class="idlMethod" id="idl-def-mediasource-istypesupported-type" data-title="isTypeSupported" data-dfn-for="MediaSource">
     static<span class="idlType"> <a data-type="interface" href="https://heycam.github.io/webidl/#idl-boolean">boolean</a></span> <a class="internalDFN idlName" data-link-type="method" href="#dom-mediasource-istypesupported" id="ref-for-dom-mediasource-istypesupported-1"><code>isTypeSupported</code></a> (<span class="idlType"><a data-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a></span> <span class="idlParamName">type</span>);</span>
-};</span></pre>
+};</span></code></pre>
       <section id="attributes">
         <h3 id="x2-1-attributes"><bdi class="secno">2.1 </bdi>Attributes<a class="self-link" aria-label="§" href="#attributes"></a></h3>
         <dl class="attributes" data-dfn-for="MediaSource"><dt><dfn data-export="" data-dfn-type="attribute" id="dom-mediasource-sourcebuffers" data-idl="attribute" data-title="sourceBuffers" data-dfn-for="MediaSource" data-type="SourceBufferList" data-lt="sourceBuffers" data-local-lt="MediaSource.sourceBuffers"><code>sourceBuffers</code></dfn> of type <span class="idlAttrType"><a href="#dom-sourcebufferlist" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebufferlist-3"><code>SourceBufferList</code></a></span>, readonly       </dt><dd>
-          Contains the list of <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-15"><code>SourceBuffer</code></a> objects associated with this <a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-10"><code>MediaSource</code></a>. When <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-3"><code><code>readyState</code></code></a> equals <code><a href="#dom-readystate-closed">"closed"</a></code> this list will be empty. Once <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-4"><code><code>readyState</code></code></a> transitions to <code><a href="#dom-readystate-open">"open"</a></code> SourceBuffer objects can be added to this list by using <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code>.
+          Contains the list of <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-15"><code>SourceBuffer</code></a> objects associated with this <a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-10"><code>MediaSource</code></a>. When <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-3"><code>readyState</code></a> equals <code><a href="#dom-readystate-closed">"closed"</a></code> this list will be empty. Once <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-4"><code>readyState</code></a> transitions to <code><a href="#dom-readystate-open">"open"</a></code> SourceBuffer objects can be added to this list by using <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code>.
         </dd><dt><dfn data-export="" data-dfn-type="attribute" id="dom-mediasource-activesourcebuffers" data-idl="attribute" data-title="activeSourceBuffers" data-dfn-for="MediaSource" data-type="SourceBufferList" data-lt="activeSourceBuffers" data-local-lt="MediaSource.activeSourceBuffers"><code>activeSourceBuffers</code></dfn> of type <span class="idlAttrType"><a href="#dom-sourcebufferlist" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebufferlist-4"><code>SourceBufferList</code></a></span>, readonly       </dt><dd>
           <p>Contains the subset of <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> that are providing the
             <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-videotrack-selected">selected video track</a>, the
@@ -609,19 +610,19 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
           </p>
           <div class="note" role="note" id="issue-container-generatedID-5"><div role="heading" class="note-title marker" id="h-note-5" aria-level="4"><span>Note</span></div><p class="">The <a href="#active-source-buffer-changes">Changes to selected/enabled track state</a> section describes how this attribute gets
             updated.</p></div>
-        </dd><dt><dfn data-export="" data-dfn-type="attribute" id="dom-mediasource-readystate" data-idl="attribute" data-title="readyState" data-dfn-for="MediaSource" data-type="ReadyState" data-lt="readyState" data-local-lt="MediaSource.readyState"><code>readyState</code></dfn> of type <a data-link-type="idl" href="#dom-readystate" class="internalDFN" id="ref-for-dom-readystate-2"><code><code>ReadyState</code></code></a>, readonly       </dt><dd>
-          <p>Indicates the current state of the <a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-11"><code>MediaSource</code></a> object. When the <a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-12"><code>MediaSource</code></a> is created <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-5"><code><code>readyState</code></code></a> <em class="rfc2119">MUST</em> be set to <code><a href="#dom-readystate-closed">"closed"</a></code>.
+        </dd><dt><dfn data-export="" data-dfn-type="attribute" id="dom-mediasource-readystate" data-idl="attribute" data-title="readyState" data-dfn-for="MediaSource" data-type="ReadyState" data-lt="readyState" data-local-lt="MediaSource.readyState"><code>readyState</code></dfn> of type <a data-link-type="idl" href="#dom-readystate" class="internalDFN" id="ref-for-dom-readystate-2"><code>ReadyState</code></a>, readonly       </dt><dd>
+          <p>Indicates the current state of the <a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-11"><code>MediaSource</code></a> object. When the <a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-12"><code>MediaSource</code></a> is created <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-5"><code>readyState</code></a> <em class="rfc2119">MUST</em> be set to <code><a href="#dom-readystate-closed">"closed"</a></code>.
         </p></dd><dt><dfn data-export="" data-dfn-type="attribute" id="dom-mediasource-duration" data-idl="attribute" data-title="duration" data-dfn-for="MediaSource" data-type="unrestricted double" data-lt="duration" data-local-lt="MediaSource.duration"><code>duration</code></dfn> of type <span class="idlAttrType"><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-unrestricted-double">unrestricted double</a></code></span></dt><dd>
           <p>Allows the web application to set the presentation duration. The duration is initially set to NaN when the <a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-13"><code>MediaSource</code></a> object is created.</p>
           <p>On getting, run the following steps:</p>
           <ol>
-            <li>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-6"><code><code>readyState</code></code></a> attribute is <code><a href="#dom-readystate-closed">"closed"</a></code> then return NaN and abort these steps.</li>
+            <li>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-6"><code>readyState</code></a> attribute is <code><a href="#dom-readystate-closed">"closed"</a></code> then return NaN and abort these steps.</li>
             <li>Return the current value of the attribute.</li>
           </ol>
           <p>On setting, run the following steps:</p>
           <ol>
             <li>If the value being set is negative or NaN then throw a <code>TypeError</code> exception and abort these steps.</li>
-            <li>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-7"><code><code>readyState</code></code></a> attribute is not <code><a href="#dom-readystate-open">"open"</a></code> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-7"><code>readyState</code></a> attribute is not <code><a href="#dom-readystate-open">"open"</a></code> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute equals true on any <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-17"><code>SourceBuffer</code></a> in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>Run the <a href="#duration-change-algorithm">duration change algorithm</a> with <var>new duration</var> set to the value being assigned to this attribute.
               <div class="note" role="note" id="issue-container-generatedID-6"><div role="heading" class="note-title marker" id="h-note-6" aria-level="4"><span>Note</span></div><p class="">The <a href="#duration-change-algorithm">duration change algorithm</a> will adjust <var>new duration</var> higher if there is any currently buffered coded frame with a higher end time.</p></div>
@@ -648,7 +649,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
                 playback.
               </p></div>
             </li>
-            <li>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-8"><code><code>readyState</code></code></a> attribute is not in the <code><a href="#dom-readystate-open">"open"</a></code> state then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-8"><code>readyState</code></a> attribute is not in the <code><a href="#dom-readystate-open">"open"</a></code> state then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>Create a new <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-20"><code>SourceBuffer</code></a> object and associated resources.</li>
             <li>Set the <var><a href="#sourcebuffer-generate-timestamps-flag">generate timestamps flag</a></var> on the new object to the value in the
                "Generate Timestamps Flag" column of the byte stream format registry [<cite><a class="bibref" data-link-type="biblio" href="#bib-mse-registry" title="Media Source Extensions™ Byte Stream Format Registry">MSE-REGISTRY</a></cite>] entry
@@ -767,7 +768,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
 
           
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">error</td><td class="prmType"><code>EndOfStreamError</code></td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-9"><code><code>readyState</code></code></a> attribute is not in the <code><a href="#dom-readystate-open">"open"</a></code> state then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-9"><code>readyState</code></a> attribute is not in the <code><a href="#dom-readystate-open">"open"</a></code> state then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute equals true on any <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-23"><code>SourceBuffer</code></a> in <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>Run the <a href="#end-of-stream-algorithm">end of stream algorithm</a> with the <var>error</var> parameter set to <var>error</var>.</li>
           </ol></dd><dt><dfn data-export="" data-dfn-type="method" id="dom-mediasource-setliveseekablerange" data-idl="operation" data-title="setLiveSeekableRange" data-dfn-for="MediaSource" data-type="undefined" data-lt="setLiveSeekableRange()|setLiveSeekableRange(start, end)" data-local-lt="MediaSource.setLiveSeekableRange|MediaSource.setLiveSeekableRange()|setLiveSeekableRange"><code>setLiveSeekableRange</code></dfn></dt><dd>
@@ -800,7 +801,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
             </tbody>
           </table>
         <div><em>Return type: </em><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-10"><code><code>readyState</code></code></a> attribute is not <code><a href="#dom-readystate-open">"open"</a></code> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-10"><code>readyState</code></a> attribute is not <code><a href="#dom-readystate-open">"open"</a></code> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If <var>start</var> is negative or greater than <var>end</var>, then throw a <code>TypeError</code> exception and abort these steps.</li>
             <li>Set <var><a href="#live-seekable-range">live seekable range</a></var> to be a new <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#normalized-timeranges-object">normalized TimeRanges object</a> containing a single range whose start position is <var>start</var> and end position is <var>end</var>.
           </li></ol></dd><dt><dfn data-export="" data-dfn-type="method" id="dom-mediasource-clearliveseekablerange" data-idl="operation" data-title="clearLiveSeekableRange" data-dfn-for="MediaSource" data-type="undefined" data-lt="clearLiveSeekableRange()" data-local-lt="MediaSource.clearLiveSeekableRange|MediaSource.clearLiveSeekableRange()|clearLiveSeekableRange"><code>clearLiveSeekableRange</code></dfn></dt><dd>
@@ -808,7 +809,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
 
           
         <div><em>No parameters.</em></div><div><em>Return type: </em><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
-            <li>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-11"><code><code>readyState</code></code></a> attribute is not <code><a href="#dom-readystate-open">"open"</a></code> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-11"><code>readyState</code></a> attribute is not <code><a href="#dom-readystate-open">"open"</a></code> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If <var><a href="#live-seekable-range">live seekable range</a></var> contains a range, then set <var><a href="#live-seekable-range">live seekable range</a></var> to be a new empty <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRanges</a></code> object.
           </li></ol></dd><dt><dfn data-export="" data-dfn-type="method" id="dom-mediasource-istypesupported" data-idl="operation" data-title="isTypeSupported" data-dfn-for="MediaSource" data-type="boolean" data-lt="isTypeSupported()|isTypeSupported(type)" data-local-lt="MediaSource.isTypeSupported|MediaSource.isTypeSupported()|isTypeSupported"><code>isTypeSupported</code></dfn>, static</dt><dd>
           <p>Check to see whether the <a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-14"><code>MediaSource</code></a> is capable of creating <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-24"><code>SourceBuffer</code></a> objects for the specified MIME type.</p>
@@ -844,17 +845,17 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
             <tr>
               <td><dfn id="dom-evt-sourceopen"><code>sourceopen</code></dfn></td>
               <td><code>Event</code></td>
-              <td><a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-12"><code><code>readyState</code></code></a> transitions from <code><a href="#dom-readystate-closed">"closed"</a></code> to <code><a href="#dom-readystate-open">"open"</a></code> or from <code><a href="#dom-readystate-ended">"ended"</a></code> to <code><a href="#dom-readystate-open">"open"</a></code>.</td>
+              <td><a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-12"><code>readyState</code></a> transitions from <code><a href="#dom-readystate-closed">"closed"</a></code> to <code><a href="#dom-readystate-open">"open"</a></code> or from <code><a href="#dom-readystate-ended">"ended"</a></code> to <code><a href="#dom-readystate-open">"open"</a></code>.</td>
             </tr>
             <tr>
               <td><dfn id="dom-evt-sourceended"><code>sourceended</code></dfn></td>
               <td><code>Event</code></td>
-              <td><a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-13"><code><code>readyState</code></code></a> transitions from <code><a href="#dom-readystate-open">"open"</a></code> to <code><a href="#dom-readystate-ended">"ended"</a></code>.</td>
+              <td><a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-13"><code>readyState</code></a> transitions from <code><a href="#dom-readystate-open">"open"</a></code> to <code><a href="#dom-readystate-ended">"ended"</a></code>.</td>
             </tr>
             <tr>
               <td><dfn id="dom-evt-sourceclose"><code>sourceclose</code></dfn></td>
               <td><code>Event</code></td>
-              <td><a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-14"><code><code>readyState</code></code></a> transitions from <code><a href="#dom-readystate-open">"open"</a></code> to <code><a href="#dom-readystate-closed">"closed"</a></code> or <code><a href="#dom-readystate-ended">"ended"</a></code> to <code><a href="#dom-readystate-closed">"closed"</a></code>.</td>
+              <td><a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-14"><code>readyState</code></a> transitions from <code><a href="#dom-readystate-open">"open"</a></code> to <code><a href="#dom-readystate-closed">"closed"</a></code> or <code><a href="#dom-readystate-ended">"ended"</a></code> to <code><a href="#dom-readystate-closed">"closed"</a></code>.</td>
             </tr>
           </tbody>
         </table>
@@ -874,13 +875,13 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
           </p><div class="note" role="note" id="issue-container-generatedID-17"><div role="heading" class="note-title marker" id="h-note-17" aria-level="5"><span>Note</span></div><p class="">The <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a>'s first step is expected to eventually align with selecting local mode for URL records whose objects are media provider objects. The intent is that if the HTMLMediaElement's <code>src</code> attribute or selected child <code>&lt;source&gt;</code>'s <code>src</code> attribute is a <code>blob:</code> URL matching a <a href="#mediasource-object-url">MediaSource object URL</a> when the respective <code>src</code> attribute was last changed, then that MediaSource object is used as the media provider object and current media resource in the local mode logic in the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a>. This also means that the remote mode logic that includes observance of any preload attribute is skipped when a MediaSource object is attached. Even with that eventual change to [<cite><a class="bibref" data-link-type="biblio" href="#bib-html" title="HTML Standard">HTML</a></cite>], the execution of the following steps at the beginning of the local mode logic is still required when the current media resource is a MediaSource object.</p></div>
           <div class="note" role="note" id="issue-container-generatedID-18"><div role="heading" class="note-title marker" id="h-note-18" aria-level="5"><span>Note</span></div><p class="">Relative to the action which triggered the media element's resource selection algorithm, these steps are asynchronous. The resource fetch algorithm is run after the task that invoked the resource selection algorithm is allowed to continue and a stable state is reached. Implementations may delay the steps in the "<i>Otherwise</i>" clause, below, until the MediaSource object is ready for use.</p></div>
           <dl class="switch">
-            <dt>If <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-15"><code><code>readyState</code></code></a> is NOT set to <code><a href="#dom-readystate-closed">"closed"</a></code></dt>
+            <dt>If <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-15"><code>readyState</code></a> is NOT set to <code><a href="#dom-readystate-closed">"closed"</a></code></dt>
             <dd>Run the <span>"<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>"</span> steps of the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a>'s <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#media-data-processing-steps-list">media data processing steps list</a>.</dd>
             <dt>Otherwise</dt>
             <dd>
               <ol>
                 <li>Set the media element's <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#delaying-the-load-event-flag">delaying-the-load-event-flag</a> to false.</li>
-                <li>Set the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-16"><code><code>readyState</code></code></a> attribute to <code><a href="#dom-readystate-open">"open"</a></code>.</li>
+                <li>Set the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-16"><code>readyState</code></a> attribute to <code><a href="#dom-readystate-open">"open"</a></code>.</li>
                 <li>
                   <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-sourceopen">sourceopen</a></code> at the <a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-18"><code>MediaSource</code></a>.</li>
                 <li>Continue the <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#resource-fetch-algorithm">resource fetch algorithm</a> by running the remaining <span>"<i>Otherwise (mode is local)</i>"</span> steps, with these clarifications:
@@ -900,7 +901,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
           <p>The following steps are run in any case where the media element is going to transition to <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-network_empty">NETWORK_EMPTY</a> and <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#eventdef-media-emptied">emptied</a> at the media element. These steps <em class="rfc2119">SHOULD</em> be run right before the transition.</p>
 
           <ol>
-            <li>Set the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-17"><code><code>readyState</code></code></a> attribute to <code><a href="#dom-readystate-closed">"closed"</a></code>.</li>
+            <li>Set the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-17"><code>readyState</code></a> attribute to <code><a href="#dom-readystate-closed">"closed"</a></code>.</li>
             <li>Update <code><a href="#dom-mediasource-duration">duration</a></code> to NaN.</li>
             <li>Remove all the <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-27"><code>SourceBuffer</code></a> objects from <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code>.</li>
             <li>
@@ -938,7 +939,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
                 </dd>
                 <dt>Otherwise</dt>
                 <dd>Continue
-                <div class="note" role="note" id="issue-container-generatedID-24"><div role="heading" class="note-title marker" id="h-note-24" aria-level="5"><span>Note</span></div><p class="">If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-18"><code><code>readyState</code></code></a> attribute is <code><a href="#dom-readystate-ended">"ended"</a></code> and the <var>new playback position</var> is within a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> currently in <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code>, then the seek operation must continue to completion here even if one or more currently selected or enabled track buffers' largest range end timestamp is less than <var>new playback position</var>. This condition should only occur due to logic in <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> when <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-19"><code><code>readyState</code></code></a> is <code><a href="#dom-readystate-ended">"ended"</a></code>.</p></div>
+                <div class="note" role="note" id="issue-container-generatedID-24"><div role="heading" class="note-title marker" id="h-note-24" aria-level="5"><span>Note</span></div><p class="">If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-18"><code>readyState</code></a> attribute is <code><a href="#dom-readystate-ended">"ended"</a></code> and the <var>new playback position</var> is within a <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#timeranges-timeranges">TimeRange</a></code> currently in <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-buffered">HTMLMediaElement.buffered</a></code>, then the seek operation must continue to completion here even if one or more currently selected or enabled track buffers' largest range end timestamp is less than <var>new playback position</var>. This condition should only occur due to logic in <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> when <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-19"><code>readyState</code></a> is <code><a href="#dom-readystate-ended">"ended"</a></code>.</p></div>
                 </dd>
               </dl>
             </li>
@@ -1110,7 +1111,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
           <p>This algorithm gets called when the application signals the end of stream via an <code><a href="#dom-mediasource-endofstream">endOfStream()</a></code> call or an algorithm needs to
             signal a decode error. This algorithm takes an <var>error</var> parameter that indicates whether an error will be signalled.</p>
           <ol>
-            <li>Change the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-20"><code><code>readyState</code></code></a> attribute value to <code><a href="#dom-readystate-ended">"ended"</a></code>.</li>
+            <li>Change the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-20"><code>readyState</code></a> attribute value to <code><a href="#dom-readystate-ended">"ended"</a></code>.</li>
             <li>
               <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-sourceended">sourceended</a></code> at the <a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-22"><code>MediaSource</code></a>.</li>
             <li><dl class="switch">
@@ -1159,10 +1160,10 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
       <h2 id="x3-sourcebuffer-object"><bdi class="secno">3. </bdi><dfn data-export="" data-dfn-type="interface" id="dom-sourcebuffer" data-idl="interface" data-title="SourceBuffer" data-dfn-for=""><code>SourceBuffer</code></dfn> Object<a class="self-link" aria-label="§" href="#sourcebuffer"></a></h2>
 
 
-<pre class="idl def" id="webidl-723564574"><span class="idlHeader"><a class="self-link" href="#webidl-723564574">WebIDL</a></span><span data-idl="" class="idlEnum" id="idl-def-appendmode" data-title="AppendMode">enum <dfn data-export="" data-dfn-type="enum" id="dom-appendmode" data-idl="enum" data-title="AppendMode" data-dfn-for="AppendMode" class="idlID"><code>AppendMode</code></dfn> {
+<pre class="idl def" id="webidl-723564574"><span class="idlHeader"><a class="self-link" href="#webidl-723564574">WebIDL</a></span><code><span data-idl="" class="idlEnum" id="idl-def-appendmode" data-title="AppendMode">enum <dfn data-export="" data-dfn-type="enum" id="dom-appendmode" data-idl="enum" data-title="AppendMode" data-dfn-for="AppendMode" class="idlID"><code>AppendMode</code></dfn> {
     <span class="idlEnumItem">"<a class="internalDFN" data-link-type="enum-value" href="#dom-appendmode-segments" id="ref-for-dom-appendmode-segments-1"><code>segments</code></a>"</span>,
     <span class="idlEnumItem">"<a class="internalDFN" data-link-type="enum-value" href="#dom-appendmode-sequence" id="ref-for-dom-appendmode-sequence-1"><code>sequence</code></a>"</span>
-};</span></pre><table class="simple" data-dfn-for="AppendMode" data-link-for="AppendMode"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn data-export="" data-dfn-type="enum-value" id="dom-appendmode-segments" data-idl="enum-value" data-title="segments" data-dfn-for="AppendMode"><code id="idl-def-AppendMode.segments">segments</code></dfn></td><td>
+};</span></code></pre><table class="simple" data-dfn-for="AppendMode" data-link-for="AppendMode"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn data-export="" data-dfn-type="enum-value" id="dom-appendmode-segments" data-idl="enum-value" data-title="segments" data-dfn-for="AppendMode"><code id="idl-def-AppendMode.segments">segments</code></dfn></td><td>
           <p>The timestamps in the media segment determine where the <a href="#coded-frame">coded frames</a> are placed in the presentation. Media segments can be appended in any order.</p>
         </td></tr><tr><td><dfn data-export="" data-dfn-type="enum-value" id="dom-appendmode-sequence" data-idl="enum-value" data-title="sequence" data-dfn-for="AppendMode"><code id="idl-def-AppendMode.sequence">sequence</code></dfn></td><td>
           <p>Media segments will be treated as adjacent in time independent of the timestamps in the media segment. Coded frames in a new media segment will be placed immediately after the coded
@@ -1172,7 +1173,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
           </p>
         </td></tr></tbody></table>
 
-<pre class="idl def" id="webidl-79422076"><span class="idlHeader"><a class="self-link" href="#webidl-79422076">WebIDL</a></span><span data-idl="" class="idlInterface" id="idl-def-sourcebuffer" data-title="SourceBuffer">[<span class="extAttr"><a data-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<a data-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window">Window</a></span>]
+<pre class="idl def" id="webidl-79422076"><span class="idlHeader"><a class="self-link" href="#webidl-79422076">WebIDL</a></span><code><span data-idl="" class="idlInterface" id="idl-def-sourcebuffer" data-title="SourceBuffer">[<span class="extAttr"><a data-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<a data-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window">Window</a></span>]
 interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sourcebuffer" id="ref-for-dom-sourcebuffer-46"><code>SourceBuffer</code></a> : <span class="idlSuperclass"><a data-type="interface" href="https://dom.spec.whatwg.org/#eventtarget">EventTarget</a></span> {<span data-idl="" class="idlAttribute" id="idl-def-sourcebuffer-mode" data-title="mode" data-dfn-for="SourceBuffer">
                     attribute<span class="idlType"> <a href="#dom-appendmode" class="internalDFN" data-link-type="idl" id="ref-for-dom-appendmode-1"><code>AppendMode</code></a></span>          <a class="internalDFN idlName" data-link-type="attribute" href="#dom-sourcebuffer-mode" id="ref-for-dom-sourcebuffer-mode-1"><code>mode</code></a>;</span><span data-idl="" class="idlAttribute" id="idl-def-sourcebuffer-updating" data-title="updating" data-dfn-for="SourceBuffer">
     readonly        attribute<span class="idlType"> <a data-type="interface" href="https://heycam.github.io/webidl/#idl-boolean">boolean</a></span>             <a class="internalDFN idlName" data-link-type="attribute" href="#dom-sourcebuffer-updating" id="ref-for-dom-sourcebuffer-updating-1"><code>updating</code></a>;</span><span data-idl="" class="idlAttribute" id="idl-def-sourcebuffer-buffered" data-title="buffered" data-dfn-for="SourceBuffer">
@@ -1191,7 +1192,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
     <a data-type="interface" href="https://heycam.github.io/webidl/#idl-undefined">undefined</a></span> <a class="internalDFN idlName" data-link-type="method" href="#dom-sourcebuffer-appendbuffer" id="ref-for-dom-sourcebuffer-appendbuffer-1"><code>appendBuffer</code></a> (<span class="idlType"><a data-type="typedef" href="https://heycam.github.io/webidl/#BufferSource">BufferSource</a></span> <span class="idlParamName">data</span>);</span><span data-idl="" class="idlMethod" id="idl-def-sourcebuffer-abort" data-title="abort" data-dfn-for="SourceBuffer"><span class="idlType">
     <a data-type="interface" href="https://heycam.github.io/webidl/#idl-undefined">undefined</a></span> <a class="internalDFN idlName" data-link-type="method" href="#dom-sourcebuffer-abort" id="ref-for-dom-sourcebuffer-abort-1"><code>abort</code></a> ();</span><span data-idl="" class="idlMethod" id="idl-def-sourcebuffer-remove-start-end" data-title="remove" data-dfn-for="SourceBuffer"><span class="idlType">
     <a data-type="interface" href="https://heycam.github.io/webidl/#idl-undefined">undefined</a></span> <a class="internalDFN idlName" data-link-type="method" href="#dom-sourcebuffer-remove" id="ref-for-dom-sourcebuffer-remove-1"><code>remove</code></a> (<span class="idlType"><a data-type="interface" href="https://heycam.github.io/webidl/#idl-double">double</a></span> <span class="idlParamName">start</span>,<span class="idlType"> <a data-type="interface" href="https://heycam.github.io/webidl/#idl-unrestricted-double">unrestricted double</a></span> <span class="idlParamName">end</span>);</span>
-};</span></pre><section id="attributes-0"><h3 id="x3-1-attributes"><bdi class="secno">3.1 </bdi>Attributes<a class="self-link" aria-label="§" href="#attributes-0"></a></h3><dl class="attributes" data-dfn-for="SourceBuffer"><dt><dfn data-export="" data-dfn-type="attribute" id="dom-sourcebuffer-mode" data-idl="attribute" data-title="mode" data-dfn-for="SourceBuffer" data-type="AppendMode" data-lt="mode" data-local-lt="SourceBuffer.mode"><code>mode</code></dfn> of type <a href="#dom-appendmode" class="internalDFN" data-link-type="idl" id="ref-for-dom-appendmode-2"><code>AppendMode</code></a></dt><dd>
+};</span></code></pre><section id="attributes-0"><h3 id="x3-1-attributes"><bdi class="secno">3.1 </bdi>Attributes<a class="self-link" aria-label="§" href="#attributes-0"></a></h3><dl class="attributes" data-dfn-for="SourceBuffer"><dt><dfn data-export="" data-dfn-type="attribute" id="dom-sourcebuffer-mode" data-idl="attribute" data-title="mode" data-dfn-for="SourceBuffer" data-type="AppendMode" data-lt="mode" data-local-lt="SourceBuffer.mode"><code>mode</code></dfn> of type <a href="#dom-appendmode" class="internalDFN" data-link-type="idl" id="ref-for-dom-appendmode-2"><code>AppendMode</code></a></dt><dd>
           <p>Controls how a sequence of <a href="#media-segment">media segments</a> are handled. This attribute is initially set by <code><a href="#dom-mediasource-addsourcebuffer">addSourceBuffer()</a></code> after the object is created.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
@@ -1203,9 +1204,9 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
               <code><a href="#dom-appendmode-segments">"segments"</a></code>, then throw a <code>TypeError</code>
               exception and abort these steps.</li>
             <li>
-              <p>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-21"><code><code>readyState</code></code></a> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#dom-readystate-ended">"ended"</a></code> state then run the following steps:</p>
+              <p>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-21"><code>readyState</code></a> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#dom-readystate-ended">"ended"</a></code> state then run the following steps:</p>
               <ol>
-                <li>Set the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-22"><code><code>readyState</code></code></a> attribute of the <a href="#parent-media-source">parent media source</a> to <code><a href="#dom-readystate-open">"open"</a></code></li>
+                <li>Set the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-22"><code>readyState</code></a> attribute of the <a href="#parent-media-source">parent media source</a> to <code><a href="#dom-readystate-open">"open"</a></code></li>
                 <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-sourceopen">sourceopen</a></code> at the <a href="#parent-media-source">parent media source</a>.</li>
               </ol>
             </li>
@@ -1229,7 +1230,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
                 <div class="note" role="note" id="issue-container-generatedID-34"><div role="heading" class="note-title marker" id="h-note-34" aria-level="4"><span>Note</span></div><p class="">Text <a href="#track-buffer">track-buffers</a> are included in the calculation of <var>highest end time</var>, above, but excluded from the buffered range calculation here. They are not necessarily continuous, nor should any discontinuity within them trigger playback stall when the other media tracks are continuous over the same time range.</p></div>
               <ol>
                 <li>Let <var>track ranges</var> equal the <a href="#track-buffer-ranges">track buffer ranges</a> for the current <a href="#track-buffer">track buffer</a>.</li>
-                <li>If <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-23"><code><code>readyState</code></code></a> is <code><a href="#dom-readystate-ended">"ended"</a></code>, then set the end time on the last range in <var>track ranges</var> to <var>highest end time</var>.</li>
+                <li>If <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-23"><code>readyState</code></a> is <code><a href="#dom-readystate-ended">"ended"</a></code>, then set the end time on the last range in <var>track ranges</var> to <var>highest end time</var>.</li>
                 <li>Let <var>new intersection ranges</var> equal the intersection between the <var>intersection ranges</var> and the <var>track ranges</var>.</li>
                 <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
               </ol>
@@ -1248,9 +1249,9 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
             <li>If this object has been removed from the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a>, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>
-              <p>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-24"><code><code>readyState</code></code></a> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#dom-readystate-ended">"ended"</a></code> state then run the following steps:</p>
+              <p>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-24"><code>readyState</code></a> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#dom-readystate-ended">"ended"</a></code> state then run the following steps:</p>
               <ol>
-                <li>Set the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-25"><code><code>readyState</code></code></a> attribute of the <a href="#parent-media-source">parent media source</a> to <code><a href="#dom-readystate-open">"open"</a></code></li>
+                <li>Set the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-25"><code>readyState</code></a> attribute of the <a href="#parent-media-source">parent media source</a> to <code><a href="#dom-readystate-open">"open"</a></code></li>
                 <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-sourceopen">sourceopen</a></code> at the <a href="#parent-media-source">parent media source</a>.</li>
               </ol>
             </li>
@@ -1315,7 +1316,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
           
         <div><em>No parameters.</em></div><div><em>Return type: </em><code><a href="https://www.w3.org/TR/WebIDL-1/#idl-void" class="idlType">void</a></code></div><p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If this object has been removed from the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
-            <li>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-26"><code><code>readyState</code></code></a> attribute of the <a href="#parent-media-source">parent media source</a> is not in the <code><a href="#dom-readystate-open">"open"</a></code> state then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
+            <li>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-26"><code>readyState</code></a> attribute of the <a href="#parent-media-source">parent media source</a> is not in the <code><a href="#dom-readystate-open">"open"</a></code> state then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If the <a href="#sourcebuffer-range-removal">range removal</a> algorithm is running, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute equals true, then run the following steps:
               <ol>
@@ -1365,10 +1366,10 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
             <li>If <var>start</var> is negative or greater than <code><a href="#dom-mediasource-duration">duration</a></code>, then throw a <code>TypeError</code> exception and abort these steps.</li>
             <li>If <var>end</var> is less than or equal to <var>start</var> or <var>end</var> equals NaN, then throw a <code>TypeError</code> exception and abort these steps.</li>
             <li>
-              <p>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-27"><code><code>readyState</code></code></a> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#dom-readystate-ended">"ended"</a></code> state then run
+              <p>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-27"><code>readyState</code></a> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#dom-readystate-ended">"ended"</a></code> state then run
                 the following steps:</p>
               <ol>
-                <li>Set the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-28"><code><code>readyState</code></code></a> attribute of the <a href="#parent-media-source">parent media source</a> to <code><a href="#dom-readystate-open">"open"</a></code></li>
+                <li>Set the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-28"><code>readyState</code></a> attribute of the <a href="#parent-media-source">parent media source</a> to <code><a href="#dom-readystate-open">"open"</a></code></li>
                 <li><a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-sourceopen">sourceopen</a></code> at the <a href="#parent-media-source">parent media source</a>.</li>
               </ol>
             </li>
@@ -1584,15 +1585,15 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
 
         <section id="sourcebuffer-prepare-append">
             <h4 id="x3-5-4-prepare-append-algorithm"><bdi class="secno">3.5.4 </bdi>Prepare Append Algorithm<a class="self-link" aria-label="§" href="#sourcebuffer-prepare-append"></a></h4>
-            <p>When an append operation begins, the follow steps are run to validate and prepare the <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-61"><code>SourceBuffer</code></a>.</p>
+            <p>When an append operation begins, the following steps are run to validate and prepare the <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-61"><code>SourceBuffer</code></a>.</p>
             <ol>
             <li>If the <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-62"><code>SourceBuffer</code></a> has been removed from the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute of the <a href="#parent-media-source">parent media source</a> then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="#dom-sourcebuffer-updating">updating</a></code> attribute equals true, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>If the <code><a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dom-htmlmediaelement-error">HTMLMediaElement.error</a></code> attribute is not null, then throw an <code><a href="https://www.w3.org/TR/WebIDL-1/#invalidstateerror">InvalidStateError</a></code> exception and abort these steps.</li>
             <li>
-              <p>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-29"><code><code>readyState</code></code></a> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#dom-readystate-ended">"ended"</a></code> state then run the following steps:</p>
+              <p>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-29"><code>readyState</code></a> attribute of the <a href="#parent-media-source">parent media source</a> is in the <code><a href="#dom-readystate-ended">"ended"</a></code> state then run the following steps:</p>
               <ol>
-                <li>Set the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-30"><code><code>readyState</code></code></a> attribute of the <a href="#parent-media-source">parent media source</a> to <code><a href="#dom-readystate-open">"open"</a></code>
+                <li>Set the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-30"><code>readyState</code></a> attribute of the <a href="#parent-media-source">parent media source</a> to <code><a href="#dom-readystate-open">"open"</a></code>
                 </li>
                 <li>
                   <a href="https://www.w3.org/TR/html51/webappapis.html#queuing">Queue a task</a> to <a href="https://www.w3.org/TR/html51/infrastructure.html#fire">fire a simple event</a> named <code><a href="#dom-evt-sourceopen">sourceopen</a></code> at the <a href="#parent-media-source">parent media source</a>.</li>
@@ -1600,7 +1601,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
             </li>
             <li>Run the <a href="#sourcebuffer-coded-frame-eviction">coded frame eviction algorithm</a>.</li>
             <li>
-              <p>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true, then throw a <code><a href="https://www.w3.org/TR/WebIDL-1/#quotaexceedederror">QuotaExceededError</a></code> exception and abort these step.</p>
+              <p>If the <var><a href="#sourcebuffer-buffer-full-flag">buffer full flag</a></var> equals true, then throw a <code><a href="https://www.w3.org/TR/WebIDL-1/#quotaexceedederror">QuotaExceededError</a></code> exception and abort these steps.</p>
               <div class="note" role="note" id="issue-container-generatedID-39"><div role="heading" class="note-title marker" id="h-note-39" aria-level="5"><span>Note</span></div><p class="">This is the signal that the implementation was unable to evict enough data to accommodate the append or the append is too big. The web
                 application <em class="rfc2119">SHOULD</em> use <code><a href="#dom-sourcebuffer-remove">remove()</a></code> to explicitly free up space and/or reduce the size of the append.</p></div>
             </li>
@@ -1655,7 +1656,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
                   <ul>
                     <li>The number of audio, video, and text tracks match what was in the first <a href="#init-segment">initialization segment</a>.</li>
                     <li>The codecs for each track, match what was specified in the first <a href="#init-segment">initialization segment</a>.</li>
-                    <li>If more than one track for a single type are present (e.g., 2 audio tracks), then the <a href="#track-id">Track IDs</a> match the ones in the
+                    <li>If more than one track for a single type is present (e.g., 2 audio tracks), then the <a href="#track-id">Track IDs</a> match the ones in the
                       first <a href="#init-segment">initialization segment</a>.</li>
                   </ul>
                 </li>
@@ -1887,7 +1888,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
                         </li>
                         <li>Let <var>decode timestamp</var> be a double precision floating point representation of the coded frame's decode timestamp in seconds.
                           <div class="note" role="note" id="issue-container-generatedID-50"><div role="heading" class="note-title marker" id="h-note-50" aria-level="5"><span>Note</span></div><p class="">Implementations don't have to internally store timestamps in a double precision floating point representation. This
-                            representation is used here because it is the represention for timestamps in the HTML spec. The intention here is to make the
+                            representation is used here because it is the representation for timestamps in the HTML spec. The intention here is to make the
                             behavior clear without adding unnecessary complexity to the algorithm to deal with the fact that adding a timestampOffset may
                             cause a timestamp rollover in the underlying timestamp representation used by the byte stream format. Implementations can use any
                             internal timestamp representation they wish, but the addition of timestampOffset <em class="rfc2119">SHOULD</em> behave in a similar manner to what would happen
@@ -2225,7 +2226,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
           </ol>
           <div class="note" role="note" id="issue-container-generatedID-69"><div role="heading" class="note-title marker" id="h-note-69" aria-level="5"><span>Note</span></div><div class="">
             <p>Here is a graphical representation of this algorithm.</p>
-            <img src="audio_splice.png" alt="Audio splice diagram" width="360" height="225">
+            <img src="audio_splice.png" alt="Audio splice diagram" height="225" width="360">
           </div></div>
         </section>
         <section id="sourcebuffer-text-splice-frame-algorithm">
@@ -2259,13 +2260,13 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
     <section id="sourcebufferlist">
       <h2 id="x4-sourcebufferlist-object"><bdi class="secno">4. </bdi><dfn data-export="" data-dfn-type="interface" id="dom-sourcebufferlist" data-idl="interface" data-title="SourceBufferList" data-dfn-for=""><code>SourceBufferList</code></dfn> Object<a class="self-link" aria-label="§" href="#sourcebufferlist"></a></h2>
       <p>SourceBufferList is a simple container object for <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-75"><code>SourceBuffer</code></a> objects. It provides read-only array access and fires events when the list is modified.</p>
-<pre class="idl def" id="webidl-67132125"><span class="idlHeader"><a class="self-link" href="#webidl-67132125">WebIDL</a></span><span data-idl="" class="idlInterface" id="idl-def-sourcebufferlist" data-title="SourceBufferList">[<span class="extAttr"><a data-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<a data-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window">Window</a></span>]
+<pre class="idl def" id="webidl-67132125"><span class="idlHeader"><a class="self-link" href="#webidl-67132125">WebIDL</a></span><code><span data-idl="" class="idlInterface" id="idl-def-sourcebufferlist" data-title="SourceBufferList">[<span class="extAttr"><a data-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<a data-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window">Window</a></span>]
 interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sourcebufferlist" id="ref-for-dom-sourcebufferlist-7"><code>SourceBufferList</code></a> : <span class="idlSuperclass"><a data-type="interface" href="https://dom.spec.whatwg.org/#eventtarget">EventTarget</a></span> {<span data-idl="" class="idlAttribute" id="idl-def-sourcebufferlist-length" data-title="length" data-dfn-for="SourceBufferList">
     readonly        attribute<span class="idlType"> <a data-type="interface" href="https://heycam.github.io/webidl/#idl-unsigned-long">unsigned long</a></span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-sourcebufferlist-length" id="ref-for-dom-sourcebufferlist-length-1"><code>length</code></a>;</span><span data-idl="" class="idlAttribute" id="idl-def-sourcebufferlist-onaddsourcebuffer" data-title="onaddsourcebuffer" data-dfn-for="SourceBufferList">
                     attribute<span class="idlType"> <a data-type="typedef" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler">EventHandler</a></span>  <a class="internalDFN idlName" data-link-type="attribute" href="#dom-sourcebufferlist-onaddsourcebuffer" id="ref-for-dom-sourcebufferlist-onaddsourcebuffer-1"><code>onaddsourcebuffer</code></a>;</span><span data-idl="" class="idlAttribute" id="idl-def-sourcebufferlist-onremovesourcebuffer" data-title="onremovesourcebuffer" data-dfn-for="SourceBufferList">
-                    attribute<span class="idlType"> <a data-type="typedef" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler">EventHandler</a></span>  <a class="internalDFN idlName" data-link-type="attribute" href="#dom-sourcebufferlist-onremovesourcebuffer" id="ref-for-dom-sourcebufferlist-onremovesourcebuffer-1"><code>onremovesourcebuffer</code></a>;</span><span data-idl="" class="idlMethod" id="idl-def-sourcebufferlist--index" data-title="" data-dfn-for="SourceBufferList">
-    getter<span class="idlType"> <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-76"><code>SourceBuffer</code></a></span> (<span class="idlType"><a data-type="interface" href="https://heycam.github.io/webidl/#idl-unsigned-long">unsigned long</a></span> <span class="idlParamName">index</span>);</span>
-};</span></pre>
+                    attribute<span class="idlType"> <a data-type="typedef" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler">EventHandler</a></span>  <a class="internalDFN idlName" data-link-type="attribute" href="#dom-sourcebufferlist-onremovesourcebuffer" id="ref-for-dom-sourcebufferlist-onremovesourcebuffer-1"><code>onremovesourcebuffer</code></a>;</span><span data-idl="" class="idlMethod" id="idl-def-sourcebufferlist-anonymous-getter-index" data-title="getter" data-dfn-for="SourceBufferList">
+    <dfn data-export="" data-dfn-type="method" id="dom-sourcebufferlist-getter" data-idl="operation" data-title="getter" data-dfn-for="SourceBufferList" data-type="SourceBuffer" data-lt="getter()|getter(index)" data-local-lt="SourceBufferList.getter|SourceBufferList.getter()|getter"><code>getter</code></dfn><span class="idlType"> <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-76"><code>SourceBuffer</code></a></span> (<span class="idlType"><a data-type="interface" href="https://heycam.github.io/webidl/#idl-unsigned-long">unsigned long</a></span> <span class="idlParamName">index</span>);</span>
+};</span></code></pre>
       <section id="attributes-1">
         <h3 id="x4-1-attributes"><bdi class="secno">4.1 </bdi>Attributes<a class="self-link" aria-label="§" href="#attributes-1"></a></h3>
         <dl class="attributes" data-dfn-for="SourceBufferList" data-link-for="SourceBufferList">
@@ -2303,7 +2304,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
                 </tr>
               </tbody>
             </table>
-            <div><em>Return type: </em><a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-79"><code><code>SourceBuffer</code></code></a></div>
+            <div><em>Return type: </em><a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-79"><code>SourceBuffer</code></a></div>
           <p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
               <li>If <var>index</var> is greater than or equal to the <code><a href="#dom-sourcebufferlist-length">length</a></code> attribute then return undefined and abort these steps.</li>
               <li>Return the <var>index</var>'th <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-78"><code>SourceBuffer</code></a> object in the list.</li>
@@ -2341,10 +2342,10 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
       <h2 id="x5-url-object-extensions"><bdi class="secno">5. </bdi>URL Object Extensions<a class="self-link" aria-label="§" href="#url"></a></h2>
       <p>This section specifies extensions to the <a href="https://www.w3.org/TR/FileAPI/#URL-object">URL</a>[<cite><a class="bibref" data-link-type="biblio" href="#bib-file-api" title="File API">FILE-API</a></cite>] object definition.</p>
 
-<pre class="idl def" id="webidl-2063149554"><span class="idlHeader"><a class="self-link" href="#webidl-2063149554">WebIDL</a></span><span data-idl="" class="idlInterface" id="idl-def-url-partial-1" data-title="URL">[<span class="extAttr"><a data-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<a data-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window">Window</a></span>]
+<pre class="idl def" id="webidl-2063149554"><span class="idlHeader"><a class="self-link" href="#webidl-2063149554">WebIDL</a></span><code><span data-idl="" class="idlInterface" id="idl-def-url-partial-1" data-title="URL">[<span class="extAttr"><a data-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<a data-type="interface" href="https://html.spec.whatwg.org/multipage/window-object.html#window">Window</a></span>]
 partial interface <a data-idl="partial" data-link-type="interface" data-title="URL" class="idlID" data-dfn-for="URL" data-type="interface" href="https://url.spec.whatwg.org/#url">URL</a> {<span data-idl="" class="idlMethod" id="idl-def-url-createobjecturl-mediasource" data-title="createObjectURL" data-dfn-for="URL">
     static<span class="idlType"> <a data-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a></span> <a class="internalDFN idlName" data-link-type="method" href="#dom-url-createobjecturl" id="ref-for-dom-url-createobjecturl-1"><code>createObjectURL</code></a> (<span class="idlType"><a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-23"><code>MediaSource</code></a></span> <span class="idlParamName">mediaSource</span>);</span>
-};</span></pre><section id="methods-2"><h3 id="x5-1-methods"><bdi class="secno">5.1 </bdi>Methods<a class="self-link" aria-label="§" href="#methods-2"></a></h3><dl class="methods" data-dfn-for="URL" data-link-for="URL"><dt><dfn data-export="" data-dfn-type="method" id="dom-url-createobjecturl" data-idl="operation" data-title="createObjectURL" data-dfn-for="URL" data-type="DOMString" data-lt="createObjectURL()|createObjectURL(mediaSource)" data-local-lt="URL.createObjectURL|URL.createObjectURL()|createObjectURL"><code>createObjectURL</code></dfn>, static</dt><dd>
+};</span></code></pre><section id="methods-2"><h3 id="x5-1-methods"><bdi class="secno">5.1 </bdi>Methods<a class="self-link" aria-label="§" href="#methods-2"></a></h3><dl class="methods" data-dfn-for="URL" data-link-for="URL"><dt><dfn data-export="" data-dfn-type="method" id="dom-url-createobjecturl" data-idl="operation" data-title="createObjectURL" data-dfn-for="URL" data-type="DOMString" data-lt="createObjectURL()|createObjectURL(mediaSource)" data-local-lt="URL.createObjectURL|URL.createObjectURL()|createObjectURL"><code>createObjectURL</code></dfn>, static</dt><dd>
           <p>Creates URLs for <a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-24"><code>MediaSource</code></a> objects.</p>
 
           
@@ -2390,7 +2391,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
             <li>For each <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-83"><code>SourceBuffer</code></a> object in <code><a href="#dom-mediasource-activesourcebuffers">activeSourceBuffers</a></code> run the following steps:
               <ol>
                 <li>Let <var>source ranges</var> equal the ranges returned by the <code><a href="#dom-sourcebuffer-buffered">buffered</a></code> attribute on the current <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-84"><code>SourceBuffer</code></a>.</li>
-                <li>If <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-31"><code><code>readyState</code></code></a> is <code><a href="#dom-readystate-ended">"ended"</a></code>, then set the end time on the last range in <var>source ranges</var> to
+                <li>If <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-31"><code>readyState</code></a> is <code><a href="#dom-readystate-ended">"ended"</a></code>, then set the end time on the last range in <var>source ranges</var> to
                   <var>highest end time</var>.</li>
                 <li>Let <var>new intersection ranges</var> equal the intersection between the <var>intersection ranges</var> and the <var>source ranges</var>.</li>
                 <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
@@ -2410,9 +2411,9 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <h2 id="x7-audiotrack-extensions"><bdi class="secno">7. </bdi>AudioTrack Extensions<a class="self-link" aria-label="§" href="#audio-track-extensions"></a></h2>
       <p>This section specifies extensions to the [<cite><a class="bibref" data-link-type="biblio" href="#bib-html" title="HTML Standard">HTML</a></cite>] <a data-link-type="idl" data-type="interface" href="https://html.spec.whatwg.org/multipage/media.html#audiotrack"><code>AudioTrack</code></a> definition.</p>
 
-      <div><pre class="idl def" id="webidl-1816565074"><span class="idlHeader"><a class="self-link" href="#webidl-1816565074">WebIDL</a></span><span data-idl="" class="idlInterface" id="idl-def-audiotrack-partial-1" data-title="AudioTrack">partial interface <a data-idl="partial" data-link-type="interface" data-title="AudioTrack" class="idlID" data-dfn-for="AudioTrack" data-type="interface" href="https://html.spec.whatwg.org/multipage/media.html#audiotrack">AudioTrack</a> {<span data-idl="" class="idlAttribute" id="idl-def-audiotrack-sourcebuffer" data-title="sourceBuffer" data-dfn-for="AudioTrack">
+      <div><pre class="idl def" id="webidl-1816565074"><span class="idlHeader"><a class="self-link" href="#webidl-1816565074">WebIDL</a></span><code><span data-idl="" class="idlInterface" id="idl-def-audiotrack-partial-1" data-title="AudioTrack">partial interface <a data-idl="partial" data-link-type="interface" data-title="AudioTrack" class="idlID" data-dfn-for="AudioTrack" data-type="interface" href="https://html.spec.whatwg.org/multipage/media.html#audiotrack">AudioTrack</a> {<span data-idl="" class="idlAttribute" id="idl-def-audiotrack-sourcebuffer" data-title="sourceBuffer" data-dfn-for="AudioTrack">
     readonly        attribute<span class="idlType"> <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-85"><code>SourceBuffer</code></a>?</span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-audiotrack-sourcebuffer" id="ref-for-dom-audiotrack-sourcebuffer-1"><code>sourceBuffer</code></a>;</span>
-};</span></pre><section><h3 id="attributes-2">Attributes<a class="self-link" aria-label="§" href="#attributes-2"></a></h3><dl class="attributes" data-dfn-for="AudioTrack" data-link-for="AudioTrack"><dt><dfn data-export="" data-dfn-type="attribute" id="dom-audiotrack-sourcebuffer" data-idl="attribute" data-title="sourceBuffer" data-dfn-for="AudioTrack" data-type="SourceBuffer" data-lt="sourceBuffer" data-local-lt="AudioTrack.sourceBuffer"><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a href="#dom-audiotrack-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-audiotrack-sourcebuffer-2">SourceBuffer</a></span>, readonly       , nullable</dt><dd>
+};</span></code></pre><section><h3 id="attributes-2">Attributes<a class="self-link" aria-label="§" href="#attributes-2"></a></h3><dl class="attributes" data-dfn-for="AudioTrack" data-link-for="AudioTrack"><dt><dfn data-export="" data-dfn-type="attribute" id="dom-audiotrack-sourcebuffer" data-idl="attribute" data-title="sourceBuffer" data-dfn-for="AudioTrack" data-type="SourceBuffer" data-lt="sourceBuffer" data-local-lt="AudioTrack.sourceBuffer"><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a href="#dom-audiotrack-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-audiotrack-sourcebuffer-2">SourceBuffer</a></span>, readonly       , nullable</dt><dd>
           <p>Returns the <a href="#dom-audiotrack-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-audiotrack-sourcebuffer-3">SourceBuffer</a> that created this track. Returns null if this track was not created by a <a href="#dom-audiotrack-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-audiotrack-sourcebuffer-4">SourceBuffer</a> or the <a href="#dom-audiotrack-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-audiotrack-sourcebuffer-5">SourceBuffer</a> has been removed from the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute of its <a href="#parent-media-source">parent media source</a>.</p>
         </dd></dl></section></div>
     </section>
@@ -2421,9 +2422,9 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <h2 id="x8-videotrack-extensions"><bdi class="secno">8. </bdi>VideoTrack Extensions<a class="self-link" aria-label="§" href="#video-track-extensions"></a></h2>
       <p>This section specifies extensions to the [<cite><a class="bibref" data-link-type="biblio" href="#bib-html" title="HTML Standard">HTML</a></cite>] <a data-link-type="idl" data-type="interface" href="https://html.spec.whatwg.org/multipage/media.html#videotrack"><code>VideoTrack</code></a> definition.</p>
 
-      <div><pre class="idl def" id="webidl-1794440115"><span class="idlHeader"><a class="self-link" href="#webidl-1794440115">WebIDL</a></span><span data-idl="" class="idlInterface" id="idl-def-videotrack-partial-1" data-title="VideoTrack">partial interface <a data-idl="partial" data-link-type="interface" data-title="VideoTrack" class="idlID" data-dfn-for="VideoTrack" data-type="interface" href="https://html.spec.whatwg.org/multipage/media.html#videotrack">VideoTrack</a> {<span data-idl="" class="idlAttribute" id="idl-def-videotrack-sourcebuffer" data-title="sourceBuffer" data-dfn-for="VideoTrack">
+      <div><pre class="idl def" id="webidl-1794440115"><span class="idlHeader"><a class="self-link" href="#webidl-1794440115">WebIDL</a></span><code><span data-idl="" class="idlInterface" id="idl-def-videotrack-partial-1" data-title="VideoTrack">partial interface <a data-idl="partial" data-link-type="interface" data-title="VideoTrack" class="idlID" data-dfn-for="VideoTrack" data-type="interface" href="https://html.spec.whatwg.org/multipage/media.html#videotrack">VideoTrack</a> {<span data-idl="" class="idlAttribute" id="idl-def-videotrack-sourcebuffer" data-title="sourceBuffer" data-dfn-for="VideoTrack">
     readonly        attribute<span class="idlType"> <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-86"><code>SourceBuffer</code></a>?</span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-videotrack-sourcebuffer" id="ref-for-dom-videotrack-sourcebuffer-1"><code>sourceBuffer</code></a>;</span>
-};</span></pre><section><h3 id="attributes-3">Attributes<a class="self-link" aria-label="§" href="#attributes-3"></a></h3><dl class="attributes" data-dfn-for="VideoTrack" data-link-for="VideoTrack"><dt><dfn data-export="" data-dfn-type="attribute" id="dom-videotrack-sourcebuffer" data-idl="attribute" data-title="sourceBuffer" data-dfn-for="VideoTrack" data-type="SourceBuffer" data-lt="sourceBuffer" data-local-lt="VideoTrack.sourceBuffer"><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a href="#dom-videotrack-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-videotrack-sourcebuffer-2">SourceBuffer</a></span>, readonly       , nullable</dt><dd>
+};</span></code></pre><section><h3 id="attributes-3">Attributes<a class="self-link" aria-label="§" href="#attributes-3"></a></h3><dl class="attributes" data-dfn-for="VideoTrack" data-link-for="VideoTrack"><dt><dfn data-export="" data-dfn-type="attribute" id="dom-videotrack-sourcebuffer" data-idl="attribute" data-title="sourceBuffer" data-dfn-for="VideoTrack" data-type="SourceBuffer" data-lt="sourceBuffer" data-local-lt="VideoTrack.sourceBuffer"><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a href="#dom-videotrack-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-videotrack-sourcebuffer-2">SourceBuffer</a></span>, readonly       , nullable</dt><dd>
           <p>Returns the <a href="#dom-videotrack-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-videotrack-sourcebuffer-3">SourceBuffer</a> that created this track. Returns null if this track was not created by a <a href="#dom-videotrack-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-videotrack-sourcebuffer-4">SourceBuffer</a> or the <a href="#dom-videotrack-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-videotrack-sourcebuffer-5">SourceBuffer</a> has been removed from the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute of its <a href="#parent-media-source">parent media source</a>.</p>
         </dd></dl></section></div>
     </section>
@@ -2432,9 +2433,9 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <h2 id="x9-texttrack-extensions"><bdi class="secno">9. </bdi>TextTrack Extensions<a class="self-link" aria-label="§" href="#text-track-extensions"></a></h2>
       <p>This section specifies extensions to the [<cite><a class="bibref" data-link-type="biblio" href="#bib-html" title="HTML Standard">HTML</a></cite>] <a data-link-type="idl" data-type="interface" href="https://html.spec.whatwg.org/multipage/media.html#texttrack"><code>TextTrack</code></a> definition.</p>
 
-      <div><pre class="idl def" id="webidl-890989617"><span class="idlHeader"><a class="self-link" href="#webidl-890989617">WebIDL</a></span><span data-idl="" class="idlInterface" id="idl-def-texttrack-partial-1" data-title="TextTrack">partial interface <a data-idl="partial" data-link-type="interface" data-title="TextTrack" class="idlID" data-dfn-for="TextTrack" data-type="interface" href="https://html.spec.whatwg.org/multipage/media.html#texttrack">TextTrack</a> {<span data-idl="" class="idlAttribute" id="idl-def-texttrack-sourcebuffer" data-title="sourceBuffer" data-dfn-for="TextTrack">
+      <div><pre class="idl def" id="webidl-890989617"><span class="idlHeader"><a class="self-link" href="#webidl-890989617">WebIDL</a></span><code><span data-idl="" class="idlInterface" id="idl-def-texttrack-partial-1" data-title="TextTrack">partial interface <a data-idl="partial" data-link-type="interface" data-title="TextTrack" class="idlID" data-dfn-for="TextTrack" data-type="interface" href="https://html.spec.whatwg.org/multipage/media.html#texttrack">TextTrack</a> {<span data-idl="" class="idlAttribute" id="idl-def-texttrack-sourcebuffer" data-title="sourceBuffer" data-dfn-for="TextTrack">
     readonly        attribute<span class="idlType"> <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-87"><code>SourceBuffer</code></a>?</span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-texttrack-sourcebuffer" id="ref-for-dom-texttrack-sourcebuffer-1"><code>sourceBuffer</code></a>;</span>
-};</span></pre><section><h3 id="attributes-4">Attributes<a class="self-link" aria-label="§" href="#attributes-4"></a></h3><dl class="attributes" data-dfn-for="TextTrack" data-link-for="TextTrack"><dt><dfn data-export="" data-dfn-type="attribute" id="dom-texttrack-sourcebuffer" data-idl="attribute" data-title="sourceBuffer" data-dfn-for="TextTrack" data-type="SourceBuffer" data-lt="sourceBuffer" data-local-lt="TextTrack.sourceBuffer"><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a href="#dom-texttrack-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-texttrack-sourcebuffer-2">SourceBuffer</a></span>, readonly       , nullable</dt><dd>
+};</span></code></pre><section><h3 id="attributes-4">Attributes<a class="self-link" aria-label="§" href="#attributes-4"></a></h3><dl class="attributes" data-dfn-for="TextTrack" data-link-for="TextTrack"><dt><dfn data-export="" data-dfn-type="attribute" id="dom-texttrack-sourcebuffer" data-idl="attribute" data-title="sourceBuffer" data-dfn-for="TextTrack" data-type="SourceBuffer" data-lt="sourceBuffer" data-local-lt="TextTrack.sourceBuffer"><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a href="#dom-texttrack-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-texttrack-sourcebuffer-2">SourceBuffer</a></span>, readonly       , nullable</dt><dd>
           <p>Returns the <a href="#dom-texttrack-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-texttrack-sourcebuffer-3">SourceBuffer</a> that created this track. Returns null if this track was not created by a <a href="#dom-texttrack-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-texttrack-sourcebuffer-4">SourceBuffer</a> or the <a href="#dom-texttrack-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-texttrack-sourcebuffer-5">SourceBuffer</a> has been removed from the <code><a href="#dom-mediasource-sourcebuffers">sourceBuffers</a></code> attribute of its <a href="#parent-media-source">parent media source</a>.</p>
         </dd></dl></section></div>
     </section>
@@ -2477,7 +2478,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
         </li>
         <li>The user agent <em class="rfc2119">MUST</em> support the following:
           <ol>
-            <li><a href="#track-id">Track IDs</a> changing across <a href="#init-segment">initialization segments</a> if the segments describes only one track of each type.</li>
+            <li><a href="#track-id">Track IDs</a> changing across <a href="#init-segment">initialization segments</a> if the segments describe only one track of each type.</li>
             <li>
               <p>Video frame size changes. The user agent <em class="rfc2119">MUST</em> support seamless playback.</p>
               <div class="note" role="note" id="issue-container-generatedID-77"><div role="heading" class="note-title marker" id="h-note-77" aria-level="3"><span>Note</span></div><p class="">This will cause the &lt;video&gt; display region to change size if the web application does not use CSS or HTML attributes (width/height) to constrain the element size.</p></div>
@@ -2522,7 +2523,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <section id="conformance"><h2 id="x11-conformance"><bdi class="secno">11. </bdi>Conformance<a class="self-link" aria-label="§" href="#conformance"></a></h2><p>As well as sections marked as non-normative, all authoring guidelines, diagrams, examples, and notes in this specification are non-normative. Everything else in this specification is normative.</p><p>
         The key words <em class="rfc2119">MAY</em>, <em class="rfc2119">MUST</em>, <em class="rfc2119">MUST NOT</em>, <em class="rfc2119">SHOULD</em>, and <em class="rfc2119">SHOULD NOT</em> in this document
         are to be interpreted as described in
-        <a href="https://tools.ietf.org/html/bcp14">BCP 14</a>
+        <a href="https://datatracker.ietf.org/doc/html/bcp14">BCP 14</a>
         [<cite><a class="bibref" data-link-type="biblio" href="#bib-rfc2119" title="Key words for use in RFCs to Indicate Requirement Levels">RFC2119</a></cite>] [<cite><a class="bibref" data-link-type="biblio" href="#bib-rfc8174" title="Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words">RFC8174</a></cite>]
         when, and only when, they appear in all capitals, as shown here.
       </p></section>
@@ -2638,13 +2639,13 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
 
 <section id="references" class="appendix"><h2 id="b-references"><bdi class="secno">B. </bdi>References<a class="self-link" aria-label="§" href="#references"></a></h2><section id="normative-references">
     <h3 id="b-1-normative-references"><bdi class="secno">B.1 </bdi>Normative references<a class="self-link" aria-label="§" href="#normative-references"></a></h3>
-    <dl class="bibliography"><dt id="bib-dom">[dom]</dt><dd><a href="https://dom.spec.whatwg.org/"><cite>DOM Standard</cite></a>. Anne van Kesteren.  WHATWG. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a></dd><dt id="bib-file-api">[FILE-API]</dt><dd><a href="https://www.w3.org/TR/FileAPI/"><cite>File API</cite></a>. Marijn Kruisselbrink; Arun Ranganathan.  W3C. 11 September 2019. W3C Working Draft. URL: <a href="https://www.w3.org/TR/FileAPI/">https://www.w3.org/TR/FileAPI/</a></dd><dt id="bib-html">[HTML]</dt><dd><a href="https://html.spec.whatwg.org/multipage/"><cite>HTML Standard</cite></a>. Anne van Kesteren; Domenic Denicola; Ian Hickson; Philip Jägenstedt; Simon Pieters.  WHATWG. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a></dd><dt id="bib-mse-registry">[MSE-REGISTRY]</dt><dd><a href="https://w3c.github.io/mse-byte-stream-format-registry/"><cite>Media Source Extensions™ Byte Stream Format Registry</cite></a>. Matthew Wolenetz; Jerry Smith; Aaron Colwell.  W3C. URL: <a href="https://w3c.github.io/mse-byte-stream-format-registry/">https://w3c.github.io/mse-byte-stream-format-registry/</a></dd><dt id="bib-rfc2119">[RFC2119]</dt><dd><a href="https://tools.ietf.org/html/rfc2119"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. S. Bradner.  IETF. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119">https://tools.ietf.org/html/rfc2119</a></dd><dt id="bib-rfc8174">[RFC8174]</dt><dd><a href="https://tools.ietf.org/html/rfc8174"><cite>Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</cite></a>. B. Leiba.  IETF. May 2017. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc8174">https://tools.ietf.org/html/rfc8174</a></dd><dt id="bib-url">[url]</dt><dd><a href="https://url.spec.whatwg.org/"><cite>URL Standard</cite></a>. Anne van Kesteren.  WHATWG. Living Standard. URL: <a href="https://url.spec.whatwg.org/">https://url.spec.whatwg.org/</a></dd><dt id="bib-webidl">[WEBIDL]</dt><dd><a href="https://heycam.github.io/webidl/"><cite>Web IDL</cite></a>. Boris Zbarsky.  W3C. 15 December 2016. W3C Editor's Draft. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a></dd></dl>
+    <dl class="bibliography"><dt id="bib-dom">[dom]</dt><dd><a href="https://dom.spec.whatwg.org/"><cite>DOM Standard</cite></a>. Anne van Kesteren.  WHATWG. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a></dd><dt id="bib-file-api">[FILE-API]</dt><dd><a href="https://www.w3.org/TR/FileAPI/"><cite>File API</cite></a>. Marijn Kruisselbrink; Arun Ranganathan.  W3C. 11 September 2019. W3C Working Draft. URL: <a href="https://www.w3.org/TR/FileAPI/">https://www.w3.org/TR/FileAPI/</a></dd><dt id="bib-html">[HTML]</dt><dd><a href="https://html.spec.whatwg.org/multipage/"><cite>HTML Standard</cite></a>. Anne van Kesteren; Domenic Denicola; Ian Hickson; Philip Jägenstedt; Simon Pieters.  WHATWG. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a></dd><dt id="bib-mse-registry">[MSE-REGISTRY]</dt><dd><a href="https://w3c.github.io/mse-byte-stream-format-registry/"><cite>Media Source Extensions™ Byte Stream Format Registry</cite></a>. Matthew Wolenetz; Jerry Smith; Aaron Colwell.  W3C. URL: <a href="https://w3c.github.io/mse-byte-stream-format-registry/">https://w3c.github.io/mse-byte-stream-format-registry/</a></dd><dt id="bib-rfc2119">[RFC2119]</dt><dd><a href="https://datatracker.ietf.org/doc/html/rfc2119"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. S. Bradner.  IETF. March 1997. Best Current Practice. URL: <a href="https://datatracker.ietf.org/doc/html/rfc2119">https://datatracker.ietf.org/doc/html/rfc2119</a></dd><dt id="bib-rfc8174">[RFC8174]</dt><dd><a href="https://datatracker.ietf.org/doc/html/rfc8174"><cite>Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</cite></a>. B. Leiba.  IETF. May 2017. Best Current Practice. URL: <a href="https://datatracker.ietf.org/doc/html/rfc8174">https://datatracker.ietf.org/doc/html/rfc8174</a></dd><dt id="bib-url">[url]</dt><dd><a href="https://url.spec.whatwg.org/"><cite>URL Standard</cite></a>. Anne van Kesteren.  WHATWG. Living Standard. URL: <a href="https://url.spec.whatwg.org/">https://url.spec.whatwg.org/</a></dd><dt id="bib-webidl">[WEBIDL]</dt><dd><a href="https://heycam.github.io/webidl/"><cite>Web IDL</cite></a>. Boris Zbarsky.  W3C. 15 December 2016. W3C Editor's Draft. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a></dd></dl>
   </section><section id="informative-references">
     <h3 id="b-2-informative-references"><bdi class="secno">B.2 </bdi>Informative references<a class="self-link" aria-label="§" href="#informative-references"></a></h3>
     <dl class="bibliography"><dt id="bib-inbandtracks">[INBANDTRACKS]</dt><dd><a href="https://dev.w3.org/html5/html-sourcing-inband-tracks/"><cite>Sourcing In-band Media Resource Tracks from Media Containers into HTML</cite></a>. Silvia Pfeiffer; Bob Lund.  W3C. 26 April 2015. Unofficial Draft. URL: <a href="https://dev.w3.org/html5/html-sourcing-inband-tracks/">https://dev.w3.org/html5/html-sourcing-inband-tracks/</a></dd><dt id="bib-media-playback-quality">[MEDIA-PLAYBACK-QUALITY]</dt><dd><a href="https://w3c.github.io/media-playback-quality/"><cite>Media Playback Quality</cite></a>. Mounir Lamouri.  W3C. W3C Editor's Draft. URL: <a href="https://w3c.github.io/media-playback-quality/">https://w3c.github.io/media-playback-quality/</a></dd></dl>
   </section></section><p role="navigation" id="back-to-top">
     <a href="#title"><abbr title="Back to Top">↑</abbr></a>
-  </p><aside class="dfn-panel" id="dfn-panel-for-dom-mediasource" hidden="">
+  </p><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-mediasource">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-mediasource">Permalink</a>
@@ -2674,7 +2675,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-mediasource-25">6. HTMLMediaElement Extensions</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-live-seekable-range" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-live-seekable-range">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#live-seekable-range">Permalink</a>
@@ -2684,7 +2685,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-readystate" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-readystate">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-readystate">Permalink</a>
@@ -2698,7 +2699,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-readystate-2">2.1 Attributes</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-readystate-closed" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-readystate-closed">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-readystate-closed">Permalink</a>
@@ -2710,7 +2711,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-readystate-closed-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-readystate-open" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-readystate-open">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-readystate-open">Permalink</a>
@@ -2722,7 +2723,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-readystate-open-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-readystate-ended" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-readystate-ended">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-readystate-ended">Permalink</a>
@@ -2734,7 +2735,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-readystate-ended-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-endofstreamerror" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-endofstreamerror">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-endofstreamerror">Permalink</a>
@@ -2746,7 +2747,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-endofstreamerror-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-endofstreamerror-network" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-endofstreamerror-network">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-endofstreamerror-network">Permalink</a>
@@ -2758,7 +2759,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-endofstreamerror-network-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-endofstreamerror-decode" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-endofstreamerror-decode">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-endofstreamerror-decode">Permalink</a>
@@ -2770,7 +2771,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-endofstreamerror-decode-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-mediasource-constructor" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-mediasource-constructor">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-mediasource-constructor">Permalink</a>
@@ -2780,7 +2781,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-mediasource-sourcebuffers" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-mediasource-sourcebuffers">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-mediasource-sourcebuffers">Permalink</a>
@@ -2792,7 +2793,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-mediasource-sourcebuffers-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-mediasource-activesourcebuffers" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-mediasource-activesourcebuffers">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-mediasource-activesourcebuffers">Permalink</a>
@@ -2804,7 +2805,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-mediasource-activesourcebuffers-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-mediasource-readystate" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-mediasource-readystate">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-mediasource-readystate">Permalink</a>
@@ -2838,7 +2839,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-mediasource-readystate-31">6. HTMLMediaElement Extensions</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-mediasource-duration" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-mediasource-duration">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-mediasource-duration">Permalink</a>
@@ -2850,7 +2851,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-mediasource-duration-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-mediasource-onsourceopen" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-mediasource-onsourceopen">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-mediasource-onsourceopen">Permalink</a>
@@ -2862,7 +2863,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-mediasource-onsourceopen-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-mediasource-onsourceended" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-mediasource-onsourceended">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-mediasource-onsourceended">Permalink</a>
@@ -2874,7 +2875,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-mediasource-onsourceended-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-mediasource-onsourceclose" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-mediasource-onsourceclose">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-mediasource-onsourceclose">Permalink</a>
@@ -2886,7 +2887,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-mediasource-onsourceclose-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-mediasource-addsourcebuffer" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-mediasource-addsourcebuffer">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-mediasource-addsourcebuffer">Permalink</a>
@@ -2898,7 +2899,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-mediasource-addsourcebuffer-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-mediasource-removesourcebuffer" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-mediasource-removesourcebuffer">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-mediasource-removesourcebuffer">Permalink</a>
@@ -2910,7 +2911,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-mediasource-removesourcebuffer-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-mediasource-endofstream" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-mediasource-endofstream">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-mediasource-endofstream">Permalink</a>
@@ -2922,7 +2923,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-mediasource-endofstream-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-mediasource-setliveseekablerange" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-mediasource-setliveseekablerange">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-mediasource-setliveseekablerange">Permalink</a>
@@ -2934,7 +2935,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-mediasource-setliveseekablerange-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-mediasource-clearliveseekablerange" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-mediasource-clearliveseekablerange">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-mediasource-clearliveseekablerange">Permalink</a>
@@ -2946,7 +2947,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-mediasource-clearliveseekablerange-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-mediasource-istypesupported" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-mediasource-istypesupported">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-mediasource-istypesupported">Permalink</a>
@@ -2958,7 +2959,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-mediasource-istypesupported-1">2. MediaSource Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-enough-data" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-enough-data">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#enough-data">Permalink</a>
@@ -2968,7 +2969,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer">Permalink</a>
@@ -3038,7 +3039,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-88">10. Byte Stream Formats</a> <a href="#ref-for-dom-sourcebuffer-89">(2)</a> <a href="#ref-for-dom-sourcebuffer-90">(3)</a> <a href="#ref-for-dom-sourcebuffer-91">(4)</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-appendmode" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-appendmode">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-appendmode">Permalink</a>
@@ -3052,7 +3053,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-appendmode-2">3.1 Attributes</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-appendmode-segments" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-appendmode-segments">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-appendmode-segments">Permalink</a>
@@ -3064,7 +3065,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-appendmode-segments-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-appendmode-sequence" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-appendmode-sequence">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-appendmode-sequence">Permalink</a>
@@ -3076,7 +3077,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-appendmode-sequence-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-mode" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-mode">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-mode">Permalink</a>
@@ -3088,7 +3089,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-mode-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-updating" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-updating">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-updating">Permalink</a>
@@ -3100,7 +3101,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-updating-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-buffered" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-buffered">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-buffered">Permalink</a>
@@ -3112,7 +3113,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-buffered-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-timestampoffset" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-timestampoffset">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-timestampoffset">Permalink</a>
@@ -3124,7 +3125,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-timestampoffset-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-audiotracks" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-audiotracks">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-audiotracks">Permalink</a>
@@ -3136,7 +3137,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-audiotracks-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-videotracks" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-videotracks">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-videotracks">Permalink</a>
@@ -3148,7 +3149,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-videotracks-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-texttracks" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-texttracks">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-texttracks">Permalink</a>
@@ -3160,7 +3161,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-texttracks-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-appendwindowstart" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-appendwindowstart">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-appendwindowstart">Permalink</a>
@@ -3172,7 +3173,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-appendwindowstart-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-appendwindowend" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-appendwindowend">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-appendwindowend">Permalink</a>
@@ -3184,7 +3185,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-appendwindowend-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-onupdatestart" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-onupdatestart">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-onupdatestart">Permalink</a>
@@ -3196,7 +3197,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-onupdatestart-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-onupdate" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-onupdate">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-onupdate">Permalink</a>
@@ -3208,7 +3209,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-onupdate-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-onupdateend" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-onupdateend">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-onupdateend">Permalink</a>
@@ -3220,7 +3221,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-onupdateend-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-onerror" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-onerror">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-onerror">Permalink</a>
@@ -3232,7 +3233,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-onerror-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-onabort" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-onabort">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-onabort">Permalink</a>
@@ -3244,7 +3245,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-onabort-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-appendbuffer" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-appendbuffer">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-appendbuffer">Permalink</a>
@@ -3256,7 +3257,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-appendbuffer-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-abort" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-abort">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-abort">Permalink</a>
@@ -3268,7 +3269,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-abort-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebuffer-remove" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebuffer-remove">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebuffer-remove">Permalink</a>
@@ -3280,7 +3281,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebuffer-remove-1">3. SourceBuffer Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-track-buffer" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-track-buffer">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#track-buffer">Permalink</a>
@@ -3290,7 +3291,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-last-decode-timestamp" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-last-decode-timestamp">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#last-decode-timestamp">Permalink</a>
@@ -3300,7 +3301,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-last-frame-duration" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-last-frame-duration">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#last-frame-duration">Permalink</a>
@@ -3310,7 +3311,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-highest-end-timestamp" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-highest-end-timestamp">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#highest-end-timestamp">Permalink</a>
@@ -3320,7 +3321,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-need-RAP-flag" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-need-RAP-flag">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#need-RAP-flag">Permalink</a>
@@ -3330,7 +3331,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-track-buffer-ranges" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-track-buffer-ranges">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#track-buffer-ranges">Permalink</a>
@@ -3340,7 +3341,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-sourcebuffer-append-state" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-sourcebuffer-append-state">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#sourcebuffer-append-state">Permalink</a>
@@ -3350,7 +3351,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-sourcebuffer-waiting-for-segment" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-sourcebuffer-waiting-for-segment">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#sourcebuffer-waiting-for-segment">Permalink</a>
@@ -3360,7 +3361,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-sourcebuffer-parsing-init-segment" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-sourcebuffer-parsing-init-segment">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#sourcebuffer-parsing-init-segment">Permalink</a>
@@ -3370,7 +3371,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-sourcebuffer-parsing-media-segment" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-sourcebuffer-parsing-media-segment">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#sourcebuffer-parsing-media-segment">Permalink</a>
@@ -3380,7 +3381,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-sourcebuffer-input-buffer" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-sourcebuffer-input-buffer">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#sourcebuffer-input-buffer">Permalink</a>
@@ -3390,7 +3391,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-sourcebuffer-buffer-full-flag" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-sourcebuffer-buffer-full-flag">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#sourcebuffer-buffer-full-flag">Permalink</a>
@@ -3400,7 +3401,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-sourcebuffer-group-start-timestamp" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-sourcebuffer-group-start-timestamp">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#sourcebuffer-group-start-timestamp">Permalink</a>
@@ -3410,7 +3411,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-sourcebuffer-group-end-timestamp" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-sourcebuffer-group-end-timestamp">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#sourcebuffer-group-end-timestamp">Permalink</a>
@@ -3420,7 +3421,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-sourcebuffer-generate-timestamps-flag" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-sourcebuffer-generate-timestamps-flag">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#sourcebuffer-generate-timestamps-flag">Permalink</a>
@@ -3430,7 +3431,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-first-init-segment-received-flag" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-first-init-segment-received-flag">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#first-init-segment-received-flag">Permalink</a>
@@ -3440,7 +3441,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebufferlist" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebufferlist">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebufferlist">Permalink</a>
@@ -3458,7 +3459,17 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebufferlist-7">4. SourceBufferList Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebufferlist-length" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebufferlist-getter">
+      <span class="caret"></span>
+      <div>
+        <a class="self-link" href="#dom-sourcebufferlist-getter">Permalink</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> 
+      </div>
+      <b>Referenced in:</b>
+      <ul>
+      <li>Not referenced in this document.</li>
+    </ul>
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebufferlist-length">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebufferlist-length">Permalink</a>
@@ -3470,7 +3481,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebufferlist-length-1">4. SourceBufferList Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebufferlist-onaddsourcebuffer" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebufferlist-onaddsourcebuffer">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebufferlist-onaddsourcebuffer">Permalink</a>
@@ -3482,7 +3493,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebufferlist-onaddsourcebuffer-1">4. SourceBufferList Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-sourcebufferlist-onremovesourcebuffer" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-sourcebufferlist-onremovesourcebuffer">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-sourcebufferlist-onremovesourcebuffer">Permalink</a>
@@ -3494,7 +3505,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-sourcebufferlist-onremovesourcebuffer-1">4. SourceBufferList Object</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dfn-sourcebufferlist-getter" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dfn-sourcebufferlist-getter">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dfn-sourcebufferlist-getter">Permalink</a>
@@ -3504,7 +3515,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
       <ul>
       <li>Not referenced in this document.</li>
     </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-url-createobjecturl" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-url-createobjecturl">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-url-createobjecturl">Permalink</a>
@@ -3516,7 +3527,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-url-createobjecturl-1">5. URL Object Extensions</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-audiotrack-sourcebuffer" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-audiotrack-sourcebuffer">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-audiotrack-sourcebuffer">Permalink</a>
@@ -3530,7 +3541,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-audiotrack-sourcebuffer-2">Attributes</a> <a href="#ref-for-dom-audiotrack-sourcebuffer-3">(2)</a> <a href="#ref-for-dom-audiotrack-sourcebuffer-4">(3)</a> <a href="#ref-for-dom-audiotrack-sourcebuffer-5">(4)</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-videotrack-sourcebuffer" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-videotrack-sourcebuffer">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-videotrack-sourcebuffer">Permalink</a>
@@ -3544,7 +3555,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-videotrack-sourcebuffer-2">Attributes</a> <a href="#ref-for-dom-videotrack-sourcebuffer-3">(2)</a> <a href="#ref-for-dom-videotrack-sourcebuffer-4">(3)</a> <a href="#ref-for-dom-videotrack-sourcebuffer-5">(4)</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-dom-texttrack-sourcebuffer" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-dom-texttrack-sourcebuffer">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-texttrack-sourcebuffer">Permalink</a>
@@ -3558,7 +3569,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="U
     <a href="#ref-for-dom-texttrack-sourcebuffer-2">Attributes</a> <a href="#ref-for-dom-texttrack-sourcebuffer-3">(2)</a> <a href="#ref-for-dom-texttrack-sourcebuffer-4">(3)</a> <a href="#ref-for-dom-texttrack-sourcebuffer-5">(4)</a> 
   </li>
   </ul>
-    </aside><aside class="dfn-panel" id="dfn-panel-for-byte-stream-format-specs" hidden="">
+    </aside><aside class="dfn-panel" hidden="" id="dfn-panel-for-byte-stream-format-specs">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#byte-stream-format-specs">Permalink</a>
