@@ -196,7 +196,7 @@
     'mode': { func: idlref_helper, fragment: 'dom-sourcebuffer-mode', link_text: 'mode',  },
 
     'SourceBufferList-length': { func: idlref_helper, fragment: 'dom-sourcebufferlist-length', link_text: 'length',  },
-    'createObjectURL': { func: idlref_helper, fragment: 'dom-url-createobjecturl', link_text: 'createObjectURL()',  },
+    'createObjectURL': { func: fileapi_helper, fragment: 'dfn-createObjectURL', link_text: 'createObjectURL()',  },
     'open': { func: idlref_helper, fragment: 'dom-readystate-open', link_text: '"open"',  },
     'closed': { func: idlref_helper, fragment: 'dom-readystate-closed', link_text: '"closed"',  },
     'ended': { func: idlref_helper, fragment: 'dom-readystate-ended', link_text: '"ended"',  },
