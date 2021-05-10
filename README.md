@@ -1,5 +1,9 @@
 # Incubation of vNext 'media-source' Specification Features
 
+
+# May 2021: See instead the upstream w3c media-source repository now for new feature incubations (this WICG repo was useful before MSE v2 work upstream began; current work is upstream). Moving incubated feature explainers, etc into the main spec is being done there currently (work-in-progress).
+
+
 This is [the repository forked off the W3C REC repository for
 media-source](https://github.com/w3c/media-source), and is intended to track
 incubation of new media-source features.
