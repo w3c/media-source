@@ -2279,6 +2279,7 @@ interface SourceBufferList : EventTarget {
               <p class="note">For example, if the first [=initialization segment=] has 2 audio tracks and 1 video track, then all [=initialization segments=] that follow it in the byte stream MUST describe 2 audio tracks and 1 video track.</p>
             </li>
             <li>[=Track IDs=] are not the same across [=initialization segments=], for segments describing multiple tracks of a single type (e.g., 2 audio tracks).</li>
+            <li>
               <p>Unsupported codec changes occur across across [=initialization segments=].</p>
               <p class="note">See the [=initialization segment received=] algorithm, {{MediaSource/addSourceBuffer()}} and {{SourceBuffer/changeType()}} for details and examples of codec changes.</p>
             </li>
