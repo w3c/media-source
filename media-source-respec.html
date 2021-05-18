@@ -1491,8 +1491,8 @@ interface SourceBuffer : EventTarget {
                     (a) the most recently successful {{SourceBuffer/changeType()}} on this {{SourceBuffer}} object, or
                     (b) if no successful {{SourceBuffer/changeType()}} has yet occurred on this object, the {{MediaSource/addSourceBuffer()}}
                     that created this {{SourceBuffer}} object.
-                    For example, MediaSource.isTypeSupported('video/webm;codecs="vp8,vorbis"') may return true, but if
-                    {{MediaSource/addSourceBuffer()}} was called with 'video/webm;codecs="vp8"' and a Vorbis track appears in the
+                    For example, <code>MediaSource.isTypeSupported('video/webm;codecs="vp8,vorbis"')</code> may return true, but if
+                    {{MediaSource/addSourceBuffer()}} was called with <code>'video/webm;codecs="vp8"'</code> and a Vorbis track appears in the
                     [=initialization segment=], then the user agent MAY use this step to trigger a decode error.
                     Implementations are encouraged to trigger error in such cases only when the codec is indeed not supported.
                     Web authors are encouraged to use {{SourceBuffer/changeType()}}, {{MediaSource/addSourceBuffer()}} and
