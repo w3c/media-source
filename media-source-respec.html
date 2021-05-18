@@ -1463,7 +1463,7 @@ interface SourceBuffer : EventTarget {
                         (a) the most recently successful {{SourceBuffer/changeType()}} on this {{SourceBuffer}} object, or
                         (b) if no successful {{SourceBuffer/changeType()}} has yet occurred on this object, the {{MediaSource/addSourceBuffer()}}
                         that created this {{SourceBuffer}} object.
-                        For example, if the most recently successful {{SourceBuffer/changeType()}} was called with 'video/webm'
+                        For example, if the most recently successful {{SourceBuffer/changeType()}} was called with <code>'video/webm'</code>
                         or 'video/webm; codecs="vp8"', and a video track containing vp9 appears in the initialization segment,
                         then the user agent MAY use this step to trigger a decode error even if the other two properties'
                         checks, above, pass. Implementations are encouraged to trigger error in such cases only when the codec
