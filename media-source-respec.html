@@ -254,8 +254,8 @@
 
           <dt><dfn id="sourcebuffer-byte-stream-format-spec">SourceBuffer byte stream format specification</dfn></dt>
           <dd><p>The specific [=byte stream format specification=] that describes the format of the byte stream accepted by a <a>SourceBuffer</a> instance. The
-              [=byte stream format specification=], for a <a>SourceBuffer</a> object, is selected based on the <var>type</var> passed to the
-              {{MediaSource/addSourceBuffer()}} call that created the object.</p></dd>
+          [=byte stream format specification=], for a <a>SourceBuffer</a> object, is initially selected based on the <var>type</var> passed to the
+          {{MediaSource/addSourceBuffer()}} call that created the object, and can be updated by {{SourceBuffer/changeType()}} calls on the object.</p></dd>
 
           <dt><dfn id="sourcebuffer-configuration">SourceBuffer configuration</dfn></dt>
           <dd><p>A specific set of tracks distributed across one or more <a>SourceBuffer</a>
@@ -929,9 +929,10 @@ interface SourceBuffer : EventTarget {
                     attribute EventHandler        onabort;
     undefined appendBuffer (BufferSource data);
     undefined abort ();
+    undefined changeType (DOMString type);
     undefined remove (double start, unrestricted double end);
 };</pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="SourceBuffer"><dt><dfn><code>mode</code></dfn> of type <a>AppendMode</a></dt><dd>
-          <p>Controls how a sequence of [=media segments=] are handled. This attribute is initially set by {{MediaSource/addSourceBuffer()}} after the object is created.</p>
+<p>Controls how a sequence of [=media segments=] are handled. This attribute is initially set by {{MediaSource/addSourceBuffer()}} after the object is created, and can be updated by {{SourceBuffer/changeType()}} or setting this attribute.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
@@ -1067,7 +1068,59 @@ interface SourceBuffer : EventTarget {
             <li>Set {{SourceBuffer/appendWindowStart}} to the [=presentation start time=].</li>
             <li>Set {{SourceBuffer/appendWindowEnd}} to positive Infinity.</li>
           </ol>
-        <div><em>No parameters.</em></div><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>remove</code></dfn></dt><dd>
+        <div><em>No parameters.</em></div><div><em>Return type: </em>{{undefined}}</div></dd>
+        <dt><dfn><code>changeType</code></dfn></dt><dd>
+        <p>Changes the MIME type associated with this object. Subsequent {{SourceBuffer/appendBuffer()}} calls will expect the newly appended bytes to conform to the new type.</a>
+          <ol class="method-algorithm">
+            <li>If <var>type</var> is an empty string then throw a {{TypeError}} exception and abort these steps.</li>
+            <li>If this object has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=], then throw an {{InvalidStateError}} exception and abort these steps.</li>
+            <li>If the {{SourceBuffer/updating}} attribute equals true, then throw an {{InvalidStateError}} exception and abort these steps.</li>
+            <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified (currently or previously) of {{SourceBuffer}} objects in the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=], then throw a {{NotSupportedError}} exception and abort these steps.</li>
+            <li>
+              <p>If the {{MediaSource/readyState}} attribute of the [=parent media source=] is in the {{ReadyState/""ended""}} state then run the following steps:</p>
+              <ol>
+                <li>Set the {{MediaSource/readyState}} attribute of the [=parent media source=] to {{ReadyState/""open""}}.</li>
+                <li>[=Queue a task=] to [=fire an event=] named {{sourceopen}} at the [=parent media source=].</li>
+              </ol>
+            </li>
+            <li>Run the [=reset parser state=] algorithm.</li>
+            <li>Update the [=generate timestamps flag=] on this {{SourceBuffer}} object to the value in the
+                 "Generate Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry
+                 that is associated with <var>type</var>.</li>
+            <li>
+                <dl class="switch">
+                  <dt>If the [=generate timestamps flag=] equals true:</dt>
+                  <dd>
+                  Set the {{SourceBuffer/mode}} attribute on this {{SourceBuffer}} object to {{AppendMode/""sequence""}}, including running the associated steps for that attribute being set.
+                  </dd>
+                  <dt>Otherwise:</dt>
+                  <dd>
+                  Keep the previous value of the {{SourceBuffer/mode}} attribute on this {{SourceBuffer}} object, without running any associated steps for that attribute being set.
+                  </dd>
+                </dl>
+            </li>
+            <li>Set the [=pending initialization segment for changeType flag=] on this {{SourceBuffer}} object to true.
+          </ol>
+          <table class="parameters">
+            <tbody>
+              <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Nullable</th>
+                <th>Optional</th>
+                <th>Description</th>
+              </tr>
+              <tr>
+                <td class="prmName">type</td>
+                <td class="prmType">{{DOMString}}</td>
+                <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
+                <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
+                <td class="prmDesc"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div><em>Return type: </em>{{undefined}}</div></dd>
+        <dt><dfn><code>remove</code></dfn></dt><dd>
         <p>Removes media for a specific time range.</p>
         <ol class="method-algorithm">
             <li>If this object has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=] then throw an {{InvalidStateError}} exception and abort these steps.</li>
@@ -1275,7 +1328,7 @@ interface SourceBuffer : EventTarget {
             <li>
               <p>If the [=append state=] equals [=PARSING_MEDIA_SEGMENT=], then run the following steps:</p>
               <ol>
-                <li>If the [=first initialization segment received flag=] is false, then run the [=append error=] algorithm and abort this algorithm.</li>
+                <li>If the [=first initialization segment received flag=] is false or the [=pending initialization segment for changeType flag=] is true, then run the [=append error=] algorithm and abort this algorithm.</li>
                 <li>If the [=input buffer=] contains one or more complete [=coded frames=], then run the
                   [=coded frame processing=] algorithm.
                   <p class="note">
@@ -1382,6 +1435,11 @@ interface SourceBuffer : EventTarget {
           <h4><dfn>Initialization Segment Received</dfn></h4>
           <p>The following steps are run when the [=segment parser loop=] successfully parses a complete [=initialization segment=]:</p>
           <p>Each SourceBuffer object has an internal <dfn id="first-init-segment-received-flag">first initialization segment received flag</dfn> that tracks whether the first [=initialization segment=] has been appended and received by this algorithm. This flag is set to false when the SourceBuffer is created and updated by the algorithm below.</p>
+          <p>Each SourceBuffer object has an internal <dfn id="pending-init-segment-for-changetype-flag">
+            pending initialization segment for changeType flag</dfn> that tracks whether an [=initialization segment=]
+            is needed since the most recent {{SourceBuffer/changeType()}}.
+            This flag is set to false when the SourceBuffer is created, set to true by {{SourceBuffer/changeType()}} and reset to false
+            by the algorithm below.</p>
           <ol>
             <li>Update the {{MediaSource/duration}} attribute if it currently equals NaN:
               <dl class="switch">
@@ -1397,9 +1455,25 @@ interface SourceBuffer : EventTarget {
                 <li>Verify the following properties. If any of the checks fail then run the [=append error=] algorithm and abort these steps.
                   <ul>
                     <li>The number of audio, video, and text tracks match what was in the first [=initialization segment=].</li>
-                    <li>The codecs for each track, match what was specified in the first [=initialization segment=].</li>
-                    <li>If more than one track for a single type is present (e.g., 2 audio tracks), then the [=Track IDs=] match the ones in the
+                    <li>If more than one track for a single type are present (e.g., 2 audio tracks), then the [=Track IDs=] match the ones in the
                       first [=initialization segment=].</li>
+                    <li>The codecs for each track are supported by the user agent.
+                      <p class="note">User agents MAY consider codecs, that would otherwise be supported, as "not supported" here if the codecs were not
+                        specified in <var>type</var> parameter passed to
+                        (a) the most recently successful {{SourceBuffer/changeType()}} on this {{SourceBuffer}} object, or
+                        (b) if no successful {{SourceBuffer/changeType()}} has yet occurred on this object, the {{MediaSource/addSourceBuffer()}}
+                        that created this {{SourceBuffer}} object.
+                        For example, if the most recently successful {{SourceBuffer/changeType()}} was called with <code>'video/webm'</code>
+                        or <code>'video/webm; codecs="vp8"'</code>, and a video track containing vp9 appears in the initialization segment,
+                        then the user agent MAY use this step to trigger a decode error even if the other two properties'
+                        checks, above, pass. Implementations are encouraged to trigger error in such cases only when the codec
+                        is indeed not supported or the other two properties' checks fail.
+                        Web authors are encouraged to use {{SourceBuffer/changeType()}}, {{MediaSource/addSourceBuffer()}} and
+                        {{MediaSource/isTypeSupported()}} with precise codec parameters to more proactively detect user agent
+                        support. {{SourceBuffer/changeType()}} is required if the {{SourceBuffer}} object's bytestream format
+                        is changing.
+                      </p>
+                    </li>
                   </ul>
                 </li>
                 <li>Add the appropriate [=track descriptions=] from this [=initialization segment=] to each of the
@@ -1413,10 +1487,18 @@ interface SourceBuffer : EventTarget {
               <ol>
                 <li>If the [=initialization segment=] contains tracks with codecs the user agent does not support, then run the [=append error=] algorithm and abort these steps.
                   <p class="note">User agents MAY consider codecs, that would otherwise be supported, as "not supported" here if the codecs were not
-                    specified in the <var>type</var> parameter passed to {{MediaSource/addSourceBuffer()}}. <br>
-                    For example, MediaSource.isTypeSupported('video/webm;codecs="vp8,vorbis"') may return true, but if
-                    {{MediaSource/addSourceBuffer()}} was called with 'video/webm;codecs="vp8"' and a Vorbis track appears in the
+                    specified in <var>type</var> parameter passed to
+                    (a) the most recently successful {{SourceBuffer/changeType()}} on this {{SourceBuffer}} object, or
+                    (b) if no successful {{SourceBuffer/changeType()}} has yet occurred on this object, the {{MediaSource/addSourceBuffer()}}
+                    that created this {{SourceBuffer}} object.
+                    For example, <code>MediaSource.isTypeSupported('video/webm;codecs="vp8,vorbis"')</code> may return true, but if
+                    {{MediaSource/addSourceBuffer()}} was called with <code>'video/webm;codecs="vp8"'</code> and a Vorbis track appears in the
                     [=initialization segment=], then the user agent MAY use this step to trigger a decode error.
+                    Implementations are encouraged to trigger error in such cases only when the codec is indeed not supported.
+                    Web authors are encouraged to use {{SourceBuffer/changeType()}}, {{MediaSource/addSourceBuffer()}} and
+                    {{MediaSource/isTypeSupported()}} with precise codec parameters to more proactively detect user agent
+                    support. {{SourceBuffer/changeType()}} is required if the {{SourceBuffer}} object's bytestream format
+                    is changing.
                   </p>
                 </li>
                 <li>
@@ -1584,6 +1666,7 @@ interface SourceBuffer : EventTarget {
                 <li>Set [=first initialization segment received flag=] to true.</li>
               </ol>
             </li>
+            <li>Set [=pending initialization segment for changeType flag=] to false.</li>
             <li>
               <p>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is <a def-id="have-nothing"></a>, then run the following steps:</p>
               <ol>
@@ -2169,8 +2252,9 @@ interface SourceBufferList : EventTarget {
       <h2><dfn data-export="">Byte Stream Formats</dfn></h2>
       <p>The bytes provided through {{SourceBuffer/appendBuffer()}} for a <a>SourceBuffer</a> form a logical byte stream. The format and
         semantics of these byte streams are defined in <dfn id="byte-stream-format-specs">byte stream format specifications</dfn>.
-        The byte stream format registry [[MSE-REGISTRY]] provides mappings between a MIME type that may be passed to {{MediaSource/addSourceBuffer()}} or
-        {{MediaSource/isTypeSupported()}} and the byte stream format expected by a <a>SourceBuffer</a> created with that MIME type. Implementations are encouraged to register
+        The byte stream format registry [[MSE-REGISTRY]] provides mappings between a MIME type that may be passed to {{MediaSource/addSourceBuffer()}},
+        {{MediaSource/isTypeSupported()}} or {{SourceBuffer/changeType()}} and the byte stream format expected by a {{SourceBuffer}} using that
+        MIME type for parsing newly appended data. Implementations are encouraged to register
         mappings for byte stream formats they support to facilitate interoperability. The byte stream format registry [[MSE-REGISTRY]] is the authoritative source for these
         mappings. If an implementation claims to support a MIME type listed in the registry, its <a>SourceBuffer</a> implementation MUST conform to the
         [=byte stream format specification=] listed in the registry entry.</p>
@@ -2196,8 +2280,8 @@ interface SourceBufferList : EventTarget {
             </li>
             <li>[=Track IDs=] are not the same across [=initialization segments=], for segments describing multiple tracks of a single type (e.g., 2 audio tracks).</li>
             <li>
-              <p>Codecs changes across [=initialization segments=].</p>
-              <p class="note">For example, a byte stream that starts with an [=initialization segment=] that specifies a single AAC track and later contains an [=initialization segment=] that specifies a single AMR-WB track is not allowed. Support for multiple codecs is handled with multiple <a>SourceBuffer</a> objects.</p>
+              <p>Unsupported codec changes occur across [=initialization segments=].</p>
+              <p class="note">See the [=initialization segment received=] algorithm, {{MediaSource/addSourceBuffer()}} and {{SourceBuffer/changeType()}} for details and examples of codec changes.</p>
             </li>
           </ol>
         </li>
