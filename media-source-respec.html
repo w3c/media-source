@@ -1166,7 +1166,8 @@ interface SourceBuffer : EventTarget {
                 <li>[=Queue a task=] to [=fire an event=] named {{sourceopen}} at the [=parent media source=].</li>
               </ol>
             </li>
-            <li>If the [=append state=] equals [=PARSING_MEDIA_SEGMENT=], then throw an {{InvalidStateError}} and abort these steps.</li>
+            <li>If the {{SourceBuffer/[[append state]]}} equals [=PARSING_MEDIA_SEGMENT=], then throw an
+              {{InvalidStateError}} and abort these steps.</li>
             <li>If the |new mode| equals {{AppendMode/""sequence""}}, then set the [=group start timestamp=] to the [=group end timestamp=].</li>
             <li>Update the attribute to |new mode|.</li>
           </ol>
@@ -1211,7 +1212,8 @@ interface SourceBuffer : EventTarget {
                 <li>[=Queue a task=] to [=fire an event=] named {{sourceopen}} at the [=parent media source=].</li>
               </ol>
             </li>
-            <li>If the [=append state=] equals [=PARSING_MEDIA_SEGMENT=], then throw an {{InvalidStateError}} and abort these steps.</li>
+            <li>If the {{SourceBuffer/[[append state]]}} equals [=PARSING_MEDIA_SEGMENT=], then throw an
+              {{InvalidStateError}} and abort these steps.</li>
             <li>If the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}}, then set the [=group start timestamp=] to |new timestamp offset|.</li>
             <li>Update the attribute to |new timestamp offset|.</li>
           </ol>
@@ -1468,7 +1470,9 @@ interface SourceBuffer : EventTarget {
 
         <section id="sourcebuffer-segment-parser-loop">
           <h4><dfn>Segment Parser Loop</dfn></h4>
-          <p>All SourceBuffer objects have an internal <dfn id="sourcebuffer-append-state">append state</dfn> variable that keeps track of the high-level segment parsing state. It is initially set to [=WAITING_FOR_SEGMENT=] and can transition to the following states as data is appended.</p>
+          <p>Each {{SourceBuffer}} object has an <dfn data-dfn-for="SourceBuffer">[[\append state]]</dfn> internal slot
+          that keeps track of the high-level segment parsing state. It is initially set to [=WAITING_FOR_SEGMENT=] and
+          can transition to the following states as data is appended.</p>
           <table class="old-table">
             <thead>
               <tr>
@@ -1525,25 +1529,30 @@ interface SourceBuffer : EventTarget {
               [=append error=] algorithm and abort this algorithm.</li>
             <li>Remove any bytes that the [=byte stream format specifications=] say MUST be ignored from the start of the [=input buffer=].</li>
             <li>
-              <p>If the [=append state=] equals [=WAITING_FOR_SEGMENT=], then run the following steps:</p>
+              <p>If the {{SourceBuffer/[[append state]]}} equals [=WAITING_FOR_SEGMENT=], then run the following
+              steps:</p>
               <ol>
-                <li>If the beginning of the [=input buffer=] indicates the start of an [=initialization segment=], set the [=append state=] to [=PARSING_INIT_SEGMENT=].</li>
-                <li>If the beginning of the [=input buffer=] indicates the start of a [=media segment=], set [=append state=] to [=PARSING_MEDIA_SEGMENT=].</li>
+                <li>If the beginning of the [=input buffer=] indicates the start of an [=initialization segment=], set
+                  the {{SourceBuffer/[[append state]]}} to [=PARSING_INIT_SEGMENT=].</li>
+                <li>If the beginning of the [=input buffer=] indicates the start of a [=media segment=], set
+                  {{SourceBuffer/[[append state]]}} to [=PARSING_MEDIA_SEGMENT=].</li>
                 <li>Jump to the <i>loop top</i> step above.</li>
               </ol>
             </li>
             <li>
-              <p>If the [=append state=] equals [=PARSING_INIT_SEGMENT=], then run the following steps:</p>
+              <p>If the {{SourceBuffer/[[append state]]}} equals [=PARSING_INIT_SEGMENT=], then run the following
+              steps:</p>
               <ol>
                 <li>If the [=input buffer=] does not contain a complete [=initialization segment=] yet, then jump to the <i>need more data</i> step below.</li>
                 <li>Run the [=initialization segment received=] algorithm.</li>
                 <li>Remove the [=initialization segment=] bytes from the beginning of the [=input buffer=].</li>
-                <li>Set [=append state=] to [=WAITING_FOR_SEGMENT=].</li>
+                <li>Set {{SourceBuffer/[[append state]]}} to [=WAITING_FOR_SEGMENT=].</li>
                 <li>Jump to the <i>loop top</i> step above.</li>
               </ol>
             </li>
             <li>
-              <p>If the [=append state=] equals [=PARSING_MEDIA_SEGMENT=], then run the following steps:</p>
+              <p>If the {{SourceBuffer/[[append state]]}} equals [=PARSING_MEDIA_SEGMENT=], then run the following
+              steps:</p>
               <ol>
                 <li>If the [=first initialization segment received flag=] is false or the [=pending initialization segment for changeType flag=] is true, then run the [=append error=] algorithm and abort this algorithm.</li>
                 <li>If the [=input buffer=] contains one or more complete [=coded frames=], then run the
@@ -1557,7 +1566,7 @@ interface SourceBuffer : EventTarget {
                 <li>If this <a>SourceBuffer</a> is full and cannot accept more media data, then set the [=buffer full flag=] to true.</li>
                 <li>If the [=input buffer=] does not contain a complete [=media segment=], then jump to the <i>need more data</i> step below.</li>
                 <li>Remove the [=media segment=] bytes from the beginning of the [=input buffer=].</li>
-                <li>Set [=append state=] to [=WAITING_FOR_SEGMENT=].</li>
+                <li>Set {{SourceBuffer/[[append state]]}} to [=WAITING_FOR_SEGMENT=].</li>
                 <li>Jump to the <i>loop top</i> step above.</li>
               </ol>
             </li>
@@ -1569,16 +1578,16 @@ interface SourceBuffer : EventTarget {
           <h4><dfn>Reset Parser State</dfn></h4>
           <p>When the parser state needs to be reset, run the following steps:</p>
           <ol>
-            <li>If the [=append state=] equals [=PARSING_MEDIA_SEGMENT=] and the [=input buffer=] contains some
-              complete [=coded frames=], then run the [=coded frame processing=] algorithm until all of these complete
-              [=coded frames=] have been processed.</li>
+            <li>If the {{SourceBuffer/[[append state]]}} equals [=PARSING_MEDIA_SEGMENT=] and the [=input buffer=]
+              contains some complete [=coded frames=], then run the [=coded frame processing=] algorithm until all of
+              these complete [=coded frames=] have been processed.</li>
             <li>Unset the [=last decode timestamp=] on all [=track buffers=].</li>
             <li>Unset the [=last frame duration=] on all [=track buffers=].</li>
             <li>Unset the [=highest end timestamp=] on all [=track buffers=].</li>
             <li>Set the [=need random access point flag=] on all [=track buffers=] to true.</li>
             <li>If the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}}, then set the [=group start timestamp=] to the [=group end timestamp=]</li>
             <li>Remove all bytes from the [=input buffer=].</li>
-            <li>Set [=append state=] to [=WAITING_FOR_SEGMENT=].</li>
+            <li>Set {{SourceBuffer/[[append state]]}} to [=WAITING_FOR_SEGMENT=].</li>
           </ol>
         </section>
 
