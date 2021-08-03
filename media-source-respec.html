@@ -1554,7 +1554,9 @@ interface SourceBuffer : EventTarget {
               <p>If the {{SourceBuffer/[[append state]]}} equals [=PARSING_MEDIA_SEGMENT=], then run the following
               steps:</p>
               <ol>
-                <li>If the [=first initialization segment received flag=] is false or the [=pending initialization segment for changeType flag=] is true, then run the [=append error=] algorithm and abort this algorithm.</li>
+                <li>If the {{SourceBuffer/[[first initialization segment received flag]]}} is false or the [=pending
+                  initialization segment for changeType flag=] is true, then run the [=append error=] algorithm and
+                  abort this algorithm.</li>
                 <li>If the [=input buffer=] contains one or more complete [=coded frames=], then run the
                   [=coded frame processing=] algorithm.
                   <p class="note">
@@ -1673,7 +1675,10 @@ interface SourceBuffer : EventTarget {
         <section id="sourcebuffer-init-segment-received">
           <h4><dfn>Initialization Segment Received</dfn></h4>
           <p>The following steps are run when the [=segment parser loop=] successfully parses a complete [=initialization segment=]:</p>
-          <p>Each SourceBuffer object has an internal <dfn id="first-init-segment-received-flag">first initialization segment received flag</dfn> that tracks whether the first [=initialization segment=] has been appended and received by this algorithm. This flag is set to false when the SourceBuffer is created and updated by the algorithm below.</p>
+          <p>Each SourceBuffer object has a
+          <dfn data-dfn-for="SourceBuffer">[[\first initialization segment received flag]]</dfn> internal slot that
+          tracks whether the first [=initialization segment=] has been appended and received by this algorithm.  This
+          flag is set to false when the SourceBuffer is created and updated by the algorithm below.</p>
           <p>Each SourceBuffer object has an internal <dfn id="pending-init-segment-for-changetype-flag">
             pending initialization segment for changeType flag</dfn> that tracks whether an [=initialization segment=]
             is needed since the most recent {{SourceBuffer/changeType()}}.
@@ -1690,7 +1695,8 @@ interface SourceBuffer : EventTarget {
               </dl>
             </li>
             <li>If the [=initialization segment=] has no audio, video, or text tracks, then run the [=append error=] algorithm  and abort these steps.</li>
-            <li>If the [=first initialization segment received flag=] is true, then run the following steps:
+            <li>If the {{SourceBuffer/[[first initialization segment received flag]]}} is true, then run the following
+              steps:
               <ol>
                 <li>Verify the following properties. If any of the checks fail then run the [=append error=] algorithm and abort these steps.
                   <ul>
@@ -1723,7 +1729,8 @@ interface SourceBuffer : EventTarget {
             </li>
             <li>Let |active track flag:boolean| equal false.</li>
             <li>
-              <p>If the [=first initialization segment received flag=] is false, then run the following steps:</p>
+              <p>If the {{SourceBuffer/[[first initialization segment received flag]]}} is false, then run the following
+              steps:</p>
               <ol>
                 <li>If the [=initialization segment=] contains tracks with codecs the user agent does not support, then run the [=append error=] algorithm and abort these steps.
                   <p class="note">User agents MAY consider codecs, that would otherwise be supported, as "not supported" here if the codecs were not
@@ -1965,7 +1972,7 @@ interface SourceBuffer : EventTarget {
                     <li>[=Queue a task=] to [=fire an event=] named {{addsourcebuffer}} at {{MediaSource/activeSourceBuffers}}</li>
                   </ol>
                 </li>
-                <li>Set [=first initialization segment received flag=] to true.</li>
+                <li>Set {{SourceBuffer/[[first initialization segment received flag]]}} to true.</li>
               </ol>
             </li>
             <li>Set [=pending initialization segment for changeType flag=] to false.</li>
@@ -1992,8 +1999,9 @@ interface SourceBuffer : EventTarget {
                 changes may trigger events on the HTMLMediaElement.
               </p>
             </li>
-            <li>If each object in {{MediaSource/sourceBuffers}} of the [=parent media source=] has [=first
-              initialization segment received flag=] equal to true, then run the following steps:
+            <li>If each object in {{MediaSource/sourceBuffers}} of the [=parent media source=] has
+              {{SourceBuffer/[[first initialization segment received flag]]}} equal to true, then run the following
+              steps:
               <dl class="switch">
                 <dt>If the [=parent media source=] was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
                 <dd>Post an internal <code>sourcebuffers ready</code> message to {{MediaSource/[[port to main]]}} whose
