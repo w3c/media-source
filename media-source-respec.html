@@ -14,7 +14,10 @@
       // the specification's short name, as in https://www.w3.org/TR/short-name/
       shortName: "media-source",
 
-      // if there a publicly available Editor's Draft, this is the link
+      // If there's a publicly available Editor's Draft, this is the link.
+      // Though the 'github' respecConfig key now duplicates this functionality, this key
+      // is still needed for media-source.js preprocessing for detecting if the
+      // including respec source is a main spec or one of the byte-stream specs.
       edDraftURI:           "https://w3c.github.io/media-source/",
 
       // if this is a LCWD, uncomment and set the end of its review period
@@ -78,19 +81,9 @@
 
       scheme: "https",
 
+      github: "w3c/media-source",
+
       otherLinks: [{
-      key: 'Repository',
-      data: [{
-        value: 'We are on GitHub',
-        href: 'https://github.com/w3c/media-source/'
-      }, {
-        value: 'File a bug',
-        href: 'https://github.com/w3c/media-source/issues'
-      }, {
-        value: 'Commit history',
-        href: 'https://github.com/w3c/media-source/commits/gh-pages/media-source-respec.html'
-      }]
-    },{
       key: 'Mailing list',
       data: [{
         value: 'public-media-wg@w3.org',
@@ -291,13 +284,19 @@
     "closed",
     "open",
     "ended"
-};</pre><table class="simple" data-dfn-for="ReadyState"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn><code id="idl-def-ReadyState.closed">closed</code></dfn></td><td>
+};</pre><table class="simple" data-dfn-for="ReadyState"><tbody><tr><th colspan="2">Enumeration description</th></tr>
+        <tr><td><dfn><code id="idl-def-ReadyState.closed">closed</code></dfn></td><td>
           Indicates the source is not currently attached to a media element.
-        </td></tr><tr><td><dfn><code id="idl-def-ReadyState.open">open</code></dfn></td><td>
+        </td></tr>
+        <tr><td><dfn><code id="idl-def-ReadyState.open">open</code></dfn></td><td>
           The source has been opened by a media element and is ready for data to be appended to the <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}.
         </td></tr><tr><td><dfn><code id="idl-def-ReadyState.ended">ended</code></dfn></td><td>
           The source is still attached to a media element, but {{MediaSource/endOfStream()}} has been called.
         </td></tr></tbody></table></div>
+
+      <div class="issue" data-number="276">
+          <p>Consider adding a "<code>closing</code>" {{MediaSource/ReadyState}} to indicate the source is in the process of being concurrently detached from a media element. This would be useful for some implementations of {{MediaSource}} and {{SourceBuffer}} in {{DedicatedWorkerGlobalScope}}.</p>
+      </div>
 
       <div><pre class="idl">enum EndOfStreamError {
     "network",
@@ -310,7 +309,7 @@
           <p class="note">JavaScript applications SHOULD use this status code to terminate playback with a decode error. For example, if a parsing error occurs while processing out-of-band media data.</p>
         </td></tr></tbody></table></div>
 
-<pre class="idl">[Exposed=Window]
+<pre class="idl">[Exposed=(Window,DedicatedWorker)]
 interface MediaSource : EventTarget {
     constructor();
     readonly        attribute SourceBufferList    sourceBuffers;
@@ -320,6 +319,7 @@ interface MediaSource : EventTarget {
                     attribute EventHandler        onsourceopen;
                     attribute EventHandler        onsourceended;
                     attribute EventHandler        onsourceclose;
+    static readonly attribute boolean canConstructInDedicatedWorker;
     SourceBuffer   addSourceBuffer (DOMString type);
     undefined           removeSourceBuffer (SourceBuffer sourceBuffer);
     undefined           endOfStream (optional EndOfStreamError error);
@@ -358,8 +358,8 @@ interface MediaSource : EventTarget {
             <li>If the value being set is negative or NaN then throw a {{TypeError}} exception and abort these steps.</li>
             <li>If the {{MediaSource/readyState}} attribute is not {{ReadyState/""open""}} then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If the {{SourceBuffer/updating}} attribute equals true on any <a>SourceBuffer</a> in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>Run the [=duration change=] algorithm with <var>new duration</var> set to the value being assigned to this attribute.
-              <p class="note">The [=duration change=] algorithm will adjust <var>new duration</var> higher if there is any currently buffered coded frame with a higher end time.</p>
+            <li>Run the [=duration change=] algorithm with |new duration| set to the value being assigned to this attribute.
+              <p class="note">The [=duration change=] algorithm will adjust |new duration| higher if there is any currently buffered coded frame with a higher end time.</p>
               <p class="note">{{SourceBuffer/appendBuffer()}} and {{MediaSource/endOfStream()}} can update the duration under certain circumstances.</p>
             </li>
           </ol>
@@ -369,6 +369,13 @@ interface MediaSource : EventTarget {
           <p>The event handler for the {{sourceended}} event.</p>
         </dd><dt><dfn><code>onsourceclose</code></dfn> of type {{EventHandler}}</dt><dd>
           <p>The event handler for the {{sourceclose}} event.</p>
+        </dd>
+        <dt><dfn><code>canConstructInDedicatedWorker</code></dfn> of type {{boolean}}</dt><dd>
+          <p>Returns true.</p>
+          <p class="note">This attribute enables main thread and dedicated worker feature detection of support for
+            creating and using a {{MediaSource}} object in a dedicated worker, and mitigates the need for higher latency
+            detection polyfills like attempting creation of a {{MediaSource}} object from a dedicated worker, especially
+            if the feature is not supported.</p>
         </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="MediaSource"><dt><dfn><code>addSourceBuffer</code></dfn></dt><dd>
           <p>Adds a new <a>SourceBuffer</a> to {{MediaSource/sourceBuffers}}.</p>
           <ol class="method-algorithm">
@@ -404,108 +411,202 @@ interface MediaSource : EventTarget {
             <li>Add the new object to {{MediaSource/sourceBuffers}} and [=queue a task=] to [=fire an event=] named {{addsourcebuffer}} at {{MediaSource/sourceBuffers}}.</li>
             <li>Return the new object.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>SourceBuffer</a></div></dd><dt><dfn><code>removeSourceBuffer</code></dfn></dt><dd>
-          <p>Removes a <a>SourceBuffer</a> from {{MediaSource/sourceBuffers}}.</p>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>SourceBuffer</a></div></dd>
+
+          <dt><dfn><code>removeSourceBuffer</code></dfn></dt><dd>
+          <p>Removes a {{SourceBuffer}} from {{MediaSource/sourceBuffers}}.</p>
 
           <ol class="method-algorithm">
-            <li>If <var>sourceBuffer</var> specifies an object that is not in {{MediaSource/sourceBuffers}} then throw a {{NotFoundError}} exception and abort these steps.</li>
-            <li>If the <var>sourceBuffer</var>.{{SourceBuffer/updating}} attribute equals true, then run the following steps:
+            <li>If |sourceBuffer:SourceBuffer| specifies an object that is not in {{MediaSource/sourceBuffers}} then throw a {{NotFoundError}} exception and abort these steps.</li>
+            <li>If the |sourceBuffer|.{{SourceBuffer/updating}} attribute equals true, then run the following steps:
               <ol>
                 <li>Abort the [=buffer append=] algorithm if it is running.</li>
-                <li>Set the <var>sourceBuffer</var>.{{SourceBuffer/updating}} attribute to false.</li>
-                <li>[=Queue a task=] to [=fire an event=] named {{abort}} at <var>sourceBuffer</var>.</li>
-                <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at <var>sourceBuffer</var>.</li>
+                <li>Set the |sourceBuffer|.{{SourceBuffer/updating}} attribute to false.</li>
+                <li>[=Queue a task=] to [=fire an event=] named {{abort}} at |sourceBuffer|.</li>
+                <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at |sourceBuffer|.</li>
               </ol>
             </li>
 
-            <li>Let <var>SourceBuffer audioTracks list</var> equal the {{AudioTrackList}} object returned by <var>sourceBuffer</var>.{{SourceBuffer/audioTracks}}.</li>
-            <li>If the <var>SourceBuffer audioTracks list</var> is not empty, then run the following steps:
+            <li>Let |SourceBuffer audioTracks list:AudioTrackList| equal the {{AudioTrackList}} object returned by
+              |sourceBuffer|.{{SourceBuffer/audioTracks}}.</li>
+            <li>If the |SourceBuffer audioTracks list| is not empty, then run the following steps:
               <ol>
-                <li>Let <var>HTMLMediaElement audioTracks list</var> equal the {{AudioTrackList}} object returned by the {{HTMLMediaElement/audioTracks}} attribute on the HTMLMediaElement.</li>
-                <li>For each {{AudioTrack}} object in the <var>SourceBuffer audioTracks list</var>, run the following steps:
+                <li>For each {{AudioTrack}} object in the |SourceBuffer audioTracks list|, run the following steps:
                   <ol>
                     <li>Set the {{AudioTrack/sourceBuffer}} attribute on the {{AudioTrack}} object to null.</li>
-                    <li>Remove the {{AudioTrack}} object from the <var>HTMLMediaElement audioTracks list</var>.
+
+                    <li>Remove the {{AudioTrack}} object from the |SourceBuffer audioTracks list|.
                     <p class="note">
-                      This should trigger {{AudioTrackList}} [[HTML]] logic to <a def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the {{AudioTrack}} object, at the <var>HTMLMediaElement audioTracks list</var>.
-                      If the {{AudioTrack/enabled}} attribute on the {{AudioTrack}} object was true at the beginning of this removal step, then this should also trigger {{AudioTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=] named <a def-id="mediatracklist-change"></a> at the <var>HTMLMediaElement audioTracks list</var>
+                      This should trigger {{AudioTrackList}} [[HTML]] logic to <a
+                        def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the {{AudioTrack}}
+                      object, at the |SourceBuffer audioTracks list|.  If the {{AudioTrack/enabled}} attribute on the
+                      {{AudioTrack}} object was true at the beginning of this removal step, then this should also
+                      trigger {{AudioTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=] named <a
+                        def-id="mediatracklist-change"></a> at the |SourceBuffer audioTracks list|.
                     </p>
                     </li>
-                    <li>Remove the {{AudioTrack}} object from the <var>SourceBuffer audioTracks list</var>.
-                    <p class="note">
-                      This should trigger {{AudioTrackList}} [[HTML]] logic to <a def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the {{AudioTrack}} object, at the <var>SourceBuffer audioTracks list</var>.
-                      If the {{AudioTrack/enabled}} attribute on the {{AudioTrack}} object was true at the beginning of this removal step, then this should also trigger {{AudioTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=] named <a def-id="mediatracklist-change"></a> at the <var>SourceBuffer audioTracks list</var>
-                    </p>
+
+                    <li>
+                      <dl class="switch">
+                        <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
+                        <dd>Post an internal <code>remove track mirror</code> message to {{MediaSource/[[port to
+                        main]]}} whose implicit handler in {{Window}} runs the steps in the following "otherwise" case
+                        for the {{Window}} {{AudioTrack}} mirror of the {{DedicatedWorkerGlobalScope}} {{AudioTrack}}
+                        object created previously by the implicit handler for the internal <code>create track
+                        mirror</code> message.</dd>
+                        <dt>Otherwise, run the following steps:</dt>
+                        <dd>
+                        <ol>
+                          <li>Let |HTMLMediaElement audioTracks list:AudioTrackList| equal the {{AudioTrackList}} object
+                            returned by the {{HTMLMediaElement/audioTracks}} attribute on the HTMLMediaElement.</li>
+                          <li>Remove the {{AudioTrack}} object from the |HTMLMediaElement audioTracks list|.
+                            <p class="note">
+                              This should trigger {{AudioTrackList}} [[HTML]] logic to <a
+                                def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the
+                              {{AudioTrack}} object, at the |HTMLMediaElement audioTracks list|. If the
+                              {{AudioTrack/enabled}} attribute on the {{AudioTrack}} object was true at the beginning of
+                              this removal step, then this should also trigger {{AudioTrackList}} [[HTML]] logic to
+                              [=queue a task=] to [=fire an event=] named <a def-id="mediatracklist-change"></a> at the
+                              |HTMLMediaElement audioTracks list|.
+                            </p>
+                          </li>
+                        </ol>
+                        </dd>
+                      </dl>
                     </li>
                   </ol>
                 </li>
               </ol>
             </li>
 
-            <li>Let <var>SourceBuffer videoTracks list</var> equal the {{VideoTrackList}} object returned by <var>sourceBuffer</var>.{{SourceBuffer/videoTracks}}.</li>
-            <li>If the <var>SourceBuffer videoTracks list</var> is not empty, then run the following steps:
+            <li>Let |SourceBuffer videoTracks list:VideoTrackList| equal the {{VideoTrackList}} object returned by
+              |sourceBuffer|.{{SourceBuffer/videoTracks}}.</li>
+            <li>If the |SourceBuffer videoTracks list| is not empty, then run the following steps:
               <ol>
-                <li>Let <var>HTMLMediaElement videoTracks list</var> equal the {{VideoTrackList}} object returned by the {{HTMLMediaElement/videoTracks}} attribute on the HTMLMediaElement.</li>
-                <li>For each {{VideoTrack}} object in the <var>SourceBuffer videoTracks list</var>, run the following steps:
+                <li>For each {{VideoTrack}} object in the |SourceBuffer videoTracks list|, run the following steps:
                   <ol>
                     <li>Set the {{VideoTrack/sourceBuffer}} attribute on the {{VideoTrack}} object to null.</li>
-                    <li>Remove the {{VideoTrack}} object from the <var>HTMLMediaElement videoTracks list</var>.
+
+                    <li>Remove the {{VideoTrack}} object from the |SourceBuffer videoTracks list|.
                     <p class="note">
-                      This should trigger {{VideoTrackList}} [[HTML]] logic to <a def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the {{VideoTrack}} object, at the <var>HTMLMediaElement videoTracks list</var>.
-                      If the {{VideoTrack/selected}} attribute on the {{VideoTrack}} object was true at the beginning of this removal step, then this should also trigger {{VideoTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=] named <a def-id="mediatracklist-change"></a> at the <var>HTMLMediaElement videoTracks list</var>
+                      This should trigger {{VideoTrackList}} [[HTML]] logic to <a
+                        def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the {{VideoTrack}}
+                      object, at the |SourceBuffer videoTracks list|.  If the {{VideoTrack/selected}} attribute on the
+                      {{VideoTrack}} object was true at the beginning of this removal step, then this should also
+                      trigger {{VideoTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=] named <a
+                        def-id="mediatracklist-change"></a> at the |SourceBuffer videoTracks list|.
                     </p>
                     </li>
-                    <li>Remove the {{VideoTrack}} object from the <var>SourceBuffer videoTracks list</var>.
-                    <p class="note">
-                      This should trigger {{VideoTrackList}} [[HTML]] logic to <a def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the {{VideoTrack}} object, at the <var>SourceBuffer videoTracks list</var>.
-                      If the {{VideoTrack/selected}} attribute on the {{VideoTrack}} object was true at the beginning of this removal step, then this should also trigger {{VideoTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=] named <a def-id="mediatracklist-change"></a> at the <var>SourceBuffer videoTracks list</var>
-                    </p>
+
+                    <li>
+                      <dl class="switch">
+                        <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
+                        <dd>Post an internal <code>remove track mirror</code> message to {{MediaSource/[[port to
+                        main]]}} whose implicit handler in {{Window}} runs the steps in the following "otherwise" case
+                        for the {{Window}} {{VideoTrack}} mirror of the {{DedicatedWorkerGlobalScope}} {{VideoTrack}}
+                        object created previously by the implicit handler for the internal <code>create track
+                        mirror</code> message.</dd>
+                        <dt>Otherwise, run the following steps:</dt>
+                        <dd>
+                        <ol>
+                          <li>Let |HTMLMediaElement videoTracks list:VideoTrackList| equal the {{VideoTrackList}} object
+                            returned by the {{HTMLMediaElement/videoTracks}} attribute on the HTMLMediaElement.</li>
+                          <li>Remove the {{VideoTrack}} object from the |HTMLMediaElement videoTracks list|.
+                            <p class="note">
+                              This should trigger {{VideoTrackList}} [[HTML]] logic to <a
+                                def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the
+                              {{VideoTrack}} object, at the |HTMLMediaElement videoTracks list|. If the
+                              {{VideoTrack/selected}} attribute on the {{VideoTrack}} object was true at the beginning
+                              of this removal step, then this should also trigger {{VideoTrackList}} [[HTML]] logic to
+                              [=queue a task=] to [=fire an event=] named <a def-id="mediatracklist-change"></a> at the
+                              |HTMLMediaElement videoTracks list|.
+                            </p>
+                          </li>
+                        </ol>
+                        </dd>
+                      </dl>
                     </li>
                   </ol>
                 </li>
               </ol>
             </li>
 
-
-            <li>Let <var>SourceBuffer textTracks list</var> equal the {{TextTrackList}} object returned by <var>sourceBuffer</var>.{{SourceBuffer/textTracks}}.</li>
-            <li>If the <var>SourceBuffer textTracks list</var> is not empty, then run the following steps:
+            <li>Let |SourceBuffer textTracks list:TextTrackList| equal the {{TextTrackList}} object returned by
+              |sourceBuffer|.{{SourceBuffer/textTracks}}.</li>
+            <li>If the |SourceBuffer textTracks list| is not empty, then run the following steps:
               <ol>
-                <li>Let <var>HTMLMediaElement textTracks list</var> equal the {{TextTrackList}} object returned by the {{HTMLMediaElement/textTracks}} attribute on the HTMLMediaElement.</li>
-                <li>For each {{TextTrack}} object in the <var>SourceBuffer textTracks list</var>, run the following steps:
+                <li>For each {{TextTrack}} object in the |SourceBuffer textTracks list|, run the following steps:
                   <ol>
                     <li>Set the {{TextTrack/sourceBuffer}} attribute on the {{TextTrack}} object to null.</li>
-                    <li>Remove the {{TextTrack}} object from the <var>HTMLMediaElement textTracks list</var>.
+
+                    <li>Remove the {{TextTrack}} object from the |SourceBuffer textTracks list|.
                     <p class="note">
-                      This should trigger {{TextTrackList}} [[HTML]] logic to <a def-id="queue-and-fire-text-removetrack-with-track-attr-initialized-to"></a> the {{TextTrack}} object, at the <var>HTMLMediaElement textTracks list</var>.
-                      If the {{TextTrack/mode}} attribute on the {{TextTrack}} object was <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> at the beginning of this removal step, then this should also trigger {{TextTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=] named <a def-id="texttracklist-change"></a> at the <var>HTMLMediaElement textTracks list</var>.
+                      This should trigger {{TextTrackList}} [[HTML]] logic to
+                      <a def-id="queue-and-fire-text-removetrack-with-track-attr-initialized-to"></a> the {{TextTrack}}
+                      object, at the |SourceBuffer textTracks list|. If the {{TextTrack/mode}} attribute on the
+                      {{TextTrack}} object was <a def-id="texttrackmode-showing"></a> or
+                      <a def-id="texttrackmode-hidden"></a> at the beginning of this removal step, then this should also
+                      trigger {{TextTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=] named <a
+                      def-id="texttracklist-change"></a> at the |SourceBuffer textTracks list|.
                     </p>
                     </li>
-                    <li>Remove the {{TextTrack}} object from the <var>SourceBuffer textTracks list</var>.
-                    <p class="note">
-                      This should trigger {{TextTrackList}} [[HTML]] logic to <a def-id="queue-and-fire-text-removetrack-with-track-attr-initialized-to"></a> the {{TextTrack}} object, at the <var>SourceBuffer textTracks list</var>.
-                      If the {{TextTrack/mode}} attribute on the {{TextTrack}} object was <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> at the beginning of this removal step, then this should also trigger {{TextTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=] named <a def-id="texttracklist-change"></a> at the <var>SourceBuffer textTracks list</var>.
-                    </p>
+
+                    <li>
+                      <dl class="switch">
+                        <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
+                        <dd>Post an internal <code>remove track mirror</code> message to {{MediaSource/[[port to
+                        main]]}} whose implicit handler in {{Window}} runs the steps in the following "otherwise" case
+                        for the {{Window}} {{TextTrack}} mirror of the {{DedicatedWorkerGlobalScope}} {{TextTrack}}
+                        object created previously by the implicit handler for the internal <code>create track
+                        mirror</code> message.</dd>
+                        <dt>Otherwise, run the following steps:</dt>
+                        <dd>
+                        <ol>
+                          <li>Let |HTMLMediaElement textTracks list:TextTrackList| equal the {{TextTrackList}} object
+                            returned by the {{HTMLMediaElement/textTracks}} attribute on the HTMLMediaElement.</li>
+                          <li>Remove the {{TextTrack}} object from the |HTMLMediaElement textTracks list|.
+                            <p class="note">
+                              This should trigger {{TextTrackList}} [[HTML]] logic to
+                              <a def-id="queue-and-fire-text-removetrack-with-track-attr-initialized-to"></a>
+                              the {{TextTrack}} object, at the |HTMLMediaElement textTracks list|. If the
+                              {{TextTrack/mode}} attribute on the {{TextTrack}} object was
+                              <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> at the
+                              beginning of this removal step, then this should also trigger {{TextTrackList}} [[HTML]]
+                              logic to [=queue a task=] to [=fire an event=] named <a def-id="texttracklist-change"></a>
+                              at the |HTMLMediaElement textTracks list|.
+                            </p>
+                          </li>
+                        </ol>
+                        </dd>
+                      </dl>
                     </li>
                   </ol>
                 </li>
               </ol>
             </li>
 
-            <li>If <var>sourceBuffer</var> is in {{MediaSource/activeSourceBuffers}}, then remove <var>sourceBuffer</var> from {{MediaSource/activeSourceBuffers}} and
-              [=queue a task=] to [=fire an event=] named {{removesourcebuffer}} at the <a>SourceBufferList</a> returned by {{MediaSource/activeSourceBuffers}}.</li>
-            <li>Remove <var>sourceBuffer</var> from {{MediaSource/sourceBuffers}} and [=queue a task=] to [=fire an event=] named {{removesourcebuffer}} at
-              the <a>SourceBufferList</a> returned by {{MediaSource/sourceBuffers}}.</li>
-            <li>Destroy all resources for <var>sourceBuffer</var>.</li>
+            <li>If |sourceBuffer| is in {{MediaSource/activeSourceBuffers}}, then remove |sourceBuffer| from
+              {{MediaSource/activeSourceBuffers}} and [=queue a task=] to [=fire an event=] named {{removesourcebuffer}}
+              at the <a>SourceBufferList</a> returned by {{MediaSource/activeSourceBuffers}}.</li>
+            <li>Remove |sourceBuffer| from {{MediaSource/sourceBuffers}} and [=queue a task=] to [=fire an event=] named
+              {{removesourcebuffer}} at the <a>SourceBufferList</a> returned by {{MediaSource/sourceBuffers}}.</li>
+            <li>Destroy all resources for |sourceBuffer|.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">sourceBuffer</td><td class="prmType">{{SourceBuffer}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>endOfStream</code></dfn></dt><dd>
+        <table
+          class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|sourceBuffer|</td><td class="prmType">{{SourceBuffer}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd>
+
+          <dt><dfn><code>endOfStream</code></dfn></dt><dd>
           <p>Signals the end of the stream.</p>
 
           <ol class="method-algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not in the {{ReadyState/""open""}} state then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If the {{SourceBuffer/updating}} attribute equals true on any <a>SourceBuffer</a> in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>Run the [=end of stream=] algorithm with the <var>error</var> parameter set to <var>error</var>.</li>
+            <li>Run the [=end of stream=] algorithm with the |error:EndOfStreamError| parameter set to |error|.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">error</td><td class="prmType">{{EndOfStreamError}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>setLiveSeekableRange</code></dfn></dt><dd>
+        <table
+          class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|error|</td><td class="prmType">{{EndOfStreamError}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd>
+
+          <dt><dfn><code>setLiveSeekableRange</code></dfn></dt><dd>
 
           <p>Updates the [=live seekable range=] variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
           <ol class="method-algorithm">
@@ -599,6 +700,42 @@ interface MediaSource : EventTarget {
         </table>
       </section>
 
+      <section id="mediasource-in-worker-communication-model">
+        <h3><dfn>Cross-context communication model</dfn></h3>
+
+        <p>When a {{Window}} {{HTMLMediaElement}} is attached to a {{DedicatedWorkerGlobalScope}} {{MediaSource}}, each context
+        has algorithms that depend on information from the other.</p>
+
+        <p class="note">{{HTMLMediaElement}} is exposed only to {{Window}} contexts, but {{MediaSource}} and related objects defined
+        in this specification are exposed in {{Window}} and {{DedicatedWorkerGlobalScope}} contexts. This lets
+        applications construct a {{MediaSource}} object in either of those types of context and attach it to an
+        {{HTMLMediaElement}} object in a {{Window}} context using a [=MediaSource object URL=] as described in the
+        [=attaching to a media element=] algorithm. A {{MediaSource}} object is not {{Transferable}}; it is only visible
+        in the context where it was created.</p>
+
+        The rest of this section describes a model for bounding information latency for attachments of a {{Window}}
+        media element to a {{DedicatedWorkerGlobalScope}} {{MediaSource}}. While the model describes communication using
+        message passing, implementations MAY choose to communicate in potentially faster ways, such as using shared
+        memory and locks. Attachments to a {{Window}} {{MediaSource}} synchronously have the information already without
+        communicating it across contexts.
+
+        <p>A {{MediaSource}} that is constructed in a {{DedicatedWorkerGlobalScope}} has a
+        <dfn data-dfn-for="MediaSource">[[\port to main]]</dfn> internal slot that stores a {{MessagePort}} setup during
+        attachment and nulled during detachment. A {{Window}} {{MediaSource/[[port to main]]}} is always null.</p>
+
+        </p>An {{HTMLMediaElement}} extended by this specification and attached to a {{DedicatedWorkerGlobalScope}}
+        {{MediaSource}} similarly has a <dfn data-dfn-for="HTMLMediaElement">[[\port to worker]]</dfn> internal slot
+        that stores a {{MessagePort}} and a <dfn data-dfn-for="HTMLMediaElement">[[\channel with worker]]</dfn> internal
+        slot that stores a {{MessageChannel}}, both setup during attachment and nulled during detachment. Both
+        {{HTMLMediaElement/[[port to worker]]}} and {{HTMLMediaElement/[[channel with worker]]}} are null unless
+        attached to a {{DedicatedWorkerGlobalScope}} {{MediaSource}}.</p>
+
+        <p>Algorithms in this specification that need to communicate information from a {{Window}} {{HTMLMediaElement}}
+        to an attached {{DedicatedWorkerGlobalScope}} {{MediaSource}}, or vice versa, will use these internal ports
+        implicitly to post a message to their counterpart, where the implicit handler of the message runs steps as
+        described in the algorithms.</p>
+      </section>
+
       <section id="mediasource-algorithms">
         <h3>Algorithms</h3>
 
@@ -619,9 +756,37 @@ interface MediaSource : EventTarget {
             <dd>
               <ol>
                 <li>Set the media element's <a def-id="delaying-the-load-event-flag"></a> to false.</li>
-                <li>Set the {{MediaSource/readyState}} attribute to {{ReadyState/""open""}}.</li>
                 <li>
-                  [=Queue a task=] to [=fire an event=] named {{sourceopen}} at the <a>MediaSource</a>.</li>
+                  <dl class="switch">
+                    <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}, then setup worker
+                    attachment communication and open the {{MediaSource}}:</dt>
+                    <dd><ol>
+                      <li>Set {{HTMLMediaElement/[[channel with worker]]}} to be a new {{MessageChannel}}.</li>
+                      <li>Set {{HTMLMediaElement/[[port to worker]]}} to the {{MessageChannel/port1}} value of
+                        {{HTMLMediaElement/[[channel with worker]]}}.</li>
+                      <li>Execute [=StructuredSerializeWithTransfer=] with the {{MessageChannel/port2}} of
+                        {{HTMLMediaElement/[[channel with worker]]}} as both the value and the sole member of the |transferList|, and let
+                        the result be |serialized port2:MessagePort|.
+                      <li>[=Queue a task=] on the {{MediaSource}}'s {{DedicatedWorkerGlobalScope}} that will
+                        <ol>
+                          <li>Execute [=StructuredDeserializeWithTransfer=] with |serialized port2| and
+                            {{DedicatedWorkerGlobalScope}}'s [=environment settings object/realm=], and set
+                            {{MediaSource/[[port to main]]}} to be the resulting deserialized clone of the transferred
+                            {{MessageChannel/port2}} value of {{HTMLMediaElement/[[channel with worker]]}}.</li>
+                          <li>Set the {{MediaSource/readyState}} attribute to {{ReadyState/""open""}}.</li>
+                          <li>[=Queue a task=] to [=fire an event=] named {{sourceopen}} at the <a>MediaSource</a>.</li>
+                        </ol>
+                      </li>
+                    </ol></dd>
+                    <dt>Otherwise, the {{MediaSource}} was constructed in a {{Window}}:</dt>
+                    <dd><ol>
+                      <li>Set {{HTMLMediaElement/[[channel with worker]]}} null.</li>
+                      <li>Set {{HTMLMediaElement/[[port to worker]]}} null.</li>
+                      <li>Set {{MediaSource/[[port to main]]}} null.</li>
+                      <li>Set the {{MediaSource/readyState}} attribute to {{ReadyState/""open""}}.</li>
+                      <li>[=Queue a task=] to [=fire an event=] named {{sourceopen}} at the <a>MediaSource</a>.</li>
+                    </ol></dd>
+                  </dl>
                 <li>Continue the <a def-id="resource-fetch-algorithm"></a> by running the remaining <a def-id="Otherwise-mode-is-local"></a> steps, with these clarifications:
                   <ol>
                     <li>Text in the <a def-id="resource-fetch-algorithm"></a> or the <a def-id="media-data-processing-steps-list"></a> that refers to "the download", "bytes received", or "whenever new data for the current media resource becomes available" refers to data passed in via {{SourceBuffer/appendBuffer()}}.</li>
@@ -639,6 +804,21 @@ interface MediaSource : EventTarget {
           <p>The following steps are run in any case where the media element is going to transition to <a def-id="videoref" name="dom-htmlmediaelement-network_empty">NETWORK_EMPTY</a> and [=queue a task=] to [=fire an event=] named <a def-id="videoref" name="eventdef-media-emptied">emptied</a> at the media element. These steps SHOULD be run right before the transition.</p>
 
           <ol>
+            <li>
+              <dl class="switch">
+                <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
+                <dd><ol>
+                  <li>Notify the {{MediaSource}} using an internal <code>detach</code> message posted to
+                    {{HTMLMediaElement/[[port to worker]]}}.</li>
+                  <li>Set {{HTMLMediaElement/[[port to worker]]}} null.</li>
+                  <li>Set {{HTMLMediaElement/[[channel with worker]]}} null.</li>
+                  <li>The implicit message handler for this <code>detach</code> notification runs the remainder of these
+                    steps in the {{DedicatedWorkerGlobalScope}} {{MediaSource}}.</li>
+                </ol></dd>
+                <dt>Otherwise, the {{MediaSource}} was constructed in a {{Window}}:</dt>
+                <dd>Continue the remainder of these steps on the {{Window}} {{MediaSource}}.</dd>
+              </dl></li>
+            <li>Set {{MediaSource/[[port to main]]}} null.</li>
             <li>Set the {{MediaSource/readyState}} attribute to {{ReadyState/""closed""}}.</li>
             <li>Update {{MediaSource/duration}} to NaN.</li>
             <li>Remove all the <a>SourceBuffer</a> objects from {{MediaSource/activeSourceBuffers}}.</li>
@@ -707,7 +887,7 @@ interface MediaSource : EventTarget {
             500ms to append more data before playback stalls.</p>
 
           <dl class="switch">
-            <dt>If the the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute equals <a def-id="have-nothing"></a>:</dt>
+            <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute equals <a def-id="have-nothing"></a>:</dt>
             <dd>
               <ol>
                 <li>Abort these steps.</li>
@@ -755,7 +935,16 @@ interface MediaSource : EventTarget {
 
         <section id="active-source-buffer-changes">
           <h4><dfn>Changes to selected/enabled track state</dfn></h4>
-          <p>During playback {{MediaSource/activeSourceBuffers}} needs to be updated if the <a def-id="videoref" name="dom-videotrack-selected">selected video track</a>, the <a def-id="videoref" name="dom-audiotrack-enabled">enabled audio track(s)</a>, or a text track <a def-id="videoref" name="dom-texttrack-mode">mode</a> changes. When one or more of these changes occur the following steps need to be followed.</p>
+          <p>During playback {{MediaSource/activeSourceBuffers}} needs to be updated if the <a def-id="videoref" name="dom-videotrack-selected">selected video track</a>, the <a def-id="videoref" name="dom-audiotrack-enabled">enabled audio track(s)</a>, or a text track <a def-id="videoref" name="dom-texttrack-mode">mode</a> changes. When one or more of these changes occur the following steps need to be followed.
+             Also, when {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}, then each change that occurs
+             to a {{Window}} mirror of a track created previously by the implicit handler for the internal <code>create
+               track mirror</code> message MUST also be made to the corresponding {{DedicatedWorkerGlobalScope}} track
+             using an internal <code>update track state</code> message posted to {{HTMLMediaElement/[[port to worker]]}}
+             whose implicit handler makes the change and runs the following steps.
+             Likewise, each change that occurs to a {{DedicatedWorkerGlobalScope}} track MUST also be made to the
+             corresponding {{Window}} mirror of the track using an internal <code>update track state</code> message
+             posted to {{MediaSource/[[port to main]]}} whose implicit handler makes the change to the mirror.
+          </p>
           <dl class="switch">
             <dt>If the selected video track changes, then run the following steps:</dt>
             <dd>
@@ -825,67 +1014,92 @@ interface MediaSource : EventTarget {
 
         <section id="duration-change-algorithm">
           <h4><dfn>Duration change</dfn></h4>
-          <p>Follow these steps when {{MediaSource/duration}} needs to change to a <var>new duration</var>.</p>
+          <p>Follow these steps when {{MediaSource/duration}} needs to change to a |new duration:unrestricted double|.</p>
           <ol>
-            <li>If the current value of {{MediaSource/duration}} is equal to <var>new duration</var>, then return.</li>
-            <li>If <var>new duration</var> is less than the highest [=presentation timestamp=] of any buffered [=coded frames=] for all <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.
+            <li>If the current value of {{MediaSource/duration}} is equal to |new duration|, then return.</li>
+            <li>If |new duration| is less than the highest [=presentation timestamp=] of any buffered [=coded frames=] for all <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.
             <p class="note">Duration reductions that would truncate currently buffered media are disallowed. When truncation is necessary, use {{SourceBuffer/remove()}} to reduce the buffered range before updating {{MediaSource/duration}}.</p>
             </li>
-            <li>Let <var>highest end time</var> be the largest [=track buffer ranges=] end time across all the [=track buffers=] across all <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}.</li>
-            <li>If <var>new duration</var> is less than <var>highest end time</var>, then
+            <li>Let |highest end time:unrestricted double| be the largest [=track buffer ranges=] end time across all the [=track buffers=] across all <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}.</li>
+            <li>If |new duration| is less than |highest end time|, then
               <p class="note">This condition can occur because the [=coded frame removal=] algorithm preserves coded frames that start before the start of the removal range.</p>
               <ol>
 
-                <li>Update <var>new duration</var> to equal <var>highest end time</var>.</li>
+                <li>Update |new duration| to equal |highest end time|.</li>
               </ol>
             </li>
-            <li>Update {{MediaSource/duration}} to <var>new duration</var>.</li>
-            <li>Update the <a def-id="hme-duration"></a> to <var>new duration</var> and run the <a def-id="hme-duration-change-algorithm"></a>.</li>
+            <li>Update {{MediaSource/duration}} to |new duration|.</li>
+            <li>Update the <a def-id="hme-duration"></a> to |new duration|.</li>
+            <li>
+              <dl class="switch">
+                <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
+                <dd>Post an internal <code>duration change</code> message to {{MediaSource//[[port to main]]}} whose
+                implicit handler in {{Window}} runs the <a def-id="hme-duration-change-algorithm"></a>.</dd>
+                <dt>Otherwise:</dt>
+                <dd>Run the <a def-id="hme-duration-change-algorithm"></a>.</dd>
+              </dl>
+            </li>
           </ol>
         </section>
 
         <section id="end-of-stream-algorithm">
           <h4><dfn>End of stream</dfn></h4>
           <p>This algorithm gets called when the application signals the end of stream via an {{MediaSource/endOfStream()}} call or an algorithm needs to
-            signal a decode error. This algorithm takes an <var>error</var> parameter that indicates whether an error will be signalled.</p>
+            signal a decode error. This algorithm takes an |error:EndOfStreamError| parameter that indicates whether an error will be signalled.</p>
           <ol>
             <li>Change the {{MediaSource/readyState}} attribute value to {{ReadyState/""ended""}}.</li>
             <li>
               [=Queue a task=] to [=fire an event=] named {{sourceended}} at the <a>MediaSource</a>.</li>
             <li><dl class="switch">
-                <dt>If <var>error</var> is not set</dt>
+                <dt>If |error| is not set</dt>
                 <dd>
                   <ol>
-                    <li>Run the [=duration change=] algorithm with <var>new duration</var> set to
+                    <li>Run the [=duration change=] algorithm with |new duration| set to
                       the largest [=track buffer ranges=] end time across all the [=track buffers=] across all <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}.
                       <p class="note">This allows the duration to properly reflect the end of the appended media segments. For example, if the duration was explicitly set to 10 seconds and only media segments for 0 to 5 seconds were appended before endOfStream() was called, then the duration will get updated to 5 seconds.</p>
                     </li>
                     <li>Notify the media element that it now has all of the media data.</li>
                   </ol>
                 </dd>
-                <dt>If <var>error</var> is set to {{EndOfStreamError/""network""}}
-                </dt>
+
+                <dt>If |error| is set to {{EndOfStreamError/""network""}}</dt>
                 <dd>
+                <dl class="switch">
+                  <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
+                  <dd>Post an internal <code>network error</code> message to {{MediaSource//[[port to main]]}} whose
+                  implicit handler in {{Window}} runs the steps in the following "otherwise" case.</dd>
+                  <dt>Otherwise:</dt>
+                  <dd>
                   <dl class="switch">
-                    <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute equals <a def-id="have-nothing"></a>
-                    </dt>
+                    <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute equals
+                    {{HTMLMediaElement/HAVE_NOTHING}}</dt>
                     <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the <a def-id="resource-fetch-algorithm"></a>'s <a def-id="media-data-processing-steps-list"></a>.</dd>
-                    <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is greater than <a def-id="have-nothing"></a>
-                    </dt>
+                    <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is greater than
+                    {{HTMLMediaElement/HAVE_NOTHING}}</dt>
                     <dd>Run the "<i>If the connection is interrupted after some media data has been received, causing the user agent to give up trying to fetch the resource</i>" steps of the <a def-id="resource-fetch-algorithm"></a>'s <a def-id="media-data-processing-steps-list"></a>.</dd>
                   </dl>
+                  </dd>
+                </dl>
                 </dd>
-                <dt>If <var>error</var> is set to {{EndOfStreamError/""decode""}}
-                </dt>
+
+                <dt>If |error| is set to {{EndOfStreamError/""decode""}}</dt>
                 <dd>
+                <dl class="switch">
+                  <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
+                  <dd>Post an internal <code>decode error</code> message to {{MediaSource/[[port to main]]}} whose
+                  implicit handler in {{Window}} runs the steps in the following "otherwise" case.</dd>
+                  <dt>Otherwise:</dt>
+                  <dd>
                   <dl class="switch">
-                    <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute equals <a def-id="have-nothing"></a>
-                    </dt>
+                    <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute equals
+                    {{HTMLMediaElement/HAVE_NOTHING}}</dt>
                     <dd>Run the "<i>If the media data can be fetched but is found by inspection to be in an unsupported format, or can otherwise not be rendered at all</i>" steps of the <a def-id="resource-fetch-algorithm"></a>'s <a def-id="media-data-processing-steps-list"></a>.</dd>
-                    <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is greater than <a def-id="have-nothing"></a>
-                    </dt>
+                    <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is greater than
+                    {{HTMLMediaElement/HAVE_NOTHING}}
                     <dd>Run the <a def-id="media-data-is-corrupted"></a> steps of the <a def-id="resource-fetch-algorithm"></a>'s <a def-id="media-data-processing-steps-list"></a>.</dd>
                   </dl>
+                  </dd>
+                </dl>
                 </dd>
               </dl>
             </li>
@@ -911,7 +1125,7 @@ interface MediaSource : EventTarget {
           </p>
         </td></tr></tbody></table>
 
-<pre class="idl">[Exposed=Window]
+<pre class="idl">[Exposed=(Window,DedicatedWorker)]
 interface SourceBuffer : EventTarget {
                     attribute AppendMode          mode;
     readonly        attribute boolean             updating;
@@ -931,8 +1145,11 @@ interface SourceBuffer : EventTarget {
     undefined abort ();
     undefined changeType (DOMString type);
     undefined remove (double start, unrestricted double end);
-};</pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="SourceBuffer"><dt><dfn><code>mode</code></dfn> of type <a>AppendMode</a></dt><dd>
-<p>Controls how a sequence of [=media segments=] are handled. This attribute is initially set by {{MediaSource/addSourceBuffer()}} after the object is created, and can be updated by {{SourceBuffer/changeType()}} or setting this attribute.</p>
+};</pre>
+          <div class="issue" data-number="280">[[HTML]] {{AudioTrackList}}, {{VideoTrackList}} and {{TextTrackList}} need Window+DedicatedWorker
+          exposure.</div>
+          <section><h2>Attributes</h2><dl class="attributes" data-dfn-for="SourceBuffer"><dt><dfn><code>mode</code></dfn> of type <a>AppendMode</a></dt><dd>
+          <p>Controls how a sequence of [=media segments=] are handled. This attribute is initially set by {{MediaSource/addSourceBuffer()}} after the object is created, and can be updated by {{SourceBuffer/changeType()}} or setting this attribute.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
@@ -1374,7 +1591,7 @@ interface SourceBuffer : EventTarget {
             <li>[=Queue a task=] to [=fire an event=] named {{error}} at this <a>SourceBuffer</a> object.</li>
             <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this <a>SourceBuffer</a> object.</li>
             <li>Run the [=end of stream=] algorithm
-              with the <var>error</var> parameter set to {{EndOfStreamError/""decode""}}.</li>
+              with the |error:EndOfStreamError| parameter set to {{EndOfStreamError/""decode""}}.</li>
           </ol>
         </section>
 
@@ -1384,7 +1601,19 @@ interface SourceBuffer : EventTarget {
             <ol>
             <li>If the <a>SourceBuffer</a> has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=] then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If the {{SourceBuffer/updating}} attribute equals true, then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>If the {{HTMLMediaElement}}.{{HTMLMediaElement/error}} attribute is not null, then throw an {{InvalidStateError}} exception and abort these steps.</li>
+            <li>Let |recent element error:boolean| be determined as follows:
+              <dl class="switch">
+                <dt>If the {{MediaSource}} was constructed in a {{Window}}</dt>
+                <dd>Let |recent element error| be true if the {{HTMLMediaElement}}.{{HTMLMediaElement/error}} attribute
+                is not null. If that attribute is null, then let |recent element error| be false.</dd>
+                <dt>Otherwise</dt>
+                <dd>Let |recent element error| be the value resulting from the steps for the {{Window}} case, but run
+                on the {{Window}} {{HTMLMediaElement}} on any change to its {{HTMLMediaElement/error}} attribute and
+                communicated by using {{HTMLMediaElement/[[port to worker]]}} implicit messages. If such a message has
+                not yet been received, then let |recent element error| be false.</dd>
+              </dl>
+            </li>
+            <li>If |recent element error| is true, then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>
               <p>If the {{MediaSource/readyState}} attribute of the [=parent media source=] is in the {{ReadyState/""ended""}} state then run the following steps:</p>
               <ol>
@@ -1431,6 +1660,7 @@ interface SourceBuffer : EventTarget {
             <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this <a>SourceBuffer</a> object.</li>
           </ol>
         </section>
+
         <section id="sourcebuffer-init-segment-received">
           <h4><dfn>Initialization Segment Received</dfn></h4>
           <p>The following steps are run when the [=segment parser loop=] successfully parses a complete [=initialization segment=]:</p>
@@ -1444,9 +1674,9 @@ interface SourceBuffer : EventTarget {
             <li>Update the {{MediaSource/duration}} attribute if it currently equals NaN:
               <dl class="switch">
                 <dt>If the initialization segment contains a duration:</dt>
-                <dd>Run the [=duration change=] algorithm with <var>new duration</var> set to the duration in the initialization segment.</dd>
+                <dd>Run the [=duration change=] algorithm with |new duration| set to the duration in the initialization segment.</dd>
                 <dt>Otherwise:</dt>
-                <dd>Run the [=duration change=] algorithm with <var>new duration</var> set to positive Infinity.</dd>
+                <dd>Run the [=duration change=] algorithm with |new duration| set to positive Infinity.</dd>
               </dl>
             </li>
             <li>If the [=initialization segment=] has no audio, video, or text tracks, then run the [=append error=] algorithm  and abort these steps.</li>
@@ -1481,7 +1711,7 @@ interface SourceBuffer : EventTarget {
                 <li>Set the [=need random access point flag=] on all track buffers to true.</li>
               </ol>
             </li>
-            <li>Let <var>active track flag</var> equal false.</li>
+            <li>Let |active track flag:boolean| equal false.</li>
             <li>
               <p>If the [=first initialization segment received flag=] is false, then run the following steps:</p>
               <ol>
@@ -1520,33 +1750,54 @@ interface SourceBuffer : EventTarget {
                       <ol>
                         <li>Let <var>current audio kind</var> equal the value from <var>audio kinds</var>
                           for this iteration of the loop.</li>
-                        <li>Let <var>new audio track</var> be a new {{AudioTrack}} object.</li>
-                        <li>Generate a unique ID and assign it to the <a def-id="audiotrack-id"></a> property on <var>new audio track</var>.</li>
+                        <li>Let |new audio track:AudioTrack| be a new {{AudioTrack}} object.</li>
+                        <li>Generate a unique ID and assign it to the <a def-id="audiotrack-id"></a> property on
+                          |new audio track|.</li>
                         <li>Assign <var>audio language</var> to the <a def-id="audiotrack-language"></a>
-                          property on <var>new audio track</var>.</li>
+                          property on |new audio track|.</li>
                         <li>Assign <var>audio label</var> to the <a def-id="audiotrack-label"></a>
-                          property on <var>new audio track</var>.</li>
+                          property on |new audio track|.</li>
                         <li>Assign <var>current audio kind</var> to the <a def-id="audiotrack-kind"></a>
-                          property on <var>new audio track</var>.</li>
+                          property on |new audio track|.</li>
                         <li>
                           <p>
-                            If {{HTMLMediaElement/audioTracks}}.<a def-id="audiotracklist-length"></a> equals 0, then run
+                            If this {{SourceBuffer}} object's {{SourceBuffer/audioTracks}}.{{AudioTrackList/length}}</a> equals 0, then run
                             the following steps:
                           </p>
                           <ol>
-                            <li>Set the {{AudioTrack/enabled}} property on <var>new audio track</var> to true.</li>
-                            <li>Set <var>active track flag</var> to true.</li>
+                            <li>Set the {{AudioTrack/enabled}} property on |new audio track| to true.</li>
+                            <li>Set |active track flag| to true.</li>
                           </ol>
                         </li>
-                        <li>Add <var>new audio track</var> to the {{SourceBuffer/audioTracks}} attribute on this <a>SourceBuffer</a> object.
+                        <li>Add |new audio track| to the {{SourceBuffer/audioTracks}} attribute on this <a>SourceBuffer</a> object.
                         <p class="note">
-                          This should trigger {{AudioTrackList}} [[HTML]] logic to <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a> <var>new audio track</var>, at the {{AudioTrackList}} object referenced by the {{SourceBuffer/audioTracks}} attribute on this <a>SourceBuffer</a> object.
+                          This should trigger {{AudioTrackList}} [[HTML]] logic to
+                          <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a>
+                          |new audio track|, at the {{AudioTrackList}} object referenced by the
+                          {{SourceBuffer/audioTracks}} attribute on this <a>SourceBuffer</a> object.
                         </p>
                         </li>
-                        <li>Add <var>new audio track</var> to the {{HTMLMediaElement/audioTracks}} attribute on the HTMLMediaElement.
-                        <p class="note">
-                          This should trigger {{AudioTrackList}} [[HTML]] logic to <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a> <var>new audio track</var>, at the {{AudioTrackList}} object referenced by the {{HTMLMediaElement/audioTracks}} attribute on the HTMLMediaElement.
-                        </p>
+                        <li>
+                          <dl class="switch">
+                            <dt>If the [=parent media source=] was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
+                            <dd>Post an internal <code>create track mirror</code> message to {{MediaSource/[[port to
+                            main]]}} whose implicit handler in {{Window}} runs the following steps:<ol>
+                              <li>Let |mirrored audio track:AudioTrack| be a new {{AudioTrack}} object.</li>
+                              <li>Assign the same property values to |mirrored audio track| as were determined for
+                                |new audio track|.</li>
+                              <li>Add |mirrored audio track| to the {{HTMLMediaElement/audioTracks}} attribute
+                                on the HTMLMediaElement.</li>
+                            </ol></dd>
+                            <dt>Otherwise:</dt>
+                            <dd>Add |new audio track| to the {{HTMLMediaElement/audioTracks}} attribute on the
+                            HTMLMediaElement.</dd>
+                          </dl>
+                          <p class="note">
+                            This should trigger {{AudioTrackList}} [[HTML]] logic to
+                            <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a>
+                            |mirrored audio track| or |new audio track|, at the {{AudioTrackList}} object referenced by
+                            the {{HTMLMediaElement/audioTracks}} attribute on the HTMLMediaElement.
+                          </p>
                         </li>
                       </ol>
                     </li>
@@ -1573,33 +1824,54 @@ interface SourceBuffer : EventTarget {
                       <ol>
                         <li>Let <var>current video kind</var> equal the value from <var>video kinds</var>
                           for this iteration of the loop.</li>
-                        <li>Let <var>new video track</var> be a new {{VideoTrack}} object.</li>
-                        <li>Generate a unique ID and assign it to the {{VideoTrack/id}} property on <var>new video track</var>.</li>
+                        <li>Let |new video track:VideoTrack| be a new {{VideoTrack}} object.</li>
+                        <li>Generate a unique ID and assign it to the {{VideoTrack/id}} property on
+                          |new video track|.</li>
                         <li>Assign <var>video language</var> to the {{VideoTrack/language}}
-                          property on <var>new video track</var>.</li>
+                          property on |new video track|.</li>
                         <li>Assign <var>video label</var> to the {{VideoTrack/label}}
-                          property on <var>new video track</var>.</li>
+                          property on |new video track|.</li>
                         <li>Assign <var>current video kind</var> to the {{VideoTrack/kind}}
-                          property on <var>new video track</var>.</li>
+                          property on |new video track|.</li>
                         <li>
                           <p>
-                            If {{HTMLMediaElement/videoTracks}}.{{VideoTrackList/length}} equals 0, then run
+                            If this {{SourceBuffer}} object's {{SourceBuffer/videoTracks}}.{{VideoTrackList/length}} equals 0, then run
                             the following steps:
                           </p>
                           <ol>
-                            <li>Set the {{VideoTrack/selected}} property on <var>new video track</var> to true.</li>
-                            <li>Set <var>active track flag</var> to true.</li>
+                            <li>Set the {{VideoTrack/selected}} property on |new video track| to true.</li>
+                            <li>Set |active track flag| to true.</li>
                           </ol>
                         </li>
-                        <li>Add <var>new video track</var> to the {{SourceBuffer/videoTracks}} attribute on this <a>SourceBuffer</a> object.
+                        <li>Add |new video track| to the {{SourceBuffer/videoTracks}} attribute on this <a>SourceBuffer</a> object.
                         <p class="note">
-                          This should trigger {{VideoTrackList}} [[HTML]] logic to <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a> <var>new video track</var>, at the {{VideoTrackList}} object referenced by the {{SourceBuffer/videoTracks}} attribute on this <a>SourceBuffer</a> object.
+                          This should trigger {{VideoTrackList}} [[HTML]] logic to
+                          <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a>
+                          |new video track|, at the {{VideoTrackList}} object referenced by the
+                          {{SourceBuffer/videoTracks}} attribute on this <a>SourceBuffer</a> object.
                         </p>
                         </li>
-                        <li>Add <var>new video track</var> to the {{HTMLMediaElement/videoTracks}} attribute on the HTMLMediaElement.
-                        <p class="note">
-                          This should trigger {{VideoTrackList}} [[HTML]] logic to <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a> <var>new video track</var>, at the {{VideoTrackList}} object referenced by the {{HTMLMediaElement/videoTracks}} attribute on the HTMLMediaElement.
-                        </p>
+                        <li>
+                          <dl class="switch">
+                            <dt>If the [=parent media source=] was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
+                            <dd>Post an internal <code>create track mirror</code> message to {{MediaSource/[[port to
+                            main]]}} whose implicit handler in {{Window}} runs the following steps:<ol>
+                              <li>Let |mirrored video track:VideoTrack| be a new {{VideoTrack}} object.</li>
+                              <li>Assign the same property values to |mirrored video track| as were determined for
+                                |new video track|.</li>
+                              <li>Add |mirrored video track| to the {{HTMLMediaElement/videoTracks}} attribute
+                                on the HTMLMediaElement.</li>
+                            </ol></dd>
+                            <dt>Otherwise:</dt>
+                            <dd>Add |new video track| to the {{HTMLMediaElement/videoTracks}} attribute on the
+                            HTMLMediaElement.</dd>
+                          </dl>
+                          <p class="note">
+                            This should trigger {{VideoTrackList}} [[HTML]] logic to
+                            <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a>
+                            |mirrored video track| or |new video track|, at the {{VideoTrackList}} object referenced by
+                            the {{HTMLMediaElement/videoTracks}} attribute on the HTMLMediaElement.
+                          </p>
                         </li>
                       </ol>
                     </li>
@@ -1626,30 +1898,50 @@ interface SourceBuffer : EventTarget {
                       <ol>
                         <li>Let <var>current text kind</var> equal the value from <var>text kinds</var>
                           for this iteration of the loop.</li>
-                        <li>
-                          Let <var>new text track</var> be a new {{TextTrack}} object.</li>
-                        <li>Generate a unique ID and assign it to the {{TextTrack/id}} property on <var>new text track</var>.</li>
+                        <li>Let |new text track:TextTrack| be a new {{TextTrack}} object.</li>
+                        <li>Generate a unique ID and assign it to the {{TextTrack/id}} property on
+                          |new text track|.</li>
                         <li>Assign <var>text language</var> to the {{TextTrack/language}}
-                          property on <var>new text track</var>.</li>
+                          property on |new text track|.</li>
                         <li>Assign <var>text label</var> to the {{TextTrack/label}}
-                          property on <var>new text track</var>.</li>
+                          property on |new text track|.</li>
                         <li>Assign <var>current text kind</var> to the {{TextTrack/kind}}
-                          property on <var>new text track</var>.</li>
-                        <li>Populate the remaining properties on <var>new text track</var> with the
-                          appropriate information from the [=initialization segment=].
-                        </li><li>
-                          If the {{TextTrack/mode}} property on <var>new text track</var> equals <a def-id="texttrackmode-showing"></a> or
-                          <a def-id="texttrackmode-hidden"></a>, then set <var>active track flag</var> to true.
+                          property on |new text track|.</li>
+                        <li>Populate the remaining properties on |new text track| with the
+                          appropriate information from the [=initialization segment=].</li>
+                        <li>If the {{TextTrack/mode}} property on |new text track| equals
+                          <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a>, then set
+                          |active track flag| to true.
                         </li>
-                        <li>Add <var>new text track</var> to the {{SourceBuffer/textTracks}} attribute on this <a>SourceBuffer</a> object.
+                        <li>Add |new text track| to the {{SourceBuffer/textTracks}} attribute on this <a>SourceBuffer</a> object.
                         <p class="note">
-                          This should trigger {{TextTrackList}} [[HTML]] logic to <a def-id="queue-and-fire-text-addtrack-with-track-attr-initialized-to"></a> <var>new text track</var>, at the {{TextTrackList}} object referenced by the {{SourceBuffer/textTracks}} attribute on this <a>SourceBuffer</a> object.
+                          This should trigger {{TextTrackList}} [[HTML]] logic to
+                          <a def-id="queue-and-fire-text-addtrack-with-track-attr-initialized-to"></a>
+                          |new text track|, at the {{TextTrackList}} object referenced by the
+                          {{SourceBuffer/textTracks}} attribute on this <a>SourceBuffer</a> object.
                         </p>
                         </li>
-                        <li>Add <var>new text track</var> to the {{HTMLMediaElement/textTracks}} attribute on the HTMLMediaElement.
-                        <p class="note">
-                          This should trigger {{TextTrackList}} [[HTML]] logic to <a def-id="queue-and-fire-text-addtrack-with-track-attr-initialized-to"></a> <var>new text track</var>, at the {{TextTrackList}} object referenced by the {{HTMLMediaElement/textTracks}} attribute on the HTMLMediaElement.
-                        </p>
+                        <li>
+                          <dl class="switch">
+                            <dt>If the [=parent media source=] was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
+                            <dd>Post an internal <code>create track mirror</code> message to {{MediaSource/[[port to
+                            main]]}} whose implicit handler in {{Window}} runs the following steps:<ol>
+                              <li>Let |mirrored text track:TextTrack| be a new {{TextTrack}} object.</li>
+                              <li>Assign the same property values to |mirrored text track| as were determined for
+                                |new text track|.</li>
+                              <li>Add |mirrored text track| to the {{HTMLMediaElement/textTracks}} attribute
+                                on the HTMLMediaElement.</li>
+                            </ol></dd>
+                            <dt>Otherwise:</dt>
+                            <dd>Add |new text track| to the {{HTMLMediaElement/textTracks}} attribute on the
+                            HTMLMediaElement.</dd>
+                          </dl>
+                          <p class="note">
+                            This should trigger {{TextTrackList}} [[HTML]] logic to
+                            <a def-id="queue-and-fire-text-addtrack-with-track-attr-initialized-to"></a>
+                            |mirrored text track| or |new text track|, at the {{TextTrackList}} object referenced by the
+                            {{HTMLMediaElement/textTracks}} attribute on the HTMLMediaElement.
+                          </p>
                         </li>
                       </ol>
                     </li>
@@ -1657,7 +1949,7 @@ interface SourceBuffer : EventTarget {
                     <li>Add the [=track description=] for this track to the [=track buffer=].</li>
                   </ol>
                 </li>
-                <li>If <var>active track flag</var> equals true, then run the following steps:
+                <li>If |active track flag| equals true, then run the following steps:
                   <ol>
                     <li>Add this <a>SourceBuffer</a> to {{MediaSource/activeSourceBuffers}}.</li>
                     <li>[=Queue a task=] to [=fire an event=] named {{addsourcebuffer}} at {{MediaSource/activeSourceBuffers}}</li>
@@ -1667,23 +1959,52 @@ interface SourceBuffer : EventTarget {
               </ol>
             </li>
             <li>Set [=pending initialization segment for changeType flag=] to false.</li>
-            <li>
-              <p>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is <a def-id="have-nothing"></a>, then run the following steps:</p>
-              <ol>
-                <li>
-                  If one or more objects in {{MediaSource/sourceBuffers}} have [=first initialization segment received flag=] set to false, then abort
-                  these steps.</li>
-                <li>Set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to <a def-id="have-metadata"></a>.
-                <p class="note">
-                  Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement. This particular transition should trigger HTMLMediaElement logic to [=queue a task=] to [=fire an event=] named <a def-id="loadedmetadata"></a> at the media element.
-                </p>
-                </li>
-              </ol>
+            <li>If the |active track flag| equals true, then run the following steps:
+              <dl class="switch">
+                <dt>If the [=parent media source=] was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
+                <dd>Post an internal <code>active track added</code> message to {{MediaSource/[[port to main]]}} whose
+                implicit handler in {{Window}} runs the following step:
+                <ol>
+                  <li>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is greater than
+                    {{HTMLMediaElement/HAVE_CURRENT_DATA}}, then set the
+                    {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to
+                    {{HTMLMediaElement/HAVE_METADATA}}.
+                  </li>
+                </ol></dd>
+                <dt>Otherwise:</dt>
+                <dd>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is greater than
+                {{HTMLMediaElement/HAVE_CURRENT_DATA}}, then set the
+                {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to
+                {{HTMLMediaElement/HAVE_METADATA}}.</dd>
+              </dl>
+              <p class="note">
+                Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}}
+                changes may trigger events on the HTMLMediaElement.
+              </p>
             </li>
-            <li>
-              If the <var>active track flag</var> equals true and the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is greater than
-              <a def-id="have-current-data"></a>, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to <a def-id="have-metadata"></a>.
-            <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
+            <li>If each object in {{MediaSource/sourceBuffers}} of the [=parent media source=] has [=first
+              initialization segment received flag=] equal to true, then run the following steps:
+              <dl class="switch">
+                <dt>If the [=parent media source=] was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
+                <dd>Post an internal <code>sourcebuffers ready</code> message to {{MediaSource/[[port to main]]}} whose
+                implicit handler in {{Window}} runs the following step:
+                <ol>
+                  <li>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is
+                    {{HTMLMediaElement/HAVE_NOTHING}}, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}}
+                    attribute to {{HTMLMediaElement/HAVE_METADATA}}.
+                  </li>
+                </ol><dd>
+                <dt>Otherwise:</dt>
+                <dd>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is
+                {{HTMLMediaElement/HAVE_NOTHING}}, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}}
+                attribute to {{HTMLMediaElement/HAVE_METADATA}}.</dd>
+              </dl>
+              <p class="note">
+                Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}}
+                changes may trigger events on the HTMLMediaElement. If transition from {{HTMLMediaElement/HAVE_NOTHING}}
+                to {{HTMLMediaElement/HAVE_METADATA}} occurs, it should trigger HTMLMediaElement logic to [=queue a
+                task=] to [=fire an event=] named [=HTMLMediaElement/loadedmetadata=] at the media element.
+              </p>
             </li>
           </ol>
         </section>
@@ -1876,7 +2197,8 @@ interface SourceBuffer : EventTarget {
               <p>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is <a def-id="have-future-data"></a> and the new [=coded frames=] cause {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} to have a {{TimeRanges}} that includes the current playback position and [=enough data to ensure uninterrupted playback=], then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to <a def-id="have-enough-data"></a>.</p>
               <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
             </li>
-            <li>If the [=media segment=] contains data beyond the current {{MediaSource/duration}}, then run the [=duration change=] algorithm with <var>new duration</var> set to the maximum of the current duration and the [=group end timestamp=].</li>
+            <li>If the [=media segment=] contains data beyond the current {{MediaSource/duration}}, then run the
+              [=duration change=] algorithm with |new duration| set to the maximum of the current duration and the [=group end timestamp=].</li>
           </ol>
         </section>
 
@@ -2085,7 +2407,7 @@ interface SourceBuffer : EventTarget {
     <section id="sourcebufferlist">
       <h2><dfn>SourceBufferList</dfn> Object</h2>
       <p>SourceBufferList is a simple container object for <a>SourceBuffer</a> objects. It provides read-only array access and fires events when the list is modified.</p>
-<pre class="idl">[Exposed=Window]
+<pre class="idl">[Exposed=(Window,DedicatedWorker)]
 interface SourceBufferList : EventTarget {
     readonly        attribute unsigned long length;
                     attribute EventHandler  onaddsourcebuffer;
@@ -2167,62 +2489,181 @@ interface SourceBufferList : EventTarget {
       <h2>HTMLMediaElement Extensions</h2>
       <p>This section specifies what existing attributes on the {{HTMLMediaElement}} MUST return when a <a>MediaSource</a> is attached to the element.</p>
 
-      <p>The {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
-      <dl class="switch">
-        <dt>If {{MediaSource/duration}} equals NaN:</dt>
-        <dd>Return an empty {{TimeRanges}} object.</dd>
-        <dt>If {{MediaSource/duration}} equals positive Infinity:</dt>
-        <dd>
-          <ol>
-            <li>If [=live seekable range=] is not empty:
-              <ol>
-                <li>Let <var>union ranges</var> be the union of [=live seekable range=] and the {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} attribute.</li>
-                <li>Return a single range with a start time equal to the earliest start time in <var>union ranges</var> and an end time equal to the highest end time in <var>union ranges</var> and abort these steps.</li>
-              </ol>
-            </li>
-            <li>If the {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} attribute returns an empty {{TimeRanges}}
-              object, then return an empty {{TimeRanges}} object and abort these steps.</li>
-            <li>Return a single range with a start time of 0 and an end time equal to the highest end time reported by the {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} attribute.
-        </li></ol></dd>
-        <dt>Otherwise:</dt>
-        <dd>Return a single range with a start time of 0 and an end time equal to {{MediaSource/duration}}.</dd>
-      </dl>
+      <section id="htmlmediaelement-extensions-seekable">
+        <h3>{{HTMLMediaElement}}.{{HTMLMediaElement/seekable}}</h3>
+        <p>The {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
+        <ol>
+          <li>If the {{MediaSource}} was constructed in a
+            {{DedicatedWorkerGlobalScope}} that is terminated or is closing
+            then return an empty {{TimeRanges}} object and abort these steps.
+            <p class="note">
+              This case is intended to handle implementations that may no
+              longer maintain any previous information about buffered or
+              seekable media in a MediaSource that was constructed in a
+              DedicatedWorkerGlobalScope that has been terminated by
+              {{Worker/terminate()}} or user agent execution of [=terminate a
+              worker=] for the MediaSource's DedicatedWorkerGlobalScope, for
+              instance as the eventual result of
+              {{DedicatedWorkerGlobalScope/close()}} execution.
+            </p>
+            <div class="issue" data-number="277">
+              <p>Should there be some (eventual) media element error transition
+              in the case of an attached worker MediaSource having its context
+              destroyed? The experimental Chromium implementation of worker MSE
+              just keeps the element readyState, networkState and error the
+              same as prior to that context destruction, though the seekable
+              and buffered attributes each report an empty TimeRange.</p>
+            </div>
+          </li>
 
-      <p id="dom-htmlmediaelement.buffered">The {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} attribute returns a static <a def-id="normalized-timeranges-object"></a> based on the following steps.</p>
-      <ol>
-        <li>Let <var>intersection ranges</var> equal an empty {{TimeRanges}} object.</li>
-        <li>If {{MediaSource/activeSourceBuffers}}.length does not equal 0 then run the following steps:
-          <ol>
-            <li>Let <var>active ranges</var> be the ranges returned by {{SourceBuffer/buffered}} for each <a>SourceBuffer</a> object in {{MediaSource/activeSourceBuffers}}.</li>
-            <li>Let <var>highest end time</var> be the largest range end time in the <var>active ranges</var>.</li>
-            <li>Let <var>intersection ranges</var> equal a {{TimeRanges}} object containing a single range from 0 to <var>highest end time</var>.</li>
-            <li>For each <a>SourceBuffer</a> object in {{MediaSource/activeSourceBuffers}} run the following steps:
+          <li>Let |recent duration:unrestricted double| and |recent live seekable range:normalized TimeRanges|
+            respectively be the recent values of {{MediaSource/duration}} and [=live seekable range=], determined as
+            follows:
+            <dl class="switch">
+              <dt>If the {{MediaSource}} was constructed in a {{Window}}</dt>
+              <dd>Set |recent duration| to be {{MediaSource/duration}} and set |recent live seekable
+                range| to be [=live seekable range=].</dd>
+              <dt>Otherwise:</dt>
+              <dd>Set |recent duration| and |recent live seekable range| respectively to be what the
+                {{MediaSource/duration}} and [=live seekable range=] were recently, updated by handling implicit
+                messages posted by the {{MediaSource}} to its {{MediaSource/[[port to main]]}} on every change to
+                {{MediaSource/duration}} or [=live seekable range=].</dd>
+            </dl>
+          </li>
+          <li>
+            <dl class="switch">
+              <dt>If |recent duration| equals NaN:</dt>
+              <dd>Return an empty {{TimeRanges}} object.</dd>
+              <dt>If |recent duration| equals positive Infinity:</dt>
+              <dd>
+                <ol>
+                  <li>If |recent live seekable range| is not empty:
+                    <ol>
+                      <li>Let |union ranges:normalized TimeRanges| be the union of |recent live seekable range| and the
+                        {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} attribute.</li>
+                      <li>Return a single range with a start time equal to the earliest start time in |union ranges| and
+                        an end time equal to the highest end time in |union ranges| and abort these steps.</li>
+                    </ol>
+                  </li>
+                  <li>If the {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} attribute returns an empty {{TimeRanges}}
+                    object, then return an empty {{TimeRanges}} object and abort these steps.</li>
+                  <li>Return a single range with a start time of 0 and an end time equal to the highest end time
+                    reported by the {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} attribute.
+              </li></ol></dd>
+              <dt>Otherwise:</dt>
+              <dd>Return a single range with a start time of 0 and an end time equal to |recent duration|.</dd>
+            </dl>
+          </li>
+        </ol>
+      </section>
+
+      <section id="htmlmediaelement-extensions-buffered">
+        <h3>{{HTMLMediaElement}}.{{HTMLMediaElement/buffered}}</h3>
+        <p id="dom-htmlmediaelement.buffered">The {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} attribute returns a static <a def-id="normalized-timeranges-object"></a> based on the following steps.</p>
+        <ol>
+          <li>If the {{MediaSource}} was constructed in a
+            {{DedicatedWorkerGlobalScope}} that is terminated or is closing
+            then return an empty {{TimeRanges}} object and abort these steps.
+            <p class="note">
+              This case is intended to handle implementations that may no
+              longer maintain any previous information about buffered or
+              seekable media in a MediaSource that was constructed in a
+              DedicatedWorkerGlobalScope that has been terminated by
+              {{Worker/terminate()}} or user agent execution of [=terminate a
+              worker=] for the MediaSource's DedicatedWorkerGlobalScope, for
+              instance as the eventual result of
+              {{DedicatedWorkerGlobalScope/close()}} execution.
+            </p>
+            <div class="issue" data-number="277">
+              <p>Should there be some (eventual) media element error transition
+              in the case of an attached worker MediaSource having its context
+              destroyed? The experimental Chromium implementation of worker MSE
+              just keeps the element readyState, networkState and error the
+              same as prior to that context destruction, though the seekable
+              and buffered attributes each report an empty TimeRange.</p>
+            </div>
+          </li>
+
+          <li>Let |recent intersection ranges:normalized TimeRanges| be determined as follows:
+            <dl class="switch">
+              <dt>If the {{MediaSource}} was constructed in a {{Window}}</dt>
+              <dd>
               <ol>
-                <li>Let <var>source ranges</var> equal the ranges returned by the {{SourceBuffer/buffered}} attribute on the current <a>SourceBuffer</a>.</li>
-                <li>If {{MediaSource/readyState}} is {{ReadyState/""ended""}}, then set the end time on the last range in <var>source ranges</var> to
-                  <var>highest end time</var>.</li>
-                <li>Let <var>new intersection ranges</var> equal the intersection between the <var>intersection ranges</var> and the <var>source ranges</var>.</li>
-                <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
+                <li>Let |recent intersection ranges| equal an empty {{TimeRanges}} object.</li>
+                <li>If {{MediaSource/activeSourceBuffers}}.length does not equal 0 then run the following steps:
+                  <ol>
+                    <li>Let |active ranges:sequence of normalized TimeRanges| be the ranges returned by
+                      {{SourceBuffer/buffered}} for each <a>SourceBuffer</a> object in
+                      {{MediaSource/activeSourceBuffers}}.</li>
+                    <li>Let |highest end time:unrestricted double| be the largest range end time in the
+                      |active ranges|.</li>
+                    <li>Let |recent intersection ranges:normalized TimeRanges| equal a {{TimeRanges}} object containing
+                      a single range from 0 to |highest end time|.</li>
+                    <li>For each <a>SourceBuffer</a> object in {{MediaSource/activeSourceBuffers}} run the following
+                      steps:
+                      <ol>
+                        <li>Let |source ranges:normalized TimeRanges| equal the ranges returned by the
+                          {{SourceBuffer/buffered}} attribute on the current <a>SourceBuffer</a>.</li>
+                        <li>If {{MediaSource/readyState}} is {{ReadyState/""ended""}}, then set the end time on the last
+                          range in |source ranges| to |highest end time|.</li>
+                        <li>Let |new intersection ranges:normalized TimeRanges| equal the intersection between the
+                          |recent intersection ranges| and the |source ranges|.</li>
+                        <li>Replace the ranges in |recent intersection ranges| with the |new intersection ranges|.</li>
+                      </ol>
+                    </li>
+                  </ol>
+                </li>
               </ol>
-            </li>
-          </ol>
-        </li>
-        <li>If the current value of this attribute has not been set by this algorithm or
-          <var>intersection ranges</var> does not contain the exact same range information as the
-          current value of this attribute, then update the current value of this attribute to
-          <var>intersection ranges</var>.
-        </li><li>Return the current value of this attribute.</li>
-      </ol>
+              </dd>
+              <dt>Otherwise:</dt>
+              <dd>Let |recent intersection ranges| be the {{TimeRanges}} resulting from the steps for the
+              {{Window}} case, but run with the {{MediaSource}} and its {{SourceBuffer}} objects in their
+              {{DedicatedWorkerGlobalScope}} and communicated by using {{MediaSource/[[port to main]]}} implicit
+              messages on every update to the {{MediaSource/activeSourceBuffers}}, {{MediaSource/readyState}}, or any of
+              the buffering state that would change any of the values of each of those {{SourceBuffer/buffered}}
+              attributes of the {{MediaSource/activeSourceBuffers}}.
+              <p class="note">The overhead of recalculating and communicating |recent intersection ranges| so
+              frequently is one reason for allowing implementation flexibility to query this information on-demand using
+              other mechanisms such as shared memory and locks as mentioned in [=cross-context communication
+              model=].</p>
+              </dd>
+            </dl>
+          </li>
+          <li>If the current value of this attribute has not been set by this algorithm or
+            |recent intersection ranges| does not contain the exact same range information as the
+            current value of this attribute, then update the current value of this attribute to
+            |recent intersection ranges|.
+          </li><li>Return the current value of this attribute.</li>
+        </ol>
+      </section>
     </section>
 
     <section id="audio-track-extensions">
       <h2>AudioTrack Extensions</h2>
       <p>This section specifies extensions to the [[HTML]] {{AudioTrack}} definition.</p>
-
-      <div><pre class="idl">partial interface AudioTrack {
+      <div><pre class="idl">[Exposed=(Window,DedicatedWorker)]
+partial interface AudioTrack {
     readonly        attribute SourceBuffer? sourceBuffer;
-};</pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="AudioTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a>SourceBuffer</a></span>, readonly       , nullable</dt><dd>
-          <p>Returns the <a>SourceBuffer</a> that created this track. Returns null if this track was not created by a <a>SourceBuffer</a> or the <a>SourceBuffer</a> has been removed from the {{MediaSource/sourceBuffers}} attribute of its [=parent media source=].</p>
+};</pre>
+        <div class="issue" data-number="280">[[HTML]] {{AudioTrack}} needs Window+DedicatedWorker
+          exposure.</div>
+        <section><h2>Attributes</h2><dl class="attributes" data-dfn-for="AudioTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a>SourceBuffer</a></span>, readonly       , nullable</dt><dd>
+        <p>On getting, run the following step:
+            <dl class="switch">
+              <dt>If this track was created by a {{SourceBuffer}} that was created on the same [=global object/realm=]
+              as this track, and if that {{SourceBuffer}} has not been removed from the {{MediaSource/sourceBuffers}}
+              attribute of its [=parent media source=]:</dt>
+              <dd>Return the {{SourceBuffer}} that created this track.</dd>
+              <dt>Otherwise:</dt>
+              <dd>Return null.</dd>
+            </dl>
+            <div class="note">
+              For example, if a {{DedicatedWorkerGlobalScope}} {{SourceBuffer}} notified its internal <code>create track
+              mirror</code> handler in {{Window}} to create this track, then the {{Window}} copy of the track would
+              return null for this attribute.
+            </div>
+          </div>
+        </p>
         </dd></dl></section></div>
     </section>
 
@@ -2230,10 +2671,29 @@ interface SourceBufferList : EventTarget {
       <h2>VideoTrack Extensions</h2>
       <p>This section specifies extensions to the [[HTML]] {{VideoTrack}} definition.</p>
 
-      <div><pre class="idl">partial interface VideoTrack {
+      <div><pre class="idl">[Exposed=(Window,DedicatedWorker)]
+partial interface VideoTrack {
     readonly        attribute SourceBuffer? sourceBuffer;
-};</pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="VideoTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a>SourceBuffer</a></span>, readonly       , nullable</dt><dd>
-          <p>Returns the <a>SourceBuffer</a> that created this track. Returns null if this track was not created by a <a>SourceBuffer</a> or the <a>SourceBuffer</a> has been removed from the {{MediaSource/sourceBuffers}} attribute of its [=parent media source=].</p>
+};</pre>
+        <div class="issue" data-number="280">[[HTML]] {{VideoTrack}} needs Window+DedicatedWorker
+          exposure.</div>
+        <section><h2>Attributes</h2><dl class="attributes" data-dfn-for="VideoTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a>SourceBuffer</a></span>, readonly       , nullable</dt><dd>
+        <p>On getting, run the following step:
+            <dl class="switch">
+              <dt>If this track was created by a {{SourceBuffer}} that was created on the same [=global object/realm=]
+              as this track, and if that {{SourceBuffer}} has not been removed from the {{MediaSource/sourceBuffers}}
+              attribute of its [=parent media source=]:</dt>
+              <dd>Return the {{SourceBuffer}} that created this track.</dd>
+              <dt>Otherwise:</dt>
+              <dd>Return null.</dd>
+            </dl>
+            <div class="note">
+              For example, if a {{DedicatedWorkerGlobalScope}} {{SourceBuffer}} notified its internal <code>create track
+              mirror</code> handler in {{Window}} to create this track, then the {{Window}} copy of the track would
+              return null for this attribute.
+            </div>
+          </div>
+        </p>
         </dd></dl></section></div>
     </section>
 
@@ -2241,10 +2701,29 @@ interface SourceBufferList : EventTarget {
       <h2>TextTrack Extensions</h2>
       <p>This section specifies extensions to the [[HTML]] {{TextTrack}} definition.</p>
 
-      <div><pre class="idl">partial interface TextTrack {
+      <div><pre class="idl">[Exposed=(Window,DedicatedWorker)]
+partial interface TextTrack {
     readonly        attribute SourceBuffer? sourceBuffer;
-};</pre><section><h2>Attributes</h2><dl class="attributes" data-dfn-for="TextTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a>SourceBuffer</a></span>, readonly       , nullable</dt><dd>
-          <p>Returns the <a>SourceBuffer</a> that created this track. Returns null if this track was not created by a <a>SourceBuffer</a> or the <a>SourceBuffer</a> has been removed from the {{MediaSource/sourceBuffers}} attribute of its [=parent media source=].</p>
+};</pre>
+        <div class="issue" data-number="280">[[HTML]] {{TextTrack}} needs Window+DedicatedWorker
+          exposure.</div>
+        <section><h2>Attributes</h2><dl class="attributes" data-dfn-for="TextTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a>SourceBuffer</a></span>, readonly       , nullable</dt><dd>
+        <p>On getting, run the following step:
+            <dl class="switch">
+              <dt>If this track was created by a {{SourceBuffer}} that was created on the same [=global object/realm=]
+              as this track, and if that {{SourceBuffer}} has not been removed from the {{MediaSource/sourceBuffers}}
+              attribute of its [=parent media source=]:</dt>
+              <dd>Return the {{SourceBuffer}} that created this track.</dd>
+              <dt>Otherwise:</dt>
+              <dd>Return null.</dd>
+            </dl>
+            <div class="note">
+              For example, if a {{DedicatedWorkerGlobalScope}} {{SourceBuffer}} notified its internal <code>create track
+              mirror</code> handler in {{Window}} to create this track, then the {{Window}} copy of the track would
+              return null for this attribute.
+            </div>
+          </div>
+        </p>
         </dd></dl></section></div>
     </section>
 
@@ -2430,6 +2909,7 @@ interface SourceBufferList : EventTarget {
       </div>
     </section>
 
+
     <section id="acknowledgements">
       <h2>Acknowledgments</h2>
       The editors would like to thank <a def-id="contributors"></a> for their contributions to this specification.
@@ -2438,6 +2918,10 @@ interface SourceBufferList : EventTarget {
     <section id="VideoPlaybackQuality" class="appendix informative">
       <h2>VideoPlaybackQuality</h2>
       The video playback quality metrics described in previous revisions of this specification (e.g., sections 5 and 10 of the <a href="https://www.w3.org/TR/2016/CR-media-source-20160705/">Candidate Recommendation</a>) are now being developed as part of [[MEDIA-PLAYBACK-QUALITY]]. Some implementations may have implemented the earlier draft <code>VideoPlaybackQuality</code> object and the {{HTMLVideoElement}} extension method <code>getVideoPlaybackQuality()</code> described in those previous revisions.
+    </section>
+
+    <section class="appendix" id="issue-summary">
+      <!-- A list of issues will magically appear here -->
     </section>
   </body>
 </html>
