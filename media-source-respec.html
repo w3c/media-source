@@ -247,7 +247,7 @@
 
           <dt><dfn id="sourcebuffer-byte-stream-format-spec">SourceBuffer byte stream format specification</dfn></dt>
           <dd><p>The specific [=byte stream format specification=] that describes the format of the byte stream accepted by a <a>SourceBuffer</a> instance. The
-          [=byte stream format specification=], for a <a>SourceBuffer</a> object, is initially selected based on the <var>type</var> passed to the
+          [=byte stream format specification=], for a <a>SourceBuffer</a> object, is initially selected based on the |type:DOMString| passed to the
           {{MediaSource/addSourceBuffer()}} call that created the object, and can be updated by {{SourceBuffer/changeType()}} calls on the object.</p></dd>
 
           <dt><dfn id="sourcebuffer-configuration">SourceBuffer configuration</dfn></dt>
@@ -358,7 +358,7 @@ interface MediaSource : EventTarget {
             <li>If the value being set is negative or NaN then throw a {{TypeError}} exception and abort these steps.</li>
             <li>If the {{MediaSource/readyState}} attribute is not {{ReadyState/""open""}} then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If the {{SourceBuffer/updating}} attribute equals true on any <a>SourceBuffer</a> in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>Run the [=duration change=] algorithm with |new duration| set to the value being assigned to this attribute.
+            <li>Run the [=duration change=] algorithm with |new duration:unrestricted double| set to the value being assigned to this attribute.
               <p class="note">The [=duration change=] algorithm will adjust |new duration| higher if there is any currently buffered coded frame with a higher end time.</p>
               <p class="note">{{SourceBuffer/appendBuffer()}} and {{MediaSource/endOfStream()}} can update the duration under certain circumstances.</p>
             </li>
@@ -379,10 +379,10 @@ interface MediaSource : EventTarget {
         </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="MediaSource"><dt><dfn><code>addSourceBuffer</code></dfn></dt><dd>
           <p>Adds a new <a>SourceBuffer</a> to {{MediaSource/sourceBuffers}}.</p>
           <ol class="method-algorithm">
-            <li>If <var>type</var> is an empty string then throw a {{TypeError}} exception and abort these steps.</li>
-            <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}, then throw a {{NotSupportedError}} exception and abort these steps.</li>
+            <li>If |type:DOMString| is an empty string then throw a {{TypeError}} exception and abort these steps.</li>
+            <li>If |type| contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}, then throw a {{NotSupportedError}} exception and abort these steps.</li>
             <li>If the user agent can't handle any more SourceBuffer objects or if creating a SourceBuffer
-              based on <var>type</var> would result in an unsupported [=SourceBuffer configuration=],
+              based on |type| would result in an unsupported [=SourceBuffer configuration=],
               then throw a {{QuotaExceededError}} exception and abort these steps.
               <p class="note">For example, a user agent MAY throw a {{QuotaExceededError}} exception if the media element has reached the
                 <a def-id="have-metadata"></a> readyState. This can occur if the user agent's media engine does not support adding more tracks during
@@ -393,7 +393,7 @@ interface MediaSource : EventTarget {
             <li>Create a new <a>SourceBuffer</a> object and associated resources.</li>
             <li>Set the [=generate timestamps flag=] on the new object to the value in the
                "Generate Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry
-              that is associated with <var>type</var>.
+              that is associated with |type|.
             </li><li>
               <dl class="switch">
                 <dt>If the [=generate timestamps flag=] equals true:</dt>
@@ -411,7 +411,7 @@ interface MediaSource : EventTarget {
             <li>Add the new object to {{MediaSource/sourceBuffers}} and [=queue a task=] to [=fire an event=] named {{addsourcebuffer}} at {{MediaSource/sourceBuffers}}.</li>
             <li>Return the new object.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>SourceBuffer</a></div></dd>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|type|</td><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>SourceBuffer</a></div></dd>
 
           <dt><dfn><code>removeSourceBuffer</code></dfn></dt><dd>
           <p>Removes a {{SourceBuffer}} from {{MediaSource/sourceBuffers}}.</p>
@@ -601,7 +601,7 @@ interface MediaSource : EventTarget {
           <ol class="method-algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not in the {{ReadyState/""open""}} state then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If the {{SourceBuffer/updating}} attribute equals true on any <a>SourceBuffer</a> in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>Run the [=end of stream=] algorithm with the |error:EndOfStreamError| parameter set to |error|.</li>
+            <li>Run the [=end of stream=] algorithm with the error parameter set to |error:EndOfStreamError|.</li>
           </ol>
         <table
           class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|error|</td><td class="prmType">{{EndOfStreamError}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd>
@@ -611,8 +611,8 @@ interface MediaSource : EventTarget {
           <p>Updates the [=live seekable range=] variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
           <ol class="method-algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not {{ReadyState/""open""}} then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>If <var>start</var> is negative or greater than <var>end</var>, then throw a {{TypeError}} exception and abort these steps.</li>
-            <li>Set [=live seekable range=] to be a new <a def-id="normalized-timeranges-object"></a> containing a single range whose start position is <var>start</var> and end position is <var>end</var>.
+            <li>If |start:double| is negative or greater than |end:double|, then throw a {{TypeError}} exception and abort these steps.</li>
+            <li>Set [=live seekable range=] to be a new <a def-id="normalized-timeranges-object"></a> containing a single range whose start position is |start| and end position is |end|.
           </li></ol>
           <table class="parameters">
             <tbody>
@@ -624,22 +624,22 @@ interface MediaSource : EventTarget {
                 <th>Description</th>
               </tr>
               <tr>
-                <td class="prmName">start</td>
+                <td class="prmName">|start|</td>
                 <td class="prmType">{{double}}</td>
                 <td class="prmNullFalse"><span aria-label="False" role=
                 "img">✘</span></td>
                 <td class="prmOptFalse"><span aria-label="False" role=
                 "img">✘</span></td>
-                <td class="prmDesc">The start of the range, in seconds measured from [=presentation start time=]. While set, and if {{MediaSource/duration}} equals positive Infinity, {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} will return a non-empty TimeRanges object with a lowest range start timestamp no greater than <var>start</var>.</td>
+                <td class="prmDesc">The start of the range, in seconds measured from [=presentation start time=]. While set, and if {{MediaSource/duration}} equals positive Infinity, {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} will return a non-empty TimeRanges object with a lowest range start timestamp no greater than |start|.</td>
               </tr>
               <tr>
-                <td class="prmName">end</td>
+                <td class="prmName">|end|</td>
                 <td class="prmType">{{double}}</td>
                 <td class="prmNullFalse"><span aria-label="False" role=
                 "img">✘</span></td>
                 <td class="prmOptFalse"><span aria-label="False" role=
                 "img">✘</span></td>
-                <td class="prmDesc">The end of range, in seconds measured from [=presentation start time=]. While set, and if {{MediaSource/duration}} equals positive Infinity, {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} will return a non-empty TimeRanges object with a highest range end timestamp no less than <var>end</var>.</td>
+                <td class="prmDesc">The end of range, in seconds measured from [=presentation start time=]. While set, and if {{MediaSource/duration}} equals positive Infinity, {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} will return a non-empty TimeRanges object with a highest range end timestamp no less than |end|.</td>
               </tr>
             </tbody>
           </table>
@@ -654,10 +654,10 @@ interface MediaSource : EventTarget {
           <p>Check to see whether the <a>MediaSource</a> is capable of creating <a>SourceBuffer</a> objects for the specified MIME type.</p>
 
           <ol class="method-algorithm">
-            <li>If <var>type</var> is an empty string, then return false.</li>
-            <li>If <var>type</var> does not contain a valid MIME type string, then return false.</li>
-            <li>If <var>type</var> contains a media type or media subtype that the MediaSource does not support, then return false.</li>
-            <li>If <var>type</var> contains a codec that the MediaSource does not support, then return false.</li>
+            <li>If |type:DOMString| is an empty string, then return false.</li>
+            <li>If |type| does not contain a valid MIME type string, then return false.</li>
+            <li>If |type| contains a media type or media subtype that the MediaSource does not support, then return false.</li>
+            <li>If |type| contains a codec that the MediaSource does not support, then return false.</li>
             <li>If the MediaSource does not support the specified combination of media type, media subtype, and codecs then return false.</li>
             <li>Return true.</li>
           </ol>
@@ -667,7 +667,7 @@ interface MediaSource : EventTarget {
           <p class="note">
             This method returning true implies that HTMLMediaElement.canPlayType() will return "maybe" or "probably" since it does not make sense for a <a>MediaSource</a> to support a type the HTMLMediaElement knows it cannot play.
           </p>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">type</td><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{boolean}}</div></dd></dl>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|type|</td><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{boolean}}</div></dd></dl>
       </section>
 
       <section id="mediasource-events">
@@ -838,10 +838,10 @@ interface MediaSource : EventTarget {
           <p>Run the following steps as part of the "<i>Wait until the user agent has established whether or not the media data for the new playback position is available, and, if it is, until it has decoded enough data to play back that position"</i> step of the <a def-id="hme-seek-algorithm"></a>:</p>
           <ol>
             <li>
-            <p class="note">The media element looks for [=media segments=] containing the <var>new playback position</var> in each <a>SourceBuffer</a> object in {{MediaSource/activeSourceBuffers}}.
+            <p class="note">The media element looks for [=media segments=] containing the |new playback position:double| in each <a>SourceBuffer</a> object in {{MediaSource/activeSourceBuffers}}.
             Any position within a {{TimeRanges}} in the current value of the {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} attribute has all necessary media segments buffered for that position.</p>
               <dl class="switch">
-                <dt>If <var>new playback position</var> is not in any {{TimeRanges}} of {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}}</dt>
+                <dt>If |new playback position| is not in any {{TimeRanges}} of {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}}</dt>
                   <dd>
                   <ol>
                     <li>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is greater than
@@ -857,13 +857,13 @@ interface MediaSource : EventTarget {
                 </dd>
                 <dt>Otherwise</dt>
                 <dd>Continue
-                <p class="note">If the {{MediaSource/readyState}} attribute is {{ReadyState/""ended""}} and the <var>new playback position</var> is within a {{TimeRanges}} currently in {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}}, then the seek operation must continue to completion here even if one or more currently selected or enabled track buffers' largest range end timestamp is less than <var>new playback position</var>. This condition should only occur due to logic in {{SourceBuffer/buffered}} when {{MediaSource/readyState}} is {{ReadyState/""ended""}}.</p>
+                <p class="note">If the {{MediaSource/readyState}} attribute is {{ReadyState/""ended""}} and the |new playback position| is within a {{TimeRanges}} currently in {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}}, then the seek operation must continue to completion here even if one or more currently selected or enabled track buffers' largest range end timestamp is less than |new playback position|. This condition should only occur due to logic in {{SourceBuffer/buffered}} when {{MediaSource/readyState}} is {{ReadyState/""ended""}}.</p>
                 </dd>
               </dl>
             </li>
             <li>The media element resets all decoders and initializes each one with data from the appropriate [=initialization segment=].</li>
             <li>The media element feeds [=coded frames=] from the [=active track buffers=] into the decoders starting with the
-              closest [=random access point=] before the <var>new playback position</var>.</li>
+              closest [=random access point=] before the |new playback position|.</li>
             <li>Resume the <a def-id="hme-seek-algorithm"></a> at the "<i>Await a stable state</i>" step.</li>
           </ol>
         </section>
@@ -1054,7 +1054,7 @@ interface MediaSource : EventTarget {
                 <dt>If |error| is not set</dt>
                 <dd>
                   <ol>
-                    <li>Run the [=duration change=] algorithm with |new duration| set to
+                    <li>Run the [=duration change=] algorithm with |new duration:unrestricted double| set to
                       the largest [=track buffer ranges=] end time across all the [=track buffers=] across all <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}.
                       <p class="note">This allows the duration to properly reflect the end of the appended media segments. For example, if the duration was explicitly set to 10 seconds and only media segments for 0 to 5 seconds were appended before endOfStream() was called, then the duration will get updated to 5 seconds.</p>
                     </li>
@@ -1155,8 +1155,8 @@ interface SourceBuffer : EventTarget {
           <ol>
             <li>If this object has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=], then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If the {{SourceBuffer/updating}} attribute equals true, then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>Let <var>new mode</var> equal the new value being assigned to this attribute.</li>
-            <li>If [=generate timestamps flag=] equals true and <var>new mode</var> equals
+            <li>Let |new mode:AppendMode| equal the new value being assigned to this attribute.</li>
+            <li>If [=generate timestamps flag=] equals true and |new mode| equals
               {{AppendMode/""segments""}}, then throw a {{TypeError}}
               exception and abort these steps.</li>
             <li>
@@ -1167,8 +1167,8 @@ interface SourceBuffer : EventTarget {
               </ol>
             </li>
             <li>If the [=append state=] equals [=PARSING_MEDIA_SEGMENT=], then throw an {{InvalidStateError}} and abort these steps.</li>
-            <li>If the <var>new mode</var> equals {{AppendMode/""sequence""}}, then set the [=group start timestamp=] to the [=group end timestamp=].</li>
-            <li>Update the attribute to <var>new mode</var>.</li>
+            <li>If the |new mode| equals {{AppendMode/""sequence""}}, then set the [=group start timestamp=] to the [=group end timestamp=].</li>
+            <li>Update the attribute to |new mode|.</li>
           </ol>
         </dd><dt><dfn><code>updating</code></dfn> of type {{boolean}}, readonly       </dt><dd>
           <p>Indicates whether the asynchronous continuation of an {{SourceBuffer/appendBuffer()}} or {{SourceBuffer/remove()}}
@@ -1180,20 +1180,20 @@ interface SourceBuffer : EventTarget {
           <p>When the attribute is read the following steps MUST occur:</p>
           <ol>
             <li>If this object has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=] then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>Let <var>highest end time</var> be the largest [=track buffer ranges=] end time across all the [=track buffers=] managed by this <a>SourceBuffer</a> object.</li>
-            <li>Let <var>intersection ranges</var> equal a {{TimeRanges}} object containing a single range from 0 to <var>highest end time</var>.</li>
+            <li>Let |highest end time:double| be the largest [=track buffer ranges=] end time across all the [=track buffers=] managed by this <a>SourceBuffer</a> object.</li>
+            <li>Let |intersection ranges:normalized TimeRanges| equal a {{TimeRanges}} object containing a single range from 0 to |highest end time|.</li>
             <li>For each audio and video [=track buffer=] managed by this <a>SourceBuffer</a>, run the following steps:
-                <p class="note">Text [=track buffers=] are included in the calculation of <var>highest end time</var>, above, but excluded from the buffered range calculation here. They are not necessarily continuous, nor should any discontinuity within them trigger playback stall when the other media tracks are continuous over the same time range.</p>
+                <p class="note">Text [=track buffers=] are included in the calculation of |highest end time|, above, but excluded from the buffered range calculation here. They are not necessarily continuous, nor should any discontinuity within them trigger playback stall when the other media tracks are continuous over the same time range.</p>
               <ol>
-                <li>Let <var>track ranges</var> equal the [=track buffer ranges=] for the current [=track buffer=].</li>
-                <li>If {{MediaSource/readyState}} is {{ReadyState/""ended""}}, then set the end time on the last range in <var>track ranges</var> to <var>highest end time</var>.</li>
-                <li>Let <var>new intersection ranges</var> equal the intersection between the <var>intersection ranges</var> and the <var>track ranges</var>.</li>
-                <li>Replace the ranges in <var>intersection ranges</var> with the <var>new intersection ranges</var>.</li>
+                <li>Let |track ranges:normalized TimeRanges| equal the [=track buffer ranges=] for the current [=track buffer=].</li>
+                <li>If {{MediaSource/readyState}} is {{ReadyState/""ended""}}, then set the end time on the last range in |track ranges| to |highest end time|.</li>
+                <li>Let |new intersection ranges:normalized TimeRanges| equal the intersection between the |intersection ranges| and the |track ranges|.</li>
+                <li>Replace the ranges in |intersection ranges| with the |new intersection ranges|.</li>
               </ol>
             </li>
-            <li>If <var>intersection ranges</var> does not contain the exact same range information as the
+            <li>If |intersection ranges| does not contain the exact same range information as the
               current value of this attribute, then update the current value of this attribute to
-              <var>intersection ranges</var>.</li>
+              |intersection ranges|.</li>
             <li>Return the current value of this attribute.</li>
           </ol>
         </dd><dt><dfn><code>timestampOffset</code></dfn> of type {{double}}</dt><dd>
@@ -1201,7 +1201,7 @@ interface SourceBuffer : EventTarget {
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
-            <li>Let <var>new timestamp offset</var> equal the new value being assigned to this attribute.</li>
+            <li>Let |new timestamp offset:double| equal the new value being assigned to this attribute.</li>
             <li>If this object has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=], then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If the {{SourceBuffer/updating}} attribute equals true, then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>
@@ -1212,8 +1212,8 @@ interface SourceBuffer : EventTarget {
               </ol>
             </li>
             <li>If the [=append state=] equals [=PARSING_MEDIA_SEGMENT=], then throw an {{InvalidStateError}} and abort these steps.</li>
-            <li>If the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}}, then set the [=group start timestamp=] to <var>new timestamp offset</var>.</li>
-            <li>Update the attribute to <var>new timestamp offset</var>.</li>
+            <li>If the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}}, then set the [=group start timestamp=] to |new timestamp offset|.</li>
+            <li>Update the attribute to |new timestamp offset|.</li>
           </ol>
         </dd><dt><dfn><code>audioTracks</code></dfn> of type {{AudioTrackList}}, readonly       </dt><dd>
           The list of {{AudioTrack}} objects created by this object.
@@ -1257,16 +1257,16 @@ interface SourceBuffer : EventTarget {
         </dd><dt><dfn><code>onabort</code></dfn> of type {{EventHandler}}</dt><dd>
           <p>The event handler for the {{abort}} event.</p>
         </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="SourceBuffer"><dt><dfn id="dom-sourcebuffer-appendbuffer"><code>appendBuffer</code></dfn></dt><dd>
-          <p>Appends the segment data in an <a class="externalDFN">BufferSource</a>[[!WEBIDL]] to the source buffer.</p>
+            <p>Appends the segment data in an <a class="externalDFN">BufferSource</a>[[!WEBIDL]] to the {{SourceBuffer}}.</p>
 
           <ol class="method-algorithm">
             <li>Run the [=prepare append=] algorithm.</li>
-            <li>Add <var>data</var> to the end of the [=input buffer=].</li>
+            <li>Add |data:BufferSource| to the end of the [=input buffer=].</li>
             <li>Set the {{SourceBuffer/updating}} attribute to true.</li>
             <li>[=Queue a task=] to [=fire an event=] named {{updatestart}} at this <a>SourceBuffer</a> object.</li>
             <li>Asynchronously run the [=buffer append=] algorithm.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">data</td><td class="prmType">{{BufferSource}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>abort</code></dfn></dt><dd>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|data|</td><td class="prmType">{{BufferSource}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>abort</code></dfn></dt><dd>
           <p>Aborts the current segment and resets the segment parser.</p>
 
           <ol class="method-algorithm">
@@ -1289,10 +1289,10 @@ interface SourceBuffer : EventTarget {
         <dt><dfn><code>changeType</code></dfn></dt><dd>
         <p>Changes the MIME type associated with this object. Subsequent {{SourceBuffer/appendBuffer()}} calls will expect the newly appended bytes to conform to the new type.</a>
           <ol class="method-algorithm">
-            <li>If <var>type</var> is an empty string then throw a {{TypeError}} exception and abort these steps.</li>
+            <li>If |type:DOMString| is an empty string then throw a {{TypeError}} exception and abort these steps.</li>
             <li>If this object has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=], then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If the {{SourceBuffer/updating}} attribute equals true, then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>If <var>type</var> contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified (currently or previously) of {{SourceBuffer}} objects in the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=], then throw a {{NotSupportedError}} exception and abort these steps.</li>
+            <li>If |type| contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified (currently or previously) of {{SourceBuffer}} objects in the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=], then throw a {{NotSupportedError}} exception and abort these steps.</li>
             <li>
               <p>If the {{MediaSource/readyState}} attribute of the [=parent media source=] is in the {{ReadyState/""ended""}} state then run the following steps:</p>
               <ol>
@@ -1303,7 +1303,7 @@ interface SourceBuffer : EventTarget {
             <li>Run the [=reset parser state=] algorithm.</li>
             <li>Update the [=generate timestamps flag=] on this {{SourceBuffer}} object to the value in the
                  "Generate Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry
-                 that is associated with <var>type</var>.</li>
+                 that is associated with |type|.</li>
             <li>
                 <dl class="switch">
                   <dt>If the [=generate timestamps flag=] equals true:</dt>
@@ -1328,7 +1328,7 @@ interface SourceBuffer : EventTarget {
                 <th>Description</th>
               </tr>
               <tr>
-                <td class="prmName">type</td>
+                <td class="prmName">|type|</td>
                 <td class="prmType">{{DOMString}}</td>
                 <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
                 <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
@@ -1343,8 +1343,8 @@ interface SourceBuffer : EventTarget {
             <li>If this object has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=] then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If the {{SourceBuffer/updating}} attribute equals true, then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If {{MediaSource/duration}} equals NaN, then throw a {{TypeError}} exception and abort these steps.</li>
-            <li>If <var>start</var> is negative or greater than {{MediaSource/duration}}, then throw a {{TypeError}} exception and abort these steps.</li>
-            <li>If <var>end</var> is less than or equal to <var>start</var> or <var>end</var> equals NaN, then throw a {{TypeError}} exception and abort these steps.</li>
+            <li>If |start:double| is negative or greater than {{MediaSource/duration}}, then throw a {{TypeError}} exception and abort these steps.</li>
+            <li>If |end:unrestricted double| is less than or equal to |start| or |end| equals NaN, then throw a {{TypeError}} exception and abort these steps.</li>
             <li>
               <p>If the {{MediaSource/readyState}} attribute of the [=parent media source=] is in the {{ReadyState/""ended""}} state then run
                 the following steps:</p>
@@ -1353,7 +1353,7 @@ interface SourceBuffer : EventTarget {
                 <li>[=Queue a task=] to [=fire an event=] named {{sourceopen}} at the [=parent media source=].</li>
               </ol>
             </li>
-            <li>Run the [=range removal=] algorithm with <var>start</var> and <var>end</var> as the start and end of the removal range.</li>
+            <li>Run the [=range removal=] algorithm with |start| and |end| as the start and end of the removal range.</li>
        </ol>
 
       <table class="parameters">
@@ -1366,7 +1366,7 @@ interface SourceBuffer : EventTarget {
             <th>Description</th>
           </tr>
           <tr>
-            <td class="prmName">start</td>
+            <td class="prmName">|start|</td>
             <td class="prmType">{{double}}</td>
             <td class="prmNullFalse"><span aria-label="False" role=
             "img">✘</span></td>
@@ -1375,7 +1375,7 @@ interface SourceBuffer : EventTarget {
             <td class="prmDesc">The start of the removal range, in seconds measured from [=presentation start time=].</td>
           </tr>
           <tr>
-            <td class="prmName">end</td>
+            <td class="prmName">|end|</td>
             <td class="prmType">{{unrestricted double}}</td>
             <td class="prmNullFalse"><span aria-label="False" role=
             "img">✘</span></td>
@@ -1649,12 +1649,12 @@ interface SourceBuffer : EventTarget {
           <p>Follow these steps when a caller needs to initiate a JavaScript visible range removal
             operation that blocks other SourceBuffer updates:</p>
           <ol>
-            <li>Let <var>start</var> equal the starting [=presentation timestamp=] for the removal range, in seconds measured from [=presentation start time=].</li>
-            <li>Let <var>end</var> equal the end [=presentation timestamp=] for the removal range, in seconds measured from [=presentation start time=].</li>
+            <li>Let |start:double| equal the starting [=presentation timestamp=] for the removal range, in seconds measured from [=presentation start time=].</li>
+            <li>Let |end:unrestricted double| equal the end [=presentation timestamp=] for the removal range, in seconds measured from [=presentation start time=].</li>
             <li>Set the {{SourceBuffer/updating}} attribute to true.</li>
             <li>[=Queue a task=] to [=fire an event=] named {{updatestart}} at this <a>SourceBuffer</a> object.</li>
             <li>Return control to the caller and run the rest of the steps asynchronously.</li>
-            <li>Run the [=coded frame removal=] algorithm with <var>start</var> and <var>end</var> as the start and end of the removal range.</li>
+            <li>Run the [=coded frame removal=] algorithm with |start| and |end| as the start and end of the removal range.</li>
             <li>Set the {{SourceBuffer/updating}} attribute to false.</li>
             <li>[=Queue a task=] to [=fire an event=] named {{update}} at this <a>SourceBuffer</a> object.</li>
             <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this <a>SourceBuffer</a> object.</li>
@@ -1674,7 +1674,8 @@ interface SourceBuffer : EventTarget {
             <li>Update the {{MediaSource/duration}} attribute if it currently equals NaN:
               <dl class="switch">
                 <dt>If the initialization segment contains a duration:</dt>
-                <dd>Run the [=duration change=] algorithm with |new duration| set to the duration in the initialization segment.</dd>
+                <dd>Run the [=duration change=] algorithm with |new duration:unrestricted double| set to the duration in
+                the initialization segment.</dd>
                 <dt>Otherwise:</dt>
                 <dd>Run the [=duration change=] algorithm with |new duration| set to positive Infinity.</dd>
               </dl>
@@ -1689,7 +1690,7 @@ interface SourceBuffer : EventTarget {
                       first [=initialization segment=].</li>
                     <li>The codecs for each track are supported by the user agent.
                       <p class="note">User agents MAY consider codecs, that would otherwise be supported, as "not supported" here if the codecs were not
-                        specified in <var>type</var> parameter passed to
+                        specified in |type:DOMString| parameter passed to
                         (a) the most recently successful {{SourceBuffer/changeType()}} on this {{SourceBuffer}} object, or
                         (b) if no successful {{SourceBuffer/changeType()}} has yet occurred on this object, the {{MediaSource/addSourceBuffer()}}
                         that created this {{SourceBuffer}} object.
@@ -1717,7 +1718,7 @@ interface SourceBuffer : EventTarget {
               <ol>
                 <li>If the [=initialization segment=] contains tracks with codecs the user agent does not support, then run the [=append error=] algorithm and abort these steps.
                   <p class="note">User agents MAY consider codecs, that would otherwise be supported, as "not supported" here if the codecs were not
-                    specified in <var>type</var> parameter passed to
+                    specified in |type:DOMString| parameter passed to
                     (a) the most recently successful {{SourceBuffer/changeType()}} on this {{SourceBuffer}} object, or
                     (b) if no successful {{SourceBuffer/changeType()}} has yet occurred on this object, the {{MediaSource/addSourceBuffer()}}
                     that created this {{SourceBuffer}} object.
@@ -1734,30 +1735,30 @@ interface SourceBuffer : EventTarget {
                 <li>
                   <p>For each audio track in the [=initialization segment=], run following steps:</p>
                   <ol>
-                    <li>Let <var>audio byte stream track ID</var> be the
+                    <li>Let |audio byte stream track ID| be the
                       [=Track ID=] for the current track being processed.</li>
-                    <li>Let <var>audio language</var> be a BCP 47 language tag for the language
+                    <li>Let |audio language:DOMString| be a BCP 47 language tag for the language
                       specified in the [=initialization segment=] for this track or an empty string if no
                       language info is present.</li>
-                    <li>If <var>audio language</var> equals the 'und' BCP 47 value, then assign an empty string to <var>audio language</var>.</li>
-                    <li>Let <var>audio label</var> be a label specified in the [=initialization segment=] for this track or an empty string if no
+                    <li>If |audio language| equals the 'und' BCP 47 value, then assign an empty string to |audio language|.</li>
+                    <li>Let |audio label:DOMString| be a label specified in the [=initialization segment=] for this track or an empty string if no
                       label info is present.</li>
-                    <li>Let <var>audio kinds</var> be a sequence of kind strings specified in the
+                    <li>Let |audio kinds:DOMString sequence| be a sequence of kind strings specified in the
                       [=initialization segment=] for this track
                       or a sequence with a single empty string element in it
                       if no kind information is provided.</li>
-                    <li>For each value in <var>audio kinds</var>, run the following steps:
+                    <li>For each value in |audio kinds|, run the following steps:
                       <ol>
-                        <li>Let <var>current audio kind</var> equal the value from <var>audio kinds</var>
+                        <li>Let |current audio kind:DOMString| equal the value from |audio kinds|
                           for this iteration of the loop.</li>
                         <li>Let |new audio track:AudioTrack| be a new {{AudioTrack}} object.</li>
                         <li>Generate a unique ID and assign it to the <a def-id="audiotrack-id"></a> property on
                           |new audio track|.</li>
-                        <li>Assign <var>audio language</var> to the <a def-id="audiotrack-language"></a>
+                        <li>Assign |audio language| to the <a def-id="audiotrack-language"></a>
                           property on |new audio track|.</li>
-                        <li>Assign <var>audio label</var> to the <a def-id="audiotrack-label"></a>
+                        <li>Assign |audio label| to the <a def-id="audiotrack-label"></a>
                           property on |new audio track|.</li>
-                        <li>Assign <var>current audio kind</var> to the <a def-id="audiotrack-kind"></a>
+                        <li>Assign |current audio kind| to the <a def-id="audiotrack-kind"></a>
                           property on |new audio track|.</li>
                         <li>
                           <p>
@@ -1808,30 +1809,30 @@ interface SourceBuffer : EventTarget {
                 <li>
                   <p>For each video track in the [=initialization segment=], run following steps:</p>
                   <ol>
-                    <li>Let <var>video byte stream track ID</var> be the
+                    <li>Let |video byte stream track ID| be the
                       [=Track ID=] for the current track being processed.</li>
-                    <li>Let <var>video language</var> be a BCP 47 language tag for the language
+                    <li>Let |video language:DOMString| be a BCP 47 language tag for the language
                       specified in the [=initialization segment=] for this track or an empty string if no
                       language info is present.</li>
-                    <li>If <var>video language</var> equals the 'und' BCP 47 value, then assign an empty string to <var>video language</var>.</li>
-                    <li>Let <var>video label</var> be a label specified in the [=initialization segment=] for this track or an empty string if no
+                    <li>If |video language| equals the 'und' BCP 47 value, then assign an empty string to |video language|.</li>
+                    <li>Let |video label:DOMString| be a label specified in the [=initialization segment=] for this track or an empty string if no
                       label info is present.</li>
-                    <li>Let <var>video kinds</var> be a sequence of kind strings specified in the
+                    <li>Let |video kinds:DOMString sequence| be a sequence of kind strings specified in the
                       [=initialization segment=] for this track
                       or a sequence with a single empty string element in it
                       if no kind information is provided.</li>
-                    <li>For each value in <var>video kinds</var>, run the following steps:
+                    <li>For each value in |video kinds|, run the following steps:
                       <ol>
-                        <li>Let <var>current video kind</var> equal the value from <var>video kinds</var>
+                        <li>Let |current video kind:DOMString| equal the value from |video kinds|
                           for this iteration of the loop.</li>
                         <li>Let |new video track:VideoTrack| be a new {{VideoTrack}} object.</li>
                         <li>Generate a unique ID and assign it to the {{VideoTrack/id}} property on
                           |new video track|.</li>
-                        <li>Assign <var>video language</var> to the {{VideoTrack/language}}
+                        <li>Assign |video language| to the {{VideoTrack/language}}
                           property on |new video track|.</li>
-                        <li>Assign <var>video label</var> to the {{VideoTrack/label}}
+                        <li>Assign |video label| to the {{VideoTrack/label}}
                           property on |new video track|.</li>
-                        <li>Assign <var>current video kind</var> to the {{VideoTrack/kind}}
+                        <li>Assign |current video kind| to the {{VideoTrack/kind}}
                           property on |new video track|.</li>
                         <li>
                           <p>
@@ -1882,30 +1883,30 @@ interface SourceBuffer : EventTarget {
                 <li>
                   <p>For each text track in the [=initialization segment=], run following steps:</p>
                   <ol>
-                    <li>Let <var>text byte stream track ID</var> be the
+                    <li>Let |text byte stream track ID| be the
                       [=Track ID=] for the current track being processed.</li>
-                    <li>Let <var>text language</var> be a BCP 47 language tag for the language
+                    <li>Let |text language:DOMString| be a BCP 47 language tag for the language
                       specified in the [=initialization segment=] for this track or an empty string if no
                       language info is present.</li>
-                    <li>If <var>text language</var> equals the 'und' BCP 47 value, then assign an empty string to <var>text language</var>.</li>
-                    <li>Let <var>text label</var> be a label specified in the [=initialization segment=] for this track or an empty string if no
+                    <li>If |text language| equals the 'und' BCP 47 value, then assign an empty string to |text language|.</li>
+                    <li>Let |text label:DOMString| be a label specified in the [=initialization segment=] for this track or an empty string if no
                       label info is present.</li>
-                    <li>Let <var>text kinds</var> be a sequence of kind strings specified in the
+                    <li>Let |text kinds:DOMString sequence| be a sequence of kind strings specified in the
                       [=initialization segment=] for this track
                       or a sequence with a single empty string element in it
                       if no kind information is provided.</li>
-                    <li>For each value in <var>text kinds</var>, run the following steps:
+                    <li>For each value in |text kinds|, run the following steps:
                       <ol>
-                        <li>Let <var>current text kind</var> equal the value from <var>text kinds</var>
+                        <li>Let |current text kind:DOMString| equal the value from |text kinds|
                           for this iteration of the loop.</li>
                         <li>Let |new text track:TextTrack| be a new {{TextTrack}} object.</li>
                         <li>Generate a unique ID and assign it to the {{TextTrack/id}} property on
                           |new text track|.</li>
-                        <li>Assign <var>text language</var> to the {{TextTrack/language}}
+                        <li>Assign |text language| to the {{TextTrack/language}}
                           property on |new text track|.</li>
-                        <li>Assign <var>text label</var> to the {{TextTrack/label}}
+                        <li>Assign |text label| to the {{TextTrack/label}}
                           property on |new text track|.</li>
-                        <li>Assign <var>current text kind</var> to the {{TextTrack/kind}}
+                        <li>Assign |current text kind| to the {{TextTrack/kind}}
                           property on |new text track|.</li>
                         <li>Populate the remaining properties on |new text track| with the
                           appropriate information from the [=initialization segment=].</li>
@@ -2020,19 +2021,19 @@ interface SourceBuffer : EventTarget {
                     <dt>If [=generate timestamps flag=] equals true:</dt>
                     <dd>
                       <ol>
-                        <li>Let <var>presentation timestamp</var> equal 0.</li>
-                        <li>Let <var>decode timestamp</var> equal 0.</li>
+                        <li>Let |presentation timestamp:double| equal 0.</li>
+                        <li>Let |decode timestamp:double| equal 0.</li>
                       </ol>
                     </dd>
                     <dt>Otherwise:</dt>
                     <dd>
                       <ol>
-                        <li>Let <var>presentation timestamp</var> be a double precision floating point representation of the coded frame's [=presentation timestamp=] in seconds.
+                        <li>Let |presentation timestamp| be a double precision floating point representation of the coded frame's [=presentation timestamp=] in seconds.
                           <p class="note">Special processing may be needed to determine the presentation and decode timestamps for timed text frames since this information may not be explicitly
                             present in the underlying format or may be dependent on the order of the frames. Some metadata text tracks, like MPEG2-TS PSI data, may only have implied timestamps.
                             Format specific rules for these situations SHOULD be in the [=byte stream format specifications=] or in separate extension specifications.</p>
                         </li>
-                        <li>Let <var>decode timestamp</var> be a double precision floating point representation of the coded frame's decode timestamp in seconds.
+                        <li>Let |decode timestamp| be a double precision floating point representation of the coded frame's decode timestamp in seconds.
                           <p class="note">Implementations don't have to internally store timestamps in a double precision floating point representation. This
                             representation is used here because it is the representation for timestamps in the HTML spec. The intention here is to make the
                             behavior clear without adding unnecessary complexity to the algorithm to deal with the fact that adding a timestampOffset may
@@ -2045,10 +2046,10 @@ interface SourceBuffer : EventTarget {
                     </dd>
                   </dl>
                 </li>
-                <li>Let <var>frame duration</var> be a double precision floating point representation of the [=coded frame duration|coded frame's duration=] in seconds.</li>
+                <li>Let |frame duration:double| be a double precision floating point representation of the [=coded frame duration|coded frame's duration=] in seconds.</li>
                 <li>If {{SourceBuffer/mode}} equals {{AppendMode/""sequence""}} and [=group start timestamp=] is set, then run the following steps:
                   <ol>
-                    <li>Set {{SourceBuffer/timestampOffset}} equal to [=group start timestamp=] - <var>presentation timestamp</var>.</li>
+                    <li>Set {{SourceBuffer/timestampOffset}} equal to [=group start timestamp=] minus |presentation timestamp|.</li>
                     <li>Set [=group end timestamp=] equal to [=group start timestamp=].</li>
                     <li>Set the [=need random access point flag=] on all [=track buffers=] to true.</li>
                     <li>Unset [=group start timestamp=].</li>
@@ -2057,24 +2058,24 @@ interface SourceBuffer : EventTarget {
                 <li>
                   <p>If {{SourceBuffer/timestampOffset}} is not 0, then run the following steps:</p>
                   <ol>
-                    <li>Add {{SourceBuffer/timestampOffset}} to the <var>presentation timestamp</var>.</li>
-                    <li>Add {{SourceBuffer/timestampOffset}} to the <var>decode timestamp</var>.</li>
+                    <li>Add {{SourceBuffer/timestampOffset}} to the |presentation timestamp|.</li>
+                    <li>Add {{SourceBuffer/timestampOffset}} to the |decode timestamp|.</li>
                   </ol>
                 </li>
-                <li>Let <var>track buffer</var> equal the [=track buffer=] that the coded frame will be added to.</li>
+                <li>Let |track buffer| equal the [=track buffer=] that the coded frame will be added to.</li>
                 <li>
                   <dl class="switch">
-                    <dt>If [=last decode timestamp=] for <var>track buffer</var> is set and <var>decode timestamp</var> is less than
+                    <dt>If [=last decode timestamp=] for |track buffer| is set and |decode timestamp| is less than
                       [=last decode timestamp=]:</dt>
                     <dd>OR</dd>
-                    <dt>If [=last decode timestamp=] for <var>track buffer</var> is set and the difference between <var>decode timestamp</var> and [=last decode timestamp=]
+                    <dt>If [=last decode timestamp=] for |track buffer| is set and the difference between |decode timestamp| and [=last decode timestamp=]
                       is greater than 2 times [=last frame duration=]:</dt>
                     <dd>
                       <ol>
                         <li>
                           <dl class="switch">
                             <dt>If {{SourceBuffer/mode}} equals {{AppendMode/""segments""}}:</dt>
-                            <dd>Set [=group end timestamp=] to <var>presentation timestamp</var>.</dd>
+                            <dd>Set [=group end timestamp=] to |presentation timestamp|.</dd>
                             <dt>If {{SourceBuffer/mode}} equals {{AppendMode/""sequence""}}:</dt>
                             <dd>Set [=group start timestamp=] equal to the [=group end timestamp=].</dd>
                           </dl>
@@ -2090,45 +2091,45 @@ interface SourceBuffer : EventTarget {
                     <dd>Continue.</dd>
                   </dl>
                 </li>
-                <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
-                <li>If <var>presentation timestamp</var> is less than {{SourceBuffer/appendWindowStart}}, then set the [=need random access point flag=] to true, drop the
+                <li>Let |frame end timestamp:double| equal the sum of |presentation timestamp| and |frame duration|.</li>
+                <li>If |presentation timestamp| is less than {{SourceBuffer/appendWindowStart}}, then set the [=need random access point flag=] to true, drop the
                   coded frame, and jump to the top of the loop to start processing the next coded frame.
-                  <p class="note">Some implementations MAY choose to collect some of these coded frames with <var>presentation timestamp</var> less than {{SourceBuffer/appendWindowStart}} and use them
+                  <p class="note">Some implementations MAY choose to collect some of these coded frames with |presentation timestamp| less than {{SourceBuffer/appendWindowStart}} and use them
                     to generate a splice at the first coded frame that has a [=presentation timestamp=] greater than or equal to {{SourceBuffer/appendWindowStart}} even if
                     that frame is not a [=random access point=]. Supporting this requires multiple decoders or faster than real-time decoding so for now
                     this behavior will not be a normative requirement.
                   </p>
                 </li>
-                <li>If <var>frame end timestamp</var> is greater than {{SourceBuffer/appendWindowEnd}}, then set the [=need random access point flag=] to true, drop the
+                <li>If |frame end timestamp| is greater than {{SourceBuffer/appendWindowEnd}}, then set the [=need random access point flag=] to true, drop the
                   coded frame, and jump to the top of the loop to start processing the next coded frame.
-                  <p class="note">Some implementations MAY choose to collect coded frames with <var>presentation timestamp</var> less than {{SourceBuffer/appendWindowEnd}} and <var>frame end timestamp</var> greater than {{SourceBuffer/appendWindowEnd}} and use them
+                  <p class="note">Some implementations MAY choose to collect coded frames with |presentation timestamp| less than {{SourceBuffer/appendWindowEnd}} and |frame end timestamp| greater than {{SourceBuffer/appendWindowEnd}} and use them
                   to generate a splice across the portion of the collected coded frames within the append window at time of collection, and the beginning portion of later processed frames which only partially overlap the end of the collected coded frames.
                     Supporting this requires multiple decoders or faster than real-time decoding so for now
                     this behavior will not be a normative requirement.
                     In conjunction with collecting coded frames that span {{SourceBuffer/appendWindowStart}}, implementations MAY thus support gapless audio splicing.
                   </p>
                 </li>
-                <li>If the [=need random access point flag=] on <var>track buffer</var> equals true, then run the following steps:
+                <li>If the [=need random access point flag=] on |track buffer| equals true, then run the following steps:
                   <ol>
                     <li>If the coded frame is not a [=random access point=], then drop the coded frame and jump to the top of the loop to start
                       processing the next coded frame.</li>
-                    <li>Set the [=need random access point flag=] on <var>track buffer</var> to false.</li>
+                    <li>Set the [=need random access point flag=] on |track buffer| to false.</li>
                   </ol>
                 </li>
-                <li>Let <var>spliced audio frame</var> be an unset variable for holding audio splice information</li>
-                <li>Let <var>spliced timed text frame</var> be an unset variable for holding timed text splice information</li>
-                <li>If [=last decode timestamp=] for <var>track buffer</var> is unset and <var>presentation timestamp</var> falls within the [=presentation interval=] of a [=coded frame=] in <var>track buffer</var>, then run the following steps:
+                <li>Let |spliced audio frame| be an unset variable for holding audio splice information</li>
+                <li>Let |spliced timed text frame| be an unset variable for holding timed text splice information</li>
+                <li>If [=last decode timestamp=] for |track buffer| is unset and |presentation timestamp| falls within the [=presentation interval=] of a [=coded frame=] in |track buffer|, then run the following steps:
                   <ol>
-                    <li>Let <var>overlapped frame</var> be the [=coded frame=] in <var>track buffer</var> that matches the condition above.</li>
+                    <li>Let |overlapped frame| be the [=coded frame=] in |track buffer| that matches the condition above.</li>
                     <li>
                       <dl class="switch">
-                        <dt>If <var>track buffer</var> contains audio [=coded frames=]:</dt>
-                        <dd>Run the [=audio splice frame=] algorithm and if a splice frame is returned, assign it to <var>spliced audio frame</var>.</dd>
-                        <dt>If <var>track buffer</var> contains video [=coded frames=]:</dt>
+                        <dt>If |track buffer| contains audio [=coded frames=]:</dt>
+                        <dd>Run the [=audio splice frame=] algorithm and if a splice frame is returned, assign it to |spliced audio frame|.</dd>
+                        <dt>If |track buffer| contains video [=coded frames=]:</dt>
                         <dd>
                           <ol>
-                            <li>Let <var>remove window timestamp</var> equal the <var>overlapped frame</var> [=presentation timestamp=] plus 1 microsecond.</li>
-                            <li>If the <var>presentation timestamp</var> is less than the <var>remove window timestamp</var>, then remove <var>overlapped frame</var> from <var>track buffer</var>.
+                            <li>Let |remove window timestamp:double| equal the |overlapped frame| [=presentation timestamp=] plus 1 microsecond.</li>
+                            <li>If the |presentation timestamp| is less than the |remove window timestamp|, then remove |overlapped frame| from |track buffer|.
                               <p class="note">
                                 This is to compensate for minor errors in frame timestamp computations that can appear when converting back and forth between double precision
                                 floating point numbers and rationals. This tolerance allows a frame to replace an existing one as long as it is within 1 microsecond of the existing
@@ -2137,24 +2138,24 @@ interface SourceBuffer : EventTarget {
                             </li>
                           </ol>
                         </dd>
-                        <dt>If <var>track buffer</var> contains timed text [=coded frames=]:</dt>
-                        <dd>Run the [=text splice frame=] algorithm and if a splice frame is returned, assign it to <var>spliced timed text frame</var>.</dd>
+                        <dt>If |track buffer| contains timed text [=coded frames=]:</dt>
+                        <dd>Run the [=text splice frame=] algorithm and if a splice frame is returned, assign it to |spliced timed text frame|.</dd>
                       </dl>
                     </li>
                   </ol>
                 </li>
-                <li>Remove existing coded frames in <var>track buffer</var>:
+                <li>Remove existing coded frames in |track buffer|:
                   <dl class="switch">
-                    <dt>If [=highest end timestamp=] for <var>track buffer</var> is not set:</dt>
-                    <dd>Remove all [=coded frames=] from <var>track buffer</var> that have a [=presentation timestamp=] greater than or equal to
-                      <var>presentation timestamp</var> and less than <var>frame end timestamp</var>.</dd>
-                    <dt>If [=highest end timestamp=] for <var>track buffer</var> is set and less than or equal to <var>presentation timestamp</var>:</dt>
-                    <dd>Remove all [=coded frames=] from <var>track buffer</var> that have a [=presentation timestamp=] greater than
-                      or equal to [=highest end timestamp=] and less than <var>frame end timestamp</var></dd>
+                    <dt>If [=highest end timestamp=] for |track buffer| is not set:</dt>
+                    <dd>Remove all [=coded frames=] from |track buffer| that have a [=presentation timestamp=] greater than or equal to
+                      |presentation timestamp| and less than |frame end timestamp|.</dd>
+                    <dt>If [=highest end timestamp=] for |track buffer| is set and less than or equal to |presentation timestamp|:</dt>
+                    <dd>Remove all [=coded frames=] from |track buffer| that have a [=presentation timestamp=] greater than
+                      or equal to [=highest end timestamp=] and less than |frame end timestamp|.</dd>
                   </dl>
                 </li>
                 <li>Remove all possible decoding dependencies on the [=coded frames=] removed in the previous two steps
-                  by removing all [=coded frames=] from <var>track buffer</var> between those frames removed in the previous two steps and the next
+                  by removing all [=coded frames=] from |track buffer| between those frames removed in the previous two steps and the next
                   [=random access point=] after those removed frames.
                   <p class="note">Removing all [=coded frames=] until the next [=random access point=] is a conservative
                     estimate of the decoding dependencies since it assumes all frames between the removed frames and the next random access point
@@ -2163,26 +2164,26 @@ interface SourceBuffer : EventTarget {
                 </li>
                 <li>
                   <dl class="switch">
-                    <dt>If <var>spliced audio frame</var> is set:</dt>
-                    <dd>Add <var>spliced audio frame</var> to the <var>track buffer</var>.</dd>
-                    <dt>If <var>spliced timed text frame</var> is set:</dt>
-                    <dd>Add <var>spliced timed text frame</var> to the <var>track buffer</var>.</dd>
+                    <dt>If |spliced audio frame| is set:</dt>
+                    <dd>Add |spliced audio frame| to the |track buffer|.</dd>
+                    <dt>If |spliced timed text frame| is set:</dt>
+                    <dd>Add |spliced timed text frame| to the |track buffer|.</dd>
                     <dt>Otherwise:</dt>
-                    <dd>Add the [=coded frame=] with the <var>presentation timestamp</var>, <var>decode timestamp</var>, and <var>frame duration</var> to the
-                      <var>track buffer</var>.</dd>
+                    <dd>Add the [=coded frame=] with the |presentation timestamp|, |decode timestamp|, and |frame duration| to the
+                      |track buffer|.</dd>
                   </dl>
-                </li><li>Set [=last decode timestamp=] for <var>track buffer</var> to <var>decode timestamp</var>.</li>
-                <li>Set [=last frame duration=] for <var>track buffer</var> to <var>frame duration</var>.</li>
-                <li>If [=highest end timestamp=] for <var>track buffer</var> is unset or <var>frame end timestamp</var> is greater
-                  than [=highest end timestamp=], then set [=highest end timestamp=] for <var>track buffer</var>
-                  to <var>frame end timestamp</var>.
+                </li><li>Set [=last decode timestamp=] for |track buffer| to |decode timestamp|.</li>
+                <li>Set [=last frame duration=] for |track buffer| to |frame duration|.</li>
+                <li>If [=highest end timestamp=] for |track buffer| is unset or |frame end timestamp| is greater
+                  than [=highest end timestamp=], then set [=highest end timestamp=] for |track buffer|
+                  to |frame end timestamp|.
                   <p class="note">The greater than check is needed because bidirectional prediction between coded frames can cause
-                    <var>presentation timestamp</var> to not be monotonically increasing even though the decode timestamps are monotonically increasing.</p>
+                    |presentation timestamp| to not be monotonically increasing even though the decode timestamps are monotonically increasing.</p>
                 </li>
-                <li>If <var>frame end timestamp</var> is greater than [=group end timestamp=],
-                  then set [=group end timestamp=] equal to <var>frame end timestamp</var>.</li>
+                <li>If |frame end timestamp| is greater than [=group end timestamp=],
+                  then set [=group end timestamp=] equal to |frame end timestamp|.</li>
                 <li>If [=generate timestamps flag=] equals true, then set
-                  {{SourceBuffer/timestampOffset}} equal to <var>frame end timestamp</var>.</li>
+                  {{SourceBuffer/timestampOffset}} equal to |frame end timestamp|.</li>
               </ol>
             </li>
             <li>
@@ -2198,7 +2199,8 @@ interface SourceBuffer : EventTarget {
               <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
             </li>
             <li>If the [=media segment=] contains data beyond the current {{MediaSource/duration}}, then run the
-              [=duration change=] algorithm with |new duration| set to the maximum of the current duration and the [=group end timestamp=].</li>
+              [=duration change=] algorithm with |new duration:unrestricted double| set to the maximum of the current
+              duration and the [=group end timestamp=].</li>
           </ol>
         </section>
 
@@ -2206,18 +2208,18 @@ interface SourceBuffer : EventTarget {
           <h4><dfn>Coded Frame Removal</dfn></h4>
           <p>Follow these steps when [=coded frames=] for a specific time range need to be removed from the SourceBuffer:</p>
           <ol>
-            <li>Let <var>start</var> be the starting [=presentation timestamp=] for the removal range.</li>
-            <li>Let <var>end</var> be the end [=presentation timestamp=] for the removal range. </li>
-            <li><p>For each [=track buffer=] in this source buffer, run the following steps:</p>
+            <li>Let |start:double| be the starting [=presentation timestamp=] for the removal range.</li>
+            <li>Let |end:unrestricted double| be the end [=presentation timestamp=] for the removal range. </li>
+            <li><p>For each [=track buffer=] in this {{SourceBuffer}}, run the following steps:</p>
               <ol>
-                <li>Let <var>remove end timestamp</var> be the current value of {{MediaSource/duration}}</li>
+                <li>Let |remove end timestamp:unrestricted double| be the current value of {{MediaSource/duration}}</li>
                 <li>
                   <p>If this [=track buffer=] has a [=random access point=] timestamp that is greater than or equal to
-                    <var>end</var>, then update <var>remove end timestamp</var> to that random access point timestamp.</p>
+                    |end|, then update |remove end timestamp| to that random access point timestamp.</p>
                   <p class="note">Random access point timestamps can be different across tracks because the dependencies between [=coded frames=] within a
                     track are usually different than the dependencies in another track.</p>
                 </li>
-                <li>Remove all media data, from this [=track buffer=], that contain starting timestamps greater than or equal to <var>start</var> and less than the <var>remove end timestamp</var>.
+                <li>Remove all media data, from this [=track buffer=], that contain starting timestamps greater than or equal to |start| and less than the |remove end timestamp|.
                 <ol>
                   <li><p>For each removed frame, if the frame has a [=decode timestamp=] equal to the [=last decode timestamp=] for the frame's track, run the following steps:</p>
                     <dl class="switch">
@@ -2243,7 +2245,7 @@ interface SourceBuffer : EventTarget {
                 </li>
                 <li>
                   <p>If this object is in {{MediaSource/activeSourceBuffers}}, the <a def-id="current-playback-position"></a> is greater than or equal to
-                    <var>start</var> and less than the <var>remove end timestamp</var>, and {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} is greater than
+                    |start| and less than the |remove end timestamp|, and {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} is greater than
                     <a def-id="have-metadata"></a>, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to <a def-id="have-metadata"></a> and stall playback.</p>
                   <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
                   <p class="note">This transition occurs because media data for the current position has been removed. Playback cannot progress until media for the
@@ -2258,17 +2260,17 @@ interface SourceBuffer : EventTarget {
 
         <section id="sourcebuffer-coded-frame-eviction">
           <h4><dfn>Coded Frame Eviction</dfn></h4>
-          <p>This algorithm is run to free up space in this source buffer when new data is appended.</p>
+          <p>This algorithm is run to free up space in this {{SourceBuffer}} when new data is appended.</p>
           <ol>
-            <li>Let <var>new data</var> equal the data that is about to be appended to this SourceBuffer.</li>
+            <li>Let |new data:BufferSource| equal the data that is about to be appended to this SourceBuffer.</li>
             <li>If the [=buffer full flag=] equals false, then abort these steps.</li>
-            <li>Let <var>removal ranges</var> equal a list of presentation time ranges that can be evicted from the presentation to make room for the
-              <var>new data</var>.
-              <p class="note">Implementations MAY use different methods for selecting <var>removal ranges</var> so web applications SHOULD NOT depend on a
+            <li>Let |removal ranges:normalized TimeRanges| equal a list of presentation time ranges that can be evicted from the presentation to make room for the
+              |new data|.
+              <p class="note">Implementations MAY use different methods for selecting |removal ranges| so web applications SHOULD NOT depend on a
                 specific behavior. The web application can use the {{SourceBuffer/buffered}} attribute to observe whether portions of the buffered data have been evicted.
               </p>
             </li>
-            <li>For each range in <var>removal ranges</var>, run the [=coded frame removal=] algorithm with <var>start</var> and <var>end</var> equal to
+            <li>For each range in |removal ranges|, run the [=coded frame removal=] algorithm with |start:double| and |end:unrestricted double| equal to
               the removal range start and end timestamp respectively.</li>
           </ol>
         </section>
@@ -2278,36 +2280,36 @@ interface SourceBuffer : EventTarget {
           <p>Follow these steps when the [=coded frame processing=] algorithm needs to generate a splice frame for two overlapping audio
             [=coded frames=]:</p>
           <ol>
-            <li>Let <var>track buffer</var> be the [=track buffer=] that will contain the splice.</li>
-            <li>Let <var>new coded frame</var> be the new [=coded frame=], that is being added to <var>track buffer</var>, which triggered the need for a splice.</li>
-            <li>Let <var>presentation timestamp</var> be the [=presentation timestamp=] for <var>new coded frame</var></li>
-            <li>Let <var>decode timestamp</var> be the decode timestamp for <var>new coded frame</var>.</li>
-            <li>Let <var>frame duration</var> be the [=coded frame duration=] of <var>new coded frame</var>.</li>
-            <li>Let <var>overlapped frame</var> be the [=coded frame=] in <var>track buffer</var> with a [=presentation interval=] that contains <var>presentation timestamp</var>.
+            <li>Let |track buffer| be the [=track buffer=] that will contain the splice.</li>
+            <li>Let |new coded frame| be the new [=coded frame=], that is being added to |track buffer|, which triggered the need for a splice.</li>
+            <li>Let |presentation timestamp:double| be the [=presentation timestamp=] for |new coded frame|.</li>
+            <li>Let |decode timestamp:double| be the decode timestamp for |new coded frame|.</li>
+            <li>Let |frame duration:double| be the [=coded frame duration=] of |new coded frame|.</li>
+            <li>Let |overlapped frame| be the [=coded frame=] in |track buffer| with a [=presentation interval=] that contains |presentation timestamp|.
             </li>
-            <li>Update <var>presentation timestamp</var> and <var>decode timestamp</var> to the nearest audio sample timestamp based on sample rate of the
-              audio in <var>overlapped frame</var>. If a timestamp is equidistant from both audio sample timestamps, then use the higher timestamp (e.g.,
+            <li>Update |presentation timestamp| and |decode timestamp| to the nearest audio sample timestamp based on sample rate of the
+              audio in |overlapped frame|. If a timestamp is equidistant from both audio sample timestamps, then use the higher timestamp (e.g.,
               <code>floor(x * sample_rate + 0.5) / sample_rate</code>).
               <div class="note">
                 <p>For example, given the following values:</p>
                 <ul>
-                  <li>The [=presentation timestamp=] of <var>overlapped frame</var> equals 10.</li>
-                  <li>The sample rate of <var>overlapped frame</var> equals 8000 Hz</li>
-                  <li><var>presentation timestamp</var> equals 10.01255</li>
-                  <li><var>decode timestamp</var> equals 10.01255</li>
+                  <li>The [=presentation timestamp=] of |overlapped frame| equals 10.</li>
+                  <li>The sample rate of |overlapped frame| equals 8000 Hz</li>
+                  <li>|presentation timestamp| equals 10.01255</li>
+                  <li>|decode timestamp| equals 10.01255</li>
                 </ul>
-                <p><var>presentation timestamp</var> and <var>decode timestamp</var> are updated to 10.0125 since 10.01255 is closer to
+                <p>|presentation timestamp| and |decode timestamp| are updated to 10.0125 since 10.01255 is closer to
                 10 + 100/8000 (10.0125) than 10 + 101/8000 (10.012625)</p>
               </div>
             </li>
             <li>If the user agent does not support crossfading then run the following steps:
               <ol>
-                <li>Remove <var>overlapped frame</var> from <var>track buffer</var>.</li>
-                <li>Add a silence frame to <var>track buffer</var> with the following properties:
+                <li>Remove |overlapped frame| from |track buffer|.</li>
+                <li>Add a silence frame to |track buffer| with the following properties:
                   <ul>
-                    <li>The [=presentation timestamp=] set to the <var>overlapped frame</var> [=presentation timestamp=].</li>
-                    <li>The [=decode timestamp=] set to the <var>overlapped frame</var> [=decode timestamp=].</li>
-                    <li>The [=coded frame duration=] set to difference between <var>presentation timestamp</var> and the <var>overlapped frame</var> [=presentation timestamp=].</li>
+                    <li>The [=presentation timestamp=] set to the |overlapped frame| [=presentation timestamp=].</li>
+                    <li>The [=decode timestamp=] set to the |overlapped frame| [=decode timestamp=].</li>
+                    <li>The [=coded frame duration=] set to difference between |presentation timestamp| and the |overlapped frame| [=presentation timestamp=].</li>
                   </ul>
                   <p class="note">
                     Some implementations MAY apply fades to/from silence to coded frames on either side of the inserted silence to make the transition less
@@ -2316,28 +2318,28 @@ interface SourceBuffer : EventTarget {
                 </li>
                 <li>Return to caller without providing a splice frame.
                   <p class="note">
-                    This is intended to allow <var>new coded frame</var> to be added to the <var>track buffer</var> as if
-                    <var>overlapped frame</var> had not been in the <var>track buffer</var> to begin with.
+                    This is intended to allow |new coded frame| to be added to the |track buffer| as if
+                    |overlapped frame| had not been in the |track buffer| to begin with.
                   </p>
                 </li>
               </ol>
             </li>
-            <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
-            <li>Let <var>splice end timestamp</var> equal the sum of <var>presentation timestamp</var> and the splice duration of 5 milliseconds.</li>
-            <li>Let <var>fade out coded frames</var> equal <var>overlapped frame</var> as well as any additional frames in <var>track buffer</var> that
-              have a [=presentation timestamp=] greater than <var>presentation timestamp</var> and less than <var>splice end timestamp</var>.</li>
-            <li>Remove all the frames included in <var>fade out coded frames</var> from <var>track buffer</var>.
+            <li>Let |frame end timestamp:double| equal the sum of |presentation timestamp| and |frame duration|.</li>
+            <li>Let |splice end timestamp:double| equal the sum of |presentation timestamp| and the splice duration of 5 milliseconds.</li>
+            <li>Let |fade out coded frames| equal |overlapped frame| as well as any additional frames in |track buffer| that
+              have a [=presentation timestamp=] greater than |presentation timestamp| and less than |splice end timestamp|.</li>
+            <li>Remove all the frames included in |fade out coded frames| from |track buffer|.
             </li><li>Return a splice frame with the following properties:
               <ul>
-                <li>The [=presentation timestamp=] set to the <var>overlapped frame</var> [=presentation timestamp=].</li>
-                <li>The [=decode timestamp=] set to the <var>overlapped frame</var> [=decode timestamp=].</li>
-                <li>The [=coded frame duration=] set to difference between <var>frame end timestamp</var> and the <var>overlapped frame</var> [=presentation timestamp=].</li>
-                <li>The fade out coded frames equals <var>fade-out coded frames</var>.</li>
-                <li>The fade in coded frame equal <var>new coded frame</var>.
-                  <p class="note">If the <var>new coded frame</var> is less than 5 milliseconds in duration, then coded frames that are appended after the
-                    <var>new coded frame</var> will be needed to properly render the splice.</p>
+                <li>The [=presentation timestamp=] set to the |overlapped frame| [=presentation timestamp=].</li>
+                <li>The [=decode timestamp=] set to the |overlapped frame| [=decode timestamp=].</li>
+                <li>The [=coded frame duration=] set to difference between |frame end timestamp| and the |overlapped frame| [=presentation timestamp=].</li>
+                <li>The fade out coded frames equals |fade out coded frames|.</li>
+                <li>The fade in coded frame equals |new coded frame|.
+                  <p class="note">If the |new coded frame| is less than 5 milliseconds in duration, then coded frames that are appended after the
+                    |new coded frame| will be needed to properly render the splice.</p>
                 </li>
-                <li>The splice timestamp equals <var>presentation timestamp</var>.</li>
+                <li>The splice timestamp equals |presentation timestamp|.</li>
               </ul>
               <p class="note">See the [=audio splice rendering=] algorithm for details on how this splice frame is rendered.</p>
             </li>
@@ -2348,28 +2350,28 @@ interface SourceBuffer : EventTarget {
           <p>The following steps are run when a spliced frame, generated by the [=audio splice frame=] algorithm, needs to be rendered by the
             media element:</p>
           <ol>
-            <li>Let <var>fade out coded frames</var> be the [=coded frames=] that are faded out during the splice.</li>
-            <li>Let <var>fade in coded frames</var> be the [=coded frames=] that are faded in during the splice.</li>
-            <li>Let <var>presentation timestamp</var> be the [=presentation timestamp=] of the first coded frame in <var>fade out coded frames</var>.</li>
-            <li>Let <var>end timestamp</var> be the sum of the [=presentation timestamp=] and the [=coded frame duration=] of the last frame in <var>fade in coded frames</var>.</li>
-            <li>Let <var>splice timestamp</var> be the [=presentation timestamp=] where the splice starts. This corresponds with the [=presentation timestamp=] of the first frame in
-              <var>fade in coded frames</var>.</li>
-            <li>Let <var>splice end timestamp</var> equal <var>splice timestamp</var> plus five milliseconds.</li>
-            <li>Let <var>fade out samples</var> be the samples generated by decoding <var>fade out coded frames</var>.</li>
-            <li>Trim <var>fade out samples</var> so that it only contains samples between <var>presentation timestamp</var> and <var>splice end timestamp</var>.</li>
-            <li>Let <var>fade in samples</var> be the samples generated by decoding <var>fade in coded frames</var>.</li>
-            <li>If <var>fade out samples</var> and <var>fade in samples</var> do not have a common sample rate and channel layout, then convert
-              <var>fade out samples</var> and <var>fade in samples</var> to a common sample rate and channel layout.</li>
-            <li>Let <var>output samples</var> be a buffer to hold the output samples.</li>
+            <li>Let |fade out coded frames| be the [=coded frames=] that are faded out during the splice.</li>
+            <li>Let |fade in coded frames| be the [=coded frames=] that are faded in during the splice.</li>
+            <li>Let |presentation timestamp:double| be the [=presentation timestamp=] of the first coded frame in |fade out coded frames|.</li>
+            <li>Let |end timestamp:double| be the sum of the [=presentation timestamp=] and the [=coded frame duration=] of the last frame in |fade in coded frames|.</li>
+            <li>Let |splice timestamp:double| be the [=presentation timestamp=] where the splice starts. This corresponds with the [=presentation timestamp=] of the first frame in
+              |fade in coded frames|.</li>
+            <li>Let |splice end timestamp:double| equal |splice timestamp| plus five milliseconds.</li>
+            <li>Let |fade out samples| be the samples generated by decoding |fade out coded frames|.</li>
+            <li>Trim |fade out samples| so that it only contains samples between |presentation timestamp| and |splice end timestamp|.</li>
+            <li>Let |fade in samples| be the samples generated by decoding |fade in coded frames|.</li>
+            <li>If |fade out samples| and |fade in samples| do not have a common sample rate and channel layout, then convert
+              |fade out samples| and |fade in samples| to a common sample rate and channel layout.</li>
+            <li>Let |output samples| be a buffer to hold the output samples.</li>
             <li>Apply a linear gain fade out with a starting gain of 1 and an ending gain of 0 to the samples between
-              <var>splice timestamp</var> and <var>splice end timestamp</var> in <var>fade out samples</var>.</li>
-            <li>Apply a linear gain fade in with a starting gain of 0 and an ending gain of 1 to the samples between <var>splice timestamp</var> and
-              <var>splice end timestamp</var> in <var>fade in samples</var>.</li>
-            <li>Copy samples between <var>presentation timestamp</var> to <var>splice timestamp</var> from <var>fade out samples</var> into <var>output samples</var>.</li>
-            <li>For each sample between <var>splice timestamp</var> and <var>splice end timestamp</var>, compute the sum of a sample from <var>fade out samples</var> and the
-              corresponding sample in <var>fade in samples</var> and store the result in <var>output samples</var>.</li>
-            <li>Copy samples between <var>splice end timestamp</var> to <var>end timestamp</var> from <var>fade in samples</var> into <var>output samples</var>.</li>
-            <li>Render <var>output samples</var>.</li>
+              |splice timestamp| and |splice end timestamp| in |fade out samples|.</li>
+            <li>Apply a linear gain fade in with a starting gain of 0 and an ending gain of 1 to the samples between |splice timestamp| and
+              |splice end timestamp| in |fade in samples|.</li>
+            <li>Copy samples between |presentation timestamp| to |splice timestamp| from |fade out samples| into |output samples|.</li>
+            <li>For each sample between |splice timestamp| and |splice end timestamp|, compute the sum of a sample from |fade out samples| and the
+              corresponding sample in |fade in samples| and store the result in |output samples|.</li>
+            <li>Copy samples between |splice end timestamp| to |end timestamp| from |fade in samples| into |output samples|.</li>
+            <li>Render |output samples|.</li>
           </ol>
           <div class="note">
             <p>Here is a graphical representation of this algorithm.</p>
@@ -2381,23 +2383,23 @@ interface SourceBuffer : EventTarget {
           <p>Follow these steps when the [=coded frame processing=] algorithm needs to generate a splice frame for two overlapping timed text
             [=coded frames=]:</p>
           <ol>
-            <li>Let <var>track buffer</var> be the [=track buffer=] that will contain the splice.</li>
-            <li>Let <var>new coded frame</var> be the new [=coded frame=], that is being added to <var>track buffer</var>, which triggered the need for a splice.</li>
-            <li>Let <var>presentation timestamp</var> be the [=presentation timestamp=] for <var>new coded frame</var></li>
-            <li>Let <var>decode timestamp</var> be the decode timestamp for <var>new coded frame</var>.</li>
-            <li>Let <var>frame duration</var> be the [=coded frame duration=] of <var>new coded frame</var>.</li>
-            <li>Let <var>frame end timestamp</var> equal the sum of <var>presentation timestamp</var> and <var>frame duration</var>.</li>
-            <li>Let <var>first overlapped frame</var> be the [=coded frame=] in <var>track buffer</var> with a [=presentation interval=] that contains <var>presentation timestamp</var>.
+            <li>Let |track buffer| be the [=track buffer=] that will contain the splice.</li>
+            <li>Let |new coded frame| be the new [=coded frame=], that is being added to |track buffer|, which triggered the need for a splice.</li>
+            <li>Let |presentation timestamp:double| be the [=presentation timestamp=] for |new coded frame|</li>
+            <li>Let |decode timestamp:double| be the decode timestamp for |new coded frame|.</li>
+            <li>Let |frame duration:double| be the [=coded frame duration=] of |new coded frame|.</li>
+            <li>Let |frame end timestamp:double| equal the sum of |presentation timestamp| and |frame duration|.</li>
+            <li>Let |first overlapped frame| be the [=coded frame=] in |track buffer| with a [=presentation interval=] that contains |presentation timestamp|.
             </li>
-            <li>Let <var>overlapped presentation timestamp</var> be the [=presentation timestamp=] of the <var>first overlapped frame</var>.</li>
-            <li>Let <var>overlapped frames</var> equal <var>first overlapped frame</var> as well as any additional frames in <var>track buffer</var> that
-              have a [=presentation timestamp=] greater than <var>presentation timestamp</var> and less than <var>frame end timestamp</var>.</li>
-            <li>Remove all the frames included in <var>overlapped frames</var> from <var>track buffer</var>.
-            </li><li>Update the [=coded frame duration=] of the <var>first overlapped frame</var> to <var>presentation timestamp</var> - <var>overlapped presentation timestamp</var>.</li>
-            <li>Add <var>first overlapped frame</var> to the <var>track buffer</var>.
+            <li>Let |overlapped presentation timestamp:double| be the [=presentation timestamp=] of the |first overlapped frame|.</li>
+            <li>Let |overlapped frames| equal |first overlapped frame| as well as any additional frames in |track buffer| that
+              have a [=presentation timestamp=] greater than |presentation timestamp| and less than |frame end timestamp|.</li>
+            <li>Remove all the frames included in |overlapped frames| from |track buffer|.
+            </li><li>Update the [=coded frame duration=] of the |first overlapped frame| to |presentation timestamp| minus |overlapped presentation timestamp|.</li>
+            <li>Add |first overlapped frame| to the |track buffer|.
             </li><li>Return to caller without providing a splice frame.
-              <p class="note">This is intended to allow <var>new coded frame</var> to be added to the <var>track buffer</var> as if
-                it hadn't overlapped any frames in <var>track buffer</var> to begin with.</p>
+              <p class="note">This is intended to allow |new coded frame| to be added to the |track buffer| as if
+                it hadn't overlapped any frames in |track buffer| to begin with.</p>
             </li>
           </ol>
         </section>
@@ -2439,14 +2441,14 @@ interface SourceBufferList : EventTarget {
             <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e., []).</p>
 
             <ol class="method-algorithm">
-              <li>If <var>index</var> is greater than or equal to the {{SourceBufferList/length}} attribute then return undefined and abort these steps.</li>
-              <li>Return the <var>index</var>'th <a>SourceBuffer</a> object in the list.</li>
+              <li>If |index:unsigned long| is greater than or equal to the {{SourceBufferList/length}} attribute then return undefined and abort these steps.</li>
+              <li>Return the |index|'th <a>SourceBuffer</a> object in the list.</li>
             </ol>
             <table class="parameters">
               <tbody>
                 <tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr>
                 <tr>
-                  <td class="prmName">index</td>
+                  <td class="prmName">|index|</td>
                   <td class="prmType">{{unsigned long}}</td>
                   <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
                   <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
