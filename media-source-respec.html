@@ -391,12 +391,12 @@ interface MediaSource : EventTarget {
             </li>
             <li>If the {{MediaSource/readyState}} attribute is not in the {{ReadyState/""open""}} state then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>Create a new <a>SourceBuffer</a> object and associated resources.</li>
-            <li>Set the [=generate timestamps flag=] on the new object to the value in the
-               "Generate Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry
-              that is associated with |type|.
+            <li>Set the {{SourceBuffer/[[generate timestamps flag]]}} on the new object to the value in the "Generate
+              Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry that is associated with
+              |type|.
             </li><li>
               <dl class="switch">
-                <dt>If the [=generate timestamps flag=] equals true:</dt>
+                <dt>If the {{SourceBuffer/[[generate timestamps flag]]}} equals true:</dt>
                 <dd>
                   Set the {{SourceBuffer/mode}} attribute on the new object to
                   {{AppendMode/""sequence""}}.
@@ -1156,9 +1156,8 @@ interface SourceBuffer : EventTarget {
             <li>If this object has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=], then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If the {{SourceBuffer/updating}} attribute equals true, then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>Let |new mode:AppendMode| equal the new value being assigned to this attribute.</li>
-            <li>If [=generate timestamps flag=] equals true and |new mode| equals
-              {{AppendMode/""segments""}}, then throw a {{TypeError}}
-              exception and abort these steps.</li>
+            <li>If {{SourceBuffer/[[generate timestamps flag]]}} equals true and |new mode| equals
+              {{AppendMode/""segments""}}, then throw a {{TypeError}} exception and abort these steps.</li>
             <li>
               <p>If the {{MediaSource/readyState}} attribute of the [=parent media source=] is in the {{ReadyState/""ended""}} state then run the following steps:</p>
               <ol>
@@ -1305,12 +1304,12 @@ interface SourceBuffer : EventTarget {
               </ol>
             </li>
             <li>Run the [=reset parser state=] algorithm.</li>
-            <li>Update the [=generate timestamps flag=] on this {{SourceBuffer}} object to the value in the
-                 "Generate Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry
-                 that is associated with |type|.</li>
+            <li>Update the {{SourceBuffer/[[generate timestamps flag]]}} on this {{SourceBuffer}} object to the value in
+              the "Generate Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry that is
+              associated with |type|.</li>
             <li>
                 <dl class="switch">
-                  <dt>If the [=generate timestamps flag=] equals true:</dt>
+                  <dt>If the {{SourceBuffer/[[generate timestamps flag]]}} equals true:</dt>
                   <dd>
                   Set the {{SourceBuffer/mode}} attribute on this {{SourceBuffer}} object to {{AppendMode/""sequence""}}, including running the associated steps for that attribute being set.
                   </dd>
@@ -1525,10 +1524,12 @@ interface SourceBuffer : EventTarget {
             across tracks.
           </p>
 
-          <p>The <dfn id="sourcebuffer-generate-timestamps-flag" data-export="">generate timestamps flag</dfn> is a
-            boolean variable that keeps track of whether timestamps need to be generated for the
-            [=coded frames=] passed to the [=coded frame processing=] algorithm.
-            This flag is set by {{MediaSource/addSourceBuffer()}} when the SourceBuffer object is created.
+          <p>Each {{SourceBuffer}} object has a
+            <dfn data-dfn-for="SourceBuffer" data-export="">[[\generate timestamps flag]]</dfn> internal slot that is a
+            boolean that keeps track of whether timestamps need to be generated for the [=coded frames=] passed to the
+            [=coded frame processing=] algorithm.
+            This flag is set by {{MediaSource/addSourceBuffer()}} when the {{SourceBuffer}} object is created and is
+            updated by {{SourceBuffer/changeType()}}.
           </p>
           <p>When the segment parser loop algorithm is invoked, run the following steps:</p>
 
@@ -2052,7 +2053,7 @@ interface SourceBuffer : EventTarget {
               <p>For each [=coded frame=] in the [=media segment=] run the following steps:</p>
               <ol>
                 <li><i>Loop Top: </i><dl class="switch">
-                    <dt>If [=generate timestamps flag=] equals true:</dt>
+                    <dt>If {{SourceBuffer/[[generate timestamps flag]]}} equals true:</dt>
                     <dd>
                       <ol>
                         <li>Let |presentation timestamp:double| equal 0.</li>
@@ -2220,7 +2221,7 @@ interface SourceBuffer : EventTarget {
                 </li>
                 <li>If |frame end timestamp| is greater than {{SourceBuffer/[[group end timestamp]]}}, then set
                   {{SourceBuffer/[[group end timestamp]]}} equal to |frame end timestamp|.</li>
-                <li>If [=generate timestamps flag=] equals true, then set
+                <li>If {{SourceBuffer/[[generate timestamps flag]]}} equals true, then set
                   {{SourceBuffer/timestampOffset}} equal to |frame end timestamp|.</li>
               </ol>
             </li>
