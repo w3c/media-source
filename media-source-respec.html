@@ -1168,7 +1168,8 @@ interface SourceBuffer : EventTarget {
             </li>
             <li>If the {{SourceBuffer/[[append state]]}} equals [=PARSING_MEDIA_SEGMENT=], then throw an
               {{InvalidStateError}} and abort these steps.</li>
-            <li>If the |new mode| equals {{AppendMode/""sequence""}}, then set the [=group start timestamp=] to the [=group end timestamp=].</li>
+            <li>If the |new mode| equals {{AppendMode/""sequence""}}, then set the {{SourceBuffer/[[group start
+              timestamp]]}} to the [=group end timestamp=].</li>
             <li>Update the attribute to |new mode|.</li>
           </ol>
         </dd><dt><dfn><code>updating</code></dfn> of type {{boolean}}, readonly       </dt><dd>
@@ -1214,7 +1215,8 @@ interface SourceBuffer : EventTarget {
             </li>
             <li>If the {{SourceBuffer/[[append state]]}} equals [=PARSING_MEDIA_SEGMENT=], then throw an
               {{InvalidStateError}} and abort these steps.</li>
-            <li>If the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}}, then set the [=group start timestamp=] to |new timestamp offset|.</li>
+            <li>If the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}}, then set the
+              {{SourceBuffer/[[group start timestamp]]}} to |new timestamp offset|.</li>
             <li>Update the attribute to |new timestamp offset|.</li>
           </ol>
         </dd><dt><dfn><code>audioTracks</code></dfn> of type {{AudioTrackList}}, readonly       </dt><dd>
@@ -1498,16 +1500,17 @@ interface SourceBuffer : EventTarget {
           </table>
 
           <p>Each {{SourceBuffer}} object has an <dfn data-dfn-for="SourceBuffer">[[\input buffer]]</dfn> internal slot
-          that is a byte buffer that holds unparsed bytes across {{SourceBuffer/appendBuffer()}} calls. The buffer is
-          empty when the {{SourceBuffer}} object is created.</p>
+            that is a byte buffer that holds unparsed bytes across {{SourceBuffer/appendBuffer()}} calls. The buffer is
+            empty when the {{SourceBuffer}} object is created.</p>
 
-          <p>Each {{SourceBuffer}} object has a <dfn data-dfn-for="SourceBuffer">[[\buffer full flag]]</dfn> that keeps
-          track of whether {{SourceBuffer/appendBuffer()}} is allowed to accept more bytes. It is set to false when the
-          {{SourceBuffer}} object is created and gets updated as data is appended and removed.</p>
+          <p>Each {{SourceBuffer}} object has a <dfn data-dfn-for="SourceBuffer">[[\buffer full flag]]</dfn> internal
+            slot that keeps track of whether {{SourceBuffer/appendBuffer()}} is allowed to accept more bytes. It is set
+            to false when the {{SourceBuffer}} object is created and gets updated as data is appended and removed.</p>
 
-          <p>The <dfn id="sourcebuffer-group-start-timestamp">group start timestamp</dfn> variable keeps track of the starting timestamp for a new
-            [=coded frame group=] in the {{AppendMode/""sequence""}} mode.
-            It is unset when the SourceBuffer object is created and gets updated when the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}} and the
+          <p>Each {{SourceBuffer}} object has a <dfn data-dfn-for="SourceBuffer">[[\group start timestamp]]</dfn>
+            internal slot that keeps track of the starting timestamp for a new [=coded frame group=] in the
+            {{AppendMode/""sequence""}} mode. It is unset when the SourceBuffer object is created and gets updated when
+            the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}} and the
             {{SourceBuffer/timestampOffset}} attribute is set, or the [=coded frame processing=] algorithm runs.
           </p>
 
@@ -1596,7 +1599,8 @@ interface SourceBuffer : EventTarget {
             <li>Unset the [=last frame duration=] on all [=track buffers=].</li>
             <li>Unset the [=highest end timestamp=] on all [=track buffers=].</li>
             <li>Set the [=need random access point flag=] on all [=track buffers=] to true.</li>
-            <li>If the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}}, then set the [=group start timestamp=] to the [=group end timestamp=]</li>
+            <li>If the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}}, then set the
+              {{SourceBuffer/[[group start timestamp]]}} to the [=group end timestamp=]</li>
             <li>Remove all bytes from the {{SourceBuffer/[[input buffer]]}}.</li>
             <li>Set {{SourceBuffer/[[append state]]}} to [=WAITING_FOR_SEGMENT=].</li>
           </ol>
@@ -2074,12 +2078,14 @@ interface SourceBuffer : EventTarget {
                   </dl>
                 </li>
                 <li>Let |frame duration:double| be a double precision floating point representation of the [=coded frame duration|coded frame's duration=] in seconds.</li>
-                <li>If {{SourceBuffer/mode}} equals {{AppendMode/""sequence""}} and [=group start timestamp=] is set, then run the following steps:
+                <li>If {{SourceBuffer/mode}} equals {{AppendMode/""sequence""}} and {{SourceBuffer/[[group start
+                  timestamp]]}} is set, then run the following steps:
                   <ol>
-                    <li>Set {{SourceBuffer/timestampOffset}} equal to [=group start timestamp=] minus |presentation timestamp|.</li>
-                    <li>Set [=group end timestamp=] equal to [=group start timestamp=].</li>
+                    <li>Set {{SourceBuffer/timestampOffset}} equal to {{SourceBuffer/[[group start timestamp]]}} minus
+                        |presentation timestamp|.</li>
+                    <li>Set [=group end timestamp=] equal to {{SourceBuffer/[[group start timestamp]]}}.</li>
                     <li>Set the [=need random access point flag=] on all [=track buffers=] to true.</li>
-                    <li>Unset [=group start timestamp=].</li>
+                    <li>Unset {{SourceBuffer/[[group start timestamp]]}}.</li>
                   </ol>
                 </li>
                 <li>
@@ -2104,7 +2110,8 @@ interface SourceBuffer : EventTarget {
                             <dt>If {{SourceBuffer/mode}} equals {{AppendMode/""segments""}}:</dt>
                             <dd>Set [=group end timestamp=] to |presentation timestamp|.</dd>
                             <dt>If {{SourceBuffer/mode}} equals {{AppendMode/""sequence""}}:</dt>
-                            <dd>Set [=group start timestamp=] equal to the [=group end timestamp=].</dd>
+                            <dd>Set {{SourceBuffer/[[group start timestamp]]}} equal to the [=group end
+                              timestamp=].</dd>
                           </dl>
                         </li>
                         <li>Unset the [=last decode timestamp=] on all [=track buffers=].</li>
@@ -2253,7 +2260,7 @@ interface SourceBuffer : EventTarget {
                       <dt>If {{SourceBuffer/mode}} equals {{AppendMode/""segments""}}:</dt>
                       <dd>Set [=group end timestamp=] to [=presentation timestamp=].</dd>
                       <dt>If {{SourceBuffer/mode}} equals {{AppendMode/""sequence""}}:</dt>
-                      <dd>Set [=group start timestamp=] equal to the [=group end timestamp=].</dd>
+                      <dd>Set {{SourceBuffer/[[group start timestamp]]}} equal to the [=group end timestamp=].</dd>
                     </dl>
                   </li>
                   <li>Unset the [=last decode timestamp=] on all [=track buffers=].</li>
