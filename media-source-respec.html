@@ -1169,7 +1169,7 @@ interface SourceBuffer : EventTarget {
             <li>If the {{SourceBuffer/[[append state]]}} equals [=PARSING_MEDIA_SEGMENT=], then throw an
               {{InvalidStateError}} and abort these steps.</li>
             <li>If the |new mode| equals {{AppendMode/""sequence""}}, then set the {{SourceBuffer/[[group start
-              timestamp]]}} to the [=group end timestamp=].</li>
+              timestamp]]}} to the {{SourceBuffer/[[group end timestamp]]}}.</li>
             <li>Update the attribute to |new mode|.</li>
           </ol>
         </dd><dt><dfn><code>updating</code></dfn> of type {{boolean}}, readonly       </dt><dd>
@@ -1514,12 +1514,15 @@ interface SourceBuffer : EventTarget {
             {{SourceBuffer/timestampOffset}} attribute is set, or the [=coded frame processing=] algorithm runs.
           </p>
 
-          <p>The <dfn id="sourcebuffer-group-end-timestamp">group end timestamp</dfn> variable stores the
-            highest [=coded frame end timestamp=] across all [=coded frames=] in
-            the current [=coded frame group=]. It is set to 0 when the SourceBuffer object is created and gets updated
-            by the [=coded frame processing=] algorithm.
+          <p>Each {{SourceBuffer}} object has a <dfn data-dfn-for="SourceBuffer">[[\group end timestamp]]</dfn> internal
+            slot that stores the highest [=coded frame end timestamp=] across all [=coded frames=] in the current
+            [=coded frame group=]. It is set to 0 when the SourceBuffer object is created and gets updated by the
+            [=coded frame processing=] algorithm.
           </p>
-          <p class="note">The [=group end timestamp=] stores the highest [=coded frame end timestamp=] across all [=track buffers=] in a <a>SourceBuffer</a>. Therefore, care should be taken in setting the {{SourceBuffer/mode}} attribute when appending multiplexed segments in which the timestamps are not aligned across tracks.
+          <p class="note">The {{SourceBuffer/[[group end timestamp]]}} stores the highest [=coded frame end timestamp=]
+            across all [=track buffers=] in a <a>SourceBuffer</a>. Therefore, care should be taken in setting the
+            {{SourceBuffer/mode}} attribute when appending multiplexed segments in which the timestamps are not aligned
+            across tracks.
           </p>
 
           <p>The <dfn id="sourcebuffer-generate-timestamps-flag" data-export="">generate timestamps flag</dfn> is a
@@ -1600,7 +1603,7 @@ interface SourceBuffer : EventTarget {
             <li>Unset the [=highest end timestamp=] on all [=track buffers=].</li>
             <li>Set the [=need random access point flag=] on all [=track buffers=] to true.</li>
             <li>If the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}}, then set the
-              {{SourceBuffer/[[group start timestamp]]}} to the [=group end timestamp=]</li>
+              {{SourceBuffer/[[group start timestamp]]}} to the {{SourceBuffer/[[group end timestamp]]}}</li>
             <li>Remove all bytes from the {{SourceBuffer/[[input buffer]]}}.</li>
             <li>Set {{SourceBuffer/[[append state]]}} to [=WAITING_FOR_SEGMENT=].</li>
           </ol>
@@ -2083,7 +2086,8 @@ interface SourceBuffer : EventTarget {
                   <ol>
                     <li>Set {{SourceBuffer/timestampOffset}} equal to {{SourceBuffer/[[group start timestamp]]}} minus
                         |presentation timestamp|.</li>
-                    <li>Set [=group end timestamp=] equal to {{SourceBuffer/[[group start timestamp]]}}.</li>
+                    <li>Set {{SourceBuffer/[[group end timestamp]]}} equal to {{SourceBuffer/[[group start
+                      timestamp]]}}.</li>
                     <li>Set the [=need random access point flag=] on all [=track buffers=] to true.</li>
                     <li>Unset {{SourceBuffer/[[group start timestamp]]}}.</li>
                   </ol>
@@ -2108,10 +2112,10 @@ interface SourceBuffer : EventTarget {
                         <li>
                           <dl class="switch">
                             <dt>If {{SourceBuffer/mode}} equals {{AppendMode/""segments""}}:</dt>
-                            <dd>Set [=group end timestamp=] to |presentation timestamp|.</dd>
+                            <dd>Set {{SourceBuffer/[[group end timestamp]]}} to |presentation timestamp|.</dd>
                             <dt>If {{SourceBuffer/mode}} equals {{AppendMode/""sequence""}}:</dt>
-                            <dd>Set {{SourceBuffer/[[group start timestamp]]}} equal to the [=group end
-                              timestamp=].</dd>
+                            <dd>Set {{SourceBuffer/[[group start timestamp]]}} equal to the {{SourceBuffer/[[group end
+                              timestamp]]}}.</dd>
                           </dl>
                         </li>
                         <li>Unset the [=last decode timestamp=] on all [=track buffers=].</li>
@@ -2214,8 +2218,8 @@ interface SourceBuffer : EventTarget {
                   <p class="note">The greater than check is needed because bidirectional prediction between coded frames can cause
                     |presentation timestamp| to not be monotonically increasing even though the decode timestamps are monotonically increasing.</p>
                 </li>
-                <li>If |frame end timestamp| is greater than [=group end timestamp=],
-                  then set [=group end timestamp=] equal to |frame end timestamp|.</li>
+                <li>If |frame end timestamp| is greater than {{SourceBuffer/[[group end timestamp]]}}, then set
+                  {{SourceBuffer/[[group end timestamp]]}} equal to |frame end timestamp|.</li>
                 <li>If [=generate timestamps flag=] equals true, then set
                   {{SourceBuffer/timestampOffset}} equal to |frame end timestamp|.</li>
               </ol>
@@ -2234,7 +2238,7 @@ interface SourceBuffer : EventTarget {
             </li>
             <li>If the [=media segment=] contains data beyond the current {{MediaSource/duration}}, then run the
               [=duration change=] algorithm with |new duration:unrestricted double| set to the maximum of the current
-              duration and the [=group end timestamp=].</li>
+              duration and the {{SourceBuffer/[[group end timestamp]]}}.</li>
           </ol>
         </section>
 
@@ -2258,9 +2262,10 @@ interface SourceBuffer : EventTarget {
                   <li><p>For each removed frame, if the frame has a [=decode timestamp=] equal to the [=last decode timestamp=] for the frame's track, run the following steps:</p>
                     <dl class="switch">
                       <dt>If {{SourceBuffer/mode}} equals {{AppendMode/""segments""}}:</dt>
-                      <dd>Set [=group end timestamp=] to [=presentation timestamp=].</dd>
+                      <dd>Set {{SourceBuffer/[[group end timestamp]]}} to [=presentation timestamp=].</dd>
                       <dt>If {{SourceBuffer/mode}} equals {{AppendMode/""sequence""}}:</dt>
-                      <dd>Set {{SourceBuffer/[[group start timestamp]]}} equal to the [=group end timestamp=].</dd>
+                      <dd>Set {{SourceBuffer/[[group start timestamp]]}} equal to the {{SourceBuffer/[[group end
+                        timestamp]]}}.</dd>
                     </dl>
                   </li>
                   <li>Unset the [=last decode timestamp=] on all [=track buffers=].</li>
