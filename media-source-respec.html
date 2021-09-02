@@ -1501,9 +1501,9 @@ interface SourceBuffer : EventTarget {
           that is a byte buffer that holds unparsed bytes across {{SourceBuffer/appendBuffer()}} calls. The buffer is
           empty when the {{SourceBuffer}} object is created.</p>
 
-          <p>The <dfn id="sourcebuffer-buffer-full-flag">buffer full flag</dfn> keeps track of whether {{SourceBuffer/appendBuffer()}}
-            is allowed to accept more bytes. It is set to false when the SourceBuffer object is created and gets updated
-            as data is appended and removed.</p>
+          <p>Each {{SourceBuffer}} object has a <dfn data-dfn-for="SourceBuffer">[[\buffer full flag]]</dfn> that keeps
+          track of whether {{SourceBuffer/appendBuffer()}} is allowed to accept more bytes. It is set to false when the
+          {{SourceBuffer}} object is created and gets updated as data is appended and removed.</p>
 
           <p>The <dfn id="sourcebuffer-group-start-timestamp">group start timestamp</dfn> variable keeps track of the starting timestamp for a new
             [=coded frame group=] in the {{AppendMode/""sequence""}} mode.
@@ -1572,7 +1572,8 @@ interface SourceBuffer : EventTarget {
                     added to the input buffer.
                   </p>
                 </li>
-                <li>If this <a>SourceBuffer</a> is full and cannot accept more media data, then set the [=buffer full flag=] to true.</li>
+                <li>If this {{SourceBuffer}} is full and cannot accept more media data, then set the
+                  {{SourceBuffer/[[buffer full flag]]}} to true.</li>
                 <li>If the {{SourceBuffer/[[input buffer]]}} does not contain a complete [=media segment=], then jump to
                   the <i>need more data</i> step below.</li>
                 <li>Remove the [=media segment=] bytes from the beginning of the {{SourceBuffer/[[input buffer]]}}.</li>
@@ -1644,7 +1645,8 @@ interface SourceBuffer : EventTarget {
             </li>
             <li>Run the [=coded frame eviction=] algorithm.</li>
             <li>
-              <p>If the [=buffer full flag=] equals true, then throw a {{QuotaExceededError}} exception and abort these steps.</p>
+              <p>If the {{SourceBuffer/[[buffer full flag]]}} equals true, then throw a {{QuotaExceededError}} exception
+                and abort these steps.</p>
               <p class="note">This is the signal that the implementation was unable to evict enough data to accommodate the append or the append is too big. The web
                 application SHOULD use {{SourceBuffer/remove()}} to explicitly free up space and/or reduce the size of the append.</p>
             </li>
@@ -2278,8 +2280,8 @@ interface SourceBuffer : EventTarget {
                 </li>
               </ol>
             </li>
-            <li>If [=buffer full flag=] equals true and this object is ready to accept more bytes, then set
-              the [=buffer full flag=] to false.</li>
+            <li>If the {{SourceBuffer/[[buffer full flag]]}} equals true and this object is ready to accept more bytes,
+              then set the {{SourceBuffer/[[buffer full flag]]}} to false.</li>
           </ol>
         </section>
 
@@ -2287,8 +2289,16 @@ interface SourceBuffer : EventTarget {
           <h4><dfn>Coded Frame Eviction</dfn></h4>
           <p>This algorithm is run to free up space in this {{SourceBuffer}} when new data is appended.</p>
           <ol>
-            <li>Let |new data:BufferSource| equal the data that is about to be appended to this SourceBuffer.</li>
-            <li>If the [=buffer full flag=] equals false, then abort these steps.</li>
+            <li>Let |new data:BufferSource| equal the data that is about to be appended to this SourceBuffer.
+              <div class="issue" data-number="289">
+                <p>Need to recognize step here that implementations MAY decide to set {{SourceBuffer/[[buffer full
+                flag]]}} true here if it predicts that processing |new data| in addition to any existing bytes in
+                {{SourceBuffer/[[input buffer]]}} would exceed the capacity of the {{SourceBuffer}}. Such a step enables
+                more proactive push-back from implementations before accepting |new data| which would overflow
+                resources, for example. In practice, at least one implementation already does this.</p>
+              </div>
+            </li>
+            <li>If the {{SourceBuffer/[[buffer full flag]]}} equals false, then abort these steps.</li>
             <li>Let |removal ranges:normalized TimeRanges| equal a list of presentation time ranges that can be evicted from the presentation to make room for the
               |new data|.
               <p class="note">Implementations MAY use different methods for selecting |removal ranges| so web applications SHOULD NOT depend on a
