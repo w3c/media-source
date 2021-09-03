@@ -278,7 +278,12 @@
       <h2><dfn>MediaSource</dfn> Object</h2>
       <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the {{MediaSource/readyState}} for this source as well as a list of <a>SourceBuffer</a> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}} to add media data to this source. The HTMLMediaElement fetches this media data from the <a>MediaSource</a> object when it is needed during playback.</p>
 
-      <p>Each <a>MediaSource</a> object has a <dfn id="live-seekable-range">live seekable range</dfn> variable that stores a <a def-id="normalized-timeranges-object"></a>.  This variable is initialized to an empty {{TimeRanges}} object when the <a>MediaSource</a> object is created, is maintained by {{MediaSource/setLiveSeekableRange()}} and {{MediaSource/clearLiveSeekableRange()}}, and is used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
+      <p>Each {{MediaSource}} object has a <dfn data-dfn-for="MediaSource">[[\live seekable range]]</dfn> internal slot
+        that stores a <a def-id="normalized-timeranges-object"></a>. It is initialized to an empty {{TimeRanges}} object
+        when the {{MediaSource}} object is created, is maintained by {{MediaSource/setLiveSeekableRange()}} and
+        {{MediaSource/clearLiveSeekableRange()}}, and is used in
+        <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify
+        {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
 
       <div><pre class="idl">enum ReadyState {
     "closed",
@@ -608,11 +613,14 @@ interface MediaSource : EventTarget {
 
           <dt><dfn><code>setLiveSeekableRange</code></dfn></dt><dd>
 
-          <p>Updates the [=live seekable range=] variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
+          <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
+            <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify
+            {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
           <ol class="method-algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not {{ReadyState/""open""}} then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If |start:double| is negative or greater than |end:double|, then throw a {{TypeError}} exception and abort these steps.</li>
-            <li>Set [=live seekable range=] to be a new <a def-id="normalized-timeranges-object"></a> containing a single range whose start position is |start| and end position is |end|.
+            <li>Set {{MediaSource/[[live seekable range]]}} to be a new <a def-id="normalized-timeranges-object"></a>
+              containing a single range whose start position is |start| and end position is |end|.
           </li></ol>
           <table class="parameters">
             <tbody>
@@ -644,11 +652,14 @@ interface MediaSource : EventTarget {
             </tbody>
           </table>
         <div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>clearLiveSeekableRange</code></dfn></dt><dd>
-          <p>Updates the [=live seekable range=] variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
+        <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
+          <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify
+          {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
 
           <ol class="method-algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not {{ReadyState/""open""}} then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>If [=live seekable range=] contains a range, then set [=live seekable range=] to be a new empty {{TimeRanges}} object.
+            <li>If {{MediaSource/[[live seekable range]]}} contains a range, then set {{MediaSource/[[live seekable
+              range]]}} to be a new empty {{TimeRanges}} object.
           </li></ol>
         <div><em>No parameters.</em></div><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>isTypeSupported</code></dfn>, static</dt><dd>
           <p>Check to see whether the <a>MediaSource</a> is capable of creating <a>SourceBuffer</a> objects for the specified MIME type.</p>
@@ -2567,17 +2578,17 @@ interface SourceBufferList : EventTarget {
           </li>
 
           <li>Let |recent duration:unrestricted double| and |recent live seekable range:normalized TimeRanges|
-            respectively be the recent values of {{MediaSource/duration}} and [=live seekable range=], determined as
-            follows:
+            respectively be the recent values of {{MediaSource/duration}} and {{MediaSource/[[live seekable range]]}},
+            determined as follows:
             <dl class="switch">
               <dt>If the {{MediaSource}} was constructed in a {{Window}}</dt>
-              <dd>Set |recent duration| to be {{MediaSource/duration}} and set |recent live seekable
-                range| to be [=live seekable range=].</dd>
+              <dd>Set |recent duration| to be {{MediaSource/duration}} and set |recent live seekable range| to be
+                {{MediaSource/[[live seekable range]]}}.</dd>
               <dt>Otherwise:</dt>
               <dd>Set |recent duration| and |recent live seekable range| respectively to be what the
-                {{MediaSource/duration}} and [=live seekable range=] were recently, updated by handling implicit
-                messages posted by the {{MediaSource}} to its {{MediaSource/[[port to main]]}} on every change to
-                {{MediaSource/duration}} or [=live seekable range=].</dd>
+                {{MediaSource/duration}} and {{MediaSource/[[live seekable range]]}} were recently, updated by handling
+                implicit messages posted by the {{MediaSource}} to its {{MediaSource/[[port to main]]}} on every change
+                to {{MediaSource/duration}} or {{MediaSource/[[live seekable range]]}}.</dd>
             </dl>
           </li>
           <li>
