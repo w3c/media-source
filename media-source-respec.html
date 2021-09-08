@@ -124,6 +124,8 @@
   <body data-cite="html dom url">
 
     <section id="sotd">
+      <p>On top of editorial updates, substantives changes since publication as a W3C Recommendation in <a href="https://www.w3.org/TR/2016/REC-media-source-20161117/">November 2016</a> are the addition of a {{SourceBuffer/changeType()}} method to switch codecs, the possibility to create and use {{MediaSource}} objects off the main thread in dedicated workers, and the removal of the <code>createObjectURL()</code> extension to the {{URL}} object following its integration in the File API [[FILEAPI]]. For a full list of changes done since the previous version, see the <a href="https://github.com/w3c/media-source/commits/main">commits</a>.</p>
+
       <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>.</p>
       <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should track the <a href="https://github.com/w3c/media-source">GitHub repository</a> and take part in the discussions.</p>
     </section>
@@ -213,7 +215,7 @@
 
           <dt><dfn id="mediasource-object-url">MediaSource object URL</dfn></dt>
           <dd>
-            <p>A MediaSource object URL is a unique <a def-id="blob-uri"></a> [[FILE-API]] created by {{URL/createObjectURL()}}. It is used to attach a <a>MediaSource</a> object to an HTMLMediaElement.</p>
+            <p>A MediaSource object URL is a unique <a def-id="blob-uri"></a> [[FILEAPI]] created by {{URL/createObjectURL()}}. It is used to attach a <a>MediaSource</a> object to an HTMLMediaElement.</p>
             <p>These URLs are the same as a <a def-id="blob-uri"></a>, except that anything in the definition of that feature that refers to <a def-id="File"></a> and <a def-id="Blob"></a> objects is hereby extended to also apply to <a>MediaSource</a> objects.</p>
             <p>The [=origin=] of the MediaSource object URL is the [=relevant settings object=] of <code>this</code> during the call to {{URL/createObjectURL()}}.</p>
             <p class="note">For example, the [=origin=] of the MediaSource object URL affects the way that the media element is <a href="https://html.spec.whatwg.org/multipage/canvas.html#security-with-canvas-elements">consumed by canvas</a>.</p>
