@@ -187,7 +187,11 @@
     'byte-stream-formats-section': { func: link_helper, fragment: '#byte-stream-formats', link_text: 'byte stream formats section', },
     'append-decode-error-algorithm': { func: append_error_helper, fragment: '#sourcebuffer-append-error', link_text: 'true', },
     'coded-frame-processing-algorithm': { func: link_helper, fragment: '#sourcebuffer-coded-frame-processing', link_text: 'coded frame processing algorithm', },
-    'generate-timestamps-flag': { func: var_helper, fragment: '#sourcebuffer-generate-timestamps-flag', link_text: 'generate timestamps flag', },
+
+    // TODO: Consider replacing this with xref usage and explicit {{SourceBuffer/[[generate timestamps flag]]}}
+    // reference usage in the BSF registry and any other user of this entry. For now, it is updated to the correct
+    // fragment.
+    'generate-timestamps-flag': { func: var_helper, fragment: '#dfn-generate-timestamps-flag', link_text: 'generate timestamps flag', },
 
     'blob-uri': { func: fileapi_helper, fragment: 'url', link_text: 'Blob URI',  },
     'File': { func: fileapi_helper, fragment: 'dfn-file', link_text: 'File', },
@@ -356,7 +360,7 @@
 
     [...document.querySelectorAll('a[def-id]')].forEach(el =>
       el.classList.add('externalDFN'));
- 
+
     // Process external links first, so ReSpec will leave them alone
     [...document.querySelectorAll('a:not([href])')].forEach(el => {
       var className = el.textContent;
@@ -365,7 +369,7 @@
         var id = info.fragment;
         var df = document.createDocumentFragment();
         var baseURL = lookupBaseUrlForSpec( info );
- 
+
         if (baseURL) {
           const anchor = document.createElement('a');
           anchor.setAttribute('href', baseURL + "#" + id);
@@ -460,7 +464,7 @@
         console.log("Found def-id '" + def_id + "' but it does not correspond to anything");
       }
     });
- 
+
     // Move algorithm text after method parameter & return value information.
     [...document.querySelectorAll('ol.method-algorithm')].forEach(el => {
       var parent = el.parentNode;
@@ -479,7 +483,7 @@
         console.log("def-id '" + k + "' from groupName '" + defGroupName + "' never used.");
       }
     }
- 
+
     [...document.querySelectorAll('a[href]')].forEach(el => {
       var href = el.getAttribute('href');
       var matched = /^#(.+)$/.exec(href);

@@ -280,7 +280,12 @@
       <h2><dfn>MediaSource</dfn> Object</h2>
       <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the {{MediaSource/readyState}} for this source as well as a list of <a>SourceBuffer</a> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}} to add media data to this source. The HTMLMediaElement fetches this media data from the <a>MediaSource</a> object when it is needed during playback.</p>
 
-      <p>Each <a>MediaSource</a> object has a <dfn id="live-seekable-range">live seekable range</dfn> variable that stores a <a def-id="normalized-timeranges-object"></a>.  This variable is initialized to an empty {{TimeRanges}} object when the <a>MediaSource</a> object is created, is maintained by {{MediaSource/setLiveSeekableRange()}} and {{MediaSource/clearLiveSeekableRange()}}, and is used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
+      <p>Each {{MediaSource}} object has a <dfn data-dfn-for="MediaSource">[[\live seekable range]]</dfn> internal slot
+        that stores a <a def-id="normalized-timeranges-object"></a>. It is initialized to an empty {{TimeRanges}} object
+        when the {{MediaSource}} object is created, is maintained by {{MediaSource/setLiveSeekableRange()}} and
+        {{MediaSource/clearLiveSeekableRange()}}, and is used in
+        <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify
+        {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
 
       <div><pre class="idl">enum ReadyState {
     "closed",
@@ -393,12 +398,12 @@ interface MediaSource : EventTarget {
             </li>
             <li>If the {{MediaSource/readyState}} attribute is not in the {{ReadyState/""open""}} state then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>Create a new <a>SourceBuffer</a> object and associated resources.</li>
-            <li>Set the [=generate timestamps flag=] on the new object to the value in the
-               "Generate Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry
-              that is associated with |type|.
+            <li>Set the {{SourceBuffer/[[generate timestamps flag]]}} on the new object to the value in the "Generate
+              Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry that is associated with
+              |type|.
             </li><li>
               <dl class="switch">
-                <dt>If the [=generate timestamps flag=] equals true:</dt>
+                <dt>If the {{SourceBuffer/[[generate timestamps flag]]}} equals true:</dt>
                 <dd>
                   Set the {{SourceBuffer/mode}} attribute on the new object to
                   {{AppendMode/""sequence""}}.
@@ -610,11 +615,14 @@ interface MediaSource : EventTarget {
 
           <dt><dfn><code>setLiveSeekableRange</code></dfn></dt><dd>
 
-          <p>Updates the [=live seekable range=] variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
+          <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
+            <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify
+            {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
           <ol class="method-algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not {{ReadyState/""open""}} then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If |start:double| is negative or greater than |end:double|, then throw a {{TypeError}} exception and abort these steps.</li>
-            <li>Set [=live seekable range=] to be a new <a def-id="normalized-timeranges-object"></a> containing a single range whose start position is |start| and end position is |end|.
+            <li>Set {{MediaSource/[[live seekable range]]}} to be a new <a def-id="normalized-timeranges-object"></a>
+              containing a single range whose start position is |start| and end position is |end|.
           </li></ol>
           <table class="parameters">
             <tbody>
@@ -646,11 +654,14 @@ interface MediaSource : EventTarget {
             </tbody>
           </table>
         <div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>clearLiveSeekableRange</code></dfn></dt><dd>
-          <p>Updates the [=live seekable range=] variable used in <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
+        <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
+          <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify
+          {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
 
           <ol class="method-algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not {{ReadyState/""open""}} then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>If [=live seekable range=] contains a range, then set [=live seekable range=] to be a new empty {{TimeRanges}} object.
+            <li>If {{MediaSource/[[live seekable range]]}} contains a range, then set {{MediaSource/[[live seekable
+              range]]}} to be a new empty {{TimeRanges}} object.
           </li></ol>
         <div><em>No parameters.</em></div><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>isTypeSupported</code></dfn>, static</dt><dd>
           <p>Check to see whether the <a>MediaSource</a> is capable of creating <a>SourceBuffer</a> objects for the specified MIME type.</p>
@@ -1158,9 +1169,8 @@ interface SourceBuffer : EventTarget {
             <li>If this object has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=], then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If the {{SourceBuffer/updating}} attribute equals true, then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>Let |new mode:AppendMode| equal the new value being assigned to this attribute.</li>
-            <li>If [=generate timestamps flag=] equals true and |new mode| equals
-              {{AppendMode/""segments""}}, then throw a {{TypeError}}
-              exception and abort these steps.</li>
+            <li>If {{SourceBuffer/[[generate timestamps flag]]}} equals true and |new mode| equals
+              {{AppendMode/""segments""}}, then throw a {{TypeError}} exception and abort these steps.</li>
             <li>
               <p>If the {{MediaSource/readyState}} attribute of the [=parent media source=] is in the {{ReadyState/""ended""}} state then run the following steps:</p>
               <ol>
@@ -1168,8 +1178,10 @@ interface SourceBuffer : EventTarget {
                 <li>[=Queue a task=] to [=fire an event=] named {{sourceopen}} at the [=parent media source=].</li>
               </ol>
             </li>
-            <li>If the [=append state=] equals [=PARSING_MEDIA_SEGMENT=], then throw an {{InvalidStateError}} and abort these steps.</li>
-            <li>If the |new mode| equals {{AppendMode/""sequence""}}, then set the [=group start timestamp=] to the [=group end timestamp=].</li>
+            <li>If the {{SourceBuffer/[[append state]]}} equals [=PARSING_MEDIA_SEGMENT=], then throw an
+              {{InvalidStateError}} and abort these steps.</li>
+            <li>If the |new mode| equals {{AppendMode/""sequence""}}, then set the {{SourceBuffer/[[group start
+              timestamp]]}} to the {{SourceBuffer/[[group end timestamp]]}}.</li>
             <li>Update the attribute to |new mode|.</li>
           </ol>
         </dd><dt><dfn><code>updating</code></dfn> of type {{boolean}}, readonly       </dt><dd>
@@ -1213,8 +1225,10 @@ interface SourceBuffer : EventTarget {
                 <li>[=Queue a task=] to [=fire an event=] named {{sourceopen}} at the [=parent media source=].</li>
               </ol>
             </li>
-            <li>If the [=append state=] equals [=PARSING_MEDIA_SEGMENT=], then throw an {{InvalidStateError}} and abort these steps.</li>
-            <li>If the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}}, then set the [=group start timestamp=] to |new timestamp offset|.</li>
+            <li>If the {{SourceBuffer/[[append state]]}} equals [=PARSING_MEDIA_SEGMENT=], then throw an
+              {{InvalidStateError}} and abort these steps.</li>
+            <li>If the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}}, then set the
+              {{SourceBuffer/[[group start timestamp]]}} to |new timestamp offset|.</li>
             <li>Update the attribute to |new timestamp offset|.</li>
           </ol>
         </dd><dt><dfn><code>audioTracks</code></dfn> of type {{AudioTrackList}}, readonly       </dt><dd>
@@ -1263,7 +1277,7 @@ interface SourceBuffer : EventTarget {
 
           <ol class="method-algorithm">
             <li>Run the [=prepare append=] algorithm.</li>
-            <li>Add |data:BufferSource| to the end of the [=input buffer=].</li>
+            <li>Add |data:BufferSource| to the end of the {{SourceBuffer/[[input buffer]]}}.</li>
             <li>Set the {{SourceBuffer/updating}} attribute to true.</li>
             <li>[=Queue a task=] to [=fire an event=] named {{updatestart}} at this <a>SourceBuffer</a> object.</li>
             <li>Asynchronously run the [=buffer append=] algorithm.</li>
@@ -1303,12 +1317,12 @@ interface SourceBuffer : EventTarget {
               </ol>
             </li>
             <li>Run the [=reset parser state=] algorithm.</li>
-            <li>Update the [=generate timestamps flag=] on this {{SourceBuffer}} object to the value in the
-                 "Generate Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry
-                 that is associated with |type|.</li>
+            <li>Update the {{SourceBuffer/[[generate timestamps flag]]}} on this {{SourceBuffer}} object to the value in
+              the "Generate Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry that is
+              associated with |type|.</li>
             <li>
                 <dl class="switch">
-                  <dt>If the [=generate timestamps flag=] equals true:</dt>
+                  <dt>If the {{SourceBuffer/[[generate timestamps flag]]}} equals true:</dt>
                   <dd>
                   Set the {{SourceBuffer/mode}} attribute on this {{SourceBuffer}} object to {{AppendMode/""sequence""}}, including running the associated steps for that attribute being set.
                   </dd>
@@ -1318,7 +1332,8 @@ interface SourceBuffer : EventTarget {
                   </dd>
                 </dl>
             </li>
-            <li>Set the [=pending initialization segment for changeType flag=] on this {{SourceBuffer}} object to true.
+            <li>Set the {{SourceBuffer/[[pending initialization segment for changeType flag]]}} on this {{SourceBuffer}}
+              object to true.
           </ol>
           <table class="parameters">
             <tbody>
@@ -1470,7 +1485,9 @@ interface SourceBuffer : EventTarget {
 
         <section id="sourcebuffer-segment-parser-loop">
           <h4><dfn>Segment Parser Loop</dfn></h4>
-          <p>All SourceBuffer objects have an internal <dfn id="sourcebuffer-append-state">append state</dfn> variable that keeps track of the high-level segment parsing state. It is initially set to [=WAITING_FOR_SEGMENT=] and can transition to the following states as data is appended.</p>
+          <p>Each {{SourceBuffer}} object has an <dfn data-dfn-for="SourceBuffer">[[\append state]]</dfn> internal slot
+          that keeps track of the high-level segment parsing state. It is initially set to [=WAITING_FOR_SEGMENT=] and
+          can transition to the following states as data is appended.</p>
           <table class="old-table">
             <thead>
               <tr>
@@ -1494,72 +1511,93 @@ interface SourceBuffer : EventTarget {
             </tbody>
           </table>
 
-          <p>The <dfn id="sourcebuffer-input-buffer">input buffer</dfn> is a byte buffer that is used to hold unparsed bytes across {{SourceBuffer/appendBuffer()}} calls. The buffer is empty when the SourceBuffer object is created.</p>
+          <p>Each {{SourceBuffer}} object has an <dfn data-dfn-for="SourceBuffer">[[\input buffer]]</dfn> internal slot
+            that is a byte buffer that holds unparsed bytes across {{SourceBuffer/appendBuffer()}} calls. The buffer is
+            empty when the {{SourceBuffer}} object is created.</p>
 
-          <p>The <dfn id="sourcebuffer-buffer-full-flag">buffer full flag</dfn> keeps track of whether {{SourceBuffer/appendBuffer()}}
-            is allowed to accept more bytes. It is set to false when the SourceBuffer object is created and gets updated
-            as data is appended and removed.</p>
+          <p>Each {{SourceBuffer}} object has a <dfn data-dfn-for="SourceBuffer">[[\buffer full flag]]</dfn> internal
+            slot that keeps track of whether {{SourceBuffer/appendBuffer()}} is allowed to accept more bytes. It is set
+            to false when the {{SourceBuffer}} object is created and gets updated as data is appended and removed.</p>
 
-          <p>The <dfn id="sourcebuffer-group-start-timestamp">group start timestamp</dfn> variable keeps track of the starting timestamp for a new
-            [=coded frame group=] in the {{AppendMode/""sequence""}} mode.
-            It is unset when the SourceBuffer object is created and gets updated when the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}} and the
+          <p>Each {{SourceBuffer}} object has a <dfn data-dfn-for="SourceBuffer">[[\group start timestamp]]</dfn>
+            internal slot that keeps track of the starting timestamp for a new [=coded frame group=] in the
+            {{AppendMode/""sequence""}} mode. It is unset when the SourceBuffer object is created and gets updated when
+            the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}} and the
             {{SourceBuffer/timestampOffset}} attribute is set, or the [=coded frame processing=] algorithm runs.
           </p>
 
-          <p>The <dfn id="sourcebuffer-group-end-timestamp">group end timestamp</dfn> variable stores the
-            highest [=coded frame end timestamp=] across all [=coded frames=] in
-            the current [=coded frame group=]. It is set to 0 when the SourceBuffer object is created and gets updated
-            by the [=coded frame processing=] algorithm.
+          <p>Each {{SourceBuffer}} object has a <dfn data-dfn-for="SourceBuffer">[[\group end timestamp]]</dfn> internal
+            slot that stores the highest [=coded frame end timestamp=] across all [=coded frames=] in the current
+            [=coded frame group=]. It is set to 0 when the SourceBuffer object is created and gets updated by the
+            [=coded frame processing=] algorithm.
           </p>
-          <p class="note">The [=group end timestamp=] stores the highest [=coded frame end timestamp=] across all [=track buffers=] in a <a>SourceBuffer</a>. Therefore, care should be taken in setting the {{SourceBuffer/mode}} attribute when appending multiplexed segments in which the timestamps are not aligned across tracks.
+          <p class="note">The {{SourceBuffer/[[group end timestamp]]}} stores the highest [=coded frame end timestamp=]
+            across all [=track buffers=] in a <a>SourceBuffer</a>. Therefore, care should be taken in setting the
+            {{SourceBuffer/mode}} attribute when appending multiplexed segments in which the timestamps are not aligned
+            across tracks.
           </p>
 
-          <p>The <dfn id="sourcebuffer-generate-timestamps-flag" data-export="">generate timestamps flag</dfn> is a
-            boolean variable that keeps track of whether timestamps need to be generated for the
-            [=coded frames=] passed to the [=coded frame processing=] algorithm.
-            This flag is set by {{MediaSource/addSourceBuffer()}} when the SourceBuffer object is created.
+          <p>Each {{SourceBuffer}} object has a
+            <dfn data-dfn-for="SourceBuffer" data-export="">[[\generate timestamps flag]]</dfn> internal slot that is a
+            boolean that keeps track of whether timestamps need to be generated for the [=coded frames=] passed to the
+            [=coded frame processing=] algorithm.
+            This flag is set by {{MediaSource/addSourceBuffer()}} when the {{SourceBuffer}} object is created and is
+            updated by {{SourceBuffer/changeType()}}.
           </p>
           <p>When the segment parser loop algorithm is invoked, run the following steps:</p>
 
           <ol>
-            <li><i>Loop Top:</i> If the [=input buffer=] is empty, then jump to the <i>need more data</i> step below.</li>
-            <li>If the [=input buffer=] contains bytes that violate the [=SourceBuffer byte stream format specification=], then run the
-              [=append error=] algorithm and abort this algorithm.</li>
-            <li>Remove any bytes that the [=byte stream format specifications=] say MUST be ignored from the start of the [=input buffer=].</li>
+            <li><i>Loop Top:</i> If the {{SourceBuffer/[[input buffer]]}} is empty, then jump to the <i>need more
+            data</i> step below.</li>
+            <li>If the {{SourceBuffer/[[input buffer]]}} contains bytes that violate the [=SourceBuffer byte stream
+              format specification=], then run the [=append error=] algorithm and abort this algorithm.</li>
+            <li>Remove any bytes that the [=byte stream format specifications=] say MUST be ignored from the start of
+              the {{SourceBuffer/[[input buffer]]}}.</li>
             <li>
-              <p>If the [=append state=] equals [=WAITING_FOR_SEGMENT=], then run the following steps:</p>
+              <p>If the {{SourceBuffer/[[append state]]}} equals [=WAITING_FOR_SEGMENT=], then run the following
+              steps:</p>
               <ol>
-                <li>If the beginning of the [=input buffer=] indicates the start of an [=initialization segment=], set the [=append state=] to [=PARSING_INIT_SEGMENT=].</li>
-                <li>If the beginning of the [=input buffer=] indicates the start of a [=media segment=], set [=append state=] to [=PARSING_MEDIA_SEGMENT=].</li>
+                <li>If the beginning of the {{SourceBuffer/[[input buffer]]}} indicates the start of an [=initialization
+                  segment=], set the {{SourceBuffer/[[append state]]}} to [=PARSING_INIT_SEGMENT=].</li>
+                <li>If the beginning of the {{SourceBuffer/[[input buffer]]}} indicates the start of a [=media
+                  segment=], set {{SourceBuffer/[[append state]]}} to [=PARSING_MEDIA_SEGMENT=].</li>
                 <li>Jump to the <i>loop top</i> step above.</li>
               </ol>
             </li>
             <li>
-              <p>If the [=append state=] equals [=PARSING_INIT_SEGMENT=], then run the following steps:</p>
+              <p>If the {{SourceBuffer/[[append state]]}} equals [=PARSING_INIT_SEGMENT=], then run the following
+              steps:</p>
               <ol>
-                <li>If the [=input buffer=] does not contain a complete [=initialization segment=] yet, then jump to the <i>need more data</i> step below.</li>
+                <li>If the {{SourceBuffer/[[input buffer]]}} does not contain a complete [=initialization segment=] yet,
+                  then jump to the <i>need more data</i> step below.</li>
                 <li>Run the [=initialization segment received=] algorithm.</li>
-                <li>Remove the [=initialization segment=] bytes from the beginning of the [=input buffer=].</li>
-                <li>Set [=append state=] to [=WAITING_FOR_SEGMENT=].</li>
+                <li>Remove the [=initialization segment=] bytes from the beginning of the {{SourceBuffer/[[input
+                  buffer]]}}.</li>
+                <li>Set {{SourceBuffer/[[append state]]}} to [=WAITING_FOR_SEGMENT=].</li>
                 <li>Jump to the <i>loop top</i> step above.</li>
               </ol>
             </li>
             <li>
-              <p>If the [=append state=] equals [=PARSING_MEDIA_SEGMENT=], then run the following steps:</p>
+              <p>If the {{SourceBuffer/[[append state]]}} equals [=PARSING_MEDIA_SEGMENT=], then run the following
+              steps:</p>
               <ol>
-                <li>If the [=first initialization segment received flag=] is false or the [=pending initialization segment for changeType flag=] is true, then run the [=append error=] algorithm and abort this algorithm.</li>
-                <li>If the [=input buffer=] contains one or more complete [=coded frames=], then run the
-                  [=coded frame processing=] algorithm.
+                <li>If the {{SourceBuffer/[[first initialization segment received flag]]}} is false or the
+                  {{SourceBuffer/[[pending initialization segment for changeType flag]]}} is true, then run the [=append
+                  error=] algorithm and abort this algorithm.</li>
+                <li>If the {{SourceBuffer/[[input buffer]]}} contains one or more complete [=coded frames=], then run
+                  the [=coded frame processing=] algorithm.
                   <p class="note">
                     The frequency at which the coded frame processing algorithm is run is implementation-specific. The coded frame processing algorithm MAY
                     be called when the input buffer contains the complete media segment or it MAY be called multiple times as complete coded frames are
                     added to the input buffer.
                   </p>
                 </li>
-                <li>If this <a>SourceBuffer</a> is full and cannot accept more media data, then set the [=buffer full flag=] to true.</li>
-                <li>If the [=input buffer=] does not contain a complete [=media segment=], then jump to the <i>need more data</i> step below.</li>
-                <li>Remove the [=media segment=] bytes from the beginning of the [=input buffer=].</li>
-                <li>Set [=append state=] to [=WAITING_FOR_SEGMENT=].</li>
+                <li>If this {{SourceBuffer}} is full and cannot accept more media data, then set the
+                  {{SourceBuffer/[[buffer full flag]]}} to true.</li>
+                <li>If the {{SourceBuffer/[[input buffer]]}} does not contain a complete [=media segment=], then jump to
+                  the <i>need more data</i> step below.</li>
+                <li>Remove the [=media segment=] bytes from the beginning of the {{SourceBuffer/[[input buffer]]}}.</li>
+                <li>Set {{SourceBuffer/[[append state]]}} to [=WAITING_FOR_SEGMENT=].</li>
                 <li>Jump to the <i>loop top</i> step above.</li>
               </ol>
             </li>
@@ -1571,16 +1609,17 @@ interface SourceBuffer : EventTarget {
           <h4><dfn>Reset Parser State</dfn></h4>
           <p>When the parser state needs to be reset, run the following steps:</p>
           <ol>
-            <li>If the [=append state=] equals [=PARSING_MEDIA_SEGMENT=] and the [=input buffer=] contains some
-              complete [=coded frames=], then run the [=coded frame processing=] algorithm until all of these complete
-              [=coded frames=] have been processed.</li>
+            <li>If the {{SourceBuffer/[[append state]]}} equals [=PARSING_MEDIA_SEGMENT=] and the {{SourceBuffer/[[input
+              buffer]]}} contains some complete [=coded frames=], then run the [=coded frame processing=] algorithm
+              until all of these complete [=coded frames=] have been processed.</li>
             <li>Unset the [=last decode timestamp=] on all [=track buffers=].</li>
             <li>Unset the [=last frame duration=] on all [=track buffers=].</li>
             <li>Unset the [=highest end timestamp=] on all [=track buffers=].</li>
             <li>Set the [=need random access point flag=] on all [=track buffers=] to true.</li>
-            <li>If the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}}, then set the [=group start timestamp=] to the [=group end timestamp=]</li>
-            <li>Remove all bytes from the [=input buffer=].</li>
-            <li>Set [=append state=] to [=WAITING_FOR_SEGMENT=].</li>
+            <li>If the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}}, then set the
+              {{SourceBuffer/[[group start timestamp]]}} to the {{SourceBuffer/[[group end timestamp]]}}</li>
+            <li>Remove all bytes from the {{SourceBuffer/[[input buffer]]}}.</li>
+            <li>Set {{SourceBuffer/[[append state]]}} to [=WAITING_FOR_SEGMENT=].</li>
           </ol>
         </section>
 
@@ -1627,7 +1666,8 @@ interface SourceBuffer : EventTarget {
             </li>
             <li>Run the [=coded frame eviction=] algorithm.</li>
             <li>
-              <p>If the [=buffer full flag=] equals true, then throw a {{QuotaExceededError}} exception and abort these steps.</p>
+              <p>If the {{SourceBuffer/[[buffer full flag]]}} equals true, then throw a {{QuotaExceededError}} exception
+                and abort these steps.</p>
               <p class="note">This is the signal that the implementation was unable to evict enough data to accommodate the append or the append is too big. The web
                 application SHOULD use {{SourceBuffer/remove()}} to explicitly free up space and/or reduce the size of the append.</p>
             </li>
@@ -1666,12 +1706,15 @@ interface SourceBuffer : EventTarget {
         <section id="sourcebuffer-init-segment-received">
           <h4><dfn>Initialization Segment Received</dfn></h4>
           <p>The following steps are run when the [=segment parser loop=] successfully parses a complete [=initialization segment=]:</p>
-          <p>Each SourceBuffer object has an internal <dfn id="first-init-segment-received-flag">first initialization segment received flag</dfn> that tracks whether the first [=initialization segment=] has been appended and received by this algorithm. This flag is set to false when the SourceBuffer is created and updated by the algorithm below.</p>
-          <p>Each SourceBuffer object has an internal <dfn id="pending-init-segment-for-changetype-flag">
-            pending initialization segment for changeType flag</dfn> that tracks whether an [=initialization segment=]
-            is needed since the most recent {{SourceBuffer/changeType()}}.
-            This flag is set to false when the SourceBuffer is created, set to true by {{SourceBuffer/changeType()}} and reset to false
-            by the algorithm below.</p>
+          <p>Each SourceBuffer object has a
+          <dfn data-dfn-for="SourceBuffer">[[\first initialization segment received flag]]</dfn> internal slot that
+          tracks whether the first [=initialization segment=] has been appended and received by this algorithm.  This
+          flag is set to false when the SourceBuffer is created and updated by the algorithm below.</p>
+          <p>Each SourceBuffer object has a
+          <dfn data-dfn-for="SourceBuffer">[[\pending initialization segment for changeType flag]]</dfn> internal slot
+          that tracks whether an [=initialization segment=] is needed since the most recent
+          {{SourceBuffer/changeType()}}.  This flag is set to false when the SourceBuffer is created, set to true by
+          {{SourceBuffer/changeType()}} and reset to false by the algorithm below.</p>
           <ol>
             <li>Update the {{MediaSource/duration}} attribute if it currently equals NaN:
               <dl class="switch">
@@ -1683,7 +1726,8 @@ interface SourceBuffer : EventTarget {
               </dl>
             </li>
             <li>If the [=initialization segment=] has no audio, video, or text tracks, then run the [=append error=] algorithm  and abort these steps.</li>
-            <li>If the [=first initialization segment received flag=] is true, then run the following steps:
+            <li>If the {{SourceBuffer/[[first initialization segment received flag]]}} is true, then run the following
+              steps:
               <ol>
                 <li>Verify the following properties. If any of the checks fail then run the [=append error=] algorithm and abort these steps.
                   <ul>
@@ -1716,7 +1760,8 @@ interface SourceBuffer : EventTarget {
             </li>
             <li>Let |active track flag:boolean| equal false.</li>
             <li>
-              <p>If the [=first initialization segment received flag=] is false, then run the following steps:</p>
+              <p>If the {{SourceBuffer/[[first initialization segment received flag]]}} is false, then run the following
+              steps:</p>
               <ol>
                 <li>If the [=initialization segment=] contains tracks with codecs the user agent does not support, then run the [=append error=] algorithm and abort these steps.
                   <p class="note">User agents MAY consider codecs, that would otherwise be supported, as "not supported" here if the codecs were not
@@ -1958,10 +2003,10 @@ interface SourceBuffer : EventTarget {
                     <li>[=Queue a task=] to [=fire an event=] named {{addsourcebuffer}} at {{MediaSource/activeSourceBuffers}}</li>
                   </ol>
                 </li>
-                <li>Set [=first initialization segment received flag=] to true.</li>
+                <li>Set {{SourceBuffer/[[first initialization segment received flag]]}} to true.</li>
               </ol>
             </li>
-            <li>Set [=pending initialization segment for changeType flag=] to false.</li>
+            <li>Set {{SourceBuffer/[[pending initialization segment for changeType flag]]}} to false.</li>
             <li>If the |active track flag| equals true, then run the following steps:
               <dl class="switch">
                 <dt>If the [=parent media source=] was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
@@ -1985,8 +2030,9 @@ interface SourceBuffer : EventTarget {
                 changes may trigger events on the HTMLMediaElement.
               </p>
             </li>
-            <li>If each object in {{MediaSource/sourceBuffers}} of the [=parent media source=] has [=first
-              initialization segment received flag=] equal to true, then run the following steps:
+            <li>If each object in {{MediaSource/sourceBuffers}} of the [=parent media source=] has
+              {{SourceBuffer/[[first initialization segment received flag]]}} equal to true, then run the following
+              steps:
               <dl class="switch">
                 <dt>If the [=parent media source=] was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
                 <dd>Post an internal <code>sourcebuffers ready</code> message to {{MediaSource/[[port to main]]}} whose
@@ -2020,7 +2066,7 @@ interface SourceBuffer : EventTarget {
               <p>For each [=coded frame=] in the [=media segment=] run the following steps:</p>
               <ol>
                 <li><i>Loop Top: </i><dl class="switch">
-                    <dt>If [=generate timestamps flag=] equals true:</dt>
+                    <dt>If {{SourceBuffer/[[generate timestamps flag]]}} equals true:</dt>
                     <dd>
                       <ol>
                         <li>Let |presentation timestamp:double| equal 0.</li>
@@ -2049,12 +2095,15 @@ interface SourceBuffer : EventTarget {
                   </dl>
                 </li>
                 <li>Let |frame duration:double| be a double precision floating point representation of the [=coded frame duration|coded frame's duration=] in seconds.</li>
-                <li>If {{SourceBuffer/mode}} equals {{AppendMode/""sequence""}} and [=group start timestamp=] is set, then run the following steps:
+                <li>If {{SourceBuffer/mode}} equals {{AppendMode/""sequence""}} and {{SourceBuffer/[[group start
+                  timestamp]]}} is set, then run the following steps:
                   <ol>
-                    <li>Set {{SourceBuffer/timestampOffset}} equal to [=group start timestamp=] minus |presentation timestamp|.</li>
-                    <li>Set [=group end timestamp=] equal to [=group start timestamp=].</li>
+                    <li>Set {{SourceBuffer/timestampOffset}} equal to {{SourceBuffer/[[group start timestamp]]}} minus
+                        |presentation timestamp|.</li>
+                    <li>Set {{SourceBuffer/[[group end timestamp]]}} equal to {{SourceBuffer/[[group start
+                      timestamp]]}}.</li>
                     <li>Set the [=need random access point flag=] on all [=track buffers=] to true.</li>
-                    <li>Unset [=group start timestamp=].</li>
+                    <li>Unset {{SourceBuffer/[[group start timestamp]]}}.</li>
                   </ol>
                 </li>
                 <li>
@@ -2077,9 +2126,10 @@ interface SourceBuffer : EventTarget {
                         <li>
                           <dl class="switch">
                             <dt>If {{SourceBuffer/mode}} equals {{AppendMode/""segments""}}:</dt>
-                            <dd>Set [=group end timestamp=] to |presentation timestamp|.</dd>
+                            <dd>Set {{SourceBuffer/[[group end timestamp]]}} to |presentation timestamp|.</dd>
                             <dt>If {{SourceBuffer/mode}} equals {{AppendMode/""sequence""}}:</dt>
-                            <dd>Set [=group start timestamp=] equal to the [=group end timestamp=].</dd>
+                            <dd>Set {{SourceBuffer/[[group start timestamp]]}} equal to the {{SourceBuffer/[[group end
+                              timestamp]]}}.</dd>
                           </dl>
                         </li>
                         <li>Unset the [=last decode timestamp=] on all [=track buffers=].</li>
@@ -2182,9 +2232,9 @@ interface SourceBuffer : EventTarget {
                   <p class="note">The greater than check is needed because bidirectional prediction between coded frames can cause
                     |presentation timestamp| to not be monotonically increasing even though the decode timestamps are monotonically increasing.</p>
                 </li>
-                <li>If |frame end timestamp| is greater than [=group end timestamp=],
-                  then set [=group end timestamp=] equal to |frame end timestamp|.</li>
-                <li>If [=generate timestamps flag=] equals true, then set
+                <li>If |frame end timestamp| is greater than {{SourceBuffer/[[group end timestamp]]}}, then set
+                  {{SourceBuffer/[[group end timestamp]]}} equal to |frame end timestamp|.</li>
+                <li>If {{SourceBuffer/[[generate timestamps flag]]}} equals true, then set
                   {{SourceBuffer/timestampOffset}} equal to |frame end timestamp|.</li>
               </ol>
             </li>
@@ -2202,7 +2252,7 @@ interface SourceBuffer : EventTarget {
             </li>
             <li>If the [=media segment=] contains data beyond the current {{MediaSource/duration}}, then run the
               [=duration change=] algorithm with |new duration:unrestricted double| set to the maximum of the current
-              duration and the [=group end timestamp=].</li>
+              duration and the {{SourceBuffer/[[group end timestamp]]}}.</li>
           </ol>
         </section>
 
@@ -2226,9 +2276,10 @@ interface SourceBuffer : EventTarget {
                   <li><p>For each removed frame, if the frame has a [=decode timestamp=] equal to the [=last decode timestamp=] for the frame's track, run the following steps:</p>
                     <dl class="switch">
                       <dt>If {{SourceBuffer/mode}} equals {{AppendMode/""segments""}}:</dt>
-                      <dd>Set [=group end timestamp=] to [=presentation timestamp=].</dd>
+                      <dd>Set {{SourceBuffer/[[group end timestamp]]}} to [=presentation timestamp=].</dd>
                       <dt>If {{SourceBuffer/mode}} equals {{AppendMode/""sequence""}}:</dt>
-                      <dd>Set [=group start timestamp=] equal to the [=group end timestamp=].</dd>
+                      <dd>Set {{SourceBuffer/[[group start timestamp]]}} equal to the {{SourceBuffer/[[group end
+                        timestamp]]}}.</dd>
                     </dl>
                   </li>
                   <li>Unset the [=last decode timestamp=] on all [=track buffers=].</li>
@@ -2255,8 +2306,8 @@ interface SourceBuffer : EventTarget {
                 </li>
               </ol>
             </li>
-            <li>If [=buffer full flag=] equals true and this object is ready to accept more bytes, then set
-              the [=buffer full flag=] to false.</li>
+            <li>If the {{SourceBuffer/[[buffer full flag]]}} equals true and this object is ready to accept more bytes,
+              then set the {{SourceBuffer/[[buffer full flag]]}} to false.</li>
           </ol>
         </section>
 
@@ -2264,8 +2315,16 @@ interface SourceBuffer : EventTarget {
           <h4><dfn>Coded Frame Eviction</dfn></h4>
           <p>This algorithm is run to free up space in this {{SourceBuffer}} when new data is appended.</p>
           <ol>
-            <li>Let |new data:BufferSource| equal the data that is about to be appended to this SourceBuffer.</li>
-            <li>If the [=buffer full flag=] equals false, then abort these steps.</li>
+            <li>Let |new data:BufferSource| equal the data that is about to be appended to this SourceBuffer.
+              <div class="issue" data-number="289">
+                <p>Need to recognize step here that implementations MAY decide to set {{SourceBuffer/[[buffer full
+                flag]]}} true here if it predicts that processing |new data| in addition to any existing bytes in
+                {{SourceBuffer/[[input buffer]]}} would exceed the capacity of the {{SourceBuffer}}. Such a step enables
+                more proactive push-back from implementations before accepting |new data| which would overflow
+                resources, for example. In practice, at least one implementation already does this.</p>
+              </div>
+            </li>
+            <li>If the {{SourceBuffer/[[buffer full flag]]}} equals false, then abort these steps.</li>
             <li>Let |removal ranges:normalized TimeRanges| equal a list of presentation time ranges that can be evicted from the presentation to make room for the
               |new data|.
               <p class="note">Implementations MAY use different methods for selecting |removal ranges| so web applications SHOULD NOT depend on a
@@ -2521,17 +2580,17 @@ interface SourceBufferList : EventTarget {
           </li>
 
           <li>Let |recent duration:unrestricted double| and |recent live seekable range:normalized TimeRanges|
-            respectively be the recent values of {{MediaSource/duration}} and [=live seekable range=], determined as
-            follows:
+            respectively be the recent values of {{MediaSource/duration}} and {{MediaSource/[[live seekable range]]}},
+            determined as follows:
             <dl class="switch">
               <dt>If the {{MediaSource}} was constructed in a {{Window}}</dt>
-              <dd>Set |recent duration| to be {{MediaSource/duration}} and set |recent live seekable
-                range| to be [=live seekable range=].</dd>
+              <dd>Set |recent duration| to be {{MediaSource/duration}} and set |recent live seekable range| to be
+                {{MediaSource/[[live seekable range]]}}.</dd>
               <dt>Otherwise:</dt>
               <dd>Set |recent duration| and |recent live seekable range| respectively to be what the
-                {{MediaSource/duration}} and [=live seekable range=] were recently, updated by handling implicit
-                messages posted by the {{MediaSource}} to its {{MediaSource/[[port to main]]}} on every change to
-                {{MediaSource/duration}} or [=live seekable range=].</dd>
+                {{MediaSource/duration}} and {{MediaSource/[[live seekable range]]}} were recently, updated by handling
+                implicit messages posted by the {{MediaSource}} to its {{MediaSource/[[port to main]]}} on every change
+                to {{MediaSource/duration}} or {{MediaSource/[[live seekable range]]}}.</dd>
             </dl>
           </li>
           <li>
