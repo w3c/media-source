@@ -1,9 +1,9 @@
 (function() {
   var MSE_spec_url = "https://www.w3.org/TR/media-source/";
-  var HTML5_spec_url = "https://www.w3.org/TR/html51/semantics-embedded-content.html";
-  var HTML5_infrastructure_spec_url = "https://www.w3.org/TR/html51/infrastructure.html";
-  var HTML5_browsers_spec_url = "https://www.w3.org/TR/html51/browsers.html";
-  var HTML5_webappapis_spec_url = "https://www.w3.org/TR/html51/webappapis.html";
+  var HTML5_spec_url = "https://html.spec.whatwg.org/multipage/media.html";
+  var HTML5_infrastructure_spec_url = "https://html.spec.whatwg.org/multipage/infrastructure.html";
+  var HTML5_browsers_spec_url = "https://html.spec.whatwg.org/multipage/browsers.html";
+  var HTML5_webappapis_spec_url = "https://html.spec.whatwg.org/multipage/webappapis.html";
   var DOM_spec_url = "https://dom.spec.whatwg.org/";
   var HRTIME_spec_url = "https://www.w3.org/TR/hr-time/";
   var W3C_STREAMS_spec_url = "https://www.w3.org/TR/streams-api/"; // Make sure this matches the localBiblio entry.
@@ -121,26 +121,6 @@
     link_helper(doc, df, WHATWG_STREAMS_spec_url + '#' + id, text);
   }
 
-  function queue_and_fire_helper(doc, df, id, text) {
-    webappapis_helper(doc, df, 'queuing', text);
-    df.appendChild(doc.createTextNode(' to '));
-    infrastructure_helper(doc, df, 'fire', 'fire a simple event');
-    df.appendChild(doc.createTextNode(' named'));
-  }
-
-  function queue_and_fire_track_event_helper_with_track_attr_initialized_to(doc, df, id, text) {
-    webappapis_helper(doc, df, 'queuing', 'queue a task');
-    df.appendChild(doc.createTextNode(' to fire a '));
-    infrastructure_helper(doc, df, 'trusted', 'trusted event');
-    df.appendChild(doc.createTextNode(' named '));
-    code_videoref_helper(doc, df, 'dom-' + id + 'tracklist-on' + text, text);
-    df.appendChild(doc.createTextNode(', that does not bubble and is not cancelable, and that uses the '));
-    code_videoref_helper(doc, df, 'trackevent-trackevent', 'TrackEvent');
-    df.appendChild(doc.createTextNode(' interface, with the '));
-    code_videoref_helper(doc, df, 'dom-trackevent-track', 'track');
-    df.appendChild(doc.createTextNode(' attribute initialized to '));
-  }
-
   function fragment_helper(doc, df, id, text) {
     var f = doc.createElement('span')
     f.innerHTML = text;
@@ -203,12 +183,12 @@
     'videoref': { func: videoref_helper, fragment: '', link_text: '', },
     'media-timeline': { func: videoref_helper, fragment: 'media-timeline', link_text: 'media timeline',  },
     'mediatracklist-change': { func: code_videoref_helper, fragment: 'dom-mediatracklist-onchange', link_text: 'change',  },
-    'resource-fetch-algorithm': { func: videoref_helper, fragment: 'resource-fetch-algorithm', link_text: 'resource fetch algorithm',  },
+    'resource-fetch-algorithm': { func: videoref_helper, fragment: 'concept-media-load-resource', link_text: 'resource fetch algorithm',  },
     'media-data-processing-steps-list': { func: videoref_helper, fragment: 'media-data-processing-steps-list', link_text: 'media data processing steps list', },
     'delaying-the-load-event-flag': {func: videoref_helper, fragment: 'delaying-the-load-event-flag', link_text: 'delaying-the-load-event-flag', },
-    'intrinsic-width-and-height': { func: videoref_helper, fragment: 'video-intrinsic-width', link_text: 'intrinsic width and height',  },
-    'normalized-timeranges-object': { func: videoref_helper, fragment: 'normalized-timeranges-object', link_text: 'normalized TimeRanges object',  },
-    'current-playback-position': { func: videoref_helper, fragment: 'current-position', link_text: 'current playback position',  },
+    'intrinsic-width-and-height': { func: videoref_helper, fragment: 'concept-video-intrinsic-width', link_text: 'intrinsic width and height',  },
+    'normalized-timeranges-object': { func: videoref_helper, fragment: 'normalised-timeranges-object', link_text: 'normalized TimeRanges object',  },
+    'current-playback-position': { func: videoref_helper, fragment: 'current-playback-position', link_text: 'current playback position',  },
     'media-data-is-corrupted': { func: videoref_helper, fragment: 'fatal-decode-error', link_text: 'media data is corrupted',  },
     'video-track': { func: code_videoref_helper, fragment: 'videotrack-videotrack', link_text: 'VideoTrack',  },
     'audio-track': { func: code_videoref_helper, fragment: 'audiotrack-audiotrack', link_text: 'AudioTrack',  },
@@ -219,9 +199,9 @@
     'audiotrack-language': { func: code_videoref_helper, fragment: 'dom-audiotrack-language', link_text: 'language', },
     'text-track': { func: code_videoref_helper, fragment: 'texttrack-texttrack', link_text: 'TextTrack',  },
     'texttracklist-change': { func: code_videoref_helper, fragment: 'dom-texttracklist-onchange', link_text: 'change',  },
-    'texttrackmode-showing': { func: code_videoref_helper, fragment: 'dom-texttrackmode-showing', link_text: '"showing"', },
-    'texttrackmode-hidden': { func: code_videoref_helper, fragment: 'dom-texttrackmode-hidden', link_text: '"hidden"',  },
-    'texttrackmode-disabled': { func: code_videoref_helper, fragment: 'dom-texttrackmode-disabled', link_text: '"disabled"', },
+    'texttrackmode-showing': { func: code_videoref_helper, fragment: 'dom-texttrack-showing', link_text: '"showing"', },
+    'texttrackmode-hidden': { func: code_videoref_helper, fragment: 'dom-texttrack-hidden', link_text: '"hidden"',  },
+    'texttrackmode-disabled': { func: code_videoref_helper, fragment: 'dom-texttrack-disabled', link_text: '"disabled"', },
     'ready-states' : { func: code_videoref_helper, fragment: 'ready-states', link_text: 'HTMLMediaElement ready states', },
     'have-nothing': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-have_nothing', link_text: 'HAVE_NOTHING',  },
     'have-metadata': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-have_metadata', link_text: 'HAVE_METADATA',  },
@@ -230,13 +210,8 @@
     'have-enough-data': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-have_enough_data', link_text: 'HAVE_ENOUGH_DATA',  },
     'loadedmetadata': { func: code_videoref_helper, fragment: 'eventdef-media-loadedmetadata', link_text: 'loadedmetadata',  },
     'hme-duration': { func: code_videoref_helper, fragment: 'dom-htmlmediaelement-duration', link_text: 'media duration',  },
-    'hme-seek-algorithm': { func: videoref_helper, fragment: 'seek', link_text: 'seek algorithm',  },
+    'hme-seek-algorithm': { func: videoref_helper, fragment: 'dom-media-seek', link_text: 'seek algorithm',  },
     'hme-duration-change-algorithm': { func: videoref_helper, fragment: 'durationChange', link_text: 'HTMLMediaElement duration change algorithm',  },
-
-    'queue-and-fire-media-addtrack-with-track-attr-initialized-to': { func: queue_and_fire_track_event_helper_with_track_attr_initialized_to, fragment: 'media', link_text: 'addtrack', },
-    'queue-and-fire-text-addtrack-with-track-attr-initialized-to': { func: queue_and_fire_track_event_helper_with_track_attr_initialized_to, fragment: 'text', link_text: 'addtrack', },
-    'queue-and-fire-media-removetrack-with-track-attr-initialized-to': { func: queue_and_fire_track_event_helper_with_track_attr_initialized_to, fragment: 'media', link_text: 'removetrack', },
-    'queue-and-fire-text-removetrack-with-track-attr-initialized-to': { func: queue_and_fire_track_event_helper_with_track_attr_initialized_to, fragment: 'text', link_text: 'removetrack', },
 
     'media-data-cannot-be-fetched': { func: fragment_helper, fragment: '', link_text: '&quot;<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>&quot;', },
     'Otherwise-mode-is-local': { func: fragment_helper, fragment: '', link_text: '&quot;<i>Otherwise (mode is local)</i>&quot;', },

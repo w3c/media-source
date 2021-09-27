@@ -27,16 +27,15 @@
       publishDate: "2016-07-26",
       */
 
-      previousMaturity: "PR",
-      previousPublishDate: "2016-10-04",
-      errata: "https://w3c.github.io/media-source/mse-1-errata.html",
+      prevRecURI: "https://www.w3.org/TR/2016/REC-media-source-20161117/",
 
       editors:  [
       { name: "Matthew Wolenetz",  mailto:"wolenetz@google.com", url: "",
       company: "Google Inc.", companyURL: "https://www.google.com/",
       w3cid: "76912" },
       { name: "Mark Watson", url: "",
-      company: "Netflix Inc.", companyURL: "https://www.netflix.com/" },
+      company: "Netflix Inc.", companyURL: "https://www.netflix.com/",
+      w3cid: "46379" },
       ],
 
       formerEditors: [
@@ -93,7 +92,7 @@
       key: 'Implementation',
       data: [{
         value: 'Can I use Media Source Extensions?',
-        href: 'https://caniuse.com/#feat=mediasource'
+        href: 'https://caniuse.com/mediasource'
       }, {
         value: 'Test Suite',
         href: 'https://w3c-test.org/media-source/'
@@ -224,7 +223,7 @@
           <dd><p>The parent media source of a <a>SourceBuffer</a> object is the <a>MediaSource</a> object that created it.</p></dd>
 
           <dt><dfn id="presentation-start-time">Presentation Start Time</dfn></dt>
-          <dd><p>The presentation start time is the earliest time point in the presentation and specifies the <a def-id="videoref" name="initial-playback-position">initial playback position</a> and <a def-id="videoref" name="earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0.</p>
+          <dd><p>The presentation start time is the earliest time point in the presentation and specifies the <a def-id="videoref" name="current-playback-position">playback position</a> and <a def-id="videoref" name="earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0.</p>
 
           <p class="note">For the purposes of determining if {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that includes the current playback position, implementations MAY choose to allow a current playback position at or after [=presentation start time=] and before the first {{TimeRanges}} to play the first {{TimeRanges}} if that {{TimeRanges}} starts within a reasonably short time, like 1 second, after [=presentation start time=]. This allowance accommodates the reality that muxed streams commonly do not begin all tracks precisely at [=presentation start time=]. Implementations MUST report the actual buffered range, regardless of this allowance.</p>
           </dd>
@@ -338,9 +337,8 @@ interface MediaSource : EventTarget {
         <dl class="attributes" data-dfn-for="MediaSource"><dt><dfn><code>sourceBuffers</code></dfn> of type <span class="idlAttrType"><a>SourceBufferList</a></span>, readonly       </dt><dd>
           Contains the list of <a>SourceBuffer</a> objects associated with this <a>MediaSource</a>. When {{MediaSource/readyState}} equals {{ReadyState/""closed""}} this list will be empty. Once {{MediaSource/readyState}} transitions to {{ReadyState/""open""}} SourceBuffer objects can be added to this list by using {{MediaSource/addSourceBuffer()}}.
         </dd><dt><dfn><code>activeSourceBuffers</code></dfn> of type <span class="idlAttrType"><a>SourceBufferList</a></span>, readonly       </dt><dd>
-          <p>Contains the subset of {{MediaSource/sourceBuffers}} that are providing the
-            <a def-id="videoref" name="dom-videotrack-selected">selected video track</a>, the
-            <a def-id="videoref" name="dom-audiotrack-enabled">enabled audio track(s)</a>, and the
+          <p>Contains the subset of {{MediaSource/sourceBuffers}} that are providing the {{VideoTrack/selected}} video track, the
+            {{AudioTrack/enabled}} audio track(s), and the
             <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> text track(s).
           </p>
           <p><a>SourceBuffer</a> objects in this list MUST appear in the same order as they appear in
@@ -391,7 +389,7 @@ interface MediaSource : EventTarget {
               based on |type| would result in an unsupported [=SourceBuffer configuration=],
               then throw a {{QuotaExceededError}} exception and abort these steps.
               <p class="note">For example, a user agent MAY throw a {{QuotaExceededError}} exception if the media element has reached the
-                <a def-id="have-metadata"></a> readyState. This can occur if the user agent's media engine does not support adding more tracks during
+                {{HTMLMediaElement/HAVE_METADATA}} readyState. This can occur if the user agent's media engine does not support adding more tracks during
                 playback.
               </p>
             </li>
@@ -443,12 +441,13 @@ interface MediaSource : EventTarget {
 
                     <li>Remove the {{AudioTrack}} object from the |SourceBuffer audioTracks list|.
                     <p class="note">
-                      This should trigger {{AudioTrackList}} [[HTML]] logic to <a
-                        def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the {{AudioTrack}}
-                      object, at the |SourceBuffer audioTracks list|.  If the {{AudioTrack/enabled}} attribute on the
-                      {{AudioTrack}} object was true at the beginning of this removal step, then this should also
-                      trigger {{AudioTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=] named <a
-                        def-id="mediatracklist-change"></a> at the |SourceBuffer audioTracks list|.
+                      This should trigger {{AudioTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=]
+                      named [=AudioTrackList/removetrack=] using {{TrackEvent}} with the {{TrackEvent/track}}
+                      attribute initialized to the {{AudioTrack}} object, at the |SourceBuffer audioTracks list|.
+                      If the {{AudioTrack/enabled}} attribute on the {{AudioTrack}} object was true at the beginning
+                      of this removal step, then this should also trigger {{AudioTrackList}} [[HTML]] logic to
+                      [=queue a task=] to [=fire an event=] named [=AudioTrackList/change=] at the
+                      |SourceBuffer audioTracks list|.
                     </p>
                     </li>
 
@@ -467,13 +466,13 @@ interface MediaSource : EventTarget {
                             returned by the {{HTMLMediaElement/audioTracks}} attribute on the HTMLMediaElement.</li>
                           <li>Remove the {{AudioTrack}} object from the |HTMLMediaElement audioTracks list|.
                             <p class="note">
-                              This should trigger {{AudioTrackList}} [[HTML]] logic to <a
-                                def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the
-                              {{AudioTrack}} object, at the |HTMLMediaElement audioTracks list|. If the
-                              {{AudioTrack/enabled}} attribute on the {{AudioTrack}} object was true at the beginning of
-                              this removal step, then this should also trigger {{AudioTrackList}} [[HTML]] logic to
-                              [=queue a task=] to [=fire an event=] named <a def-id="mediatracklist-change"></a> at the
-                              |HTMLMediaElement audioTracks list|.
+                              This should trigger {{AudioTrackList}} [[HTML]] logic to [=queue a task=] to
+                              [=fire an event=] named [=AudioTrackList/removetrack=] using {{TrackEvent}} with the
+                              {{TrackEvent/track}} attribute initialized to the {{AudioTrack}} object, at the
+                              |HTMLMediaElement audioTracks list|. If the {{AudioTrack/enabled}} attribute on the
+                              {{AudioTrack}} object was true at the beginning of this removal step, then this should
+                              also trigger {{AudioTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=]
+                              named [=AudioTrackList/change=] at the |HTMLMediaElement audioTracks list|.
                             </p>
                           </li>
                         </ol>
@@ -495,12 +494,13 @@ interface MediaSource : EventTarget {
 
                     <li>Remove the {{VideoTrack}} object from the |SourceBuffer videoTracks list|.
                     <p class="note">
-                      This should trigger {{VideoTrackList}} [[HTML]] logic to <a
-                        def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the {{VideoTrack}}
-                      object, at the |SourceBuffer videoTracks list|.  If the {{VideoTrack/selected}} attribute on the
+                      This should trigger {{VideoTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=]
+                      named [=VideoTrackList/removetrack=] using {{TrackEvent}} with the {{TrackEvent/track}}
+                      attribute initialized to the {{VideoTrack}} object, at the |SourceBuffer videoTracks list|.
+                      If the {{VideoTrack/selected}} attribute on the
                       {{VideoTrack}} object was true at the beginning of this removal step, then this should also
-                      trigger {{VideoTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=] named <a
-                        def-id="mediatracklist-change"></a> at the |SourceBuffer videoTracks list|.
+                      trigger {{VideoTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=] named
+                      [=VideoTrackList/change=] at the |SourceBuffer videoTracks list|.
                     </p>
                     </li>
 
@@ -519,12 +519,13 @@ interface MediaSource : EventTarget {
                             returned by the {{HTMLMediaElement/videoTracks}} attribute on the HTMLMediaElement.</li>
                           <li>Remove the {{VideoTrack}} object from the |HTMLMediaElement videoTracks list|.
                             <p class="note">
-                              This should trigger {{VideoTrackList}} [[HTML]] logic to <a
-                                def-id="queue-and-fire-media-removetrack-with-track-attr-initialized-to"></a> the
-                              {{VideoTrack}} object, at the |HTMLMediaElement videoTracks list|. If the
+                              This should trigger {{VideoTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=]
+                              named [=VideoTrackList/removetrack=] using {{TrackEvent}} with the {{TrackEvent/track}}
+                              attribute initialized to the {{VideoTrack}} object, at the |HTMLMediaElement videoTracks list|.
+                              If the
                               {{VideoTrack/selected}} attribute on the {{VideoTrack}} object was true at the beginning
                               of this removal step, then this should also trigger {{VideoTrackList}} [[HTML]] logic to
-                              [=queue a task=] to [=fire an event=] named <a def-id="mediatracklist-change"></a> at the
+                              [=queue a task=] to [=fire an event=] named [=VideoTrackList/change=] at the
                               |HTMLMediaElement videoTracks list|.
                             </p>
                           </li>
@@ -547,13 +548,14 @@ interface MediaSource : EventTarget {
 
                     <li>Remove the {{TextTrack}} object from the |SourceBuffer textTracks list|.
                     <p class="note">
-                      This should trigger {{TextTrackList}} [[HTML]] logic to
-                      <a def-id="queue-and-fire-text-removetrack-with-track-attr-initialized-to"></a> the {{TextTrack}}
-                      object, at the |SourceBuffer textTracks list|. If the {{TextTrack/mode}} attribute on the
+                      This should trigger {{TextTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=]
+                      named [=TextTrackList/removetrack=] using {{TrackEvent}} with the {{TrackEvent/track}}
+                      attribute initialized to the {{TextTrack}} object, at the |SourceBuffer textTracks list|.
+                      If the {{TextTrack/mode}} attribute on the
                       {{TextTrack}} object was <a def-id="texttrackmode-showing"></a> or
                       <a def-id="texttrackmode-hidden"></a> at the beginning of this removal step, then this should also
-                      trigger {{TextTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=] named <a
-                      def-id="texttracklist-change"></a> at the |SourceBuffer textTracks list|.
+                      trigger {{TextTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=] named
+                      [=TextTrackList/change=] at the |SourceBuffer textTracks list|.
                     </p>
                     </li>
 
@@ -572,13 +574,14 @@ interface MediaSource : EventTarget {
                             returned by the {{HTMLMediaElement/textTracks}} attribute on the HTMLMediaElement.</li>
                           <li>Remove the {{TextTrack}} object from the |HTMLMediaElement textTracks list|.
                             <p class="note">
-                              This should trigger {{TextTrackList}} [[HTML]] logic to
-                              <a def-id="queue-and-fire-text-removetrack-with-track-attr-initialized-to"></a>
-                              the {{TextTrack}} object, at the |HTMLMediaElement textTracks list|. If the
+                              This should trigger {{TextTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=]
+                              named [=TextTrackList/removetrack=] using {{TrackEvent}} with the {{TrackEvent/track}}
+                              attribute initialized to the {{TextTrack}} object, at the |HTMLMediaElement textTracks list|.
+                              If the
                               {{TextTrack/mode}} attribute on the {{TextTrack}} object was
                               <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> at the
                               beginning of this removal step, then this should also trigger {{TextTrackList}} [[HTML]]
-                              logic to [=queue a task=] to [=fire an event=] named <a def-id="texttracklist-change"></a>
+                              logic to [=queue a task=] to [=fire an event=] named [=TextTrackList/change=]
                               at the |HTMLMediaElement textTracks list|.
                             </p>
                           </li>
@@ -813,7 +816,7 @@ interface MediaSource : EventTarget {
 
         <section id="mediasource-detach">
           <h4><dfn>Detaching from a media element</dfn></h4>
-          <p>The following steps are run in any case where the media element is going to transition to <a def-id="videoref" name="dom-htmlmediaelement-network_empty">NETWORK_EMPTY</a> and [=queue a task=] to [=fire an event=] named <a def-id="videoref" name="eventdef-media-emptied">emptied</a> at the media element. These steps SHOULD be run right before the transition.</p>
+          <p>The following steps are run in any case where the media element is going to transition to {{HTMLMediaElement/NETWORK_EMPTY}} and [=queue a task=] to [=fire an event=] named   [=HTMLMediaElement/emptied=] at the media element. These steps SHOULD be run right before the transition.</p>
 
           <ol>
             <li>
@@ -842,7 +845,7 @@ interface MediaSource : EventTarget {
             <li>
               [=Queue a task=] to [=fire an event=] named {{sourceclose}} at the <a>MediaSource</a>.</li>
           </ol>
-          <p class="note">Going forward, this algorithm is intended to be externally called and run in any case where the attached <a>MediaSource</a>, if any, must be detached from the media element.  It MAY be called on HTMLMediaElement [[HTML]] operations like load() and resource fetch algorithm failures in addition to, or in place of, when the media element transitions to <a def-id="videoref" name="dom-htmlmediaelement-network_empty">NETWORK_EMPTY</a>. Resource fetch algorithm failures are those which abort either the resource fetch algorithm or the resource selection algorithm, with the exception that the "Final step" [[HTML]] is not considered a failure that triggers detachment.</p>
+          <p class="note">Going forward, this algorithm is intended to be externally called and run in any case where the attached <a>MediaSource</a>, if any, must be detached from the media element.  It MAY be called on HTMLMediaElement [[HTML]] operations like load() and resource fetch algorithm failures in addition to, or in place of, when the media element transitions to {{HTMLMediaElement/NETWORK_EMPTY}}. Resource fetch algorithm failures are those which abort either the resource fetch algorithm or the resource selection algorithm, with the exception that the "Final step" [[HTML]] is not considered a failure that triggers detachment.</p>
         </section>
 
         <section id="mediasource-seeking">
@@ -857,12 +860,12 @@ interface MediaSource : EventTarget {
                   <dd>
                   <ol>
                     <li>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is greater than
-                      <a def-id="have-metadata"></a>, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute
-                      to <a def-id="have-metadata"></a>.
+                      {{HTMLMediaElement/HAVE_METADATA}}, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute
+                      to {{HTMLMediaElement/HAVE_METADATA}}.
                     <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
                     </li>
                     <li>The media element waits until an {{SourceBuffer/appendBuffer()}} call causes the [=coded frame processing=] algorithm to set
-                      the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to a value greater than <a def-id="have-metadata"></a>.
+                      the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to a value greater than {{HTMLMediaElement/HAVE_METADATA}}.
                       <p class="note">The web application can use {{SourceBuffer/buffered}} and {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} to determine what the media element needs to resume playback.</p>
                     </li>
                   </ol>
@@ -886,20 +889,20 @@ interface MediaSource : EventTarget {
 
           <p>Having <dfn id="enough-data">enough data to ensure uninterrupted playback</dfn> is an implementation specific condition where the user agent
           determines that it currently has enough data to play the presentation without stalling for a meaningful period of time. This condition is
-          constantly evaluated to determine when to transition the media element into and out of the <a def-id="have-enough-data"></a> ready state.
+          constantly evaluated to determine when to transition the media element into and out of the {{HTMLMediaElement/HAVE_ENOUGH_DATA}} ready state.
           These transitions indicate when the user agent believes it has enough data buffered or it needs more data respectively.</p>
 
           <p class="note">An implementation MAY choose to use bytes buffered, time buffered, the append rate, or any other metric it sees fit to
             determine when it has enough data. The metrics used MAY change during playback so web applications SHOULD only rely on the value of
             {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} to determine whether more data is needed or not.</p>
 
-          <p class="note">When the media element needs more data, the user agent SHOULD transition it from <a def-id="have-enough-data"></a> to
-            <a def-id="have-future-data"></a> early enough for a web application to be able to respond without causing an interruption in playback.
+          <p class="note">When the media element needs more data, the user agent SHOULD transition it from {{HTMLMediaElement/HAVE_ENOUGH_DATA}} to
+            {{HTMLMediaElement/HAVE_FUTURE_DATA}} early enough for a web application to be able to respond without causing an interruption in playback.
             For example, transitioning when the current playback position is 500ms before the end of the buffered data gives the application roughly
             500ms to append more data before playback stalls.</p>
 
           <dl class="switch">
-            <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute equals <a def-id="have-nothing"></a>:</dt>
+            <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute equals {{HTMLMediaElement/HAVE_NOTHING}}:</dt>
             <dd>
               <ol>
                 <li>Abort these steps.</li>
@@ -908,7 +911,7 @@ interface MediaSource : EventTarget {
             <dt>If {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} does not contain a {{TimeRanges}} for the current playback position:</dt>
             <dd>
               <ol>
-                <li>Set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to <a def-id="have-metadata"></a>.
+                <li>Set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_METADATA}}.
                 <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p></li>
                 <li>Abort these steps.</li>
               </ol>
@@ -916,26 +919,26 @@ interface MediaSource : EventTarget {
             <dt>If {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that includes the current playback position and [=enough data to ensure uninterrupted playback=]:</dt>
             <dd>
               <ol>
-                <li>Set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to <a def-id="have-enough-data"></a>.
+                <li>Set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_ENOUGH_DATA}}.
                 <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p></li>
-                <li>Playback may resume at this point if it was previously suspended by a transition to <a def-id="have-current-data"></a>.</li>
+                <li>Playback may resume at this point if it was previously suspended by a transition to {{HTMLMediaElement/HAVE_CURRENT_DATA}}.</li>
                 <li>Abort these steps.</li>
               </ol>
             </dd>
             <dt>If {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that includes the current playback position and some time beyond the current playback position, then run the following steps:</dt>
             <dd>
               <ol>
-                <li>Set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to <a def-id="have-future-data"></a>.
+                <li>Set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_FUTURE_DATA}}.
                 <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
                 </li>
-                <li>Playback may resume at this point if it was previously suspended by a transition to <a def-id="have-current-data"></a>.</li>
+                <li>Playback may resume at this point if it was previously suspended by a transition to {{HTMLMediaElement/HAVE_CURRENT_DATA}}.</li>
                 <li>Abort these steps.</li>
               </ol>
             </dd>
             <dt>If {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that ends at the current playback position and does not have a range covering the time immediately after the current position:</dt>
             <dd>
               <ol>
-                <li>Set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to <a def-id="have-current-data"></a>.
+                <li>Set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_CURRENT_DATA}}.
                 <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
                 </li>
                 <li>Playback is suspended at this point since the media element doesn't have enough data to advance the <a def-id="media-timeline"></a>.</li>
@@ -947,7 +950,7 @@ interface MediaSource : EventTarget {
 
         <section id="active-source-buffer-changes">
           <h4><dfn>Changes to selected/enabled track state</dfn></h4>
-          <p>During playback {{MediaSource/activeSourceBuffers}} needs to be updated if the <a def-id="videoref" name="dom-videotrack-selected">selected video track</a>, the <a def-id="videoref" name="dom-audiotrack-enabled">enabled audio track(s)</a>, or a text track <a def-id="videoref" name="dom-texttrack-mode">mode</a> changes. When one or more of these changes occur the following steps need to be followed.
+          <p>During playback {{MediaSource/activeSourceBuffers}} needs to be updated if the {{VideoTrack/selected}} video track, the {{AudioTrack/enabled}} audio track(s), or a text track {{TextTrack/mode}} changes. When one or more of these changes occur the following steps need to be followed.
              Also, when {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}, then each change that occurs
              to a {{Window}} mirror of a track created previously by the implicit handler for the internal <code>create
                track mirror</code> message MUST also be made to the corresponding {{DedicatedWorkerGlobalScope}} track
@@ -1000,7 +1003,7 @@ interface MediaSource : EventTarget {
                 </li>
               </ol>
             </dd>
-            <dt>If a text track <a def-id="videoref" name="dom-texttrack-mode">mode</a> becomes <a def-id="texttrackmode-disabled"></a> and the <a>SourceBuffer</a> associated with this track is not associated with any other enabled or selected track, then run the following steps:</dt>
+            <dt>If a text track {{TextTrack/mode}} becomes <a def-id="texttrackmode-disabled"></a> and the <a>SourceBuffer</a> associated with this track is not associated with any other enabled or selected track, then run the following steps:</dt>
             <dd>
               <ol>
                 <li>Remove the <a>SourceBuffer</a> associated with the text track from {{MediaSource/activeSourceBuffers}}
@@ -1010,7 +1013,7 @@ interface MediaSource : EventTarget {
                 </li>
               </ol>
             </dd>
-            <dt>If a text track <a def-id="videoref" name="dom-texttrack-mode">mode</a> becomes <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> and the <a>SourceBuffer</a> associated with this track is not already in {{MediaSource/activeSourceBuffers}}, then run the following steps:
+            <dt>If a text track {{TextTrack/mode}} becomes <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> and the <a>SourceBuffer</a> associated with this track is not already in {{MediaSource/activeSourceBuffers}}, then run the following steps:
             </dt>
             <dd>
               <ol>
@@ -1041,7 +1044,7 @@ interface MediaSource : EventTarget {
               </ol>
             </li>
             <li>Update {{MediaSource/duration}} to |new duration|.</li>
-            <li>Update the <a def-id="hme-duration"></a> to |new duration|.</li>
+            <li>Update the {{HTMLMediaElement/duration}} to |new duration|.</li>
             <li>
               <dl class="switch">
                 <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
@@ -1798,13 +1801,13 @@ interface SourceBuffer : EventTarget {
                         <li>Let |current audio kind:DOMString| equal the value from |audio kinds|
                           for this iteration of the loop.</li>
                         <li>Let |new audio track:AudioTrack| be a new {{AudioTrack}} object.</li>
-                        <li>Generate a unique ID and assign it to the <a def-id="audiotrack-id"></a> property on
+                        <li>Generate a unique ID and assign it to the {{AudioTrack/id}} property on
                           |new audio track|.</li>
-                        <li>Assign |audio language| to the <a def-id="audiotrack-language"></a>
+                        <li>Assign |audio language| to the {{AudioTrack/language}}
                           property on |new audio track|.</li>
-                        <li>Assign |audio label| to the <a def-id="audiotrack-label"></a>
+                        <li>Assign |audio label| to the {{AudioTrack/label}}
                           property on |new audio track|.</li>
-                        <li>Assign |current audio kind| to the <a def-id="audiotrack-kind"></a>
+                        <li>Assign |current audio kind| to the {{AudioTrack/kind}}
                           property on |new audio track|.</li>
                         <li>
                           <p>
@@ -1819,7 +1822,8 @@ interface SourceBuffer : EventTarget {
                         <li>Add |new audio track| to the {{SourceBuffer/audioTracks}} attribute on this <a>SourceBuffer</a> object.
                         <p class="note">
                           This should trigger {{AudioTrackList}} [[HTML]] logic to
-                          <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a>
+                          [=queue a task=] to [=fire an event=] named [=AudioTrackList/addtrack=]
+                          using {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
                           |new audio track|, at the {{AudioTrackList}} object referenced by the
                           {{SourceBuffer/audioTracks}} attribute on this <a>SourceBuffer</a> object.
                         </p>
@@ -1841,7 +1845,8 @@ interface SourceBuffer : EventTarget {
                           </dl>
                           <p class="note">
                             This should trigger {{AudioTrackList}} [[HTML]] logic to
-                            <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a>
+                            [=queue a task=] to [=fire an event=] named [=AudioTrackList/addtrack=]
+                            using {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
                             |mirrored audio track| or |new audio track|, at the {{AudioTrackList}} object referenced by
                             the {{HTMLMediaElement/audioTracks}} attribute on the HTMLMediaElement.
                           </p>
@@ -1893,7 +1898,8 @@ interface SourceBuffer : EventTarget {
                         <li>Add |new video track| to the {{SourceBuffer/videoTracks}} attribute on this <a>SourceBuffer</a> object.
                         <p class="note">
                           This should trigger {{VideoTrackList}} [[HTML]] logic to
-                          <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a>
+                          [=queue a task=] to [=fire an event=] named [=VideoTrackList/addtrack=]
+                          using {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
                           |new video track|, at the {{VideoTrackList}} object referenced by the
                           {{SourceBuffer/videoTracks}} attribute on this <a>SourceBuffer</a> object.
                         </p>
@@ -1915,7 +1921,8 @@ interface SourceBuffer : EventTarget {
                           </dl>
                           <p class="note">
                             This should trigger {{VideoTrackList}} [[HTML]] logic to
-                            <a def-id="queue-and-fire-media-addtrack-with-track-attr-initialized-to"></a>
+                            [=queue a task=] to [=fire an event=] named [=VideoTrackList/addtrack=]
+                            using {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
                             |mirrored video track| or |new video track|, at the {{VideoTrackList}} object referenced by
                             the {{HTMLMediaElement/videoTracks}} attribute on the HTMLMediaElement.
                           </p>
@@ -1963,7 +1970,8 @@ interface SourceBuffer : EventTarget {
                         <li>Add |new text track| to the {{SourceBuffer/textTracks}} attribute on this <a>SourceBuffer</a> object.
                         <p class="note">
                           This should trigger {{TextTrackList}} [[HTML]] logic to
-                          <a def-id="queue-and-fire-text-addtrack-with-track-attr-initialized-to"></a>
+                          [=queue a task=] to [=fire an event=] named [=TextTrackList/addtrack=]
+                          using {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
                           |new text track|, at the {{TextTrackList}} object referenced by the
                           {{SourceBuffer/textTracks}} attribute on this <a>SourceBuffer</a> object.
                         </p>
@@ -1985,7 +1993,8 @@ interface SourceBuffer : EventTarget {
                           </dl>
                           <p class="note">
                             This should trigger {{TextTrackList}} [[HTML]] logic to
-                            <a def-id="queue-and-fire-text-addtrack-with-track-attr-initialized-to"></a>
+                            [=queue a task=] to [=fire an event=] named [=TextTrackList/addtrack=]
+                            using {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
                             |mirrored text track| or |new text track|, at the {{TextTrackList}} object referenced by the
                             {{HTMLMediaElement/textTracks}} attribute on the HTMLMediaElement.
                           </p>
@@ -2238,15 +2247,15 @@ interface SourceBuffer : EventTarget {
               </ol>
             </li>
             <li>
-              <p>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is <a def-id="have-metadata"></a> and the new [=coded frames=] cause {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} to have a {{TimeRanges}} for the current playback position, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to <a def-id="have-current-data"></a>.</p>
+              <p>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is {{HTMLMediaElement/HAVE_METADATA}} and the new [=coded frames=] cause {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} to have a {{TimeRanges}} for the current playback position, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_CURRENT_DATA}}.</p>
               <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
             </li>
             <li>
-              <p>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is <a def-id="have-current-data"></a> and the new [=coded frames=] cause {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} to have a {{TimeRanges}} that includes the current playback position and some time beyond the current playback position, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to <a def-id="have-future-data"></a>.</p>
+              <p>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is {{HTMLMediaElement/HAVE_CURRENT_DATA}} and the new [=coded frames=] cause {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} to have a {{TimeRanges}} that includes the current playback position and some time beyond the current playback position, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_FUTURE_DATA}}.</p>
               <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
             </li>
             <li>
-              <p>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is <a def-id="have-future-data"></a> and the new [=coded frames=] cause {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} to have a {{TimeRanges}} that includes the current playback position and [=enough data to ensure uninterrupted playback=], then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to <a def-id="have-enough-data"></a>.</p>
+              <p>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is {{HTMLMediaElement/HAVE_FUTURE_DATA}} and the new [=coded frames=] cause {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} to have a {{TimeRanges}} that includes the current playback position and [=enough data to ensure uninterrupted playback=], then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_ENOUGH_DATA}}.</p>
               <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
             </li>
             <li>If the [=media segment=] contains data beyond the current {{MediaSource/duration}}, then run the
@@ -2298,7 +2307,7 @@ interface SourceBuffer : EventTarget {
                 <li>
                   <p>If this object is in {{MediaSource/activeSourceBuffers}}, the <a def-id="current-playback-position"></a> is greater than or equal to
                     |start| and less than the |remove end timestamp|, and {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} is greater than
-                    <a def-id="have-metadata"></a>, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to <a def-id="have-metadata"></a> and stall playback.</p>
+                    {{HTMLMediaElement/HAVE_METADATA}}, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_METADATA}} and stall playback.</p>
                   <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
                   <p class="note">This transition occurs because media data for the current position has been removed. Playback cannot progress until media for the
                     <a def-id="current-playback-position"></a> is appended or the <a href="#active-source-buffer-changes">selected/enabled tracks change</a>.</p>
