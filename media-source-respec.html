@@ -221,7 +221,7 @@
           <dd><p>The parent media source of a <a>SourceBuffer</a> object is the <a>MediaSource</a> object that created it.</p></dd>
 
           <dt><dfn id="presentation-start-time">Presentation Start Time</dfn></dt>
-          <dd><p>The presentation start time is the earliest time point in the presentation and specifies the <a def-id="videoref" name="current-playback-position">playback position</a> and <a def-id="videoref" name="earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0.</p>
+          <dd><p>The presentation start time is the earliest time point in the presentation and specifies the initial <a def-id="videoref" name="current-playback-position">playback position</a> and <a def-id="videoref" name="earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0.</p>
 
           <p class="note">For the purposes of determining if {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that includes the current playback position, implementations MAY choose to allow a current playback position at or after [=presentation start time=] and before the first {{TimeRanges}} to play the first {{TimeRanges}} if that {{TimeRanges}} starts within a reasonably short time, like 1 second, after [=presentation start time=]. This allowance accommodates the reality that muxed streams commonly do not begin all tracks precisely at [=presentation start time=]. Implementations MUST report the actual buffered range, regardless of this allowance.</p>
           </dd>
