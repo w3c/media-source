@@ -127,7 +127,14 @@
     </section>
 
     <section id="sotd">
-      <p>On top of editorial updates, substantives changes since publication as a W3C Recommendation in <a href="https://www.w3.org/TR/2016/REC-media-source-20161117/">November 2016</a> are the addition of a {{SourceBuffer/changeType()}} method to switch codecs, the possibility to create and use {{MediaSource}} objects off the main thread in dedicated workers, and the removal of the <code>createObjectURL()</code> extension to the {{URL}} object following its integration in the File API [[FILEAPI]]. For a full list of changes done since the previous version, see the <a href="https://github.com/w3c/media-source/commits/main">commits</a>.</p>
+      <p>On top of editorial updates, substantive changes since publication as a W3C Recommendation in <a href="https://www.w3.org/TR/2016/REC-media-source-20161117/">November 2016</a> are
+      <ul>
+        <li>the addition of a {{SourceBuffer/changeType()}} method to switch among codecs or bytestreams</li>
+        <li>the possibility to create and use {{MediaSource}} objects off the main thread in dedicated workers</li>
+        <li>the removal of the <code>createObjectURL()</code> extension to the {{URL}} object following its integration in the File API [[FILEAPI]]</li>
+        <li>the addition of letting WebCodecs [[WEBCODECS]] decoder configs and encoded chunks be used as an alternative to mime-types and bytestream formats.</li>
+      </ul>
+      For a full list of changes done since the previous version, see the <a href="https://github.com/w3c/media-source/commits/main">commits</a>.</p>
 
       <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>.</p>
       <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should track the <a href="https://github.com/w3c/media-source">GitHub repository</a> and take part in the discussions.</p>
@@ -323,15 +330,26 @@ interface MediaSource : EventTarget {
                     attribute EventHandler        onsourceended;
                     attribute EventHandler        onsourceclose;
     static readonly attribute boolean canConstructInDedicatedWorker;
-    SourceBuffer   addSourceBuffer (DOMString type);
-    undefined           removeSourceBuffer (SourceBuffer sourceBuffer);
-    undefined           endOfStream (optional EndOfStreamError error);
-    undefined           setLiveSeekableRange (double start, double end);
-    undefined           clearLiveSeekableRange ();
-    static boolean isTypeSupported (DOMString type);
-};</pre>
+    SourceBuffer    addSourceBuffer (optional TypeOrConfig typeOrConfig = {});
+    undefined       removeSourceBuffer (SourceBuffer sourceBuffer);
+    undefined       endOfStream (optional EndOfStreamError error);
+    undefined       setLiveSeekableRange (double start, double end);
+    undefined       clearLiveSeekableRange ();
+    static boolean  isTypeSupported (DOMString type);
+};
+
+dictionary SourceBufferConfig {
+  // Precisely one of these must be populated to signal via addSourceBuffer or
+  // changeType the intent to buffer the corresponding WebCodecs media.
+  AudioDecoderConfig audioConfig;  // For appending EncodedAudioChunks
+  VideoDecoderConfig videoConfig;  // For appending EncodedVideoChunks
+};
+
+typedef (DOMString or SourceBufferConfig) TypeOrConfig;
+</pre>
       <section>
         <h3>Attributes</h3>
+        <p>REMOVE THIS PLACEHOLDER NOTE: TODO describe SourceBufferConfig and the updated addSourceBuffer and the linkage to [[WEBCODECS]]</p>
         <dl class="attributes" data-dfn-for="MediaSource"><dt><dfn><code>sourceBuffers</code></dfn> of type <span class="idlAttrType"><a>SourceBufferList</a></span>, readonly       </dt><dd>
           Contains the list of <a>SourceBuffer</a> objects associated with this <a>MediaSource</a>. When {{MediaSource/readyState}} equals {{ReadyState/""closed""}} this list will be empty. Once {{MediaSource/readyState}} transitions to {{ReadyState/""open""}} SourceBuffer objects can be added to this list by using {{MediaSource/addSourceBuffer()}}.
         </dd><dt><dfn><code>activeSourceBuffers</code></dfn> of type <span class="idlAttrType"><a>SourceBufferList</a></span>, readonly       </dt><dd>
@@ -1138,7 +1156,8 @@ interface MediaSource : EventTarget {
           </p>
         </td></tr></tbody></table>
 
-<pre class="idl">[Exposed=(Window,DedicatedWorker)]
+<pre class="idl">
+[Exposed=(Window,DedicatedWorker)]
 interface SourceBuffer : EventTarget {
                     attribute AppendMode          mode;
     readonly        attribute boolean             updating;
@@ -1155,13 +1174,20 @@ interface SourceBuffer : EventTarget {
                     attribute EventHandler        onerror;
                     attribute EventHandler        onabort;
     undefined appendBuffer (BufferSource data);
+    Promise < undefined > appendEncodedChunks(EncodedChunks chunks);
     undefined abort ();
-    undefined changeType (DOMString type);
+    undefined changeType (optional TypeOrConfig typeOrConfig = {});
     undefined remove (double start, unrestricted double end);
-};</pre>
+};
+
+typedef (sequence< (EncodedAudioChunk or EncodedVideoChunk) >
+            or EncodedAudioChunk or EncodedVideoChunk) EncodedChunks;
+</pre>
           <div class="issue" data-number="280">[[HTML]] {{AudioTrackList}}, {{VideoTrackList}} and {{TextTrackList}} need Window+DedicatedWorker
           exposure.</div>
-          <section><h2>Attributes</h2><dl class="attributes" data-dfn-for="SourceBuffer"><dt><dfn><code>mode</code></dfn> of type <a>AppendMode</a></dt><dd>
+      <section><h2>Attributes</h2>
+        <p>REMOVE THIS PLACEHOLDER NOTE: TODO describe encodedchunks, appendEncodedChunks, and the updated changeType and linkage to [[WEBCODECS]].</p>
+        <dl class="attributes" data-dfn-for="SourceBuffer"><dt><dfn><code>mode</code></dfn> of type <a>AppendMode</a></dt><dd>
           <p>Controls how a sequence of [=media segments=] are handled. This attribute is initially set by {{MediaSource/addSourceBuffer()}} after the object is created, and can be updated by {{SourceBuffer/changeType()}} or setting this attribute.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
