@@ -330,7 +330,12 @@ interface MediaSource : EventTarget {
                     attribute EventHandler        onsourceended;
                     attribute EventHandler        onsourceclose;
     static readonly attribute boolean canConstructInDedicatedWorker;
+
+    // "optional" with default empty SourceBufferConfig dictionary is used here
+    // to pass WebIDL verification. Behavior of the method enforces that either
+    // a valid mime-type string or a valid SourceBufferConfig are provided.
     SourceBuffer    addSourceBuffer (optional TypeOrConfig typeOrConfig = {});
+
     undefined       removeSourceBuffer (SourceBuffer sourceBuffer);
     undefined       endOfStream (optional EndOfStreamError error);
     undefined       setLiveSeekableRange (double start, double end);
@@ -345,6 +350,8 @@ dictionary SourceBufferConfig {
   VideoDecoderConfig videoConfig;  // For appending EncodedVideoChunks
 };
 
+// This typedef simplifies the syntax for overloading addSourceBuffer and
+// changeType to receive either a mime-type string or a WebCodecs config.
 typedef (DOMString or SourceBufferConfig) TypeOrConfig;
 </pre>
       <section>
@@ -380,7 +387,7 @@ typedef (DOMString or SourceBufferConfig) TypeOrConfig;
             <li>If the {{SourceBuffer/updating}} attribute equals true on any <a>SourceBuffer</a> in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>Run the [=duration change=] algorithm with |new duration:unrestricted double| set to the value being assigned to this attribute.
               <p class="note">The [=duration change=] algorithm will adjust |new duration| higher if there is any currently buffered coded frame with a higher end time.</p>
-              <p class="note">{{SourceBuffer/appendBuffer()}} and {{MediaSource/endOfStream()}} can update the duration under certain circumstances.</p>
+              <p class="note">{{SourceBuffer/appendBuffer()}}, {{SourceBuffer/appendEncodedChunks()}} and {{MediaSource/endOfStream()}} can update the duration under certain circumstances.</p>
             </li>
           </ol>
         </dd><dt><dfn><code>onsourceopen</code></dfn> of type {{EventHandler}}</dt><dd>
@@ -820,7 +827,7 @@ typedef (DOMString or SourceBufferConfig) TypeOrConfig;
                   </dl>
                 <li>Continue the <a def-id="resource-fetch-algorithm"></a> by running the remaining <a def-id="Otherwise-mode-is-local"></a> steps, with these clarifications:
                   <ol>
-                    <li>Text in the <a def-id="resource-fetch-algorithm"></a> or the <a def-id="media-data-processing-steps-list"></a> that refers to "the download", "bytes received", or "whenever new data for the current media resource becomes available" refers to data passed in via {{SourceBuffer/appendBuffer()}}.</li>
+                    <li>Text in the <a def-id="resource-fetch-algorithm"></a> or the <a def-id="media-data-processing-steps-list"></a> that refers to "the download", "bytes received", or "whenever new data for the current media resource becomes available" refers to data passed in via {{SourceBuffer/appendBuffer()}} or {{SourceBuffer/appendEncodedChunks()}}.</li>
                     <li>References to HTTP in the <a def-id="resource-fetch-algorithm"></a> and the <a def-id="media-data-processing-steps-list"></a> do not apply because the HTMLMediaElement does not fetch media data via HTTP when a <a>MediaSource</a> is attached.</li>
                   </ol>
                 </li>
@@ -880,7 +887,7 @@ typedef (DOMString or SourceBufferConfig) TypeOrConfig;
                       to {{HTMLMediaElement/HAVE_METADATA}}.
                     <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
                     </li>
-                    <li>The media element waits until an {{SourceBuffer/appendBuffer()}} call causes the [=coded frame processing=] algorithm to set
+                    <li>The media element waits until an {{SourceBuffer/appendBuffer()}} or {{SourceBuffer/appendEncodedChunks()}} call causes the [=coded frame processing=] algorithm to set
                       the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to a value greater than {{HTMLMediaElement/HAVE_METADATA}}.
                       <p class="note">The web application can use {{SourceBuffer/buffered}} and {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} to determine what the media element needs to resume playback.</p>
                     </li>
@@ -1176,17 +1183,28 @@ interface SourceBuffer : EventTarget {
     undefined appendBuffer (BufferSource data);
     Promise < undefined > appendEncodedChunks(EncodedChunks chunks);
     undefined abort ();
+
+    // "optional" with default empty SourceBufferConfig dictionary is used here
+    // to pass WebIDL verification. Behavior of the method enforces that either
+    // a valid mime-type string or a valid SourceBufferConfig are provided.
     undefined changeType (optional TypeOrConfig typeOrConfig = {});
+
     undefined remove (double start, unrestricted double end);
 };
 
+// This typedef simplifies the syntax for describing either a single audio or
+// video chunk, or a sequence of chunks. While this typedef does not provide the
+// ability to enforce that all members of a sequence of chunks are the same kind
+// (audio versus video), the behavior of the appendEncodedChunks method enforces
+// that constraint: the implementation MUST reject a sequence containing both
+// audio and video chunks.
 typedef (sequence< (EncodedAudioChunk or EncodedVideoChunk) >
             or EncodedAudioChunk or EncodedVideoChunk) EncodedChunks;
 </pre>
           <div class="issue" data-number="280">[[HTML]] {{AudioTrackList}}, {{VideoTrackList}} and {{TextTrackList}} need Window+DedicatedWorker
           exposure.</div>
       <section><h2>Attributes</h2>
-        <p>REMOVE THIS PLACEHOLDER NOTE: TODO describe encodedchunks, appendEncodedChunks, and the updated changeType and linkage to [[WEBCODECS]].</p>
+        <p>REMOVE THIS PLACEHOLDER NOTE: TODO describe appendEncodedChunks, the updated changeType and linkage to [[WEBCODECS]].</p>
         <dl class="attributes" data-dfn-for="SourceBuffer"><dt><dfn><code>mode</code></dfn> of type <a>AppendMode</a></dt><dd>
           <p>Controls how a sequence of [=media segments=] are handled. This attribute is initially set by {{MediaSource/addSourceBuffer()}} after the object is created, and can be updated by {{SourceBuffer/changeType()}} or setting this attribute.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
@@ -1211,7 +1229,7 @@ typedef (sequence< (EncodedAudioChunk or EncodedVideoChunk) >
             <li>Update the attribute to |new mode|.</li>
           </ol>
         </dd><dt><dfn><code>updating</code></dfn> of type {{boolean}}, readonly       </dt><dd>
-          <p>Indicates whether the asynchronous continuation of an {{SourceBuffer/appendBuffer()}} or {{SourceBuffer/remove()}}
+        <p>Indicates whether the asynchronous continuation of an {{SourceBuffer/appendBuffer()}}, {{SourceBuffer/appendEncodedChunks()}} or {{SourceBuffer/remove()}}
             operation is still being processed. This attribute is initially set to false when the object is created.</p>
         </dd><dt><dfn><code>buffered</code></dfn> of type {{TimeRanges}}, readonly       </dt><dd>
           <p>Indicates what {{TimeRanges}} are buffered in the <a>SourceBuffer</a>. This
@@ -1329,7 +1347,7 @@ typedef (sequence< (EncodedAudioChunk or EncodedVideoChunk) >
           </ol>
         <div><em>No parameters.</em></div><div><em>Return type: </em>{{undefined}}</div></dd>
         <dt><dfn><code>changeType</code></dfn></dt><dd>
-        <p>Changes the MIME type associated with this object. Subsequent {{SourceBuffer/appendBuffer()}} calls will expect the newly appended bytes to conform to the new type.</a>
+        <p>Changes the MIME type associated with this object (TODO: split logic by arg type, reference appendEncodedChunks() too). Subsequent {{SourceBuffer/appendBuffer()}} calls will expect the newly appended bytes to conform to the new type.</a>
           <ol class="method-algorithm">
             <li>If |type:DOMString| is an empty string then throw a {{TypeError}} exception and abort these steps.</li>
             <li>If this object has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=], then throw an {{InvalidStateError}} exception and abort these steps.</li>
@@ -1542,7 +1560,7 @@ typedef (sequence< (EncodedAudioChunk or EncodedVideoChunk) >
             empty when the {{SourceBuffer}} object is created.</p>
 
           <p>Each {{SourceBuffer}} object has a <dfn data-dfn-for="SourceBuffer">[[\buffer full flag]]</dfn> internal
-            slot that keeps track of whether {{SourceBuffer/appendBuffer()}} is allowed to accept more bytes. It is set
+          slot that keeps track of whether {{SourceBuffer/appendBuffer()}} is allowed to accept more bytes or {{SourceBuffer/appendEncodedChunks()}} is allowed to accept more encoded chunks. It is set
             to false when the {{SourceBuffer}} object is created and gets updated as data is appended and removed.</p>
 
           <p>Each {{SourceBuffer}} object has a <dfn data-dfn-for="SourceBuffer">[[\group start timestamp]]</dfn>
@@ -1702,7 +1720,7 @@ typedef (sequence< (EncodedAudioChunk or EncodedVideoChunk) >
 
         <section id="sourcebuffer-buffer-append">
           <h4><dfn>Buffer Append</dfn></h4>
-          <p>When {{SourceBuffer/appendBuffer()}} is called, the following steps are run to process the appended data.</p>
+          <p>When {{SourceBuffer/appendBuffer()}} (TODO split out chunk processing) is called, the following steps are run to process the appended data.</p>
           <ol>
             <li>Run the [=segment parser loop=] algorithm.</li>
             <li>If the [=segment parser loop=] algorithm in the previous step was aborted, then abort this algorithm.</li>
@@ -2908,9 +2926,12 @@ partial interface TextTrack {
     <section id="examples">
       <h2>Examples</h2>
       <p>Example use of the Media Source Extensions</p>
-      <div class="block">
-        <div class="blockContent">
-          <pre class="code">&lt;script&gt;
+      <section id="bsf-based">
+        <h3>Buffering bytes from a bytestream format</h3>
+        <div class="block">
+          <div class="blockContent">
+            <pre class="code">
+&lt;script&gt;
   function onSourceOpen(videoTag, e) {
     var mediaSource = e.target;
 
@@ -2999,9 +3020,98 @@ partial interface TextTrack {
   mediaSource.addEventListener('sourceopen', onSourceOpen.bind(this, video));
   video.src = window.URL.createObjectURL(mediaSource);
 &lt;/script&gt;
-          </pre>
+            </pre>
+          </div>
         </div>
-      </div>
+      </section>
+      <section id="webcodecs-based">
+        <h3>Buffering WebCodecs encoded chunks</h3>
+        <div class="block">
+          <div class="blockContent">
+            <pre class="code">
+&lt;body&gt;
+&lt;script&gt;
+  // Very simple demuxer bound to a specific media file.
+  // Replace with other source of WebCodecs configs and encoded chunks.
+  let next_chunk_index = 0;
+  let buffer;
+  let chunk_duration = 100 * 1000;  // 100 milliseconds for this example.
+  let metadata = [
+    {
+      offset: /* chunk offset, e.g. 42 */,
+      size: /* chunk size, e.g. 4242 */,
+      type: /* chunk type, e.g. "key" or "delta" */
+    }, // Plus additional chunks' metadata listed here.
+  ];
+
+  function getConfig() {
+    return( /* e.g. { videoConfig: { codec: "vp09.00.10.08" } } */ );
+  }
+
+  async function getNextEncodedChunk() {
+    if (next_chunk_index >= metadata.length)
+      return null;
+    if (next_chunk_index == 0)
+      buffer = await (await fetch(/* e.g. "vp9.chunks" */)).arrayBuffer();
+    let chunk_metadata = metadata[next_chunk_index];
+    let chunk_timestamp = chunk_duration * next_chunk_index;
+    next_chunk_index++;
+    // EncodedAudioChunks could also be buffered into MSE, but only one form of
+    // media (audio versus video) can be buffered into a specific SourceBuffer,
+    // so this simple example is video-only.
+    return new EncodedVideoChunk( {
+      type: chunk_metadata.type,
+      timestamp: chunk_timestamp,
+      duration: chunk_duration,
+      data: new Uint8Array(buffer, chunk_metadata.offset, chunk_metadata.size)
+    } );
+  }
+
+  // MSE player using the WebCodecs content generated, above.
+  async function getOpenMediaSource() {
+    return new Promise(async (resolve, reject) => {
+      const v = document.createElement("video");
+      document.body.appendChild(v);
+      const mediaSource = new MediaSource();
+      const url = URL.createObjectURL(mediaSource);
+      mediaSource.addEventListener("sourceopen", () => {
+        URL.revokeObjectURL(url);
+        if (mediaSource.readyState != "open")
+          reject();
+        else
+          resolve([ v, mediaSource ]);
+      }, { once: true });
+      v.src = url;
+    });
+  }
+
+  async function bufferMedia() {
+    let [ videoElement, mediaSource ] = await getOpenMediaSource();
+    let sourceBuffer = mediaSource.addSourceBuffer(await getConfig());
+
+    // This simple player attempts to buffer everything immediately. Full
+    // players will condition buffering, for example, on playback progress
+    // and availability of chunks.
+    while (null != (chunk = await(getNextEncodedChunk()))) {
+      // Note that appending a sequence instead of a single chunk here
+      // could be more performant.
+      await sourceBuffer.appendEncodedChunks(chunk);
+    }
+
+    mediaSource.endOfStream();
+    videoElement.controls = true;  // Show default controls.
+  }
+
+  if (!SourceBuffer.prototype.hasOwnProperty("appendEncodedChunks"))
+    console.log("MSE-for-WebCodecs support is missing.")
+  else
+    bufferMedia();
+&lt;/script&gt;
+&lt;/body&gt;
+            </pre>
+          </div>
+        </div>
+      </section>
     </section>
 
 
