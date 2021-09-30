@@ -91,6 +91,9 @@
           {{BufferedChangeEvent}} interfaces supporting power-efficient streaming and active buffered
           media cleanup by the user agent
           </li>
+          <li>the addition of letting WebCodecs [[WEBCODECS]] decoder configs and encoded chunks be
+          used as an alternative to mime-types and bytestream formats
+          </li>
         </ul>
         <p>
         For a full list of changes made since the previous version, see the <a href=
@@ -566,14 +569,27 @@
 
             static readonly attribute boolean canConstructInDedicatedWorker;
 
-            SourceBuffer addSourceBuffer(DOMString type);
+            SourceBuffer addSourceBuffer(optional TypeOrConfig typeOrConfig = {});
             undefined removeSourceBuffer(SourceBuffer sourceBuffer);
             undefined endOfStream(optional EndOfStreamError error);
             undefined setLiveSeekableRange(double start, double end);
             undefined clearLiveSeekableRange();
             static boolean isTypeSupported(DOMString type);
         };
+
+        dictionary SourceBufferConfig {
+          // Precisely one of these must be populated to signal via addSourceBuffer or
+          // changeType the intent to buffer the corresponding WebCodecs media.
+          AudioDecoderConfig audioConfig;  // For appending EncodedAudioChunks
+          VideoDecoderConfig videoConfig;  // For appending EncodedVideoChunks
+        };
+
+        typedef (DOMString or SourceBufferConfig) TypeOrConfig;
       </pre>
+      <p>
+        REMOVE THIS PLACEHOLDER NOTE: TODO describe SourceBufferConfig and the updated
+        addSourceBuffer and the linkage to [[WEBCODECS]]
+      </p>
       <h3>
         <dfn>handle</dfn> attribute
       </h3>
@@ -2081,10 +2097,14 @@
           attribute EventHandler onabort;
 
           undefined appendBuffer(BufferSource data);
+          Promise&lt;undefined&gt; appendEncodedChunks(EncodedChunks chunks);
           undefined abort();
-          undefined changeType(DOMString type);
+          undefined changeType(optional TypeOrConfig typeOrConfig = {});
           undefined remove(double start, unrestricted double end);
         };
+
+        typedef (sequence<(EncodedAudioChunk or EncodedVideoChunk)>
+                    or EncodedAudioChunk or EncodedVideoChunk) EncodedChunks;
       </pre>
       <div class="issue" data-number="280">
         [[HTML]] {{AudioTrackList}}, {{VideoTrackList}} and {{TextTrackList}} need
@@ -2094,6 +2114,11 @@
         <h2>
           Attributes
         </h2>
+        <p>
+          REMOVE THIS PLACEHOLDER NOTE: TODO describe encodedchunks,
+          appendEncodedChunks, and the updated changeType and linkage to
+          [[WEBCODECS]].
+        </p>
         <dl class="attributes" data-dfn-for="SourceBuffer">
           <dt>
             <dfn>mode</dfn> of type <a>AppendMode</a>
@@ -5492,33 +5517,33 @@
         async function setUpVideoStream() {
           // Specific video format and codec
           const mediaType = 'video/mp4; codecs="mp4a.40.2,avc1.4d4015"';
-  
+
           // Check if the type of video format / codec is supported.
           if (!window.ManagedMediaSource?.isTypeSupported(mediaType)) {
             return; // Not supported, do something else.
           }
-  
+
           // Set up video and its managed source.
           const video = document.createElement("video");
           const source = new ManagedMediaSource();
-  
+
           video.controls = true;
-  
+
           await new Promise((resolve) =&gt; {
             video.src = URL.createObjectURL(source);
             source.addEventListener("sourceopen", resolve, { once: true });
             document.body.appendChild(video);
           });
-  
+
           const sourceBuffer = source.addSourceBuffer(mediaType);
-  
+
           // Set up the event handlers
           sourceBuffer.onbufferedchange = (e) =&gt; {
             console.log("onbufferedchange event fired.");
             console.log(`Added Ranges: ${timeRangesToString(e.addedRanges)}`);
             console.log(`Removed Ranges: ${timeRangesToString(e.removedRanges)}`);
           };
-  
+
           source.onstartstreaming = async () =&gt; {
             const response = await fetch("./videos/bipbop.mp4");
             const buffer = await response.arrayBuffer();
@@ -5527,19 +5552,19 @@
               sourceBuffer.appendBuffer(buffer);
             });
           };
-  
+
           source.onendstreaming = async () =&gt; {
             // Stop fetching new segments here
           };
         }
-  
+
         // Helper function...
         function timeRangesToString(timeRanges) {
           const ranges = [];
           for (let i = 0; i &lt; timeRanges.length; i++) {
             ranges.push([timeRanges.start(i), timeRanges.end(i)]);
           }
-          return "[" + ranges.map(([start, end]) =&gt; `[${start}, ${end})` ) + "]";     
+          return "[" + ranges.map(([start, end]) =&gt; `[${start}, ${end})` ) + "]";
         }
         &lt;/script&gt;
         &lt;body onload="setUpVideoStream()"&gt;&lt;/body&gt;
