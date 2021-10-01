@@ -66,7 +66,7 @@
     </script>
     <link rel="stylesheet" href="mse.css">
   </head>
-  <body data-cite="html dom url fileapi infra">
+  <body data-cite="html dom url fileapi infra webcodecs">
     <section id="abstract">
       This specification extends {{HTMLMediaElement}} [[HTML]] to allow JavaScript to generate
       media streams for playback. Allowing JavaScript to generate streams facilitates a variety of
@@ -581,8 +581,9 @@
         };
 
         dictionary SourceBufferConfig {
-          // Precisely one of these must be populated to signal via addSourceBuffer or
-          // changeType the intent to buffer the corresponding WebCodecs media.
+          // Precisely one of these WebCodecs config objects must be populated to
+          // signal via addSourceBuffer or changeType the intent to buffer the
+          // corresponding WebCodecs media.
           AudioDecoderConfig audioConfig;  // For appending EncodedAudioChunks
           VideoDecoderConfig videoConfig;  // For appending EncodedVideoChunks
         };
@@ -724,17 +725,35 @@
         Adds a new <a>SourceBuffer</a> to {{MediaSource/sourceBuffers}}.
       </p>
       <ol class="algorithm">
-        <li>If |type:DOMString| is an empty string then throw a {{TypeError}} exception and abort
+        <li>If |typeOrConfig:TypeOrConfig| is a DOMString, then run the following steps:
+          <ol>
+            <li>If |typeOrConfig| is empty then throw a {{TypeError}} exception and abort these
+            steps and this method.</li>
+            <li>If |typeOrConfig| contains a MIME type that is not supported or contains a MIME
+            type that is not supported with the types specified for the other {{SourceBuffer}}
+            objects in {{MediaSource/sourceBuffers}}, then throw a {{NotSupportedError}} exception
+            and abort these steps and this method.</li>
+          </ol>
+        </li>
+        <li>If |typeOrConfig| is not a DOMString, then run the following steps:
+          <ol>
+            <li>If |typeOrConfig| has both an {{SourceBufferConfig/audioConfig}} and a
+            {{SourceBufferConfig/videoConfig}} or has neither, then throw a {{TypeError}}
+            exception and abort these steps and this method.</li>
+            <li>If |typeOrConfig| has neither a neither a [=valid AudioDecoderConfig=] in
+            {{SourceBufferConfig/audioConfig}} nor a [=valid VideoDecoderConfig=] in
+            {{SourceBufferConfig/videoConfig}}, then throw a {{TypeError}} exception and abort
+            these steps and this method.</li>
+            <li>If |typeOrConfig| contains a decoder configuration that is not supported or is not
+            supported with the types specified for the other {{SourceBuffer}} objects in
+            {{MediaSource/sourceBuffers}}, then throw a {{NotSupportedError}} exception and abort
+            these steps and this method.</li>
+          </ol>
+        </li>
+        <li>If the user agent can't handle any more {{SourceBuffer}} objects or if creating a
+        {{SourceBuffer}} based on |typeOrConfig| would result in an unsupported
+        [=SourceBuffer configuration=], then throw a {{QuotaExceededError}} exception and abort
         these steps.
-        </li>
-        <li>If |type| contains a MIME type that is not supported or contains a MIME type that is
-        not supported with the types specified for the other {{SourceBuffer}} objects in
-        {{MediaSource/sourceBuffers}}, then throw a {{NotSupportedError}} exception and abort these
-        steps.
-        </li>
-        <li>If the user agent can't handle any more SourceBuffer objects or if creating a
-        SourceBuffer based on |type| would result in an unsupported [=SourceBuffer configuration=],
-        then throw a {{QuotaExceededError}} exception and abort these steps.
           <p class="note">
             For example, a user agent MAY throw a {{QuotaExceededError}} exception if the media
             element has reached the {{HTMLMediaElement/HAVE_METADATA}} readyState. This can occur
@@ -744,13 +763,41 @@
         <li>If the {{MediaSource/readyState}} attribute is not in the {{ReadyState/""open""}} state
         then throw an {{InvalidStateError}} exception and abort these steps.
         </li>
+        <li>If |typeOrConfig| is a {{DOMString}}, set the
+        {{SourceBuffer/[[generate timestamps flag]]}} on the new object to the value
+        in the "Generate Timestamps Flag" column of the byte stream format registry
+        [[MSE-REGISTRY]] entry that is associated with |type|, otherwise set the
+        {{SourceBuffer/[[generate timestamps flag]]}} on the new object to false.
+          <p class="note">
+            WebCodecs encoded chunks are required to have timestamps, so there is
+            no need to generate them.
+          </p>
+        </li>
         <li>Let |buffer| be a new instance of a {{ManagedSourceBuffer}} if [=this=] is a
         {{ManagedMediaSource}}, or a {{SourceBuffer}} otherwise, with their respective associated
         resources.
         </li>
-        <li>Set |buffer|'s {{SourceBuffer/[[generate timestamps flag]]}} to the value in the
-        "Generate Timestamps Flag" column of the [[[MSE-REGISTRY]]] entry that is associated with
-        |type|.
+        <li>
+          <dl class="switch">
+            <dt>
+              If |typeOrConfig| is a DOMString:
+            </dt>
+            <dd>
+              Set |buffer|'s {{SourceBuffer/[[generate timestamps flag]]}} to the value
+              in the "Generate Timestamps Flag" column of the byte stream format registry
+              [[MSE-REGISTRY]] entry that is associated with |type|.
+            </dd>
+            <dt>
+              Otherwise:
+            </dt>
+            <dd>
+              Set |buffer|'s {{SourceBuffer/[[generate timestamps flag]]}} to false.
+              <p class="note">
+                WebCodecs encoded chunks are required to have timestamps, so there is no need to
+                generate them.
+              </p>
+            </dd>
+          </dl>
         </li>
         <li>If |buffer|'s {{SourceBuffer/[[generate timestamps flag]]}} is true, set |buffer|'s
         {{SourceBuffer/mode}} to {{AppendMode/"sequence"}}. Otherwise, set |buffer|'s
@@ -2132,7 +2179,7 @@
         </h2>
         <p>
           REMOVE THIS PLACEHOLDER NOTE: TODO describe appendEncodedChunks, the updated
-          changeType and linkage to [[WEBCODECS]].
+          changeType and linkage to WEBCODECS.
         </p>
         <dl class="attributes" data-dfn-for="SourceBuffer">
           <dt>
