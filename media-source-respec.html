@@ -118,7 +118,7 @@
 
     <link rel="stylesheet" href="mse.css">
   </head>
-  <body data-cite="html dom url">
+  <body data-cite="html dom url WEBCODECS">
     <section id="abstract">
       This specification extends {{HTMLMediaElement}} [[HTML]] to allow
       JavaScript to generate media streams for playback.
@@ -344,8 +344,9 @@ interface MediaSource : EventTarget {
 };
 
 dictionary SourceBufferConfig {
-  // Precisely one of these must be populated to signal via addSourceBuffer or
-  // changeType the intent to buffer the corresponding WebCodecs media.
+  // Precisely one of these WebCodecs config objects must be populated to
+  // signal via addSourceBuffer or changeType the intent to buffer the
+  // corresponding WebCodecs media.
   AudioDecoderConfig audioConfig;  // For appending EncodedAudioChunks
   VideoDecoderConfig videoConfig;  // For appending EncodedVideoChunks
 };
@@ -356,7 +357,6 @@ typedef (DOMString or SourceBufferConfig) TypeOrConfig;
 </pre>
       <section>
         <h3>Attributes</h3>
-        <p>REMOVE THIS PLACEHOLDER NOTE: TODO describe SourceBufferConfig and the updated addSourceBuffer and the linkage to [[WEBCODECS]]</p>
         <dl class="attributes" data-dfn-for="MediaSource"><dt><dfn><code>sourceBuffers</code></dfn> of type <span class="idlAttrType"><a>SourceBufferList</a></span>, readonly       </dt><dd>
           Contains the list of <a>SourceBuffer</a> objects associated with this <a>MediaSource</a>. When {{MediaSource/readyState}} equals {{ReadyState/""closed""}} this list will be empty. Once {{MediaSource/readyState}} transitions to {{ReadyState/""open""}} SourceBuffer objects can be added to this list by using {{MediaSource/addSourceBuffer()}}.
         </dd><dt><dfn><code>activeSourceBuffers</code></dfn> of type <span class="idlAttrType"><a>SourceBufferList</a></span>, readonly       </dt><dd>
@@ -403,25 +403,60 @@ typedef (DOMString or SourceBufferConfig) TypeOrConfig;
             creating and using a {{MediaSource}} object in a dedicated worker, and mitigates the need for higher latency
             detection polyfills like attempting creation of a {{MediaSource}} object from a dedicated worker, especially
             if the feature is not supported.</p>
-        </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="MediaSource"><dt><dfn><code>addSourceBuffer</code></dfn></dt><dd>
+        </dd></dl></section>
+        <section><h2>Methods</h2>
+          <dl class="methods" data-dfn-for="MediaSource"><dt><dfn><code>addSourceBuffer</code></dfn></dt><dd>
           <p>Adds a new <a>SourceBuffer</a> to {{MediaSource/sourceBuffers}}.</p>
           <ol class="method-algorithm">
-            <li>If |type:DOMString| is an empty string then throw a {{TypeError}} exception and abort these steps.</li>
-            <li>If |type| contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}, then throw a {{NotSupportedError}} exception and abort these steps.</li>
-            <li>If the user agent can't handle any more SourceBuffer objects or if creating a SourceBuffer
-              based on |type| would result in an unsupported [=SourceBuffer configuration=],
-              then throw a {{QuotaExceededError}} exception and abort these steps.
+            <li>If |typeOrConfig:TypeOrConfig| is a DOMString, then run the following steps:
+              <ol>
+                <li>If |typeOrConfig| is empty then throw a {{TypeError}} exception and abort these steps and
+                  this method.</li>
+                <li>If |typeOrConfig| contains a MIME type that is not supported or contains a MIME type that is not
+                  supported with the types specified for the other {{SourceBuffer}} objects in
+                  {{MediaSource/sourceBuffers}}, then throw a {{NotSupportedError}} exception and abort these
+                  steps and this method.</li>
+              </ol>
+            </li>
+            <li>If |typeOrConfig| is not a DOMString, then run the following steps:
+              <ol>
+                <li>If |typeOrConfig| has both an {{SourceBufferConfig/audioConfig}} and a
+                  {{SourceBufferConfig/videoConfig}} or has neither, then throw a {{TypeError}} exception and abort
+                  these steps and this method.</li>
+                <li>If |typeOrConfig| has neither a neither a [=valid AudioDecoderConfig=] in
+                  {{SourceBufferConfig/audioConfig}} nor a [=valid VideoDecoderConfig=] in
+                  {{SourceBufferConfig/videoConfig}}, then throw a {{TypeError}} exception and abort these steps and
+                this method.</li>
+                <li>If |typeOrConfig| contains a decoder configuration that is not supported or is not supported with
+                  the types specified for the other {{SourceBuffer}} objects in {{MediaSource/sourceBuffers}}, then
+                  throw a {{NotSupportedError}} exception and abort these steps and this method.</li>
+              </ol>
+            </li>
+            <li>If the user agent can't handle any more {{SourceBuffer}} objects or if creating a {{SourceBuffer}} based
+              on |typeOrConfig| would result in an unsupported [=SourceBuffer configuration=], then throw a
+              {{QuotaExceededError}} exception and abort these steps.
               <p class="note">For example, a user agent MAY throw a {{QuotaExceededError}} exception if the media element has reached the
                 {{HTMLMediaElement/HAVE_METADATA}} readyState. This can occur if the user agent's media engine does not support adding more tracks during
                 playback.
               </p>
             </li>
             <li>If the {{MediaSource/readyState}} attribute is not in the {{ReadyState/""open""}} state then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>Create a new <a>SourceBuffer</a> object and associated resources.</li>
-            <li>Set the {{SourceBuffer/[[generate timestamps flag]]}} on the new object to the value in the "Generate
-              Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry that is associated with
-              |type|.
-            </li><li>
+            <li>Create a new {{SourceBuffer}} object and associated resources.</li>
+            <li>
+              <dl class="switch">
+                <dt>If |typeOrConfig| is a DOMString:</dt>
+                <dd>Set the {{SourceBuffer/[[generate timestamps flag]]}} on the new object to the value in the
+                "Generate Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry that is
+                associated with |type|.
+                </dd>
+                <dt>Otherwise:</dt>
+                <dd>Set the {{SourceBuffer/[[generate timestamps flag]]}} on the new object to false.
+                <p class="note">WebCodecs encoded chunks are required to have timestamps, so there is no need to
+                generate them.</p>
+                </dd>
+              </dl>
+            </li>
+            <li>
               <dl class="switch">
                 <dt>If the {{SourceBuffer/[[generate timestamps flag]]}} equals true:</dt>
                 <dd>
@@ -1204,7 +1239,7 @@ typedef (sequence< (EncodedAudioChunk or EncodedVideoChunk) >
           <div class="issue" data-number="280">[[HTML]] {{AudioTrackList}}, {{VideoTrackList}} and {{TextTrackList}} need Window+DedicatedWorker
           exposure.</div>
       <section><h2>Attributes</h2>
-        <p>REMOVE THIS PLACEHOLDER NOTE: TODO describe appendEncodedChunks, the updated changeType and linkage to [[WEBCODECS]].</p>
+        <p>REMOVE THIS PLACEHOLDER NOTE: TODO describe appendEncodedChunks, the updated changeType and linkage to WEBCODECS.</p>
         <dl class="attributes" data-dfn-for="SourceBuffer"><dt><dfn><code>mode</code></dfn> of type <a>AppendMode</a></dt><dd>
           <p>Controls how a sequence of [=media segments=] are handled. This attribute is initially set by {{MediaSource/addSourceBuffer()}} after the object is created, and can be updated by {{SourceBuffer/changeType()}} or setting this attribute.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
