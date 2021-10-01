@@ -1,5 +1,14 @@
 <!DOCTYPE html>
 <html>
+  <!--
+    TODO: define [=chunks append=] algorithm.
+    TODO: define [[pending chunks append promise]].
+    TODO: condition async buffer append and chunk append on having appropriate type/codec vs WebCodecs config. Add an
+    item for discussion: should such check be done during the synchronous portion instead?
+    TODO: adjust wording around AppendMode (not just media segments...)
+    TODO: remember to hook into both the coded frame processing algorithm and the initialization segment received
+    algorithm from the steps asynchronously launched by appendEncodedChunks.
+  -->
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Media Source Extensions™</title>
@@ -251,9 +260,16 @@
           <dd><p>A position in a [=media segment=] where decoding and continuous playback can begin without relying on any previous data in the segment. For video this tends to be the location of I-frames. In the case of audio, most audio frames can be treated as a random access point. Since video tracks tend to have a more sparse distribution of random access points, the location of these points are usually considered the random access points for multiplexed streams.</p></dd>
 
           <dt><dfn id="sourcebuffer-byte-stream-format-spec">SourceBuffer byte stream format specification</dfn></dt>
-          <dd><p>The specific [=byte stream format specification=] that describes the format of the byte stream accepted by a <a>SourceBuffer</a> instance. The
-          [=byte stream format specification=], for a <a>SourceBuffer</a> object, is initially selected based on the |type:DOMString| passed to the
-          {{MediaSource/addSourceBuffer()}} call that created the object, and can be updated by {{SourceBuffer/changeType()}} calls on the object.</p></dd>
+          <dd><p>The specific [=byte stream format specification=] that describes the format of the byte stream accepted
+          by a {{SourceBuffer}} instance, when configured via {{MediaSource/addSourceBuffer()}} or updated by
+          {{SourceBuffer/changeType()}} to be based on a |typeOrConfig:TypeOrConfig| that is a DOMString. The [=byte
+          stream format specification=], for a {{SourceBuffer}} object, is initially selected based on the
+          |type:DOMString| passed to the {{MediaSource/addSourceBuffer()}} call that created the object, and can be
+          updated by {{SourceBuffer/changeType()}} calls on the object. When the {{SourceBuffer}} is instead using a
+          WebCodecs {{AudioDecoderConfig}} or {{VideoDecoderConfig}} [[WEBCODECS]] in the most recent of either the
+          {{MediaSource/addSourceBuffer()}} call that created the {{SourceBuffer}} or a {{SourceBuffer/changeType()}}
+          call, the {{SourceBuffer}} is not expecting byte stream appends via {{SourceBuffer/appendBuffer()}}; instead
+          it is expecting WebCodecs chunks to be appended via {{SourceBuffer/appendEncodedChunks()}}.</p></dd>
 
           <dt><dfn id="sourcebuffer-configuration">SourceBuffer configuration</dfn></dt>
           <dd><p>A specific set of tracks distributed across one or more <a>SourceBuffer</a>
@@ -473,7 +489,9 @@ typedef (DOMString or SourceBufferConfig) TypeOrConfig;
             <li>Add the new object to {{MediaSource/sourceBuffers}} and [=queue a task=] to [=fire an event=] named {{addsourcebuffer}} at {{MediaSource/sourceBuffers}}.</li>
             <li>Return the new object.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|type|</td><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>SourceBuffer</a></div></dd>
+        <table class="parameters"><tbody>
+            <tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr>
+            <tr><td class="prmName">|typeOrConfig|</td><td class="prmType">{{TypeOrConfig}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>SourceBuffer</a></div></dd>
 
           <dt><dfn><code>removeSourceBuffer</code></dfn></dt><dd>
           <p>Removes a {{SourceBuffer}} from {{MediaSource/sourceBuffers}}.</p>
@@ -483,6 +501,10 @@ typedef (DOMString or SourceBufferConfig) TypeOrConfig;
             <li>If the |sourceBuffer|.{{SourceBuffer/updating}} attribute equals true, then run the following steps:
               <ol>
                 <li>Abort the [=buffer append=] algorithm if it is running.</li>
+                <li>Abort the [=chunks append=] algorithm if it is running.</li>
+                <li>If this object has a {{Promise}} in {{SourceBuffer/[[\pending append chunks promise]]}} then reject
+                  that {{Promise}} with an {{AbortError}} {{DOMException}} and unset {{SourceBuffer/[[\pending append
+                  chunks promise]]}}.</li>
                 <li>Set the |sourceBuffer|.{{SourceBuffer/updating}} attribute to false.</li>
                 <li>[=Queue a task=] to [=fire an event=] named {{abort}} at |sourceBuffer|.</li>
                 <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at |sourceBuffer|.</li>
@@ -739,6 +761,11 @@ typedef (DOMString or SourceBufferConfig) TypeOrConfig;
           </p>
           <p class="note">
             This method returning true implies that HTMLMediaElement.canPlayType() will return "maybe" or "probably" since it does not make sense for a <a>MediaSource</a> to support a type the HTMLMediaElement knows it cannot play.
+          </p>
+          <p class="note">
+            For proactively checking support for a WebCodecs {{AudioDecoderConfig}} or {{VideoDecoderConfig}}, use the
+            respective {{AudioDecoder}} {{AudioDecoder/isConfigSupported()}} or {{VideoDecoder}}
+            {{VideoDecoder/isConfigSupported()}} method.
           </p>
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|type|</td><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{boolean}}</div></dd></dl>
       </section>
@@ -1371,6 +1398,10 @@ typedef (sequence< (EncodedAudioChunk or EncodedVideoChunk) >
             <li>If the {{SourceBuffer/updating}} attribute equals true, then run the following steps:
               <ol>
                 <li>Abort the [=buffer append=] algorithm if it is running.</li>
+                <li>Abort the [=chunks append=] algorithm if it is running.</li>
+                <li>If this object has a {{Promise}} in {{SourceBuffer/[[\pending append chunks promise]]}} then reject
+                  that {{Promise}} with an {{AbortError}} {{DOMException}} and unset {{SourceBuffer/[[\pending append
+                  chunks promise]]}}.</li>
                 <li>Set the {{SourceBuffer/updating}} attribute to false.</li>
                 <li>[=Queue a task=] to [=fire an event=] named {{abort}} at this <a>SourceBuffer</a> object.</li>
                 <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this <a>SourceBuffer</a> object.</li>
@@ -2888,6 +2919,10 @@ partial interface TextTrack {
       <p class="note">The byte stream format specifications in the registry are not intended to define new storage formats. They simply outline the subset of
         existing storage format structures that implementations of this specification will accept.</p>
       <p class="note">Byte stream format parsing and validation is implemented in the [=segment parser loop=] algorithm.</p>
+      <p class="note">When currently configured by {{MediaSource/addSourceBuffer()}} or {{SourceBuffer/changeType()}} to
+        expect appends of WebCodecs encoded chunks via {{SourceBuffer/appendEncodedChunks()}} instead of a bytestream
+        via {{SourceBuffer/appendBuffer}}, the {{SourceBuffer}} does not have a specific bytestream format
+        associated.</p>
 
       <p>This section provides general requirements for all byte stream format specifications:</p>
       <ul>
