@@ -323,12 +323,13 @@ interface MediaSource : EventTarget {
                     attribute EventHandler        onsourceended;
                     attribute EventHandler        onsourceclose;
     static readonly attribute boolean canConstructInDedicatedWorker;
-    SourceBuffer   addSourceBuffer (DOMString type);
-    undefined           removeSourceBuffer (SourceBuffer sourceBuffer);
-    undefined           endOfStream (optional EndOfStreamError error);
-    undefined           setLiveSeekableRange (double start, double end);
-    undefined           clearLiveSeekableRange ();
-    static boolean isTypeSupported (DOMString type);
+    SourceBuffer      addSourceBuffer (DOMString type);
+    undefined         removeSourceBuffer (SourceBuffer sourceBuffer);
+    undefined         endOfStream (optional EndOfStreamError error);
+    undefined         setLiveSeekableRange (double start, double end);
+    undefined         clearLiveSeekableRange ();
+    MediaSourceHandle getHandle ();
+    static boolean    isTypeSupported (DOMString type);
 };</pre>
       <section>
         <h3>Attributes</h3>
@@ -636,7 +637,25 @@ interface MediaSource : EventTarget {
             <li>If {{MediaSource/[[live seekable range]]}} contains a range, then set {{MediaSource/[[live seekable
               range]]}} to be a new empty {{TimeRanges}} object.
           </li></ol>
-        <div><em>No parameters.</em></div><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>isTypeSupported</code></dfn>, static</dt><dd>
+        <div><em>No parameters.</em></div><div><em>Return type: </em>{{undefined}}</div></dd>
+
+      <dt><dfn><code>getHandle</code></dfn></dt><dd>
+        <p>Creates a handle useful for attachment to an {{HTMLMediaElement}} via {{HTMLMediaElement/srcObject}}.</p>
+        <ol class="method-algorithm">
+          <li>If the implementation does not support creating a handle for this {{MediaSource}}, then throw a
+            {{NotSupportedError}} exception and abort these steps.
+            <p class="note">Implementations MAY choose to only allow handle creation for {{MediaSource}} objects in a
+              {{DedicatedWorkerGlobalScope}}, as a minimum requirement for enabling attachment of such a {{MediaSource}}
+              object to an {{HTMLMediaElement}}.</p>
+            <p class="issue">Consider requiring conforming implementations to let such handle be created on a {{Window}}
+              {{MediaSource}} object, too?</p>
+          </li>
+          <li>Create a new {{MediaSourceHandle}} object and associated resources.</li>
+          <li>Return the new object.</li>
+        </ol>
+        <div><em>No parameters.</em></div><div><em>Return type: </em>{{MediaSourceHandle}}</div></dd>
+
+      <dt><dfn><code>isTypeSupported</code></dfn>, static</dt><dd>
           <p>Check to see whether the <a>MediaSource</a> is capable of creating <a>SourceBuffer</a> objects for the specified MIME type.</p>
 
           <ol class="method-algorithm">
@@ -695,9 +714,9 @@ interface MediaSource : EventTarget {
         <p class="note">{{HTMLMediaElement}} is exposed only to {{Window}} contexts, but {{MediaSource}} and related objects defined
         in this specification are exposed in {{Window}} and {{DedicatedWorkerGlobalScope}} contexts. This lets
         applications construct a {{MediaSource}} object in either of those types of context and attach it to an
-        {{HTMLMediaElement}} object in a {{Window}} context using a [=MediaSource object URL=] as described in the
-        [=attaching to a media element=] algorithm. A {{MediaSource}} object is not {{Transferable}}; it is only visible
-        in the context where it was created.</p>
+        {{HTMLMediaElement}} object in a {{Window}} context using a [=MediaSource object URL=] or a
+        {{MediaSourceHandle}} as described in the [=attaching to a media element=] algorithm. A {{MediaSource}} object
+        is not {{Transferable}}; it is only visible in the context where it was created.</p>
 
         The rest of this section describes a model for bounding information latency for attachments of a {{Window}}
         media element to a {{DedicatedWorkerGlobalScope}} {{MediaSource}}. While the model describes communication using
@@ -727,16 +746,48 @@ interface MediaSource : EventTarget {
 
         <section id="mediasource-attach">
           <h4><dfn>Attaching to a media element</dfn></h4>
-          <p> A <a>MediaSource</a> object can be attached to a media element by assigning a [=MediaSource object URL=] to the media element {{HTMLMediaElement/src}} attribute or the src attribute of a &lt;source&gt; inside a media element. A [=MediaSource object URL=] is created by passing a MediaSource object to {{URL/createObjectURL()}}.</p>
+          <p>There are distinct mechanisms for attaching a {{MediaSource}} to a media element depending on where the {{MediaSource}} object was constructed, in a {{Window}} versus in a {{DedicatedWorkerGlobalScope}}:</p>
+          <ul>
+            <li>
+              <p>Attaching a {{MediaSource}} that was constructed in a {{Window}} can be done by assigning a
+                [=MediaSource object URL=] for that {{MediaSource}} to the media element {{HTMLMediaElement/src}}
+                attribute or the src attribute of a &lt;source&gt; inside a media element. A [=MediaSource object URL=]
+                is created by passing a MediaSource object to {{URL/createObjectURL()}}.</p>
+              <p>Though implementations MAY allow [=MediaSource object URL=] creation in a
+                {{DedicatedWorkerGlobalScope}} for a {{MediaSource}} constructed in that worker, attempting to use that
+                [=MediaSource object URL=] to attach to a media element using either the {{HTMLMediaElement/src}}
+                attribute or the src attribute of a &lt;source&gt; inside a media element MUST fail in the media
+                element's resource selection aglorithm, as extended below.</p>
+              <p class="note">Extending the object URL attachment mechanism to worker MediaSource object URLs would
+                further propagate this idiom that is less preferred versus using srcObject, and would unnecessarily
+                increase user agent interoperability risk and implementation complexity.</p>
+            </li>
+            <li>Attaching a {{MediaSource}} that was constructed in a {{DedicatedWorkerGlobalScope}} can be done by
+              obtaining a handle from it using {{MediaSource/getHandle}}, transferring that {{MediaSourceHandle}} to the
+              {{Window}} context and assigning it to the media element {{HTMLMediaElement/srcObject}} attribute. For the
+              purposes of aligning this specification with {{HTMLMediaElement}} resource loading and fetching
+              algorithms, the underlying {{DedicatedWorkerGlobalScope}} {{MediaSource}} is the MediaSource
+              object mentioned there, and the {{MediaSourceHandle}} object is the media provider object.
+              <p class="issue">MediaSourceHandle needs to be added to HTMLMediaElement's MediaProvider IDL typedef and
+              related text involving media provider objects.</p>
+            </li>
+          </ul>
 
-          <p>If the <a def-id="resource-fetch-algorithm"></a> was invoked with
-          a media provider object that is a MediaSource object or a URL record whose object is a MediaSource object,
-          then let mode be local, skip the first step in the <a def-id="resource-fetch-algorithm"></a>
-          (which may otherwise set mode to remote) and add the steps and clarifications below to the <a def-id="Otherwise-mode-is-local"></a> section of the <a def-id="resource-fetch-algorithm"></a>.
+          <p>If the <a def-id="resource-fetch-algorithm"></a> was invoked with a media provider object that is a
+          {{MediaSource}} object, a {{MediaSourceHandle}} object or a URL record whose object is a {{MediaSource}}
+          object, then let mode be local, skip the first step in the <a def-id="resource-fetch-algorithm"></a>
+          (which may otherwise set mode to remote) and add the steps and clarifications below to the <a
+            def-id="Otherwise-mode-is-local"></a> section of the <a def-id="resource-fetch-algorithm"></a>.
           <p class="note">The <a def-id="resource-fetch-algorithm"></a>'s first step is expected to eventually align with selecting local mode for URL records whose objects are media provider objects. The intent is that if the HTMLMediaElement's <code>src</code> attribute or selected child <code>&lt;source&gt;</code>'s <code>src</code> attribute is a <code>blob:</code> URL matching a [=MediaSource object URL=] when the respective <code>src</code> attribute was last changed, then that MediaSource object is used as the media provider object and current media resource in the local mode logic in the <a def-id="resource-fetch-algorithm"></a>. This also means that the remote mode logic that includes observance of any preload attribute is skipped when a MediaSource object is attached. Even with that eventual change to [[HTML]], the execution of the following steps at the beginning of the local mode logic is still required when the current media resource is a MediaSource object.</p>
           <p class="note">Relative to the action which triggered the media element's resource selection algorithm, these steps are asynchronous. The resource fetch algorithm is run after the task that invoked the resource selection algorithm is allowed to continue and a stable state is reached. Implementations may delay the steps in the "<i>Otherwise</i>" clause, below, until the MediaSource object is ready for use.</p>
           <dl class="switch">
-            <dt>If {{MediaSource/readyState}} is NOT set to {{ReadyState/""closed""}}</dt>
+            <dt>If the media provider object is
+              a URL record whose object is a {{MediaSource}} that was constructed in a {{DedicatedWorkerGlobalScope}},
+              such as would occur if attempting to use  a [=MediaSource object URL=] from a
+              {{DedicatedWorkerGlobalScope}} {{MediaSource}}
+              </dt>
+            <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the <a def-id="resource-fetch-algorithm"></a>'s <a def-id="media-data-processing-steps-list"></a>.</dd>
+            <dt>If {{MediaSource/readyState}} is NOT set to {{ReadyState/""closed""}} 
             <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the <a def-id="resource-fetch-algorithm"></a>'s <a def-id="media-data-processing-steps-list"></a>.</dd>
             <dt>Otherwise</dt>
             <dd>
@@ -1097,6 +1148,27 @@ interface MediaSource : EventTarget {
             <dd>Run |steps|.</dd>
           </dl>
         </section>
+      </section>
+    </section>
+
+    <section id="mediasourcehandle">
+      <h2><dfn>MediaSourceHandle</dfn> Object</h2>
+      <p>The MediaSourceHandle object represents a proxy for a {{MediaSource}} object that is useful for attaching a
+        {{DedicatedWorkerGlobalScope}} {{MediaSource}} to a {{Window}} {{HTMLMediaElement}} using
+        {{HTMLMediaElement/srcObject}} as described in the [=attaching to a media element=] algorithm.</p>
+
+      <p class="note">This distinct object is necessary to attach a cross-context {{MediaSource}} to a media element
+        because {{MediaSource}} objects themselves are not transferable since they are event targets.</p>
+
+      <pre class="idl">
+[Exposed=(Window,DedicatedWorker)]
+interface MediaSourceHandle {};</pre>
+
+      <section><h2>Transfer</h2>
+        The {{MediaSourceHandle}} [=transfer steps=] and [=transfer-receiving steps=] require the implementation to
+        maintain an implicit internal slot referencing the underlying {{MediaSource}} to enable [=attaching to a media
+        element=] using {{HTMLMediaElement/srcObject}} and consequent setup of an attachment's [=cross-context
+        communication model=].
       </section>
     </section>
 
