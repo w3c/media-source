@@ -449,34 +449,27 @@ interface MediaSource : EventTarget {
                     </p>
                     </li>
 
-                    <li>
-                      <dl class="switch">
-                        <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
-                        <dd>Post an internal <code>remove track mirror</code> message to {{MediaSource/[[port to
-                        main]]}} whose implicit handler in {{Window}} runs the steps in the following "otherwise" case
-                        for the {{Window}} {{AudioTrack}} mirror of the {{DedicatedWorkerGlobalScope}} {{AudioTrack}}
-                        object created previously by the implicit handler for the internal <code>create track
-                        mirror</code> message.</dd>
-                        <dt>Otherwise, run the following steps:</dt>
-                        <dd>
-                        <ol>
-                          <li>Let |HTMLMediaElement audioTracks list:AudioTrackList| equal the {{AudioTrackList}} object
-                            returned by the {{HTMLMediaElement/audioTracks}} attribute on the HTMLMediaElement.</li>
-                          <li>Remove the {{AudioTrack}} object from the |HTMLMediaElement audioTracks list|.
-                            <p class="note">
-                              This should trigger {{AudioTrackList}} [[HTML]] logic to [=queue a task=] to
-                              [=fire an event=] named [=AudioTrackList/removetrack=] using {{TrackEvent}} with the
-                              {{TrackEvent/track}} attribute initialized to the {{AudioTrack}} object, at the
-                              |HTMLMediaElement audioTracks list|. If the {{AudioTrack/enabled}} attribute on the
-                              {{AudioTrack}} object was true at the beginning of this removal step, then this should
-                              also trigger {{AudioTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=]
-                              named [=AudioTrackList/change=] at the |HTMLMediaElement audioTracks list|.
-                            </p>
-                          </li>
-                        </ol>
-                        </dd>
-                      </dl>
+                    <li>Use the [=mirror if necessary=] algorithm to run the following steps in {{Window}}, to
+                      remove the {{AudioTrack}} object (or instead, the {{Window}} mirror of it if the {{MediaSource}}
+                      object was constructed in a {{DedicatedWorkerGlobalScope}}) from the media element:
+                      <ol>
+                        <li>Let |HTMLMediaElement audioTracks list:AudioTrackList| equal the {{AudioTrackList}} object
+                          returned by the {{HTMLMediaElement/audioTracks}} attribute on the HTMLMediaElement.</li>
+                        <li>Remove the {{AudioTrack}} object from the |HTMLMediaElement audioTracks list|.
+                          <p class="note">
+                            This should trigger {{AudioTrackList}} [[HTML]] logic to [=queue a task=] to
+                            [=fire an event=] named [=AudioTrackList/removetrack=] using {{TrackEvent}} with the
+                            {{TrackEvent/track}} attribute initialized to the {{AudioTrack}} object, at the
+                            |HTMLMediaElement audioTracks list|. If the {{AudioTrack/enabled}} attribute on the
+                            {{AudioTrack}} object was true at the beginning of this removal step, then this should
+                            also trigger {{AudioTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=]
+                            named [=AudioTrackList/change=] at the |HTMLMediaElement audioTracks list|.
+                          </p>
+                        </li>
+                      </ol>
                     </li>
+
+
                   </ol>
                 </li>
               </ol>
@@ -502,34 +495,24 @@ interface MediaSource : EventTarget {
                     </p>
                     </li>
 
-                    <li>
-                      <dl class="switch">
-                        <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
-                        <dd>Post an internal <code>remove track mirror</code> message to {{MediaSource/[[port to
-                        main]]}} whose implicit handler in {{Window}} runs the steps in the following "otherwise" case
-                        for the {{Window}} {{VideoTrack}} mirror of the {{DedicatedWorkerGlobalScope}} {{VideoTrack}}
-                        object created previously by the implicit handler for the internal <code>create track
-                        mirror</code> message.</dd>
-                        <dt>Otherwise, run the following steps:</dt>
-                        <dd>
-                        <ol>
-                          <li>Let |HTMLMediaElement videoTracks list:VideoTrackList| equal the {{VideoTrackList}} object
-                            returned by the {{HTMLMediaElement/videoTracks}} attribute on the HTMLMediaElement.</li>
-                          <li>Remove the {{VideoTrack}} object from the |HTMLMediaElement videoTracks list|.
-                            <p class="note">
-                              This should trigger {{VideoTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=]
-                              named [=VideoTrackList/removetrack=] using {{TrackEvent}} with the {{TrackEvent/track}}
-                              attribute initialized to the {{VideoTrack}} object, at the |HTMLMediaElement videoTracks list|.
-                              If the
-                              {{VideoTrack/selected}} attribute on the {{VideoTrack}} object was true at the beginning
-                              of this removal step, then this should also trigger {{VideoTrackList}} [[HTML]] logic to
-                              [=queue a task=] to [=fire an event=] named [=VideoTrackList/change=] at the
-                              |HTMLMediaElement videoTracks list|.
-                            </p>
-                          </li>
-                        </ol>
-                        </dd>
-                      </dl>
+                    <li>Use the [=mirror if necessary=] algorithm to run the following steps in {{Window}}, to
+                      remove the {{VideoTrack}} object (or instead, the {{Window}} mirror of it if the {{MediaSource}}
+                      object was constructed in a {{DedicatedWorkerGlobalScope}}) from the media element:
+                      <ol>
+                        <li>Let |HTMLMediaElement videoTracks list:VideoTrackList| equal the {{VideoTrackList}} object
+                          returned by the {{HTMLMediaElement/videoTracks}} attribute on the HTMLMediaElement.</li>
+                        <li>Remove the {{VideoTrack}} object from the |HTMLMediaElement videoTracks list|.
+                          <p class="note">
+                            This should trigger {{VideoTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an
+                            event=] named [=VideoTrackList/removetrack=] using {{TrackEvent}} with the
+                            {{TrackEvent/track}} attribute initialized to the {{VideoTrack}} object, at the
+                            |HTMLMediaElement videoTracks list|.  If the {{VideoTrack/selected}} attribute on the
+                            {{VideoTrack}} object was true at the beginning of this removal step, then this should also
+                            trigger {{VideoTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=] named
+                            [=VideoTrackList/change=] at the |HTMLMediaElement videoTracks list|.
+                          </p>
+                        </li>
+                      </ol>
                     </li>
                   </ol>
                 </li>
@@ -557,35 +540,25 @@ interface MediaSource : EventTarget {
                     </p>
                     </li>
 
-                    <li>
-                      <dl class="switch">
-                        <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
-                        <dd>Post an internal <code>remove track mirror</code> message to {{MediaSource/[[port to
-                        main]]}} whose implicit handler in {{Window}} runs the steps in the following "otherwise" case
-                        for the {{Window}} {{TextTrack}} mirror of the {{DedicatedWorkerGlobalScope}} {{TextTrack}}
-                        object created previously by the implicit handler for the internal <code>create track
-                        mirror</code> message.</dd>
-                        <dt>Otherwise, run the following steps:</dt>
-                        <dd>
-                        <ol>
-                          <li>Let |HTMLMediaElement textTracks list:TextTrackList| equal the {{TextTrackList}} object
-                            returned by the {{HTMLMediaElement/textTracks}} attribute on the HTMLMediaElement.</li>
-                          <li>Remove the {{TextTrack}} object from the |HTMLMediaElement textTracks list|.
-                            <p class="note">
-                              This should trigger {{TextTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=]
-                              named [=TextTrackList/removetrack=] using {{TrackEvent}} with the {{TrackEvent/track}}
-                              attribute initialized to the {{TextTrack}} object, at the |HTMLMediaElement textTracks list|.
-                              If the
-                              {{TextTrack/mode}} attribute on the {{TextTrack}} object was
-                              <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> at the
-                              beginning of this removal step, then this should also trigger {{TextTrackList}} [[HTML]]
-                              logic to [=queue a task=] to [=fire an event=] named [=TextTrackList/change=]
-                              at the |HTMLMediaElement textTracks list|.
-                            </p>
-                          </li>
-                        </ol>
-                        </dd>
-                      </dl>
+                    <li>Use the [=mirror if necessary=] algorithm to run the following steps in {{Window}}, to
+                      remove the {{TextTrack}} object (or instead, the {{Window}} mirror of it if the {{MediaSource}}
+                      object was constructed in a {{DedicatedWorkerGlobalScope}}) from the media element:
+                      <ol>
+                        <li>Let |HTMLMediaElement textTracks list:TextTrackList| equal the {{TextTrackList}} object
+                          returned by the {{HTMLMediaElement/textTracks}} attribute on the HTMLMediaElement.</li>
+                        <li>Remove the {{TextTrack}} object from the |HTMLMediaElement textTracks list|.
+                          <p class="note">
+                            This should trigger {{TextTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an
+                            event=] named [=TextTrackList/removetrack=] using {{TrackEvent}} with the
+                            {{TrackEvent/track}} attribute initialized to the {{TextTrack}} object, at the
+                            |HTMLMediaElement textTracks list|.  If the {{TextTrack/mode}} attribute on the
+                            {{TextTrack}} object was <a def-id="texttrackmode-showing"></a> or
+                            <a def-id="texttrackmode-hidden"></a> at the beginning of this removal step, then this
+                            should also trigger {{TextTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an
+                            event=] named [=TextTrackList/change=] at the |HTMLMediaElement textTracks list|.
+                          </p>
+                        </li>
+                      </ol>
                     </li>
                   </ol>
                 </li>
@@ -1042,15 +1015,12 @@ interface MediaSource : EventTarget {
               </ol>
             </li>
             <li>Update {{MediaSource/duration}} to |new duration|.</li>
-            <li>Update the {{HTMLMediaElement/duration}} to |new duration|.</li>
-            <li>
-              <dl class="switch">
-                <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
-                <dd>Post an internal <code>duration change</code> message to {{MediaSource//[[port to main]]}} whose
-                implicit handler in {{Window}} runs the <a def-id="hme-duration-change-algorithm"></a>.</dd>
-                <dt>Otherwise:</dt>
-                <dd>Run the <a def-id="hme-duration-change-algorithm"></a>.</dd>
-              </dl>
+            <li>Use the [=mirror if necessary=] algorithm to run the following steps in {{Window}} to update the media
+              element's duration:
+              <ol>
+                <li>Update the media element's {{HTMLMediaElement/duration}} to |new duration|.</li>
+                <li>Run the <a def-id="hme-duration-change-algorithm"></a>.</li>
+              </ol>
             </li>
           </ol>
         </section>
@@ -1076,13 +1046,7 @@ interface MediaSource : EventTarget {
                 </dd>
 
                 <dt>If |error| is set to {{EndOfStreamError/""network""}}</dt>
-                <dd>
-                <dl class="switch">
-                  <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
-                  <dd>Post an internal <code>network error</code> message to {{MediaSource//[[port to main]]}} whose
-                  implicit handler in {{Window}} runs the steps in the following "otherwise" case.</dd>
-                  <dt>Otherwise:</dt>
-                  <dd>
+                <dd>Use the [=mirror if necessary=] algorithm to run the following steps in {{Window}}:
                   <dl class="switch">
                     <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute equals
                     {{HTMLMediaElement/HAVE_NOTHING}}</dt>
@@ -1091,18 +1055,10 @@ interface MediaSource : EventTarget {
                     {{HTMLMediaElement/HAVE_NOTHING}}</dt>
                     <dd>Run the "<i>If the connection is interrupted after some media data has been received, causing the user agent to give up trying to fetch the resource</i>" steps of the <a def-id="resource-fetch-algorithm"></a>'s <a def-id="media-data-processing-steps-list"></a>.</dd>
                   </dl>
-                  </dd>
-                </dl>
                 </dd>
 
                 <dt>If |error| is set to {{EndOfStreamError/""decode""}}</dt>
-                <dd>
-                <dl class="switch">
-                  <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
-                  <dd>Post an internal <code>decode error</code> message to {{MediaSource/[[port to main]]}} whose
-                  implicit handler in {{Window}} runs the steps in the following "otherwise" case.</dd>
-                  <dt>Otherwise:</dt>
-                  <dd>
+                <dd>Use the [=mirror if necessary=] algorithm to run the following steps in {{Window}}:
                   <dl class="switch">
                     <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute equals
                     {{HTMLMediaElement/HAVE_NOTHING}}</dt>
@@ -1111,12 +1067,35 @@ interface MediaSource : EventTarget {
                     {{HTMLMediaElement/HAVE_NOTHING}}
                     <dd>Run the <a def-id="media-data-is-corrupted"></a> steps of the <a def-id="resource-fetch-algorithm"></a>'s <a def-id="media-data-processing-steps-list"></a>.</dd>
                   </dl>
-                  </dd>
-                </dl>
                 </dd>
               </dl>
             </li>
           </ol>
+        </section>
+
+        <section id="mirror-if-necessary-algorithm">
+          <h4><dfn>Mirror if necessary</dfn></h4>
+          <p>This algorithm is used to run steps on {{Window}} from a {{MediaSource}} attached from either the same
+          {{Window}} or from a {{DedicatedWorkerGlobalScope}}, usually to update the state of the attached
+          {{HTMLMediaElement}}. This algorithm takes a |steps| parameter that lists the steps to run on {{Window}}.</p>
+          <dl class="switch">
+            <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
+            <dd>Post an internal <code>mirror on window</code> message to {{MediaSource/[[port to main]]}} whose
+              implicit handler in {{Window}} will run |steps|. Return control to the caller without awaiting that
+              handler's receipt of the message.
+              <div class="note">
+              The purpose of the mirror message mechanism is to ensure that:
+                <ol>
+                  <li>|steps| run asynchronously as their own task on {{Window}} rather than these |steps| somehow
+                    happening in the middle of some other {{Window}} task's execution, and</li>
+                  <li>|steps| are run without blocking the synchronous execution and return of this algorithm on
+                    {{DedicatedWorkerGlobalScope}}.
+                </ol>
+              </div>
+            </dd>
+            <dt>Otherwise:</dt>
+            <dd>Run |steps|.</dd>
+          </dl>
         </section>
       </section>
     </section>
@@ -2014,52 +1993,37 @@ interface SourceBuffer : EventTarget {
             </li>
             <li>Set {{SourceBuffer/[[pending initialization segment for changeType flag]]}} to false.</li>
             <li>If the |active track flag| equals true, then run the following steps:
-              <dl class="switch">
-                <dt>If the [=parent media source=] was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
-                <dd>Post an internal <code>active track added</code> message to {{MediaSource/[[port to main]]}} whose
-                implicit handler in {{Window}} runs the following step:
+              <li>Use the [=parent media source=]'s [=mirror if necessary=] algorithm to run the following step in
+                {{Window}}:
                 <ol>
                   <li>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is greater than
                     {{HTMLMediaElement/HAVE_CURRENT_DATA}}, then set the
                     {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to
                     {{HTMLMediaElement/HAVE_METADATA}}.
-                  </li>
-                </ol></dd>
-                <dt>Otherwise:</dt>
-                <dd>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is greater than
-                {{HTMLMediaElement/HAVE_CURRENT_DATA}}, then set the
-                {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to
-                {{HTMLMediaElement/HAVE_METADATA}}.</dd>
-              </dl>
-              <p class="note">
-                Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}}
-                changes may trigger events on the HTMLMediaElement.
-              </p>
+                    <p class="note">
+                      Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}}
+                      changes may trigger events on the HTMLMediaElement.
+                    </p>
+                </ol>
+              </li>
             </li>
             <li>If each object in {{MediaSource/sourceBuffers}} of the [=parent media source=] has
-              {{SourceBuffer/[[first initialization segment received flag]]}} equal to true, then run the following
-              steps:
-              <dl class="switch">
-                <dt>If the [=parent media source=] was constructed in a {{DedicatedWorkerGlobalScope}}:</dt>
-                <dd>Post an internal <code>sourcebuffers ready</code> message to {{MediaSource/[[port to main]]}} whose
-                implicit handler in {{Window}} runs the following step:
-                <ol>
-                  <li>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is
-                    {{HTMLMediaElement/HAVE_NOTHING}}, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}}
-                    attribute to {{HTMLMediaElement/HAVE_METADATA}}.
-                  </li>
-                </ol><dd>
-                <dt>Otherwise:</dt>
-                <dd>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is
-                {{HTMLMediaElement/HAVE_NOTHING}}, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}}
-                attribute to {{HTMLMediaElement/HAVE_METADATA}}.</dd>
-              </dl>
-              <p class="note">
-                Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}}
-                changes may trigger events on the HTMLMediaElement. If transition from {{HTMLMediaElement/HAVE_NOTHING}}
-                to {{HTMLMediaElement/HAVE_METADATA}} occurs, it should trigger HTMLMediaElement logic to [=queue a
-                task=] to [=fire an event=] named [=HTMLMediaElement/loadedmetadata=] at the media element.
-              </p>
+              {{SourceBuffer/[[first initialization segment received flag]]}} equal to true, then
+              use the [=parent media source=]'s [=mirror if necessary=] algorithm to run the following step in
+              {{Window}}:
+              <ol>
+                <li>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is
+                  {{HTMLMediaElement/HAVE_NOTHING}}, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}}
+                  attribute to {{HTMLMediaElement/HAVE_METADATA}}.
+                  <p class="note">
+                    Per <a def-id="ready-states"></a> [[HTML]] logic,
+                    {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the
+                    HTMLMediaElement. If transition from {{HTMLMediaElement/HAVE_NOTHING}} to
+                    {{HTMLMediaElement/HAVE_METADATA}} occurs, it should trigger HTMLMediaElement logic to [=queue a
+                    task=] to [=fire an event=] named [=HTMLMediaElement/loadedmetadata=] at the media element.
+                  </p>
+                </li>
+              </ol>
             </li>
           </ol>
         </section>
