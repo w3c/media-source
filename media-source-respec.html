@@ -118,7 +118,7 @@
 
     <link rel="stylesheet" href="mse.css">
   </head>
-  <body data-cite="html dom url">
+  <body data-cite="html dom url WEBCODECS">
     <section id="abstract">
       This specification extends {{HTMLMediaElement}} [[HTML]] to allow
       JavaScript to generate media streams for playback.
@@ -127,7 +127,14 @@
     </section>
 
     <section id="sotd">
-      <p>On top of editorial updates, substantives changes since publication as a W3C Recommendation in <a href="https://www.w3.org/TR/2016/REC-media-source-20161117/">November 2016</a> are the addition of a {{SourceBuffer/changeType()}} method to switch codecs, the possibility to create and use {{MediaSource}} objects off the main thread in dedicated workers, and the removal of the <code>createObjectURL()</code> extension to the {{URL}} object following its integration in the File API [[FILEAPI]]. For a full list of changes done since the previous version, see the <a href="https://github.com/w3c/media-source/commits/main">commits</a>.</p>
+      <p>On top of editorial updates, substantive changes since publication as a W3C Recommendation in <a href="https://www.w3.org/TR/2016/REC-media-source-20161117/">November 2016</a> are
+      <ul>
+        <li>the addition of a {{SourceBuffer/changeType()}} method to switch among codecs or bytestreams</li>
+        <li>the possibility to create and use {{MediaSource}} objects off the main thread in dedicated workers</li>
+        <li>the removal of the <code>createObjectURL()</code> extension to the {{URL}} object following its integration in the File API [[FILEAPI]]</li>
+        <li>the addition of letting WebCodecs [[WEBCODECS]] decoder configs and encoded chunks be used as an alternative to mime-types and bytestream formats.</li>
+      </ul>
+      For a full list of changes done since the previous version, see the <a href="https://github.com/w3c/media-source/commits/main">commits</a>.</p>
 
       <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>.</p>
       <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should track the <a href="https://github.com/w3c/media-source">GitHub repository</a> and take part in the discussions.</p>
@@ -243,12 +250,22 @@
           <dt><dfn id="random-access-point" data-export="">Random Access Point</dfn></dt>
           <dd><p>A position in a [=media segment=] where decoding and continuous playback can begin without relying on any previous data in the segment. For video this tends to be the location of I-frames. In the case of audio, most audio frames can be treated as a random access point. Since video tracks tend to have a more sparse distribution of random access points, the location of these points are usually considered the random access points for multiplexed streams.</p></dd>
 
-          <dt><dfn id="sourcebuffer-byte-stream-format-spec">SourceBuffer byte stream format specification</dfn></dt>
-          <dd><p>The specific [=byte stream format specification=] that describes the format of the byte stream accepted by a <a>SourceBuffer</a> instance. The
-          [=byte stream format specification=], for a <a>SourceBuffer</a> object, is initially selected based on the |type:DOMString| passed to the
-          {{MediaSource/addSourceBuffer()}} call that created the object, and can be updated by {{SourceBuffer/changeType()}} calls on the object.</p></dd>
+          <dt><dfn>SourceBuffer byte stream format specification or WebCodecs chunks buffering expectations</dfn></dt>
+          <dd><p>
+          A {{SourceBuffer}} object can dynamically be configured to either expect to be sent a byte stream via
+          {{SourceBuffer/appendBuffer()}} that conforms to a specific [=byte stream format specification=], or to be
+          sent sequences of WebCodecs [[WEBCODECS]] chunks via {{SourceBuffer/appendEncodedChunks()}}.
+          When configured to expect a byte stream, the <dfn id="sourcebuffer-byte-stream-format-spec">SourceBuffer byte
+          stream format specification</dfn> is the specific [=byte stream format specification=] that describes the
+          format of the byte stream expected and accepted by a {{SourceBuffer}} object is initially selected based on
+          the |type:DOMString| passed to the {{MediaSource/addSourceBuffer()}} call that created the object, and can be
+          updated by {{SourceBuffer/changeType()}} calls on the object.
+          When the {{SourceBuffer}} is instead using a WebCodecs {{AudioDecoderConfig}} or {{VideoDecoderConfig}}
+          [[WEBCODECS]] in the most recent of either the {{MediaSource/addSourceBuffer()}} call that created the
+          {{SourceBuffer}} or a {{SourceBuffer/changeType()}} call, the {{SourceBuffer}} is instead expecting WebCodecs
+          chunks to be appended via {{SourceBuffer/appendEncodedChunks()}}.</p></dd>
 
-          <dt><dfn id="sourcebuffer-configuration">SourceBuffer configuration</dfn></dt>
+          <dt><dfn id="sourcebuffer-configuration">SourceBuffer track configuration</dfn></dt>
           <dd><p>A specific set of tracks distributed across one or more <a>SourceBuffer</a>
               objects owned by a single <a>MediaSource</a> instance.</p>
             <p>Implementations MUST support at least 1 <a>MediaSource</a> object with the following
@@ -323,13 +340,31 @@ interface MediaSource : EventTarget {
                     attribute EventHandler        onsourceended;
                     attribute EventHandler        onsourceclose;
     static readonly attribute boolean canConstructInDedicatedWorker;
-    SourceBuffer   addSourceBuffer (DOMString type);
-    undefined           removeSourceBuffer (SourceBuffer sourceBuffer);
-    undefined           endOfStream (optional EndOfStreamError error);
-    undefined           setLiveSeekableRange (double start, double end);
-    undefined           clearLiveSeekableRange ();
-    static boolean isTypeSupported (DOMString type);
-};</pre>
+
+    // "optional" with default empty SourceBufferConfig dictionary is used here
+    // to pass WebIDL verification. Behavior of the method enforces that either
+    // a valid mime-type string or a valid SourceBufferConfig are provided.
+    SourceBuffer    addSourceBuffer (optional TypeOrConfig typeOrConfig = {});
+
+    undefined       removeSourceBuffer (SourceBuffer sourceBuffer);
+    undefined       endOfStream (optional EndOfStreamError error);
+    undefined       setLiveSeekableRange (double start, double end);
+    undefined       clearLiveSeekableRange ();
+    static boolean  isTypeSupported (DOMString type);
+};
+
+dictionary SourceBufferConfig {
+  // Precisely one of these WebCodecs config objects must be populated to
+  // signal via addSourceBuffer or changeType the intent to buffer the
+  // corresponding WebCodecs media.
+  AudioDecoderConfig audioConfig;  // For appending EncodedAudioChunks
+  VideoDecoderConfig videoConfig;  // For appending EncodedVideoChunks
+};
+
+// This typedef simplifies the syntax for overloading addSourceBuffer and
+// changeType to receive either a mime-type string or a WebCodecs config.
+typedef (DOMString or SourceBufferConfig) TypeOrConfig;
+</pre>
       <section>
         <h3>Attributes</h3>
         <dl class="attributes" data-dfn-for="MediaSource"><dt><dfn><code>sourceBuffers</code></dfn> of type <span class="idlAttrType"><a>SourceBufferList</a></span>, readonly       </dt><dd>
@@ -362,7 +397,7 @@ interface MediaSource : EventTarget {
             <li>If the {{SourceBuffer/updating}} attribute equals true on any <a>SourceBuffer</a> in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>Run the [=duration change=] algorithm with |new duration:unrestricted double| set to the value being assigned to this attribute.
               <p class="note">The [=duration change=] algorithm will adjust |new duration| higher if there is any currently buffered coded frame with a higher end time.</p>
-              <p class="note">{{SourceBuffer/appendBuffer()}} and {{MediaSource/endOfStream()}} can update the duration under certain circumstances.</p>
+              <p class="note">{{SourceBuffer/appendBuffer()}}, {{SourceBuffer/appendEncodedChunks()}} and {{MediaSource/endOfStream()}} can update the duration under certain circumstances.</p>
             </li>
           </ol>
         </dd><dt><dfn><code>onsourceopen</code></dfn> of type {{EventHandler}}</dt><dd>
@@ -378,25 +413,66 @@ interface MediaSource : EventTarget {
             creating and using a {{MediaSource}} object in a dedicated worker, and mitigates the need for higher latency
             detection polyfills like attempting creation of a {{MediaSource}} object from a dedicated worker, especially
             if the feature is not supported.</p>
-        </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="MediaSource"><dt><dfn><code>addSourceBuffer</code></dfn></dt><dd>
+        </dd></dl></section>
+        <section><h2>Methods</h2>
+          <dl class="methods" data-dfn-for="MediaSource"><dt><dfn><code>addSourceBuffer</code></dfn></dt><dd>
           <p>Adds a new <a>SourceBuffer</a> to {{MediaSource/sourceBuffers}}.</p>
           <ol class="method-algorithm">
-            <li>If |type:DOMString| is an empty string then throw a {{TypeError}} exception and abort these steps.</li>
-            <li>If |type| contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}, then throw a {{NotSupportedError}} exception and abort these steps.</li>
-            <li>If the user agent can't handle any more SourceBuffer objects or if creating a SourceBuffer
-              based on |type| would result in an unsupported [=SourceBuffer configuration=],
-              then throw a {{QuotaExceededError}} exception and abort these steps.
+            <li>If |typeOrConfig:TypeOrConfig| is a DOMString, then run the following steps:
+              <ol>
+                <li>If |typeOrConfig| is empty then throw a {{TypeError}} exception and abort these steps and
+                  this method.</li>
+                <li>If |typeOrConfig| contains a MIME type that is not supported or contains a MIME type that is not
+                  supported with the types specified for the other {{SourceBuffer}} objects in
+                  {{MediaSource/sourceBuffers}}, then throw a {{NotSupportedError}} exception and abort these
+                  steps and this method.</li>
+              </ol>
+            </li>
+            <li>If |typeOrConfig| is not a DOMString, then run the following steps:
+              <ol>
+                <li>If |typeOrConfig| has both an {{SourceBufferConfig/audioConfig}} and a
+                  {{SourceBufferConfig/videoConfig}} or has neither, then throw a {{TypeError}} exception and abort
+                  these steps and this method.</li>
+                <li>If |typeOrConfig| has neither a neither a [=valid AudioDecoderConfig=] in
+                  {{SourceBufferConfig/audioConfig}} nor a [=valid VideoDecoderConfig=] in
+                  {{SourceBufferConfig/videoConfig}}, then throw a {{TypeError}} exception and abort these steps and
+                  this method.</li>
+                <li>If |typeOrConfig| contains a decoder configuration that is not supported or is not supported with
+                  the types specified for the other {{SourceBuffer}} objects in {{MediaSource/sourceBuffers}}, then
+                  throw a {{NotSupportedError}} exception and abort these steps and this method.</li>
+              </ol>
+            </li>
+            <li>If the user agent can't handle any more {{SourceBuffer}} objects or if creating a {{SourceBuffer}} based
+              on |typeOrConfig| would result in an unsupported [=SourceBuffer track configuration=], then throw a
+              {{QuotaExceededError}} exception and abort these steps.
               <p class="note">For example, a user agent MAY throw a {{QuotaExceededError}} exception if the media element has reached the
                 {{HTMLMediaElement/HAVE_METADATA}} readyState. This can occur if the user agent's media engine does not support adding more tracks during
                 playback.
               </p>
             </li>
             <li>If the {{MediaSource/readyState}} attribute is not in the {{ReadyState/""open""}} state then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>Create a new <a>SourceBuffer</a> object and associated resources.</li>
-            <li>Set the {{SourceBuffer/[[generate timestamps flag]]}} on the new object to the value in the "Generate
-              Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry that is associated with
-              |type|.
-            </li><li>
+            <li>Create a new {{SourceBuffer}} object and associated resources.</li>
+            <li>
+              <dl class="switch">
+                <dt>If |typeOrConfig| is a DOMString:</dt>
+                <dd>Set the {{SourceBuffer/[[generate timestamps flag]]}} on the new object to the value in the
+                "Generate Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry that is
+                associated with |typeOrConfig|.
+                </dd>
+                <dt>Otherwise:</dt>
+                <dd><ol>
+                  <li>Set the {{SourceBuffer/[[generate timestamps flag]]}} on the new object to false.
+                    <div class="note">WebCodecs encoded chunks are required to have timestamps, so there is no need to
+                generate them.</div>
+                  </li>
+                  <li>Copy the {{SourceBufferConfig}} from |typeOrConfig| into the new object's {{SourceBuffer/[[input
+                    webcodecs configs and chunks]]}} for potential handling later during that object's [=chunks append=]
+                    algorithm.</li>
+                </ol>
+                </dd>
+              </dl>
+            </li>
+            <li>
               <dl class="switch">
                 <dt>If the {{SourceBuffer/[[generate timestamps flag]]}} equals true:</dt>
                 <dd>
@@ -413,7 +489,9 @@ interface MediaSource : EventTarget {
             <li>Add the new object to {{MediaSource/sourceBuffers}} and [=queue a task=] to [=fire an event=] named {{addsourcebuffer}} at {{MediaSource/sourceBuffers}}.</li>
             <li>Return the new object.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|type|</td><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>SourceBuffer</a></div></dd>
+        <table class="parameters"><tbody>
+            <tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr>
+            <tr><td class="prmName">|typeOrConfig|</td><td class="prmType">{{TypeOrConfig}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>SourceBuffer</a></div></dd>
 
           <dt><dfn><code>removeSourceBuffer</code></dfn></dt><dd>
           <p>Removes a {{SourceBuffer}} from {{MediaSource/sourceBuffers}}.</p>
@@ -423,9 +501,20 @@ interface MediaSource : EventTarget {
             <li>If the |sourceBuffer|.{{SourceBuffer/updating}} attribute equals true, then run the following steps:
               <ol>
                 <li>Abort the [=buffer append=] algorithm if it is running.</li>
+                <li>Abort the [=chunks append=] algorithm if it is running.</li>
                 <li>Set the |sourceBuffer|.{{SourceBuffer/updating}} attribute to false.</li>
-                <li>[=Queue a task=] to [=fire an event=] named {{abort}} at |sourceBuffer|.</li>
-                <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at |sourceBuffer|.</li>
+                <li><dl class="switch">
+                    <dt>If the |sourceBuffer| has a {{Promise}} in {{SourceBuffer/[[pending append chunks
+                    promise]]}}:</dt>
+                    <dd>Reject that {{Promise}} with an {{AbortError}} {{DOMException}} and unset
+                    {{SourceBuffer/[[pending append chunks promise]]}}.</dd>
+                    <dt>Otherwise:</dt>
+                    <dd><ol>
+                      <li>[=Queue a task=] to [=fire an event=] named {{abort}} at |sourceBuffer|.</li>
+                      <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at |sourceBuffer|.</li>
+                    </ol></dd>
+                  </dl>
+                </li>
               </ol>
             </li>
 
@@ -653,6 +742,11 @@ interface MediaSource : EventTarget {
           <p class="note">
             This method returning true implies that HTMLMediaElement.canPlayType() will return "maybe" or "probably" since it does not make sense for a <a>MediaSource</a> to support a type the HTMLMediaElement knows it cannot play.
           </p>
+          <p class="note">
+            For proactively checking support for a WebCodecs {{AudioDecoderConfig}} or {{VideoDecoderConfig}}, use the
+            respective {{AudioDecoder}} {{AudioDecoder/isConfigSupported()}} or {{VideoDecoder}}
+            {{VideoDecoder/isConfigSupported()}} method.
+          </p>
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|type|</td><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{boolean}}</div></dd></dl>
       </section>
 
@@ -775,7 +869,7 @@ interface MediaSource : EventTarget {
                   </dl>
                 <li>Continue the <a def-id="resource-fetch-algorithm"></a> by running the remaining <a def-id="Otherwise-mode-is-local"></a> steps, with these clarifications:
                   <ol>
-                    <li>Text in the <a def-id="resource-fetch-algorithm"></a> or the <a def-id="media-data-processing-steps-list"></a> that refers to "the download", "bytes received", or "whenever new data for the current media resource becomes available" refers to data passed in via {{SourceBuffer/appendBuffer()}}.</li>
+                    <li>Text in the <a def-id="resource-fetch-algorithm"></a> or the <a def-id="media-data-processing-steps-list"></a> that refers to "the download", "bytes received", or "whenever new data for the current media resource becomes available" refers to data passed in via {{SourceBuffer/appendBuffer()}} or {{SourceBuffer/appendEncodedChunks()}}.</li>
                     <li>References to HTTP in the <a def-id="resource-fetch-algorithm"></a> and the <a def-id="media-data-processing-steps-list"></a> do not apply because the HTMLMediaElement does not fetch media data via HTTP when a <a>MediaSource</a> is attached.</li>
                   </ol>
                 </li>
@@ -835,7 +929,7 @@ interface MediaSource : EventTarget {
                       to {{HTMLMediaElement/HAVE_METADATA}}.
                     <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
                     </li>
-                    <li>The media element waits until an {{SourceBuffer/appendBuffer()}} call causes the [=coded frame processing=] algorithm to set
+                    <li>The media element waits until an {{SourceBuffer/appendBuffer()}} or {{SourceBuffer/appendEncodedChunks()}} call causes the [=coded frame processing=] algorithm to set
                       the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to a value greater than {{HTMLMediaElement/HAVE_METADATA}}.
                       <p class="note">The web application can use {{SourceBuffer/buffered}} and {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} to determine what the media element needs to resume playback.</p>
                     </li>
@@ -1107,17 +1201,28 @@ interface MediaSource : EventTarget {
 <pre class="idl">enum AppendMode {
     "segments",
     "sequence"
-};</pre><table class="simple" data-dfn-for="AppendMode"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn><code id="idl-def-AppendMode.segments">segments</code></dfn></td><td>
-          <p>The timestamps in the media segment determine where the [=coded frames=] are placed in the presentation. Media segments can be appended in any order.</p>
-        </td></tr><tr><td><dfn><code id="idl-def-AppendMode.sequence">sequence</code></dfn></td><td>
-          <p>Media segments will be treated as adjacent in time independent of the timestamps in the media segment. Coded frames in a new media segment will be placed immediately after the coded
-            frames in the previous media segment. The {{SourceBuffer/timestampOffset}} attribute will be updated if a new offset is needed to make the new media segments adjacent to the previous media segment.
-            Setting the {{SourceBuffer/timestampOffset}} attribute in {{AppendMode/""sequence""}} mode allows a media segment to be placed at a specific position in the timeline without any knowledge
-            of the timestamps in the media segment.
-          </p>
+};</pre><table class="simple" data-dfn-for="AppendMode"><tbody><tr><th colspan="2">Enumeration description</th></tr>
+      <tr><td><dfn><code id="idl-def-AppendMode.segments">segments</code></dfn></td><td>
+        <p>The timestamps in the media segment or {{EncodedChunks}} determine where the [=coded frames=] are placed in
+        the presentation. Media segments can be appended in any order. Discontinuous {{EncodedChunks}} should not be
+        appended in the same {{SourceBuffer/appendEncodedChunks()}} call: the application should instead wait for the
+        {{SourceBuffer}} to no longer be {{SourceBuffer/updating}}, and then call {{SourceBuffer/abort()}} or
+        {{SourceBuffer/changeType()}} before appending {{EncodedChunks}} that are discontinuous with those in the
+        previous {{SourceBuffer/appendEncodedChunks()}} call.</p>
+        </td></tr>
+      <tr><td><dfn><code id="idl-def-AppendMode.sequence">sequence</code></dfn></td><td>
+        <p>Media segments will be treated as adjacent in time independent of the timestamps in the media segment. Coded
+        frames in a new media segment will be placed immediately after the coded frames in the previous media segment.
+        As with {{AppendMode/""segments""}} mode, discontinuous {{EncodedChunks}} should not be appended in the same
+        {{SourceBuffer/appendEncodedChunks()}} call.
+        The {{SourceBuffer/timestampOffset}} attribute will be updated if a new offset is needed to make the new media
+        segments adjacent to the previous media segment.  Setting the {{SourceBuffer/timestampOffset}} attribute in
+        {{AppendMode/""sequence""}} mode allows a media segment to be placed at a specific position in the timeline
+        without any knowledge of the timestamps in the media segment.</p>
         </td></tr></tbody></table>
 
-<pre class="idl">[Exposed=(Window,DedicatedWorker)]
+<pre class="idl">
+[Exposed=(Window,DedicatedWorker)]
 interface SourceBuffer : EventTarget {
                     attribute AppendMode          mode;
     readonly        attribute boolean             updating;
@@ -1134,13 +1239,30 @@ interface SourceBuffer : EventTarget {
                     attribute EventHandler        onerror;
                     attribute EventHandler        onabort;
     undefined appendBuffer (BufferSource data);
+    Promise < undefined > appendEncodedChunks(EncodedChunks chunks);
     undefined abort ();
-    undefined changeType (DOMString type);
+
+    // "optional" with default empty SourceBufferConfig dictionary is used here
+    // to pass WebIDL verification. Behavior of the method enforces that either
+    // a valid mime-type string or a valid SourceBufferConfig are provided.
+    undefined changeType (optional TypeOrConfig typeOrConfig = {});
+
     undefined remove (double start, unrestricted double end);
-};</pre>
+};
+
+// This typedef simplifies the syntax for describing either a single audio or
+// video chunk, or a sequence of chunks. While this typedef does not provide the
+// ability to enforce that all members of a sequence of chunks are the same kind
+// (audio versus video), the behavior of the appendEncodedChunks method enforces
+// that constraint: the implementation MUST reject a sequence containing both
+// audio and video chunks.
+typedef (sequence< (EncodedAudioChunk or EncodedVideoChunk) >
+            or EncodedAudioChunk or EncodedVideoChunk) EncodedChunks;
+</pre>
           <div class="issue" data-number="280">[[HTML]] {{AudioTrackList}}, {{VideoTrackList}} and {{TextTrackList}} need Window+DedicatedWorker
           exposure.</div>
-          <section><h2>Attributes</h2><dl class="attributes" data-dfn-for="SourceBuffer"><dt><dfn><code>mode</code></dfn> of type <a>AppendMode</a></dt><dd>
+      <section><h2>Attributes</h2>
+        <dl class="attributes" data-dfn-for="SourceBuffer"><dt><dfn><code>mode</code></dfn> of type <a>AppendMode</a></dt><dd>
           <p>Controls how a sequence of [=media segments=] are handled. This attribute is initially set by {{MediaSource/addSourceBuffer()}} after the object is created, and can be updated by {{SourceBuffer/changeType()}} or setting this attribute.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
@@ -1164,7 +1286,7 @@ interface SourceBuffer : EventTarget {
             <li>Update the attribute to |new mode|.</li>
           </ol>
         </dd><dt><dfn><code>updating</code></dfn> of type {{boolean}}, readonly       </dt><dd>
-          <p>Indicates whether the asynchronous continuation of an {{SourceBuffer/appendBuffer()}} or {{SourceBuffer/remove()}}
+        <p>Indicates whether the asynchronous continuation of an {{SourceBuffer/appendBuffer()}}, {{SourceBuffer/appendEncodedChunks()}} or {{SourceBuffer/remove()}}
             operation is still being processed. This attribute is initially set to false when the object is created.</p>
         </dd><dt><dfn><code>buffered</code></dfn> of type {{TimeRanges}}, readonly       </dt><dd>
           <p>Indicates what {{TimeRanges}} are buffered in the <a>SourceBuffer</a>. This
@@ -1190,7 +1312,7 @@ interface SourceBuffer : EventTarget {
             <li>Return the current value of this attribute.</li>
           </ol>
         </dd><dt><dfn><code>timestampOffset</code></dfn> of type {{double}}</dt><dd>
-          <p>Controls the offset applied to timestamps inside subsequent [=media segments=] that are appended to this <a>SourceBuffer</a>. The {{SourceBuffer/timestampOffset}} is initially set to 0 which indicates that no offset is being applied.</p>
+        <p>Controls the offset applied to timestamps inside subsequent [=media segments=] or {{EncodedChunks}} that are appended to this <a>SourceBuffer</a>. The {{SourceBuffer/timestampOffset}} is initially set to 0 which indicates that no offset is being applied.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
@@ -1251,17 +1373,68 @@ interface SourceBuffer : EventTarget {
           <p>The event handler for the {{error}} event.</p>
         </dd><dt><dfn><code>onabort</code></dfn> of type {{EventHandler}}</dt><dd>
           <p>The event handler for the {{abort}} event.</p>
-        </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="SourceBuffer"><dt><dfn id="dom-sourcebuffer-appendbuffer"><code>appendBuffer</code></dfn></dt><dd>
+        </dd></dl></section>
+        <section><h2>Methods</h2><dl class="methods" data-dfn-for="SourceBuffer">
+          <dt><dfn id="dom-sourcebuffer-appendbuffer"><code>appendBuffer</code></dfn></dt>
+          <dd>
             <p>Appends the segment data in an <a class="externalDFN">BufferSource</a>[[!WEBIDL]] to the {{SourceBuffer}}.</p>
 
           <ol class="method-algorithm">
-            <li>Run the [=prepare append=] algorithm.</li>
+            <li>Run the [=prepare append=] algorithm. If it throws exception and aborts, then these steps are also
+              aborted.</li>
             <li>Add |data:BufferSource| to the end of the {{SourceBuffer/[[input buffer]]}}.</li>
             <li>Set the {{SourceBuffer/updating}} attribute to true.</li>
             <li>[=Queue a task=] to [=fire an event=] named {{updatestart}} at this <a>SourceBuffer</a> object.</li>
-            <li>Asynchronously run the [=buffer append=] algorithm.</li>
+            <li>Asynchronously run the [=buffer append=] algorithm.
+              <div class="issue" data-number="301">If this {{SourceBuffer}} is currently configured by the most recent
+                of the {{MediaSource/addSourceBuffer()}} call that created this object or a more recent
+                {{SourceBuffer/changeType()}} call to expect to buffer WebCodecs {{EncodedChunks}} via
+                {{SourceBuffer/appendEncodedChunks()}}, the asynchronous [=buffer append=] algorithm will detect this and
+                trigger the [=append error=] algorithm.</div>
+            </li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|data|</td><td class="prmType">{{BufferSource}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>abort</code></dfn></dt><dd>
+          <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|data|</td><td class="prmType">{{BufferSource}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd>
+
+          <dt><dfn id="dom-sourcebuffer-appendencodedchunks"><code>appendEncodedChunks</code></dfn></dt>
+          <dd>
+            <p>Appends WebCodecs [[WEBCODECS]] {{EncodedChunks}} to the {{SourceBuffer}}.</p>
+
+            <ol class="method-algorithm">
+              <li>Run the [=prepare append=] algorithm. If it throws exception and aborts, then these steps are also
+                aborted.</li>
+              <li>If any of the chunks in |chunks:EncodedChunks| have a null value for their duration attribute, throw a
+                {{TypeError}} exception and abort these steps.
+                <div class="note">This requirement is necessary to understand all chunks' presentation intervals in
+                  the coded frame processing algorithm, enabling correct buffering when frames overlap other frames, are later
+                  overlapped by other frames, or are in a disjoint portion of the presentation timeline.
+                </div>
+              </li>
+              <li>Add |chunks| to the end of {{SourceBuffer/[[input webcodecs configs and chunks]]}}.</li>
+              <li>Set the {{SourceBuffer/updating}} attribute to true.
+                <div class="note">This promise-based method differs from the asynchronous event-signalling
+                  {{SourceBuffer/appendBuffer()}} method: promise resolution or rejection is the way to detect the
+                  analogues of "abort", "error", "updatestart", "update", and "updateend" events that are not enqueued
+                  by {{SourceBuffer/appendEncodedChunks()}}.</div>
+              </li>
+              <li>Let |promise:Promise| be a new {{Promise}}.</li>
+              <li>Set {{SourceBuffer/[[pending append chunks promise]]}} to be |promise|.</li>
+              <li>Return |promise| to the caller and run the rest of these steps asynchronously.</li>
+              <li>Run the [=chunks append=] algorithm.
+                <div class="issue" data-number="301">If this {{SourceBuffer}} is currently configured by the most recent
+                  of the {{MediaSource/addSourceBuffer()}} call that created this object or a more recent
+                  {{SourceBuffer/changeType()}} call to expect to buffer bytes parsed from a {{BufferSource}} via
+                  {{SourceBuffer/appendBuffer()}}, the asynchronous [=chunks append=] algorithm will detect this and
+                  trigger the [=append error=] algorithm.</div>
+              </li>
+            </ol>
+            <table class="parameters"><tbody>
+                <tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr>
+                <tr><td class="prmName">|chunks|</td><td class="prmType">{{EncodedChunks}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table>
+            <div><em>Return type: </em>{{Promise}} < {{undefined}} ></div></dd>
+          </dd>
+
+
+          <dt><dfn><code>abort</code></dfn></dt><dd>
           <p>Aborts the current segment and resets the segment parser.</p>
 
           <ol class="method-algorithm">
@@ -1271,9 +1444,20 @@ interface SourceBuffer : EventTarget {
             <li>If the {{SourceBuffer/updating}} attribute equals true, then run the following steps:
               <ol>
                 <li>Abort the [=buffer append=] algorithm if it is running.</li>
+                <li>Abort the [=chunks append=] algorithm if it is running.</li>
                 <li>Set the {{SourceBuffer/updating}} attribute to false.</li>
-                <li>[=Queue a task=] to [=fire an event=] named {{abort}} at this <a>SourceBuffer</a> object.</li>
-                <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this <a>SourceBuffer</a> object.</li>
+                <li><dl class="switch">
+                    <dt>If this object has a {{Promise}} in {{SourceBuffer/[[pending append chunks promise]]}}:</dt>
+                    <dd>Reject that {{Promise}} with an {{AbortError}} {{DOMException}} and unset
+                    {{SourceBuffer/[[pending append chunks promise]]}}.</dd>
+                    <dt>Otherwise:</dt>
+                    <dd><ol>
+                      <li>[=Queue a task=] to [=fire an event=] named {{abort}} at this {{SourceBuffer}} object.</li>
+                      <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this {{SourceBuffer}}
+                        object.</li>
+                    </ol></dd>
+                  </dl>
+                </li>
               </ol>
             </li>
             <li>Run the [=reset parser state=] algorithm.</li>
@@ -1282,12 +1466,38 @@ interface SourceBuffer : EventTarget {
           </ol>
         <div><em>No parameters.</em></div><div><em>Return type: </em>{{undefined}}</div></dd>
         <dt><dfn><code>changeType</code></dfn></dt><dd>
-        <p>Changes the MIME type associated with this object. Subsequent {{SourceBuffer/appendBuffer()}} calls will expect the newly appended bytes to conform to the new type.</a>
+          <p>Changes the [=SourceBuffer byte stream format specification or WebCodecs chunks buffering expectations=] for
+            this object. Enables switching among bytestreams, codecs, or even between bytestream parsing versus
+            buffering of WebCodecs encoded chunks in the same {{SourceBuffer}}.</p>
           <ol class="method-algorithm">
-            <li>If |type:DOMString| is an empty string then throw a {{TypeError}} exception and abort these steps.</li>
-            <li>If this object has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=], then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>If the {{SourceBuffer/updating}} attribute equals true, then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>If |type| contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified (currently or previously) of {{SourceBuffer}} objects in the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=], then throw a {{NotSupportedError}} exception and abort these steps.</li>
+            <li>If |typeOrConfig:TypeOrConfig| is an empty DOMString, then throw a {{TypeError}} exception and abort
+              these steps.</li>
+            <li>If |typeOrConfig| is not a DOMString, then run the following steps:
+              <ol>
+                <li>If |typeOrConfig| has both an {{SourceBufferConfig/audioConfig}} and a
+                  {{SourceBufferConfig/videoConfig}} or has neither, then throw a {{TypeError}} exception and abort
+                  these steps and this method.</li>
+                <li>If |typeOrConfig| has neither a neither a [=valid AudioDecoderConfig=] in
+                  {{SourceBufferConfig/audioConfig}} nor a [=valid VideoDecoderConfig=] in
+                  {{SourceBufferConfig/videoConfig}}, then throw a {{TypeError}} exception and abort these steps and
+                  this method.</li>
+              </ol>
+            </li>
+
+            <li>If this object has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media
+              source=], then throw an {{InvalidStateError}} exception and abort these steps.</li>
+
+            <li>If the {{SourceBuffer/updating}} attribute equals true, then throw an {{InvalidStateError}} exception
+              and abort these steps.</li>
+
+            <li>If |typeOrConfig| is a DOMString that contains a MIME type that is not supported or that contains a MIME
+              type that is not supported with the types specified (currently or previously) of {{SourceBuffer}} objects
+              in the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=], then throw a
+              {{NotSupportedError}} exception and abort these steps.</li>
+            <li>If |typeOrConfig| is not a DOMString, and if it contains a decoder configuration that is not supported
+              or is not supported with the types specified (currently or previously) of {{SourceBuffer}} objects in the
+              {{MediaSource/sourceBuffers}} attribute of the [=parent media source=], then throw a {{NotSupportedError}}
+              exception and abort these steps.</li>
             <li>
               <p>If the {{MediaSource/readyState}} attribute of the [=parent media source=] is in the {{ReadyState/""ended""}} state then run the following steps:</p>
               <ol>
@@ -1296,9 +1506,28 @@ interface SourceBuffer : EventTarget {
               </ol>
             </li>
             <li>Run the [=reset parser state=] algorithm.</li>
-            <li>Update the {{SourceBuffer/[[generate timestamps flag]]}} on this {{SourceBuffer}} object to the value in
-              the "Generate Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry that is
-              associated with |type|.</li>
+
+            <li>
+              <dl class="switch">
+                <dt>If |typeOrConfig| is a DOMString:</dt>
+                <dd>Update the {{SourceBuffer/[[generate timestamps flag]]}} on this {{SourceBuffer}} object to the value in the
+                "Generate Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry that is
+                associated with |typeOrConfig|.
+                </dd>
+                <dt>Otherwise:</dt>
+                <dd><ol>
+                  <li>Update the {{SourceBuffer/[[generate timestamps flag]]}} on this {{SourceBuffer}} object to false.
+                    <div class="note">WebCodecs encoded chunks are required to have timestamps, so there is no need to
+                generate them.</div>
+                  </li>
+                  <li>Remove any {{SourceBufferConfig}} that may be in this {{SourceBuffer}} object's
+                    {{SourceBuffer/[[input webcodecs configs and chunks]]}}.</li>
+                  <li>Copy the {{SourceBufferConfig}} from |typeOrConfig| into this {{SourceBuffer}} object's {{SourceBuffer/[[input
+                    webcodecs configs and chunks]]}} for potential handling later during [=chunks append=] algorithm.</li>
+                </ol>
+                </dd>
+              </dl>
+            </li>
             <li>
                 <dl class="switch">
                   <dt>If the {{SourceBuffer/[[generate timestamps flag]]}} equals true:</dt>
@@ -1324,8 +1553,8 @@ interface SourceBuffer : EventTarget {
                 <th>Description</th>
               </tr>
               <tr>
-                <td class="prmName">|type|</td>
-                <td class="prmType">{{DOMString}}</td>
+                <td class="prmName">|typeOrConfig|</td>
+                <td class="prmType">{{TypeOrConfig}}</td>
                 <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
                 <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
                 <td class="prmDesc"></td>
@@ -1387,9 +1616,9 @@ interface SourceBuffer : EventTarget {
 
       <section id="track-buffers">
         <h3>Track Buffers</h3>
-        <p>A <dfn id="track-buffer">track buffer</dfn> stores the [=track descriptions=] and [=coded frames=] for an individual
-          track. The track buffer is updated as [=initialization segments=] and [=media segments=] are appended to the
-          <a>SourceBuffer</a>.</p>
+        <p>A <dfn id="track-buffer">track buffer</dfn> stores the [=track descriptions=] and [=coded frames=] for an
+          individual track. The track buffer is updated as [=initialization segments=], [=media segments=], decoder
+          configurations and {{EncodedChunks}} are given to the {{SourceBuffer}}.</p>
 
         <p>Each [=track buffer=] has a <dfn id="last-decode-timestamp">last decode timestamp</dfn> variable that stores
           the decode timestamp of the last [=coded frame=] appended in the current [=coded frame group=]. The variable is initially
@@ -1495,8 +1724,9 @@ interface SourceBuffer : EventTarget {
             empty when the {{SourceBuffer}} object is created.</p>
 
           <p>Each {{SourceBuffer}} object has a <dfn data-dfn-for="SourceBuffer">[[\buffer full flag]]</dfn> internal
-            slot that keeps track of whether {{SourceBuffer/appendBuffer()}} is allowed to accept more bytes. It is set
-            to false when the {{SourceBuffer}} object is created and gets updated as data is appended and removed.</p>
+            slot that keeps track of whether {{SourceBuffer/appendBuffer()}} is allowed to accept more bytes or
+            {{SourceBuffer/appendEncodedChunks()}} is allowed to accept more encoded chunks. It is set to false when the
+            {{SourceBuffer}} object is created and gets updated as data is appended and removed.</p>
 
           <p>Each {{SourceBuffer}} object has a <dfn data-dfn-for="SourceBuffer">[[\group start timestamp]]</dfn>
             internal slot that keeps track of the starting timestamp for a new [=coded frame group=] in the
@@ -1523,6 +1753,7 @@ interface SourceBuffer : EventTarget {
             This flag is set by {{MediaSource/addSourceBuffer()}} when the {{SourceBuffer}} object is created and is
             updated by {{SourceBuffer/changeType()}}.
           </p>
+
           <p>When the segment parser loop algorithm is invoked, run the following steps:</p>
 
           <ol>
@@ -1598,6 +1829,15 @@ interface SourceBuffer : EventTarget {
             <li>If the {{SourceBuffer/mode}} attribute equals {{AppendMode/""sequence""}}, then set the
               {{SourceBuffer/[[group start timestamp]]}} to the {{SourceBuffer/[[group end timestamp]]}}</li>
             <li>Remove all bytes from the {{SourceBuffer/[[input buffer]]}}.</li>
+            <li>If {{SourceBuffer/[[input webcodecs configs and chunks]]}} contains any {{EncodedChunks}}, remove them
+              from {{SourceBuffer/[[input webcodecs configs and chunks]]}}, but retain any {{AudioDecoderConfig}} or
+              {{VideoDecoderConfig}} that may be in that internal slot.
+              <div class="note">Keeping an unprocessed WebCodecs config in this internal slot lets future
+                {{SourceBuffer/appendEncodedChunks()}} reuse the config in the [=chunks append=] algorithm because
+                there is no other way to retain such an unprocessed config, except perhaps by the app calling
+                {{SourceBuffer/changeType()}} with the config again.
+              </div>
+            </li>
             <li>Set {{SourceBuffer/[[append state]]}} to [=WAITING_FOR_SEGMENT=].</li>
           </ol>
         </section>
@@ -1608,8 +1848,18 @@ interface SourceBuffer : EventTarget {
           <ol>
             <li>Run the [=reset parser state=] algorithm.</li>
             <li>Set the {{SourceBuffer/updating}} attribute to false.</li>
-            <li>[=Queue a task=] to [=fire an event=] named {{error}} at this <a>SourceBuffer</a> object.</li>
-            <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this <a>SourceBuffer</a> object.</li>
+            <li><dl class="switch">
+                <dt>If this {{SourceBuffer}} has a {{Promise}} in {{SourceBuffer/[[pending append chunks
+                promise]]}}:</dt>
+                <dd>Reject that {{Promise}} with an {{AbortError}} {{DOMException}} and unset {{SourceBuffer/[[pending
+                append chunks promise]]}}.</dd>
+                <dt>Otherwise:</dt>
+                <dd><ol>
+                  <li>[=Queue a task=] to [=fire an event=] named {{error}} at this {{SourceBuffer}} object.</li>
+                  <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this {{SourceBuffer}} object.</li>
+                </ol></dd>
+              </dl>
+            </li>
             <li>Run the [=end of stream=] algorithm
               with the |error:EndOfStreamError| parameter set to {{EndOfStreamError/""decode""}}.</li>
           </ol>
@@ -1657,11 +1907,94 @@ interface SourceBuffer : EventTarget {
           <h4><dfn>Buffer Append</dfn></h4>
           <p>When {{SourceBuffer/appendBuffer()}} is called, the following steps are run to process the appended data.</p>
           <ol>
+            <li>If this {{SourceBuffer}} is currently configured to expect processing of WebCodecs {{EncodedChunks}},
+              then run the [=append error=] algorithm and abort this algorithm.
+              <div class="note">The expectation of processing an appended bytestream versus appended {{EncodedChunks}}
+                is based on the most recently successful execution of the initial {{MediaSource/addSourceBuffer()}} that
+                created this {{SourceBuffer}} or potentially a more recent {{SourceBuffer/changeType()}} call that may
+                have changed the expectation.</div>
+            </li>
             <li>Run the [=segment parser loop=] algorithm.</li>
             <li>If the [=segment parser loop=] algorithm in the previous step was aborted, then abort this algorithm.</li>
             <li>Set the {{SourceBuffer/updating}} attribute to false.</li>
             <li>[=Queue a task=] to [=fire an event=] named {{update}} at this <a>SourceBuffer</a> object.</li>
             <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this <a>SourceBuffer</a> object.</li>
+          </ol>
+        </section>
+
+        <section id="sourcebuffer-chunks-append">
+          <h4><dfn>Chunks Append</dfn></h4>
+          <p>Each {{SourceBuffer}} object has a <dfn data-dfn-for="SourceBuffer">[[\pending append chunks
+            promise]]</dfn> internal slot that stores the promise necessary to communicate the completion of
+            asynchronous steps begun by a call to {{SourceBuffer/appendEncodedChunks()}}. If there is no asynchronous
+            {{SourceBuffer/appendEncodedChunks()}} operation in progress, then this slot is unset.</p>
+
+          <p>Each {{SourceBuffer}} object has an <dfn data-dfn-for="SourceBuffer">[[\input webcodecs configs and
+            chunks]]</dfn> internal slot that stores a queue of unprocessed {{EncodedChunks}} and at most one
+            {{SourceBufferConfig}}. The {{SourceBufferConfig}} is added if the initial call to
+            {{MediaSource/addSourceBuffer()}} that created this object was provided a {{SourceBufferConfig}}, or if
+            there is a more recent successful call to {{SourceBuffer/changeType()}} on this {{SourceBuffer}} that
+            provided a {{SourceBufferConfig}}. The contents of this slot are processed by the [=chunks append=]
+            algorithm to buffer the necessary decoder configuration and coded frames into the underlying [=track
+            buffer=].</p>
+
+          <p>When the chunks append algorithm is invoked, run the following steps to process the appended
+          {{EncodedChunks}} relative to the current {{SourceBufferConfig}}:</p>
+          <ol>
+            <li>If this {{SourceBuffer}} is currently configured to expect processing of an appended bytestream,
+              then run the [=append error=] algorithm and abort this algorithm.
+              <div class="note">The expectation of processing an appended bytestream versus appended {{EncodedChunks}}
+                is based on the most recently successful execution of the initial {{MediaSource/addSourceBuffer()}} that
+                created this {{SourceBuffer}} or potentially a more recent {{SourceBuffer/changeType()}} call that may
+                have changed the expectation.</div>
+            </li>
+            <li>If there is a {{SourceBufferConfig}} in this {{SourceBuffer}}'s {{SourceBuffer/[[input webcodecs configs
+              and chunks]]}}, then run the following steps:
+              <ol>
+                <li>Let |config:SourceBufferConfig| be the {{SourceBufferConfig}} from {{SourceBuffer/[[input webcodecs
+                  configs and chunks]]}}.
+                  <div class="note">There must be precisely one {{AudioDecoderConfig}} or {{VideoDecoderConfig}} in
+                    |config|; this condition was already enforced by the {{MediaSource/addSourceBuffer()}} or
+                    {{SourceBuffer/changeType()}} call that placed |config| into {{SourceBuffer/[[input webcodecs
+                    configs and chunks]]}}.</div>
+                </li>
+                <li>Remove the {{SourceBufferConfig}} from {{SourceBuffer/[[input webcodecs configs and chunks]]}}.</li>
+                <li>Run the [=initialization segment received=] algorithm with |config| denoting a single track
+                  configuration. If that algorithm aborts, then abort this algorithm.</li>
+              </ol>
+            </li>
+            <li>In the order in which they were added to {{SourceBuffer/[[input webcodecs configs and chunks]]}},
+              prepare the {{EncodedChunks}} for coded frame processing by running the following steps for each chunk:
+              <ol>
+                <li>Let |chunk:EncodedAudioChunk or EncodedVideoChunk| be the next encoded chunk being prepared,
+                  dequeued (removed) from the front of {{SourceBuffer/[[input webcodecs configs and chunks]]}}.</li>
+                <li>If |chunk| is an {{EncodedAudioChunk}} but the most recently processed |config| by this object was a
+                  {{VideoDecoderConfig}}, or if |chunk| is an {{EncodedVideoChunk}} but the most recently processed
+                  |config| by this object was an {{AudioDecoderConfig}}, then run the [=append error=] algorithm and
+                  abort this algorithm.
+                </li>
+                <li>Create a coded frame from |chunk|. Treat the frame as a random access point iff |chunk|'s type
+                  is "key". Set the frame's decode timestamp to be 0.
+                  <div class="note">Using a constant decode timestamp disables the [=coded frame processing=]
+                    algorithm's discontinuity detection. Note that other mechanisms for signalling discontinuous
+                    sequences of frames survive this simplification, with the most reliable yet lightweight being calling
+                    {{SourceBuffer/abort()}} when {{SourceBuffer/updating}} is false. A more heavyweight option would be
+                    to call {{SourceBuffer/changeType()}}. Also note that, though WebCodecs does not define a decode
+                    timestamp attribute for encoded chunks, if reliable buffering of chunks into MSE needs real decode
+                    timestamps, this spec may be refined to improve that support.
+                  </div>
+                </li>
+              </ol>
+            </li>
+            <li>Run the [=coded frame processing=] algorithm with the frames in order from the previous step.
+              <div class="note">This algorithm, unlike the [=segment parser loop=] algorithm, deterministically
+                consumes and clears all of its input state and processes all corresponding coded frames. Even the steps
+                which might abort this algorithm early do so after the [=append error=] algorithm clears any remaining
+                input state and rejects the promise.
+              </div>
+            </li>
+            <li>Set the {{SourceBuffer/updating}} attribute to false.
+            <li>Resolve the {{SourceBuffer/[[pending append chunks promise]]}} and unset that internal slot.</li>
           </ol>
         </section>
 
@@ -1684,7 +2017,8 @@ interface SourceBuffer : EventTarget {
 
         <section id="sourcebuffer-init-segment-received">
           <h4><dfn>Initialization Segment Received</dfn></h4>
-          <p>The following steps are run when the [=segment parser loop=] successfully parses a complete [=initialization segment=]:</p>
+          <p>The following steps are run when the [=segment parser loop=] successfully parses a complete
+          [=initialization segment=] or the [=chunks append=] algorithm handles a {{SourceBufferConfig}}:</p>
           <p>Each SourceBuffer object has a
           <dfn data-dfn-for="SourceBuffer">[[\first initialization segment received flag]]</dfn> internal slot that
           tracks whether the first [=initialization segment=] has been appended and received by this algorithm.  This
@@ -2030,10 +2364,11 @@ interface SourceBuffer : EventTarget {
 
         <section id="sourcebuffer-coded-frame-processing">
           <h4><dfn data-export="">Coded Frame Processing</dfn></h4>
-          <p>When complete [=coded frames=] have been parsed by the [=segment parser loop=] then the following steps are run:</p>
+          <p>When complete [=coded frames=] have been parsed by the [=segment parser loop=] or emitted by the [=chunks
+          append=] algorithm, then the following steps are run:</p>
           <ol>
             <li>
-              <p>For each [=coded frame=] in the [=media segment=] run the following steps:</p>
+              <p>For each [=coded frame=] run the following steps:</p>
               <ol>
                 <li><i>Loop Top: </i><dl class="switch">
                     <dt>If {{SourceBuffer/[[generate timestamps flag]]}} equals true:</dt>
@@ -2220,7 +2555,7 @@ interface SourceBuffer : EventTarget {
               <p>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is {{HTMLMediaElement/HAVE_FUTURE_DATA}} and the new [=coded frames=] cause {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} to have a {{TimeRanges}} that includes the current playback position and [=enough data to ensure uninterrupted playback=], then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_ENOUGH_DATA}}.</p>
               <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
             </li>
-            <li>If the [=media segment=] contains data beyond the current {{MediaSource/duration}}, then run the
+            <li>If the result of coded frame processing buffers data beyond the current {{MediaSource/duration}}, then run the
               [=duration change=] algorithm with |new duration:unrestricted double| set to the maximum of the current
               duration and the {{SourceBuffer/[[group end timestamp]]}}.</li>
           </ol>
@@ -2283,9 +2618,11 @@ interface SourceBuffer : EventTarget {
 
         <section id="sourcebuffer-coded-frame-eviction">
           <h4><dfn>Coded Frame Eviction</dfn></h4>
-          <p>This algorithm is run to free up space in this {{SourceBuffer}} when new data is appended.</p>
+          <p>This algorithm is run to free up space in this {{SourceBuffer}} when new data is appended. New data is
+          either the bytes being appended via {{SourceBuffer/appendBuffer()}} or the WebCodecs {{EncodedChunks}} being
+          appended via {{SourceBuffer/appendEncodedChunks()}}.</p>
           <ol>
-            <li>Let |new data:BufferSource| equal the data that is about to be appended to this SourceBuffer.
+            <li>Let |new data:BufferSource or EncodedChunks| equal the data that is about to be appended to this SourceBuffer.
               <div class="issue" data-number="289">
                 <p>Need to recognize step here that implementations MAY decide to set {{SourceBuffer/[[buffer full
                 flag]]}} true here if it predicts that processing |new data| in addition to any existing bytes in
@@ -2773,6 +3110,10 @@ partial interface TextTrack {
       <p class="note">The byte stream format specifications in the registry are not intended to define new storage formats. They simply outline the subset of
         existing storage format structures that implementations of this specification will accept.</p>
       <p class="note">Byte stream format parsing and validation is implemented in the [=segment parser loop=] algorithm.</p>
+      <p class="note">When currently configured by {{MediaSource/addSourceBuffer()}} or {{SourceBuffer/changeType()}} to
+        expect appends of WebCodecs encoded chunks via {{SourceBuffer/appendEncodedChunks()}} instead of a bytestream
+        via {{SourceBuffer/appendBuffer}}, the {{SourceBuffer}} does not have a specific bytestream format
+        associated.</p>
 
       <p>This section provides general requirements for all byte stream format specifications:</p>
       <ul>
@@ -2846,9 +3187,12 @@ partial interface TextTrack {
     <section id="examples">
       <h2>Examples</h2>
       <p>Example use of the Media Source Extensions</p>
-      <div class="block">
-        <div class="blockContent">
-          <pre class="code">&lt;script&gt;
+      <section id="bsf-based">
+        <h3>Buffering bytes from a bytestream format</h3>
+        <div class="block">
+          <div class="blockContent">
+            <pre class="code">
+&lt;script&gt;
   function onSourceOpen(videoTag, e) {
     var mediaSource = e.target;
 
@@ -2937,9 +3281,98 @@ partial interface TextTrack {
   mediaSource.addEventListener('sourceopen', onSourceOpen.bind(this, video));
   video.src = window.URL.createObjectURL(mediaSource);
 &lt;/script&gt;
-          </pre>
+            </pre>
+          </div>
         </div>
-      </div>
+      </section>
+      <section id="webcodecs-based">
+        <h3>Buffering WebCodecs encoded chunks</h3>
+        <div class="block">
+          <div class="blockContent">
+            <pre class="code">
+&lt;body&gt;
+&lt;script&gt;
+  // Very simple demuxer bound to a specific media file.
+  // Replace with other source of WebCodecs configs and encoded chunks.
+  let next_chunk_index = 0;
+  let buffer;
+  let chunk_duration = 100 * 1000;  // 100 milliseconds for this example.
+  let metadata = [
+    {
+      offset: /* chunk offset, e.g. 42 */,
+      size: /* chunk size, e.g. 4242 */,
+      type: /* chunk type, e.g. "key" or "delta" */
+    }, // Plus additional chunks' metadata listed here.
+  ];
+
+  function getConfig() {
+    return( /* e.g. { videoConfig: { codec: "vp09.00.10.08" } } */ );
+  }
+
+  async function getNextEncodedChunk() {
+    if (next_chunk_index >= metadata.length)
+      return null;
+    if (next_chunk_index == 0)
+      buffer = await (await fetch(/* e.g. "vp9.chunks" */)).arrayBuffer();
+    let chunk_metadata = metadata[next_chunk_index];
+    let chunk_timestamp = chunk_duration * next_chunk_index;
+    next_chunk_index++;
+    // EncodedAudioChunks could also be buffered into MSE, but only one form of
+    // media (audio versus video) can be buffered into a specific SourceBuffer,
+    // so this simple example is video-only.
+    return new EncodedVideoChunk( {
+      type: chunk_metadata.type,
+      timestamp: chunk_timestamp,
+      duration: chunk_duration,
+      data: new Uint8Array(buffer, chunk_metadata.offset, chunk_metadata.size)
+    } );
+  }
+
+  // MSE player using the WebCodecs content generated, above.
+  async function getOpenMediaSource() {
+    return new Promise(async (resolve, reject) => {
+      const v = document.createElement("video");
+      document.body.appendChild(v);
+      const mediaSource = new MediaSource();
+      const url = URL.createObjectURL(mediaSource);
+      mediaSource.addEventListener("sourceopen", () => {
+        URL.revokeObjectURL(url);
+        if (mediaSource.readyState != "open")
+          reject();
+        else
+          resolve([ v, mediaSource ]);
+      }, { once: true });
+      v.src = url;
+    });
+  }
+
+  async function bufferMedia() {
+    let [ videoElement, mediaSource ] = await getOpenMediaSource();
+    let sourceBuffer = mediaSource.addSourceBuffer(await getConfig());
+
+    // This simple player attempts to buffer everything immediately. Full
+    // players will condition buffering, for example, on playback progress
+    // and availability of chunks.
+    while (null != (chunk = await(getNextEncodedChunk()))) {
+      // Note that appending a sequence instead of a single chunk here
+      // could be more performant.
+      await sourceBuffer.appendEncodedChunks(chunk);
+    }
+
+    mediaSource.endOfStream();
+    videoElement.controls = true;  // Show default controls.
+  }
+
+  if (!SourceBuffer.prototype.hasOwnProperty("appendEncodedChunks"))
+    console.log("MSE-for-WebCodecs support is missing.")
+  else
+    bufferMedia();
+&lt;/script&gt;
+&lt;/body&gt;
+            </pre>
+          </div>
+        </div>
+      </section>
     </section>
 
 
