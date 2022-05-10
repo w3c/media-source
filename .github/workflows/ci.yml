@@ -19,19 +19,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # If event is a push to main branch (and not a pull request),
-      # copy static files over to the gh-pages branch, excluding files
-      # that don't need to be published, and preserving older versions
-      # of the spec that are in the gh-pages branch.
-      - name: Deploy static files
-        if: ${{ github.ref == 'refs/heads/main' }}
-        uses: peaceiris/actions-gh-pages@v3.8.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
-          exclude_assets: '.github,*.md,*.json,media-source-respec.html'
-          keep_files: true
-
       # Run spec-prod action to build, validate the spec itself and,
       # if event is a push, deploy it both to the gh-pages branch and
       # to w3.org/TR
@@ -46,3 +33,20 @@ jobs:
           W3C_WG_DECISION_URL: https://github.com/w3c/media-wg/issues/27
           W3C_BUILD_OVERRIDE: |
             specStatus: WD
+
+      # If event is a push to main branch (and not a pull request),
+      # copy static files over to the gh-pages branch, excluding files
+      # that don't need to be published, and preserving older versions
+      # of the spec that are in the gh-pages branch.
+      # Note: Step needs to take place after spec-prod step because the
+      # w3c/spec-prod action expects local state to be clean and the
+      # peaceiris/actions-gh-pages seems to change it in such a way that the
+      # w3c/spec-prod can no longer find the .git/config file.
+      - name: Deploy static files
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: peaceiris/actions-gh-pages@v3.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          exclude_assets: '.github,*.md,*.json,media-source-respec.html'
+          keep_files: true
