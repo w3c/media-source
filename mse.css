@@ -6,7 +6,7 @@ table.old-table { border-collapse: collapse; border-style: hidden hidden none hi
 table.old-table thead, table tbody { border-bottom: solid; }
 table.old-table tbody th:first-child { border-left: solid; }
 table.old-table tbody th { text-align: left; }
-table.old-table td, table th { border-left: solid; border-right: solid; border-bottom: solid thin; vertical-align: top; padding: 0.2em; }
+table.old-table td, table th:not(.prmName) { border-left: solid; border-right: solid; border-bottom: solid thin; vertical-align: top; padding: 0.2em; }
 
 dl.switch { padding-left: 2em; }
 dl.switch > dt { text-indent: -1.5em; }
@@ -20,3 +20,63 @@ p + * > li, dd li { margin: 1em 0; }
 body > form { padding: 4px; border: 1px solid red; background-color: white; }
 
 #bug-assist-form { position: fixed; width: 10em; top: 5em; right: 1em; font-family: Tahoma, sans-serif; font-size: 11px; opacity: 0.8; text-align: right; }
+
+.prmNullTrue,
+.prmNullFalse,
+.prmOptTrue,
+.prmOptFalse {
+  width: 45px;
+  text-align: center;
+}
+
+.prmNullTrue,
+.prmOptTrue {
+  color: #0c0;
+}
+
+.prmNullFalse,
+.prmOptFalse {
+  color: #c00;
+}
+
+table.parameters {
+  border-spacing: 0;
+  border-collapse: collapse;
+  margin: 0.5em 0;
+  width: 100%;
+}
+
+table.parameters {
+  border-bottom: 1px solid #90b8de;
+}
+
+.parameters th {
+  color: inherit;
+  padding: 3px 5px;
+  text-align: left;
+  font-weight: normal;
+}
+
+.parameters th:not(.prmName) {
+  color: #fff;
+  background: #005a9c;
+}
+
+.parameters td,
+.parameters .prmName {
+  padding: 3px 10px;
+  border-top: 1px solid #ddd;
+  vertical-align: top;
+}
+
+.parameters tr:first-child td {
+  border-top: none;
+}
+
+.parameters .prmName {
+  width: 100px;
+}
+
+.parameters .prmType {
+  width: 120px;
+}

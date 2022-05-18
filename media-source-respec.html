@@ -287,7 +287,7 @@
     "closed",
     "open",
     "ended"
-};</pre><table class="simple" data-dfn-for="ReadyState"><tbody><tr><th colspan="2">Enumeration description</th></tr>
+};</pre><table class="simple" data-dfn-for="ReadyState"><caption>Description of {{ReadyState}} enumeration values</caption><tbody><tr><th>Value</th><th>Description</th></tr>
         <tr><td><dfn><code id="idl-def-ReadyState.closed">closed</code></dfn></td><td>
           Indicates the source is not currently attached to a media element.
         </td></tr>
@@ -304,7 +304,7 @@
       <div><pre class="idl">enum EndOfStreamError {
     "network",
     "decode"
-};</pre><table class="simple" data-dfn-for="EndOfStreamError"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn><code id="idl-def-EndOfStreamError.network">network</code></dfn></td><td>
+};</pre><table class="simple" data-dfn-for="EndOfStreamError"><caption>Description of {{EndOfStreamError}} enumeration values</caption><tbody><tr><th>Value</th><th>Description</th></tr><tr><td><dfn><code id="idl-def-EndOfStreamError.network">network</code></dfn></td><td>
           <p>Terminates playback and signals that a network error has occurred.</p>
           <p class="note">JavaScript applications SHOULD use this status code to terminate playback with a network error. For example, if a network error occurs while fetching media data.</p>
         </td></tr><tr><td><dfn><code id="idl-def-EndOfStreamError.decode">decode</code></dfn></td><td>
@@ -414,7 +414,7 @@ interface MediaSource : EventTarget {
             <li>Add the new object to {{MediaSource/sourceBuffers}} and [=queue a task=] to [=fire an event=] named {{addsourcebuffer}} at {{MediaSource/sourceBuffers}}.</li>
             <li>Return the new object.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|type|</td><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>SourceBuffer</a></div></dd>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|type|</th><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em><a>SourceBuffer</a></div></dd>
 
           <dt><dfn><code>removeSourceBuffer</code></dfn></dt><dd>
           <p>Removes a {{SourceBuffer}} from {{MediaSource/sourceBuffers}}.</p>
@@ -574,7 +574,7 @@ interface MediaSource : EventTarget {
             <li>Destroy all resources for |sourceBuffer|.</li>
           </ol>
         <table
-          class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|sourceBuffer|</td><td class="prmType">{{SourceBuffer}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd>
+          class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|sourceBuffer|</th><td class="prmType">{{SourceBuffer}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd>
 
           <dt><dfn><code>endOfStream</code></dfn></dt><dd>
           <p>Signals the end of the stream.</p>
@@ -585,7 +585,7 @@ interface MediaSource : EventTarget {
             <li>Run the [=end of stream=] algorithm with the error parameter set to |error:EndOfStreamError|.</li>
           </ol>
         <table
-          class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|error|</td><td class="prmType">{{EndOfStreamError}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd>
+          class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|error|</th><td class="prmType">{{EndOfStreamError}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd>
 
           <dt><dfn><code>setLiveSeekableRange</code></dfn></dt><dd>
 
@@ -608,7 +608,7 @@ interface MediaSource : EventTarget {
                 <th>Description</th>
               </tr>
               <tr>
-                <td class="prmName">|start|</td>
+                <th class="prmName">|start|</th>
                 <td class="prmType">{{double}}</td>
                 <td class="prmNullFalse"><span aria-label="False" role=
                 "img">✘</span></td>
@@ -617,7 +617,7 @@ interface MediaSource : EventTarget {
                 <td class="prmDesc">The start of the range, in seconds measured from [=presentation start time=]. While set, and if {{MediaSource/duration}} equals positive Infinity, {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} will return a non-empty TimeRanges object with a lowest range start timestamp no greater than |start|.</td>
               </tr>
               <tr>
-                <td class="prmName">|end|</td>
+                <th class="prmName">|end|</th>
                 <td class="prmType">{{double}}</td>
                 <td class="prmNullFalse"><span aria-label="False" role=
                 "img">✘</span></td>
@@ -672,7 +672,7 @@ interface MediaSource : EventTarget {
           <p class="note">
             This method returning true implies that HTMLMediaElement.canPlayType() will return "maybe" or "probably" since it does not make sense for a <a>MediaSource</a> to support a type the HTMLMediaElement knows it cannot play.
           </p>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|type|</td><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{boolean}}</div></dd></dl>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|type|</th><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{boolean}}</div></dd></dl>
       </section>
 
       <section id="mediasource-events">
@@ -1179,7 +1179,7 @@ interface MediaSourceHandle {};</pre>
 <pre class="idl">enum AppendMode {
     "segments",
     "sequence"
-};</pre><table class="simple" data-dfn-for="AppendMode"><tbody><tr><th colspan="2">Enumeration description</th></tr><tr><td><dfn><code id="idl-def-AppendMode.segments">segments</code></dfn></td><td>
+};</pre><table class="simple" data-dfn-for="AppendMode"><caption>Description of {{AppendMode}} enumeration values</caption><tbody><tr><th>Value</th><th>Description</th></tr><tr><td><dfn><code id="idl-def-AppendMode.segments">segments</code></dfn></td><td>
           <p>The timestamps in the media segment determine where the [=coded frames=] are placed in the presentation. Media segments can be appended in any order.</p>
         </td></tr><tr><td><dfn><code id="idl-def-AppendMode.sequence">sequence</code></dfn></td><td>
           <p>Media segments will be treated as adjacent in time independent of the timestamps in the media segment. Coded frames in a new media segment will be placed immediately after the coded
@@ -1333,7 +1333,7 @@ interface SourceBuffer : EventTarget {
             <li>[=Queue a task=] to [=fire an event=] named {{updatestart}} at this <a>SourceBuffer</a> object.</li>
             <li>Asynchronously run the [=buffer append=] algorithm.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><td class="prmName">|data|</td><td class="prmType">{{BufferSource}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>abort</code></dfn></dt><dd>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|data|</th><td class="prmType">{{BufferSource}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>abort</code></dfn></dt><dd>
           <p>Aborts the current segment and resets the segment parser.</p>
 
           <ol class="method-algorithm">
@@ -1396,7 +1396,7 @@ interface SourceBuffer : EventTarget {
                 <th>Description</th>
               </tr>
               <tr>
-                <td class="prmName">|type|</td>
+                <th class="prmName">|type|</th>
                 <td class="prmType">{{DOMString}}</td>
                 <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
                 <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
@@ -1434,7 +1434,7 @@ interface SourceBuffer : EventTarget {
             <th>Description</th>
           </tr>
           <tr>
-            <td class="prmName">|start|</td>
+            <th class="prmName">|start|</th>
             <td class="prmType">{{double}}</td>
             <td class="prmNullFalse"><span aria-label="False" role=
             "img">✘</span></td>
@@ -1443,7 +1443,7 @@ interface SourceBuffer : EventTarget {
             <td class="prmDesc">The start of the removal range, in seconds measured from [=presentation start time=].</td>
           </tr>
           <tr>
-            <td class="prmName">|end|</td>
+            <th class="prmName">|end|</th>
             <td class="prmType">{{unrestricted double}}</td>
             <td class="prmNullFalse"><span aria-label="False" role=
             "img">✘</span></td>
@@ -2551,7 +2551,7 @@ interface SourceBufferList : EventTarget {
               <tbody>
                 <tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr>
                 <tr>
-                  <td class="prmName">|index|</td>
+                  <th class="prmName">|index|</th>
                   <td class="prmType">{{unsigned long}}</td>
                   <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
                   <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
