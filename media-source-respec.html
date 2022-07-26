@@ -783,8 +783,7 @@ interface MediaSource : EventTarget {
           <p>If the [=resource fetch algorithm=] was invoked with a media provider object that is a {{MediaSource}}
           object, a {{MediaSourceHandle}} object or a URL record whose object is a {{MediaSource}} object, then let mode
             be local, skip the first step in the [=resource fetch algorithm=] (which may otherwise set mode to remote)
-            and add the steps and clarifications below to the <a def-id="Otherwise-mode-is-local"></a> section of the
-            [=resource fetch algorithm=].
+            and continue the execution of the [=resource fetch algorithm=].</p>
           <p class="note">The first step of the [=resource fetch algorithm=] is expected to eventually align with
           selecting local mode for URL records whose objects are media provider objects. The intent is that if the
           HTMLMediaElement's <code>src</code> attribute or selected child <code>&lt;source&gt;</code>'s <code>src</code>
@@ -795,91 +794,99 @@ interface MediaSource : EventTarget {
           MediaSource object is attached. Even with that eventual change to [[HTML]], the execution of the following
           steps at the beginning of the local mode logic is still required when the current media resource is a
           MediaSource object.</p>
+          <p>At the beginning of the "Otherwise (mode is local)" section of the [=resource fetch algorithm=], execute
+          the additional steps, below.</p>
           <p class="note">Relative to the action which triggered the media element's resource selection algorithm, these
           steps are asynchronous. The [=resource fetch algorithm=] is run after the task that invoked the resource
           selection algorithm is allowed to continue and a stable state is reached. Implementations may delay the steps
           in the "<i>Otherwise</i>" clause, below, until the MediaSource object is ready for use.</p>
-          <dl class="switch">
-            <dt>If the media provider object is a URL record whose object is a {{MediaSource}} that was constructed in a
-              {{DedicatedWorkerGlobalScope}}, such as would occur if attempting to use a [=MediaSource object URL=]
-              from a {{DedicatedWorkerGlobalScope}} {{MediaSource}}
-              </dt>
-            <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the [=resource fetch algorithm=]'s
-              <a def-id="media-data-processing-steps-list"></a>.
-              <div class="note">This prevents using [=MediaSource object URLs=] for DedicatedWorker MediaSource
-                attachments. Transferring {{MediaSource}}.{{MediaSource/handle}} from the DedicatedWorker to the Window
-                context and assigning it to the media element's {{HTMLMediaElement/srcObject}} attribute is the only way
-                to attach such a MediaSource.
-              </div>
-            </dd>
-            <dt>If the media provider object is a {{MediaSourceHandle}} whose underlying {{MediaSource}} has ever
-              been used beyond this point by in any {{HTMLMediaElement}}'s [=resource fetch algorithm=]</dt>
-            <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the [=resource fetch algorithm=]'s
-              <a def-id="media-data-processing-steps-list"></a>.
-              <div class="note">This prevents loading an underlying {{MediaSource}} more than once using a
-                {{MediaSourceHandle}}, even if the {{MediaSource}} was constructed on {{Window}} and had been loaded
-                previously using a [=MediaSource object URL=]. This doesn't preclude subsequent use of a [=MediaSource
-                object URL=] for a {{Window}} {{MediaSource}} from succeeding though.
-              </div>
-            </dd>
-            <dt>If the media provider object is a {{MediaSource}} that is already being used
-              beyond this point as the media provider object in a different {{HTMLMediaElement}}'s [=resource fetch
-              algorithm=]</dt>
-            <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the [=resource fetch algorithm=]'s
-              <a def-id="media-data-processing-steps-list"></a>.</dd>
-            <dt>If {{MediaSource/readyState}} is NOT set to {{ReadyState/""closed""}}</dt>
-            <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the [=resource fetch algorithm=]'s
-              <a def-id="media-data-processing-steps-list"></a>.</dd>
-            <dt>Otherwise</dt>
-            <dd>
-              <ol>
-                <li>Set the media element's <a def-id="delaying-the-load-event-flag"></a> to false.</li>
-                <li>
-                  <dl class="switch">
-                    <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}, then setup worker
-                    attachment communication and open the {{MediaSource}}:</dt>
-                    <dd><ol>
-                      <li>Set {{HTMLMediaElement/[[channel with worker]]}} to be a new {{MessageChannel}}.</li>
-                      <li>Set {{HTMLMediaElement/[[port to worker]]}} to the {{MessageChannel/port1}} value of
-                        {{HTMLMediaElement/[[channel with worker]]}}.</li>
-                      <li>Execute [=StructuredSerializeWithTransfer=] with the {{MessageChannel/port2}} of
-                        {{HTMLMediaElement/[[channel with worker]]}} as both the value and the sole member of the |transferList|, and let
-                        the result be |serialized port2:MessagePort|.
-                      <li>[=Queue a task=] on the {{MediaSource}}'s {{DedicatedWorkerGlobalScope}} that will
-                        <ol>
-                          <li>Execute [=StructuredDeserializeWithTransfer=] with |serialized port2| and
-                            {{DedicatedWorkerGlobalScope}}'s [=environment settings object/realm=], and set
-                            {{MediaSource/[[port to main]]}} to be the resulting deserialized clone of the transferred
-                            {{MessageChannel/port2}} value of {{HTMLMediaElement/[[channel with worker]]}}.</li>
+          <ol>
+            <li>If the [=resource fetch algorithm=] was invoked with a media provider object that is a {{MediaSource}}
+              object, a {{MediaSourceHandle}} object or a URL record whose object is a {{MediaSource}} object, then:
+              <dl class="switch">
+                <dt>If the media provider object is a URL record whose object is a {{MediaSource}} that was constructed
+                  in a {{DedicatedWorkerGlobalScope}}, such as would occur if attempting to use a [=MediaSource object
+                  URL=] from a {{DedicatedWorkerGlobalScope}} {{MediaSource}}
+                  </dt>
+                <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the [=resource fetch algorithm=]'s
+                  <a def-id="media-data-processing-steps-list"></a>.
+                  <div class="note">This prevents using [=MediaSource object URLs=] for DedicatedWorker MediaSource
+                    attachments. Transferring {{MediaSource}}.{{MediaSource/handle}} from the DedicatedWorker to the
+                    Window context and assigning it to the media element's {{HTMLMediaElement/srcObject}} attribute is
+                    the only way to attach such a MediaSource.
+                  </div>
+                </dd>
+                <dt>If the media provider object is a {{MediaSourceHandle}} whose underlying {{MediaSource}} has ever
+                  been used beyond this point by in any {{HTMLMediaElement}}'s [=resource fetch algorithm=]</dt>
+                <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the [=resource fetch algorithm=]'s
+                  <a def-id="media-data-processing-steps-list"></a>.
+                  <div class="note">This prevents loading an underlying {{MediaSource}} more than once using a
+                    {{MediaSourceHandle}}, even if the {{MediaSource}} was constructed on {{Window}} and had been loaded
+                    previously using a [=MediaSource object URL=]. This doesn't preclude subsequent use of a
+                    [=MediaSource object URL=] for a {{Window}} {{MediaSource}} from succeeding though.
+                  </div>
+                </dd>
+                <dt>If the media provider object is a {{MediaSource}} that is already being used beyond this point as
+                  the media provider object in a different {{HTMLMediaElement}}'s [=resource fetch algorithm=]</dt>
+                <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the [=resource fetch algorithm=]'s
+                  <a def-id="media-data-processing-steps-list"></a>.</dd>
+                <dt>If {{MediaSource/readyState}} is NOT set to {{ReadyState/""closed""}}</dt>
+                <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the [=resource fetch algorithm=]'s
+                  <a def-id="media-data-processing-steps-list"></a>.</dd>
+                <dt>Otherwise</dt>
+                <dd>
+                  <ol>
+                    <li>Set the media element's <a def-id="delaying-the-load-event-flag"></a> to false.</li>
+                    <li>
+                      <dl class="switch">
+                        <dt>If the {{MediaSource}} was constructed in a {{DedicatedWorkerGlobalScope}}, then setup
+                          worker attachment communication and open the {{MediaSource}}:</dt>
+                        <dd><ol>
+                          <li>Set {{HTMLMediaElement/[[channel with worker]]}} to be a new {{MessageChannel}}.</li>
+                          <li>Set {{HTMLMediaElement/[[port to worker]]}} to the {{MessageChannel/port1}} value of
+                            {{HTMLMediaElement/[[channel with worker]]}}.</li>
+                          <li>Execute [=StructuredSerializeWithTransfer=] with the {{MessageChannel/port2}} of
+                            {{HTMLMediaElement/[[channel with worker]]}} as both the value and the sole member of the
+                            |transferList|, and let the result be |serialized port2:MessagePort|.
+                          <li>[=Queue a task=] on the {{MediaSource}}'s {{DedicatedWorkerGlobalScope}} that will
+                            <ol>
+                              <li>Execute [=StructuredDeserializeWithTransfer=] with |serialized port2| and
+                                {{DedicatedWorkerGlobalScope}}'s [=environment settings object/realm=], and set
+                                {{MediaSource/[[port to main]]}} to be the resulting deserialized clone of the
+                                transferred {{MessageChannel/port2}} value of {{HTMLMediaElement/[[channel with
+                                worker]]}}.</li>
+                              <li>Set the {{MediaSource/readyState}} attribute to {{ReadyState/""open""}}.</li>
+                              <li>[=Queue a task=] to [=fire an event=] named {{sourceopen}} at the
+                                <a>MediaSource</a>.</li>
+                            </ol>
+                          </li>
+                        </ol></dd>
+                        <dt>Otherwise, the {{MediaSource}} was constructed in a {{Window}}:</dt>
+                        <dd><ol>
+                          <li>Set {{HTMLMediaElement/[[channel with worker]]}} null.</li>
+                          <li>Set {{HTMLMediaElement/[[port to worker]]}} null.</li>
+                          <li>Set {{MediaSource/[[port to main]]}} null.</li>
                           <li>Set the {{MediaSource/readyState}} attribute to {{ReadyState/""open""}}.</li>
                           <li>[=Queue a task=] to [=fire an event=] named {{sourceopen}} at the <a>MediaSource</a>.</li>
-                        </ol>
-                      </li>
-                    </ol></dd>
-                    <dt>Otherwise, the {{MediaSource}} was constructed in a {{Window}}:</dt>
-                    <dd><ol>
-                      <li>Set {{HTMLMediaElement/[[channel with worker]]}} null.</li>
-                      <li>Set {{HTMLMediaElement/[[port to worker]]}} null.</li>
-                      <li>Set {{MediaSource/[[port to main]]}} null.</li>
-                      <li>Set the {{MediaSource/readyState}} attribute to {{ReadyState/""open""}}.</li>
-                      <li>[=Queue a task=] to [=fire an event=] named {{sourceopen}} at the <a>MediaSource</a>.</li>
-                    </ol></dd>
-                  </dl>
-                <li>Continue the [=resource fetch algorithm=] by running the remaining
-                  <a def-id="Otherwise-mode-is-local"></a> steps, with these clarifications:
-                  <ol>
-                    <li>Text in the [=resource fetch algorithm=] or the
-                      <a def-id="media-data-processing-steps-list"></a> that refers to "the download", "bytes received",
-                      or "whenever new data for the current media resource becomes available" refers to data passed in
-                      via {{SourceBuffer/appendBuffer()}}.</li>
-                    <li>References to HTTP in the [=resource fetch algorithm=] and the
-                      <a def-id="media-data-processing-steps-list"></a> do not apply because the HTMLMediaElement does
-                      not fetch media data via HTTP when a {{MediaSource}} is attached.</li>
+                        </ol></dd>
+                      </dl>
+                    <li>Continue the [=resource fetch algorithm=] by running the remaining
+                      <a def-id="Otherwise-mode-is-local"></a> steps, with these clarifications:
+                      <ol>
+                        <li>Text in the [=resource fetch algorithm=] or the
+                          <a def-id="media-data-processing-steps-list"></a> that refers to "the download", "bytes
+                          received", or "whenever new data for the current media resource becomes available" refers to
+                          data passed in via {{SourceBuffer/appendBuffer()}}.</li>
+                        <li>References to HTTP in the [=resource fetch algorithm=] and the
+                          <a def-id="media-data-processing-steps-list"></a> do not apply because the HTMLMediaElement
+                          does not fetch media data via HTTP when a {{MediaSource}} is attached.</li>
+                      </ol>
+                    </li>
                   </ol>
-                </li>
-              </ol>
-            </dd>
-          </dl>
+                </dd>
+              </dl>
+            </li>
+          </ol>
           <p class="note">An attached MediaSource does not use the remote mode steps in the [=resource fetch
           algorithm=], so the media element will not fire "suspend" events. Though future versions of this specification
           will likely remove "progress" and "stalled" events from a media element with an attached MediaSource, user
