@@ -2887,11 +2887,7 @@ interface SourceBufferList : EventTarget {
             true as part of the synchronous steps of the extended {{HTMLMediaElement}}'s {{HTMLMediaElement/srcObject}}
             setter that occur before invoking the element's load algorithm.
             <p class="note">This prevents transferring that {{MediaSourceHandle}} object ever again, enabling clear
-              synchronous exception if that is attempted. Rather than risking interoperability of specifying some more
-              complex behavior in this scenario, such as causing media element error, a synchronous exception on
-              attempted transfer of a handle that has ever been assigned to any {{HTMLMediaElement}}'s
-              {{HTMLMediaElement/srcObject}} attribute is simpler and provides rapid indication to the API user of the
-              transfer failure.</p>
+              synchronous exception if that is attempted.</p>
             <p class="issue">MediaSourceHandle needs to be added to HTMLMediaElement's MediaProvider IDL typedef and
               related text involving media provider objects.</p>
           </p>
