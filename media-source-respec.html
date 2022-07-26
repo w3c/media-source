@@ -1280,13 +1280,15 @@ interface MediaSourceHandle {};</pre>
         </p>
 
         <p>{{MediaSourceHandle}} is only exposed on {{Window}} and {{DedicatedWorkerGlobalScope}} contexts, and cannot
-          successfully transfer between different agent clusters. Transfer of a {{MediaSourceHandle}} object can only
-          succeed within the same agent cluster.
+          successfully transfer between different [=ECMAScript/agent clusters=] [[!ECMASCRIPT]]. Transfer of a
+          {{MediaSourceHandle}} object can only succeed within the same [=ECMAScript/agent cluster=].
           <p class="note">For example, transfer of a {{MediaSourceHandle}} object from either a {{Window}} or
           {{DedicatedWorkerGlobalScope}} to either a SharedWorker or a ServiceWorker will not succeed. Developers should
           be aware of this difference versus [=MediaSource object URLs=] which are {{DOMString}}s that can be
           communicated many ways. Even so, [=attaching to a media element=] using a [=MediaSource object URL=] can only
-          succeed for a {{MediaSource}} that was constructed in a {{Window}} context.</p>
+          succeed for a {{MediaSource}} that was constructed in a {{Window}} context. See also the integration of the
+          [=ECMAScript/agent=] and [=ECMAScript/agent cluster=] formalisms for Web Application APIs [[HTML]] where
+          related concepts such as [=dedicated worker agents=] are defined.</p>
         </p>
 
         <p>[=Transfer steps=] for a {{MediaSourceHandle}} object MUST include the following steps:
