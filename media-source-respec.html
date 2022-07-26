@@ -283,6 +283,13 @@
         <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify
         {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
 
+      <p>Each {{MediaSource}} object has a <dfn data-dfn-for="MediaSource">[[\has ever been attached]]</dfn> internal
+        slot that stores a {{boolean}}. It is initialized to false when the {{MediaSource}} object is created, and is
+        set true in the extended {{HTMLMediaElement}}'s [=resource fetch algorithm=] as described in the [=attaching to
+        a media element=] algorithm. The extended [=resource fetch algorithm=] uses this internal slot to conditionally
+        fail attachment of a {{MediaSource}} using a {{MediaSourceHandle}} set on a {{HTMLMediaElement}}'s
+        {{HTMLMediaElement/srcObject}} attribute.</p>
+
       <div><pre class="idl">enum ReadyState {
     "closed",
     "open",
@@ -816,8 +823,13 @@ interface MediaSource : EventTarget {
                     the only way to attach such a MediaSource.
                   </div>
                 </dd>
-                <dt>If the media provider object is a {{MediaSourceHandle}} whose underlying {{MediaSource}} has ever
-                  been used beyond this point by in any {{HTMLMediaElement}}'s [=resource fetch algorithm=]</dt>
+                <dt>If the media provider object is a {{MediaSourceHandle}} whose {{MediaSourceHandle/[[Detached]]}}
+                  internal slot is true</dt>
+                <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the [=resource fetch algorithm=]'s
+                  <a def-id="media-data-processing-steps-list"></a>.
+                </dd>
+                <dt>If the media provider object is a {{MediaSourceHandle}} whose underlying {{MediaSource}}'s
+                  {{MediaSource/[[has ever been attached]]}} internal slot is true</dt>
                 <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the [=resource fetch algorithm=]'s
                   <a def-id="media-data-processing-steps-list"></a>.
                   <div class="note">This prevents loading an underlying {{MediaSource}} more than once using a
@@ -826,16 +838,13 @@ interface MediaSource : EventTarget {
                     [=MediaSource object URL=] for a {{Window}} {{MediaSource}} from succeeding though.
                   </div>
                 </dd>
-                <dt>If the media provider object is a {{MediaSource}} that is already being used beyond this point as
-                  the media provider object in a different {{HTMLMediaElement}}'s [=resource fetch algorithm=]</dt>
-                <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the [=resource fetch algorithm=]'s
-                  <a def-id="media-data-processing-steps-list"></a>.</dd>
                 <dt>If {{MediaSource/readyState}} is NOT set to {{ReadyState/""closed""}}</dt>
                 <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the [=resource fetch algorithm=]'s
                   <a def-id="media-data-processing-steps-list"></a>.</dd>
                 <dt>Otherwise</dt>
                 <dd>
                   <ol>
+                    <li>Set the {{MediaSource}}'s {{MediaSource/[[has ever been attached]]}} internal slot to true.</li>
                     <li>Set the media element's <a def-id="delaying-the-load-event-flag"></a> to false.</li>
                     <li>
                       <dl class="switch">
