@@ -1291,14 +1291,10 @@ interface MediaSourceHandle {};</pre>
           related concepts such as [=dedicated worker agents=] are defined.</p>
         </p>
 
-        <p>[=Transfer steps=] for a {{MediaSourceHandle}} object MUST include the following steps:
+        <p>[=Transfer steps=] for a {{MediaSourceHandle}} object MUST include the following step:
           <ol>
-            <li>If the {{MediaSourceHandle}}'s {{MediaSourceHandle/[[Detached]]}} internal slot is true, then the
-              [=transfer steps=] must fail by throwing a {{DataCloneError}} exception.</li>
             <li>If the {{MediaSourceHandle}}'s {{MediaSourceHandle/[[has ever been assigned as srcobject]]}} internal
               slot is true, then the [=transfer steps=] must fail by throwing a {{DataCloneError}} exception.</li>
-            <li>Otherwise, the {{MediaSourceHandle/[[Detached]]}} internal slot must be set true as part of execution of
-              the [=transfer steps=].</p>
           </ol>
         </p>
 
