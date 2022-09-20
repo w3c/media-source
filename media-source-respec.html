@@ -322,7 +322,10 @@
 <pre class="idl">[Exposed=(Window,DedicatedWorker)]
 interface MediaSource : EventTarget {
     constructor();
-    [SameObject] readonly attribute MediaSourceHandle   handle;
+
+    [ SameObject, Exposed=DedicatedWorker ]
+    readonly              attribute MediaSourceHandle   handle;
+
     readonly              attribute SourceBufferList    sourceBuffers;
     readonly              attribute SourceBufferList    activeSourceBuffers;
     readonly              attribute ReadyState          readyState;
@@ -344,22 +347,22 @@ interface MediaSource : EventTarget {
 
           <dt><dfn><code>handle</code></dfn> of type <span class="idlAttrType"><a>MediaSourceHandle</a></span>, [SameObject] readonly</dt><dd>
 
-          <p>Contains a handle useful for attachment to an {{HTMLMediaElement}} via {{HTMLMediaElement/srcObject}}.
-          The handle remains the same object for this {{MediaSource}} object across accesses of this attribute, but it
-          is distinct for each {{MediaSource}} object.</p>
+          <p>Contains a handle useful for attachment of a dedicated worker {{MediaSource}} object to an
+          {{HTMLMediaElement}} via {{HTMLMediaElement/srcObject}}. The handle remains the same object for this
+          {{MediaSource}} object across accesses of this attribute, but it is distinct for each {{MediaSource}}
+          object.</p>
+
+          <p class="note">This specification may eventually enable visibility of this attribute on {{MediaSource}}
+          objects on the main Window context. If so, specification care will be necessary to prevent potential backwards
+          incompatible changes, such as could happen if exceptions were thrown on accesses to this attribute.</p>
+
           <p>On getting, run the following steps:</p>
           <ol>
-            <li>If the implementation does not support creating a handle for this {{MediaSource}}, then throw a
-              {{NotSupportedError}} exception and abort these steps.
-              <p class="note">Implementations MAY choose to only allow handle creation for {{MediaSource}} objects in a
-                {{DedicatedWorkerGlobalScope}}, as a minimum requirement for enabling attachment of such a {{MediaSource}}
-                object to an {{HTMLMediaElement}}.</p>
             </li>
             <li>If the handle for this {{MediaSource}} object has not yet been created, then run the following steps:
               <ol>
-                <li>Let |created handle:MediaSourceHandle| be the result of creating a new
-              {{MediaSourceHandle}} object and associated resources, linked internally to this
-              {{MediaSource}}.</li>
+                <li>Let |created handle:MediaSourceHandle| be the result of creating a new {{MediaSourceHandle}} object
+                  and associated resources, linked internally to this {{MediaSource}}.</li>
                 <li>Update the attribute to be |created handle|.</li>
               </ol>
             <li>Return the {{MediaSourceHandle}} object that is this attribute's value.</li>
