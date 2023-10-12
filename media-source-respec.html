@@ -273,6 +273,8 @@
         a media element=] algorithm. The extended [=resource fetch algorithm=] uses this internal slot to conditionally
         fail attachment of a {{MediaSource}} using a {{MediaSourceHandle}} set on a {{HTMLMediaElement}}'s
         {{HTMLMediaElement/srcObject}} attribute.</p>
+      <p>Each {{MediaSource}} object has a <dfn data-dfn-for="MediaSource">[[\is actively managed flag]]</dfn> internal slot that stores a boolean indicating if the MediaSource object is actively managing its content or not.
+        It is initialized to false when the MediaSource object is created.
 
       <div><pre class="idl">enum ReadyState {
     "closed",
@@ -412,8 +414,17 @@ interface MediaSource : EventTarget {
               </p>
             </li>
             <li>If the {{MediaSource/readyState}} attribute is not in the {{ReadyState/""open""}} state then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>Create a new <a>SourceBuffer</a> object and associated resources.</li>
-            <li>Set the {{SourceBuffer/[[generate timestamps flag]]}} on the new object to the value in the "Generate
+            <li>
+              <dl class="switch">
+                <dt>If the {{MediaSource/[[is actively managed flag]]}} equals false:</dt>
+                <dd>
+                  Create a new <a>{{SourceBuffer}}</a> object and associated resources.
+                </dd>
+                <dt>Otherwise:</dt>
+                <dd>
+                  Create a new <a>{{ManagedSourceBuffer}}</a> object and associated resources.
+                </dd>
+              </dl>Set the {{SourceBuffer/[[generate timestamps flag]]}} on the new object to the value in the "Generate
               Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry that is associated with
               |type|.
             </li><li>
@@ -2706,6 +2717,239 @@ interface SourceBufferList : EventTarget {
       </section>
     </section>
 
+    <section id="managed-mediasource">
+      <h2><dfn>ManagedMediaSource</dfn> Object</h2>
+      <p>The ManagedMediaSource object is a MediaSource object that actively manages its memory content.
+        Unlike a MediaSource object it can evict from its ManagedSourceBuffer objects when the User Agent is under memory pressure.</p>
+
+      <p>Each {{ManagedMediaSource}} object has a <dfn data-dfn-for="MediaSource">[[\is actively managed flag]]</dfn> internal
+        slot that stores a {{boolean}}. It is initialized to true when the {{ManagedMediaSource}} object is created.</p>
+
+      <pre class="idl">[Exposed=(Window,DedicatedWorker)]
+interface ManagedMediaSource : MediaSource {
+    constructor();
+
+    readonly attribute boolean          streaming;
+             attribute EventHandler     onstartstreaming;
+             attribute EventHandler     onendstreaming;
+
+             static boolean          isTypeSupported (DOMString type);
+ };</pre>
+      <section>
+        <h3>Attributes</h3>
+        <dl class="attributes" data-dfn-for="ManagedMediaSource">
+
+          <dt><dfn><code>streaming</code></dfn> of type <span class="idlAttrType"><a>boolean</a></span>, readonly</dt><dd>
+            <p>On getting, run the following steps:</p>
+            <ol>
+              <li>If the {{MediaSource/readyState}} attribute is {{ReadyState/""closed""}} then return false and abort these steps.</li>
+              <li>Return the current value of the attribute.</li>
+            </ol>
+        </dd><dt><dfn><code>onstartstreaming</code></dfn> of type {{EventHandler}}</dt><dd>
+          <p>The event handler for the {{startstreaming}} event.</p>
+        </dd><dt><dfn><code>onendstreaming</code></dfn> of type {{EventHandler}}</dt><dd>
+          <p>The event handler for the {{endstreaming}} event.</p>
+      <dt><dfn><code>isTypeSupported</code></dfn>, static</dt><dd>
+          <p>Check to see whether the <a>ManagedMediaSource</a> is capable of creating <a>ManagedSourceBuffer</a> objects for the specified MIME type.</p>
+
+          <ol class="method-algorithm">
+            <li>If |type:DOMString| is an empty string, then return false.</li>
+            <li>If |type| does not contain a valid MIME type string, then return false.</li>
+            <li>If |type| contains a media type or media subtype that the ManagedMediaSource does not support, then return false.</li>
+            <li>If |type| contains a codec that the ManagedMediaSource does not support, then return false.</li>
+            <li>If the ManagedMediaSource does not support the specified combination of media type, media subtype, and codecs then return false.</li>
+            <li>Return true.</li>
+          </ol>
+          <p class="note">
+            If true is returned from this method, it only indicates that the <a>ManagedMediaSource</a> implementation is capable of creating <a>ManagedSourceBuffer</a> objects for the specified MIME type. An {{MediaSource/addSourceBuffer()}} call SHOULD still fail if sufficient resources are not available to support the addition of a new <a>ManagedSourceBuffer</a>.
+          </p>
+          <p class="note">
+            This method returning true implies that HTMLMediaElement.canPlayType() will return "maybe" or "probably" since it does not make sense for a <a>ManagedMediaSource</a> to support a type the HTMLMediaElement knows it cannot play.
+          </p>
+        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|type|</th><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{boolean}}</div></dd></dl>
+      </section>
+
+      <section id="managed-mediasource-events">
+        <h3>Event Summary</h3>
+        <table class="old-table">
+          <thead>
+            <tr>
+              <th>Event name</th>
+              <th>Interface</th>
+              <th>Dispatched when...</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><dfn><code>startstreaming</code></dfn></td>
+              <td><code>Event</code></td>
+              <td>{{ManagedMediaSource/streaming}} transitions from {{""false""}} to {{""true""}}.</td>
+            </tr>
+            <tr>
+              <td><dfn><code>endstreaming</code></dfn></td>
+              <td><code>Event</code></td>
+              <td>{{ManagedMediaSource/streaming}} transitions from {{""true""}} to {{""false""}}.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section id="managedmediasource-algorithms">
+        <h3>Algorithms</h3>
+        <section id="managedbuffer-monitoring">
+          <h4><dfn>ManagedSourceBuffer Monitoring</dfn></h4>
+          <p>The following steps are run periodically, whenever the {{MediaSource}} SourceBuffer Monitoring algorithm was scheduled to be running.</p>
+          <p>Having <dfn id="managedenough-data">enough managed data to ensure uninterrupted playback</dfn> is an implementation specific condition where the user agent
+            determines that it currently has enough data to play the presentation without stalling for a meaningful period of time and that it can achieve a balance between optimal memory and energy usage.
+            This condition is constantly evaluated to determine when to transition the media element into and out of the {{HTMLMediaElement/HAVE_ENOUGH_DATA}} ready state.
+            These transitions indicate when the user agent believes it has enough data buffered or it needs more data respectively.</p>
+            <ol>
+          <li>
+            <dl class="switch">
+            <dt>If the {{MediaSource/readyState}} attribute is {{ReadyState/""closed""}}:</dt>
+            <dd>
+              <ol>
+                <li>Set the {{ManagedMediaSource.streaming}} attribute to false.</li>
+                <li>Abort these steps.</li>
+              </ol>
+            </dd>
+            </dl>
+          </li>
+          <li>Run the {{MediaSource}} SourceBuffer Monitoring algorithm</li>
+          <li>
+            <dl class="switch">
+            <dt>If {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that includes the current playback position and not [=enough managed data to ensure uninterrupted playback=]:</dt>
+            <dd>
+              <ol>
+                <li>Set the {{ManagedMediaSource.streaming}} attribute to true.</li>
+                <li>Abort these steps.</li>
+              </ol>
+            </dd>
+            </dl>
+          </li>
+          <li>
+            <dl class="switch">
+            <dt>If {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that includes the current playback position and [=enough managed data to ensure uninterrupted playback=]:</dt>
+            <dd>
+              <ol>
+                <li>Set the {{ManagedMediaSource.streaming}} attribute to false.</li>
+                <li>Abort these steps.</li>
+              </ol>
+            </dd>
+            </dl>
+          </li>
+          </ol>
+        </section>
+        <section id="managedmediasource-memory-pressure">
+          <h4><dfn>Memory pressure</dfn></h4>
+          <ol>
+            <li>
+            <dl class="switch">
+            <dt>For each {{ManagedSourceBuffer}} found in {{MediaSource.sourceBuffers}}:</dt>
+            <dd>
+              <ol>
+                <li>Run the ManagedSourceBuffer memory pressure algorithm.</li>
+              </ol>
+            </dd>
+            </dl>
+          </li>
+          </ol>
+        </section>
+      </section>
+    </section>
+
+    <section id="managed-sourcebuffer">
+      <h2><dfn>ManagedSourceBuffer</dfn> Object</h2>
+
+
+<pre class="idl">[Exposed=Window,DedicatedWorker]
+interface BufferedChangeEvent : Event {
+    constructor(DOMString type, optional BufferedChangeEventInit eventInitDict);
+
+    [SameObject] readonly attribute TimeRanges? addedRanges;
+    [SameObject] readonly attribute TimeRanges? removedRanges;
+};
+
+dictionary BufferedChangeEventInit : EventInit {
+    TimeRanges? addedRanges = null;
+    TimeRanges? removedRanges = null;
+};
+</pre><table class="simple" data-dfn-for="BufferedChangeEvent"><caption>Description of {{BufferedChangeEvent}} event</caption><tbody><tr><th>Value</th><th>Description</th></tr><tr><td><dfn><code id="idl-def-BufferedChangeEvent.addedRanges">addedRanges</code></dfn></td><td>
+          <p>The TimeRanges added during the last appendBuffer() operation.</p>
+        </td></tr><tr><td><dfn><code id="idl-def-BufferedChangeEvent.removedRanges">removedRanges</code></dfn></td><td>
+          <p>The TimeRanges removed during the last remove() operation or if the User-Agent evicted content in response to a memory pressure.</p>
+        </td></tr></tbody></table>
+
+<pre class="idl">[Exposed=(Window,DedicatedWorker)]
+interface ManagedSourceBuffer : SourceBuffer {
+                 attribute EventHandler     onbufferedchange;
+};</pre>
+<section><h2>Attributes</h2>
+  <dl class="attributes" data-dfn-for="ManagedSourceBuffer">
+  </dd><dt><dfn><code>onbufferedchange</code></dfn> of type {{EventHandler}}</dt>
+  <dd>
+    <p>The event handler for the {{bufferedchange}} event.</p>
+  </dd>
+  </dl>
+      <section id="managed-sourcebuffer-events">
+        <h3>Event Summary</h3>
+        <table class="old-table">
+          <thead>
+            <tr>
+              <th>Event name</th>
+              <th>Interface</th>
+              <th>Dispatched when...</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><dfn><code>bufferedchange</code></dfn></td>
+              <td><code>Event</code></td>
+              <td>The ManagedSourceBuffer's buffered range changed following an appendBuffer, remove or [=memory pressure algorithm=].</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </section>
+    <section id="managedsourcebuffer-algorithms">
+      <h3>Algorithms</h3>
+      <section id="managedsourcebuffer-buffered-change">
+        <h4><dfn>Buffered Change</dfn></h4>
+        <p>The following steps are run whenever a change to the {{ManagedSourceBuffer}} is performed that would cause {{SourceBuffer.buffered}} to change.
+        <ol>
+          <li>Let |previous buffered ranges:normalized TimeRanges| equal the {{SourceBuffer.buffered}} attribute before the changes occurred.</li>
+          <li>Let |new buffered ranges:normalized TimeRanges| equal the new {{SourceBuffer.buffered}} TimeRanges.</li>
+          <li>Let |added ranges:normalized TimeRanges| equal the |previous buffered ranges:normalized TimeRanges| substracted from |new buffered ranges:normalized TimeRanges|.</li>
+          <li>Let |removed ranges:normalized TimeRanges| equal the |new buffered ranges:normalized TimeRanges| substracted from |previous buffered ranges:normalized TimeRanges| .</li>
+          <li>and [=queue a task=] to [=fire an event=] named {{bufferedchange}} at {{ManagedSourceBuffer}} with the |added ranges| and |removed ranges|</li>
+        </ol>
+      </section>
+      <section id="managedsourcebuffer-memory-pressure">
+        <h4><dfn>Memory pressure</dfn></h4>
+        <ol>
+          <li>
+          <dl class="switch">
+          <dt>If |managedSourceBuffer| is not in {{MediaSource/activeSourceBuffers}}:</dt>
+          <dd>
+            <ol>
+              <li>Run the Range Removal Algorithm with removal range set to [0, positive infinity].</li>
+              <li>Abort those steps.</li>
+            </ol>
+          </dd>
+          </dl>
+        </li>
+        <li>Let |removal ranges:normalized TimeRanges| equal a list of presentation time ranges that can be evicted from the presentation to ensure uninterrupted playback from {{HTMLMediaElement.currentTime}}
+          until such presentation could be fetched again.
+          <p class="note">Implementations MAY use different methods for selecting |removal ranges| so web applications SHOULD NOT depend on a
+            specific behavior. The web application should listen to the {{ManagedSourceBuffer/bufferedchange}} event to observe whether portions of the buffered data have been evicted.
+          </p>
+        </li>
+        <li>For each range in |removal ranges|, run the [=coded frame removal=] algorithm with |start:double| and |end:unrestricted double| equal to
+          the removal range start and end timestamp respectively.</li>
+    </ol>
+      </section>
+    </section>
+
+  </section>
     <section id="htmlmediaelement-extensions">
       <h2>HTMLMediaElement Extensions</h2>
       <p>This section specifies what existing {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} and
