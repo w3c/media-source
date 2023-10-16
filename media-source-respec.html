@@ -3296,7 +3296,8 @@ partial interface TextTrack {
 
     <section id="examples">
       <h2>Examples</h2>
-      <p>Example use of the Media Source Extensions</p>
+      <section id="mse-examples">
+        <h3>Use of the Media Source Extensions</h3>
       <div class="block">
         <div class="blockContent">
           <pre class="code">&lt;script&gt;
@@ -3392,6 +3393,70 @@ partial interface TextTrack {
         </div>
       </div>
     </section>
+    <h3>Example use of the Managed Media Source Extensions</h3>
+    <div class="block">
+      <div class="blockContent">
+        <pre class="code">&lt;script&gt;
+async function setUpVideoStream(){
+  // Specific video format and codec
+  const mediaType = 'video/mp4; codecs="mp4a.40.2,avc1.4d4015"';
+  
+  // Check if the type of video format / codect is supported.
+  if (!window.ManagedMediaSource || !ManagedMediaSource.isTypeSupported(mediaType)) {
+    return; // Not supported, do something else.
+  }
+
+  // Set up video and its managed source.
+  const video = document.createElement("video");
+  const source = new ManagedMediaSource();
+
+  video.disableRemotePlayback = true;
+  video.controls = true;
+
+  await new Promise((resolve) => {
+    video.src = URL.createObjectURL(source);
+    source.addEventListener("sourceopen", resolve, { once: true });
+    document.body.appendChild(video);
+  });
+  
+  const sourceBuffer = source.addSourceBuffer(mediaType);
+  
+  // Set up the event handlers
+  sourceBuffer.onbufferedchange = (e) => {
+    console.log("onbufferedchange event fired.");
+    console.log(`Added Ranges: [${timeRangesToString(e.addedRanges)}]`);
+    console.log(`Removed Ranges: [${timeRangesToString(e.removedRanges)}]`);
+  };
+  
+  source.onstartstreaming = async () => {
+    const response = await fetch("./videos/bipbop.mp4");
+    const buffer = await response.arrayBuffer();
+    await new Promise((resolve) => {
+      sourceBuffer.addEventListener("updateend", resolve, { once: true });
+      sourceBuffer.appendBuffer(buffer);
+    });
+  };
+  
+  source.onendstreaming = async () => {
+    // Stop fetching new segments here
+  };
+}
+
+// Helper function...
+function timeRangesToString(timeRanges) {
+  const ranges = [];
+  for (let i = 0; i < timeRanges?.length; i++) {
+    const range = [timeRanges.start(i), timeRanges.end(i)];
+    ranges.push(range);
+  }
+  return ranges.toString();
+}
+
+<body onload="setUpVideoStream()"></body>
+      </pre>
+      </div>
+    </div>
+</section>
 
 
     <section id="acknowledgements">
