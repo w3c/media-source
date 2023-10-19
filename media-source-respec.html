@@ -2926,15 +2926,15 @@ interface SourceBufferList : EventTarget {
       <pre class="idl">
         [Exposed=(Window,DedicatedWorker)]
         interface BufferedChangeEvent : Event {
-          constructor(DOMString type, optional BufferedChangeEventInit eventInitDict = {});
+          constructor(DOMString type, BufferedChangeEventInit eventInitDict);
 
-          [SameObject] readonly attribute TimeRanges? addedRanges;
-          [SameObject] readonly attribute TimeRanges? removedRanges;
+          [SameObject] readonly attribute TimeRanges addedRanges;
+          [SameObject] readonly attribute TimeRanges removedRanges;
         };
 
         dictionary BufferedChangeEventInit : EventInit {
-          TimeRanges? addedRanges = null;
-          TimeRanges? removedRanges = null;
+          TimeRanges addedRanges;
+          TimeRanges removedRanges;
         };
       </pre>
       <h3>Attributes</h3>
@@ -2990,7 +2990,7 @@ interface SourceBufferList : EventTarget {
             <td>{{Event}}</td>
             <td>
               The {{ManagedSourceBuffer}}'s buffered range changed following a
-              call to {{SourceBuffer/appendBuffer()}}, {{ManagedSourceBuffer/remove()}},
+              call to {{SourceBuffer/appendBuffer()}}, {{SourceBuffer/remove()}},
               or as a consequence of the user agent running the
               [=ManagedSourceBuffer/memory pressure=] algorithm.
             </td>
@@ -3002,8 +3002,8 @@ interface SourceBufferList : EventTarget {
       <h4>Buffered Change</h4>
       <p>
         The following steps are run whenever a change to the {{ManagedSourceBuffer}}
-        is performed that would cause a {{SourceBuffer}}'s {{SourceBuffer/buffered}}
-        to change.
+        |buffer:ManagedSourceBuffer| is performed that would cause a
+        a |buffer|'s {{SourceBuffer/buffered}} to change.
       </p>
       <ol>
         <li>
@@ -3015,18 +3015,24 @@ interface SourceBufferList : EventTarget {
           {{SourceBuffer/buffered}} {{TimeRanges}}.
         </li>
         <li>
-          Let |added ranges:normalized TimeRanges| equal the |previous buffered
+          Let |added:normalized TimeRanges| equal the |previous buffered
           ranges:normalized TimeRanges| subtracted from |new buffered
           ranges:normalized TimeRanges|.
         </li>
         <li>
-          Let |removed ranges:normalized TimeRanges| equal the |new buffered
+          Let |removed:normalized TimeRanges| equal the |new buffered
           ranges:normalized TimeRanges| subtracted from |previous buffered
-          ranges:normalized TimeRanges| .
+          ranges:normalized TimeRanges|.
         </li>
         <li>
-          [=Queue a task=] to [=fire an event=] named {{bufferedchange}} at
-          {{ManagedSourceBuffer}} with the |added ranges| and |removed ranges|.
+          Let |eventInitDict| be a new {{BufferedChangeEventInit}} dictionary
+          initialized with |added| as its {{BufferedChangeEventInit/addedRanges}} and
+          |removed| as its {{BufferedChangeEventInit/removedRanges}}
+        </li>
+        <li>
+          [=Queue a task=] to [=fire an event=] named {{bufferedchange}} at |buffer|
+          using the {{BufferedChangeEvent}} interface, initialized with
+          |eventInitDict|.
         </li>
       </ol>
       <h4>
