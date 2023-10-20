@@ -3001,9 +3001,10 @@ interface SourceBufferList : EventTarget {
       <h3>Algorithms</h3>
       <h4>Buffered Change</h4>
       <p>
-        The following steps are run whenever a change to the {{ManagedSourceBuffer}}
-        |buffer:ManagedSourceBuffer| is performed that would cause a
-        a |buffer|'s {{SourceBuffer/buffered}} to change.
+        The following steps are run at the completion of all operations to the {{ManagedSourceBuffer}}
+        |buffer:ManagedSourceBuffer| that would cause a |buffer|'s {{SourceBuffer/buffered}} to change.
+        That is once {{SourceBuffer/appendBuffer()}}, {{SourceBuffer/remove()}} or
+        [=ManagedSourceBuffer/memory pressure=] algorithm have completed.
       </p>
       <ol>
         <li>
@@ -3048,8 +3049,7 @@ interface SourceBufferList : EventTarget {
             <dd>
               <ol>
                 <li>
-                  Run the [=range removal=] algorithm with removal range set to [0,
-                  positive infinity].
+                  Run the [=coded frame removal=] algorithm with 0 and positive infinity equal to the removal range start and end timestamp respectively, and abort these steps.
                 </li>
               </ol>
             </dd>
