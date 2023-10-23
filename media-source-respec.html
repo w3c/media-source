@@ -3548,8 +3548,8 @@ partial interface TextTrack {
         // Set up the event handlers
         sourceBuffer.onbufferedchange = (e) => {
           console.log("onbufferedchange event fired.");
-          console.log(`Added Ranges: [${timeRangesToString(e.addedRanges)}]`);
-          console.log(`Removed Ranges: [${timeRangesToString(e.removedRanges)}]`);
+          console.log(`Added Ranges: ${timeRangesToString(e.addedRanges)}`);
+          console.log(`Removed Ranges: ${timeRangesToString(e.removedRanges)}`);
         };
 
         source.onstartstreaming = async () => {
