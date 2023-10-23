@@ -18,27 +18,9 @@
     return url;
   }
 
-  function eventdfn_helper(doc, df, id, text) {
-    const code = doc.createElement('code');
-    code.appendChild(doc.createTextNode(text));
-    const dfn = doc.createElement('dfn');
-    dfn.setAttribute('id', 'dom-evt-' + text.toLowerCase());
-    dfn.appendChild(code);
-    df.appendChild(dfn);
-  }
-
   function idlref_helper(doc, df, id, text) {
     const anchor = doc.createElement('a');
     anchor.setAttribute('href', url_helper(doc, '#' + id));
-    anchor.appendChild(doc.createTextNode(text));
-    const code = doc.createElement('code');
-    code.appendChild(anchor);
-    df.appendChild(code);
-  }
-
-  function eventref_helper(doc, df, id, text) {
-    const anchor = doc.createElement('a');
-    anchor.setAttribute('href', url_helper(doc, '#dom-evt-' + id));
     anchor.appendChild(doc.createTextNode(text));
     const code = doc.createElement('code');
     code.appendChild(anchor);
@@ -62,21 +44,6 @@
     link_helper(doc, df, FILE_spec_url + '#' + id, text);
   }
 
-  function hrtime_helper(doc, df, id, text) {
-    link_helper(doc, df, HRTIME_spec_url + '#' + id, text);
-  }
-
-  function webappapis_helper(doc, df, id, text) {
-    link_helper(doc, df, HTML5_webappapis_spec_url + '#' + id, text);
-  }
-
-  function infrastructure_helper(doc, df, id, text) {
-    link_helper(doc, df, HTML5_infrastructure_spec_url + '#' + id, text);
-  }
-
-  function browsers_helper(doc, df, id, text) {
-    link_helper(doc, df, HTML5_browsers_spec_url + '#' + id, text);
-  }
 
   function term_helper(doc, df, id, text) {
     link_helper(doc, df, url_helper(doc, '#' + id), text);
@@ -98,28 +65,6 @@
     df.appendChild(anchor);
   }
 
-  function exception_helper(doc, df, id, text) {
-    const anchor = doc.createElement('a');
-    anchor.setAttribute('href', url_helper(doc, WEBIDL_spec_url + '#' + id));
-    anchor.appendChild(doc.createTextNode(text));
-    const code = doc.createElement('code');
-    code.appendChild(anchor);
-    df.appendChild(code);
-  }
-
-  function typeerror_helper(doc, df, id, text) {
-    const code = doc.createElement('code');
-    code.appendChild(doc.createTextNode(text));
-    df.appendChild(code);
-  }
-
-  function webmref_helper(doc, df, id, text) {
-    link_helper(doc, df, 'http://www.webmproject.org/code/specs/container/#' + id, text);
-  }
-
-  function whatwg_streams_helper(doc, df, id, text) {
-    link_helper(doc, df, WHATWG_STREAMS_spec_url + '#' + id, text);
-  }
 
   function fragment_helper(doc, df, id, text) {
     var f = doc.createElement('span')
@@ -401,78 +346,6 @@
     }
   }
 
-  function mediaSourcePostProcessor() {
-    var doc = document;
-    doc.normalize();
-
-    var usedMap = {};
-
-    [...document.querySelectorAll('a[def-id]')].forEach(el => {
-      var def_id = el.getAttribute('def-id');
-      var info = definitionInfo[def_id];
-      if (info) {
-        if (!usedMap[def_id]) {
-          usedMap[def_id] = 1;
-        } else {
-          usedMap[def_id]++;
-        }
-
-        var id = info.fragment;
-        var text = info.link_text;
-
-        if (el.getAttribute('name')) {
-          id = el.getAttribute('name');
-        }
-
-        var element_text = el.textContent;
-        if (element_text) {
-          text = element_text;
-        }
-
-        var df = doc.createDocumentFragment();
-        doc.mseDefGroupName = info.groupName;
-        info.func(doc, df, id, text);
-        doc.mseDefGroupName = "";
-        el.parentNode.replaceChild(df, el);
-
-      } else {
-        console.log("Found def-id '" + def_id + "' but it does not correspond to anything");
-      }
-    });
-
-    // Move algorithm text after method parameter & return value information.
-    [...document.querySelectorAll('ol.method-algorithm')].forEach(el => {
-      var parent = el.parentNode;
-      parent.removeChild(el);
-      const p = document.createElement('p');
-      p.appendChild(document.createTextNode('When this method is invoked, the user agent must run the following steps:'));
-      parent.appendChild(p);
-      parent.appendChild(el);
-    });
-
-    // Validate that all defined def-ids are actually used.
-    var excludeList = window.respecConfig.mseUnusedGroupNameExcludeList || [];
-    for (var k in definitionInfo) {
-      var defGroupName = definitionInfo[k].groupName;
-      if (!usedMap[k] && !(excludeList.indexOf(defGroupName) != -1)) {
-        console.log("def-id '" + k + "' from groupName '" + defGroupName + "' never used.");
-      }
-    }
-
-    [...document.querySelectorAll('a[href]')].forEach(el => {
-      var href = el.getAttribute('href');
-      var matched = /^#(.+)$/.exec(href);
-      if (matched) {
-        var id = matched[1];
-        if (!document.getElementById(id)) {
-          console.log("Internal link to an id '" + id + "' which does not exist");
-        }
-      }
-    });
-
-    return;
-  }
-
   function getMediaSourceRegistryBibioEntries(status) {
     var stream_path = "https://w3c.github.io/mse-byte-stream-format";
     var postfix = "/";
@@ -519,6 +392,5 @@
 
   window.mediaSourceAddDefinitionInfo = mediaSourceAddDefinitionInfo;
   window.mediaSourcePreProcessor = mediaSourcePreProcessor;
-  window.mediaSourcePostProcessor = mediaSourcePostProcessor;
   window.mediaSourceAddMainSpecDefinitionInfos = mediaSourceAddMainSpecDefinitionInfos;
 })();
