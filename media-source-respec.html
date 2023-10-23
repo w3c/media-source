@@ -699,7 +699,7 @@ interface MediaSource : EventTarget {
 
       <section id="mediasource-events">
         <h3>Event Summary</h3>
-        <table class="old-table">
+        <table class="data">
           <thead>
             <tr>
               <th>Event name</th>
@@ -707,23 +707,21 @@ interface MediaSource : EventTarget {
               <th>Dispatched when...</th>
             </tr>
           </thead>
-          <tbody>
             <tr>
-              <td><dfn><code>sourceopen</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>{{MediaSource/readyState}} transitions from {{ReadyState/""closed""}} to {{ReadyState/""open""}} or from {{ReadyState/""ended""}} to {{ReadyState/""open""}}.</td>
+              <td><dfn class="event">sourceopen</dfn></td>
+              <td>{{Event}}</td>
+              <td>{{MediaSource}}'s {{MediaSource/readyState}} transitions from {{ReadyState/"closed"}} to {{ReadyState/"open"}} or from {{ReadyState/"ended"}} to {{ReadyState/"open"}}.</td>
             </tr>
             <tr>
-              <td><dfn><code>sourceended</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>{{MediaSource/readyState}} transitions from {{ReadyState/""open""}} to {{ReadyState/""ended""}}.</td>
+              <td><dfn class="event">sourceended</dfn></td>
+              <td>{{Event}}</td>
+              <td>{{MediaSource}}'s {{MediaSource/readyState}} transitions from {{ReadyState/"open"}} to {{ReadyState/"ended"}}.</td>
             </tr>
             <tr>
-              <td><dfn><code>sourceclose</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>{{MediaSource/readyState}} transitions from {{ReadyState/""open""}} to {{ReadyState/""closed""}} or {{ReadyState/""ended""}} to {{ReadyState/""closed""}}.</td>
+              <td><dfn class="event">sourceclose</dfn></td>
+              <td>{{Event}}</td>
+              <td>{{MediaSource}}'s {{MediaSource/readyState}} transitions from {{ReadyState/"open"}} to {{ReadyState/"closed"}} or {{ReadyState/"ended"}} to {{ReadyState/"closed"}}.</td>
             </tr>
-          </tbody>
         </table>
       </section>
 
@@ -1628,7 +1626,7 @@ interface SourceBuffer : EventTarget {
 
       <section id="sourcebuffer-events">
         <h3>Event Summary</h3>
-        <table class="old-table">
+        <table class="data">
           <thead>
             <tr>
               <th>Event name</th>
@@ -1636,33 +1634,31 @@ interface SourceBuffer : EventTarget {
               <th>Dispatched when...</th>
             </tr>
           </thead>
-          <tbody>
             <tr>
-              <td><dfn><code>updatestart</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>{{SourceBuffer/updating}} transitions from false to true.</td>
+              <td><dfn class="event">updatestart</dfn></td>
+              <td>{{Event}}</td>
+              <td>{{SourceBuffer}}'s {{SourceBuffer/updating}} transitions from false to true.</td>
             </tr>
             <tr>
-              <td><dfn><code>update</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>The append or remove has successfully completed. {{SourceBuffer/updating}} transitions from true to false.</td>
+              <td><dfn class="event">update</dfn></td>
+              <td>{{Event}}</td>
+              <td>A {{SourceBuffer}}'s append or remove successfully completed. {{SourceBuffer}}'s {{SourceBuffer/updating}} transitions from true to false.</td>
             </tr>
             <tr>
-              <td><dfn><code>updateend</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>The append or remove has ended.</td>
+              <td><dfn class="event">updateend</dfn></td>
+              <td>{{Event}}</td>
+              <td>The append or remove of a {{SourceBuffer}} ended.</td>
             </tr>
             <tr>
-              <td><dfn><code>error</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>An error occurred during the append. {{SourceBuffer/updating}} transitions from true to false.</td>
+              <td><dfn class="event">error</dfn></td>
+              <td>{{Event}}</td>
+              <td>An error occurred during the append to a {{SourceBuffer}}. {{SourceBuffer/updating}} transitions from true to false.</td>
             </tr>
             <tr>
-              <td><dfn><code>abort</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>The append was aborted by an {{SourceBuffer/abort()}} call. {{SourceBuffer/updating}} transitions from true to false.</td>
+              <td><dfn class="event">abort</dfn></td>
+              <td>{{Event}}</td>
+              <td>The {{SourceBuffer}}'s append was aborted by an {{SourceBuffer/abort()}} call. {{SourceBuffer/updating}} transitions from true to false.</td>
             </tr>
-          </tbody>
         </table>
       </section>
 
@@ -1674,7 +1670,7 @@ interface SourceBuffer : EventTarget {
           <p>Each {{SourceBuffer}} object has an <dfn data-dfn-for="SourceBuffer">[[\append state]]</dfn> internal slot
           that keeps track of the high-level segment parsing state. It is initially set to [=WAITING_FOR_SEGMENT=] and
           can transition to the following states as data is appended.</p>
-          <table class="old-table">
+          <table class="data">
             <thead>
               <tr>
                 <th>Append state name</th>
@@ -2701,7 +2697,7 @@ interface SourceBufferList : EventTarget {
 
       <section id="sourcebufferlist-events">
         <h3>Event Summary</h3>
-        <table class="old-table">
+        <table class="data">
           <thead>
             <tr>
               <th>Event name</th>
@@ -2709,18 +2705,16 @@ interface SourceBufferList : EventTarget {
               <th>Dispatched when...</th>
             </tr>
           </thead>
-          <tbody>
             <tr>
-              <td><dfn><code>addsourcebuffer</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>When a <a>SourceBuffer</a> is added to the list.</td>
+              <td><dfn class="event">addsourcebuffer</dfn></td>
+              <td>{{Event}}</td>
+              <td>When a {{SourceBuffer}} is added to the list.</td>
             </tr>
             <tr>
-              <td><dfn><code>removesourcebuffer</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>When a <a>SourceBuffer</a> is removed from the list.</td>
+              <td><dfn class="event">removesourcebuffer</dfn></td>
+              <td>{{Event}}</td>
+              <td>When a {{SourceBuffer}} is removed from the list.</td>
             </tr>
-          </tbody>
         </table>
       </section>
     </section>
