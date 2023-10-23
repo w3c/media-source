@@ -3569,11 +3569,10 @@ partial interface TextTrack {
       // Helper function...
       function timeRangesToString(timeRanges) {
         const ranges = [];
-        for (let i = 0; i &lt; timeRanges?.length; i++) {
-          const range = [timeRanges.start(i), timeRanges.end(i)];
-          ranges.push(range);
+        for (let i = 0; i < timeRanges.length; i++) {
+          ranges.push([timeRanges.start(i), timeRanges.end(i)]);
         }
-        return ranges.toString();
+        return "[" + ranges.map(([start, end]) => `[${start}, ${end})` ) + "]";     
       }
       &lt;/script&gt;
       &lt;body onload="setUpVideoStream()"&gt;&lt;/body&gt;
