@@ -9,7 +9,6 @@
       var respecConfig = {
       // specification status (e.g., WD, LCWD, NOTE, etc.). If in doubt use ED.
       specStatus: "ED",
-      useExperimentalStyles: true,
 
       // the specification's short name, as in https://www.w3.org/TR/short-name/
       shortName: "media-source-2",
@@ -79,31 +78,13 @@
       // name of the WG
       group: "media",
 
-      scheme: "https",
-
       github: "w3c/media-source",
 
-      otherLinks: [{
-      key: 'Mailing list',
-      data: [{
-        value: 'public-media-wg@w3.org',
-        href: 'https://lists.w3.org/Archives/Public/public-media-wg/'
-      }]
-    },{
-      key: 'Implementation',
-      data: [{
-        value: 'Can I use Media Source Extensions?',
-        href: 'https://caniuse.com/mediasource'
-      }, {
-        value: 'Test Suite',
-        href: 'https://w3c-test.org/media-source/'
-      }, {
-        value: 'Test Suite repository',
-        href: 'https://github.com/web-platform-tests/wpt/tree/master/media-source'
-      }]
-    }],
+      caniuse: "mediasource",
 
-      xref: ['fileapi'],
+      testsuiteURI: "https://wpt.live/media-source/",
+
+      wgPublicList: "public-media-wg",
 
       preProcess: [ mediaSourcePreProcessor ],
 
@@ -121,7 +102,7 @@
 
     <link rel="stylesheet" href="mse.css">
   </head>
-  <body data-cite="html dom url">
+  <body data-cite="html dom url fileapi">
     <section id="abstract">
       This specification extends {{HTMLMediaElement}} [[HTML]] to allow
       JavaScript to generate media streams for playback.
