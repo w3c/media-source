@@ -307,7 +307,6 @@
 
   function mediaSourcePreProcessor() {
     var original_MSE_spec_url = MSE_spec_url; // The loop may change multiple groupBaseURLs.
-    var is_registry_file = window.respecConfig.edDraftURI.includes("byte-stream");
     var specStatus = window.respecConfig.specStatus;
     var specStatusIndex = location.search.indexOf("specStatus");
     if (specStatusIndex !== -1) {
