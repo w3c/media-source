@@ -293,34 +293,47 @@
         fail attachment of a {{MediaSource}} using a {{MediaSourceHandle}} set on a {{HTMLMediaElement}}'s
         {{HTMLMediaElement/srcObject}} attribute.</p>
 
-      <div><pre class="idl">enum ReadyState {
-    "closed",
-    "open",
-    "ended"
-};</pre><table class="simple" data-dfn-for="ReadyState"><caption>Description of {{ReadyState}} enumeration values</caption><tbody><tr><th>Value</th><th>Description</th></tr>
-        <tr><td><dfn><code id="idl-def-ReadyState.closed">closed</code></dfn></td><td>
-          Indicates the source is not currently attached to a media element.
-        </td></tr>
-        <tr><td><dfn><code id="idl-def-ReadyState.open">open</code></dfn></td><td>
-          The source has been opened by a media element and is ready for data to be appended to the <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}.
-        </td></tr><tr><td><dfn><code id="idl-def-ReadyState.ended">ended</code></dfn></td><td>
-          The source is still attached to a media element, but {{MediaSource/endOfStream()}} has been called.
-        </td></tr></tbody></table></div>
+      <pre class="idl">
+        enum ReadyState {
+          "closed",
+          "open",
+          "ended",
+        };
+      </pre>
+      <dl data-dfn-for="ReadyState">
+        <dt><dfn>closed</dfn></dt>
+        <dd>Indicates the source is not currently attached to a media element.</dd>
 
-      <div class="issue" data-number="276">
-          <p>Consider adding a "<code>closing</code>" {{MediaSource/ReadyState}} to indicate the source is in the process of being concurrently detached from a media element. This would be useful for some implementations of {{MediaSource}} and {{SourceBuffer}} in {{DedicatedWorkerGlobalScope}}.</p>
-      </div>
+        <dt><dfn>open</dfn></dt>
+        <dd>The source has been opened by a media element and is ready for data to be appended to the {{SourceBuffer}} objects in {{MediaSource}}'s {{MediaSource/sourceBuffers}}.</dd>
 
-      <div><pre class="idl">enum EndOfStreamError {
-    "network",
-    "decode"
-};</pre><table class="simple" data-dfn-for="EndOfStreamError"><caption>Description of {{EndOfStreamError}} enumeration values</caption><tbody><tr><th>Value</th><th>Description</th></tr><tr><td><dfn><code id="idl-def-EndOfStreamError.network">network</code></dfn></td><td>
+        <dt><dfn>ended</dfn></dt>
+        <dd>The source is still attached to a media element, but {{MediaSource}}'s {{MediaSource/endOfStream()}} has been called.</dd>
+      </dl>
+
+
+      <aside class="issue" data-number="276">
+        <p>Consider adding a "`closing`" {{MediaSource/ReadyState}} to indicate the source is in the process of being concurrently detached from a media element. This would be useful for some implementations of {{MediaSource}} and {{SourceBuffer}} in {{DedicatedWorkerGlobalScope}}.</p>
+      </aside>
+
+      <pre class="idl">
+        enum EndOfStreamError {
+          "network",
+          "decode",
+        };
+      </pre>
+      <dl data-dfn-for="EndOfStreamError">
+        <dt><dfn>network</dfn></dt>
+        <dd>
           <p>Terminates playback and signals that a network error has occurred.</p>
           <p class="note">JavaScript applications SHOULD use this status code to terminate playback with a network error. For example, if a network error occurs while fetching media data.</p>
-        </td></tr><tr><td><dfn><code id="idl-def-EndOfStreamError.decode">decode</code></dfn></td><td>
+        </dd>
+        <dt><dfn>decode</dfn></dt>
+        <dd>
           <p>Terminates playback and signals that a decoding error has occurred.</p>
           <p class="note">JavaScript applications SHOULD use this status code to terminate playback with a decode error. For example, if a parsing error occurs while processing out-of-band media data.</p>
-        </td></tr></tbody></table></div>
+        </dd>
+      </dl>
 
 <pre class="idl">[Exposed=(Window,DedicatedWorker)]
 interface MediaSource : EventTarget {
@@ -1310,19 +1323,25 @@ interface MediaSourceHandle {};</pre>
     <section id="sourcebuffer">
       <h2><dfn>SourceBuffer</dfn> Object</h2>
 
-
-<pre class="idl">enum AppendMode {
-    "segments",
-    "sequence"
-};</pre><table class="simple" data-dfn-for="AppendMode"><caption>Description of {{AppendMode}} enumeration values</caption><tbody><tr><th>Value</th><th>Description</th></tr><tr><td><dfn><code id="idl-def-AppendMode.segments">segments</code></dfn></td><td>
-          <p>The timestamps in the media segment determine where the [=coded frames=] are placed in the presentation. Media segments can be appended in any order.</p>
-        </td></tr><tr><td><dfn><code id="idl-def-AppendMode.sequence">sequence</code></dfn></td><td>
-          <p>Media segments will be treated as adjacent in time independent of the timestamps in the media segment. Coded frames in a new media segment will be placed immediately after the coded
-            frames in the previous media segment. The {{SourceBuffer/timestampOffset}} attribute will be updated if a new offset is needed to make the new media segments adjacent to the previous media segment.
-            Setting the {{SourceBuffer/timestampOffset}} attribute in {{AppendMode/""sequence""}} mode allows a media segment to be placed at a specific position in the timeline without any knowledge
-            of the timestamps in the media segment.
-          </p>
-        </td></tr></tbody></table>
+      <pre class="idl">
+        enum AppendMode {
+          "segments",
+          "sequence",
+        };
+      </pre>
+      <dl data-dfn-for="AppendMode">
+        <dt><dfn>segments</dfn></dt>
+        <dd>
+          The timestamps in the media segment determine where the [=coded frames=] are placed in the presentation. Media segments can be appended in any order.
+        </dd>
+        <dt><dfn>sequence</dfn></dt>
+        <dd>
+          Media segments will be treated as adjacent in time independent of the timestamps in the media segment. Coded frames in a new media segment will be placed immediately after the coded
+          frames in the previous media segment. The {{SourceBuffer/timestampOffset}} attribute will be updated if a new offset is needed to make the new media segments adjacent to the previous media segment.
+          Setting the {{SourceBuffer/timestampOffset}} attribute in {{AppendMode/""sequence""}} mode allows a media segment to be placed at a specific position in the timeline without any knowledge
+          of the timestamps in the media segment.
+        </dd>
+      </dl>
 
 <pre class="idl">[Exposed=(Window,DedicatedWorker)]
 interface SourceBuffer : EventTarget {
