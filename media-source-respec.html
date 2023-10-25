@@ -2730,8 +2730,6 @@ interface SourceBufferList : EventTarget {
         readonly attribute boolean streaming;
         attribute EventHandler onstartstreaming;
         attribute EventHandler onendstreaming;
-
-        static boolean isTypeSupported(DOMString type);
       };
       </pre>
 
@@ -2749,53 +2747,6 @@ interface SourceBufferList : EventTarget {
             </li>
             <li>Otherwise, return `true`.</li>
           </ol>
-        </dd>
-      </dl>
-      <h3>Static Methods</h3>
-      <dl>
-        <dt>
-          <dfn>isTypeSupported()</dfn>
-        </dt>
-        <dd>
-          <p>
-            Checks to see whether the user agent would be capable of instantiating a
-            {{ManagedSourceBuffer}} object for the given [=MIME type=]
-            |type:DOMString|.
-          </p>
-          <ol class="method-algorithm">
-            <li>
-              Return `false` if any of the following conditions is met:
-              <ul>
-                <li>|type| is not a [=valid mime type string=].</li>
-                <li>
-                  The user agent does not support |type|'s [=MIME type/type=].
-                </li>
-                <li>
-                  The user agent does not support |type|'s [=MIME type/subtype=].
-                </li>
-                <li>
-                  If |type| has [=MIME type/parameters=], if any of the codecs
-                  passed as [=MIME type/parameters=] is not supported.
-                </li>
-              </ul>
-            </li>
-            <li>Otherwise, return `true`.</li>
-          </ol>
-          <p class="note">
-            If true is returned from this method, it only indicates that the
-            {{ManagedMediaSource}} implementation is capable of creating
-            {{ManagedSourceBuffer}} objects for the specified MIME type. An
-            {{MediaSource/addSourceBuffer()}} call can still fail if there are
-            insufficient resources available to support the addition of a new
-            {{ManagedSourceBuffer}}.
-          </p>
-          <p class="note">
-            This method returning true implies that {{HTMLMediaElement}}'s
-            {{HTMLMediaElement/canPlayType()}} will return
-            {{CanPlayTypeResult/"maybe"}} or {{CanPlayTypeResult/"probably"}} since
-            it does not make sense for a {{ManagedMediaSource}} to support a type
-            the {{HTMLMediaElement}} knows it cannot play.
-          </p>
         </dd>
       </dl>
 
