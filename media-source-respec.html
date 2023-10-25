@@ -2777,12 +2777,11 @@ interface SourceBufferList : EventTarget {
       <h3>Algorithms</h3>
       <h4>`ManagedSourceBuffer` Monitoring</h4>
       <p>
-        The following steps are run periodically, whenever the {{MediaSource}}
-        {{SourceBuffer}} Monitoring algorithm is scheduled to run.
+        The following steps are run periodically, whenever the [=MediaSource/SourceBuffer Monitoring=] algorithm is scheduled to run.
       </p>
       <p>
         Having <dfn>enough managed data to ensure uninterrupted playback</dfn>
-        is an implementation specific condition where the user agent determines that
+        is an implementation defined condition where the user agent determines that
         it currently has enough data to play the presentation without stalling for a
         meaningful period of time and that it can achieve a balance between optimal
         memory and energy usage. This condition is constantly evaluated to determine
@@ -2802,7 +2801,7 @@ interface SourceBufferList : EventTarget {
             <dd>
               <ol>
                 <li>
-                  Set [=this=]'s {{ManagedMediaSource/streaming}} attribute to true.
+                  Set [=this=]'s {{ManagedMediaSource/streaming}} attribute to `true`.
                 </li>
                 <li>Abort these steps.</li>
               </ol>
@@ -2820,7 +2819,7 @@ interface SourceBufferList : EventTarget {
               <ol>
                 <li>
                   Set [=this=]'s {{ManagedMediaSource/streaming}} attribute to
-                  false.
+                  `false`.
                 </li>
                 <li>Abort these steps.</li>
               </ol>
