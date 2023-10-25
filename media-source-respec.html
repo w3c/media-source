@@ -264,7 +264,7 @@
         that stores a <a def-id="normalized-timeranges-object"></a>. It is initialized to an empty {{TimeRanges}} object
         when the {{MediaSource}} object is created, is maintained by {{MediaSource/setLiveSeekableRange()}} and
         {{MediaSource/clearLiveSeekableRange()}}, and is used in
-        <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify
+        [[[#htmlmediaelement-extensions]]] to modify
         {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
 
       <p>Each {{MediaSource}} object has a <dfn data-dfn-for="MediaSource">[[\has ever been attached]]</dfn> internal
@@ -377,7 +377,7 @@ interface MediaSource : EventTarget {
             sourceBuffers[3] are in {{MediaSource/activeSourceBuffers}}, then activeSourceBuffers[0] MUST
             equal sourceBuffers[0] and activeSourceBuffers[1] MUST equal sourceBuffers[3].
           </p>
-          <p class="note">The <a href="#active-source-buffer-changes">Changes to selected/enabled track state</a> section describes how this attribute gets
+          <p class="note">Section [[[#active-source-buffer-changes]]] describes how this attribute gets
             updated.</p>
         </dd><dt><dfn><code>readyState</code></dfn> of type {{ReadyState}}, readonly       </dt><dd>
           <p>Indicates the current state of the <a>MediaSource</a> object. When the <a>MediaSource</a> is created {{MediaSource/readyState}} MUST be set to {{ReadyState/""closed""}}.
@@ -622,7 +622,7 @@ interface MediaSource : EventTarget {
           <dt><dfn><code>setLiveSeekableRange</code></dfn></dt><dd>
 
           <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
-            <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify
+            section [[[#htmlmediaelement-extensions]]] to modify
             {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
           <ol class="method-algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not {{ReadyState/""open""}} then throw an {{InvalidStateError}} exception and abort these steps.</li>
@@ -661,7 +661,7 @@ interface MediaSource : EventTarget {
           </table>
         <div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>clearLiveSeekableRange</code></dfn></dt><dd>
         <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
-          <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify
+          section [[[#htmlmediaelement-extensions]]] to modify
           {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
 
           <ol class="method-algorithm">
@@ -1241,8 +1241,8 @@ interface MediaSource : EventTarget {
         srcobject]]</dfn> internal slot that stores a {{boolean}}. It is initialized to false when the
         {{MediaSourceHandle}} object is created, is set true in the extended {{HTMLMediaElement}}'s
         {{HTMLMediaElement/srcObject}} setter as described in
-        <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a>, and if true, prevents successful
-        transfer of the {{MediaSourceHandle}} as described in the [=Transfer=] section.</p>
+        section [[[#htmlmediaelement-extensions]]], and if true, prevents successful
+        transfer of the {{MediaSourceHandle}} as described in section [[[#transfer]]].</p>
 
       <p>{{MediaSourceHandle}} objects are {{Transferable}}, each having a <dfn
         data-dfn-for="MediaSourceHandle">[[\Detached]]</dfn> internal slot that is used to ensure that once the handle
@@ -1252,7 +1252,8 @@ interface MediaSource : EventTarget {
 [Transferable, Exposed=(Window,DedicatedWorker)]
 interface MediaSourceHandle {};</pre>
 
-      <section><h2><dfn>Transfer</dfn></h2>
+      <section id="transfer">
+        <h2>Transfer</h2>
         <p>The {{MediaSourceHandle}} [=transfer steps=] and [=transfer-receiving steps=] require the implementation to
           maintain an implicit internal slot referencing the underlying {{MediaSource}} to enable [=attaching to a media
           element=] using {{HTMLMediaElement/srcObject}} and consequent setup of an attachment's [=cross-context
@@ -2475,7 +2476,7 @@ interface SourceBuffer : EventTarget {
                     {{HTMLMediaElement/HAVE_METADATA}}, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_METADATA}} and stall playback.</p>
                   <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
                   <p class="note">This transition occurs because media data for the current position has been removed. Playback cannot progress until media for the
-                    <a def-id="current-playback-position"></a> is appended or the <a href="#active-source-buffer-changes">selected/enabled tracks change</a>.</p>
+                    <a def-id="current-playback-position"></a> is appended or the [[[#active-source-buffer-changes]]].</p>
                 </li>
               </ol>
             </li>
