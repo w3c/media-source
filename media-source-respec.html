@@ -280,34 +280,46 @@
         actively managing its content or not. It is initialized to false when the
         {{MediaSource}} object is created.
       </p>
-      <div><pre class="idl">enum ReadyState {
-    "closed",
-    "open",
-    "ended"
-};</pre><table class="simple" data-dfn-for="ReadyState"><caption>Description of {{ReadyState}} enumeration values</caption><tbody><tr><th>Value</th><th>Description</th></tr>
-        <tr><td><dfn><code id="idl-def-ReadyState.closed">closed</code></dfn></td><td>
-          Indicates the source is not currently attached to a media element.
-        </td></tr>
-        <tr><td><dfn><code id="idl-def-ReadyState.open">open</code></dfn></td><td>
-          The source has been opened by a media element and is ready for data to be appended to the <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}.
-        </td></tr><tr><td><dfn><code id="idl-def-ReadyState.ended">ended</code></dfn></td><td>
-          The source is still attached to a media element, but {{MediaSource/endOfStream()}} has been called.
-        </td></tr></tbody></table></div>
+      <pre class="idl">
+        enum ReadyState {
+          "closed",
+          "open",
+          "ended",
+        };
+      </pre>
+      <dl data-dfn-for="ReadyState">
+        <dt><dfn>closed</dfn></dt>
+        <dd>Indicates the source is not currently attached to a media element.</dd>
 
-      <div class="issue" data-number="276">
-          <p>Consider adding a "<code>closing</code>" {{MediaSource/ReadyState}} to indicate the source is in the process of being concurrently detached from a media element. This would be useful for some implementations of {{MediaSource}} and {{SourceBuffer}} in {{DedicatedWorkerGlobalScope}}.</p>
-      </div>
+        <dt><dfn>open</dfn></dt>
+        <dd>The source has been opened by a media element and is ready for data to be appended to the {{SourceBuffer}} objects in {{MediaSource}}'s {{MediaSource/sourceBuffers}}.</dd>
 
-      <div><pre class="idl">enum EndOfStreamError {
-    "network",
-    "decode"
-};</pre><table class="simple" data-dfn-for="EndOfStreamError"><caption>Description of {{EndOfStreamError}} enumeration values</caption><tbody><tr><th>Value</th><th>Description</th></tr><tr><td><dfn><code id="idl-def-EndOfStreamError.network">network</code></dfn></td><td>
+        <dt><dfn>ended</dfn></dt>
+        <dd>The source is still attached to a media element, but {{MediaSource}}'s {{MediaSource/endOfStream()}} has been called.</dd>
+      </dl>
+
+      <aside class="issue" data-number="276">
+        <p>Consider adding a "`closing`" {{MediaSource/ReadyState}} to indicate the source is in the process of being concurrently detached from a media element. This would be useful for some implementations of {{MediaSource}} and {{SourceBuffer}} in {{DedicatedWorkerGlobalScope}}.</p>
+      </aside>
+
+      <pre class="idl">
+        enum EndOfStreamError {
+          "network",
+          "decode",
+        };
+      </pre>
+      <dl data-dfn-for="EndOfStreamError">
+        <dt><dfn>network</dfn></dt>
+        <dd>
           <p>Terminates playback and signals that a network error has occurred.</p>
           <p class="note">JavaScript applications SHOULD use this status code to terminate playback with a network error. For example, if a network error occurs while fetching media data.</p>
-        </td></tr><tr><td><dfn><code id="idl-def-EndOfStreamError.decode">decode</code></dfn></td><td>
+        </dd>
+        <dt><dfn>decode</dfn></dt>
+        <dd>
           <p>Terminates playback and signals that a decoding error has occurred.</p>
           <p class="note">JavaScript applications SHOULD use this status code to terminate playback with a decode error. For example, if a parsing error occurs while processing out-of-band media data.</p>
-        </td></tr></tbody></table></div>
+        </dd>
+      </dl>
 
 <pre class="idl">[Exposed=(Window,DedicatedWorker)]
 interface MediaSource : EventTarget {
@@ -688,7 +700,7 @@ interface MediaSource : EventTarget {
 
       <section id="mediasource-events">
         <h3>Event Summary</h3>
-        <table class="old-table">
+        <table class="data">
           <thead>
             <tr>
               <th>Event name</th>
@@ -696,23 +708,21 @@ interface MediaSource : EventTarget {
               <th>Dispatched when...</th>
             </tr>
           </thead>
-          <tbody>
             <tr>
-              <td><dfn><code>sourceopen</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>{{MediaSource/readyState}} transitions from {{ReadyState/""closed""}} to {{ReadyState/""open""}} or from {{ReadyState/""ended""}} to {{ReadyState/""open""}}.</td>
+              <td><dfn class="event">sourceopen</dfn></td>
+              <td>{{Event}}</td>
+              <td>{{MediaSource}}'s {{MediaSource/readyState}} transitions from {{ReadyState/"closed"}} to {{ReadyState/"open"}} or from {{ReadyState/"ended"}} to {{ReadyState/"open"}}.</td>
             </tr>
             <tr>
-              <td><dfn><code>sourceended</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>{{MediaSource/readyState}} transitions from {{ReadyState/""open""}} to {{ReadyState/""ended""}}.</td>
+              <td><dfn class="event">sourceended</dfn></td>
+              <td>{{Event}}</td>
+              <td>{{MediaSource}}'s {{MediaSource/readyState}} transitions from {{ReadyState/"open"}} to {{ReadyState/"ended"}}.</td>
             </tr>
             <tr>
-              <td><dfn><code>sourceclose</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>{{MediaSource/readyState}} transitions from {{ReadyState/""open""}} to {{ReadyState/""closed""}} or {{ReadyState/""ended""}} to {{ReadyState/""closed""}}.</td>
+              <td><dfn class="event">sourceclose</dfn></td>
+              <td>{{Event}}</td>
+              <td>{{MediaSource}}'s {{MediaSource/readyState}} transitions from {{ReadyState/"open"}} to {{ReadyState/"closed"}} or {{ReadyState/"ended"}} to {{ReadyState/"closed"}}.</td>
             </tr>
-          </tbody>
         </table>
       </section>
 
@@ -1299,19 +1309,25 @@ interface MediaSourceHandle {};</pre>
     <section id="sourcebuffer">
       <h2><dfn>SourceBuffer</dfn> Object</h2>
 
-
-<pre class="idl">enum AppendMode {
-    "segments",
-    "sequence"
-};</pre><table class="simple" data-dfn-for="AppendMode"><caption>Description of {{AppendMode}} enumeration values</caption><tbody><tr><th>Value</th><th>Description</th></tr><tr><td><dfn><code id="idl-def-AppendMode.segments">segments</code></dfn></td><td>
-          <p>The timestamps in the media segment determine where the [=coded frames=] are placed in the presentation. Media segments can be appended in any order.</p>
-        </td></tr><tr><td><dfn><code id="idl-def-AppendMode.sequence">sequence</code></dfn></td><td>
-          <p>Media segments will be treated as adjacent in time independent of the timestamps in the media segment. Coded frames in a new media segment will be placed immediately after the coded
-            frames in the previous media segment. The {{SourceBuffer/timestampOffset}} attribute will be updated if a new offset is needed to make the new media segments adjacent to the previous media segment.
-            Setting the {{SourceBuffer/timestampOffset}} attribute in {{AppendMode/""sequence""}} mode allows a media segment to be placed at a specific position in the timeline without any knowledge
-            of the timestamps in the media segment.
-          </p>
-        </td></tr></tbody></table>
+      <pre class="idl">
+        enum AppendMode {
+          "segments",
+          "sequence",
+        };
+      </pre>
+      <dl data-dfn-for="AppendMode">
+        <dt><dfn>segments</dfn></dt>
+        <dd>
+          The timestamps in the media segment determine where the [=coded frames=] are placed in the presentation. Media segments can be appended in any order.
+        </dd>
+        <dt><dfn>sequence</dfn></dt>
+        <dd>
+          Media segments will be treated as adjacent in time independent of the timestamps in the media segment. Coded frames in a new media segment will be placed immediately after the coded
+          frames in the previous media segment. The {{SourceBuffer/timestampOffset}} attribute will be updated if a new offset is needed to make the new media segments adjacent to the previous media segment.
+          Setting the {{SourceBuffer/timestampOffset}} attribute in {{AppendMode/""sequence""}} mode allows a media segment to be placed at a specific position in the timeline without any knowledge
+          of the timestamps in the media segment.
+        </dd>
+      </dl>
 
 <pre class="idl">[Exposed=(Window,DedicatedWorker)]
 interface SourceBuffer : EventTarget {
@@ -1617,7 +1633,7 @@ interface SourceBuffer : EventTarget {
 
       <section id="sourcebuffer-events">
         <h3>Event Summary</h3>
-        <table class="old-table">
+        <table class="data">
           <thead>
             <tr>
               <th>Event name</th>
@@ -1625,33 +1641,31 @@ interface SourceBuffer : EventTarget {
               <th>Dispatched when...</th>
             </tr>
           </thead>
-          <tbody>
             <tr>
-              <td><dfn><code>updatestart</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>{{SourceBuffer/updating}} transitions from false to true.</td>
+              <td><dfn class="event">updatestart</dfn></td>
+              <td>{{Event}}</td>
+              <td>{{SourceBuffer}}'s {{SourceBuffer/updating}} transitions from false to true.</td>
             </tr>
             <tr>
-              <td><dfn><code>update</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>The append or remove has successfully completed. {{SourceBuffer/updating}} transitions from true to false.</td>
+              <td><dfn class="event">update</dfn></td>
+              <td>{{Event}}</td>
+              <td>A {{SourceBuffer}}'s append or remove successfully completed. {{SourceBuffer}}'s {{SourceBuffer/updating}} transitions from true to false.</td>
             </tr>
             <tr>
-              <td><dfn><code>updateend</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>The append or remove has ended.</td>
+              <td><dfn class="event">updateend</dfn></td>
+              <td>{{Event}}</td>
+              <td>The append or remove of a {{SourceBuffer}} ended.</td>
             </tr>
             <tr>
-              <td><dfn><code>error</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>An error occurred during the append. {{SourceBuffer/updating}} transitions from true to false.</td>
+              <td><dfn class="event">error</dfn></td>
+              <td>{{Event}}</td>
+              <td>An error occurred during the append to a {{SourceBuffer}}. {{SourceBuffer/updating}} transitions from true to false.</td>
             </tr>
             <tr>
-              <td><dfn><code>abort</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>The append was aborted by an {{SourceBuffer/abort()}} call. {{SourceBuffer/updating}} transitions from true to false.</td>
+              <td><dfn class="event">abort</dfn></td>
+              <td>{{Event}}</td>
+              <td>The {{SourceBuffer}}'s append was aborted by an {{SourceBuffer/abort()}} call. {{SourceBuffer/updating}} transitions from true to false.</td>
             </tr>
-          </tbody>
         </table>
       </section>
 
@@ -1663,7 +1677,7 @@ interface SourceBuffer : EventTarget {
           <p>Each {{SourceBuffer}} object has an <dfn data-dfn-for="SourceBuffer">[[\append state]]</dfn> internal slot
           that keeps track of the high-level segment parsing state. It is initially set to [=WAITING_FOR_SEGMENT=] and
           can transition to the following states as data is appended.</p>
-          <table class="old-table">
+          <table class="data">
             <thead>
               <tr>
                 <th>Append state name</th>
@@ -2690,7 +2704,7 @@ interface SourceBufferList : EventTarget {
 
       <section id="sourcebufferlist-events">
         <h3>Event Summary</h3>
-        <table class="old-table">
+        <table class="data">
           <thead>
             <tr>
               <th>Event name</th>
@@ -2698,18 +2712,16 @@ interface SourceBufferList : EventTarget {
               <th>Dispatched when...</th>
             </tr>
           </thead>
-          <tbody>
             <tr>
               <td><dfn class="event">addsourcebuffer</dfn></td>
-              <td><code>Event</code></td>
-              <td>When a <a>SourceBuffer</a> is added to the list.</td>
+              <td>{{Event}}</td>
+              <td>When a {{SourceBuffer}} is added to the list.</td>
             </tr>
             <tr>
               <td><dfn class="event">removesourcebuffer</dfn></td>
-              <td><code>Event</code></td>
-              <td>When a <a>SourceBuffer</a> is removed from the list.</td>
+              <td>{{Event}}</td>
+              <td>When a {{SourceBuffer}} is removed from the list.</td>
             </tr>
-          </tbody>
         </table>
       </section>
     </section>
