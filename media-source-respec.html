@@ -913,6 +913,7 @@ interface MediaSource : EventTarget {
               </dl></li>
             <li>Set {{MediaSource/[[port to main]]}} null.</li>
             <li>Set the {{MediaSource/readyState}} attribute to {{ReadyState/""closed""}}.</li>
+            <li>If [=this=] is a {{ManagedMediaSource}} set {{ManagedMediaSource/streaming}} attribute to `false`</li>
             <li>Update {{MediaSource/duration}} to NaN.</li>
             <li>Remove all the <a>SourceBuffer</a> objects from {{MediaSource/activeSourceBuffers}}.</li>
             <li>
@@ -2737,11 +2738,7 @@ interface SourceBufferList : EventTarget {
         <dd>
           <p>On getting:</p>
           <ol>
-            <li>
-              If [=this=]'s {{MediaSource/readyState}} attribute is
-              {{ReadyState/"closed"}} then return `false`.
-            </li>
-            <li>Otherwise, return the current value of the attribute.</li>
+            <li>Return the current value of the attribute.</li>
           </ol>
         </dd>
       </dl>
@@ -2794,23 +2791,6 @@ interface SourceBufferList : EventTarget {
         needs more data respectively.
       </p>
       <ol class="algorithm">
-        <li>
-          <dl class="switch">
-            <dt>
-              If [=this=]'s {{MediaSource/readyState}} attribute is
-              {{ReadyState/"closed"}}:
-            </dt>
-            <dd>
-              <ol>
-                <li>
-                  Set [=this=]'s {{ManagedMediaSource/streaming}} attribute to
-                  false.
-                </li>
-                <li>Abort these steps.</li>
-              </ol>
-            </dd>
-          </dl>
-        </li>
         <li>Run the {{MediaSource}} [=MediaSource/SourceBuffer Monitoring=] algorithm.</li>
         <li>
           <dl class="switch">
@@ -3007,7 +2987,7 @@ interface SourceBufferList : EventTarget {
           uninterrupted playback from {{HTMLMediaElement.currentTime}} until such
           presentation could be fetched again.
           <p class="note">
-            Implementations can use different methods for selecting |removal ranges|
+            Implementations can use different strategies for selecting |removal ranges|
             so web applications shouldn't depend on a specific behavior. The web
             application would listen to the {{bufferedchange}} event to observe
             whether portions of the buffered data have been evicted.
