@@ -273,13 +273,6 @@
         a media element=] algorithm. The extended [=resource fetch algorithm=] uses this internal slot to conditionally
         fail attachment of a {{MediaSource}} using a {{MediaSourceHandle}} set on a {{HTMLMediaElement}}'s
         {{HTMLMediaElement/srcObject}} attribute.</p>
-      <p>
-        Each {{MediaSource}} object has a
-        <dfn data-dfn-for="MediaSource">[[\is actively managed flag]]</dfn> internal
-        slot that stores a boolean indicating if the {{MediaSource}} object is
-        actively managing its content or not. It is initialized to false when the
-        {{MediaSource}} object is created.
-      </p>
       <pre class="idl">
         enum ReadyState {
           "closed",
@@ -431,16 +424,7 @@ interface MediaSource : EventTarget {
             </li>
             <li>If the {{MediaSource/readyState}} attribute is not in the {{ReadyState/""open""}} state then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>
-              Let |buffer| be a new instance created as follows:
-              <ul>
-                <li>
-                  If [=this=]'s {{MediaSource/[[is actively managed flag]]}} is false, a newly created {{SourceBuffer}} instance along with its associated resources.
-                </li>
-                <li>
-                  Otherwise, a newly created {{ManagedSourceBuffer}} instance and its associated resources.
-                </li>
-              </ul>
-            </li>
+              Let |buffer| be a new instance of a {{ManagedSourceBuffer}} if |this| is a {{ManagedMediaSource}}, or a {{SourceBuffer}} otherwise, with their respective associated resources.            </li>
             <li>
               Set |buffer|'s {{SourceBuffer/[[generate timestamps flag]]}} to the value in the "Generate
               Timestamps Flag" column of the [[[MSE-REGISTRY]]] entry that is associated with
@@ -2730,8 +2714,8 @@ interface SourceBufferList : EventTarget {
       <h2><dfn>ManagedMediaSource</dfn> interface</h2>
       <p>
         A {{ManagedMediaSource}} is a {{MediaSource}} that actively manages its
-        memory content. Unlike a {{MediaSource}}, the [=user agent=] MAY evict evict content
-        from its {{MediaSource/sourceBuffers}} (populated with {{ManagedSourceBuffer}}) for any reasons, including when under [=ManagedMediaSource/memory
+        memory content. Unlike a {{MediaSource}}, the [=user agent=] can evict evict content
+        from its {{MediaSource/sourceBuffers}} (populated with {{ManagedSourceBuffer}}) for any reason, including when under [=ManagedMediaSource/memory
         pressure=].
       </p>
 
