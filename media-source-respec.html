@@ -2783,45 +2783,29 @@ interface SourceBufferList : EventTarget {
         Having <dfn>enough managed data to ensure uninterrupted playback</dfn>
         is an implementation defined condition where the user agent determines that
         it currently has enough data to play the presentation without stalling for a
-        meaningful period of time and that it can achieve a balance between optimal
-        memory and energy usage. This condition is constantly evaluated to determine
+        meaningful period of time. This condition is constantly evaluated to determine
         when to transition the value of {{ManagedMediaSource/streaming}}. These transitions
         indicate when the user agent believes it has enough data buffered or it
         needs more data respectively.
       </p>
+      <p>
+        Being <dfn>able to retrieve and buffer data in an efficient way</dfn>
+        is an implementation defined condition where the user agent determines that
+        it can fetch new data in an energy efficient manner while able to achieve the desired memory usage.
+      </p>
       <ol class="algorithm">
         <li>Run the {{MediaSource}} [=MediaSource/SourceBuffer Monitoring=] algorithm.</li>
-        <li>
+        <li>Let |can play uninterupted and efficiently| be a flag that is true if the {{HTMLMediaElement/buffered}} attribute contains a {{TimeRanges}} that includes the current playback position and [=enough managed data to ensure uninterrupted playback=]
+          and [=able to retrieve and buffer data in an efficient way=]
           <dl class="switch">
-            <dt>
-              If {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} attribute
-              contains a {{TimeRanges}} that includes the current playback position
-              and not [=enough managed data to ensure uninterrupted playback=]:
+            <dt>If |can play uninterupted and efficiently| is not equal to {{ManagedMediaSource/streaming}}, [=queue an element task=] on the [=media element=]
+              that runs the following steps:
             </dt>
             <dd>
               <ol>
-                <li>
-                  Set [=this=]'s {{ManagedMediaSource/streaming}} attribute to `true`.
-                </li>
-                <li>Abort these steps.</li>
-              </ol>
-            </dd>
-          </dl>
-        </li>
-        <li>
-          <dl class="switch">
-            <dt>
-              If {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} attribute
-              contains a {{TimeRanges}} that includes the current playback position and
-              [=enough managed data to ensure uninterrupted playback=]:
-            </dt>
-            <dd>
-              <ol>
-                <li>
-                  Set [=this=]'s {{ManagedMediaSource/streaming}} attribute to
-                  `false`.
-                </li>
-                <li>Abort these steps.</li>
+                <li>Set |this| {{ManagedMediaSource/streaming}} attribute to |can play uninterupted and efficiently|.</li>
+                <li>If |can play uninterupted and efficiently| is false [=fire an event=] called {{startstreaming}} at the {{ManagedMediaSource}}.</li>
+                <li>Else [=fire an event=] called {{endstreaming}} at the {{ManagedMediaSource}}.</li>
               </ol>
             </dd>
           </dl>
