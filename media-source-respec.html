@@ -2745,7 +2745,7 @@ interface SourceBufferList : EventTarget {
               If [=this=]'s {{MediaSource/readyState}} attribute is
               {{ReadyState/"closed"}} then return `false`.
             </li>
-            <li>Otherwise, return `true`.</li>
+            <li>Otherwise, return the current value of the attribute.</li>
           </ol>
         </dd>
       </dl>
@@ -2793,8 +2793,7 @@ interface SourceBufferList : EventTarget {
         it currently has enough data to play the presentation without stalling for a
         meaningful period of time and that it can achieve a balance between optimal
         memory and energy usage. This condition is constantly evaluated to determine
-        when to transition the media element into and out of the
-        {{HTMLMediaElement/HAVE_ENOUGH_DATA}} ready state. These transitions
+        when to transition the value of {{ManagedMediaSource/streaming}}. These transitions
         indicate when the user agent believes it has enough data buffered or it
         needs more data respectively.
       </p>
