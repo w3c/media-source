@@ -2716,8 +2716,9 @@ interface SourceBufferList : EventTarget {
       <p>
         A {{ManagedMediaSource}} is a {{MediaSource}} that actively manages its
         memory content. Unlike a {{MediaSource}}, the [=user agent=] can evict evict content
-        from its {{MediaSource/sourceBuffers}} (populated with {{ManagedSourceBuffer}}) for any reason, including when under [=ManagedMediaSource/memory
-        pressure=].
+        through the [=ManagedMediaSource/memory
+        cleanup=] algorithm from its {{MediaSource/sourceBuffers}} (populated with {{ManagedSourceBuffer}})
+        for any reason.
       </p>
 
       <pre class="idl">
@@ -2812,7 +2813,7 @@ interface SourceBufferList : EventTarget {
         </li>
       </ol>
 
-      <h4><dfn data-dfn-for="ManagedMediaSource">Memory pressure</dfn></h4>
+      <h4><dfn data-dfn-for="ManagedMediaSource">Memory Cleanup</dfn></h4>
       <ol>
         <li>
           <dl class="switch">
@@ -2822,7 +2823,7 @@ interface SourceBufferList : EventTarget {
             </dt>
             <dd>
               <ol>
-                <li>Run the |buffer|'s memory pressure algorithm.</li>
+                <li>Run the |buffer|'s [=ManagedSourceBuffer/memory cleanup=] algorithm.</li>
               </ol>
             </dd>
           </dl>
@@ -2852,14 +2853,14 @@ interface SourceBufferList : EventTarget {
           <dfn>addedRanges</dfn>
         </dt>
         <dd>
-          The time ranges added during the last {{SourceBuffer/appendBuffer()}} operation.
+          The time ranges added during the last run of the [=coded frame processing=] algorithm.
         </dd>
         <dt>
           <dfn>removedRanges</dfn>
         </dt>
         <dd>
-          The time ranges removed during the last {{SourceBuffer/remove()}} operation or if the
-          user agent evicted content in response to a memory pressure.
+          The time ranges removed during the last run of the [=coded frame removal=] or [=coded frame eviction=] algorithm or if the
+          user agent evicted content in response to a [=ManagedSourceBuffer/memory cleanup=].
         </dd>
       </dl>
     </section>
@@ -2901,7 +2902,7 @@ interface SourceBufferList : EventTarget {
               The {{ManagedSourceBuffer}}'s buffered range changed following a
               call to {{SourceBuffer/appendBuffer()}}, {{SourceBuffer/remove()}},
               or as a consequence of the user agent running the
-              [=ManagedSourceBuffer/memory pressure=] algorithm.
+              [=ManagedSourceBuffer/memory cleanup=] algorithm.
             </td>
           </tr>
         </tbody>
@@ -2913,7 +2914,7 @@ interface SourceBufferList : EventTarget {
         The following steps are run at the completion of all operations to the {{ManagedSourceBuffer}}
         |buffer:ManagedSourceBuffer| that would cause a |buffer|'s {{SourceBuffer/buffered}} to change.
         That is once {{SourceBuffer/appendBuffer()}}, {{SourceBuffer/remove()}} or
-        [=ManagedSourceBuffer/memory pressure=] algorithm have completed.
+        [=ManagedSourceBuffer/memory cleanup=] algorithm have completed.
       </p>
       <ol>
         <li>
@@ -2946,13 +2947,13 @@ interface SourceBufferList : EventTarget {
         </li>
       </ol>
       <h4>
-        <dfn data-dfn-for="ManagedSourceBuffer">Memory pressure</dfn>
+        <dfn data-dfn-for="ManagedSourceBuffer">Memory cleanup</dfn>
       </h4>
       <ol>
         <li>
           <dl class="switch">
             <dt>
-              If |managedSourceBuffer| is not in [=this=]'s
+              If [=this=] is not in [=this=]'s {{ManagedMediaSource}} parent
               {{MediaSource/activeSourceBuffers}}:
             </dt>
             <dd>
