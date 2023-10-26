@@ -2797,7 +2797,7 @@ interface SourceBufferList : EventTarget {
       <ol class="algorithm">
         <li>Run the {{MediaSource}} [=MediaSource/SourceBuffer Monitoring=] algorithm.</li>
         <li>Let |can play uninterupted and efficiently| be a flag that is true if the {{HTMLMediaElement/buffered}} attribute contains a {{TimeRanges}} that includes the current playback position and [=enough managed data to ensure uninterrupted playback=]
-          and [=able to retrieve and buffer data in an efficient way=]
+          and is [=able to retrieve and buffer data in an efficient way=]
           <dl class="switch">
             <dt>If |can play uninterupted and efficiently| is not equal to {{ManagedMediaSource/streaming}}, [=queue an element task=] on the [=media element=]
               that runs the following steps:
