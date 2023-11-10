@@ -424,7 +424,7 @@ interface MediaSource : EventTarget {
             </li>
             <li>If the {{MediaSource/readyState}} attribute is not in the {{ReadyState/""open""}} state then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>
-              Let |buffer| be a new instance of a {{ManagedSourceBuffer}} if |this| is a {{ManagedMediaSource}}, or a {{SourceBuffer}} otherwise, with their respective associated resources.            </li>
+              Let |buffer| be a new instance of a {{ManagedSourceBuffer}} if [=this=] is a {{ManagedMediaSource}}, or a {{SourceBuffer}} otherwise, with their respective associated resources. </li>
             <li>
               Set |buffer|'s {{SourceBuffer/[[generate timestamps flag]]}} to the value in the "Generate
               Timestamps Flag" column of the [[[MSE-REGISTRY]]] entry that is associated with
