@@ -3436,7 +3436,7 @@ partial interface TextTrack {
         const mediaType = 'video/mp4; codecs="mp4a.40.2,avc1.4d4015"';
 
         // Check if the type of video format / codec is supported.
-        if (ManagedMediaSource?.isTypeSupported(mediaType)) {
+        if (!window.ManagedMediaSource?.isTypeSupported(mediaType)) {
           return; // Not supported, do something else.
         }
 
