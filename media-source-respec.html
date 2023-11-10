@@ -434,7 +434,7 @@ interface MediaSource : EventTarget {
               If |buffer|'s {{SourceBuffer/[[generate timestamps flag]]}} is true, set |buffer|'s {{SourceBuffer/mode}} to {{AppendMode/"sequence"}}.
               Otherwise, set |buffer|'s {{SourceBuffer/mode}} to {{AppendMode/"segments"}}.
             </li>
-            <li>[=List/Append=] |buffer| to |this|'s {{MediaSource/sourceBuffers}}.</li>
+            <li>[=List/Append=] |buffer| to [=this=]'s {{MediaSource/sourceBuffers}}.</li>
             <li>[=Queue a task=] to [=fire an event=] named {{addsourcebuffer}} at [=this=]'s {{MediaSource/sourceBuffers}}.</li>
             <li>Return |buffer|.</li>
           </ol>
