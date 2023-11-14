@@ -3084,13 +3084,13 @@ async function onSourceOpen(e) {
 
     sourceBuffer.appendBuffer(initSegment);
   } catch (error) {
-    // Handle errors that might occur during the initialization segment fetching
+    // Handle errors that might occur during initialization segment fetching.
     console.error("Error fetching initialization segment:", error);
     mediaSource.endOfStream("network");
   }
 }
 
-function appendNextMediaSegment(mediaSource) {
+async function appendNextMediaSegment(mediaSource) {
   if (
     mediaSource.readyState === "closed" ||
     mediaSource.sourceBuffers[0].updating
@@ -3103,17 +3103,19 @@ function appendNextMediaSegment(mediaSource) {
     return;
   }
 
-  const mediaSegment = getNextMediaSegment();
+  try {
+    const mediaSegment = await getNextMediaSegment();
 
-  if (!mediaSegment) {
-    mediaSource.endOfStream("network");
-    return;
+    // NOTE: If mediaSource.readyState == "ended", this appendBuffer() call will
+    // cause mediaSource.readyState to transition to "open". The web application
+    // should be prepared to handle multiple "sourceopen" events.
+    mediaSource.sourceBuffers[0].appendBuffer(mediaSegment);
   }
-
-  // NOTE: If mediaSource.readyState == "ended", this appendBuffer() call will
-  // cause mediaSource.readyState to transition to "open". The web application
-  // should be prepared to handle multiple "sourceopen" events.
-  mediaSource.sourceBuffers[0].appendBuffer(mediaSegment);
+  catch (error) {
+    // Handle errors that might occur during media segment fetching.
+    console.error("Error fetching media segment:", error);
+    mediaSource.endOfStream("network");
+  }
 }
 
 function onSeeking(mediaSource, video) {
@@ -3147,7 +3149,7 @@ function haveMoreMediaSegments() {
 }
 
 // Example function for getting the next media segment
-function getNextMediaSegment() {
+async function getNextMediaSegment() {
   // Implement fetching of the next media segment
   // This is just a placeholder function
 }
