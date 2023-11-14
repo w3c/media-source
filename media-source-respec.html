@@ -3042,22 +3042,31 @@ partial interface TextTrack {
 
     <section id="examples">
       <h2>Examples</h2>
-      <p>Example use of the Media Source Extensions</p>
-      <div class="block">
-        <div class="blockContent">
-          <pre class="code">&lt;script&gt;
-  function onSourceOpen(videoTag, e) {
-    var mediaSource = e.target;
+      <p>Example use of the Media Source Extensions.</p>
+      <pre class="example html">
+&lt;video id="v" autoplay&gt;&lt;/video&gt;
+&lt;script&gt;
+const video = document.getElementById("v");
+const mediaSource = new MediaSource();
+mediaSource.addEventListener("sourceopen", onSourceOpen);
+video.src = window.URL.createObjectURL(mediaSource);
 
-    if (mediaSource.sourceBuffers.length &gt; 0)
-        return;
+async function onSourceOpen(e) {
+  const mediaSource = e.target;
 
-    var sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vorbis,vp8"');
+  if (mediaSource.sourceBuffers.length > 0) return;
 
-    videoTag.addEventListener('seeking', onSeeking.bind(videoTag, mediaSource));
-    videoTag.addEventListener('progress', onProgress.bind(videoTag, mediaSource));
+  const sourceBuffer = mediaSource.addSourceBuffer(
+    'video/webm; codecs="vorbis,vp8"',
+  );
 
-    var initSegment = GetInitializationSegment();
+  video.addEventListener("seeking", (e) => onSeeking(mediaSource, e.target));
+  video.addEventListener("progress", () =>
+    appendNextMediaSegment(mediaSource),
+  );
+
+  try {
+    const initSegment = await getInitializationSegment();
 
     if (initSegment == null) {
       // Error fetching the initialization segment. Signal end of stream with an error.
@@ -3066,77 +3075,79 @@ partial interface TextTrack {
     }
 
     // Append the initialization segment.
-    var firstAppendHandler = function(e) {
-      var sourceBuffer = e.target;
-      sourceBuffer.removeEventListener('updateend', firstAppendHandler);
-
-      // Append some initial media data.
+    sourceBuffer.addEventListener("updateend", function firstAppendHandler() {
+      sourceBuffer.removeEventListener("updateend", firstAppendHandler);
       appendNextMediaSegment(mediaSource);
-    };
-    sourceBuffer.addEventListener('updateend', firstAppendHandler);
+    });
+
     sourceBuffer.appendBuffer(initSegment);
+  } catch (error) {
+    // Handle errors that might occur during the initialization segment fetching
+    console.error("Error fetching initialization segment:", error);
+    mediaSource.endOfStream("network");
+  }
+}
+
+function appendNextMediaSegment(mediaSource) {
+  if (
+    mediaSource.readyState === "closed" ||
+    mediaSource.sourceBuffers[0].updating
+  )
+    return;
+
+  if (!haveMoreMediaSegments()) {
+    mediaSource.endOfStream();
+    return;
   }
 
-  function appendNextMediaSegment(mediaSource) {
-    if (mediaSource.readyState == "closed")
-      return;
+  const mediaSegment = getNextMediaSegment();
 
-    // If we have run out of stream data, then signal end of stream.
-    if (!HaveMoreMediaSegments()) {
-      mediaSource.endOfStream();
-      return;
-    }
-
-    // Make sure the previous append is not still pending.
-    if (mediaSource.sourceBuffers[0].updating)
-        return;
-
-    var mediaSegment = GetNextMediaSegment();
-
-    if (!mediaSegment) {
-      // Error fetching the next media segment.
-      mediaSource.endOfStream("network");
-      return;
-    }
-
-    // NOTE: If mediaSource.readyState == “ended”, this appendBuffer() call will
-    // cause mediaSource.readyState to transition to "open". The web application
-    // should be prepared to handle multiple “sourceopen” events.
-    mediaSource.sourceBuffers[0].appendBuffer(mediaSegment);
+  if (!mediaSegment) {
+    mediaSource.endOfStream("network");
+    return;
   }
 
-  function onSeeking(mediaSource, e) {
-    var video = e.target;
+  mediaSource.sourceBuffers[0].appendBuffer(mediaSegment);
+}
 
-    if (mediaSource.readyState == "open") {
-      // Abort current segment append.
-      mediaSource.sourceBuffers[0].abort();
-    }
-
-    // Notify the media segment loading code to start fetching data at the
-    // new playback position.
-    SeekToMediaSegmentAt(video.currentTime);
-
-    // Append a media segment from the new playback position.
-    appendNextMediaSegment(mediaSource);
+function onSeeking(mediaSource, video) {
+  if (mediaSource.readyState === "open") {
+    mediaSource.sourceBuffers[0].abort();
   }
 
-  function onProgress(mediaSource, e) {
-    appendNextMediaSegment(mediaSource);
-  }
+  seekToMediaSegmentAt(video.currentTime);
+  appendNextMediaSegment(mediaSource);
+}
+
+function onProgress(mediaSource, e) {
+  appendNextMediaSegment(mediaSource);
+}
+
+// Example of async function for getting initialization segment
+async function getInitializationSegment() {
+  // Implement fetching of the initialization segment
+  // This is just a placeholder function
+}
+
+// Example function for checking if there are more media segments
+function haveMoreMediaSegments() {
+  // Implement logic to determine if there are more media segments
+  // This is just a placeholder function
+}
+
+// Example function for getting the next media segment
+function getNextMediaSegment() {
+  // Implement fetching of the next media segment
+  // This is just a placeholder function
+}
+
+// Example function for seeking to a specific media segment
+function seekToMediaSegmentAt(currentTime) {
+  // Implement seeking logic
+  // This is just a placeholder function
+}
 &lt;/script&gt;
-
-&lt;video id="v" autoplay&gt; &lt;/video&gt;
-
-&lt;script&gt;
-  var video = document.getElementById('v');
-  var mediaSource = new MediaSource();
-  mediaSource.addEventListener('sourceopen', onSourceOpen.bind(this, video));
-  video.src = window.URL.createObjectURL(mediaSource);
-&lt;/script&gt;
-          </pre>
-        </div>
-      </div>
+      </pre>
     </section>
 
 
