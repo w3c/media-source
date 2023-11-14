@@ -9,7 +9,6 @@
       var respecConfig = {
       // specification status (e.g., WD, LCWD, NOTE, etc.). If in doubt use ED.
       specStatus: "ED",
-      useExperimentalStyles: true,
 
       // the specification's short name, as in https://www.w3.org/TR/short-name/
       shortName: "media-source-2",
@@ -36,9 +35,9 @@
       { name: "Mark Watson", url: "",
       company: "Netflix Inc.", companyURL: "https://www.netflix.com/",
       w3cid: "46379" },
-      { name: "Matthew Wolenetz",  mailto:"wolenetz@google.com", url: "",
-      company: "Google Inc.", companyURL: "https://www.google.com/",
-      w3cid: "76912" },
+      { name: "Matthew Wolenetz",  mailto:"matt.wolenetz@gmail.com",
+      company: "W3C Invited Expert",
+      w3cid: "148095" },
       ],
 
       formerEditors: [
@@ -51,59 +50,17 @@
       ],
 
       mseDefGroupName: "media-source",
-      mseContributors: [
-        "Bob Lund",
-        "Alex Giladi",
-        "Duncan Rowden",
-        "Mark Vickers",
-        "Glenn Adams",
-        "Frank Galligan",
-        "Steven Robertson",
-        "Matt Ward",
-        "David Dorwin",
-        "Kevin Streeter",
-        "Joe Steele",
-        "Michael Thornburgh",
-        "Philip Jägenstedt",
-        "John Simmons",
-        "Pierre Lemieux",
-        "Cyril Concolato",
-        "Ralph Giles",
-        "David Singer",
-        "Tatsuya Igarashi",
-        "Chris Poole",
-        "Jer Noble",
-        "Matthew Gregan"
-      ],
 
       // name of the WG
       group: "media",
 
-      scheme: "https",
-
       github: "w3c/media-source",
 
-      otherLinks: [{
-      key: 'Mailing list',
-      data: [{
-        value: 'public-media-wg@w3.org',
-        href: 'https://lists.w3.org/Archives/Public/public-media-wg/'
-      }]
-    },{
-      key: 'Implementation',
-      data: [{
-        value: 'Can I use Media Source Extensions?',
-        href: 'https://caniuse.com/mediasource'
-      }, {
-        value: 'Test Suite',
-        href: 'https://w3c-test.org/media-source/'
-      }, {
-        value: 'Test Suite repository',
-        href: 'https://github.com/web-platform-tests/wpt/tree/master/media-source'
-      }]
-    }],
+      caniuse: "mediasource",
 
-      xref: ['fileapi'],
+      testsuiteURI: "https://wpt.live/media-source/",
+
+      wgPublicList: "public-media-wg",
 
       preProcess: [ mediaSourcePreProcessor ],
 
@@ -121,7 +78,7 @@
 
     <link rel="stylesheet" href="mse.css">
   </head>
-  <body data-cite="html dom url">
+  <body data-cite="html dom url fileapi">
     <section id="abstract">
       This specification extends {{HTMLMediaElement}} [[HTML]] to allow
       JavaScript to generate media streams for playback.
@@ -283,7 +240,7 @@
         that stores a <a def-id="normalized-timeranges-object"></a>. It is initialized to an empty {{TimeRanges}} object
         when the {{MediaSource}} object is created, is maintained by {{MediaSource/setLiveSeekableRange()}} and
         {{MediaSource/clearLiveSeekableRange()}}, and is used in
-        <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify
+        [[[#htmlmediaelement-extensions]]] to modify
         {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
 
       <p>Each {{MediaSource}} object has a <dfn data-dfn-for="MediaSource">[[\has ever been attached]]</dfn> internal
@@ -293,34 +250,47 @@
         fail attachment of a {{MediaSource}} using a {{MediaSourceHandle}} set on a {{HTMLMediaElement}}'s
         {{HTMLMediaElement/srcObject}} attribute.</p>
 
-      <div><pre class="idl">enum ReadyState {
-    "closed",
-    "open",
-    "ended"
-};</pre><table class="simple" data-dfn-for="ReadyState"><caption>Description of {{ReadyState}} enumeration values</caption><tbody><tr><th>Value</th><th>Description</th></tr>
-        <tr><td><dfn><code id="idl-def-ReadyState.closed">closed</code></dfn></td><td>
-          Indicates the source is not currently attached to a media element.
-        </td></tr>
-        <tr><td><dfn><code id="idl-def-ReadyState.open">open</code></dfn></td><td>
-          The source has been opened by a media element and is ready for data to be appended to the <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}.
-        </td></tr><tr><td><dfn><code id="idl-def-ReadyState.ended">ended</code></dfn></td><td>
-          The source is still attached to a media element, but {{MediaSource/endOfStream()}} has been called.
-        </td></tr></tbody></table></div>
+      <pre class="idl">
+        enum ReadyState {
+          "closed",
+          "open",
+          "ended",
+        };
+      </pre>
+      <dl data-dfn-for="ReadyState">
+        <dt><dfn>closed</dfn></dt>
+        <dd>Indicates the source is not currently attached to a media element.</dd>
 
-      <div class="issue" data-number="276">
-          <p>Consider adding a "<code>closing</code>" {{MediaSource/ReadyState}} to indicate the source is in the process of being concurrently detached from a media element. This would be useful for some implementations of {{MediaSource}} and {{SourceBuffer}} in {{DedicatedWorkerGlobalScope}}.</p>
-      </div>
+        <dt><dfn>open</dfn></dt>
+        <dd>The source has been opened by a media element and is ready for data to be appended to the {{SourceBuffer}} objects in {{MediaSource}}'s {{MediaSource/sourceBuffers}}.</dd>
 
-      <div><pre class="idl">enum EndOfStreamError {
-    "network",
-    "decode"
-};</pre><table class="simple" data-dfn-for="EndOfStreamError"><caption>Description of {{EndOfStreamError}} enumeration values</caption><tbody><tr><th>Value</th><th>Description</th></tr><tr><td><dfn><code id="idl-def-EndOfStreamError.network">network</code></dfn></td><td>
+        <dt><dfn>ended</dfn></dt>
+        <dd>The source is still attached to a media element, but {{MediaSource}}'s {{MediaSource/endOfStream()}} has been called.</dd>
+      </dl>
+
+
+      <aside class="issue" data-number="276">
+        <p>Consider adding a "`closing`" {{MediaSource/ReadyState}} to indicate the source is in the process of being concurrently detached from a media element. This would be useful for some implementations of {{MediaSource}} and {{SourceBuffer}} in {{DedicatedWorkerGlobalScope}}.</p>
+      </aside>
+
+      <pre class="idl">
+        enum EndOfStreamError {
+          "network",
+          "decode",
+        };
+      </pre>
+      <dl data-dfn-for="EndOfStreamError">
+        <dt><dfn>network</dfn></dt>
+        <dd>
           <p>Terminates playback and signals that a network error has occurred.</p>
           <p class="note">JavaScript applications SHOULD use this status code to terminate playback with a network error. For example, if a network error occurs while fetching media data.</p>
-        </td></tr><tr><td><dfn><code id="idl-def-EndOfStreamError.decode">decode</code></dfn></td><td>
+        </dd>
+        <dt><dfn>decode</dfn></dt>
+        <dd>
           <p>Terminates playback and signals that a decoding error has occurred.</p>
           <p class="note">JavaScript applications SHOULD use this status code to terminate playback with a decode error. For example, if a parsing error occurs while processing out-of-band media data.</p>
-        </td></tr></tbody></table></div>
+        </dd>
+      </dl>
 
 <pre class="idl">[Exposed=(Window,DedicatedWorker)]
 interface MediaSource : EventTarget {
@@ -383,7 +353,7 @@ interface MediaSource : EventTarget {
             sourceBuffers[3] are in {{MediaSource/activeSourceBuffers}}, then activeSourceBuffers[0] MUST
             equal sourceBuffers[0] and activeSourceBuffers[1] MUST equal sourceBuffers[3].
           </p>
-          <p class="note">The <a href="#active-source-buffer-changes">Changes to selected/enabled track state</a> section describes how this attribute gets
+          <p class="note">Section [[[#active-source-buffer-changes]]] describes how this attribute gets
             updated.</p>
 
          <h3><dfn>readyState</dfn> attribute</h3>
@@ -626,7 +596,7 @@ interface MediaSource : EventTarget {
           <h3><dfn>setLiveSeekableRange()</dfn> method</h3>
 
           <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
-            <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify
+            section [[[#htmlmediaelement-extensions]]] to modify
             {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
           <ol class="algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not {{ReadyState/""open""}} then throw an {{InvalidStateError}} exception and abort these steps.</li>
@@ -667,7 +637,7 @@ interface MediaSource : EventTarget {
 
         <h3><dfn>clearLiveSeekableRange()</dfn> method</h3>
         <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
-          <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify
+          section [[[#htmlmediaelement-extensions]]] to modify
           {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
 
           <ol class="method-algorithm">
@@ -699,7 +669,7 @@ interface MediaSource : EventTarget {
 
       <section id="mediasource-events">
         <h3>Event Summary</h3>
-        <table class="old-table">
+        <table class="data">
           <thead>
             <tr>
               <th>Event name</th>
@@ -707,23 +677,21 @@ interface MediaSource : EventTarget {
               <th>Dispatched when...</th>
             </tr>
           </thead>
-          <tbody>
             <tr>
-              <td><dfn><code>sourceopen</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>{{MediaSource/readyState}} transitions from {{ReadyState/""closed""}} to {{ReadyState/""open""}} or from {{ReadyState/""ended""}} to {{ReadyState/""open""}}.</td>
+              <td><dfn class="event">sourceopen</dfn></td>
+              <td>{{Event}}</td>
+              <td>{{MediaSource}}'s {{MediaSource/readyState}} transitions from {{ReadyState/"closed"}} to {{ReadyState/"open"}} or from {{ReadyState/"ended"}} to {{ReadyState/"open"}}.</td>
             </tr>
             <tr>
-              <td><dfn><code>sourceended</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>{{MediaSource/readyState}} transitions from {{ReadyState/""open""}} to {{ReadyState/""ended""}}.</td>
+              <td><dfn class="event">sourceended</dfn></td>
+              <td>{{Event}}</td>
+              <td>{{MediaSource}}'s {{MediaSource/readyState}} transitions from {{ReadyState/"open"}} to {{ReadyState/"ended"}}.</td>
             </tr>
             <tr>
-              <td><dfn><code>sourceclose</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>{{MediaSource/readyState}} transitions from {{ReadyState/""open""}} to {{ReadyState/""closed""}} or {{ReadyState/""ended""}} to {{ReadyState/""closed""}}.</td>
+              <td><dfn class="event">sourceclose</dfn></td>
+              <td>{{Event}}</td>
+              <td>{{MediaSource}}'s {{MediaSource/readyState}} transitions from {{ReadyState/"open"}} to {{ReadyState/"closed"}} or {{ReadyState/"ended"}} to {{ReadyState/"closed"}}.</td>
             </tr>
-          </tbody>
         </table>
       </section>
 
@@ -1250,8 +1218,8 @@ interface MediaSource : EventTarget {
         srcobject]]</dfn> internal slot that stores a {{boolean}}. It is initialized to false when the
         {{MediaSourceHandle}} object is created, is set true in the extended {{HTMLMediaElement}}'s
         {{HTMLMediaElement/srcObject}} setter as described in
-        <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a>, and if true, prevents successful
-        transfer of the {{MediaSourceHandle}} as described in the [=Transfer=] section.</p>
+        section [[[#htmlmediaelement-extensions]]], and if true, prevents successful
+        transfer of the {{MediaSourceHandle}} as described in section [[[#transfer]]].</p>
 
       <p>{{MediaSourceHandle}} objects are {{Transferable}}, each having a <dfn
         data-dfn-for="MediaSourceHandle">[[\Detached]]</dfn> internal slot that is used to ensure that once the handle
@@ -1261,7 +1229,8 @@ interface MediaSource : EventTarget {
 [Transferable, Exposed=(Window,DedicatedWorker)]
 interface MediaSourceHandle {};</pre>
 
-      <section><h2><dfn>Transfer</dfn></h2>
+      <section id="transfer">
+        <h2>Transfer</h2>
         <p>The {{MediaSourceHandle}} [=transfer steps=] and [=transfer-receiving steps=] require the implementation to
           maintain an implicit internal slot referencing the underlying {{MediaSource}} to enable [=attaching to a media
           element=] using {{HTMLMediaElement/srcObject}} and consequent setup of an attachment's [=cross-context
@@ -1311,19 +1280,25 @@ interface MediaSourceHandle {};</pre>
     <section id="sourcebuffer">
       <h2><dfn>SourceBuffer</dfn> interface</h2>
 
-
-<pre class="idl">enum AppendMode {
-    "segments",
-    "sequence"
-};</pre><table class="simple" data-dfn-for="AppendMode"><caption>Description of {{AppendMode}} enumeration values</caption><tbody><tr><th>Value</th><th>Description</th></tr><tr><td><dfn><code id="idl-def-AppendMode.segments">segments</code></dfn></td><td>
-          <p>The timestamps in the media segment determine where the [=coded frames=] are placed in the presentation. Media segments can be appended in any order.</p>
-        </td></tr><tr><td><dfn><code id="idl-def-AppendMode.sequence">sequence</code></dfn></td><td>
-          <p>Media segments will be treated as adjacent in time independent of the timestamps in the media segment. Coded frames in a new media segment will be placed immediately after the coded
-            frames in the previous media segment. The {{SourceBuffer/timestampOffset}} attribute will be updated if a new offset is needed to make the new media segments adjacent to the previous media segment.
-            Setting the {{SourceBuffer/timestampOffset}} attribute in {{AppendMode/""sequence""}} mode allows a media segment to be placed at a specific position in the timeline without any knowledge
-            of the timestamps in the media segment.
-          </p>
-        </td></tr></tbody></table>
+      <pre class="idl">
+        enum AppendMode {
+          "segments",
+          "sequence",
+        };
+      </pre>
+      <dl data-dfn-for="AppendMode">
+        <dt><dfn>segments</dfn></dt>
+        <dd>
+          The timestamps in the media segment determine where the [=coded frames=] are placed in the presentation. Media segments can be appended in any order.
+        </dd>
+        <dt><dfn>sequence</dfn></dt>
+        <dd>
+          Media segments will be treated as adjacent in time independent of the timestamps in the media segment. Coded frames in a new media segment will be placed immediately after the coded
+          frames in the previous media segment. The {{SourceBuffer/timestampOffset}} attribute will be updated if a new offset is needed to make the new media segments adjacent to the previous media segment.
+          Setting the {{SourceBuffer/timestampOffset}} attribute in {{AppendMode/""sequence""}} mode allows a media segment to be placed at a specific position in the timeline without any knowledge
+          of the timestamps in the media segment.
+        </dd>
+      </dl>
 
 <pre class="idl">[Exposed=(Window,DedicatedWorker)]
 interface SourceBuffer : EventTarget {
@@ -1629,7 +1604,7 @@ interface SourceBuffer : EventTarget {
 
       <section id="sourcebuffer-events">
         <h3>Event Summary</h3>
-        <table class="old-table">
+        <table class="data">
           <thead>
             <tr>
               <th>Event name</th>
@@ -1637,33 +1612,31 @@ interface SourceBuffer : EventTarget {
               <th>Dispatched when...</th>
             </tr>
           </thead>
-          <tbody>
             <tr>
-              <td><dfn><code>updatestart</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>{{SourceBuffer/updating}} transitions from false to true.</td>
+              <td><dfn class="event">updatestart</dfn></td>
+              <td>{{Event}}</td>
+              <td>{{SourceBuffer}}'s {{SourceBuffer/updating}} transitions from false to true.</td>
             </tr>
             <tr>
-              <td><dfn><code>update</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>The append or remove has successfully completed. {{SourceBuffer/updating}} transitions from true to false.</td>
+              <td><dfn class="event">update</dfn></td>
+              <td>{{Event}}</td>
+              <td>A {{SourceBuffer}}'s append or remove successfully completed. {{SourceBuffer}}'s {{SourceBuffer/updating}} transitions from true to false.</td>
             </tr>
             <tr>
-              <td><dfn><code>updateend</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>The append or remove has ended.</td>
+              <td><dfn class="event">updateend</dfn></td>
+              <td>{{Event}}</td>
+              <td>The append or remove of a {{SourceBuffer}} ended.</td>
             </tr>
             <tr>
-              <td><dfn><code>error</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>An error occurred during the append. {{SourceBuffer/updating}} transitions from true to false.</td>
+              <td><dfn class="event">error</dfn></td>
+              <td>{{Event}}</td>
+              <td>An error occurred during the append to a {{SourceBuffer}}. {{SourceBuffer/updating}} transitions from true to false.</td>
             </tr>
             <tr>
-              <td><dfn><code>abort</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>The append was aborted by an {{SourceBuffer/abort()}} call. {{SourceBuffer/updating}} transitions from true to false.</td>
+              <td><dfn class="event">abort</dfn></td>
+              <td>{{Event}}</td>
+              <td>The {{SourceBuffer}}'s append was aborted by an {{SourceBuffer/abort()}} call. {{SourceBuffer/updating}} transitions from true to false.</td>
             </tr>
-          </tbody>
         </table>
       </section>
 
@@ -1675,7 +1648,7 @@ interface SourceBuffer : EventTarget {
           <p>Each {{SourceBuffer}} object has an <dfn data-dfn-for="SourceBuffer">[[\append state]]</dfn> internal slot
           that keeps track of the high-level segment parsing state. It is initially set to [=WAITING_FOR_SEGMENT=] and
           can transition to the following states as data is appended.</p>
-          <table class="old-table">
+          <table class="data">
             <thead>
               <tr>
                 <th>Append state name</th>
@@ -2480,7 +2453,7 @@ interface SourceBuffer : EventTarget {
                     {{HTMLMediaElement/HAVE_METADATA}}, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_METADATA}} and stall playback.</p>
                   <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
                   <p class="note">This transition occurs because media data for the current position has been removed. Playback cannot progress until media for the
-                    <a def-id="current-playback-position"></a> is appended or the <a href="#active-source-buffer-changes">selected/enabled tracks change</a>.</p>
+                    <a def-id="current-playback-position"></a> is appended or the [[[#active-source-buffer-changes]]].</p>
                 </li>
               </ol>
             </li>
@@ -2702,7 +2675,7 @@ interface SourceBufferList : EventTarget {
 
       <section id="sourcebufferlist-events">
         <h3>Event Summary</h3>
-        <table class="old-table">
+        <table class="data">
           <thead>
             <tr>
               <th>Event name</th>
@@ -2710,18 +2683,16 @@ interface SourceBufferList : EventTarget {
               <th>Dispatched when...</th>
             </tr>
           </thead>
-          <tbody>
             <tr>
-              <td><dfn><code>addsourcebuffer</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>When a <a>SourceBuffer</a> is added to the list.</td>
+              <td><dfn class="event">addsourcebuffer</dfn></td>
+              <td>{{Event}}</td>
+              <td>When a {{SourceBuffer}} is added to the list.</td>
             </tr>
             <tr>
-              <td><dfn><code>removesourcebuffer</code></dfn></td>
-              <td><code>Event</code></td>
-              <td>When a <a>SourceBuffer</a> is removed from the list.</td>
+              <td><dfn class="event">removesourcebuffer</dfn></td>
+              <td>{{Event}}</td>
+              <td>When a {{SourceBuffer}} is removed from the list.</td>
             </tr>
-          </tbody>
         </table>
       </section>
     </section>
@@ -3172,7 +3143,40 @@ partial interface TextTrack {
 
     <section id="acknowledgements">
       <h2>Acknowledgments</h2>
-      The editors would like to thank <a def-id="contributors"></a> for their contributions to this specification.
+      <p>The editors would like to thank
+      Alex Giladi,
+      Bob Lund,
+      Chris Needham,
+      Chris Poole,
+      Chris Wilson,
+      Cyril Concolato,
+      Dale Curtis,
+      David Dorwin,
+      David Singer,
+      Duncan Rowden,
+      François Daoust,
+      Frank Galligan,
+      Glenn Adams,
+      Jer Noble,
+      Joe Steele,
+      John Simmons,
+      Kagami Sascha Rosylight,
+      Kevin Streeter,
+      Marcos Cáceres,
+      Mark Vickers,
+      Matt Ward,
+      Matthew Gregan,
+      Michael(tm) Smith,
+      Michael Thornburgh,
+      Mounir Lamouri,
+      Paul Adenot,
+      Philip Jägenstedt,
+      Philippe Le Hegaret,
+      Pierre Lemieux,
+      Ralph Giles,
+      Steven Robertson,
+      and Tatsuya Igarashi for their contributions to this specification.
+    </p>
     </section>
 
     <section id="VideoPlaybackQuality" class="appendix informative">
