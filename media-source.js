@@ -171,7 +171,6 @@
     'media-data-processing-steps-list': { func: videoref_helper, fragment: 'media-data-processing-steps-list', link_text: 'media data processing steps list', },
     'delaying-the-load-event-flag': {func: videoref_helper, fragment: 'delaying-the-load-event-flag', link_text: 'delaying-the-load-event-flag', },
     'intrinsic-width-and-height': { func: videoref_helper, fragment: 'concept-video-intrinsic-width', link_text: 'intrinsic width and height',  },
-    'normalized-timeranges-object': { func: videoref_helper, fragment: 'normalised-timeranges-object', link_text: 'normalized TimeRanges object',  },
     'current-playback-position': { func: videoref_helper, fragment: 'current-playback-position', link_text: 'current playback position',  },
     'media-data-is-corrupted': { func: videoref_helper, fragment: 'fatal-decode-error', link_text: 'media data is corrupted',  },
     'video-track': { func: code_videoref_helper, fragment: 'videotrack-videotrack', link_text: 'VideoTrack',  },
