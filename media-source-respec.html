@@ -3077,6 +3077,8 @@ async function onSourceOpen(e) {
     // Append the initialization segment.
     sourceBuffer.addEventListener("updateend", function firstAppendHandler() {
       sourceBuffer.removeEventListener("updateend", firstAppendHandler);
+
+      // Append some initial media data.
       appendNextMediaSegment(mediaSource);
     });
 
@@ -3095,6 +3097,7 @@ function appendNextMediaSegment(mediaSource) {
   )
     return;
 
+  // If we have run out of stream data, then signal end of stream.
   if (!haveMoreMediaSegments()) {
     mediaSource.endOfStream();
     return;
@@ -3107,15 +3110,23 @@ function appendNextMediaSegment(mediaSource) {
     return;
   }
 
+  // NOTE: If mediaSource.readyState == "ended", this appendBuffer() call will
+  // cause mediaSource.readyState to transition to "open". The web application
+  // should be prepared to handle multiple "sourceopen" events.
   mediaSource.sourceBuffers[0].appendBuffer(mediaSegment);
 }
 
 function onSeeking(mediaSource, video) {
   if (mediaSource.readyState === "open") {
+    // Abort current segment append.
     mediaSource.sourceBuffers[0].abort();
   }
 
+  // Notify the media segment loading code to start fetching data at the
+  // new playback position.
   seekToMediaSegmentAt(video.currentTime);
+
+  // Append a media segment from the new playback position.
   appendNextMediaSegment(mediaSource);
 }
 
