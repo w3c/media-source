@@ -1,7 +1,16 @@
 <!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="generator" content="ReSpec 34.2.1">
+<meta name="generator" content="ReSpec 34.2.2">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<style>
+span.example-title{text-transform:none}
+:is(aside,div).example,div.illegal-example{padding:.5em;margin:1em 0;position:relative;clear:both}
+div.illegal-example{color:red}
+div.illegal-example p{color:#000}
+:is(aside,div).example{border-left-width:.5em;border-left-style:solid;border-color:#e0cb52;background:#fcfaee}
+aside.example div.example{border-left-width:.1em;border-color:#999;background:#fff}
+.example pre{background-color:rgba(0,0,0,.03)}
+</style>
 <style>
 .issue-label{text-transform:initial}
 .warning>p:first-child{margin-top:0}
@@ -134,7 +143,7 @@ dd{margin-left:0}
     
 <link rel="stylesheet" href="mse.css">
   
-<meta name="revision" content="6da1beffc8f5343c27e0daaa7a077d7b356bc34d">
+<meta name="revision" content="6f69e59f2e4e5e3f1c7a7cf1eed9409c5c7dc40c">
 <style>
 .hljs{display:block;overflow-x:auto;padding:.5em;color:#383a42;background:#fafafa}
 .hljs-comment,.hljs-quote{color:#717277;font-style:italic}
@@ -220,16 +229,16 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
   "postProcess": [
     null
   ],
-  "gitRevision": "6da1beffc8f5343c27e0daaa7a077d7b356bc34d",
-  "publishISODate": "2023-11-14T00:00:00.000Z",
-  "generatedSubtitle": "W3C Editor's Draft 14 November 2023"
+  "gitRevision": "6f69e59f2e4e5e3f1c7a7cf1eed9409c5c7dc40c",
+  "publishISODate": "2023-12-04T00:00:00.000Z",
+  "generatedSubtitle": "W3C Editor's Draft 04 December 2023"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED"></head>
   <body data-cite="WEBIDL html dom url fileapi" class="h-entry"><div class="head">
     <p class="logos"><a class="logo" href="https://www.w3.org/"><img crossorigin="" alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72">
   </a></p>
     <h1 id="title" class="title">Media Source Extensions™</h1> 
-    <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">W3C Editor's Draft</a> <time class="dt-published" datetime="2023-11-14">14 November 2023</time></p>
+    <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">W3C Editor's Draft</a> <time class="dt-published" datetime="2023-12-04">04 December 2023</time></p>
     <details open="">
       <summary>More details about this document</summary>
       <dl>
@@ -336,9 +345,9 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
           <a href="https://www.w3.org/Consortium/Patent-Policy/#sec-Disclosure">section 6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
         
   </p><p>
-                  This document is governed by the
-                  <a id="w3c_process_revision" href="https://www.w3.org/2023/Process-20231103/">03 November 2023 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
-                </p></section><nav id="toc"><h2 class="introductory" id="table-of-contents">Table of Contents</h2><ol class="toc"><li class="tocline"><a class="tocxref" href="#abstract">Abstract</a></li><li class="tocline"><a class="tocxref" href="#sotd">Status of This Document</a></li><li class="tocline"><a class="tocxref" href="#introduction"><bdi class="secno">1. </bdi>Introduction</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#goals"><bdi class="secno">1.1 </bdi>Goals</a></li><li class="tocline"><a class="tocxref" href="#definitions"><bdi class="secno">1.2 </bdi>Definitions</a></li></ol></li><li class="tocline"><a class="tocxref" href="#mediasource"><bdi class="secno">2. </bdi><span data-export="" data-dfn-type="interface" data-idl="interface" data-title="MediaSource" data-dfn-for=""><code>MediaSource</code></span> Object</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#attributes"><bdi class="secno">2.1 </bdi>Attributes</a></li><li class="tocline"><a class="tocxref" href="#methods"><bdi class="secno">2.2 </bdi>Methods</a></li><li class="tocline"><a class="tocxref" href="#mediasource-events"><bdi class="secno">2.3 </bdi>Event Summary</a></li><li class="tocline"><a class="tocxref" href="#mediasource-in-worker-communication-model"><bdi class="secno">2.4 </bdi><span>Cross-context communication model</span></a></li><li class="tocline"><a class="tocxref" href="#mediasource-algorithms"><bdi class="secno">2.5 </bdi>Algorithms</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#mediasource-attach"><bdi class="secno">2.5.1 </bdi><span>Attaching to a media element</span></a></li><li class="tocline"><a class="tocxref" href="#mediasource-detach"><bdi class="secno">2.5.2 </bdi><span>Detaching from a media element</span></a></li><li class="tocline"><a class="tocxref" href="#mediasource-seeking"><bdi class="secno">2.5.3 </bdi><span>Seeking</span></a></li><li class="tocline"><a class="tocxref" href="#buffer-monitoring"><bdi class="secno">2.5.4 </bdi><span>SourceBuffer Monitoring</span></a></li><li class="tocline"><a class="tocxref" href="#active-source-buffer-changes"><bdi class="secno">2.5.5 </bdi><span>Changes to selected/enabled track state</span></a></li><li class="tocline"><a class="tocxref" href="#duration-change-algorithm"><bdi class="secno">2.5.6 </bdi><span>Duration change</span></a></li><li class="tocline"><a class="tocxref" href="#end-of-stream-algorithm"><bdi class="secno">2.5.7 </bdi><span>End of stream</span></a></li><li class="tocline"><a class="tocxref" href="#mirror-if-necessary-algorithm"><bdi class="secno">2.5.8 </bdi><span>Mirror if necessary</span></a></li></ol></li></ol></li><li class="tocline"><a class="tocxref" href="#mediasourcehandle"><bdi class="secno">3. </bdi><span data-export="" data-dfn-type="interface" data-idl="interface" data-title="MediaSourceHandle" data-dfn-for=""><code>MediaSourceHandle</code></span> Object</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#transfer"><bdi class="secno">3.1 </bdi>Transfer</a></li></ol></li><li class="tocline"><a class="tocxref" href="#sourcebuffer"><bdi class="secno">4. </bdi><span data-export="" data-dfn-type="interface" data-idl="interface" data-title="SourceBuffer" data-dfn-for=""><code>SourceBuffer</code></span> Object</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#attributes-0"><bdi class="secno">4.1 </bdi>Attributes</a></li><li class="tocline"><a class="tocxref" href="#methods-0"><bdi class="secno">4.2 </bdi>Methods</a></li><li class="tocline"><a class="tocxref" href="#track-buffers"><bdi class="secno">4.3 </bdi>Track Buffers</a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-events"><bdi class="secno">4.4 </bdi>Event Summary</a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-algorithms"><bdi class="secno">4.5 </bdi>Algorithms</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#sourcebuffer-segment-parser-loop"><bdi class="secno">4.5.1 </bdi><span>Segment Parser Loop</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-reset-parser-state"><bdi class="secno">4.5.2 </bdi><span>Reset Parser State</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-append-error"><bdi class="secno">4.5.3 </bdi><span data-export="">Append Error</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-prepare-append"><bdi class="secno">4.5.4 </bdi><span>Prepare Append</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-buffer-append"><bdi class="secno">4.5.5 </bdi><span>Buffer Append</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-range-removal"><bdi class="secno">4.5.6 </bdi><span>Range Removal</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-init-segment-received"><bdi class="secno">4.5.7 </bdi><span>Initialization Segment Received</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-coded-frame-processing"><bdi class="secno">4.5.8 </bdi><span data-export="">Coded Frame Processing</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-coded-frame-removal"><bdi class="secno">4.5.9 </bdi><span>Coded Frame Removal</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-coded-frame-eviction"><bdi class="secno">4.5.10 </bdi><span>Coded Frame Eviction</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-audio-splice-frame-algorithm"><bdi class="secno">4.5.11 </bdi><span>Audio Splice Frame</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-audio-splice-rendering-algorithm"><bdi class="secno">4.5.12 </bdi><span>Audio Splice Rendering</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-text-splice-frame-algorithm"><bdi class="secno">4.5.13 </bdi><span>Text Splice Frame</span></a></li></ol></li></ol></li><li class="tocline"><a class="tocxref" href="#sourcebufferlist"><bdi class="secno">5. </bdi><span data-export="" data-dfn-type="interface" data-idl="interface" data-title="SourceBufferList" data-dfn-for=""><code>SourceBufferList</code></span> Object</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#attributes-1"><bdi class="secno">5.1 </bdi>Attributes</a></li><li class="tocline"><a class="tocxref" href="#methods-1"><bdi class="secno">5.2 </bdi>Methods</a></li><li class="tocline"><a class="tocxref" href="#sourcebufferlist-events"><bdi class="secno">5.3 </bdi>Event Summary</a></li></ol></li><li class="tocline"><a class="tocxref" href="#htmlmediaelement-extensions"><bdi class="secno">6. </bdi>HTMLMediaElement Extensions</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#htmlmediaelement-extensions-seekable"><bdi class="secno">6.1 </bdi><span data-xref-type="_IDL_" data-link-type="idl" data-lt="HTMLMediaElement" data-cite="html" data-cite-path="/media.html" data-cite-frag="htmlmediaelement" data-type="interface" class="formerLink"><code>HTMLMediaElement</code></span>.<span data-link-type="idl" data-xref-type="attribute|dict-member|const" data-link-for="HTMLMediaElement" data-xref-for="HTMLMediaElement" data-cite="html" data-cite-path="/media.html" data-cite-frag="dom-media-seekable" data-type="attribute" class="formerLink"><code>seekable</code></span></a></li><li class="tocline"><a class="tocxref" href="#htmlmediaelement-extensions-buffered"><bdi class="secno">6.2 </bdi><span data-xref-type="_IDL_" data-link-type="idl" data-lt="HTMLMediaElement" data-cite="html" data-cite-path="/media.html" data-cite-frag="htmlmediaelement" data-type="interface" class="formerLink"><code>HTMLMediaElement</code></span>.<span data-link-type="idl" data-xref-type="attribute|dict-member|const" data-link-for="HTMLMediaElement" data-xref-for="HTMLMediaElement" data-cite="html" data-cite-path="/media.html" data-cite-frag="dom-media-buffered" data-type="attribute" class="formerLink"><code>buffered</code></span></a></li><li class="tocline"><a class="tocxref" href="#htmlmediaelement-extensions-srcobject"><bdi class="secno">6.3 </bdi><span data-xref-type="_IDL_" data-link-type="idl" data-lt="HTMLMediaElement" data-cite="html" data-cite-path="/media.html" data-cite-frag="htmlmediaelement" data-type="interface" class="formerLink"><code>HTMLMediaElement</code></span>.<span data-link-type="idl" data-xref-type="attribute|dict-member|const" data-link-for="HTMLMediaElement" data-xref-for="HTMLMediaElement" data-cite="html" data-cite-path="/media.html" data-cite-frag="dom-media-srcobject" data-type="attribute" class="formerLink"><code>srcObject</code></span></a></li></ol></li><li class="tocline"><a class="tocxref" href="#audio-track-extensions"><bdi class="secno">7. </bdi>AudioTrack Extensions</a></li><li class="tocline"><a class="tocxref" href="#video-track-extensions"><bdi class="secno">8. </bdi>VideoTrack Extensions</a></li><li class="tocline"><a class="tocxref" href="#text-track-extensions"><bdi class="secno">9. </bdi>TextTrack Extensions</a></li><li class="tocline"><a class="tocxref" href="#byte-stream-formats"><bdi class="secno">10. </bdi><span data-export="">Byte Stream Formats</span></a></li><li class="tocline"><a class="tocxref" href="#conformance"><bdi class="secno">11. </bdi>Conformance</a></li><li class="tocline"><a class="tocxref" href="#examples"><bdi class="secno">12. </bdi>Examples</a></li><li class="tocline"><a class="tocxref" href="#acknowledgements"><bdi class="secno">13. </bdi>Acknowledgments</a></li><li class="tocline"><a class="tocxref" href="#VideoPlaybackQuality"><bdi class="secno">A. </bdi>VideoPlaybackQuality</a></li><li class="tocline"><a class="tocxref" href="#issue-summary"><bdi class="secno">B. </bdi>Issue summary</a></li><li class="tocline"><a class="tocxref" href="#references"><bdi class="secno">C. </bdi>References</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#normative-references"><bdi class="secno">C.1 </bdi>Normative references</a></li><li class="tocline"><a class="tocxref" href="#informative-references"><bdi class="secno">C.2 </bdi>Informative references</a></li></ol></li></ol></nav>
+                      This document is governed by the
+                      <a id="w3c_process_revision" href="https://www.w3.org/2023/Process-20231103/">03 November 2023 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
+                    </p></section><nav id="toc"><h2 class="introductory" id="table-of-contents">Table of Contents</h2><ol class="toc"><li class="tocline"><a class="tocxref" href="#abstract">Abstract</a></li><li class="tocline"><a class="tocxref" href="#sotd">Status of This Document</a></li><li class="tocline"><a class="tocxref" href="#introduction"><bdi class="secno">1. </bdi>Introduction</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#goals"><bdi class="secno">1.1 </bdi>Goals</a></li><li class="tocline"><a class="tocxref" href="#definitions"><bdi class="secno">1.2 </bdi>Definitions</a></li></ol></li><li class="tocline"><a class="tocxref" href="#mediasource"><bdi class="secno">2. </bdi><span data-export="" data-dfn-type="interface" data-idl="interface" data-title="MediaSource" data-dfn-for=""><code>MediaSource</code></span> Object</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#attributes"><bdi class="secno">2.1 </bdi>Attributes</a></li><li class="tocline"><a class="tocxref" href="#methods"><bdi class="secno">2.2 </bdi>Methods</a></li><li class="tocline"><a class="tocxref" href="#mediasource-events"><bdi class="secno">2.3 </bdi>Event Summary</a></li><li class="tocline"><a class="tocxref" href="#mediasource-in-worker-communication-model"><bdi class="secno">2.4 </bdi><span>Cross-context communication model</span></a></li><li class="tocline"><a class="tocxref" href="#mediasource-algorithms"><bdi class="secno">2.5 </bdi>Algorithms</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#mediasource-attach"><bdi class="secno">2.5.1 </bdi><span>Attaching to a media element</span></a></li><li class="tocline"><a class="tocxref" href="#mediasource-detach"><bdi class="secno">2.5.2 </bdi><span>Detaching from a media element</span></a></li><li class="tocline"><a class="tocxref" href="#mediasource-seeking"><bdi class="secno">2.5.3 </bdi><span>Seeking</span></a></li><li class="tocline"><a class="tocxref" href="#buffer-monitoring"><bdi class="secno">2.5.4 </bdi><span>SourceBuffer Monitoring</span></a></li><li class="tocline"><a class="tocxref" href="#active-source-buffer-changes"><bdi class="secno">2.5.5 </bdi><span>Changes to selected/enabled track state</span></a></li><li class="tocline"><a class="tocxref" href="#duration-change-algorithm"><bdi class="secno">2.5.6 </bdi><span>Duration change</span></a></li><li class="tocline"><a class="tocxref" href="#end-of-stream-algorithm"><bdi class="secno">2.5.7 </bdi><span>End of stream</span></a></li><li class="tocline"><a class="tocxref" href="#mirror-if-necessary-algorithm"><bdi class="secno">2.5.8 </bdi><span>Mirror if necessary</span></a></li></ol></li></ol></li><li class="tocline"><a class="tocxref" href="#mediasourcehandle"><bdi class="secno">3. </bdi><span data-export="" data-dfn-type="interface" data-idl="interface" data-title="MediaSourceHandle" data-dfn-for=""><code>MediaSourceHandle</code></span> Object</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#transfer"><bdi class="secno">3.1 </bdi>Transfer</a></li></ol></li><li class="tocline"><a class="tocxref" href="#sourcebuffer"><bdi class="secno">4. </bdi><span data-export="" data-dfn-type="interface" data-idl="interface" data-title="SourceBuffer" data-dfn-for=""><code>SourceBuffer</code></span> Object</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#attributes-0"><bdi class="secno">4.1 </bdi>Attributes</a></li><li class="tocline"><a class="tocxref" href="#methods-0"><bdi class="secno">4.2 </bdi>Methods</a></li><li class="tocline"><a class="tocxref" href="#track-buffers"><bdi class="secno">4.3 </bdi>Track Buffers</a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-events"><bdi class="secno">4.4 </bdi>Event Summary</a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-algorithms"><bdi class="secno">4.5 </bdi>Algorithms</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#sourcebuffer-segment-parser-loop"><bdi class="secno">4.5.1 </bdi><span>Segment Parser Loop</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-reset-parser-state"><bdi class="secno">4.5.2 </bdi><span>Reset Parser State</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-append-error"><bdi class="secno">4.5.3 </bdi><span data-export="">Append Error</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-prepare-append"><bdi class="secno">4.5.4 </bdi><span>Prepare Append</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-buffer-append"><bdi class="secno">4.5.5 </bdi><span>Buffer Append</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-range-removal"><bdi class="secno">4.5.6 </bdi><span>Range Removal</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-init-segment-received"><bdi class="secno">4.5.7 </bdi><span>Initialization Segment Received</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-coded-frame-processing"><bdi class="secno">4.5.8 </bdi><span data-export="">Coded Frame Processing</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-coded-frame-removal"><bdi class="secno">4.5.9 </bdi><span>Coded Frame Removal</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-coded-frame-eviction"><bdi class="secno">4.5.10 </bdi><span>Coded Frame Eviction</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-audio-splice-frame-algorithm"><bdi class="secno">4.5.11 </bdi><span>Audio Splice Frame</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-audio-splice-rendering-algorithm"><bdi class="secno">4.5.12 </bdi><span>Audio Splice Rendering</span></a></li><li class="tocline"><a class="tocxref" href="#sourcebuffer-text-splice-frame-algorithm"><bdi class="secno">4.5.13 </bdi><span>Text Splice Frame</span></a></li></ol></li></ol></li><li class="tocline"><a class="tocxref" href="#sourcebufferlist"><bdi class="secno">5. </bdi><span data-export="" data-dfn-type="interface" data-idl="interface" data-title="SourceBufferList" data-dfn-for=""><code>SourceBufferList</code></span> Object</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#attributes-1"><bdi class="secno">5.1 </bdi>Attributes</a></li><li class="tocline"><a class="tocxref" href="#methods-1"><bdi class="secno">5.2 </bdi>Methods</a></li><li class="tocline"><a class="tocxref" href="#sourcebufferlist-events"><bdi class="secno">5.3 </bdi>Event Summary</a></li></ol></li><li class="tocline"><a class="tocxref" href="#htmlmediaelement-extensions"><bdi class="secno">6. </bdi>HTMLMediaElement Extensions</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#htmlmediaelement-extensions-seekable"><bdi class="secno">6.1 </bdi><span data-xref-type="_IDL_" data-link-type="idl" data-lt="HTMLMediaElement" data-cite="html" data-cite-path="/media.html" data-cite-frag="htmlmediaelement" data-type="interface" class="formerLink"><code>HTMLMediaElement</code></span>.<span data-link-type="idl" data-xref-type="attribute|dict-member|const" data-link-for="HTMLMediaElement" data-xref-for="HTMLMediaElement" data-cite="html" data-cite-path="/media.html" data-cite-frag="dom-media-seekable" data-type="attribute" class="formerLink"><code>seekable</code></span></a></li><li class="tocline"><a class="tocxref" href="#htmlmediaelement-extensions-buffered"><bdi class="secno">6.2 </bdi><span data-xref-type="_IDL_" data-link-type="idl" data-lt="HTMLMediaElement" data-cite="html" data-cite-path="/media.html" data-cite-frag="htmlmediaelement" data-type="interface" class="formerLink"><code>HTMLMediaElement</code></span>.<span data-link-type="idl" data-xref-type="attribute|dict-member|const" data-link-for="HTMLMediaElement" data-xref-for="HTMLMediaElement" data-cite="html" data-cite-path="/media.html" data-cite-frag="dom-media-buffered" data-type="attribute" class="formerLink"><code>buffered</code></span></a></li><li class="tocline"><a class="tocxref" href="#htmlmediaelement-extensions-srcobject"><bdi class="secno">6.3 </bdi><span data-xref-type="_IDL_" data-link-type="idl" data-lt="HTMLMediaElement" data-cite="html" data-cite-path="/media.html" data-cite-frag="htmlmediaelement" data-type="interface" class="formerLink"><code>HTMLMediaElement</code></span>.<span data-link-type="idl" data-xref-type="attribute|dict-member|const" data-link-for="HTMLMediaElement" data-xref-for="HTMLMediaElement" data-cite="html" data-cite-path="/media.html" data-cite-frag="dom-media-srcobject" data-type="attribute" class="formerLink"><code>srcObject</code></span></a></li></ol></li><li class="tocline"><a class="tocxref" href="#audio-track-extensions"><bdi class="secno">7. </bdi>AudioTrack Extensions</a></li><li class="tocline"><a class="tocxref" href="#video-track-extensions"><bdi class="secno">8. </bdi>VideoTrack Extensions</a></li><li class="tocline"><a class="tocxref" href="#text-track-extensions"><bdi class="secno">9. </bdi>TextTrack Extensions</a></li><li class="tocline"><a class="tocxref" href="#byte-stream-formats"><bdi class="secno">10. </bdi><span data-export="">Byte Stream Formats</span></a></li><li class="tocline"><a class="tocxref" href="#conformance"><bdi class="secno">11. </bdi>Conformance</a></li><li class="tocline"><a class="tocxref" href="#examples"><bdi class="secno">12. </bdi>Examples</a></li><li class="tocline"><a class="tocxref" href="#acknowledgements"><bdi class="secno">13. </bdi>Acknowledgments</a></li><li class="tocline"><a class="tocxref" href="#VideoPlaybackQuality"><bdi class="secno">A. </bdi>VideoPlaybackQuality</a></li><li class="tocline"><a class="tocxref" href="#issue-summary"><bdi class="secno">B. </bdi>Issue summary</a></li><li class="tocline"><a class="tocxref" href="#references"><bdi class="secno">C. </bdi>References</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#normative-references"><bdi class="secno">C.1 </bdi>Normative references</a></li><li class="tocline"><a class="tocxref" href="#informative-references"><bdi class="secno">C.2 </bdi>Informative references</a></li></ol></li></ol></nav>
 
     <section id="introduction" class="informative"><div class="header-wrapper"><h2 id="x1-introduction"><bdi class="secno">1. </bdi>Introduction</h2><a class="self-link" href="#introduction" aria-label="Permalink for Section 1."></a></div><p><em>This section is non-normative.</em></p>
       
@@ -3246,99 +3255,126 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="T
 
     <section id="examples"><div class="header-wrapper"><h2 id="x12-examples"><bdi class="secno">12. </bdi>Examples</h2><a class="self-link" href="#examples" aria-label="Permalink for Section 12."></a></div>
       
-      <p>Example use of the Media Source Extensions</p>
-      <div class="block">
-        <div class="blockContent">
-          <pre class="code" aria-busy="false"><code class="hljs">&lt;script&gt;
-  function onSourceOpen(videoTag, e) {
-    var mediaSource = e.target;
+      <p>Example use of the Media Source Extensions.</p>
+      <div class="example" id="example-1">
+        <div class="marker">
+    <a class="self-link" href="#example-1">Example<bdi> 1</bdi></a>
+  </div> <pre aria-busy="false"><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">video</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"v"</span> <span class="hljs-attr">autoplay</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">video</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-keyword">const</span> video = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"v"</span>);
+<span class="hljs-keyword">const</span> mediaSource = <span class="hljs-keyword">new</span> MediaSource();
+mediaSource.addEventListener(<span class="hljs-string">"sourceopen"</span>, onSourceOpen);
+video.src = <span class="hljs-built_in">window</span>.URL.createObjectURL(mediaSource);
 
-    if (mediaSource.sourceBuffers.length &gt; 0)
-        return;
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onSourceOpen</span>(<span class="hljs-params">e</span>) </span>{
+  <span class="hljs-keyword">const</span> mediaSource = e.target;
 
-    var sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vorbis,vp8"');
+  <span class="hljs-keyword">if</span> (mediaSource.sourceBuffers.length &gt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span>;
 
-    videoTag.addEventListener('seeking', onSeeking.bind(videoTag, mediaSource));
-    videoTag.addEventListener('progress', onProgress.bind(videoTag, mediaSource));
+  <span class="hljs-keyword">const</span> sourceBuffer = mediaSource.addSourceBuffer(
+    <span class="hljs-string">'video/webm; codecs="vorbis,vp8"'</span>,
+  );
 
-    var initSegment = GetInitializationSegment();
+  video.addEventListener(<span class="hljs-string">"seeking"</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> onSeeking(mediaSource, e.target));
+  video.addEventListener(<span class="hljs-string">"progress"</span>, <span class="hljs-function">() =&gt;</span>
+    appendNextMediaSegment(mediaSource),
+  );
 
-    if (initSegment == null) {
-      // Error fetching the initialization segment. Signal end of stream with an error.
-      mediaSource.endOfStream("network");
-      return;
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> initSegment = <span class="hljs-keyword">await</span> getInitializationSegment();
+
+    <span class="hljs-keyword">if</span> (initSegment == <span class="hljs-literal">null</span>) {
+      <span class="hljs-comment">// Error fetching the initialization segment. Signal end of stream with an error.</span>
+      mediaSource.endOfStream(<span class="hljs-string">"network"</span>);
+      <span class="hljs-keyword">return</span>;
     }
 
-    // Append the initialization segment.
-    var firstAppendHandler = function(e) {
-      var sourceBuffer = e.target;
-      sourceBuffer.removeEventListener('updateend', firstAppendHandler);
+    <span class="hljs-comment">// Append the initialization segment.</span>
+    sourceBuffer.addEventListener(<span class="hljs-string">"updateend"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">firstAppendHandler</span>(<span class="hljs-params"></span>) </span>{
+      sourceBuffer.removeEventListener(<span class="hljs-string">"updateend"</span>, firstAppendHandler);
 
-      // Append some initial media data.
+      <span class="hljs-comment">// Append some initial media data.</span>
       appendNextMediaSegment(mediaSource);
-    };
-    sourceBuffer.addEventListener('updateend', firstAppendHandler);
+    });
+
     sourceBuffer.appendBuffer(initSegment);
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-comment">// Handle errors that might occur during initialization segment fetching.</span>
+    <span class="hljs-built_in">console</span>.error(<span class="hljs-string">"Error fetching initialization segment:"</span>, error);
+    mediaSource.endOfStream(<span class="hljs-string">"network"</span>);
+  }
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">appendNextMediaSegment</span>(<span class="hljs-params">mediaSource</span>) </span>{
+  <span class="hljs-keyword">if</span> (
+    mediaSource.readyState === <span class="hljs-string">"closed"</span> ||
+    mediaSource.sourceBuffers[<span class="hljs-number">0</span>].updating
+  )
+    <span class="hljs-keyword">return</span>;
+
+  <span class="hljs-comment">// If we have run out of stream data, then signal end of stream.</span>
+  <span class="hljs-keyword">if</span> (!haveMoreMediaSegments()) {
+    mediaSource.endOfStream();
+    <span class="hljs-keyword">return</span>;
   }
 
-  function appendNextMediaSegment(mediaSource) {
-    if (mediaSource.readyState == "closed")
-      return;
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> mediaSegment = <span class="hljs-keyword">await</span> getNextMediaSegment();
 
-    // If we have run out of stream data, then signal end of stream.
-    if (!HaveMoreMediaSegments()) {
-      mediaSource.endOfStream();
-      return;
-    }
+    <span class="hljs-comment">// <span class="hljs-doctag">NOTE:</span> If mediaSource.readyState == "ended", this appendBuffer() call will</span>
+    <span class="hljs-comment">// cause mediaSource.readyState to transition to "open". The web application</span>
+    <span class="hljs-comment">// should be prepared to handle multiple "sourceopen" events.</span>
+    mediaSource.sourceBuffers[<span class="hljs-number">0</span>].appendBuffer(mediaSegment);
+  }
+  <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-comment">// Handle errors that might occur during media segment fetching.</span>
+    <span class="hljs-built_in">console</span>.error(<span class="hljs-string">"Error fetching media segment:"</span>, error);
+    mediaSource.endOfStream(<span class="hljs-string">"network"</span>);
+  }
+}
 
-    // Make sure the previous append is not still pending.
-    if (mediaSource.sourceBuffers[0].updating)
-        return;
-
-    var mediaSegment = GetNextMediaSegment();
-
-    if (!mediaSegment) {
-      // Error fetching the next media segment.
-      mediaSource.endOfStream("network");
-      return;
-    }
-
-    // NOTE: If mediaSource.readyState == “ended”, this appendBuffer() call will
-    // cause mediaSource.readyState to transition to "open". The web application
-    // should be prepared to handle multiple “sourceopen” events.
-    mediaSource.sourceBuffers[0].appendBuffer(mediaSegment);
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onSeeking</span>(<span class="hljs-params">mediaSource, video</span>) </span>{
+  <span class="hljs-keyword">if</span> (mediaSource.readyState === <span class="hljs-string">"open"</span>) {
+    <span class="hljs-comment">// Abort current segment append.</span>
+    mediaSource.sourceBuffers[<span class="hljs-number">0</span>].abort();
   }
 
-  function onSeeking(mediaSource, e) {
-    var video = e.target;
+  <span class="hljs-comment">// Notify the media segment loading code to start fetching data at the</span>
+  <span class="hljs-comment">// new playback position.</span>
+  seekToMediaSegmentAt(video.currentTime);
 
-    if (mediaSource.readyState == "open") {
-      // Abort current segment append.
-      mediaSource.sourceBuffers[0].abort();
-    }
+  <span class="hljs-comment">// Append a media segment from the new playback position.</span>
+  appendNextMediaSegment(mediaSource);
+}
 
-    // Notify the media segment loading code to start fetching data at the
-    // new playback position.
-    SeekToMediaSegmentAt(video.currentTime);
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onProgress</span>(<span class="hljs-params">mediaSource, e</span>) </span>{
+  appendNextMediaSegment(mediaSource);
+}
 
-    // Append a media segment from the new playback position.
-    appendNextMediaSegment(mediaSource);
-  }
+<span class="hljs-comment">// Example of async function for getting initialization segment</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getInitializationSegment</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// Implement fetching of the initialization segment</span>
+  <span class="hljs-comment">// This is just a placeholder function</span>
+}
 
-  function onProgress(mediaSource, e) {
-    appendNextMediaSegment(mediaSource);
-  }
-&lt;/script&gt;
+<span class="hljs-comment">// Example function for checking if there are more media segments</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">haveMoreMediaSegments</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// Implement logic to determine if there are more media segments</span>
+  <span class="hljs-comment">// This is just a placeholder function</span>
+}
 
-&lt;video id="v" autoplay&gt; &lt;/video&gt;
+<span class="hljs-comment">// Example function for getting the next media segment</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getNextMediaSegment</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// Implement fetching of the next media segment</span>
+  <span class="hljs-comment">// This is just a placeholder function</span>
+}
 
-&lt;script&gt;
-  var video = document.getElementById('v');
-  var mediaSource = new MediaSource();
-  mediaSource.addEventListener('sourceopen', onSourceOpen.bind(this, video));
-  video.src = window.URL.createObjectURL(mediaSource);
-&lt;/script&gt;</code></pre>
-        </div>
+<span class="hljs-comment">// Example function for seeking to a specific media segment</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">seekToMediaSegmentAt</span>(<span class="hljs-params">currentTime</span>) </span>{
+  <span class="hljs-comment">// Implement seeking logic</span>
+  <span class="hljs-comment">// This is just a placeholder function</span>
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
       </div>
     </section>
 
