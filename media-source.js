@@ -157,13 +157,6 @@
     // fragment.
     'generate-timestamps-flag': { func: var_helper, fragment: '#dfn-generate-timestamps-flag', link_text: 'generate timestamps flag', },
 
-    'blob-uri': { func: fileapi_helper, fragment: 'url', link_text: 'Blob URI',  },
-    'File': { func: fileapi_helper, fragment: 'dfn-file', link_text: 'File', },
-    'Blob': { func: fileapi_helper, fragment: 'dfn-Blob', link_text: 'Blob',  },
-    'URL': { func: fileapi_helper, fragment: 'URL-object', link_text: 'URL',  },
-    'file-createObjectURL': { func: fileapi_helper, fragment: 'dfn-createObjectURL', link_text: 'createObjectURL()',  },
-    'file-revokeObjectURL': { func: fileapi_helper, fragment: 'dfn-revokeObjectURL', link_text: 'revokeObjectURL()',  },
-
     'videoref': { func: videoref_helper, fragment: '', link_text: '', },
     'media-timeline': { func: videoref_helper, fragment: 'media-timeline', link_text: 'media timeline',  },
     'mediatracklist-change': { func: code_videoref_helper, fragment: 'dom-mediatracklist-onchange', link_text: 'change',  },
