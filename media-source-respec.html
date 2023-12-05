@@ -2699,7 +2699,7 @@ interface SourceBufferList : EventTarget {
       </p>
 <aside class="note" title="Eviction reasons">
 <p>
-  Reasons that the user agent might evict content are implementation specific and can include, but are not limited to, memory and/or hardware limitations, change in environmental conditions, and so on. Developers shouldn't make assumptions as to why, how, or when a user agent might evict content. Instead, developers need to write scripts with the assumption that content is constantly and randomly being evicted to avoid stalled video playback (i.e., code defensibly!). 
+  Reasons that the user agent might evict content are implementation specific and can include, but are not limited to, memory and/or hardware limitations, change in environmental conditions, and so on. Developers shouldn't make assumptions as to why, how, or when a user agent might evict content. Instead, developers need to write scripts with the assumption that content is constantly and randomly being evicted to avoid stalled video playback (i.e., code defensibly and listen for the `bufferedchangeevent`!). 
 </p>
 </aside>
       <pre class="idl">
