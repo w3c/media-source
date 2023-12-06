@@ -121,49 +121,49 @@
         <h3>Definitions</h3>
 
         <dl>
-          <dt><dfn id="active-track-buffers">Active Track Buffers</dfn></dt>
+          <dt><dfn>Active Track Buffers</dfn></dt>
           <dd><p>The [=track buffers=] that provide [=coded frames=] for the {{AudioTrack/enabled}}
               {{HTMLMediaElement/audioTracks}}, the {{VideoTrack/selected}} {{HTMLMediaElement/videoTracks}}, and the
               <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> {{HTMLMediaElement/textTracks}}. All these tracks are associated with
             <a>SourceBuffer</a> objects in the {{MediaSource/activeSourceBuffers}} list.</p>
           </dd>
 
-          <dt><dfn id="append-window">Append Window</dfn></dt>
+          <dt><dfn>Append Window</dfn></dt>
           <dd><p>A [=presentation timestamp=] range used to filter out [=coded frames=] while appending. The append window represents a single
             continuous time range with a single start time and end time. Coded frames with [=presentation timestamp=] within this range are allowed to be appended
             to the <a>SourceBuffer</a> while coded frames outside this range are filtered out. The append window start and end times are controlled by
             the {{SourceBuffer/appendWindowStart}} and {{SourceBuffer/appendWindowEnd}} attributes respectively.</p></dd>
 
-          <dt><dfn id="coded-frame" data-export="">Coded Frame</dfn></dt>
+          <dt><dfn class="export">Coded Frame</dfn></dt>
           <dd><p>A unit of media data that has a [=presentation timestamp=], a [=decode timestamp=], and a [=coded frame duration=].</p></dd>
 
-          <dt><dfn id="coded-frame-duration">Coded Frame Duration</dfn></dt>
+          <dt><dfn>Coded Frame Duration</dfn></dt>
           <dd>
             <p>The duration of a [=coded frame=]. For video and text, the duration indicates how long the video frame or text SHOULD be displayed. For audio, the duration represents the sum of all the samples contained within the coded frame. For example, if an audio frame contained 441 samples @44100Hz the frame duration would be 10 milliseconds.</p>
           </dd>
 
-          <dt><dfn id="coded-frame-end-timestamp">Coded Frame End Timestamp</dfn></dt>
+          <dt><dfn>Coded Frame End Timestamp</dfn></dt>
           <dd>
             <p>The sum of a [=coded frame=] [=presentation timestamp=] and its
                 [=coded frame duration=]. It represents the [=presentation timestamp=] that immediately follows the coded frame.</p>
           </dd>
 
-          <dt><dfn id="coded-frame-group">Coded Frame Group</dfn></dt>
+          <dt><dfn>Coded Frame Group</dfn></dt>
           <dd><p>A group of [=coded frames=] that are adjacent and have monotonically increasing [=decode timestamps=] without any gaps. Discontinuities detected by the
               [=coded frame processing=] algorithm and {{SourceBuffer/abort()}} calls trigger the start of a new coded frame group.</p>
           </dd>
 
-          <dt><dfn id="decode-timestamp">Decode Timestamp</dfn></dt>
+          <dt><dfn>Decode Timestamp</dfn></dt>
           <dd>
             <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the [=presentation timestamp=] of the earliest frame, in [=presentation order=], that is dependant on this frame). If frames can be decoded out of [=presentation order=], then the decode timestamp MUST be present in or derivable from the byte stream. The user agent MUST run the [=append error=] algorithm if this is not the case. If frames cannot be decoded out of  [=presentation order=] and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the [=presentation timestamp=].</p>
           </dd>
 
-          <dt><dfn id="init-segment" data-export="">Initialization Segment</dfn></dt>
+          <dt><dfn class="export">Initialization Segment</dfn></dt>
           <dd>
             <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of [=media segments=]. This includes codec initialization data, [=Track ID=] mappings for multiplexed segments, and timestamp offsets (e.g., edit lists).</p>
             <p class="note">The [=byte stream format specifications=] in the byte stream format registry [[MSE-REGISTRY]] contain format specific examples.</p>
 
-          </dd><dt><dfn id="media-segment" data-export="">Media Segment</dfn></dt>
+          </dd><dt><dfn class="export">Media Segment</dfn></dt>
           <dd>
             <p>A sequence of bytes that contain packetized &amp; timestamped media data for a portion of the <a def-id="media-timeline"></a>. Media segments are always associated with the most recently appended [=initialization segment=].</p>
             <p class="note">The [=byte stream format specifications=] in the byte stream format registry [[MSE-REGISTRY]] contain format specific examples.</p>
