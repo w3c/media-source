@@ -620,13 +620,24 @@ interface MediaSource : EventTarget {
             <li>Run the [=end of stream=] algorithm with the error parameter set to |error:EndOfStreamError|.</li>
           </ol>
           <dt><dfn><code>setLiveSeekableRange</code></dfn></dt><dd>
-          <p>
-            The |start| of the range, in seconds measured from [=presentation start time=]. While set, and if {{MediaSource/duration}} equals positive Infinity, {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} will return a non-empty TimeRanges object with a lowest range start timestamp no greater than |start|.
-            The |end| of range, in seconds measured from [=presentation start time=]. While set, and if {{MediaSource/duration}} equals positive Infinity, {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} will return a non-empty TimeRanges object with a highest range end timestamp no less than |end|.
-          </p>
           <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
-            <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> to modify
-            {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
+            [[[#htmlmediaelement-extensions]]] to modify
+            {{HTMLMediaElement}}/{{HTMLMediaElement/seekable}} behavior.</p>
+          <p>
+            The |start| of the range, in seconds measured from [=presentation start time=].
+            The |end| of range, in seconds measured from [=presentation start time=].
+          </p>
+          <p class="note">
+            <a href="#htmlmediaelement-extensions">HTMLMediaElement Extensions</a> uses
+            {{MediaSource/[[live seekable range]]}}, if not empty and if
+            {{MediaSource/duration}} is positive infinity, to return a {{TimeRanges}}
+            object with a lowest range start timestamp no greater than |start| and a highest
+            range end timestamp no less than |end|. If this is a worker {{MediaSource}},
+            cross-context communication latency will delay the effect of any duration or
+            live seekable range updates on
+            {{HTMLMediaElement}}'s {{HTMLMediaElement/seekable}} behavior.
+          </p>
+         
           <ol class="method-algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not {{ReadyState/""open""}} then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If |start:double| is negative or greater than |end:double|, then throw a {{TypeError}} exception and abort these steps.</li>
