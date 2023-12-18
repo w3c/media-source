@@ -78,7 +78,7 @@
 
     <link rel="stylesheet" href="mse.css">
   </head>
-  <body data-cite="html dom url fileapi">
+  <body data-cite="html dom url fileapi infra">
     <section id="abstract">
       This specification extends {{HTMLMediaElement}} [[HTML]] to allow
       JavaScript to generate media streams for playback.
@@ -87,10 +87,13 @@
     </section>
 
     <section id="sotd">
-      <p>On top of editorial updates, substantives changes since publication as a W3C Recommendation in <a href="https://www.w3.org/TR/2016/REC-media-source-20161117/">November 2016</a> are the addition of a {{SourceBuffer/changeType()}} method to switch codecs, the possibility to create and use {{MediaSource}} objects off the main thread in dedicated workers, and the removal of the <code>createObjectURL()</code> extension to the {{URL}} object following its integration in the File API [[FILEAPI]]. For a full list of changes done since the previous version, see the <a href="https://github.com/w3c/media-source/commits/main">commits</a>.</p>
+      <p>On top of editorial updates, substantives changes since publication as a W3C Recommendation in <a href="https://www.w3.org/TR/2016/REC-media-source-20161117/">November 2016</a> are the addition of a {{SourceBuffer/changeType()}} method to switch codecs, the possibility to create and use {{MediaSource}} objects off the main thread in dedicated workers, the removal of the <code>createObjectURL()</code> extension to the {{URL}} object following its integration in the File API [[FILEAPI]], and the addition of {{ManagedMediaSource}}, ManagedSourceBuffer}}, and {{BufferedChangeEvent}} interfaces supporting power-efficient streaming and active buffered media cleanup by the user agent. For a full list of changes done since the previous version, see the <a href="https://github.com/w3c/media-source/commits/main">commits</a>.</p>
 
       <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>.</p>
       <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should track the <a href="https://github.com/w3c/media-source">GitHub repository</a> and take part in the discussions.</p>
+      <h3>Changes since last publication</h3>
+      <p>On top of editorial updates, substantives changes since publication as a W3C Recommendation in
+        <a href="https://www.w3.org/TR/2016/REC-media-source-20161117/">November 2016</a> are the addition of a {{SourceBuffer/changeType()}} method to switch codecs, the possibility to create and use {{MediaSource}} objects off the main thread in dedicated workers, the removal of the <code>createObjectURL()</code> extension to the {{URL}} object following its integration in the File API [[FILEAPI]], and the addition of {{ManagedMediaSource}}, ManagedSourceBuffer}}, and {{BufferedChangeEvent}} interfaces supporting power-efficient streaming and active buffered media cleanup by the user agent. For a full list of changes done since the previous version, see the <a href="https://github.com/w3c/media-source/commits/main">commits</a>.</p>
     </section>
 
     <section id="introduction" class="informative">
@@ -121,49 +124,49 @@
         <h3>Definitions</h3>
 
         <dl>
-          <dt><dfn id="active-track-buffers">Active Track Buffers</dfn></dt>
+          <dt><dfn>Active Track Buffers</dfn></dt>
           <dd><p>The [=track buffers=] that provide [=coded frames=] for the {{AudioTrack/enabled}}
               {{HTMLMediaElement/audioTracks}}, the {{VideoTrack/selected}} {{HTMLMediaElement/videoTracks}}, and the
               <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> {{HTMLMediaElement/textTracks}}. All these tracks are associated with
             {{SourceBuffer}} objects in the {{MediaSource/activeSourceBuffers}} list.</p>
           </dd>
 
-          <dt><dfn id="append-window">Append Window</dfn></dt>
+          <dt><dfn>Append Window</dfn></dt>
           <dd><p>A [=presentation timestamp=] range used to filter out [=coded frames=] while appending. The append window represents a single
             continuous time range with a single start time and end time. Coded frames with [=presentation timestamp=] within this range are allowed to be appended
             to the {{SourceBuffer}} while coded frames outside this range are filtered out. The append window start and end times are controlled by
             the {{SourceBuffer/appendWindowStart}} and {{SourceBuffer/appendWindowEnd}} attributes respectively.</p></dd>
 
-          <dt><dfn id="coded-frame" data-export="">Coded Frame</dfn></dt>
+          <dt><dfn class="export">Coded Frame</dfn></dt>
           <dd><p>A unit of media data that has a [=presentation timestamp=], a [=decode timestamp=], and a [=coded frame duration=].</p></dd>
 
-          <dt><dfn id="coded-frame-duration">Coded Frame Duration</dfn></dt>
+          <dt><dfn>Coded Frame Duration</dfn></dt>
           <dd>
             <p>The duration of a [=coded frame=]. For video and text, the duration indicates how long the video frame or text SHOULD be displayed. For audio, the duration represents the sum of all the samples contained within the coded frame. For example, if an audio frame contained 441 samples @44100Hz the frame duration would be 10 milliseconds.</p>
           </dd>
 
-          <dt><dfn id="coded-frame-end-timestamp">Coded Frame End Timestamp</dfn></dt>
+          <dt><dfn>Coded Frame End Timestamp</dfn></dt>
           <dd>
             <p>The sum of a [=coded frame=] [=presentation timestamp=] and its
                 [=coded frame duration=]. It represents the [=presentation timestamp=] that immediately follows the coded frame.</p>
           </dd>
 
-          <dt><dfn id="coded-frame-group">Coded Frame Group</dfn></dt>
+          <dt><dfn>Coded Frame Group</dfn></dt>
           <dd><p>A group of [=coded frames=] that are adjacent and have monotonically increasing [=decode timestamps=] without any gaps. Discontinuities detected by the
               [=coded frame processing=] algorithm and {{SourceBuffer/abort()}} calls trigger the start of a new coded frame group.</p>
           </dd>
 
-          <dt><dfn id="decode-timestamp">Decode Timestamp</dfn></dt>
+          <dt><dfn>Decode Timestamp</dfn></dt>
           <dd>
             <p> The decode timestamp indicates the latest time at which the frame needs to be decoded assuming instantaneous decoding and rendering of this and any dependant frames (this is equal to the [=presentation timestamp=] of the earliest frame, in [=presentation order=], that is dependant on this frame). If frames can be decoded out of [=presentation order=], then the decode timestamp MUST be present in or derivable from the byte stream. The user agent MUST run the [=append error=] algorithm if this is not the case. If frames cannot be decoded out of  [=presentation order=] and a decode timestamp is not present in the byte stream, then the decode timestamp is equal to the [=presentation timestamp=].</p>
           </dd>
 
-          <dt><dfn id="init-segment" data-export="">Initialization Segment</dfn></dt>
+          <dt><dfn class="export">Initialization Segment</dfn></dt>
           <dd>
             <p>A sequence of bytes that contain all of the initialization information required to decode a sequence of [=media segments=]. This includes codec initialization data, [=Track ID=] mappings for multiplexed segments, and timestamp offsets (e.g., edit lists).</p>
             <p class="note">The [=byte stream format specifications=] in the byte stream format registry [[MSE-REGISTRY]] contain format specific examples.</p>
 
-          </dd><dt><dfn id="media-segment" data-export="">Media Segment</dfn></dt>
+          </dd><dt><dfn class="export">Media Segment</dfn></dt>
           <dd>
             <p>A sequence of bytes that contain packetized &amp; timestamped media data for a portion of the <a def-id="media-timeline"></a>. Media segments are always associated with the most recently appended [=initialization segment=].</p>
             <p class="note">The [=byte stream format specifications=] in the byte stream format registry [[MSE-REGISTRY]] contain format specific examples.</p>
@@ -232,9 +235,9 @@
       </section>
     </section>
 
-    <section id="mediasource">
-      <h2><dfn>MediaSource</dfn> Object</h2>
-      <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the {{MediaSource/readyState}} for this source as well as a list of {{SourceBuffer}} objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the {{SourceBuffer}} objects in {{MediaSource/sourceBuffers}} to add media data to this source. The HTMLMediaElement fetches this media data from the {{MediaSource}} object when it is needed during playback.</p>
+    <section id="mediasource" data-dfn-for="MediaSource">
+      <h2><dfn>MediaSource</dfn> interface</h2>
+      <p>The {{MediaSource}} interface represents a source of media data for an {{HTMLMediaElement}}. It keeps track of the {{MediaSource/readyState}} for this source as well as a list of <a>SourceBuffer</a> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}} to add media data to this source. The HTMLMediaElement fetches this media data from the <a>MediaSource</a> object when it is needed during playback.</p>
 
       <p>Each {{MediaSource}} object has a <dfn data-dfn-for="MediaSource">[[\live seekable range]]</dfn> internal slot
         that stores a <a def-id="normalized-timeranges-object"></a>. It is initialized to an empty {{TimeRanges}} object
@@ -249,7 +252,6 @@
         a media element=] algorithm. The extended [=resource fetch algorithm=] uses this internal slot to conditionally
         fail attachment of a {{MediaSource}} using a {{MediaSourceHandle}} set on a {{HTMLMediaElement}}'s
         {{HTMLMediaElement/srcObject}} attribute.</p>
-
       <pre class="idl">
         enum ReadyState {
           "closed",
@@ -267,7 +269,6 @@
         <dt><dfn>ended</dfn></dt>
         <dd>The source is still attached to a media element, but {{MediaSource}}'s {{MediaSource/endOfStream()}} has been called.</dd>
       </dl>
-
 
       <aside class="issue" data-number="276">
         <p>Consider adding a "`closing`" {{MediaSource/ReadyState}} to indicate the source is in the process of being concurrently detached from a media element. This would be useful for some implementations of {{MediaSource}} and {{SourceBuffer}} in {{DedicatedWorkerGlobalScope}}.</p>
@@ -314,11 +315,8 @@ interface MediaSource : EventTarget {
     undefined             clearLiveSeekableRange ();
     static boolean        isTypeSupported (DOMString type);
 };</pre>
-      <section>
-        <h3>Attributes</h3>
-        <dl class="attributes" data-dfn-for="MediaSource">
 
-          <dt><dfn><code>handle</code></dfn> of type <span class="idlAttrType"><a>MediaSourceHandle</a></span>, [SameObject] readonly</dt><dd>
+          <h3><dfn><code>handle</code></dfn> attribute</h3>
 
           <p>Contains a handle useful for attachment of a dedicated worker {{MediaSource}} object to an
           {{HTMLMediaElement}} via {{HTMLMediaElement/srcObject}}. The handle remains the same object for this
@@ -341,9 +339,12 @@ interface MediaSource : EventTarget {
             <li>Return the {{MediaSourceHandle}} object that is this attribute's value.</li>
           </ol>
 
-          <dt><dfn><code>sourceBuffers</code></dfn> of type <span class="idlAttrType"><a>SourceBufferList</a></span>, readonly       </dt><dd>
-          Contains the list of {{SourceBuffer}} objects associated with this {{MediaSource}}. When {{MediaSource/readyState}} equals {{ReadyState/""closed""}} this list will be empty. Once {{MediaSource/readyState}} transitions to {{ReadyState/""open""}} SourceBuffer objects can be added to this list by using {{MediaSource/addSourceBuffer()}}.
-        </dd><dt><dfn><code>activeSourceBuffers</code></dfn> of type <span class="idlAttrType"><a>SourceBufferList</a></span>, readonly       </dt><dd>
+          <h3><dfn>sourceBuffers</dfn> attribute</h3>
+          <p>
+          Contains the list of {{SourceBuffer}} objects associated with this {{MediaSource}}. When {{MediaSource}}'s {{MediaSource/readyState}} equals {{ReadyState/""closed""}} this list will be empty. Once {{MediaSource/readyState}} transitions to {{ReadyState/""open""}} SourceBuffer objects can be added to this list by using {{MediaSource/addSourceBuffer()}}.
+          </p>
+
+          <h3><dfn>activeSourceBuffers</dfn> attribute</h3>
           <p>Contains the subset of {{MediaSource/sourceBuffers}} that are providing the {{VideoTrack/selected}} video track, the
             {{AudioTrack/enabled}} audio track(s), and the
             <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> text track(s).
@@ -355,10 +356,12 @@ interface MediaSource : EventTarget {
           </p>
           <p class="note">Section [[[#active-source-buffer-changes]]] describes how this attribute gets
             updated.</p>
-        </dd><dt><dfn><code>readyState</code></dfn> of type {{ReadyState}}, readonly       </dt><dd>
-          <p>Indicates the current state of the {{MediaSource}} object. When the {{MediaSource}} is created {{MediaSource/readyState}} MUST be set to {{ReadyState/""closed""}}.
-        </p></dd><dt><dfn><code>duration</code></dfn> of type {{unrestricted double}}</dt><dd>
-          <p>Allows the web application to set the presentation duration. The duration is initially set to NaN when the {{MediaSource}} object is created.</p>
+
+         <h3><dfn>readyState</dfn> attribute</h3>
+          <p>Indicates the current state of the <a>MediaSource</a> object. When the <a>MediaSource</a> is created {{MediaSource/readyState}} MUST be set to {{ReadyState/""closed""}}.</p>
+    
+        <h3><dfn>duration</dfn> attribute</h3>
+          <p>Allows the web application to set the presentation duration. The duration is initially set to NaN when the <a>MediaSource</a> object is created.</p>
           <p>On getting, run the following steps:</p>
           <ol>
             <li>If the {{MediaSource/readyState}} attribute is {{ReadyState/""closed""}} then return NaN and abort these steps.</li>
@@ -374,22 +377,18 @@ interface MediaSource : EventTarget {
               <p class="note">{{SourceBuffer/appendBuffer()}} and {{MediaSource/endOfStream()}} can update the duration under certain circumstances.</p>
             </li>
           </ol>
-        </dd><dt><dfn><code>onsourceopen</code></dfn> of type {{EventHandler}}</dt><dd>
-          <p>The event handler for the {{sourceopen}} event.</p>
-        </dd><dt><dfn><code>onsourceended</code></dfn> of type {{EventHandler}}</dt><dd>
-          <p>The event handler for the {{sourceended}} event.</p>
-        </dd><dt><dfn><code>onsourceclose</code></dfn> of type {{EventHandler}}</dt><dd>
-          <p>The event handler for the {{sourceclose}} event.</p>
-        </dd>
-        <dt><dfn><code>canConstructInDedicatedWorker</code></dfn> of type {{boolean}}</dt><dd>
+
+        <h3><dfn>canConstructInDedicatedWorker</dfn> attribute</h3>
           <p>Returns true.</p>
           <p class="note">This attribute enables main thread and dedicated worker feature detection of support for
             creating and using a {{MediaSource}} object in a dedicated worker, and mitigates the need for higher latency
             detection polyfills like attempting creation of a {{MediaSource}} object from a dedicated worker, especially
             if the feature is not supported.</p>
-        </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="MediaSource"><dt><dfn><code>addSourceBuffer</code></dfn></dt><dd>
-          <p>Adds a new {{SourceBuffer}} to {{MediaSource/sourceBuffers}}.</p>
-          <ol class="method-algorithm">
+
+
+        <h3><dfn>addSourceBuffer()</dfn> method</h3>
+          <p>Adds a new <a>SourceBuffer</a> to {{MediaSource/sourceBuffers}}.</p>
+          <ol class="algorithm">
             <li>If |type:DOMString| is an empty string then throw a {{TypeError}} exception and abort these steps.</li>
             <li>If |type| contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other {{SourceBuffer}} objects in {{MediaSource/sourceBuffers}}, then throw a {{NotSupportedError}} exception and abort these steps.</li>
             <li>If the user agent can't handle any more SourceBuffer objects or if creating a SourceBuffer
@@ -401,33 +400,26 @@ interface MediaSource : EventTarget {
               </p>
             </li>
             <li>If the {{MediaSource/readyState}} attribute is not in the {{ReadyState/""open""}} state then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>Create a new {{SourceBuffer}} object and associated resources.</li>
-            <li>Set the {{SourceBuffer/[[generate timestamps flag]]}} on the new object to the value in the "Generate
-              Timestamps Flag" column of the byte stream format registry [[MSE-REGISTRY]] entry that is associated with
+            <li>
+              Let |buffer| be a new instance of a {{ManagedSourceBuffer}} if [=this=] is a {{ManagedMediaSource}}, or a {{SourceBuffer}} otherwise, with their respective associated resources. </li>
+            <li>
+              Set |buffer|'s {{SourceBuffer/[[generate timestamps flag]]}} to the value in the "Generate
+              Timestamps Flag" column of the [[[MSE-REGISTRY]]] entry that is associated with
               |type|.
-            </li><li>
-              <dl class="switch">
-                <dt>If the {{SourceBuffer/[[generate timestamps flag]]}} equals true:</dt>
-                <dd>
-                  Set the {{SourceBuffer/mode}} attribute on the new object to
-                  {{AppendMode/""sequence""}}.
-                </dd>
-                <dt>Otherwise:</dt>
-                <dd>
-                  Set the {{SourceBuffer/mode}} attribute on the new object to
-                  {{AppendMode/""segments""}}.
-                </dd>
-              </dl>
             </li>
-            <li>Add the new object to {{MediaSource/sourceBuffers}} and [=queue a task=] to [=fire an event=] named {{addsourcebuffer}} at {{MediaSource/sourceBuffers}}.</li>
-            <li>Return the new object.</li>
+            <li>
+              If |buffer|'s {{SourceBuffer/[[generate timestamps flag]]}} is true, set |buffer|'s {{SourceBuffer/mode}} to {{AppendMode/"sequence"}}.
+              Otherwise, set |buffer|'s {{SourceBuffer/mode}} to {{AppendMode/"segments"}}.
+            </li>
+            <li>[=List/Append=] |buffer| to [=this=]'s {{MediaSource/sourceBuffers}}.</li>
+            <li>[=Queue a task=] to [=fire an event=] named {{addsourcebuffer}} at [=this=]'s {{MediaSource/sourceBuffers}}.</li>
+            <li>Return |buffer|.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|type|</th><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{SourceBuffer}}</div></dd>
 
-          <dt><dfn><code>removeSourceBuffer</code></dfn></dt><dd>
+          <h3><dfn>removeSourceBuffer()</dfn> method</h3>
           <p>Removes a {{SourceBuffer}} from {{MediaSource/sourceBuffers}}.</p>
 
-          <ol class="method-algorithm">
+          <ol class="algorithm">
             <li>If |sourceBuffer:SourceBuffer| specifies an object that is not in {{MediaSource/sourceBuffers}} then throw a {{NotFoundError}} exception and abort these steps.</li>
             <li>If the |sourceBuffer|.{{SourceBuffer/updating}} attribute equals true, then run the following steps:
               <ol>
@@ -584,10 +576,10 @@ interface MediaSource : EventTarget {
         <table
           class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|sourceBuffer|</th><td class="prmType">{{SourceBuffer}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd>
 
-          <dt><dfn><code>endOfStream</code></dfn></dt><dd>
+        <h3><dfn>endOfStream()</dfn> method</h3>
           <p>Signals the end of the stream.</p>
 
-          <ol class="method-algorithm">
+          <ol class="algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not in the {{ReadyState/""open""}} state then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If the {{SourceBuffer/updating}} attribute equals true on any {{SourceBuffer}} in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>Run the [=end of stream=] algorithm with the error parameter set to |error:EndOfStreamError|.</li>
@@ -595,7 +587,7 @@ interface MediaSource : EventTarget {
         <table
           class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|error|</th><td class="prmType">{{EndOfStreamError}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd>
 
-          <dt><dfn><code>setLiveSeekableRange</code></dfn></dt><dd>
+          <h3><dfn>setLiveSeekableRange()</dfn> method</h3>
 
           <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
             section [[[#htmlmediaelement-extensions]]] to modify
@@ -635,7 +627,9 @@ interface MediaSource : EventTarget {
               </tr>
             </tbody>
           </table>
-        <div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>clearLiveSeekableRange</code></dfn></dt><dd>
+        <div><em>Return type: </em>{{undefined}}</div></dd>
+
+        <h3><dfn>clearLiveSeekableRange()</dfn> method</h3>
         <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
           section [[[#htmlmediaelement-extensions]]] to modify
           {{HTMLMediaElement}}'s {{HTMLMediaElement/seekable}} behavior.</p>
@@ -645,10 +639,10 @@ interface MediaSource : EventTarget {
             <li>If {{MediaSource/[[live seekable range]]}} contains a range, then set {{MediaSource/[[live seekable
               range]]}} to be a new empty {{TimeRanges}} object.
           </li></ol>
-        <div><em>No parameters.</em></div><div><em>Return type: </em>{{undefined}}</div></dd>
+        <div><em>No parameters.</em></div><div><em>Return type: </em>{{undefined}}</div>
 
-      <dt><dfn><code>isTypeSupported</code></dfn>, static</dt><dd>
-          <p>Check to see whether the {{MediaSource}} is capable of creating {{SourceBuffer}} objects for the specified MIME type.</p>
+        <h3><dfn>isTypeSupported()</dfn> method</h3>
+          <p>Check to see whether the <a>MediaSource</a> is capable of creating <a>SourceBuffer</a> objects for the specified MIME type.</p>
 
           <ol class="method-algorithm">
             <li>If |type:DOMString| is an empty string, then return false.</li>
@@ -665,7 +659,7 @@ interface MediaSource : EventTarget {
             This method returning true implies that {{HTMLMediaElement}}'s {{HTMLMediaElement/canPlayType()}} will return "maybe" or "probably" since it does not make sense for a {{MediaSource}} to support a type the HTMLMediaElement knows it cannot play.
           </p>
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|type|</th><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{boolean}}</div></dd></dl>
-      </section>
+
 
       <section id="mediasource-events">
         <h3>Event Summary</h3>
@@ -898,6 +892,7 @@ interface MediaSource : EventTarget {
               </dl></li>
             <li>Set {{MediaSource/[[port to main]]}} null.</li>
             <li>Set the {{MediaSource/readyState}} attribute to {{ReadyState/""closed""}}.</li>
+            <li>If [=this=] is a {{ManagedMediaSource}}, then set {{ManagedMediaSource/streaming}} attribute to `false`.</li>
             <li>Update {{MediaSource/duration}} to NaN.</li>
             <li>Remove all the {{SourceBuffer}} objects from {{MediaSource/activeSourceBuffers}}.</li>
             <li>
@@ -1203,10 +1198,11 @@ interface MediaSource : EventTarget {
         </section>
       </section>
     </section>
+    </section>
 
     <section id="mediasourcehandle">
-      <h2><dfn>MediaSourceHandle</dfn> Object</h2>
-      <p>The MediaSourceHandle object represents a proxy for a {{MediaSource}} object that is useful for attaching a
+      <h2><dfn>MediaSourceHandle</dfn> interface</h2>
+      <p>The {{MediaSourceHandle}} interface represents a proxy for a {{MediaSource}} object that is useful for attaching a
         {{DedicatedWorkerGlobalScope}} {{MediaSource}} to a {{Window}} {{HTMLMediaElement}} using
         {{HTMLMediaElement/srcObject}} as described in the [=attaching to a media element=] algorithm.</p>
 
@@ -1277,7 +1273,7 @@ interface MediaSourceHandle {};</pre>
     </section>
 
     <section id="sourcebuffer">
-      <h2><dfn>SourceBuffer</dfn> Object</h2>
+      <h2><dfn>SourceBuffer</dfn> interface</h2>
 
       <pre class="idl">
         enum AppendMode {
@@ -2618,8 +2614,8 @@ interface SourceBuffer : EventTarget {
     </section>
 
     <section id="sourcebufferlist">
-      <h2><dfn>SourceBufferList</dfn> Object</h2>
-      <p>SourceBufferList is a simple container object for {{SourceBuffer}} objects. It provides read-only array access and fires events when the list is modified.</p>
+      <h2><dfn>SourceBufferList</dfn> interface</h2>
+      <p>{{SourceBufferList}} is a simple container object for <a>SourceBuffer</a> objects. It provides read-only array access and fires events when the list is modified.</p>
 <pre class="idl">[Exposed=(Window,DedicatedWorker)]
 interface SourceBufferList : EventTarget {
     readonly        attribute unsigned long length;
@@ -2694,6 +2690,285 @@ interface SourceBufferList : EventTarget {
             </tr>
         </table>
       </section>
+    </section>
+
+    <section data-cite="mimesniff" data-dfn-for="ManagedMediaSource">
+      <h2><dfn>ManagedMediaSource</dfn> interface</h2>
+      <p>
+        A {{ManagedMediaSource}} is a {{MediaSource}} that actively manages its
+        memory content. Unlike a {{MediaSource}}, the [=user agent=] can evict content
+        through the [=ManagedMediaSource/memory
+        cleanup=] algorithm from its {{MediaSource/sourceBuffers}} (populated with {{ManagedSourceBuffer}})
+        for any reason.
+      </p>
+<aside class="note" title="Eviction reasons">
+<p>
+  Reasons that the user agent might evict content are implementation specific and can include, but are not limited to, memory and/or hardware limitations, change in environmental conditions, and so on. Developers shouldn't make assumptions as to why, how, or when a user agent might evict content. Instead, developers need to write scripts with the assumption that content is constantly and randomly being evicted to avoid stalled video playback (i.e., code defensibly and listen for the `bufferedchangeevent`!). 
+</p>
+</aside>
+      <pre class="idl">
+      [Exposed=(Window,DedicatedWorker)]
+      interface ManagedMediaSource : MediaSource {
+        constructor();
+        readonly attribute boolean streaming;
+        attribute EventHandler onstartstreaming;
+        attribute EventHandler onendstreaming;
+      };
+      </pre>
+
+      <h3>Attributes</h3>
+      <dl class="attributes" data-dfn-for="ManagedMediaSource">
+        <dt>
+          <dfn>streaming</dfn>
+        </dt>
+        <dd>
+          <p>On getting:</p>
+          <ol>
+            <li>Return the current value of the attribute.</li>
+          </ol>
+        </dd>
+      </dl>
+
+      <h3>Event Summary</h3>
+      <table class="old-table">
+        <thead>
+          <tr>
+            <th>Event name</th>
+            <th>Interface</th>
+            <th>Dispatched when...</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <dfn class="event">startstreaming</dfn>
+            </td>
+            <td>{{Event}}</td>
+            <td>
+              A {{ManagedMediaSource}}'s {{ManagedMediaSource/streaming}} attribute changed from `false` to `true`.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <dfn class="event">endstreaming</dfn>
+            </td>
+            <td>{{Event}}</td>
+            <td>
+              A {{ManagedMediaSource}}'s {{ManagedMediaSource/streaming}} attribute changed from `true` to `false`.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Algorithms</h3>
+      <h4>`ManagedSourceBuffer` Monitoring</h4>
+      <p>
+        The following steps are run periodically, whenever the [=MediaSource/SourceBuffer Monitoring=] algorithm is scheduled to run.
+      </p>
+      <p>
+        Having <dfn>enough managed data to ensure uninterrupted playback</dfn>
+        is an implementation defined condition where the user agent determines that
+        it currently has enough data to play the presentation without stalling for a
+        meaningful period of time. This condition is constantly evaluated to determine
+        when to transition the value of {{ManagedMediaSource/streaming}}. These transitions
+        indicate when the user agent believes it has enough data buffered or it
+        needs more data respectively.
+      </p>
+      <p>
+        Being <dfn>able to retrieve and buffer data in an efficient way</dfn>
+        is an implementation defined condition where the user agent determines that
+        it can fetch new data in an energy efficient manner while able to achieve the desired memory usage.
+      </p>
+      <ol class="algorithm">
+        <li>Run the {{MediaSource}} [=MediaSource/SourceBuffer Monitoring=] algorithm.</li>
+        <li>Let |can play uninterrupted and efficiently| be a flag that is true if the {{HTMLMediaElement/buffered}} attribute contains a {{TimeRanges}} that includes the current playback position and [=enough managed data to ensure uninterrupted playback=]
+          and is [=able to retrieve and buffer data in an efficient way=]
+          <dl class="switch">
+            <dt>If |can play uninterrupted and efficiently| is not equal to {{ManagedMediaSource/streaming}}, [=queue an element task=] on the [=media element=]
+              that runs the following steps:
+            </dt>
+            <dd>
+              <ol>
+                <li>Set [=this=] {{ManagedMediaSource/streaming}} attribute to |can play uninterrupted and efficiently|.</li>
+                <li>If |can play uninterrupted and efficiently| is false [=fire an event=] called {{startstreaming}} at the {{ManagedMediaSource}}.</li>
+                <li>Otherwise, [=fire an event=] called {{endstreaming}} at the {{ManagedMediaSource}}.</li>
+              </ol>
+            </dd>
+          </dl>
+        </li>
+      </ol>
+
+      <h4><dfn data-dfn-for="ManagedMediaSource">Memory Cleanup</dfn></h4>
+      <ol>
+        <li>
+          <dl class="switch">
+            <dt>
+              For each |buffer:ManagedSourceBuffer| in [=this=]'s
+              {{MediaSource/sourceBuffers}}:
+            </dt>
+            <dd>
+              <ol>
+                <li>Run the |buffer|'s [=ManagedSourceBuffer/memory cleanup=] algorithm.</li>
+              </ol>
+            </dd>
+          </dl>
+        </li>
+      </ol>
+    </section>
+
+    <section data-dfn-for="BufferedChangeEvent">
+      <h2><dfn>BufferedChangeEvent</dfn> interface</h2>
+      <pre class="idl">
+        [Exposed=(Window,DedicatedWorker)]
+        interface BufferedChangeEvent : Event {
+          constructor(DOMString type, BufferedChangeEventInit eventInitDict);
+
+          [SameObject] readonly attribute TimeRanges addedRanges;
+          [SameObject] readonly attribute TimeRanges removedRanges;
+        };
+
+        dictionary BufferedChangeEventInit : EventInit {
+          TimeRanges addedRanges;
+          TimeRanges removedRanges;
+        };
+      </pre>
+      <h3>Attributes</h3>
+      <dl>
+        <dt>
+          <dfn>addedRanges</dfn>
+        </dt>
+        <dd>
+          The time ranges added between the last {{updatestart}} and {{updateend}} events (which would have occurred during the last run of the [=coded frame processing=] algorithm).
+        </dd>
+        <dt>
+          <dfn>removedRanges</dfn>
+        </dt>
+        <dd>
+          The time ranges removed between the last `updatestart` and `updateend` events (which would have occurred during the last run of the [=coded frame removal=] or [=coded frame eviction=] algorithm or if the
+          user agent evicted content in response to a [=ManagedSourceBuffer/memory cleanup=]).
+        </dd>
+      </dl>
+    </section>
+
+    <section>
+      <h2><dfn>ManagedSourceBuffer</dfn> interface</h2>
+      <pre class="idl">
+        [Exposed=(Window,DedicatedWorker)]
+        interface ManagedSourceBuffer : SourceBuffer {
+          attribute EventHandler onbufferedchange;
+        };
+      </pre>
+      <h3>Attributes</h3>
+      <dl class="attributes" data-dfn-for="ManagedSourceBuffer">
+        <dt>
+          <dfn>onbufferedchange</dfn>
+        </dt>
+        <dd>
+          <p>An [=event handler IDL attribute=] whose [=event handler event type=] is {{bufferedchange}}.</p>
+        </dd>
+      </dl>
+
+      <h3>Event Summary</h3>
+      <table class="old-table">
+        <thead>
+          <tr>
+            <th>Event name</th>
+            <th>Interface</th>
+            <th>Dispatched when...</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <dfn class="event">bufferedchange</dfn>
+            </td>
+            <td>{{Event}}</td>
+            <td>
+              The {{ManagedSourceBuffer}}'s buffered range changed following a
+              call to {{SourceBuffer/appendBuffer()}}, {{SourceBuffer/remove()}},
+              {{MediaSource/endOfStream()}},
+              or as a consequence of the user agent running the
+              [=ManagedSourceBuffer/memory cleanup=] algorithm.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Algorithms</h3>
+      <h4>Buffered Change</h4>
+      <p>
+        The following steps are run at the completion of all operations to the {{ManagedSourceBuffer}}
+        |buffer:ManagedSourceBuffer| that would cause a |buffer|'s {{SourceBuffer/buffered}} to change.
+        That is once {{SourceBuffer/appendBuffer()}}, {{SourceBuffer/remove()}} or
+        [=ManagedSourceBuffer/memory cleanup=] algorithm have completed.
+      </p>
+      <ol>
+        <li>
+          Let |previous buffered ranges:normalized TimeRanges| equal the
+          {{SourceBuffer/buffered}} attribute before the changes occurred.
+        </li>
+        <li>
+          Let |new buffered ranges:normalized TimeRanges| equal the new
+          {{SourceBuffer/buffered}} {{TimeRanges}}.
+        </li>
+        <li>
+          Let |added:normalized TimeRanges| equal the |previous buffered
+          ranges:normalized TimeRanges| subtracted from |new buffered
+          ranges:normalized TimeRanges|.
+        </li>
+        <li>
+          Let |removed:normalized TimeRanges| equal the |new buffered
+          ranges:normalized TimeRanges| subtracted from |previous buffered
+          ranges:normalized TimeRanges|.
+        </li>
+        <li>
+          Let |eventInitDict| be a new {{BufferedChangeEventInit}} dictionary
+          initialized with |added| as its {{BufferedChangeEventInit/addedRanges}} and
+          |removed| as its {{BufferedChangeEventInit/removedRanges}}
+        </li>
+        <li>
+          [=Queue a task=] to [=fire an event=] named {{bufferedchange}} at |buffer|
+          using the {{BufferedChangeEvent}} interface, initialized with
+          |eventInitDict|.
+        </li>
+      </ol>
+      <h4>
+        <dfn data-dfn-for="ManagedSourceBuffer">Memory cleanup</dfn>
+      </h4>
+      <ol>
+        <li>
+          <dl class="switch">
+            <dt>
+              If [=this=] is not in [=this=]'s {{ManagedMediaSource}} parent
+              {{MediaSource/activeSourceBuffers}}:
+            </dt>
+            <dd>
+              <ol>
+                <li>
+                  Run the [=coded frame removal=] algorithm with start set to 0, end set to positive infinity, and abort these steps.
+                </li>
+              </ol>
+            </dd>
+          </dl>
+        </li>
+        <li>
+          Let |removal ranges:normalized TimeRanges| equal a list of presentation
+          time ranges that can be evicted from the presentation to ensure
+          uninterrupted playback from {{HTMLMediaElement/currentTime}} until such
+          presentation could be retrieved again.
+          <p class="note">
+            Implementations can use different strategies for selecting |removal ranges|
+            so web applications shouldn't depend on a specific behavior. The web
+            application would listen to the {{bufferedchange}} event to observe
+            whether portions of the buffered data have been evicted.
+          </p>
+        </li>
+        <li>
+          For each range in |removal ranges|, run the [=coded frame removal=]
+          algorithm with |start:double| and |end:unrestricted double| equal to the
+          removal range start and end timestamp respectively.
+        </li>
+      </ol>
     </section>
 
     <section id="htmlmediaelement-extensions">
@@ -3162,7 +3437,65 @@ function seekToMediaSegmentAt(currentTime) {
 &lt;/script&gt;
       </pre>
     </section>
+    <h3>Use of the Managed Media Source Extensions</h3>
+    <pre class="example html">
+      &lt;script&gt;
+      async function setUpVideoStream() {
+        // Specific video format and codec
+        const mediaType = 'video/mp4; codecs="mp4a.40.2,avc1.4d4015"';
 
+        // Check if the type of video format / codec is supported.
+        if (!window.ManagedMediaSource?.isTypeSupported(mediaType)) {
+          return; // Not supported, do something else.
+        }
+
+        // Set up video and its managed source.
+        const video = document.createElement("video");
+        const source = new ManagedMediaSource();
+
+        video.controls = true;
+
+        await new Promise((resolve) => {
+          video.src = URL.createObjectURL(source);
+          source.addEventListener("sourceopen", resolve, { once: true });
+          document.body.appendChild(video);
+        });
+
+        const sourceBuffer = source.addSourceBuffer(mediaType);
+
+        // Set up the event handlers
+        sourceBuffer.onbufferedchange = (e) => {
+          console.log("onbufferedchange event fired.");
+          console.log(`Added Ranges: ${timeRangesToString(e.addedRanges)}`);
+          console.log(`Removed Ranges: ${timeRangesToString(e.removedRanges)}`);
+        };
+
+        source.onstartstreaming = async () => {
+          const response = await fetch("./videos/bipbop.mp4");
+          const buffer = await response.arrayBuffer();
+          await new Promise((resolve) => {
+            sourceBuffer.addEventListener("updateend", resolve, { once: true });
+            sourceBuffer.appendBuffer(buffer);
+          });
+        };
+
+        source.onendstreaming = async () => {
+          // Stop fetching new segments here
+        };
+      }
+
+      // Helper function...
+      function timeRangesToString(timeRanges) {
+        const ranges = [];
+        for (let i = 0; i < timeRanges.length; i++) {
+          ranges.push([timeRanges.start(i), timeRanges.end(i)]);
+        }
+        return "[" + ranges.map(([start, end]) => `[${start}, ${end})` ) + "]";     
+      }
+      &lt;/script&gt;
+      &lt;body onload="setUpVideoStream()"&gt;&lt;/body&gt;
+    </pre>
+    </section>
 
     <section id="acknowledgements">
       <h2>Acknowledgments</h2>
