@@ -235,9 +235,9 @@
       </section>
     </section>
 
-    <section id="mediasource">
-      <h2><dfn>MediaSource</dfn> Object</h2>
-      <p>The MediaSource object represents a source of media data for an HTMLMediaElement. It keeps track of the {{MediaSource/readyState}} for this source as well as a list of <a>SourceBuffer</a> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}} to add media data to this source. The HTMLMediaElement fetches this media data from the <a>MediaSource</a> object when it is needed during playback.</p>
+    <section id="mediasource" data-dfn-for="MediaSource">
+      <h2><dfn>MediaSource</dfn> interface</h2>
+      <p>The {{MediaSource}} interface represents a source of media data for an {{HTMLMediaElement}}. It keeps track of the {{MediaSource/readyState}} for this source as well as a list of <a>SourceBuffer</a> objects that can be used to add media data to the presentation. MediaSource objects are created by the web application and then attached to an HTMLMediaElement. The application uses the <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}} to add media data to this source. The HTMLMediaElement fetches this media data from the <a>MediaSource</a> object when it is needed during playback.</p>
 
       <p>Each {{MediaSource}} object has a <dfn data-dfn-for="MediaSource">[[\live seekable range]]</dfn> internal slot
         that stores a <a def-id="normalized-timeranges-object"></a>. It is initialized to an empty {{TimeRanges}} object
@@ -315,11 +315,8 @@ interface MediaSource : EventTarget {
     undefined             clearLiveSeekableRange ();
     static boolean        isTypeSupported (DOMString type);
 };</pre>
-      <section>
-        <h3>Attributes</h3>
-        <dl class="attributes" data-dfn-for="MediaSource">
 
-          <dt><dfn><code>handle</code></dfn> of type <span class="idlAttrType"><a>MediaSourceHandle</a></span>, [SameObject] readonly</dt><dd>
+          <h3><dfn><code>handle</code></dfn> attribute</h3>
 
           <p>Contains a handle useful for attachment of a dedicated worker {{MediaSource}} object to an
           {{HTMLMediaElement}} via {{HTMLMediaElement/srcObject}}. The handle remains the same object for this
@@ -342,9 +339,12 @@ interface MediaSource : EventTarget {
             <li>Return the {{MediaSourceHandle}} object that is this attribute's value.</li>
           </ol>
 
-          <dt><dfn><code>sourceBuffers</code></dfn> of type <span class="idlAttrType"><a>SourceBufferList</a></span>, readonly       </dt><dd>
-          Contains the list of <a>SourceBuffer</a> objects associated with this <a>MediaSource</a>. When {{MediaSource/readyState}} equals {{ReadyState/""closed""}} this list will be empty. Once {{MediaSource/readyState}} transitions to {{ReadyState/""open""}} SourceBuffer objects can be added to this list by using {{MediaSource/addSourceBuffer()}}.
-        </dd><dt><dfn><code>activeSourceBuffers</code></dfn> of type <span class="idlAttrType"><a>SourceBufferList</a></span>, readonly       </dt><dd>
+          <h3><dfn>sourceBuffers</dfn> attribute</h3>
+          <p>
+          Contains the list of {{SourceBuffer}} objects associated with this {{MediaSource}}. When {{MediaSource}}'s {{MediaSource/readyState}} equals {{ReadyState/""closed""}} this list will be empty. Once {{MediaSource/readyState}} transitions to {{ReadyState/""open""}} SourceBuffer objects can be added to this list by using {{MediaSource/addSourceBuffer()}}.
+          </p>
+
+          <h3><dfn>activeSourceBuffers</dfn> attribute</h3>
           <p>Contains the subset of {{MediaSource/sourceBuffers}} that are providing the {{VideoTrack/selected}} video track, the
             {{AudioTrack/enabled}} audio track(s), and the
             <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> text track(s).
@@ -356,9 +356,11 @@ interface MediaSource : EventTarget {
           </p>
           <p class="note">Section [[[#active-source-buffer-changes]]] describes how this attribute gets
             updated.</p>
-        </dd><dt><dfn><code>readyState</code></dfn> of type {{ReadyState}}, readonly       </dt><dd>
+
+         <h3><dfn>readyState</dfn> attribute</h3>
           <p>Indicates the current state of the <a>MediaSource</a> object. When the <a>MediaSource</a> is created {{MediaSource/readyState}} MUST be set to {{ReadyState/""closed""}}.
-        </p></dd><dt><dfn><code>duration</code></dfn> of type {{unrestricted double}}</dt><dd>
+        </p>
+        <h3><dfn>duration</dfn> attribute</h3>
           <p>Allows the web application to set the presentation duration. The duration is initially set to NaN when the <a>MediaSource</a> object is created.</p>
           <p>On getting, run the following steps:</p>
           <ol>
@@ -375,22 +377,18 @@ interface MediaSource : EventTarget {
               <p class="note">{{SourceBuffer/appendBuffer()}} and {{MediaSource/endOfStream()}} can update the duration under certain circumstances.</p>
             </li>
           </ol>
-        </dd><dt><dfn><code>onsourceopen</code></dfn> of type {{EventHandler}}</dt><dd>
-          <p>The event handler for the {{sourceopen}} event.</p>
-        </dd><dt><dfn><code>onsourceended</code></dfn> of type {{EventHandler}}</dt><dd>
-          <p>The event handler for the {{sourceended}} event.</p>
-        </dd><dt><dfn><code>onsourceclose</code></dfn> of type {{EventHandler}}</dt><dd>
-          <p>The event handler for the {{sourceclose}} event.</p>
-        </dd>
-        <dt><dfn><code>canConstructInDedicatedWorker</code></dfn> of type {{boolean}}</dt><dd>
+
+        <h3><dfn>canConstructInDedicatedWorker</dfn> attribute</h3>
           <p>Returns true.</p>
           <p class="note">This attribute enables main thread and dedicated worker feature detection of support for
             creating and using a {{MediaSource}} object in a dedicated worker, and mitigates the need for higher latency
             detection polyfills like attempting creation of a {{MediaSource}} object from a dedicated worker, especially
             if the feature is not supported.</p>
-        </dd></dl></section><section><h2>Methods</h2><dl class="methods" data-dfn-for="MediaSource"><dt><dfn><code>addSourceBuffer</code></dfn></dt><dd>
+
+
+        <h3><dfn>addSourceBuffer()</dfn> method</h3>
           <p>Adds a new <a>SourceBuffer</a> to {{MediaSource/sourceBuffers}}.</p>
-          <ol class="method-algorithm">
+          <ol class="algorithm">
             <li>If |type:DOMString| is an empty string then throw a {{TypeError}} exception and abort these steps.</li>
             <li>If |type| contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}, then throw a {{NotSupportedError}} exception and abort these steps.</li>
             <li>If the user agent can't handle any more SourceBuffer objects or if creating a SourceBuffer
@@ -418,10 +416,10 @@ interface MediaSource : EventTarget {
             <li>Return |buffer|.</li>
           </ol>
 
-          <dt><dfn><code>removeSourceBuffer</code></dfn></dt><dd>
+          <h3><dfn>removeSourceBuffer()</dfn> method</h3>
           <p>Removes a {{SourceBuffer}} from {{MediaSource/sourceBuffers}}.</p>
 
-          <ol class="method-algorithm">
+          <ol class="algorithm">
             <li>If |sourceBuffer:SourceBuffer| specifies an object that is not in {{MediaSource/sourceBuffers}} then throw a {{NotFoundError}} exception and abort these steps.</li>
             <li>If the |sourceBuffer|.{{SourceBuffer/updating}} attribute equals true, then run the following steps:
               <ol>
@@ -578,10 +576,10 @@ interface MediaSource : EventTarget {
         <table
           class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|sourceBuffer|</th><td class="prmType">{{SourceBuffer}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd>
 
-          <dt><dfn><code>endOfStream</code></dfn></dt><dd>
+        <h3><dfn>endOfStream()</dfn> method</h3>
           <p>Signals the end of the stream.</p>
 
-          <ol class="method-algorithm">
+          <ol class="algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not in the {{ReadyState/""open""}} state then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If the {{SourceBuffer/updating}} attribute equals true on any <a>SourceBuffer</a> in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>Run the [=end of stream=] algorithm with the error parameter set to |error:EndOfStreamError|.</li>
@@ -589,12 +587,12 @@ interface MediaSource : EventTarget {
         <table
           class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|error|</th><td class="prmType">{{EndOfStreamError}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd>
 
-          <dt><dfn><code>setLiveSeekableRange</code></dfn></dt><dd>
+          <h3><dfn>setLiveSeekableRange()</dfn> method</h3>
 
           <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
             section [[[#htmlmediaelement-extensions]]] to modify
             {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
-          <ol class="method-algorithm">
+          <ol class="algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not {{ReadyState/""open""}} then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If |start:double| is negative or greater than |end:double|, then throw a {{TypeError}} exception and abort these steps.</li>
             <li>Set {{MediaSource/[[live seekable range]]}} to be a new <a def-id="normalized-timeranges-object"></a>
@@ -629,7 +627,9 @@ interface MediaSource : EventTarget {
               </tr>
             </tbody>
           </table>
-        <div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>clearLiveSeekableRange</code></dfn></dt><dd>
+        <div><em>Return type: </em>{{undefined}}</div></dd>
+
+        <h3><dfn>clearLiveSeekableRange()</dfn> method</h3>
         <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
           section [[[#htmlmediaelement-extensions]]] to modify
           {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
@@ -639,9 +639,9 @@ interface MediaSource : EventTarget {
             <li>If {{MediaSource/[[live seekable range]]}} contains a range, then set {{MediaSource/[[live seekable
               range]]}} to be a new empty {{TimeRanges}} object.
           </li></ol>
-        <div><em>No parameters.</em></div><div><em>Return type: </em>{{undefined}}</div></dd>
+        <div><em>No parameters.</em></div><div><em>Return type: </em>{{undefined}}</div>
 
-      <dt><dfn><code>isTypeSupported</code></dfn>, static</dt><dd>
+        <h3><dfn>isTypeSupported()</dfn> method</h3>
           <p>Check to see whether the <a>MediaSource</a> is capable of creating <a>SourceBuffer</a> objects for the specified MIME type.</p>
 
           <ol class="method-algorithm">
@@ -659,7 +659,7 @@ interface MediaSource : EventTarget {
             This method returning true implies that HTMLMediaElement.canPlayType() will return "maybe" or "probably" since it does not make sense for a <a>MediaSource</a> to support a type the HTMLMediaElement knows it cannot play.
           </p>
         <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|type|</th><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{boolean}}</div></dd></dl>
-      </section>
+
 
       <section id="mediasource-events">
         <h3>Event Summary</h3>
@@ -1198,10 +1198,11 @@ interface MediaSource : EventTarget {
         </section>
       </section>
     </section>
+    </section>
 
     <section id="mediasourcehandle">
-      <h2><dfn>MediaSourceHandle</dfn> Object</h2>
-      <p>The MediaSourceHandle object represents a proxy for a {{MediaSource}} object that is useful for attaching a
+      <h2><dfn>MediaSourceHandle</dfn> interface</h2>
+      <p>The {{MediaSourceHandle}} interface represents a proxy for a {{MediaSource}} object that is useful for attaching a
         {{DedicatedWorkerGlobalScope}} {{MediaSource}} to a {{Window}} {{HTMLMediaElement}} using
         {{HTMLMediaElement/srcObject}} as described in the [=attaching to a media element=] algorithm.</p>
 
@@ -1272,7 +1273,7 @@ interface MediaSourceHandle {};</pre>
     </section>
 
     <section id="sourcebuffer">
-      <h2><dfn>SourceBuffer</dfn> Object</h2>
+      <h2><dfn>SourceBuffer</dfn> interface</h2>
 
       <pre class="idl">
         enum AppendMode {
@@ -2613,8 +2614,8 @@ interface SourceBuffer : EventTarget {
     </section>
 
     <section id="sourcebufferlist">
-      <h2><dfn>SourceBufferList</dfn> Object</h2>
-      <p>SourceBufferList is a simple container object for <a>SourceBuffer</a> objects. It provides read-only array access and fires events when the list is modified.</p>
+      <h2><dfn>SourceBufferList</dfn> interface</h2>
+      <p>{{SourceBufferList}} is a simple container object for <a>SourceBuffer</a> objects. It provides read-only array access and fires events when the list is modified.</p>
 <pre class="idl">[Exposed=(Window,DedicatedWorker)]
 interface SourceBufferList : EventTarget {
     readonly        attribute unsigned long length;
