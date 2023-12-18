@@ -127,22 +127,6 @@
     df.appendChild(f);
   }
 
-  function contributors_helper(doc, df, id, text) {
-    var contributors = window.respecConfig.mseContributors;
-    contributors.sort();
-
-    var str = "";
-    for (var i = 0; i < contributors.length - 1; ++i) {
-      if (i > 0)
-        str += ", ";
-      str += contributors[i];
-    }
-    str += ", and ";
-    str += contributors[contributors.length - 1];
-
-    df.appendChild(doc.createTextNode(str));
-  }
-
   function append_error_helper(doc, df, id, text) {
     link_helper(doc, df, id, 'append error algorithm');
   }
@@ -215,8 +199,6 @@
 
     'media-data-cannot-be-fetched': { func: fragment_helper, fragment: '', link_text: '&quot;<i>If the media data cannot be fetched at all, due to network errors, causing the user agent to give up trying to fetch the resource</i>&quot;', },
     'Otherwise-mode-is-local': { func: fragment_helper, fragment: '', link_text: '&quot;<i>Otherwise (mode is local)</i>&quot;', },
-
-    'contributors': { func: contributors_helper, fragment: '', link_text: '', },
   };
 
   // These definitions are only referenced from the registries.
@@ -307,7 +289,6 @@
 
   function mediaSourcePreProcessor() {
     var original_MSE_spec_url = MSE_spec_url; // The loop may change multiple groupBaseURLs.
-    var is_registry_file = window.respecConfig.edDraftURI.includes("byte-stream");
     var specStatus = window.respecConfig.specStatus;
     var specStatusIndex = location.search.indexOf("specStatus");
     if (specStatusIndex !== -1) {
