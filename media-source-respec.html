@@ -96,7 +96,7 @@
 
     <section id="introduction" class="informative">
       <h2>Introduction</h2>
-      <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;. It defines a MediaSource object that can serve as a source of media data for an HTMLMediaElement. MediaSource objects have one or more <a>SourceBuffer</a> objects.  Applications append data segments to the <a>SourceBuffer</a> objects, and can adapt the quality of appended data based on system performance and other factors. Data from the <a>SourceBuffer</a> objects is managed as track buffers for audio, video and text data that is decoded and played. Byte stream specifications used with these extensions are available in the byte stream format registry [[MSE-REGISTRY]].</p>
+      <p>This specification allows JavaScript to dynamically construct media streams for &lt;audio&gt; and &lt;video&gt;. It defines a MediaSource object that can serve as a source of media data for an HTMLMediaElement. MediaSource objects have one or more {{SourceBuffer}} objects.  Applications append data segments to the {{SourceBuffer}} objects, and can adapt the quality of appended data based on system performance and other factors. Data from the {{SourceBuffer}} objects is managed as track buffers for audio, video and text data that is decoded and played. Byte stream specifications used with these extensions are available in the byte stream format registry [[MSE-REGISTRY]].</p>
       <a href='https://w3c.github.io/media-source/pipeline_model_description.html#pipelinedesc'>
         <picture><img src="pipeline_model.svg" alt="Media Source Pipeline Model Diagram"></picture>
       </a>
@@ -126,13 +126,13 @@
           <dd><p>The [=track buffers=] that provide [=coded frames=] for the {{AudioTrack/enabled}}
               {{HTMLMediaElement/audioTracks}}, the {{VideoTrack/selected}} {{HTMLMediaElement/videoTracks}}, and the
               <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> {{HTMLMediaElement/textTracks}}. All these tracks are associated with
-            <a>SourceBuffer</a> objects in the {{MediaSource/activeSourceBuffers}} list.</p>
+            {{SourceBuffer}} objects in the {{MediaSource/activeSourceBuffers}} list.</p>
           </dd>
 
           <dt><dfn>Append Window</dfn></dt>
           <dd><p>A [=presentation timestamp=] range used to filter out [=coded frames=] while appending. The append window represents a single
             continuous time range with a single start time and end time. Coded frames with [=presentation timestamp=] within this range are allowed to be appended
-            to the <a>SourceBuffer</a> while coded frames outside this range are filtered out. The append window start and end times are controlled by
+            to the {{SourceBuffer}} while coded frames outside this range are filtered out. The append window start and end times are controlled by
             the {{SourceBuffer/appendWindowStart}} and {{SourceBuffer/appendWindowEnd}} attributes respectively.</p></dd>
 
           <dt><dfn class="export">Coded Frame</dfn></dt>
@@ -172,19 +172,19 @@
 
           <dt><dfn id="mediasource-object-url">MediaSource object URL</dfn></dt>
           <dd>
-            <p>A MediaSource object URL is a unique <a def-id="blob-uri"></a> [[FILEAPI]] created by {{URL/createObjectURL()}}. It is used to attach a <a>MediaSource</a> object to an HTMLMediaElement.</p>
-            <p>These URLs are the same as a <a def-id="blob-uri"></a>, except that anything in the definition of that feature that refers to <a def-id="File"></a> and <a def-id="Blob"></a> objects is hereby extended to also apply to <a>MediaSource</a> objects.</p>
-            <p>The [=origin=] of the MediaSource object URL is the [=relevant settings object=] of <code>this</code> during the call to {{URL/createObjectURL()}}.</p>
+            <p>A {{MediaSource}} object URL is a unique [=blob URL=] created by {{URL/createObjectURL()}}. It is used to attach a {{MediaSource}} object to an HTMLMediaElement.</p>
+            <p>These URLs are the same as a [=blob URLs=], except that anything in the definition of that feature that refers to {{File}} and {{Blob}} objects is hereby extended to also apply to {{MediaSource}} objects.</p>
+            <p>The [=origin=] of the MediaSource object URL is the [=relevant settings object=] of [=this=] during the call to {{URL/createObjectURL()}}.</p>
             <p class="note">For example, the [=origin=] of the MediaSource object URL affects the way that the media element is <a href="https://html.spec.whatwg.org/multipage/canvas.html#security-with-canvas-elements">consumed by canvas</a>.</p>
           </dd>
 
           <dt><dfn id="parent-media-source">Parent Media Source</dfn></dt>
-          <dd><p>The parent media source of a <a>SourceBuffer</a> object is the <a>MediaSource</a> object that created it.</p></dd>
+          <dd><p>The parent media source of a {{SourceBuffer}} object is the {{MediaSource}} object that created it.</p></dd>
 
           <dt><dfn id="presentation-start-time">Presentation Start Time</dfn></dt>
           <dd><p>The presentation start time is the earliest time point in the presentation and specifies the initial <a def-id="videoref" name="current-playback-position">playback position</a> and <a def-id="videoref" name="earliest-possible-position">earliest possible position</a>. All presentations created using this specification have a presentation start time of 0.</p>
 
-          <p class="note">For the purposes of determining if {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that includes the current playback position, implementations MAY choose to allow a current playback position at or after [=presentation start time=] and before the first {{TimeRanges}} to play the first {{TimeRanges}} if that {{TimeRanges}} starts within a reasonably short time, like 1 second, after [=presentation start time=]. This allowance accommodates the reality that muxed streams commonly do not begin all tracks precisely at [=presentation start time=]. Implementations MUST report the actual buffered range, regardless of this allowance.</p>
+          <p class="note">For the purposes of determining if {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that includes the current playback position, implementations MAY choose to allow a current playback position at or after [=presentation start time=] and before the first {{TimeRanges}} to play the first {{TimeRanges}} if that {{TimeRanges}} starts within a reasonably short time, like 1 second, after [=presentation start time=]. This allowance accommodates the reality that muxed streams commonly do not begin all tracks precisely at [=presentation start time=]. Implementations MUST report the actual buffered range, regardless of this allowance.</p>
           </dd>
           <dt><dfn id="presentation-interval">Presentation Interval</dfn></dt>
           <dd>
@@ -205,14 +205,14 @@
           <dd><p>A position in a [=media segment=] where decoding and continuous playback can begin without relying on any previous data in the segment. For video this tends to be the location of I-frames. In the case of audio, most audio frames can be treated as a random access point. Since video tracks tend to have a more sparse distribution of random access points, the location of these points are usually considered the random access points for multiplexed streams.</p></dd>
 
           <dt><dfn id="sourcebuffer-byte-stream-format-spec">SourceBuffer byte stream format specification</dfn></dt>
-          <dd><p>The specific [=byte stream format specification=] that describes the format of the byte stream accepted by a <a>SourceBuffer</a> instance. The
-          [=byte stream format specification=], for a <a>SourceBuffer</a> object, is initially selected based on the |type:DOMString| passed to the
+          <dd><p>The specific [=byte stream format specification=] that describes the format of the byte stream accepted by a {{SourceBuffer}} instance. The
+          [=byte stream format specification=], for a {{SourceBuffer}} object, is initially selected based on the |type:DOMString| passed to the
           {{MediaSource/addSourceBuffer()}} call that created the object, and can be updated by {{SourceBuffer/changeType()}} calls on the object.</p></dd>
 
           <dt><dfn id="sourcebuffer-configuration">SourceBuffer configuration</dfn></dt>
-          <dd><p>A specific set of tracks distributed across one or more <a>SourceBuffer</a>
-              objects owned by a single <a>MediaSource</a> instance.</p>
-            <p>Implementations MUST support at least 1 <a>MediaSource</a> object with the following
+          <dd><p>A specific set of tracks distributed across one or more {{SourceBuffer}}
+              objects owned by a single {{MediaSource}} instance.</p>
+            <p>Implementations MUST support at least 1 {{MediaSource}} object with the following
             configurations:</p>
             <ul>
               <li>A single SourceBuffer with 1 audio track and/or 1 video track.</li>
@@ -242,7 +242,7 @@
         when the {{MediaSource}} object is created, is maintained by {{MediaSource/setLiveSeekableRange()}} and
         {{MediaSource/clearLiveSeekableRange()}}, and is used in
         [[[#htmlmediaelement-extensions]]] to modify
-        {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
+        {{HTMLMediaElement}}'s {{HTMLMediaElement/seekable}} behavior.</p>
 
       <p>Each {{MediaSource}} object has a <dfn data-dfn-for="MediaSource">[[\has ever been attached]]</dfn> internal
         slot that stores a {{boolean}}. It is initialized to false when the {{MediaSource}} object is created, and is
@@ -347,7 +347,7 @@ interface MediaSource : EventTarget {
             {{AudioTrack/enabled}} audio track(s), and the
             <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> text track(s).
           </p>
-          <p><a>SourceBuffer</a> objects in this list MUST appear in the same order as they appear in
+          <p>{{SourceBuffer}} objects in this list MUST appear in the same order as they appear in
             the {{MediaSource/sourceBuffers}} attribute; e.g., if only sourceBuffers[0] and
             sourceBuffers[3] are in {{MediaSource/activeSourceBuffers}}, then activeSourceBuffers[0] MUST
             equal sourceBuffers[0] and activeSourceBuffers[1] MUST equal sourceBuffers[3].
@@ -356,8 +356,8 @@ interface MediaSource : EventTarget {
             updated.</p>
 
          <h3><dfn>readyState</dfn> attribute</h3>
-          <p>Indicates the current state of the <a>MediaSource</a> object. When the <a>MediaSource</a> is created {{MediaSource/readyState}} MUST be set to {{ReadyState/""closed""}}.
-        </p>
+          <p>Indicates the current state of the <a>MediaSource</a> object. When the <a>MediaSource</a> is created {{MediaSource/readyState}} MUST be set to {{ReadyState/""closed""}}.</p>
+    
         <h3><dfn>duration</dfn> attribute</h3>
           <p>Allows the web application to set the presentation duration. The duration is initially set to NaN when the <a>MediaSource</a> object is created.</p>
           <p>On getting, run the following steps:</p>
@@ -369,7 +369,7 @@ interface MediaSource : EventTarget {
           <ol>
             <li>If the value being set is negative or NaN then throw a {{TypeError}} exception and abort these steps.</li>
             <li>If the {{MediaSource/readyState}} attribute is not {{ReadyState/""open""}} then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>If the {{SourceBuffer/updating}} attribute equals true on any <a>SourceBuffer</a> in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.</li>
+            <li>If the {{SourceBuffer/updating}} attribute equals true on any {{SourceBuffer}} in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>Run the [=duration change=] algorithm with |new duration:unrestricted double| set to the value being assigned to this attribute.
               <p class="note">The [=duration change=] algorithm will adjust |new duration| higher if there is any currently buffered coded frame with a higher end time.</p>
               <p class="note">{{SourceBuffer/appendBuffer()}} and {{MediaSource/endOfStream()}} can update the duration under certain circumstances.</p>
@@ -388,7 +388,7 @@ interface MediaSource : EventTarget {
           <p>Adds a new <a>SourceBuffer</a> to {{MediaSource/sourceBuffers}}.</p>
           <ol class="algorithm">
             <li>If |type:DOMString| is an empty string then throw a {{TypeError}} exception and abort these steps.</li>
-            <li>If |type| contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}, then throw a {{NotSupportedError}} exception and abort these steps.</li>
+            <li>If |type| contains a MIME type that is not supported or contains a MIME type that is not supported with the types specified for the other {{SourceBuffer}} objects in {{MediaSource/sourceBuffers}}, then throw a {{NotSupportedError}} exception and abort these steps.</li>
             <li>If the user agent can't handle any more SourceBuffer objects or if creating a SourceBuffer
               based on |type| would result in an unsupported [=SourceBuffer configuration=],
               then throw a {{QuotaExceededError}} exception and abort these steps.
@@ -578,15 +578,15 @@ interface MediaSource : EventTarget {
 
           <ol class="algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not in the {{ReadyState/""open""}} state then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>If the {{SourceBuffer/updating}} attribute equals true on any <a>SourceBuffer</a> in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.</li>
+            <li>If the {{SourceBuffer/updating}} attribute equals true on any {{SourceBuffer}} in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>Run the [=end of stream=] algorithm with the error parameter set to |error:EndOfStreamError|.</li>
           </ol>
           <h3><dfn>setLiveSeekableRange()</dfn> method</h3>
 
           <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
             section [[[#htmlmediaelement-extensions]]] to modify
-            {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
-          <ol class="algorithm">
+            {{HTMLMediaElement}}'s {{HTMLMediaElement/seekable}} behavior.</p>
+          <ol class="method-algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not {{ReadyState/""open""}} then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If |start:double| is negative or greater than |end:double|, then throw a {{TypeError}} exception and abort these steps.</li>
             <li>Set {{MediaSource/[[live seekable range]]}} to be a new <a def-id="normalized-timeranges-object"></a>
@@ -595,7 +595,7 @@ interface MediaSource : EventTarget {
         <h3><dfn>clearLiveSeekableRange()</dfn> method</h3>
         <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
           section [[[#htmlmediaelement-extensions]]] to modify
-          {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} behavior.</p>
+          {{HTMLMediaElement}}'s {{HTMLMediaElement/seekable}} behavior.</p>
 
           <ol class="method-algorithm">
             <li>If the {{MediaSource/readyState}} attribute is not {{ReadyState/""open""}} then throw an {{InvalidStateError}} exception and abort these steps.</li>
@@ -615,10 +615,10 @@ interface MediaSource : EventTarget {
             <li>Return true.</li>
           </ol>
           <p class="note">
-            If true is returned from this method, it only indicates that the <a>MediaSource</a> implementation is capable of creating <a>SourceBuffer</a> objects for the specified MIME type. An {{MediaSource/addSourceBuffer()}} call SHOULD still fail if sufficient resources are not available to support the addition of a new <a>SourceBuffer</a>.
+            If true is returned from this method, it only indicates that the {{MediaSource}} implementation is capable of creating {{SourceBuffer}} objects for the specified MIME type. An {{MediaSource/addSourceBuffer()}} call SHOULD still fail if sufficient resources are not available to support the addition of a new {{SourceBuffer}}.
           </p>
           <p class="note">
-            This method returning true implies that HTMLMediaElement.canPlayType() will return "maybe" or "probably" since it does not make sense for a <a>MediaSource</a> to support a type the HTMLMediaElement knows it cannot play.
+            This method returning true implies that {{HTMLMediaElement}}'s {{HTMLMediaElement/canPlayType()}} will return "maybe" or "probably" since it does not make sense for a {{MediaSource}} to support a type the HTMLMediaElement knows it cannot play.
           </p>
       </section>
 
@@ -747,7 +747,7 @@ interface MediaSource : EventTarget {
                 <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the [=resource fetch algorithm=]'s
                   <a def-id="media-data-processing-steps-list"></a>.
                   <div class="note">This prevents using [=MediaSource object URLs=] for DedicatedWorker MediaSource
-                    attachments. Transferring {{MediaSource}}.{{MediaSource/handle}} from the DedicatedWorker to the
+                    attachments. Transferring {{MediaSource}}'s {{MediaSource/handle}} from the DedicatedWorker to the
                     Window context and assigning it to the media element's {{HTMLMediaElement/srcObject}} attribute is
                     the only way to attach such a MediaSource.
                   </div>
@@ -795,7 +795,7 @@ interface MediaSource : EventTarget {
                                 worker]]}}.</li>
                               <li>Set the {{MediaSource/readyState}} attribute to {{ReadyState/""open""}}.</li>
                               <li>[=Queue a task=] to [=fire an event=] named {{sourceopen}} at the
-                                <a>MediaSource</a>.</li>
+                                {{MediaSource}}.</li>
                             </ol>
                           </li>
                         </ol></dd>
@@ -805,7 +805,7 @@ interface MediaSource : EventTarget {
                           <li>Set {{HTMLMediaElement/[[port to worker]]}} null.</li>
                           <li>Set {{MediaSource/[[port to main]]}} null.</li>
                           <li>Set the {{MediaSource/readyState}} attribute to {{ReadyState/""open""}}.</li>
-                          <li>[=Queue a task=] to [=fire an event=] named {{sourceopen}} at the <a>MediaSource</a>.</li>
+                          <li>[=Queue a task=] to [=fire an event=] named {{sourceopen}} at the {{MediaSource}}.</li>
                         </ol></dd>
                       </dl>
                     <li>Continue the [=resource fetch algorithm=] by running the remaining
@@ -855,17 +855,17 @@ interface MediaSource : EventTarget {
             <li>Set the {{MediaSource/readyState}} attribute to {{ReadyState/""closed""}}.</li>
             <li>If [=this=] is a {{ManagedMediaSource}}, then set {{ManagedMediaSource/streaming}} attribute to `false`.</li>
             <li>Update {{MediaSource/duration}} to NaN.</li>
-            <li>Remove all the <a>SourceBuffer</a> objects from {{MediaSource/activeSourceBuffers}}.</li>
+            <li>Remove all the {{SourceBuffer}} objects from {{MediaSource/activeSourceBuffers}}.</li>
             <li>
               [=Queue a task=] to [=fire an event=] named {{removesourcebuffer}} at {{MediaSource/activeSourceBuffers}}.</li>
-            <li>Remove all the <a>SourceBuffer</a> objects from {{MediaSource/sourceBuffers}}.</li>
+            <li>Remove all the {{SourceBuffer}} objects from {{MediaSource/sourceBuffers}}.</li>
             <li>
               [=Queue a task=] to [=fire an event=] named {{removesourcebuffer}} at {{MediaSource/sourceBuffers}}.</li>
             <li>
-              [=Queue a task=] to [=fire an event=] named {{sourceclose}} at the <a>MediaSource</a>.</li>
+              [=Queue a task=] to [=fire an event=] named {{sourceclose}} at the {{MediaSource}}.</li>
           </ol>
           <p class="note">Going forward, this algorithm is intended to be externally called and run in any case where
-          the attached <a>MediaSource</a>, if any, must be detached from the media element.  It MAY be called on
+          the attached {{MediaSource}}, if any, must be detached from the media element.  It MAY be called on
           HTMLMediaElement [[HTML]] operations like load() and [=resource fetch algorithm=] failures in addition to, or
           in place of, when the media element transitions to {{HTMLMediaElement/NETWORK_EMPTY}}. Resource fetch
           algorithm failures are those which abort either the resource fetch algorithm or the resource selection
@@ -878,26 +878,26 @@ interface MediaSource : EventTarget {
           <p>Run the following steps as part of the "<i>Wait until the user agent has established whether or not the media data for the new playback position is available, and, if it is, until it has decoded enough data to play back that position"</i> step of the <a def-id="hme-seek-algorithm"></a>:</p>
           <ol>
             <li>
-            <p class="note">The media element looks for [=media segments=] containing the |new playback position:double| in each <a>SourceBuffer</a> object in {{MediaSource/activeSourceBuffers}}.
-            Any position within a {{TimeRanges}} in the current value of the {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} attribute has all necessary media segments buffered for that position.</p>
+            <p class="note">The media element looks for [=media segments=] containing the |new playback position:double| in each {{SourceBuffer}} object in {{MediaSource/activeSourceBuffers}}.
+            Any position within a {{TimeRanges}} in the current value of the {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} attribute has all necessary media segments buffered for that position.</p>
               <dl class="switch">
-                <dt>If |new playback position| is not in any {{TimeRanges}} of {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}}</dt>
+                <dt>If |new playback position| is not in any {{TimeRanges}} of {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}}</dt>
                   <dd>
                   <ol>
-                    <li>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is greater than
-                      {{HTMLMediaElement/HAVE_METADATA}}, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute
+                    <li>If the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute is greater than
+                      {{HTMLMediaElement/HAVE_METADATA}}, then set the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute
                       to {{HTMLMediaElement/HAVE_METADATA}}.
-                    <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
+                    <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
                     </li>
                     <li>The media element waits until an {{SourceBuffer/appendBuffer()}} call causes the [=coded frame processing=] algorithm to set
-                      the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to a value greater than {{HTMLMediaElement/HAVE_METADATA}}.
-                      <p class="note">The web application can use {{SourceBuffer/buffered}} and {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} to determine what the media element needs to resume playback.</p>
+                      the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute to a value greater than {{HTMLMediaElement/HAVE_METADATA}}.
+                      <p class="note">The web application can use {{SourceBuffer/buffered}} and {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} to determine what the media element needs to resume playback.</p>
                     </li>
                   </ol>
                 </dd>
                 <dt>Otherwise</dt>
                 <dd>Continue
-                <p class="note">If the {{MediaSource/readyState}} attribute is {{ReadyState/""ended""}} and the |new playback position| is within a {{TimeRanges}} currently in {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}}, then the seek operation must continue to completion here even if one or more currently selected or enabled track buffers' largest range end timestamp is less than |new playback position|. This condition should only occur due to logic in {{SourceBuffer/buffered}} when {{MediaSource/readyState}} is {{ReadyState/""ended""}}.</p>
+                <p class="note">If the {{MediaSource/readyState}} attribute is {{ReadyState/""ended""}} and the |new playback position| is within a {{TimeRanges}} currently in {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}}, then the seek operation must continue to completion here even if one or more currently selected or enabled track buffers' largest range end timestamp is less than |new playback position|. This condition should only occur due to logic in {{SourceBuffer/buffered}} when {{MediaSource/readyState}} is {{ReadyState/""ended""}}.</p>
                 </dd>
               </dl>
             </li>
@@ -910,7 +910,7 @@ interface MediaSource : EventTarget {
 
         <section id="buffer-monitoring">
           <h4><dfn>SourceBuffer Monitoring</dfn></h4>
-          <p>The following steps are periodically run during playback to make sure that all of the <a>SourceBuffer</a> objects in {{MediaSource/activeSourceBuffers}} have [=enough data to ensure uninterrupted playback=]. Changes to {{MediaSource/activeSourceBuffers}} also cause these steps to run because they affect the conditions that trigger state transitions.</p>
+          <p>The following steps are periodically run during playback to make sure that all of the {{SourceBuffer}} objects in {{MediaSource/activeSourceBuffers}} have [=enough data to ensure uninterrupted playback=]. Changes to {{MediaSource/activeSourceBuffers}} also cause these steps to run because they affect the conditions that trigger state transitions.</p>
 
           <p>Having <dfn id="enough-data">enough data to ensure uninterrupted playback</dfn> is an implementation specific condition where the user agent
           determines that it currently has enough data to play the presentation without stalling for a meaningful period of time. This condition is
@@ -919,7 +919,7 @@ interface MediaSource : EventTarget {
 
           <p class="note">An implementation MAY choose to use bytes buffered, time buffered, the append rate, or any other metric it sees fit to
             determine when it has enough data. The metrics used MAY change during playback so web applications SHOULD only rely on the value of
-            {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} to determine whether more data is needed or not.</p>
+            {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} to determine whether more data is needed or not.</p>
 
           <p class="note">When the media element needs more data, the user agent SHOULD transition it from {{HTMLMediaElement/HAVE_ENOUGH_DATA}} to
             {{HTMLMediaElement/HAVE_FUTURE_DATA}} early enough for a web application to be able to respond without causing an interruption in playback.
@@ -927,44 +927,44 @@ interface MediaSource : EventTarget {
             500ms to append more data before playback stalls.</p>
 
           <dl class="switch">
-            <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute equals {{HTMLMediaElement/HAVE_NOTHING}}:</dt>
+            <dt>If the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute equals {{HTMLMediaElement/HAVE_NOTHING}}:</dt>
             <dd>
               <ol>
                 <li>Abort these steps.</li>
               </ol>
             </dd>
-            <dt>If {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} does not contain a {{TimeRanges}} for the current playback position:</dt>
+            <dt>If {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} does not contain a {{TimeRanges}} for the current playback position:</dt>
             <dd>
               <ol>
-                <li>Set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_METADATA}}.
-                <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p></li>
+                <li>Set the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_METADATA}}.
+                <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p></li>
                 <li>Abort these steps.</li>
               </ol>
             </dd>
-            <dt>If {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that includes the current playback position and [=enough data to ensure uninterrupted playback=]:</dt>
+            <dt>If {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that includes the current playback position and [=enough data to ensure uninterrupted playback=]:</dt>
             <dd>
               <ol>
-                <li>Set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_ENOUGH_DATA}}.
-                <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p></li>
+                <li>Set the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_ENOUGH_DATA}}.
+                <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p></li>
                 <li>Playback may resume at this point if it was previously suspended by a transition to {{HTMLMediaElement/HAVE_CURRENT_DATA}}.</li>
                 <li>Abort these steps.</li>
               </ol>
             </dd>
-            <dt>If {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that includes the current playback position and some time beyond the current playback position, then run the following steps:</dt>
+            <dt>If {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that includes the current playback position and some time beyond the current playback position, then run the following steps:</dt>
             <dd>
               <ol>
-                <li>Set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_FUTURE_DATA}}.
-                <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
+                <li>Set the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_FUTURE_DATA}}.
+                <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
                 </li>
                 <li>Playback may resume at this point if it was previously suspended by a transition to {{HTMLMediaElement/HAVE_CURRENT_DATA}}.</li>
                 <li>Abort these steps.</li>
               </ol>
             </dd>
-            <dt>If {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that ends at the current playback position and does not have a range covering the time immediately after the current position:</dt>
+            <dt>If {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that ends at the current playback position and does not have a range covering the time immediately after the current position:</dt>
             <dd>
               <ol>
-                <li>Set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_CURRENT_DATA}}.
-                <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
+                <li>Set the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_CURRENT_DATA}}.
+                <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
                 </li>
                 <li>Playback is suspended at this point since the media element doesn't have enough data to advance the <a def-id="media-timeline"></a>.</li>
                 <li>Abort these steps.</li>
@@ -989,17 +989,17 @@ interface MediaSource : EventTarget {
             <dt>If the selected video track changes, then run the following steps:</dt>
             <dd>
               <ol>
-                <li>If the <a>SourceBuffer</a> associated with the previously selected video track is not associated with any other enabled tracks, run the following steps:
+                <li>If the {{SourceBuffer}} associated with the previously selected video track is not associated with any other enabled tracks, run the following steps:
                   <ol>
-                    <li>Remove the <a>SourceBuffer</a> from {{MediaSource/activeSourceBuffers}}.</li>
+                    <li>Remove the {{SourceBuffer}} from {{MediaSource/activeSourceBuffers}}.</li>
                     <li>
                       [=Queue a task=] to [=fire an event=] named {{removesourcebuffer}} at {{MediaSource/activeSourceBuffers}}
                     </li>
                   </ol>
                 </li>
-                <li>If the <a>SourceBuffer</a> associated with the newly selected video track is not already in {{MediaSource/activeSourceBuffers}}, run the following steps:
+                <li>If the {{SourceBuffer}} associated with the newly selected video track is not already in {{MediaSource/activeSourceBuffers}}, run the following steps:
                   <ol>
-                    <li>Add the <a>SourceBuffer</a> to {{MediaSource/activeSourceBuffers}}.</li>
+                    <li>Add the {{SourceBuffer}} to {{MediaSource/activeSourceBuffers}}.</li>
                     <li>
                       [=Queue a task=] to [=fire an event=] named {{addsourcebuffer}} at {{MediaSource/activeSourceBuffers}}
                     </li>
@@ -1007,42 +1007,42 @@ interface MediaSource : EventTarget {
                 </li>
               </ol>
             </dd>
-            <dt>If an audio track becomes disabled and the <a>SourceBuffer</a> associated with this track is not associated with any other enabled or selected track, then run the following steps:</dt>
+            <dt>If an audio track becomes disabled and the {{SourceBuffer}} associated with this track is not associated with any other enabled or selected track, then run the following steps:</dt>
             <dd>
               <ol>
-                <li>Remove the <a>SourceBuffer</a> associated with the audio track from {{MediaSource/activeSourceBuffers}}
+                <li>Remove the {{SourceBuffer}} associated with the audio track from {{MediaSource/activeSourceBuffers}}
                 </li>
                 <li>
                   [=Queue a task=] to [=fire an event=] named {{removesourcebuffer}} at {{MediaSource/activeSourceBuffers}}
                 </li>
               </ol>
             </dd>
-            <dt>If an audio track becomes enabled and the <a>SourceBuffer</a> associated with this track is not already in {{MediaSource/activeSourceBuffers}}, then run the following steps:
+            <dt>If an audio track becomes enabled and the {{SourceBuffer}} associated with this track is not already in {{MediaSource/activeSourceBuffers}}, then run the following steps:
             </dt>
             <dd>
               <ol>
-                <li>Add the <a>SourceBuffer</a> associated with the audio track to {{MediaSource/activeSourceBuffers}}
+                <li>Add the {{SourceBuffer}} associated with the audio track to {{MediaSource/activeSourceBuffers}}
                 </li>
                 <li>
                   [=Queue a task=] to [=fire an event=] named {{addsourcebuffer}} at {{MediaSource/activeSourceBuffers}}
                 </li>
               </ol>
             </dd>
-            <dt>If a text track {{TextTrack/mode}} becomes <a def-id="texttrackmode-disabled"></a> and the <a>SourceBuffer</a> associated with this track is not associated with any other enabled or selected track, then run the following steps:</dt>
+            <dt>If a text track {{TextTrack/mode}} becomes <a def-id="texttrackmode-disabled"></a> and the {{SourceBuffer}} associated with this track is not associated with any other enabled or selected track, then run the following steps:</dt>
             <dd>
               <ol>
-                <li>Remove the <a>SourceBuffer</a> associated with the text track from {{MediaSource/activeSourceBuffers}}
+                <li>Remove the {{SourceBuffer}} associated with the text track from {{MediaSource/activeSourceBuffers}}
                 </li>
                 <li>
                   [=Queue a task=] to [=fire an event=] named {{removesourcebuffer}} at {{MediaSource/activeSourceBuffers}}
                 </li>
               </ol>
             </dd>
-            <dt>If a text track {{TextTrack/mode}} becomes <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> and the <a>SourceBuffer</a> associated with this track is not already in {{MediaSource/activeSourceBuffers}}, then run the following steps:
+            <dt>If a text track {{TextTrack/mode}} becomes <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> and the {{SourceBuffer}} associated with this track is not already in {{MediaSource/activeSourceBuffers}}, then run the following steps:
             </dt>
             <dd>
               <ol>
-                <li>Add the <a>SourceBuffer</a> associated with the text track to {{MediaSource/activeSourceBuffers}}
+                <li>Add the {{SourceBuffer}} associated with the text track to {{MediaSource/activeSourceBuffers}}
                 </li>
                 <li>
                   [=Queue a task=] to [=fire an event=] named {{addsourcebuffer}} at {{MediaSource/activeSourceBuffers}}
@@ -1057,10 +1057,10 @@ interface MediaSource : EventTarget {
           <p>Follow these steps when {{MediaSource/duration}} needs to change to a |new duration:unrestricted double|.</p>
           <ol>
             <li>If the current value of {{MediaSource/duration}} is equal to |new duration|, then return.</li>
-            <li>If |new duration| is less than the highest [=presentation timestamp=] of any buffered [=coded frames=] for all <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.
+            <li>If |new duration| is less than the highest [=presentation timestamp=] of any buffered [=coded frames=] for all {{SourceBuffer}} objects in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.
             <p class="note">Duration reductions that would truncate currently buffered media are disallowed. When truncation is necessary, use {{SourceBuffer/remove()}} to reduce the buffered range before updating {{MediaSource/duration}}.</p>
             </li>
-            <li>Let |highest end time:unrestricted double| be the largest [=track buffer ranges=] end time across all the [=track buffers=] across all <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}.</li>
+            <li>Let |highest end time:unrestricted double| be the largest [=track buffer ranges=] end time across all the [=track buffers=] across all {{SourceBuffer}} objects in {{MediaSource/sourceBuffers}}.</li>
             <li>If |new duration| is less than |highest end time|, then
               <p class="note">This condition can occur because the [=coded frame removal=] algorithm preserves coded frames that start before the start of the removal range.</p>
               <ol>
@@ -1086,13 +1086,13 @@ interface MediaSource : EventTarget {
           <ol>
             <li>Change the {{MediaSource/readyState}} attribute value to {{ReadyState/""ended""}}.</li>
             <li>
-              [=Queue a task=] to [=fire an event=] named {{sourceended}} at the <a>MediaSource</a>.</li>
+              [=Queue a task=] to [=fire an event=] named {{sourceended}} at the {{MediaSource}}.</li>
             <li><dl class="switch">
                 <dt>If |error| is not set</dt>
                 <dd>
                   <ol>
                     <li>Run the [=duration change=] algorithm with |new duration:unrestricted double| set to
-                      the largest [=track buffer ranges=] end time across all the [=track buffers=] across all <a>SourceBuffer</a> objects in {{MediaSource/sourceBuffers}}.
+                      the largest [=track buffer ranges=] end time across all the [=track buffers=] across all {{SourceBuffer}} objects in {{MediaSource/sourceBuffers}}.
                       <p class="note">This allows the duration to properly reflect the end of the appended media segments. For example, if the duration was explicitly set to 10 seconds and only media segments for 0 to 5 seconds were appended before endOfStream() was called, then the duration will get updated to 5 seconds.</p>
                     </li>
                     <li>Notify the media element that it now has all of the media data.</li>
@@ -1102,11 +1102,11 @@ interface MediaSource : EventTarget {
                 <dt>If |error| is set to {{EndOfStreamError/""network""}}</dt>
                 <dd>Use the [=mirror if necessary=] algorithm to run the following steps in {{Window}}:
                   <dl class="switch">
-                    <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute equals
+                    <dt>If the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute equals
                     {{HTMLMediaElement/HAVE_NOTHING}}</dt>
                     <dd>Run the <a def-id="media-data-cannot-be-fetched"></a> steps of the [=resource fetch
                       algorithm=]'s <a def-id="media-data-processing-steps-list"></a>.</dd>
-                    <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is greater than
+                    <dt>If the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute is greater than
                     {{HTMLMediaElement/HAVE_NOTHING}}</dt>
                     <dd>Run the "<i>If the connection is interrupted after some media data has been received, causing
                       the user agent to give up trying to fetch the resource</i>" steps of the [=resource fetch
@@ -1117,12 +1117,12 @@ interface MediaSource : EventTarget {
                 <dt>If |error| is set to {{EndOfStreamError/""decode""}}</dt>
                 <dd>Use the [=mirror if necessary=] algorithm to run the following steps in {{Window}}:
                   <dl class="switch">
-                    <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute equals
+                    <dt>If the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute equals
                     {{HTMLMediaElement/HAVE_NOTHING}}</dt>
                     <dd>Run the "<i>If the media data can be fetched but is found by inspection to be in an unsupported
                       format, or can otherwise not be rendered at all</i>" steps of the [=resource fetch algorithm=]'s
                       <a def-id="media-data-processing-steps-list"></a>.</dd>
-                    <dt>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is greater than
+                    <dt>If the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute is greater than
                     {{HTMLMediaElement/HAVE_NOTHING}}
                     <dd>Run the <a def-id="media-data-is-corrupted"></a> steps of the [=resource fetch algorithm=]'s
                       <a def-id="media-data-processing-steps-list"></a>.</dd>
@@ -1306,15 +1306,15 @@ interface SourceBuffer : EventTarget {
           <p>Indicates whether the asynchronous continuation of an {{SourceBuffer/appendBuffer()}} or {{SourceBuffer/remove()}}
             operation is still being processed. This attribute is initially set to false when the object is created.</p>
         </dd><dt><dfn><code>buffered</code></dfn> of type {{TimeRanges}}, readonly       </dt><dd>
-          <p>Indicates what {{TimeRanges}} are buffered in the <a>SourceBuffer</a>. This
+          <p>Indicates what {{TimeRanges}} are buffered in the {{SourceBuffer}}. This
           attribute is initially set to an empty {{TimeRanges}} object when the object is
           created.</p>
           <p>When the attribute is read the following steps MUST occur:</p>
           <ol>
             <li>If this object has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=] then throw an {{InvalidStateError}} exception and abort these steps.</li>
-            <li>Let |highest end time:double| be the largest [=track buffer ranges=] end time across all the [=track buffers=] managed by this <a>SourceBuffer</a> object.</li>
+            <li>Let |highest end time:double| be the largest [=track buffer ranges=] end time across all the [=track buffers=] managed by this {{SourceBuffer}} object.</li>
             <li>Let |intersection ranges:normalized TimeRanges| equal a {{TimeRanges}} object containing a single range from 0 to |highest end time|.</li>
-            <li>For each audio and video [=track buffer=] managed by this <a>SourceBuffer</a>, run the following steps:
+            <li>For each audio and video [=track buffer=] managed by this {{SourceBuffer}}, run the following steps:
                 <p class="note">Text [=track buffers=] are included in the calculation of |highest end time|, above, but excluded from the buffered range calculation here. They are not necessarily continuous, nor should any discontinuity within them trigger playback stall when the other media tracks are continuous over the same time range.</p>
               <ol>
                 <li>Let |track ranges:normalized TimeRanges| equal the [=track buffer ranges=] for the current [=track buffer=].</li>
@@ -1329,7 +1329,7 @@ interface SourceBuffer : EventTarget {
             <li>Return the current value of this attribute.</li>
           </ol>
         </dd><dt><dfn><code>timestampOffset</code></dfn> of type {{double}}</dt><dd>
-          <p>Controls the offset applied to timestamps inside subsequent [=media segments=] that are appended to this <a>SourceBuffer</a>. The {{SourceBuffer/timestampOffset}} is initially set to 0 which indicates that no offset is being applied.</p>
+          <p>Controls the offset applied to timestamps inside subsequent [=media segments=] that are appended to this {{SourceBuffer}}. The {{SourceBuffer/timestampOffset}} is initially set to 0 which indicates that no offset is being applied.</p>
           <p>On getting, Return the initial value or the last value that was successfully set.</p>
           <p>On setting, run the following steps:</p>
           <ol>
@@ -1397,7 +1397,7 @@ interface SourceBuffer : EventTarget {
             <li>Run the [=prepare append=] algorithm.</li>
             <li>Add |data:BufferSource| to the end of the {{SourceBuffer/[[input buffer]]}}.</li>
             <li>Set the {{SourceBuffer/updating}} attribute to true.</li>
-            <li>[=Queue a task=] to [=fire an event=] named {{updatestart}} at this <a>SourceBuffer</a> object.</li>
+            <li>[=Queue a task=] to [=fire an event=] named {{updatestart}} at this {{SourceBuffer}} object.</li>
             <li>Asynchronously run the [=buffer append=] algorithm.</li>
           </ol>
 
@@ -1413,8 +1413,8 @@ interface SourceBuffer : EventTarget {
               <ol>
                 <li>Abort the [=buffer append=] algorithm if it is running.</li>
                 <li>Set the {{SourceBuffer/updating}} attribute to false.</li>
-                <li>[=Queue a task=] to [=fire an event=] named {{abort}} at this <a>SourceBuffer</a> object.</li>
-                <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this <a>SourceBuffer</a> object.</li>
+                <li>[=Queue a task=] to [=fire an event=] named {{abort}} at this {{SourceBuffer}} object.</li>
+                <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this {{SourceBuffer}} object.</li>
               </ol>
             </li>
             <li>Run the [=reset parser state=] algorithm.</li>
@@ -1485,7 +1485,7 @@ interface SourceBuffer : EventTarget {
         <h3>Track Buffers</h3>
         <p>A <dfn id="track-buffer">track buffer</dfn> stores the [=track descriptions=] and [=coded frames=] for an individual
           track. The track buffer is updated as [=initialization segments=] and [=media segments=] are appended to the
-          <a>SourceBuffer</a>.</p>
+          {{SourceBuffer}}.</p>
 
         <p>Each [=track buffer=] has a <dfn id="last-decode-timestamp">last decode timestamp</dfn> variable that stores
           the decode timestamp of the last [=coded frame=] appended in the current [=coded frame group=]. The variable is initially
@@ -1507,12 +1507,12 @@ interface SourceBuffer : EventTarget {
 
         <p>Each [=track buffer=] has a <dfn id="track-buffer-ranges">track buffer ranges</dfn> variable that represents the presentation time ranges occupied by the [=coded frames=] currently stored in the track buffer.</p>
 
-          <p class="note">For track buffer ranges, these presentation time ranges are based on [=presentation timestamps=], frame durations, and potentially coded frame group start times for coded frame groups across track buffers in a muxed <a>SourceBuffer</a>.</p>
+          <p class="note">For track buffer ranges, these presentation time ranges are based on [=presentation timestamps=], frame durations, and potentially coded frame group start times for coded frame groups across track buffers in a muxed {{SourceBuffer}}.</p>
 
-          <p>For specification purposes, this information is treated as if it were stored in a <a def-id="normalized-timeranges-object"></a>. Intersected [=track buffer ranges=] are used to report {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}}, and MUST therefore support uninterrupted playback within each range of {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}}.</p>
+          <p>For specification purposes, this information is treated as if it were stored in a <a def-id="normalized-timeranges-object"></a>. Intersected [=track buffer ranges=] are used to report {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}}, and MUST therefore support uninterrupted playback within each range of {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}}.</p>
 
           <p class="note">These coded frame group start times differ slightly from those mentioned in the [=coded frame processing=] algorithm in that they are the earliest [=presentation timestamp=] across all track buffers following a discontinuity. Discontinuities can occur within the [=coded frame processing=] algorithm or result from the [=coded frame removal=] algorithm, regardless of {{SourceBuffer/mode}}.
-          The threshold for determining disjointness of [=track buffer ranges=] is implementation-specific. For example, to reduce unexpected playback stalls, implementations MAY approximate the [=coded frame processing=] algorithm's discontinuity detection logic by coalescing adjacent ranges separated by a gap smaller than 2 times the maximum frame duration buffered so far in this [=track buffer=]. Implementations MAY also use coded frame group start times as range start times across [=track buffers=] in a muxed <a>SourceBuffer</a> to further reduce unexpected playback stalls.</p>
+          The threshold for determining disjointness of [=track buffer ranges=] is implementation-specific. For example, to reduce unexpected playback stalls, implementations MAY approximate the [=coded frame processing=] algorithm's discontinuity detection logic by coalescing adjacent ranges separated by a gap smaller than 2 times the maximum frame duration buffered so far in this [=track buffer=]. Implementations MAY also use coded frame group start times as range start times across [=track buffers=] in a muxed {{SourceBuffer}} to further reduce unexpected playback stalls.</p>
       </section>
 
       <section id="sourcebuffer-events">
@@ -1605,7 +1605,7 @@ interface SourceBuffer : EventTarget {
             [=coded frame processing=] algorithm.
           </p>
           <p class="note">The {{SourceBuffer/[[group end timestamp]]}} stores the highest [=coded frame end timestamp=]
-            across all [=track buffers=] in a <a>SourceBuffer</a>. Therefore, care should be taken in setting the
+            across all [=track buffers=] in a {{SourceBuffer}}. Therefore, care should be taken in setting the
             {{SourceBuffer/mode}} attribute when appending multiplexed segments in which the timestamps are not aligned
             across tracks.
           </p>
@@ -1702,8 +1702,8 @@ interface SourceBuffer : EventTarget {
           <ol>
             <li>Run the [=reset parser state=] algorithm.</li>
             <li>Set the {{SourceBuffer/updating}} attribute to false.</li>
-            <li>[=Queue a task=] to [=fire an event=] named {{error}} at this <a>SourceBuffer</a> object.</li>
-            <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this <a>SourceBuffer</a> object.</li>
+            <li>[=Queue a task=] to [=fire an event=] named {{error}} at this {{SourceBuffer}} object.</li>
+            <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this {{SourceBuffer}} object.</li>
             <li>Run the [=end of stream=] algorithm
               with the |error:EndOfStreamError| parameter set to {{EndOfStreamError/""decode""}}.</li>
           </ol>
@@ -1711,14 +1711,14 @@ interface SourceBuffer : EventTarget {
 
         <section id="sourcebuffer-prepare-append">
             <h4><dfn>Prepare Append</dfn></h4>
-            <p>When an append operation begins, the following steps are run to validate and prepare the <a>SourceBuffer</a>.</p>
+            <p>When an append operation begins, the following steps are run to validate and prepare the {{SourceBuffer}}.</p>
             <ol>
-            <li>If the <a>SourceBuffer</a> has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=] then throw an {{InvalidStateError}} exception and abort these steps.</li>
+            <li>If the {{SourceBuffer}} has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=] then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If the {{SourceBuffer/updating}} attribute equals true, then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>Let |recent element error:boolean| be determined as follows:
               <dl class="switch">
                 <dt>If the {{MediaSource}} was constructed in a {{Window}}</dt>
-                <dd>Let |recent element error| be true if the {{HTMLMediaElement}}.{{HTMLMediaElement/error}} attribute
+                <dd>Let |recent element error| be true if the {{HTMLMediaElement}}'s {{HTMLMediaElement/error}} attribute
                 is not null. If that attribute is null, then let |recent element error| be false.</dd>
                 <dt>Otherwise</dt>
                 <dd>Let |recent element error| be the value resulting from the steps for the {{Window}} case, but run
@@ -1754,8 +1754,8 @@ interface SourceBuffer : EventTarget {
             <li>Run the [=segment parser loop=] algorithm.</li>
             <li>If the [=segment parser loop=] algorithm in the previous step was aborted, then abort this algorithm.</li>
             <li>Set the {{SourceBuffer/updating}} attribute to false.</li>
-            <li>[=Queue a task=] to [=fire an event=] named {{update}} at this <a>SourceBuffer</a> object.</li>
-            <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this <a>SourceBuffer</a> object.</li>
+            <li>[=Queue a task=] to [=fire an event=] named {{update}} at this {{SourceBuffer}} object.</li>
+            <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this {{SourceBuffer}} object.</li>
           </ol>
         </section>
 
@@ -1767,12 +1767,12 @@ interface SourceBuffer : EventTarget {
             <li>Let |start:double| equal the starting [=presentation timestamp=] for the removal range, in seconds measured from [=presentation start time=].</li>
             <li>Let |end:unrestricted double| equal the end [=presentation timestamp=] for the removal range, in seconds measured from [=presentation start time=].</li>
             <li>Set the {{SourceBuffer/updating}} attribute to true.</li>
-            <li>[=Queue a task=] to [=fire an event=] named {{updatestart}} at this <a>SourceBuffer</a> object.</li>
+            <li>[=Queue a task=] to [=fire an event=] named {{updatestart}} at this {{SourceBuffer}} object.</li>
             <li>Return control to the caller and run the rest of the steps asynchronously.</li>
             <li>Run the [=coded frame removal=] algorithm with |start| and |end| as the start and end of the removal range.</li>
             <li>Set the {{SourceBuffer/updating}} attribute to false.</li>
-            <li>[=Queue a task=] to [=fire an event=] named {{update}} at this <a>SourceBuffer</a> object.</li>
-            <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this <a>SourceBuffer</a> object.</li>
+            <li>[=Queue a task=] to [=fire an event=] named {{update}} at this {{SourceBuffer}} object.</li>
+            <li>[=Queue a task=] to [=fire an event=] named {{updateend}} at this {{SourceBuffer}} object.</li>
           </ol>
         </section>
 
@@ -1882,7 +1882,7 @@ interface SourceBuffer : EventTarget {
                           property on |new audio track|.</li>
                         <li>
                           <p>
-                            If this {{SourceBuffer}} object's {{SourceBuffer/audioTracks}}.{{AudioTrackList/length}}</a> equals 0, then run
+                            If this {{SourceBuffer}} object's {{SourceBuffer/audioTracks}}'s {{AudioTrackList/length}}</a> equals 0, then run
                             the following steps:
                           </p>
                           <ol>
@@ -1890,13 +1890,13 @@ interface SourceBuffer : EventTarget {
                             <li>Set |active track flag| to true.</li>
                           </ol>
                         </li>
-                        <li>Add |new audio track| to the {{SourceBuffer/audioTracks}} attribute on this <a>SourceBuffer</a> object.
+                        <li>Add |new audio track| to the {{SourceBuffer/audioTracks}} attribute on this {{SourceBuffer}} object.
                         <p class="note">
                           This should trigger {{AudioTrackList}} [[HTML]] logic to
                           [=queue a task=] to [=fire an event=] named [=AudioTrackList/addtrack=]
                           using {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
                           |new audio track|, at the {{AudioTrackList}} object referenced by the
-                          {{SourceBuffer/audioTracks}} attribute on this <a>SourceBuffer</a> object.
+                          {{SourceBuffer/audioTracks}} attribute on this {{SourceBuffer}} object.
                         </p>
                         </li>
                         <li>
@@ -1958,7 +1958,7 @@ interface SourceBuffer : EventTarget {
                           property on |new video track|.</li>
                         <li>
                           <p>
-                            If this {{SourceBuffer}} object's {{SourceBuffer/videoTracks}}.{{VideoTrackList/length}} equals 0, then run
+                            If this {{SourceBuffer}} object's {{SourceBuffer/videoTracks}}'s {{VideoTrackList/length}} equals 0, then run
                             the following steps:
                           </p>
                           <ol>
@@ -1966,13 +1966,13 @@ interface SourceBuffer : EventTarget {
                             <li>Set |active track flag| to true.</li>
                           </ol>
                         </li>
-                        <li>Add |new video track| to the {{SourceBuffer/videoTracks}} attribute on this <a>SourceBuffer</a> object.
+                        <li>Add |new video track| to the {{SourceBuffer/videoTracks}} attribute on this {{SourceBuffer}} object.
                         <p class="note">
                           This should trigger {{VideoTrackList}} [[HTML]] logic to
                           [=queue a task=] to [=fire an event=] named [=VideoTrackList/addtrack=]
                           using {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
                           |new video track|, at the {{VideoTrackList}} object referenced by the
-                          {{SourceBuffer/videoTracks}} attribute on this <a>SourceBuffer</a> object.
+                          {{SourceBuffer/videoTracks}} attribute on this {{SourceBuffer}} object.
                         </p>
                         </li>
                         <li>
@@ -2038,13 +2038,13 @@ interface SourceBuffer : EventTarget {
                           <a def-id="texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a>, then set
                           |active track flag| to true.
                         </li>
-                        <li>Add |new text track| to the {{SourceBuffer/textTracks}} attribute on this <a>SourceBuffer</a> object.
+                        <li>Add |new text track| to the {{SourceBuffer/textTracks}} attribute on this {{SourceBuffer}} object.
                         <p class="note">
                           This should trigger {{TextTrackList}} [[HTML]] logic to
                           [=queue a task=] to [=fire an event=] named [=TextTrackList/addtrack=]
                           using {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
                           |new text track|, at the {{TextTrackList}} object referenced by the
-                          {{SourceBuffer/textTracks}} attribute on this <a>SourceBuffer</a> object.
+                          {{SourceBuffer/textTracks}} attribute on this {{SourceBuffer}} object.
                         </p>
                         </li>
                         <li>
@@ -2078,7 +2078,7 @@ interface SourceBuffer : EventTarget {
                 </li>
                 <li>If |active track flag| equals true, then run the following steps:
                   <ol>
-                    <li>Add this <a>SourceBuffer</a> to {{MediaSource/activeSourceBuffers}}.</li>
+                    <li>Add this {{SourceBuffer}} to {{MediaSource/activeSourceBuffers}}.</li>
                     <li>[=Queue a task=] to [=fire an event=] named {{addsourcebuffer}} at {{MediaSource/activeSourceBuffers}}</li>
                   </ol>
                 </li>
@@ -2090,12 +2090,12 @@ interface SourceBuffer : EventTarget {
               <li>Use the [=parent media source=]'s [=mirror if necessary=] algorithm to run the following step in
                 {{Window}}:
                 <ol>
-                  <li>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is greater than
+                  <li>If the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute is greater than
                     {{HTMLMediaElement/HAVE_CURRENT_DATA}}, then set the
-                    {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to
+                    {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute to
                     {{HTMLMediaElement/HAVE_METADATA}}.
                     <p class="note">
-                      Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}}
+                      Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}}
                       changes may trigger events on the HTMLMediaElement.
                     </p>
                 </ol>
@@ -2106,12 +2106,12 @@ interface SourceBuffer : EventTarget {
               use the [=parent media source=]'s [=mirror if necessary=] algorithm to run the following step in
               {{Window}}:
               <ol>
-                <li>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is
-                  {{HTMLMediaElement/HAVE_NOTHING}}, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}}
+                <li>If the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute is
+                  {{HTMLMediaElement/HAVE_NOTHING}}, then set the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}}
                   attribute to {{HTMLMediaElement/HAVE_METADATA}}.
                   <p class="note">
                     Per <a def-id="ready-states"></a> [[HTML]] logic,
-                    {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the
+                    {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} changes may trigger events on the
                     HTMLMediaElement. If transition from {{HTMLMediaElement/HAVE_NOTHING}} to
                     {{HTMLMediaElement/HAVE_METADATA}} occurs, it should trigger HTMLMediaElement logic to [=queue a
                     task=] to [=fire an event=] named [=HTMLMediaElement/loadedmetadata=] at the media element.
@@ -2303,16 +2303,16 @@ interface SourceBuffer : EventTarget {
               </ol>
             </li>
             <li>
-              <p>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is {{HTMLMediaElement/HAVE_METADATA}} and the new [=coded frames=] cause {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} to have a {{TimeRanges}} for the current playback position, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_CURRENT_DATA}}.</p>
-              <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
+              <p>If the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute is {{HTMLMediaElement/HAVE_METADATA}} and the new [=coded frames=] cause {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} to have a {{TimeRanges}} for the current playback position, then set the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_CURRENT_DATA}}.</p>
+              <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
             </li>
             <li>
-              <p>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is {{HTMLMediaElement/HAVE_CURRENT_DATA}} and the new [=coded frames=] cause {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} to have a {{TimeRanges}} that includes the current playback position and some time beyond the current playback position, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_FUTURE_DATA}}.</p>
-              <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
+              <p>If the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute is {{HTMLMediaElement/HAVE_CURRENT_DATA}} and the new [=coded frames=] cause {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} to have a {{TimeRanges}} that includes the current playback position and some time beyond the current playback position, then set the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_FUTURE_DATA}}.</p>
+              <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
             </li>
             <li>
-              <p>If the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute is {{HTMLMediaElement/HAVE_FUTURE_DATA}} and the new [=coded frames=] cause {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} to have a {{TimeRanges}} that includes the current playback position and [=enough data to ensure uninterrupted playback=], then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_ENOUGH_DATA}}.</p>
-              <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
+              <p>If the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute is {{HTMLMediaElement/HAVE_FUTURE_DATA}} and the new [=coded frames=] cause {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} to have a {{TimeRanges}} that includes the current playback position and [=enough data to ensure uninterrupted playback=], then set the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_ENOUGH_DATA}}.</p>
+              <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
             </li>
             <li>If the [=media segment=] contains data beyond the current {{MediaSource/duration}}, then run the
               [=duration change=] algorithm with |new duration:unrestricted double| set to the maximum of the current
@@ -2362,9 +2362,9 @@ interface SourceBuffer : EventTarget {
                 </li>
                 <li>
                   <p>If this object is in {{MediaSource/activeSourceBuffers}}, the <a def-id="current-playback-position"></a> is greater than or equal to
-                    |start| and less than the |remove end timestamp|, and {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} is greater than
-                    {{HTMLMediaElement/HAVE_METADATA}}, then set the {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_METADATA}} and stall playback.</p>
-                  <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}.{{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
+                    |start| and less than the |remove end timestamp|, and {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} is greater than
+                    {{HTMLMediaElement/HAVE_METADATA}}, then set the {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} attribute to {{HTMLMediaElement/HAVE_METADATA}} and stall playback.</p>
+                  <p class="note">Per <a def-id="ready-states"></a> [[HTML]] logic, {{HTMLMediaElement}}'s {{HTMLMediaElement/readyState}} changes may trigger events on the HTMLMediaElement.</p>
                   <p class="note">This transition occurs because media data for the current position has been removed. Playback cannot progress until media for the
                     <a def-id="current-playback-position"></a> is appended or the [[[#active-source-buffer-changes]]].</p>
                 </li>
@@ -2546,7 +2546,7 @@ interface SourceBufferList : EventTarget {
         <dl class="attributes" data-dfn-for="SourceBufferList">
           <dt><dfn><code>length</code></dfn> of type {{unsigned long}}, readonly       </dt>
           <dd>
-            <p>Indicates the number of <a>SourceBuffer</a> objects in the list.</p>
+            <p>Indicates the number of {{SourceBuffer}} objects in the list.</p>
           </dd>
           <dt><dfn><code>onaddsourcebuffer</code></dfn> of type {{EventHandler}}</dt>
           <dd>
@@ -2567,7 +2567,7 @@ interface SourceBufferList : EventTarget {
 
             <ol class="method-algorithm">
               <li>If |index:unsigned long| is greater than or equal to the {{SourceBufferList/length}} attribute then return undefined and abort these steps.</li>
-              <li>Return the |index|'th <a>SourceBuffer</a> object in the list.</li>
+              <li>Return the |index|'th {{SourceBuffer}} object in the list.</li>
             </ol>
           </dd>
         </dl>
@@ -2878,15 +2878,15 @@ interface SourceBufferList : EventTarget {
 
     <section id="htmlmediaelement-extensions">
       <h2>HTMLMediaElement Extensions</h2>
-      <p>This section specifies what existing {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} and
-      {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} attributes on the {{HTMLMediaElement}} MUST return when a
-      <a>MediaSource</a> is attached to the element, and what the existing
-      {{HTMLMediaElement}}.{{HTMLMediaElement/srcObject}} attribute MUST also do when it is set to be a
+      <p>This section specifies what existing {{HTMLMediaElement}}'s {{HTMLMediaElement/seekable}} and
+      {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} attributes on the {{HTMLMediaElement}} MUST return when a
+      {{MediaSource}} is attached to the element, and what the existing
+      {{HTMLMediaElement}}'s {{HTMLMediaElement/srcObject}} attribute MUST also do when it is set to be a
       {{MediaSourceHandle}} object.</p>
 
       <section id="htmlmediaelement-extensions-seekable">
-        <h3>{{HTMLMediaElement}}.{{HTMLMediaElement/seekable}}</h3>
-        <p>The {{HTMLMediaElement}}.{{HTMLMediaElement/seekable}} attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
+        <h3>{{HTMLMediaElement}}'s {{HTMLMediaElement/seekable}}</h3>
+        <p>The {{HTMLMediaElement}}'s {{HTMLMediaElement/seekable}} attribute returns a new static <a def-id="normalized-timeranges-object"></a> created based on the following steps:</p>
         <ol>
           <li>If the {{MediaSource}} was constructed in a
             {{DedicatedWorkerGlobalScope}} that is terminated or is closing
@@ -2935,15 +2935,15 @@ interface SourceBufferList : EventTarget {
                   <li>If |recent live seekable range| is not empty:
                     <ol>
                       <li>Let |union ranges:normalized TimeRanges| be the union of |recent live seekable range| and the
-                        {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} attribute.</li>
+                        {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} attribute.</li>
                       <li>Return a single range with a start time equal to the earliest start time in |union ranges| and
                         an end time equal to the highest end time in |union ranges| and abort these steps.</li>
                     </ol>
                   </li>
-                  <li>If the {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} attribute returns an empty {{TimeRanges}}
+                  <li>If the {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} attribute returns an empty {{TimeRanges}}
                     object, then return an empty {{TimeRanges}} object and abort these steps.</li>
                   <li>Return a single range with a start time of 0 and an end time equal to the highest end time
-                    reported by the {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} attribute.
+                    reported by the {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} attribute.
               </li></ol></dd>
               <dt>Otherwise:</dt>
               <dd>Return a single range with a start time of 0 and an end time equal to |recent duration|.</dd>
@@ -2953,8 +2953,8 @@ interface SourceBufferList : EventTarget {
       </section>
 
       <section id="htmlmediaelement-extensions-buffered">
-        <h3>{{HTMLMediaElement}}.{{HTMLMediaElement/buffered}}</h3>
-        <p id="dom-htmlmediaelement.buffered">The {{HTMLMediaElement}}.{{HTMLMediaElement/buffered}} attribute returns a static <a def-id="normalized-timeranges-object"></a> based on the following steps.</p>
+        <h3>{{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}}</h3>
+        <p id="dom-htmlmediaelement.buffered">The {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}} attribute returns a static <a def-id="normalized-timeranges-object"></a> based on the following steps.</p>
         <ol>
           <li>If the {{MediaSource}} was constructed in a
             {{DedicatedWorkerGlobalScope}} that is terminated or is closing
@@ -2988,17 +2988,17 @@ interface SourceBufferList : EventTarget {
                 <li>If {{MediaSource/activeSourceBuffers}}.length does not equal 0 then run the following steps:
                   <ol>
                     <li>Let |active ranges:sequence of normalized TimeRanges| be the ranges returned by
-                      {{SourceBuffer/buffered}} for each <a>SourceBuffer</a> object in
+                      {{SourceBuffer/buffered}} for each {{SourceBuffer}} object in
                       {{MediaSource/activeSourceBuffers}}.</li>
                     <li>Let |highest end time:unrestricted double| be the largest range end time in the
                       |active ranges|.</li>
                     <li>Let |recent intersection ranges:normalized TimeRanges| equal a {{TimeRanges}} object containing
                       a single range from 0 to |highest end time|.</li>
-                    <li>For each <a>SourceBuffer</a> object in {{MediaSource/activeSourceBuffers}} run the following
+                    <li>For each {{SourceBuffer}} object in {{MediaSource/activeSourceBuffers}} run the following
                       steps:
                       <ol>
                         <li>Let |source ranges:normalized TimeRanges| equal the ranges returned by the
-                          {{SourceBuffer/buffered}} attribute on the current <a>SourceBuffer</a>.</li>
+                          {{SourceBuffer/buffered}} attribute on the current {{SourceBuffer}}.</li>
                         <li>If {{MediaSource/readyState}} is {{ReadyState/""ended""}}, then set the end time on the last
                           range in |source ranges| to |highest end time|.</li>
                         <li>Let |new intersection ranges:normalized TimeRanges| equal the intersection between the
@@ -3033,9 +3033,9 @@ interface SourceBufferList : EventTarget {
       </section>
 
       <section id="htmlmediaelement-extensions-srcobject">
-        <h3>{{HTMLMediaElement}}.{{HTMLMediaElement/srcObject}}</h3>
+        <h3>{{HTMLMediaElement}}'s {{HTMLMediaElement/srcObject}}</h3>
 
-          <p>If a {{HTMLMediaElement}}.{{HTMLMediaElement/srcObject}} attribute is assigned a {{MediaSourceHandle}},
+          <p>If a {{HTMLMediaElement}}'s {{HTMLMediaElement/srcObject}} attribute is assigned a {{MediaSourceHandle}},
             then set {{MediaSourceHandle/[[has ever been assigned as srcobject]]}} for that {{MediaSourceHandle}} to
             true as part of the synchronous steps of the extended {{HTMLMediaElement}}'s {{HTMLMediaElement/srcObject}}
             setter that occur before invoking the element's load algorithm.
@@ -3057,7 +3057,7 @@ partial interface AudioTrack {
 };</pre>
         <div class="issue" data-number="280">[[HTML]] {{AudioTrack}} needs Window+DedicatedWorker
           exposure.</div>
-        <section><h2>Attributes</h2><dl class="attributes" data-dfn-for="AudioTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a>SourceBuffer</a></span>, readonly       , nullable</dt><dd>
+        <section><h2>Attributes</h2><dl class="attributes" data-dfn-for="AudioTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType">{{SourceBuffer}}</span>, readonly       , nullable</dt><dd>
         <p>On getting, run the following step:
             <dl class="switch">
               <dt>If this track was created by a {{SourceBuffer}} that was created on the same [=global object/realm=]
@@ -3087,7 +3087,7 @@ partial interface VideoTrack {
 };</pre>
         <div class="issue" data-number="280">[[HTML]] {{VideoTrack}} needs Window+DedicatedWorker
           exposure.</div>
-        <section><h2>Attributes</h2><dl class="attributes" data-dfn-for="VideoTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a>SourceBuffer</a></span>, readonly       , nullable</dt><dd>
+        <section><h2>Attributes</h2><dl class="attributes" data-dfn-for="VideoTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType">{{SourceBuffer}}</span>, readonly       , nullable</dt><dd>
         <p>On getting, run the following step:
             <dl class="switch">
               <dt>If this track was created by a {{SourceBuffer}} that was created on the same [=global object/realm=]
@@ -3117,7 +3117,7 @@ partial interface TextTrack {
 };</pre>
         <div class="issue" data-number="280">[[HTML]] {{TextTrack}} needs Window+DedicatedWorker
           exposure.</div>
-        <section><h2>Attributes</h2><dl class="attributes" data-dfn-for="TextTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType"><a>SourceBuffer</a></span>, readonly       , nullable</dt><dd>
+        <section><h2>Attributes</h2><dl class="attributes" data-dfn-for="TextTrack"><dt><dfn><code>sourceBuffer</code></dfn> of type <span class="idlAttrType">{{SourceBuffer}}</span>, readonly       , nullable</dt><dd>
         <p>On getting, run the following step:
             <dl class="switch">
               <dt>If this track was created by a {{SourceBuffer}} that was created on the same [=global object/realm=]
@@ -3139,13 +3139,13 @@ partial interface TextTrack {
 
     <section id="byte-stream-formats">
       <h2><dfn data-export="">Byte Stream Formats</dfn></h2>
-      <p>The bytes provided through {{SourceBuffer/appendBuffer()}} for a <a>SourceBuffer</a> form a logical byte stream. The format and
+      <p>The bytes provided through {{SourceBuffer/appendBuffer()}} for a {{SourceBuffer}} form a logical byte stream. The format and
         semantics of these byte streams are defined in <dfn id="byte-stream-format-specs">byte stream format specifications</dfn>.
         The byte stream format registry [[MSE-REGISTRY]] provides mappings between a MIME type that may be passed to {{MediaSource/addSourceBuffer()}},
         {{MediaSource/isTypeSupported()}} or {{SourceBuffer/changeType()}} and the byte stream format expected by a {{SourceBuffer}} using that
         MIME type for parsing newly appended data. Implementations are encouraged to register
         mappings for byte stream formats they support to facilitate interoperability. The byte stream format registry [[MSE-REGISTRY]] is the authoritative source for these
-        mappings. If an implementation claims to support a MIME type listed in the registry, its <a>SourceBuffer</a> implementation MUST conform to the
+        mappings. If an implementation claims to support a MIME type listed in the registry, its {{SourceBuffer}} implementation MUST conform to the
         [=byte stream format specification=] listed in the registry entry.</p>
       <p class="note">The byte stream format specifications in the registry are not intended to define new storage formats. They simply outline the subset of
         existing storage format structures that implementations of this specification will accept.</p>
