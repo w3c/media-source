@@ -87,13 +87,11 @@
     </section>
 
     <section id="sotd">
-      <p>On top of editorial updates, substantives changes since publication as a W3C Recommendation in <a href="https://www.w3.org/TR/2016/REC-media-source-20161117/">November 2016</a> are the addition of a {{SourceBuffer/changeType()}} method to switch codecs, the possibility to create and use {{MediaSource}} objects off the main thread in dedicated workers, the removal of the <code>createObjectURL()</code> extension to the {{URL}} object following its integration in the File API [[FILEAPI]], and the addition of {{ManagedMediaSource}}, ManagedSourceBuffer}}, and {{BufferedChangeEvent}} interfaces supporting power-efficient streaming and active buffered media cleanup by the user agent. For a full list of changes done since the previous version, see the <a href="https://github.com/w3c/media-source/commits/main">commits</a>.</p>
+      <p>On top of editorial updates, substantives changes since publication as a W3C Recommendation in
+        <a href="https://www.w3.org/TR/2016/REC-media-source-20161117/">November 2016</a> are the addition of a {{SourceBuffer/changeType()}} method to switch codecs, the possibility to create and use {{MediaSource}} objects off the main thread in dedicated workers, the removal of the <code>createObjectURL()</code> extension to the {{URL}} object following its integration in the File API [[FILEAPI]], and the addition of {{ManagedMediaSource}}, {{ManagedSourceBuffer}}, and {{BufferedChangeEvent}} interfaces supporting power-efficient streaming and active buffered media cleanup by the user agent. For a full list of changes done since the previous version, see the <a href="https://github.com/w3c/media-source/commits/main">commits</a>.</p>
 
       <p>The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of all bug reports that the editors have not yet tried to address</a>.</p>
       <p>Implementors should be aware that this specification is not stable. <strong>Implementors who are not taking part in the discussions are likely to find the specification changing out from under them in incompatible ways.</strong> Vendors interested in implementing this specification before it eventually reaches the Candidate Recommendation stage should track the <a href="https://github.com/w3c/media-source">GitHub repository</a> and take part in the discussions.</p>
-      <h3>Changes since last publication</h3>
-      <p>On top of editorial updates, substantives changes since publication as a W3C Recommendation in
-        <a href="https://www.w3.org/TR/2016/REC-media-source-20161117/">November 2016</a> are the addition of a {{SourceBuffer/changeType()}} method to switch codecs, the possibility to create and use {{MediaSource}} objects off the main thread in dedicated workers, the removal of the <code>createObjectURL()</code> extension to the {{URL}} object following its integration in the File API [[FILEAPI]], and the addition of {{ManagedMediaSource}}, ManagedSourceBuffer}}, and {{BufferedChangeEvent}} interfaces supporting power-efficient streaming and active buffered media cleanup by the user agent. For a full list of changes done since the previous version, see the <a href="https://github.com/w3c/media-source/commits/main">commits</a>.</p>
     </section>
 
     <section id="introduction" class="informative">
@@ -573,8 +571,7 @@ interface MediaSource : EventTarget {
               {{removesourcebuffer}} at the <a>SourceBufferList</a> returned by {{MediaSource/sourceBuffers}}.</li>
             <li>Destroy all resources for |sourceBuffer|.</li>
           </ol>
-        <table
-          class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|sourceBuffer|</th><td class="prmType">{{SourceBuffer}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd>
+        </section>
 
         <h3><dfn>endOfStream()</dfn> method</h3>
           <p>Signals the end of the stream.</p>
@@ -584,9 +581,6 @@ interface MediaSource : EventTarget {
             <li>If the {{SourceBuffer/updating}} attribute equals true on any {{SourceBuffer}} in {{MediaSource/sourceBuffers}}, then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>Run the [=end of stream=] algorithm with the error parameter set to |error:EndOfStreamError|.</li>
           </ol>
-        <table
-          class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|error|</th><td class="prmType">{{EndOfStreamError}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptTrue"><span role="img" aria-label="True">✔</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd>
-
           <h3><dfn>setLiveSeekableRange()</dfn> method</h3>
 
           <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
@@ -598,37 +592,6 @@ interface MediaSource : EventTarget {
             <li>Set {{MediaSource/[[live seekable range]]}} to be a new <a def-id="normalized-timeranges-object"></a>
               containing a single range whose start position is |start| and end position is |end|.
           </li></ol>
-          <table class="parameters">
-            <tbody>
-              <tr>
-                <th>Parameter</th>
-                <th>Type</th>
-                <th>Nullable</th>
-                <th>Optional</th>
-                <th>Description</th>
-              </tr>
-              <tr>
-                <th class="prmName">|start|</th>
-                <td class="prmType">{{double}}</td>
-                <td class="prmNullFalse"><span aria-label="False" role=
-                "img">✘</span></td>
-                <td class="prmOptFalse"><span aria-label="False" role=
-                "img">✘</span></td>
-                <td class="prmDesc">The start of the range, in seconds measured from [=presentation start time=]. While set, and if {{MediaSource/duration}} equals positive Infinity, {{HTMLMediaElement}}'s {{HTMLMediaElement/seekable}} will return a non-empty {{TimeRanges}} object with a lowest range start timestamp no greater than |start|.</td>
-              </tr>
-              <tr>
-                <th class="prmName">|end|</th>
-                <td class="prmType">{{double}}</td>
-                <td class="prmNullFalse"><span aria-label="False" role=
-                "img">✘</span></td>
-                <td class="prmOptFalse"><span aria-label="False" role=
-                "img">✘</span></td>
-                <td class="prmDesc">The end of range, in seconds measured from [=presentation start time=]. While set, and if {{MediaSource/duration}} equals positive Infinity, {{HTMLMediaElement}}'s {{HTMLMediaElement/seekable}} will return a non-empty {{TimeRanges}} object with a highest range end timestamp no less than |end|.</td>
-              </tr>
-            </tbody>
-          </table>
-        <div><em>Return type: </em>{{undefined}}</div></dd>
-
         <h3><dfn>clearLiveSeekableRange()</dfn> method</h3>
         <p>Updates {{MediaSource/[[live seekable range]]}} that is used in
           section [[[#htmlmediaelement-extensions]]] to modify
@@ -639,7 +602,6 @@ interface MediaSource : EventTarget {
             <li>If {{MediaSource/[[live seekable range]]}} contains a range, then set {{MediaSource/[[live seekable
               range]]}} to be a new empty {{TimeRanges}} object.
           </li></ol>
-        <div><em>No parameters.</em></div><div><em>Return type: </em>{{undefined}}</div>
 
         <h3><dfn>isTypeSupported()</dfn> method</h3>
           <p>Check to see whether the <a>MediaSource</a> is capable of creating <a>SourceBuffer</a> objects for the specified MIME type.</p>
@@ -658,8 +620,7 @@ interface MediaSource : EventTarget {
           <p class="note">
             This method returning true implies that {{HTMLMediaElement}}'s {{HTMLMediaElement/canPlayType()}} will return "maybe" or "probably" since it does not make sense for a {{MediaSource}} to support a type the HTMLMediaElement knows it cannot play.
           </p>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|type|</th><td class="prmType">{{DOMString}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{boolean}}</div></dd></dl>
-
+      </section>
 
       <section id="mediasource-events">
         <h3>Event Summary</h3>
@@ -1439,7 +1400,9 @@ interface SourceBuffer : EventTarget {
             <li>[=Queue a task=] to [=fire an event=] named {{updatestart}} at this {{SourceBuffer}} object.</li>
             <li>Asynchronously run the [=buffer append=] algorithm.</li>
           </ol>
-        <table class="parameters"><tbody><tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr><tr><th class="prmName">|data|</th><td class="prmType">{{BufferSource}}</td><td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td><td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td><td class="prmDesc"></td></tr></tbody></table><div><em>Return type: </em>{{undefined}}</div></dd><dt><dfn><code>abort</code></dfn></dt><dd>
+
+        <dt><code><dfn>abort</dfn></code></dt><dd>
+
           <p>Aborts the current segment and resets the segment parser.</p>
 
           <ol class="method-algorithm">
@@ -1458,7 +1421,7 @@ interface SourceBuffer : EventTarget {
             <li>Set {{SourceBuffer/appendWindowStart}} to the [=presentation start time=].</li>
             <li>Set {{SourceBuffer/appendWindowEnd}} to positive Infinity.</li>
           </ol>
-        <div><em>No parameters.</em></div><div><em>Return type: </em>{{undefined}}</div></dd>
+        </dd>
         <dt><dfn><code>changeType</code></dfn></dt><dd>
         <p>Changes the MIME type associated with this object. Subsequent {{SourceBuffer/appendBuffer()}} calls will expect the newly appended bytes to conform to the new type.</a>
           <ol class="method-algorithm">
@@ -1492,27 +1455,13 @@ interface SourceBuffer : EventTarget {
             <li>Set the {{SourceBuffer/[[pending initialization segment for changeType flag]]}} on this {{SourceBuffer}}
               object to true.
           </ol>
-          <table class="parameters">
-            <tbody>
-              <tr>
-                <th>Parameter</th>
-                <th>Type</th>
-                <th>Nullable</th>
-                <th>Optional</th>
-                <th>Description</th>
-              </tr>
-              <tr>
-                <th class="prmName">|type|</th>
-                <td class="prmType">{{DOMString}}</td>
-                <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
-                <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
-                <td class="prmDesc"></td>
-              </tr>
-            </tbody>
-          </table>
-          <div><em>Return type: </em>{{undefined}}</div></dd>
+          </dd>
         <dt><dfn><code>remove</code></dfn></dt><dd>
-        <p>Removes media for a specific time range.</p>
+        <p>
+          Removes media for a specific time range.
+          The |start| of the removal range, in seconds measured from [=presentation start time=]
+          The |end| of the removal range, in seconds measured from [=presentation start time=].
+        </p>
         <ol class="method-algorithm">
             <li>If this object has been removed from the {{MediaSource/sourceBuffers}} attribute of the [=parent media source=] then throw an {{InvalidStateError}} exception and abort these steps.</li>
             <li>If the {{SourceBuffer/updating}} attribute equals true, then throw an {{InvalidStateError}} exception and abort these steps.</li>
@@ -1529,37 +1478,6 @@ interface SourceBuffer : EventTarget {
             </li>
             <li>Run the [=range removal=] algorithm with |start| and |end| as the start and end of the removal range.</li>
        </ol>
-
-      <table class="parameters">
-        <tbody>
-          <tr>
-            <th>Parameter</th>
-            <th>Type</th>
-            <th>Nullable</th>
-            <th>Optional</th>
-            <th>Description</th>
-          </tr>
-          <tr>
-            <th class="prmName">|start|</th>
-            <td class="prmType">{{double}}</td>
-            <td class="prmNullFalse"><span aria-label="False" role=
-            "img">✘</span></td>
-            <td class="prmOptFalse"><span aria-label="False" role=
-            "img">✘</span></td>
-            <td class="prmDesc">The start of the removal range, in seconds measured from [=presentation start time=].</td>
-          </tr>
-          <tr>
-            <th class="prmName">|end|</th>
-            <td class="prmType">{{unrestricted double}}</td>
-            <td class="prmNullFalse"><span aria-label="False" role=
-            "img">✘</span></td>
-            <td class="prmOptFalse"><span aria-label="False" role=
-            "img">✘</span></td>
-            <td class="prmDesc">The end of the removal range, in seconds measured from [=presentation start time=].</td>
-          </tr>
-        </tbody>
-      </table>
-        <div><em>Return type: </em>{{undefined}}</div>
       </dd></dl>
       </section>
 
@@ -2651,19 +2569,6 @@ interface SourceBufferList : EventTarget {
               <li>If |index:unsigned long| is greater than or equal to the {{SourceBufferList/length}} attribute then return undefined and abort these steps.</li>
               <li>Return the |index|'th {{SourceBuffer}} object in the list.</li>
             </ol>
-            <table class="parameters">
-              <tbody>
-                <tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></tr>
-                <tr>
-                  <th class="prmName">|index|</th>
-                  <td class="prmType">{{unsigned long}}</td>
-                  <td class="prmNullFalse"><span role="img" aria-label="False">✘</span></td>
-                  <td class="prmOptFalse"><span role="img" aria-label="False">✘</span></td>
-                  <td class="prmDesc"></td>
-                </tr>
-              </tbody>
-            </table>
-            <div><em>Return type: </em>{{SourceBuffer}}</div>
           </dd>
         </dl>
       </section>
@@ -2703,7 +2608,7 @@ interface SourceBufferList : EventTarget {
       </p>
 <aside class="note" title="Eviction reasons">
 <p>
-  Reasons that the user agent might evict content are implementation specific and can include, but are not limited to, memory and/or hardware limitations, change in environmental conditions, and so on. Developers shouldn't make assumptions as to why, how, or when a user agent might evict content. Instead, developers need to write scripts with the assumption that content is constantly and randomly being evicted to avoid stalled video playback (i.e., code defensibly and listen for the `bufferedchangeevent`!). 
+  Reasons that the user agent might evict content are implementation specific and can include, but are not limited to, memory and/or hardware limitations, change in environmental conditions, and so on. Developers shouldn't make assumptions as to why, how, or when a user agent might evict content. Instead, developers need to write scripts with the assumption that content is constantly and randomly being evicted to avoid stalled video playback (i.e., code defensibly and listen for the {{bufferedchange}} event!).
 </p>
 </aside>
       <pre class="idl">
@@ -2821,7 +2726,7 @@ interface SourceBufferList : EventTarget {
       <pre class="idl">
         [Exposed=(Window,DedicatedWorker)]
         interface BufferedChangeEvent : Event {
-          constructor(DOMString type, BufferedChangeEventInit eventInitDict);
+          constructor(DOMString type, optional BufferedChangeEventInit eventInitDict = {});
 
           [SameObject] readonly attribute TimeRanges addedRanges;
           [SameObject] readonly attribute TimeRanges removedRanges;
@@ -2882,7 +2787,7 @@ interface SourceBufferList : EventTarget {
             <td>
               <dfn class="event">bufferedchange</dfn>
             </td>
-            <td>{{Event}}</td>
+            <td>{{BufferedChangeEvent}}</td>
             <td>
               The {{ManagedSourceBuffer}}'s buffered range changed following a
               call to {{SourceBuffer/appendBuffer()}}, {{SourceBuffer/remove()}},
