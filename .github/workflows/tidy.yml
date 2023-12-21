@@ -10,10 +10,10 @@ jobs:
     name: Tidy up
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - run: brew install tidy-html5
       - run: tidy -config tidyconfig.txt -o media-source-respec.html media-source-respec.html
-      - uses: peter-evans/create-pull-request@v3
+      - uses: peter-evans/create-pull-request@v5
         with:
           title: "Tidied up document using tidy-html5"
           commit-message: "chore: tidy up index.html"
