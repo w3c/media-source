@@ -1,15 +1,13 @@
 <!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="generator" content="ReSpec 34.2.2">
+<meta name="generator" content="ReSpec 34.5.0">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <style>
 span.example-title{text-transform:none}
 :is(aside,div).example,div.illegal-example{padding:.5em;margin:1em 0;position:relative;clear:both}
 div.illegal-example{color:red}
 div.illegal-example p{color:#000}
-:is(aside,div).example{border-left-width:.5em;border-left-style:solid;border-color:#e0cb52;background:#fcfaee}
 aside.example div.example{border-left-width:.1em;border-color:#999;background:#fff}
-.example pre{background-color:rgba(0,0,0,.03)}
 </style>
 <style>
 .issue-label{text-transform:initial}
@@ -18,7 +16,7 @@ aside.example div.example{border-left-width:.1em;border-color:#999;background:#f
 span.warning{padding:.1em .5em .15em}
 .issue.closed span.issue-number{text-decoration:line-through}
 .issue.closed span.issue-number::after{content:" (Closed)";font-size:smaller}
-.warning{border-color:#f11;border-width:.2em;border-style:solid;background:#fbe9e9}
+.warning{border-color:#f11;border-color:var(--warning-border,#f11);border-width:.2em;border-style:solid;background:#fbe9e9;background:var(--warning-bg,#fbe9e9);color:#000;color:var(--text,#000)}
 .warning-title:before{content:"⚠";font-size:1.3em;float:left;padding-right:.3em;margin-top:-.3em}
 li.task-list-item{list-style:none}
 input.task-list-item-checkbox{margin:0 .35em .25em -1.6em;vertical-align:middle}
@@ -26,12 +24,12 @@ input.task-list-item-checkbox{margin:0 .35em .25em -1.6em;vertical-align:middle}
 </style>
 <style>
 pre.idl{padding:1em;position:relative}
-pre.idl>code{color:#000}
+pre.idl>code{color:#000;color:var(--text,#000)}
 @media print{
 pre.idl{white-space:pre-wrap}
 }
-.idlHeader{display:block;width:150px;background:#8ccbf2;color:#fff;font-family:sans-serif;font-weight:700;margin:-1em 0 1em -1em;height:28px;line-height:28px}
-.idlHeader a.self-link{margin-left:.3cm;text-decoration:none;border-bottom:none}
+.idlHeader{display:block;width:150px;background:#8ccbf2;background:var(--def-border,#8ccbf2);color:#fff;color:var(--defrow-border,#fff);font-family:sans-serif;font-weight:700;margin:-1em 0 1em -1em;height:28px;line-height:28px}
+.idlHeader a.self-link{margin-left:.3cm;text-decoration:none;border-bottom:none;color:inherit}
 .idlID{font-weight:700;color:#005a9c}
 .idlType{color:#005a9c}
 .idlName{color:#ff4500}
@@ -54,13 +52,13 @@ a.idlEnumItem{color:#000;border-bottom:1px dotted #ccc;text-decoration:none}
 </style>
 <style>
 dfn{cursor:pointer}
-.dfn-panel{position:absolute;z-index:35;min-width:300px;max-width:500px;padding:.5em .75em;margin-top:.6em;font-family:"Helvetica Neue",sans-serif;font-size:small;background:#fff;color:#000;box-shadow:0 1em 3em -.4em rgba(0,0,0,.3),0 0 1px 1px rgba(0,0,0,.05);border-radius:2px}
+.dfn-panel{position:absolute;z-index:35;min-width:300px;max-width:500px;padding:.5em .75em;margin-top:.6em;font-family:"Helvetica Neue",sans-serif;font-size:small;background:#fff;background:var(--indextable-hover-bg,#fff);color:#000;color:var(--text,#000);box-shadow:0 1em 3em -.4em rgba(0,0,0,.3),0 0 1px 1px rgba(0,0,0,.05);box-shadow:0 1em 3em -.4em var(--tocsidebar-shadow,rgba(0,0,0,.3)),0 0 1px 1px var(--tocsidebar-shadow,rgba(0,0,0,.05));border-radius:2px}
 .dfn-panel:not(.docked)>.caret{position:absolute;top:-9px}
-.dfn-panel:not(.docked)>.caret::after,.dfn-panel:not(.docked)>.caret::before{content:"";position:absolute;border:10px solid transparent;border-top:0;border-bottom:10px solid #fff;top:0}
-.dfn-panel:not(.docked)>.caret::before{border-bottom:9px solid #a2a9b1}
+.dfn-panel:not(.docked)>.caret::after,.dfn-panel:not(.docked)>.caret::before{content:"";position:absolute;border:10px solid transparent;border-top:0;border-bottom:10px solid #fff;border-bottom-color:var(--indextable-hover-bg,#fff);top:0}
+.dfn-panel:not(.docked)>.caret::before{border-bottom:9px solid #a2a9b1;border-bottom-color:var(--indextable-hover-bg,#a2a9b1)}
 .dfn-panel *{margin:0}
-.dfn-panel b{display:block;color:#000;margin-top:.25em}
-.dfn-panel ul a[href]{color:#333}
+.dfn-panel b{display:block;color:#000;color:var(--text,#000);margin-top:.25em}
+.dfn-panel ul a[href]{color:#333;color:var(--text,#333)}
 .dfn-panel>div{display:flex}
 .dfn-panel a.self-link{font-weight:700;margin-right:auto}
 .dfn-panel .marker{padding:.1em;margin-left:.5em;border-radius:.2em;text-align:center;white-space:nowrap;font-size:90%;color:#040b1c}
@@ -98,7 +96,6 @@ cite .bibref{font-style:normal}
 a[href].orcid{padding-left:4px;padding-right:4px}
 a[href].orcid>svg{margin-bottom:-2px}
 .toc a,.tof a{text-decoration:none}
-a .figno,a .secno{color:#000}
 ol.tof,ul.tof{list-style:none outside none}
 .caption{margin-top:.5em;font-style:italic}
 table.simple{border-spacing:0;border-collapse:collapse;border-bottom:3px solid #005a9c}
@@ -143,17 +140,21 @@ dd{margin-left:0}
     
 <link rel="stylesheet" href="mse.css">
   
-<meta name="revision" content="0f27243c920a68da0457239edcc0ddbe4c786ccd">
+<meta name="revision" content="47948b452073ff475209e26f5fbbb33208be62f6">
 <style>
-.hljs{display:block;overflow-x:auto;padding:.5em;color:#383a42;background:#fafafa}
-.hljs-comment,.hljs-quote{color:#717277;font-style:italic}
-.hljs-doctag,.hljs-formula,.hljs-keyword{color:#a626a4}
-.hljs-deletion,.hljs-name,.hljs-section,.hljs-selector-tag,.hljs-subst{color:#ca4706;font-weight:700}
-.hljs-literal{color:#0b76c5}
-.hljs-addition,.hljs-attribute,.hljs-meta-string,.hljs-regexp,.hljs-string{color:#42803c}
-.hljs-built_in,.hljs-class .hljs-title{color:#9a6a01}
-.hljs-attr,.hljs-number,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-pseudo,.hljs-template-variable,.hljs-type,.hljs-variable{color:#986801}
-.hljs-bullet,.hljs-link,.hljs-meta,.hljs-selector-id,.hljs-symbol,.hljs-title{color:#336ae3}
+.hljs{--base:#fafafa;--mono-1:#383a42;--mono-2:#686b77;--mono-3:#717277;--hue-1:#0b76c5;--hue-2:#336ae3;--hue-3:#a626a4;--hue-4:#42803c;--hue-5:#ca4706;--hue-5-2:#c91243;--hue-6:#986801;--hue-6-2:#9a6a01}
+@media (prefers-color-scheme:dark){
+.hljs{--base:#282c34;--mono-1:#abb2bf;--mono-2:#818896;--mono-3:#5c6370;--hue-1:#56b6c2;--hue-2:#61aeee;--hue-3:#c678dd;--hue-4:#98c379;--hue-5:#e06c75;--hue-5-2:#be5046;--hue-6:#d19a66;--hue-6-2:#e6c07b}
+}
+.hljs{display:block;overflow-x:auto;padding:.5em;color:#383a42;color:var(--mono-1,#383a42);background:#fafafa;background:var(--base,#fafafa)}
+.hljs-comment,.hljs-quote{color:#717277;color:var(--mono-3,#717277);font-style:italic}
+.hljs-doctag,.hljs-formula,.hljs-keyword{color:#a626a4;color:var(--hue-3,#a626a4)}
+.hljs-deletion,.hljs-name,.hljs-section,.hljs-selector-tag,.hljs-subst{color:#ca4706;color:var(--hue-5,#ca4706);font-weight:700}
+.hljs-literal{color:#0b76c5;color:var(--hue-1,#0b76c5)}
+.hljs-addition,.hljs-attribute,.hljs-meta-string,.hljs-regexp,.hljs-string{color:#42803c;color:var(--hue-4,#42803c)}
+.hljs-built_in,.hljs-class .hljs-title{color:#9a6a01;color:var(--hue-6-2,#9a6a01)}
+.hljs-attr,.hljs-number,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-pseudo,.hljs-template-variable,.hljs-type,.hljs-variable{color:#986801;color:var(--hue-6,#986801)}
+.hljs-bullet,.hljs-link,.hljs-meta,.hljs-selector-id,.hljs-symbol,.hljs-title{color:#336ae3;color:var(--hue-2,#336ae3)}
 .hljs-emphasis{font-style:italic}
 .hljs-strong{font-weight:700}
 .hljs-link{text-decoration:underline}
@@ -161,8 +162,8 @@ dd{margin-left:0}
 <style>
 var{position:relative;cursor:pointer}
 var[data-type]::after,var[data-type]::before{position:absolute;left:50%;top:-6px;opacity:0;transition:opacity .4s;pointer-events:none}
-var[data-type]::before{content:"";transform:translateX(-50%);border-width:4px 6px 0 6px;border-style:solid;border-color:transparent;border-top-color:#000}
-var[data-type]::after{content:attr(data-type);transform:translateX(-50%) translateY(-100%);background:#000;text-align:center;font-family:"Dank Mono","Fira Code",monospace;font-style:normal;padding:6px;border-radius:3px;color:#daca88;text-indent:0;font-weight:400}
+var[data-type]::before{content:"";transform:translateX(-50%);border-width:4px 6px 0 6px;border-style:solid;border-color:transparent;border-top-color:#222}
+var[data-type]::after{content:attr(data-type);transform:translateX(-50%) translateY(-100%);background:#222;text-align:center;font-family:"Dank Mono","Fira Code",monospace;font-style:normal;padding:6px;border-radius:3px;color:#daca88;text-indent:0;font-weight:400}
 var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
 </style>
 <script id="initialUserConfig" type="application/json">{
@@ -229,16 +230,16 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
   "postProcess": [
     null
   ],
-  "gitRevision": "0f27243c920a68da0457239edcc0ddbe4c786ccd",
-  "publishISODate": "2023-12-21T00:00:00.000Z",
-  "generatedSubtitle": "W3C Editor's Draft 21 December 2023"
+  "gitRevision": "47948b452073ff475209e26f5fbbb33208be62f6",
+  "publishISODate": "2024-03-19T00:00:00.000Z",
+  "generatedSubtitle": "W3C Editor's Draft 19 March 2024"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED"></head>
   <body data-cite="WEBIDL html dom url fileapi infra" class="h-entry"><div class="head">
     <p class="logos"><a class="logo" href="https://www.w3.org/"><img crossorigin="" alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72">
   </a></p>
     <h1 id="title" class="title">Media Source Extensions™</h1> 
-    <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">W3C Editor's Draft</a> <time class="dt-published" datetime="2023-12-21">21 December 2023</time></p>
+    <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">W3C Editor's Draft</a> <time class="dt-published" datetime="2024-03-19">19 March 2024</time></p>
     <details open="">
       <summary>More details about this document</summary>
       <dl>
@@ -291,7 +292,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <p class="copyright">
     <a href="https://www.w3.org/policies/#copyright">Copyright</a>
     ©
-    2023
+    2024
     
     <a href="https://www.w3.org/">World Wide Web Consortium</a>.
     <abbr title="World Wide Web Consortium">W3C</abbr><sup>®</sup>
@@ -823,7 +824,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
           </ol>
         </section></section>
 
-        <section id="endofstream-method"><div class="header-wrapper"><h2 id="x3-endofstream-method"><bdi class="secno">3. </bdi><dfn id="dfn-endofstream" tabindex="0" aria-haspopup="dialog" class="respec-offending-element" title="Found definition for &quot;endOfStream()&quot;, but nothing links to it. This is usually a spec bug!" data-dfn-type="dfn">endOfStream()</dfn> method</h2><a class="self-link" href="#endofstream-method" aria-label="Permalink for Section 3."></a></div>
+        <section id="endofstream-method"><div class="header-wrapper"><h2 id="x3-endofstream-method"><bdi class="secno">3. </bdi><dfn id="dfn-endofstream" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn" class="respec-offending-element" title="Found definition for &quot;endOfStream()&quot;, but nothing links to it. This is usually a spec bug!">endOfStream()</dfn> method</h2><a class="self-link" href="#endofstream-method" aria-label="Permalink for Section 3."></a></div>
           <p>Signals the end of the stream.</p>
 
           <ol class="algorithm">
@@ -831,7 +832,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
             <li>If the <a data-link-type="idl" href="#dom-sourcebuffer-updating" class="internalDFN" id="ref-for-dom-sourcebuffer-updating-4"><code>updating</code></a> attribute equals true on any <a data-link-type="idl" data-lt="SourceBuffer" href="#dom-sourcebuffer" class="internalDFN" id="ref-for-dom-sourcebuffer-23"><code>SourceBuffer</code></a> in <a data-link-type="idl" href="#dom-mediasource-sourcebuffers" class="internalDFN" id="ref-for-dom-mediasource-sourcebuffers-15"><code>sourceBuffers</code></a>, then throw an <a data-link-type="idl" data-lt="InvalidStateError" data-type="exception" href="https://webidl.spec.whatwg.org/#invalidstateerror"><code>InvalidStateError</code></a> exception and abort these steps.</li>
             <li>Run the <a data-link-type="dfn|abstract-op" href="#dfn-end-of-stream" class="internalDFN" id="ref-for-dfn-end-of-stream-1">end of stream</a> algorithm with the error parameter set to <var data-type="EndOfStreamError">error</var>.</li>
           </ol>
-          </section><section id="setliveseekablerange-method"><div class="header-wrapper"><h2 id="x4-setliveseekablerange-method"><bdi class="secno">4. </bdi><dfn id="dfn-setliveseekablerange" tabindex="0" aria-haspopup="dialog" class="respec-offending-element" title="Found definition for &quot;setLiveSeekableRange()&quot;, but nothing links to it. This is usually a spec bug!" data-dfn-type="dfn">setLiveSeekableRange()</dfn> method</h2><a class="self-link" href="#setliveseekablerange-method" aria-label="Permalink for Section 4."></a></div>
+          </section><section id="setliveseekablerange-method"><div class="header-wrapper"><h2 id="x4-setliveseekablerange-method"><bdi class="secno">4. </bdi><dfn id="dfn-setliveseekablerange" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn" class="respec-offending-element" title="Found definition for &quot;setLiveSeekableRange()&quot;, but nothing links to it. This is usually a spec bug!">setLiveSeekableRange()</dfn> method</h2><a class="self-link" href="#setliveseekablerange-method" aria-label="Permalink for Section 4."></a></div>
 
           <p>Updates <a data-link-type="attribute" data-lt="[[live seekable range]]" href="#dfn-live-seekable-range" class="internalDFN" id="ref-for-dfn-live-seekable-range-1"><code>[[live seekable range]]</code></a> that is used in
             section <a href="#htmlmediaelement-extensions" data-matched-text="[[[#htmlmediaelement-extensions]]]" class="sec-ref"><bdi class="secno">16. </bdi>HTMLMediaElement Extensions</a> to modify
@@ -842,7 +843,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
             <li>If <var data-type="double">start</var> is negative or greater than <var data-type="double">end</var>, then throw a <a data-link-type="idl" data-lt="TypeError" data-type="exception" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror"><code>TypeError</code></a> exception and abort these steps.</li>
             <li>Set <a data-link-type="attribute" data-lt="[[live seekable range]]" href="#dfn-live-seekable-range" class="internalDFN" id="ref-for-dfn-live-seekable-range-2"><code>[[live seekable range]]</code></a> to be a new <a href="https://html.spec.whatwg.org/multipage/media.html#normalised-timeranges-object">normalized TimeRanges object</a>
               containing a single range whose start position is <var data-type="double">start</var> and end position is <var data-type="double">end</var>.
-          </li></ol></section><section id="clearliveseekablerange-method"><div class="header-wrapper"><h2 id="x5-clearliveseekablerange-method"><bdi class="secno">5. </bdi><dfn id="dfn-clearliveseekablerange" tabindex="0" aria-haspopup="dialog" class="respec-offending-element" title="Found definition for &quot;clearLiveSeekableRange()&quot;, but nothing links to it. This is usually a spec bug!" data-dfn-type="dfn">clearLiveSeekableRange()</dfn> method</h2><a class="self-link" href="#clearliveseekablerange-method" aria-label="Permalink for Section 5."></a></div>
+          </li></ol></section><section id="clearliveseekablerange-method"><div class="header-wrapper"><h2 id="x5-clearliveseekablerange-method"><bdi class="secno">5. </bdi><dfn id="dfn-clearliveseekablerange" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn" class="respec-offending-element" title="Found definition for &quot;clearLiveSeekableRange()&quot;, but nothing links to it. This is usually a spec bug!">clearLiveSeekableRange()</dfn> method</h2><a class="self-link" href="#clearliveseekablerange-method" aria-label="Permalink for Section 5."></a></div>
         <p>Updates <a data-link-type="attribute" data-lt="[[live seekable range]]" href="#dfn-live-seekable-range" class="internalDFN" id="ref-for-dfn-live-seekable-range-3"><code>[[live seekable range]]</code></a> that is used in
           section <a href="#htmlmediaelement-extensions" data-matched-text="[[[#htmlmediaelement-extensions]]]" class="sec-ref"><bdi class="secno">16. </bdi>HTMLMediaElement Extensions</a> to modify
           <a data-link-type="idl" data-lt="HTMLMediaElement" data-type="interface" href="https://html.spec.whatwg.org/multipage/media.html#htmlmediaelement"><code>HTMLMediaElement</code></a>'s <a data-link-type="idl" data-type="attribute" href="https://html.spec.whatwg.org/multipage/media.html#dom-media-seekable"><code>seekable</code></a> behavior.</p>
@@ -852,7 +853,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
         <p>When this method is invoked, the user agent must run the following steps:</p><ol class="method-algorithm">
             <li>If the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-12"><code>readyState</code></a> attribute is not "<a data-link-type="idl" href="#dom-readystate-open" class="internalDFN" id="ref-for-dom-readystate-open-7"><code>open</code></a>" then throw an <a data-link-type="idl" data-lt="InvalidStateError" data-type="exception" href="https://webidl.spec.whatwg.org/#invalidstateerror"><code>InvalidStateError</code></a> exception and abort these steps.</li>
             <li>If <a data-link-type="attribute" data-lt="[[live seekable range]]" href="#dfn-live-seekable-range" class="internalDFN" id="ref-for-dfn-live-seekable-range-4"><code>[[live seekable range]]</code></a> contains a range, then set <a data-link-type="attribute" data-lt="[[live seekable range]]" href="#dfn-live-seekable-range" class="internalDFN" id="ref-for-dfn-live-seekable-range-5"><code>[[live seekable range]]</code></a> to be a new empty <a data-link-type="idl" data-lt="TimeRanges" data-type="interface" href="https://html.spec.whatwg.org/multipage/media.html#timeranges"><code>TimeRanges</code></a> object.
-          </li></ol></section><section id="istypesupported-method"><div class="header-wrapper"><h2 id="x6-istypesupported-method"><bdi class="secno">6. </bdi><dfn id="dfn-istypesupported" tabindex="0" aria-haspopup="dialog" class="respec-offending-element" title="Found definition for &quot;isTypeSupported()&quot;, but nothing links to it. This is usually a spec bug!" data-dfn-type="dfn">isTypeSupported()</dfn> method</h2><a class="self-link" href="#istypesupported-method" aria-label="Permalink for Section 6."></a></div>
+          </li></ol></section><section id="istypesupported-method"><div class="header-wrapper"><h2 id="x6-istypesupported-method"><bdi class="secno">6. </bdi><dfn id="dfn-istypesupported" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn" class="respec-offending-element" title="Found definition for &quot;isTypeSupported()&quot;, but nothing links to it. This is usually a spec bug!">isTypeSupported()</dfn> method</h2><a class="self-link" href="#istypesupported-method" aria-label="Permalink for Section 6."></a></div>
           <p>Check to see whether the <a href="#dom-mediasource" class="internalDFN" data-link-type="idl" id="ref-for-dom-mediasource-35"><code>MediaSource</code></a> is capable of creating <a href="#dom-sourcebuffer" class="internalDFN" data-link-type="idl" id="ref-for-dom-sourcebuffer-24"><code>SourceBuffer</code></a> objects for the specified MIME type.</p>
 
           
@@ -1078,7 +1079,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
           references changed after implementations of this specification stabilized.</p></div>
         </section>
 
-        <section id="mediasource-detach"><div class="header-wrapper"><h3 id="x9-2-detaching-from-a-media-element"><bdi class="secno">9.2 </bdi><dfn id="dfn-detaching-from-a-media-element" tabindex="0" aria-haspopup="dialog" class="respec-offending-element" title="Found definition for &quot;Detaching from a media element&quot;, but nothing links to it. This is usually a spec bug!" data-dfn-type="dfn">Detaching from a media element</dfn></h3><a class="self-link" href="#mediasource-detach" aria-label="Permalink for Section 9.2"></a></div>
+        <section id="mediasource-detach"><div class="header-wrapper"><h3 id="x9-2-detaching-from-a-media-element"><bdi class="secno">9.2 </bdi><dfn id="dfn-detaching-from-a-media-element" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn" class="respec-offending-element" title="Found definition for &quot;Detaching from a media element&quot;, but nothing links to it. This is usually a spec bug!">Detaching from a media element</dfn></h3><a class="self-link" href="#mediasource-detach" aria-label="Permalink for Section 9.2"></a></div>
           
           <p>The following steps are run in any case where the media element is going to transition to <a data-link-type="idl" data-type="const" href="https://html.spec.whatwg.org/multipage/media.html#dom-media-network_empty"><code>NETWORK_EMPTY</code></a> and <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task">queue a task</a> to <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-fire">fire an event</a> named   <a data-link-type="dfn|abstract-op" data-type="event" href="https://html.spec.whatwg.org/multipage/media.html#event-media-emptied">emptied</a> at the media element. These steps <em class="rfc2119">SHOULD</em> be run right before the transition.</p>
 
@@ -1119,7 +1120,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
           detachment.</p></div>
         </section>
 
-        <section id="mediasource-seeking"><div class="header-wrapper"><h3 id="x9-3-seeking"><bdi class="secno">9.3 </bdi><dfn id="dfn-seeking" tabindex="0" aria-haspopup="dialog" class="respec-offending-element" title="Found definition for &quot;Seeking&quot;, but nothing links to it. This is usually a spec bug!" data-dfn-type="dfn">Seeking</dfn></h3><a class="self-link" href="#mediasource-seeking" aria-label="Permalink for Section 9.3"></a></div>
+        <section id="mediasource-seeking"><div class="header-wrapper"><h3 id="x9-3-seeking"><bdi class="secno">9.3 </bdi><dfn id="dfn-seeking" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn" class="respec-offending-element" title="Found definition for &quot;Seeking&quot;, but nothing links to it. This is usually a spec bug!">Seeking</dfn></h3><a class="self-link" href="#mediasource-seeking" aria-label="Permalink for Section 9.3"></a></div>
           
           <p>Run the following steps as part of the "<i>Wait until the user agent has established whether or not the media data for the new playback position is available, and, if it is, until it has decoded enough data to play back that position"</i> step of the <a href="https://html.spec.whatwg.org/multipage/media.html#dom-media-seek">seek algorithm</a>:</p>
           <ol>
@@ -1219,7 +1220,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
           </dl>
         </section>
 
-        <section id="active-source-buffer-changes"><div class="header-wrapper"><h3 id="x9-5-changes-to-selected-enabled-track-state"><bdi class="secno">9.5 </bdi><dfn id="dfn-changes-to-selected-enabled-track-state" tabindex="0" aria-haspopup="dialog" class="respec-offending-element" title="Found definition for &quot;Changes to selected/enabled track state&quot;, but nothing links to it. This is usually a spec bug!" data-dfn-type="dfn">Changes to selected/enabled track state</dfn></h3><a class="self-link" href="#active-source-buffer-changes" aria-label="Permalink for Section 9.5"></a></div>
+        <section id="active-source-buffer-changes"><div class="header-wrapper"><h3 id="x9-5-changes-to-selected-enabled-track-state"><bdi class="secno">9.5 </bdi><dfn id="dfn-changes-to-selected-enabled-track-state" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn" class="respec-offending-element" title="Found definition for &quot;Changes to selected/enabled track state&quot;, but nothing links to it. This is usually a spec bug!">Changes to selected/enabled track state</dfn></h3><a class="self-link" href="#active-source-buffer-changes" aria-label="Permalink for Section 9.5"></a></div>
           
           <p>During playback <a data-link-type="idl" href="#dom-mediasource-activesourcebuffers" class="internalDFN" id="ref-for-dom-mediasource-activesourcebuffers-12"><code>activeSourceBuffers</code></a> needs to be updated if the <a data-link-type="idl" data-type="attribute" href="https://html.spec.whatwg.org/multipage/media.html#dom-videotrack-selected"><code>selected</code></a> video track, the <a data-link-type="idl" data-type="attribute" href="https://html.spec.whatwg.org/multipage/media.html#dom-audiotrack-enabled"><code>enabled</code></a> audio track(s), or a text track <a data-link-type="idl" data-type="attribute" href="https://html.spec.whatwg.org/multipage/media.html#dom-texttrack-mode"><code>mode</code></a> changes. When one or more of these changes occur the following steps need to be followed.
              Also, when <a data-link-type="idl" data-lt="MediaSource" href="#dom-mediasource" class="internalDFN" id="ref-for-dom-mediasource-84"><code>MediaSource</code></a> was constructed in a <a data-link-type="idl" data-lt="DedicatedWorkerGlobalScope" data-type="interface" href="https://html.spec.whatwg.org/multipage/workers.html#dedicatedworkerglobalscope"><code>DedicatedWorkerGlobalScope</code></a>, then each change that occurs
@@ -2783,7 +2784,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
       <section id="methods-0"><div class="header-wrapper"><h3 id="x12-2-methods"><bdi class="secno">12.2 </bdi>Methods</h3><a class="self-link" href="#methods-0" aria-label="Permalink for Section 12.2"></a></div>
         
         <dl class="methods" data-dfn-for="SourceBufferList">
-          <dt><dfn data-lt-nodefault="" data-lt="sourcebufferlist-getter" id="dfn-sourcebufferlist-getter" tabindex="0" aria-haspopup="dialog" class="respec-offending-element" title="Found definition for &quot;getter&quot;, but nothing links to it. This is usually a spec bug!" data-dfn-type="dfn"><code>getter</code></dfn></dt>
+          <dt><dfn data-lt-nodefault="" data-lt="sourcebufferlist-getter" id="dfn-sourcebufferlist-getter" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn" class="respec-offending-element" title="Found definition for &quot;getter&quot;, but nothing links to it. This is usually a spec bug!"><code>getter</code></dfn></dt>
           <dd>
             <p>Allows the SourceBuffer objects in the list to be accessed with an array operator (i.e., []).</p>
 
@@ -2942,9 +2943,9 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-man
 
     <section data-dfn-for="BufferedChangeEvent" id="bufferedchangeevent-interface"><div class="header-wrapper"><h2 id="x14-bufferedchangeevent-interface"><bdi class="secno">14. </bdi><dfn data-export="" data-dfn-type="interface" id="dom-bufferedchangeevent" data-idl="interface" data-title="BufferedChangeEvent" data-dfn-for="" tabindex="0" aria-haspopup="dialog"><code>BufferedChangeEvent</code></dfn> interface</h2><a class="self-link" href="#bufferedchangeevent-interface" aria-label="Permalink for Section 14."></a></div>
       
-      <pre class="idl def" id="webidl-2057880103"><span class="idlHeader"><a class="self-link" href="#webidl-2057880103">WebIDL</a></span><code><span data-idl="" class="idlInterface" id="idl-def-bufferedchangeevent" data-title="BufferedChangeEvent">[<span class="extAttr"><a data-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed">Exposed</a>=(Window,DedicatedWorker)</span>]
+      <pre class="idl def" id="webidl-1824271606"><span class="idlHeader"><a class="self-link" href="#webidl-1824271606">WebIDL</a></span><code><span data-idl="" class="idlInterface" id="idl-def-bufferedchangeevent" data-title="BufferedChangeEvent">[<span class="extAttr"><a data-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed">Exposed</a>=(Window,DedicatedWorker)</span>]
 interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-bufferedchangeevent" id="ref-for-dom-bufferedchangeevent-2"><code>BufferedChangeEvent</code></a> : <span class="idlSuperclass"><a data-link-type="idl" data-type="interface" href="https://dom.spec.whatwg.org/#event">Event</a></span> {<span data-idl="" class="idlConstructor" id="idl-def-bufferedchangeevent-constructor-type-eventinitdict" data-title="constructor" data-dfn-for="BufferedChangeEvent">
-  <dfn data-export="" data-dfn-type="constructor" id="dom-bufferedchangeevent-constructor" data-idl="constructor" data-title="constructor" data-dfn-for="BufferedChangeEvent" data-lt="constructor()|constructor(type)|constructor(type, eventInitDict)" data-local-lt="BufferedChangeEvent.constructor|BufferedChangeEvent.constructor()|constructor" tabindex="0" aria-haspopup="dialog"><code>constructor</code></dfn>(<span class="idlType"><a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString">DOMString</a></span> <span class="idlParamName">type</span>, optional<span class="idlType"> <a data-link-type="idl" href="#dom-bufferedchangeeventinit" class="internalDFN" id="ref-for-dom-bufferedchangeeventinit-1"><code>BufferedChangeEventInit</code></a></span> <span class="idlParamName">eventInitDict</span> = {});</span><span data-idl="" class="idlAttribute" id="idl-def-bufferedchangeevent-addedranges" data-title="addedRanges" data-dfn-for="BufferedChangeEvent">
+  <dfn data-export="" data-dfn-type="constructor" id="dom-bufferedchangeevent-constructor" data-idl="constructor" data-title="constructor" data-dfn-for="BufferedChangeEvent" data-lt="constructor()|constructor(type, eventInitDict)" data-local-lt="BufferedChangeEvent.constructor|BufferedChangeEvent.constructor()|constructor" tabindex="0" aria-haspopup="dialog"><code>constructor</code></dfn>(<span class="idlType"><a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString">DOMString</a></span> <span class="idlParamName">type</span>,<span class="idlType"> <a data-link-type="idl" href="#dom-bufferedchangeeventinit" class="internalDFN" id="ref-for-dom-bufferedchangeeventinit-1"><code>BufferedChangeEventInit</code></a></span> <span class="idlParamName">eventInitDict</span>);</span><span data-idl="" class="idlAttribute" id="idl-def-bufferedchangeevent-addedranges" data-title="addedRanges" data-dfn-for="BufferedChangeEvent">
 
   [<span class="extAttr"><a data-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SameObject">SameObject</a></span>] readonly attribute<span class="idlType"> <a data-link-type="idl" data-type="interface" href="https://html.spec.whatwg.org/multipage/media.html#timeranges">TimeRanges</a></span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-bufferedchangeevent-addedranges" id="ref-for-dom-bufferedchangeevent-addedranges-1"><code>addedRanges</code></a>;</span><span data-idl="" class="idlAttribute" id="idl-def-bufferedchangeevent-removedranges" data-title="removedRanges" data-dfn-for="BufferedChangeEvent">
   [<span class="extAttr"><a data-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SameObject">SameObject</a></span>] readonly attribute<span class="idlType"> <a data-link-type="idl" data-type="interface" href="https://html.spec.whatwg.org/multipage/media.html#timeranges">TimeRanges</a></span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-bufferedchangeevent-removedranges" id="ref-for-dom-bufferedchangeevent-removedranges-1"><code>removedRanges</code></a>;</span>
@@ -6272,7 +6273,7 @@ video.src = <span class="hljs-built_in">window</span>.URL.createObjectURL(mediaS
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-bufferedchangeevent" aria-label="Permalink for definition: BufferedChangeEvent. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-2057880103">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1824271606">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -6338,7 +6339,7 @@ video.src = <span class="hljs-built_in">window</span>.URL.createObjectURL(mediaS
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-bufferedchangeevent-addedranges" aria-label="Permalink for definition: addedRanges. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-2057880103">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1824271606">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -6350,7 +6351,7 @@ video.src = <span class="hljs-built_in">window</span>.URL.createObjectURL(mediaS
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-bufferedchangeevent-removedranges" aria-label="Permalink for definition: removedRanges. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-2057880103">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1824271606">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
