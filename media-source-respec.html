@@ -154,288 +154,288 @@
           </li>
         </ul>
       </section>
-      <section id="definitions">
-        <h3>
-          Definitions
-        </h3>
-        <dl>
-          <dt>
-            <dfn>Active Track Buffers</dfn>
-          </dt>
-          <dd>
-            <p>
-              The [=track buffers=] that provide [=coded frames=] for the {{AudioTrack/enabled}}
-              {{HTMLMediaElement/audioTracks}}, the {{VideoTrack/selected}}
-              {{HTMLMediaElement/videoTracks}}, and the <a def-id="texttrackmode-showing"></a> or
-              <a def-id="texttrackmode-hidden"></a> {{HTMLMediaElement/textTracks}}. All these
-              tracks are associated with {{SourceBuffer}} objects in the
-              {{MediaSource/activeSourceBuffers}} list.
-            </p>
-          </dd>
-          <dt>
-            <dfn>Append Window</dfn>
-          </dt>
-          <dd>
-            <p>
-              A [=presentation timestamp=] range used to filter out [=coded frames=] while
-              appending. The append window represents a single continuous time range with a single
-              start time and end time. Coded frames with [=presentation timestamp=] within this
-              range are allowed to be appended to the {{SourceBuffer}} while coded frames outside
-              this range are filtered out. The append window start and end times are controlled by
-              the {{SourceBuffer/appendWindowStart}} and {{SourceBuffer/appendWindowEnd}}
-              attributes respectively.
-            </p>
-          </dd>
-          <dt>
-            <dfn class="export">Coded Frame</dfn>
-          </dt>
-          <dd>
-            <p>
-              A unit of media data that has a [=presentation timestamp=], a [=decode timestamp=],
-              and a [=coded frame duration=].
-            </p>
-          </dd>
-          <dt>
-            <dfn>Coded Frame Duration</dfn>
-          </dt>
-          <dd>
-            <p>
-              The duration of a [=coded frame=]. For video and text, the duration indicates how
-              long the video frame or text SHOULD be displayed. For audio, the duration represents
-              the sum of all the samples contained within the coded frame. For example, if an audio
-              frame contained 441 samples @44100Hz the frame duration would be 10 milliseconds.
-            </p>
-          </dd>
-          <dt>
-            <dfn>Coded Frame End Timestamp</dfn>
-          </dt>
-          <dd>
-            <p>
-              The sum of a [=coded frame=] [=presentation timestamp=] and its [=coded frame
-              duration=]. It represents the [=presentation timestamp=] that immediately follows the
-              coded frame.
-            </p>
-          </dd>
-          <dt>
-            <dfn>Coded Frame Group</dfn>
-          </dt>
-          <dd>
-            <p>
-              A group of [=coded frames=] that are adjacent and have monotonically increasing
-              [=decode timestamps=] without any gaps. Discontinuities detected by the [=coded frame
-              processing=] algorithm and {{SourceBuffer/abort()}} calls trigger the start of a new
-              coded frame group.
-            </p>
-          </dd>
-          <dt>
-            <dfn>Decode Timestamp</dfn>
-          </dt>
-          <dd>
-            <p>
-              The decode timestamp indicates the latest time at which the frame needs to be decoded
-              assuming instantaneous decoding and rendering of this and any dependant frames (this
-              is equal to the [=presentation timestamp=] of the earliest frame, in [=presentation
-              order=], that is dependant on this frame). If frames can be decoded out of
-              [=presentation order=], then the decode timestamp MUST be present in or derivable
-              from the byte stream. The user agent MUST run the [=append error=] algorithm if this
-              is not the case. If frames cannot be decoded out of [=presentation order=] and a
-              decode timestamp is not present in the byte stream, then the decode timestamp is
-              equal to the [=presentation timestamp=].
-            </p>
-          </dd>
-          <dt>
-            <dfn class="export">Initialization Segment</dfn>
-          </dt>
-          <dd>
-            <p>
-              A sequence of bytes that contain all of the initialization information required to
-              decode a sequence of [=media segments=]. This includes codec initialization data,
-              [=Track ID=] mappings for multiplexed segments, and timestamp offsets (e.g., edit
-              lists).
-            </p>
-            <p class="note">
-              The [=byte stream format specifications=] in the byte stream format registry
-              [[MSE-REGISTRY]] contain format specific examples.
-            </p>
-          </dd>
-          <dt>
-            <dfn class="export">Media Segment</dfn>
-          </dt>
-          <dd>
-            <p>
-              A sequence of bytes that contain packetized & timestamped media data for a portion of
-              the <a def-id="media-timeline"></a>. Media segments are always associated with the
-              most recently appended [=initialization segment=].
-            </p>
-            <p class="note">
-              The [=byte stream format specifications=] in the byte stream format registry
-              [[MSE-REGISTRY]] contain format specific examples.
-            </p>
-          </dd>
-          <dt>
-            <dfn id="mediasource-object-url">MediaSource object URL</dfn>
-          </dt>
-          <dd>
-            <p>
-              A {{MediaSource}} object URL is a unique [=blob URL=] created by
-              {{URL/createObjectURL()}}. It is used to attach a {{MediaSource}} object to an
-              HTMLMediaElement.
-            </p>
-            <p>
-              These URLs are the same as a [=blob URLs=], except that anything in the definition of
-              that feature that refers to {{File}} and {{Blob}} objects is hereby extended to also
-              apply to {{MediaSource}} objects.
-            </p>
-            <p>
-              The [=origin=] of the MediaSource object URL is the [=relevant settings object=] of
-              [=this=] during the call to {{URL/createObjectURL()}}.
-            </p>
-            <p class="note">
-              For example, the [=origin=] of the MediaSource object URL affects the way that the
-              media element is <a href=
-              "https://html.spec.whatwg.org/multipage/canvas.html#security-with-canvas-elements">consumed
-              by canvas</a>.
-            </p>
-          </dd>
-          <dt>
-            <dfn id="parent-media-source">Parent Media Source</dfn>
-          </dt>
-          <dd>
-            <p>
-              The parent media source of a {{SourceBuffer}} object is the {{MediaSource}} object
-              that created it.
-            </p>
-          </dd>
-          <dt>
-            <dfn id="presentation-start-time">Presentation Start Time</dfn>
-          </dt>
-          <dd>
-            <p>
-              The presentation start time is the earliest time point in the presentation and
-              specifies the initial <a def-id="videoref" name="current-playback-position" id=
-              "current-playback-position">playback position</a> and <a def-id="videoref" name=
-              "earliest-possible-position" id="earliest-possible-position">earliest possible
-              position</a>. All presentations created using this specification have a presentation
-              start time of 0.
-            </p>
-            <p class="note">
-              For the purposes of determining if {{HTMLMediaElement}}'s
-              {{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that includes the current
-              playback position, implementations MAY choose to allow a current playback position at
-              or after [=presentation start time=] and before the first {{TimeRanges}} to play the
-              first {{TimeRanges}} if that {{TimeRanges}} starts within a reasonably short time,
-              like 1 second, after [=presentation start time=]. This allowance accommodates the
-              reality that muxed streams commonly do not begin all tracks precisely at
-              [=presentation start time=]. Implementations MUST report the actual buffered range,
-              regardless of this allowance.
-            </p>
-          </dd>
-          <dt>
-            <dfn id="presentation-interval">Presentation Interval</dfn>
-          </dt>
-          <dd>
-            <p>
-              The presentation interval of a [=coded frame=] is the time interval from its
-              [=presentation timestamp=] to the [=presentation timestamp=] plus the [=coded frame
-              duration|coded frame's duration=]. For example, if a coded frame has a presentation
-              timestamp of 10 seconds and a [=coded frame duration=] of 100 milliseconds, then the
-              presentation interval would be [10-10.1). Note that the start of the range is
-              inclusive, but the end of the range is exclusive.
-            </p>
-          </dd>
-          <dt>
-            <dfn id="presentation-order">Presentation Order</dfn>
-          </dt>
-          <dd>
-            <p>
-              The order that [=coded frames=] are rendered in the presentation. The presentation
-              order is achieved by ordering [=coded frames=] in monotonically increasing order by
-              their [=presentation timestamps=].
-            </p>
-          </dd>
-          <dt>
-            <dfn id="presentation-timestamp" data-export="">Presentation Timestamp</dfn>
-          </dt>
-          <dd>
-            <p>
-              A reference to a specific time in the presentation. The presentation timestamp in a
-              [=coded frame=] indicates when the frame SHOULD be rendered.
-            </p>
-          </dd>
-          <dt>
-            <dfn id="random-access-point" data-export="">Random Access Point</dfn>
-          </dt>
-          <dd>
-            <p>
-              A position in a [=media segment=] where decoding and continuous playback can begin
-              without relying on any previous data in the segment. For video this tends to be the
-              location of I-frames. In the case of audio, most audio frames can be treated as a
-              random access point. Since video tracks tend to have a more sparse distribution of
-              random access points, the location of these points are usually considered the random
-              access points for multiplexed streams.
-            </p>
-          </dd>
-          <dt>
-            <dfn>SourceBuffer byte stream format specification</dfn>
-          </dt>
-          <dd>
-            <p>
-              The specific [=byte stream format specification=] that describes the format of the
-              byte stream accepted by a {{SourceBuffer}} instance. The [=byte stream format
-              specification=], for a {{SourceBuffer}} object, is initially selected based on the
-              |type:DOMString| passed to the {{MediaSource/addSourceBuffer()}} call that created
-              the object, and can be updated by {{SourceBuffer/changeType()}} calls on the object.
-            </p>
-          </dd>
-          <dt>
-            <dfn>`SourceBuffer` configuration</dfn>
-          </dt>
-          <dd>
-            <p>
-              A specific set of tracks distributed across one or more {{SourceBuffer}} objects
-              owned by a single {{MediaSource}} instance.
-            </p>
-            <p>
-              Implementations MUST support at least 1 {{MediaSource}} object with the following
-              configurations:
-            </p>
-            <ul>
-              <li>A single SourceBuffer with 1 audio track and/or 1 video track.
-              </li>
-              <li>Two SourceBuffers with one handling a single audio track and the other handling a
-              single video track.
-              </li>
-            </ul>
-            <p>
-              MediaSource objects MUST support each of the configurations above, but they are only
-              required to support one configuration at a time. Supporting multiple configurations
-              at once or additional configurations is a quality of implementation issue.
-            </p>
-          </dd>
-          <dt>
-            <dfn>Track Description</dfn>
-          </dt>
-          <dd>
-            <p>
-              A byte stream format specific structure that provides the [=Track ID=], codec
-              configuration, and other metadata for a single track. Each track description inside a
-              single [=initialization segment=] has a unique [=Track ID=]. The user agent MUST run
-              the [=append error=] algorithm if the [=Track ID=] is not unique within the
-              [=initialization segment=].
-            </p>
-          </dd>
-          <dt>
-            <dfn>Track ID</dfn>
-          </dt>
-          <dd>
-            <p>
-              A Track ID is a byte stream format specific identifier that marks sections of the
-              byte stream as being part of a specific track. The Track ID in a [=track
-              description=] identifies which sections of a [=media segment=] belong to that track.
-            </p>
-          </dd>
-        </dl>
-      </section>
+    </section>
+    <section id="definitions">
+      <h3>
+        Definitions
+      </h3>
+      <dl>
+        <dt>
+          <dfn>Active Track Buffers</dfn>
+        </dt>
+        <dd>
+          <p>
+            The [=track buffers=] that provide [=coded frames=] for the {{AudioTrack/enabled}}
+            {{HTMLMediaElement/audioTracks}}, the {{VideoTrack/selected}}
+            {{HTMLMediaElement/videoTracks}}, and the <a def-id="texttrackmode-showing"></a> or
+            <a def-id="texttrackmode-hidden"></a> {{HTMLMediaElement/textTracks}}. All these
+            tracks are associated with {{SourceBuffer}} objects in the
+            {{MediaSource/activeSourceBuffers}} list.
+          </p>
+        </dd>
+        <dt>
+          <dfn>Append Window</dfn>
+        </dt>
+        <dd>
+          <p>
+            A [=presentation timestamp=] range used to filter out [=coded frames=] while
+            appending. The append window represents a single continuous time range with a single
+            start time and end time. Coded frames with [=presentation timestamp=] within this
+            range are allowed to be appended to the {{SourceBuffer}} while coded frames outside
+            this range are filtered out. The append window start and end times are controlled by
+            the {{SourceBuffer/appendWindowStart}} and {{SourceBuffer/appendWindowEnd}}
+            attributes respectively.
+          </p>
+        </dd>
+        <dt>
+          <dfn class="export">Coded Frame</dfn>
+        </dt>
+        <dd>
+          <p>
+            A unit of media data that has a [=presentation timestamp=], a [=decode timestamp=],
+            and a [=coded frame duration=].
+          </p>
+        </dd>
+        <dt>
+          <dfn>Coded Frame Duration</dfn>
+        </dt>
+        <dd>
+          <p>
+            The duration of a [=coded frame=]. For video and text, the duration indicates how
+            long the video frame or text SHOULD be displayed. For audio, the duration represents
+            the sum of all the samples contained within the coded frame. For example, if an audio
+            frame contained 441 samples @44100Hz the frame duration would be 10 milliseconds.
+          </p>
+        </dd>
+        <dt>
+          <dfn>Coded Frame End Timestamp</dfn>
+        </dt>
+        <dd>
+          <p>
+            The sum of a [=coded frame=] [=presentation timestamp=] and its [=coded frame
+            duration=]. It represents the [=presentation timestamp=] that immediately follows the
+            coded frame.
+          </p>
+        </dd>
+        <dt>
+          <dfn>Coded Frame Group</dfn>
+        </dt>
+        <dd>
+          <p>
+            A group of [=coded frames=] that are adjacent and have monotonically increasing
+            [=decode timestamps=] without any gaps. Discontinuities detected by the [=coded frame
+            processing=] algorithm and {{SourceBuffer/abort()}} calls trigger the start of a new
+            coded frame group.
+          </p>
+        </dd>
+        <dt>
+          <dfn>Decode Timestamp</dfn>
+        </dt>
+        <dd>
+          <p>
+            The decode timestamp indicates the latest time at which the frame needs to be decoded
+            assuming instantaneous decoding and rendering of this and any dependant frames (this
+            is equal to the [=presentation timestamp=] of the earliest frame, in [=presentation
+            order=], that is dependant on this frame). If frames can be decoded out of
+            [=presentation order=], then the decode timestamp MUST be present in or derivable
+            from the byte stream. The user agent MUST run the [=append error=] algorithm if this
+            is not the case. If frames cannot be decoded out of [=presentation order=] and a
+            decode timestamp is not present in the byte stream, then the decode timestamp is
+            equal to the [=presentation timestamp=].
+          </p>
+        </dd>
+        <dt>
+          <dfn class="export">Initialization Segment</dfn>
+        </dt>
+        <dd>
+          <p>
+            A sequence of bytes that contain all of the initialization information required to
+            decode a sequence of [=media segments=]. This includes codec initialization data,
+            [=Track ID=] mappings for multiplexed segments, and timestamp offsets (e.g., edit
+            lists).
+          </p>
+          <p class="note">
+            The [=byte stream format specifications=] in the byte stream format registry
+            [[MSE-REGISTRY]] contain format specific examples.
+          </p>
+        </dd>
+        <dt>
+          <dfn class="export">Media Segment</dfn>
+        </dt>
+        <dd>
+          <p>
+            A sequence of bytes that contain packetized & timestamped media data for a portion of
+            the <a def-id="media-timeline"></a>. Media segments are always associated with the
+            most recently appended [=initialization segment=].
+          </p>
+          <p class="note">
+            The [=byte stream format specifications=] in the byte stream format registry
+            [[MSE-REGISTRY]] contain format specific examples.
+          </p>
+        </dd>
+        <dt>
+          <dfn id="mediasource-object-url">MediaSource object URL</dfn>
+        </dt>
+        <dd>
+          <p>
+            A {{MediaSource}} object URL is a unique [=blob URL=] created by
+            {{URL/createObjectURL()}}. It is used to attach a {{MediaSource}} object to an
+            HTMLMediaElement.
+          </p>
+          <p>
+            These URLs are the same as a [=blob URLs=], except that anything in the definition of
+            that feature that refers to {{File}} and {{Blob}} objects is hereby extended to also
+            apply to {{MediaSource}} objects.
+          </p>
+          <p>
+            The [=origin=] of the MediaSource object URL is the [=relevant settings object=] of
+            [=this=] during the call to {{URL/createObjectURL()}}.
+          </p>
+          <p class="note">
+            For example, the [=origin=] of the MediaSource object URL affects the way that the
+            media element is <a href=
+            "https://html.spec.whatwg.org/multipage/canvas.html#security-with-canvas-elements">consumed
+            by canvas</a>.
+          </p>
+        </dd>
+        <dt>
+          <dfn id="parent-media-source">Parent Media Source</dfn>
+        </dt>
+        <dd>
+          <p>
+            The parent media source of a {{SourceBuffer}} object is the {{MediaSource}} object
+            that created it.
+          </p>
+        </dd>
+        <dt>
+          <dfn id="presentation-start-time">Presentation Start Time</dfn>
+        </dt>
+        <dd>
+          <p>
+            The presentation start time is the earliest time point in the presentation and
+            specifies the initial <a def-id="videoref" name="current-playback-position" id=
+            "current-playback-position">playback position</a> and <a def-id="videoref" name=
+            "earliest-possible-position" id="earliest-possible-position">earliest possible
+            position</a>. All presentations created using this specification have a presentation
+            start time of 0.
+          </p>
+          <p class="note">
+            For the purposes of determining if {{HTMLMediaElement}}'s
+            {{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that includes the current
+            playback position, implementations MAY choose to allow a current playback position at
+            or after [=presentation start time=] and before the first {{TimeRanges}} to play the
+            first {{TimeRanges}} if that {{TimeRanges}} starts within a reasonably short time,
+            like 1 second, after [=presentation start time=]. This allowance accommodates the
+            reality that muxed streams commonly do not begin all tracks precisely at
+            [=presentation start time=]. Implementations MUST report the actual buffered range,
+            regardless of this allowance.
+          </p>
+        </dd>
+        <dt>
+          <dfn id="presentation-interval">Presentation Interval</dfn>
+        </dt>
+        <dd>
+          <p>
+            The presentation interval of a [=coded frame=] is the time interval from its
+            [=presentation timestamp=] to the [=presentation timestamp=] plus the [=coded frame
+            duration|coded frame's duration=]. For example, if a coded frame has a presentation
+            timestamp of 10 seconds and a [=coded frame duration=] of 100 milliseconds, then the
+            presentation interval would be [10-10.1). Note that the start of the range is
+            inclusive, but the end of the range is exclusive.
+          </p>
+        </dd>
+        <dt>
+          <dfn id="presentation-order">Presentation Order</dfn>
+        </dt>
+        <dd>
+          <p>
+            The order that [=coded frames=] are rendered in the presentation. The presentation
+            order is achieved by ordering [=coded frames=] in monotonically increasing order by
+            their [=presentation timestamps=].
+          </p>
+        </dd>
+        <dt>
+          <dfn id="presentation-timestamp" data-export="">Presentation Timestamp</dfn>
+        </dt>
+        <dd>
+          <p>
+            A reference to a specific time in the presentation. The presentation timestamp in a
+            [=coded frame=] indicates when the frame SHOULD be rendered.
+          </p>
+        </dd>
+        <dt>
+          <dfn id="random-access-point" data-export="">Random Access Point</dfn>
+        </dt>
+        <dd>
+          <p>
+            A position in a [=media segment=] where decoding and continuous playback can begin
+            without relying on any previous data in the segment. For video this tends to be the
+            location of I-frames. In the case of audio, most audio frames can be treated as a
+            random access point. Since video tracks tend to have a more sparse distribution of
+            random access points, the location of these points are usually considered the random
+            access points for multiplexed streams.
+          </p>
+        </dd>
+        <dt>
+          <dfn>SourceBuffer byte stream format specification</dfn>
+        </dt>
+        <dd>
+          <p>
+            The specific [=byte stream format specification=] that describes the format of the
+            byte stream accepted by a {{SourceBuffer}} instance. The [=byte stream format
+            specification=], for a {{SourceBuffer}} object, is initially selected based on the
+            |type:DOMString| passed to the {{MediaSource/addSourceBuffer()}} call that created
+            the object, and can be updated by {{SourceBuffer/changeType()}} calls on the object.
+          </p>
+        </dd>
+        <dt>
+          <dfn>`SourceBuffer` configuration</dfn>
+        </dt>
+        <dd>
+          <p>
+            A specific set of tracks distributed across one or more {{SourceBuffer}} objects
+            owned by a single {{MediaSource}} instance.
+          </p>
+          <p>
+            Implementations MUST support at least 1 {{MediaSource}} object with the following
+            configurations:
+          </p>
+          <ul>
+            <li>A single SourceBuffer with 1 audio track and/or 1 video track.
+            </li>
+            <li>Two SourceBuffers with one handling a single audio track and the other handling a
+            single video track.
+            </li>
+          </ul>
+          <p>
+            MediaSource objects MUST support each of the configurations above, but they are only
+            required to support one configuration at a time. Supporting multiple configurations
+            at once or additional configurations is a quality of implementation issue.
+          </p>
+        </dd>
+        <dt>
+          <dfn>Track Description</dfn>
+        </dt>
+        <dd>
+          <p>
+            A byte stream format specific structure that provides the [=Track ID=], codec
+            configuration, and other metadata for a single track. Each track description inside a
+            single [=initialization segment=] has a unique [=Track ID=]. The user agent MUST run
+            the [=append error=] algorithm if the [=Track ID=] is not unique within the
+            [=initialization segment=].
+          </p>
+        </dd>
+        <dt>
+          <dfn>Track ID</dfn>
+        </dt>
+        <dd>
+          <p>
+            A Track ID is a byte stream format specific identifier that marks sections of the
+            byte stream as being part of a specific track. The Track ID in a [=track
+            description=] identifies which sections of a [=media segment=] belong to that track.
+          </p>
+        </dd>
+      </dl>
     </section>
     <section id="mediasource" data-dfn-for="MediaSource">
       <h2>
