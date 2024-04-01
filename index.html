@@ -136,7 +136,7 @@ dd{margin-left:0}
     
 <link rel="stylesheet" href="mse.css">
   
-<meta name="revision" content="eaa1f9119efada6ba72abc1314cbcfb7f78fddce">
+<meta name="revision" content="b54c5ef2714477d9a67e15376a8c95b2e3355bf5">
 <style>
 .hljs{--base:#fafafa;--mono-1:#383a42;--mono-2:#686b77;--mono-3:#717277;--hue-1:#0b76c5;--hue-2:#336ae3;--hue-3:#a626a4;--hue-4:#42803c;--hue-5:#ca4706;--hue-5-2:#c91243;--hue-6:#986801;--hue-6-2:#9a6a01}
 @media (prefers-color-scheme:dark){
@@ -221,16 +221,16 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
   "postProcess": [
     null
   ],
-  "gitRevision": "eaa1f9119efada6ba72abc1314cbcfb7f78fddce",
-  "publishISODate": "2024-03-21T00:00:00.000Z",
-  "generatedSubtitle": "W3C Editor's Draft 21 March 2024"
+  "gitRevision": "b54c5ef2714477d9a67e15376a8c95b2e3355bf5",
+  "publishISODate": "2024-04-01T00:00:00.000Z",
+  "generatedSubtitle": "W3C Editor's Draft 01 April 2024"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED"></head>
   <body data-cite="WEBIDL html dom url fileapi infra" class="h-entry"><div class="head">
     <p class="logos"><a class="logo" href="https://www.w3.org/"><img crossorigin="" alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72">
   </a></p>
     <h1 id="title" class="title">Media Source Extensions™</h1> 
-    <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">W3C Editor's Draft</a> <time class="dt-published" datetime="2024-03-21">21 March 2024</time></p>
+    <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">W3C Editor's Draft</a> <time class="dt-published" datetime="2024-04-01">01 April 2024</time></p>
     <details open="">
       <summary>More details about this document</summary>
       <dl>
@@ -304,15 +304,26 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
       in the <a href="https://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at
       https://www.w3.org/TR/.</em></p>
       <p>
-        On top of editorial updates, substantives changes since publication as a <abbr title="World Wide Web Consortium">W3C</abbr> Recommendation
-        in <a href="https://www.w3.org/TR/2016/REC-media-source-20161117/">November 2016</a> are
-        the addition of a <a data-link-type="idl" data-lt="changeType()" href="#dom-sourcebuffer-changetype" class="internalDFN" id="ref-for-dom-sourcebuffer-changetype-1"><code>changeType</code></a><code>()</code> method to switch codecs, the possibility to
-        create and use <a data-link-type="idl" data-lt="MediaSource" href="#dom-mediasource" class="internalDFN" id="ref-for-dom-mediasource-1"><code>MediaSource</code></a> objects off the main thread in dedicated workers, the
-        removal of the <a data-link-type="idl" data-lt="createObjectURL()" data-type="method" href="https://www.w3.org/TR/FileAPI/#dfn-createObjectURL"><code>createObjectURL</code></a><code>()</code> extension to the <a data-link-type="idl" data-lt="URL" data-type="interface" href="https://url.spec.whatwg.org/#url"><code>URL</code></a> object following its
-        integration in the File API [<cite><a class="bibref" data-link-type="biblio" href="#bib-fileapi" title="File API">FILEAPI</a></cite>], and the addition of <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-1"><code>ManagedMediaSource</code></a>,
-        <a data-link-type="idl" data-lt="ManagedSourceBuffer" href="#dom-managedsourcebuffer" class="internalDFN" id="ref-for-dom-managedsourcebuffer-1"><code>ManagedSourceBuffer</code></a>, and <a data-link-type="idl" data-lt="BufferedChangeEvent" href="#dom-bufferedchangeevent" class="internalDFN" id="ref-for-dom-bufferedchangeevent-1"><code>BufferedChangeEvent</code></a> interfaces supporting power-efficient
-        streaming and active buffered media cleanup by the user agent. For a full list of changes
-        done since the previous version, see the <a href="https://github.com/w3c/media-source/commits/main">commits</a>.
+        On top of editorial updates, substantive changes since publication as a <abbr title="World Wide Web Consortium">W3C</abbr> Recommendation
+        in <a href="https://www.w3.org/TR/2016/REC-media-source-20161117/">November 2016</a> are:
+        </p>
+        <ul>
+          <li>the addition of a <a data-link-type="idl" data-lt="changeType()" href="#dom-sourcebuffer-changetype" class="internalDFN" id="ref-for-dom-sourcebuffer-changetype-1"><code>changeType</code></a><code>()</code> method to switch among codecs or
+          bytestreams
+          </li>
+          <li>the possibility to create and use <a data-link-type="idl" data-lt="MediaSource" href="#dom-mediasource" class="internalDFN" id="ref-for-dom-mediasource-1"><code>MediaSource</code></a> objects off the main thread in
+          dedicated workers
+          </li>
+          <li>the removal of the <a data-link-type="idl" data-lt="createObjectURL()" data-type="method" href="https://www.w3.org/TR/FileAPI/#dfn-createObjectURL"><code>createObjectURL</code></a><code>()</code> extension to the <a data-link-type="idl" data-lt="URL" data-type="interface" href="https://url.spec.whatwg.org/#url"><code>URL</code></a> object following
+          its integration in the File API [<cite><a class="bibref" data-link-type="biblio" href="#bib-fileapi" title="File API">FILEAPI</a></cite>]
+          </li>
+          <li>the addition of <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-1"><code>ManagedMediaSource</code></a>, <a data-link-type="idl" data-lt="ManagedSourceBuffer" href="#dom-managedsourcebuffer" class="internalDFN" id="ref-for-dom-managedsourcebuffer-1"><code>ManagedSourceBuffer</code></a>, and
+          <a data-link-type="idl" data-lt="BufferedChangeEvent" href="#dom-bufferedchangeevent" class="internalDFN" id="ref-for-dom-bufferedchangeevent-1"><code>BufferedChangeEvent</code></a> interfaces supporting power-efficient streaming and active buffered
+          media cleanup by the user agent
+          </li>
+        </ul>
+        <p>
+        For a full list of changes made since the previous version, see the <a href="https://github.com/w3c/media-source/commits/main">commits</a>.
       </p>
       <p>
         The working group maintains <a href="https://github.com/w3c/media-source/issues">a list of
