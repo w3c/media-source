@@ -5492,33 +5492,33 @@
         async function setUpVideoStream() {
           // Specific video format and codec
           const mediaType = 'video/mp4; codecs="mp4a.40.2,avc1.4d4015"';
-  
+
           // Check if the type of video format / codec is supported.
           if (!window.ManagedMediaSource?.isTypeSupported(mediaType)) {
             return; // Not supported, do something else.
           }
-  
+
           // Set up video and its managed source.
           const video = document.createElement("video");
           const source = new ManagedMediaSource();
-  
+
           video.controls = true;
-  
+
           await new Promise((resolve) =&gt; {
             video.src = URL.createObjectURL(source);
             source.addEventListener("sourceopen", resolve, { once: true });
             document.body.appendChild(video);
           });
-  
+
           const sourceBuffer = source.addSourceBuffer(mediaType);
-  
+
           // Set up the event handlers
           sourceBuffer.onbufferedchange = (e) =&gt; {
             console.log("onbufferedchange event fired.");
             console.log(`Added Ranges: ${timeRangesToString(e.addedRanges)}`);
             console.log(`Removed Ranges: ${timeRangesToString(e.removedRanges)}`);
           };
-  
+
           source.onstartstreaming = async () =&gt; {
             const response = await fetch("./videos/bipbop.mp4");
             const buffer = await response.arrayBuffer();
@@ -5527,19 +5527,19 @@
               sourceBuffer.appendBuffer(buffer);
             });
           };
-  
+
           source.onendstreaming = async () =&gt; {
             // Stop fetching new segments here
           };
         }
-  
+
         // Helper function...
         function timeRangesToString(timeRanges) {
           const ranges = [];
           for (let i = 0; i &lt; timeRanges.length; i++) {
             ranges.push([timeRanges.start(i), timeRanges.end(i)]);
           }
-          return "[" + ranges.map(([start, end]) =&gt; `[${start}, ${end})` ) + "]";     
+          return "[" + ranges.map(([start, end]) =&gt; `[${start}, ${end})` ) + "]";
         }
         &lt;/script&gt;
         &lt;body onload="setUpVideoStream()"&gt;&lt;/body&gt;
