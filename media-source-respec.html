@@ -76,23 +76,23 @@
       <p>
         On top of editorial updates, substantive changes since publication as a W3C Recommendation
         in <a href="https://www.w3.org/TR/2016/REC-media-source-20161117/">November 2016</a> are:
-        </p>
-        <ul>
-          <li>the addition of a {{SourceBuffer/changeType()}} method to switch among codecs or
-          bytestreams
-          </li>
-          <li>the possibility to create and use {{MediaSource}} objects off the main thread in
-          dedicated workers
-          </li>
-          <li>the removal of the {{URL/createObjectURL()}} extension to the {{URL}} object following
-          its integration in the File API [[FILEAPI]]
-          </li>
-          <li>the addition of {{ManagedMediaSource}}, {{ManagedSourceBuffer}}, and
-          {{BufferedChangeEvent}} interfaces supporting power-efficient streaming and active buffered
-          media cleanup by the user agent
-          </li>
-        </ul>
-        <p>
+      </p>
+      <ul>
+        <li>the addition of a {{SourceBuffer/changeType()}} method to switch among codecs or
+        bytestreams
+        </li>
+        <li>the possibility to create and use {{MediaSource}} objects off the main thread in
+        dedicated workers
+        </li>
+        <li>the removal of the {{URL/createObjectURL()}} extension to the {{URL}} object following
+        its integration in the File API [[FILEAPI]]
+        </li>
+        <li>the addition of {{ManagedMediaSource}}, {{ManagedSourceBuffer}}, and
+        {{BufferedChangeEvent}} interfaces supporting power-efficient streaming and active buffered
+        media cleanup by the user agent
+        </li>
+      </ul>
+      <p>
         For a full list of changes made since the previous version, see the <a href=
         "https://github.com/w3c/media-source/commits/main">commits</a>.
       </p>
@@ -179,9 +179,9 @@
             The [=track buffers=] that provide [=coded frames=] for the {{AudioTrack/enabled}}
             {{HTMLMediaElement/audioTracks}}, the {{VideoTrack/selected}}
             {{HTMLMediaElement/videoTracks}}, and the <a def-id="texttrackmode-showing"></a> or
-            <a def-id="texttrackmode-hidden"></a> {{HTMLMediaElement/textTracks}}. All these
-            tracks are associated with {{SourceBuffer}} objects in the
-            {{MediaSource/activeSourceBuffers}} list.
+            <a def-id="texttrackmode-hidden"></a> {{HTMLMediaElement/textTracks}}. All these tracks
+            are associated with {{SourceBuffer}} objects in the {{MediaSource/activeSourceBuffers}}
+            list.
           </p>
         </dd>
         <dt>
@@ -189,13 +189,13 @@
         </dt>
         <dd>
           <p>
-            A [=presentation timestamp=] range used to filter out [=coded frames=] while
-            appending. The append window represents a single continuous time range with a single
-            start time and end time. Coded frames with [=presentation timestamp=] within this
-            range are allowed to be appended to the {{SourceBuffer}} while coded frames outside
-            this range are filtered out. The append window start and end times are controlled by
-            the {{SourceBuffer/appendWindowStart}} and {{SourceBuffer/appendWindowEnd}}
-            attributes respectively.
+            A [=presentation timestamp=] range used to filter out [=coded frames=] while appending.
+            The append window represents a single continuous time range with a single start time
+            and end time. Coded frames with [=presentation timestamp=] within this range are
+            allowed to be appended to the {{SourceBuffer}} while coded frames outside this range
+            are filtered out. The append window start and end times are controlled by the
+            {{SourceBuffer/appendWindowStart}} and {{SourceBuffer/appendWindowEnd}} attributes
+            respectively.
           </p>
         </dd>
         <dt>
@@ -203,8 +203,8 @@
         </dt>
         <dd>
           <p>
-            A unit of media data that has a [=presentation timestamp=], a [=decode timestamp=],
-            and a [=coded frame duration=].
+            A unit of media data that has a [=presentation timestamp=], a [=decode timestamp=], and
+            a [=coded frame duration=].
           </p>
         </dd>
         <dt>
@@ -212,10 +212,10 @@
         </dt>
         <dd>
           <p>
-            The duration of a [=coded frame=]. For video and text, the duration indicates how
-            long the video frame or text SHOULD be displayed. For audio, the duration represents
-            the sum of all the samples contained within the coded frame. For example, if an audio
-            frame contained 441 samples @44100Hz the frame duration would be 10 milliseconds.
+            The duration of a [=coded frame=]. For video and text, the duration indicates how long
+            the video frame or text SHOULD be displayed. For audio, the duration represents the sum
+            of all the samples contained within the coded frame. For example, if an audio frame
+            contained 441 samples @44100Hz the frame duration would be 10 milliseconds.
           </p>
         </dd>
         <dt>
@@ -245,14 +245,14 @@
         <dd>
           <p>
             The decode timestamp indicates the latest time at which the frame needs to be decoded
-            assuming instantaneous decoding and rendering of this and any dependant frames (this
-            is equal to the [=presentation timestamp=] of the earliest frame, in [=presentation
+            assuming instantaneous decoding and rendering of this and any dependant frames (this is
+            equal to the [=presentation timestamp=] of the earliest frame, in [=presentation
             order=], that is dependant on this frame). If frames can be decoded out of
-            [=presentation order=], then the decode timestamp MUST be present in or derivable
-            from the byte stream. The user agent MUST run the [=append error=] algorithm if this
-            is not the case. If frames cannot be decoded out of [=presentation order=] and a
-            decode timestamp is not present in the byte stream, then the decode timestamp is
-            equal to the [=presentation timestamp=].
+            [=presentation order=], then the decode timestamp MUST be present in or derivable from
+            the byte stream. The user agent MUST run the [=append error=] algorithm if this is not
+            the case. If frames cannot be decoded out of [=presentation order=] and a decode
+            timestamp is not present in the byte stream, then the decode timestamp is equal to the
+            [=presentation timestamp=].
           </p>
         </dd>
         <dt>
@@ -276,8 +276,8 @@
         <dd>
           <p>
             A sequence of bytes that contain packetized & timestamped media data for a portion of
-            the <a def-id="media-timeline"></a>. Media segments are always associated with the
-            most recently appended [=initialization segment=].
+            the <a def-id="media-timeline"></a>. Media segments are always associated with the most
+            recently appended [=initialization segment=].
           </p>
           <p class="note">
             The [=byte stream format specifications=] in the byte stream format registry
@@ -314,8 +314,8 @@
         </dt>
         <dd>
           <p>
-            The parent media source of a {{SourceBuffer}} object is the {{MediaSource}} object
-            that created it.
+            The parent media source of a {{SourceBuffer}} object is the {{MediaSource}} object that
+            created it.
           </p>
         </dd>
         <dt>
@@ -324,22 +324,20 @@
         <dd>
           <p>
             The presentation start time is the earliest time point in the presentation and
-            specifies the initial <a def-id="videoref" name="current-playback-position" id=
-            "current-playback-position">playback position</a> and <a def-id="videoref" name=
-            "earliest-possible-position" id="earliest-possible-position">earliest possible
+            specifies the initial <a def-id="videoref" id="current-playback-position">playback
+            position</a> and <a def-id="videoref" id="earliest-possible-position">earliest possible
             position</a>. All presentations created using this specification have a presentation
             start time of 0.
           </p>
           <p class="note">
-            For the purposes of determining if {{HTMLMediaElement}}'s
-            {{HTMLMediaElement/buffered}} contains a {{TimeRanges}} that includes the current
-            playback position, implementations MAY choose to allow a current playback position at
-            or after [=presentation start time=] and before the first {{TimeRanges}} to play the
-            first {{TimeRanges}} if that {{TimeRanges}} starts within a reasonably short time,
-            like 1 second, after [=presentation start time=]. This allowance accommodates the
-            reality that muxed streams commonly do not begin all tracks precisely at
-            [=presentation start time=]. Implementations MUST report the actual buffered range,
-            regardless of this allowance.
+            For the purposes of determining if {{HTMLMediaElement}}'s {{HTMLMediaElement/buffered}}
+            contains a {{TimeRanges}} that includes the current playback position, implementations
+            MAY choose to allow a current playback position at or after [=presentation start time=]
+            and before the first {{TimeRanges}} to play the first {{TimeRanges}} if that
+            {{TimeRanges}} starts within a reasonably short time, like 1 second, after
+            [=presentation start time=]. This allowance accommodates the reality that muxed streams
+            commonly do not begin all tracks precisely at [=presentation start time=].
+            Implementations MUST report the actual buffered range, regardless of this allowance.
           </p>
         </dd>
         <dt>
@@ -392,11 +390,11 @@
         </dt>
         <dd>
           <p>
-            The specific [=byte stream format specification=] that describes the format of the
-            byte stream accepted by a {{SourceBuffer}} instance. The [=byte stream format
+            The specific [=byte stream format specification=] that describes the format of the byte
+            stream accepted by a {{SourceBuffer}} instance. The [=byte stream format
             specification=], for a {{SourceBuffer}} object, is initially selected based on the
-            |type:DOMString| passed to the {{MediaSource/addSourceBuffer()}} call that created
-            the object, and can be updated by {{SourceBuffer/changeType()}} calls on the object.
+            |type:DOMString| passed to the {{MediaSource/addSourceBuffer()}} call that created the
+            object, and can be updated by {{SourceBuffer/changeType()}} calls on the object.
           </p>
         </dd>
         <dt>
@@ -404,8 +402,8 @@
         </dt>
         <dd>
           <p>
-            A specific set of tracks distributed across one or more {{SourceBuffer}} objects
-            owned by a single {{MediaSource}} instance.
+            A specific set of tracks distributed across one or more {{SourceBuffer}} objects owned
+            by a single {{MediaSource}} instance.
           </p>
           <p>
             Implementations MUST support at least 1 {{MediaSource}} object with the following
@@ -420,8 +418,8 @@
           </ul>
           <p>
             MediaSource objects MUST support each of the configurations above, but they are only
-            required to support one configuration at a time. Supporting multiple configurations
-            at once or additional configurations is a quality of implementation issue.
+            required to support one configuration at a time. Supporting multiple configurations at
+            once or additional configurations is a quality of implementation issue.
           </p>
         </dd>
         <dt>
@@ -441,9 +439,9 @@
         </dt>
         <dd>
           <p>
-            A Track ID is a byte stream format specific identifier that marks sections of the
-            byte stream as being part of a specific track. The Track ID in a [=track
-            description=] identifies which sections of a [=media segment=] belong to that track.
+            A Track ID is a byte stream format specific identifier that marks sections of the byte
+            stream as being part of a specific track. The Track ID in a [=track description=]
+            identifies which sections of a [=media segment=] belong to that track.
           </p>
         </dd>
       </dl>
