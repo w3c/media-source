@@ -124,13 +124,81 @@
         extensions are available in the byte stream format registry [[MSE-REGISTRY]].
       </p>
       <figure>
-        <a href=
-        'https://w3c.github.io/media-source/pipeline_model_description.html#pipelinedesc'><picture><img src="pipeline_model.svg"
-        alt="Media Source Pipeline Model Diagram"></picture></a>
+        <picture><img src="pipeline_model.svg" alt="Media Source Pipeline Model Diagram"></picture>
         <figcaption>
-          Media Source Pipeline Model Diagram
+          Media Source pipeline diagram showing how a MediaSource provides one or more
+          SourceBuffers that feed audio and video decoders through a media element. The decoded
+          data is rendered as synchronized audio and video output.
         </figcaption>
       </figure>
+      <details class="note">
+        <summary>
+          Image description
+        </summary>
+        <p>
+          The image shows a flowchart that reads from a top down perspective. At the top is a
+          container marked |MediaSource|, with three arrows flowing down to containers each marked
+          |SourceBuffer|. (Not indicated, but for sake of clarity in this description referred to
+          here-after as |SourceBuffer 1|, shown with a blue background; |SourceBuffer 2|, shown
+          with a mauve background; and |SourceBuffer 3|, shown with a rose background; as described
+          from Left to Right).
+        </p>
+        <p>
+          Below these three |SourceBuffer| containers is a dashed line, with an indication that the
+          top half (|MediaSource| plus the three |SourceBuffer| containers) are taken from the
+          Media Source API, while the details to follow are taken from the {{HTMLMediaElement}}.
+        </p>
+        <h3 id='sourcebuffer1' class="notoc">
+          Flowing down from SourceBuffer 1
+        </h3>
+        <p>
+          Flowing down from |SourceBuffer 1| is a blue triangle with three arrows pointing to three
+          process indications, each labeled |Track Buffer|.
+        </p>
+        <p>
+          The first |Track Buffer| from the left then flows to a red box labeled |Video Decoder|,
+          which then flows to a switch that selects between one of three inputs, and the output of
+          the switch connects to an output destination, labeled |Video Tag Display Region|. The
+          switch indicates that one |Video Decoder| output (from |SourceBuffer 2|) is selected to
+          flow into the |Video Tag Display Region|.
+        </p>
+        <p>
+          The second |Track Buffer| flows to a green box labeled |Audio Decoder|, which then
+          follows to an indicator of an open switch, which then continues to a summing junction
+          indicator. The output of the summing junction connects to a green output destination,
+          labeled |Audio Device|.
+        </p>
+        <p>
+          The third |Track Buffer| also flows to a green box labeled |Audio Decoder|, which also
+          flows to a switch, this time however indicated closed, which then also continues to the
+          same summing junction as the second |Track Buffer|, which connects to the |Audio Device|.
+        </p>
+        <h3 id="sourcebuffer2" class="notoc">
+          Flowing down from SourceBuffer 2
+        </h3>
+        <p>
+          Flowing down from |SourceBuffer 2| is a mauve triangle with an arrow flowing to a process
+          indication labeled |Track Buffer|.
+        </p>
+        <p>
+          This |Track Buffer| then flows to a red box labeled |Video Decoder|, which then flows to
+          the same switch that feeds to the |Video Tag Display Region| previously mentioned in
+          |SourceBuffer 1|. The switch is positioned so that this |Video Decoder| output is
+          connected to the |Video Tag Display Region|.
+        </p>
+        <h3 id="sourcebuffer3" class="notoc">
+          Flowing down from SourceBuffer 3
+        </h3>
+        <p>
+          Flowing down from |SourceBuffer 3| is a rose triangle with an arrow flowing to a process
+          indication labeled |Track Buffer|.
+        </p>
+        <p>
+          This |Track Buffer| then flows to a green box labeled |Audio Decoder|, which then flows
+          through a closed switch, which then also continues to the same summing junction
+          previously mentioned in |SourceBuffer 1|, which connects to the |Audio Device|.
+        </p>
+      </details>
       <section>
         <h3>
           Goals
@@ -215,7 +283,7 @@
             The duration of a [=coded frame=]. For video and text, the duration indicates how long
             the video frame or text SHOULD be displayed. For audio, the duration represents the sum
             of all the samples contained within the coded frame. For example, if an audio frame
-            contained 441 samples @44100Hz the frame duration would be 10 milliseconds.
+            contained 441 samples at 44100 Hz the frame duration would be 10 milliseconds.
           </p>
         </dd>
         <dt>
@@ -4291,7 +4359,16 @@
           <div class="note">
             <p>
               Here is a graphical representation of this algorithm.
-            </p><img src="audio_splice.png" alt="Audio splice diagram">
+            </p>
+            <figure>
+              <picture><img src="audio_splice.png" alt="Audio Splice Rendering diagram"></picture>
+              <figcaption>
+                The image depicts the process of audio cross-fading between two sets of coded
+                frames over a duration of 5 milliseconds. The audio to be faded-out decreases in
+                volume from maximum to zero over a 5 millisecond period, while the audio to be
+                faded-in increases in volume from zero to maximum over the same period.
+              </figcaption>
+            </figure>
           </div>
         </section>
         <section id="sourcebuffer-text-splice-frame-algorithm">
@@ -5550,11 +5627,11 @@
       <p>
         The editors would like to thank Alex Giladi, Bob Lund, Chris Needham, Chris Poole, Chris
         Wilson, Cyril Concolato, Dale Curtis, David Dorwin, David Singer, Duncan Rowden, François
-        Daoust, Frank Galligan, Glenn Adams, Jer Noble, Joe Steele, John Simmons, Kagami Sascha
-        Rosylight, Kevin Streeter, Marcos Cáceres, Mark Vickers, Matt Ward, Matthew Gregan,
-        Michael(tm) Smith, Michael Thornburgh, Mounir Lamouri, Paul Adenot, Philip Jägenstedt,
-        Philippe Le Hegaret, Pierre Lemieux, Ralph Giles, Steven Robertson, and Tatsuya Igarashi
-        for their contributions to this specification.
+        Daoust, Frank Galligan, Glenn Adams, Jer Noble, Joe Steele, John Foliot, John Simmons,
+        Kagami Sascha Rosylight, Kevin Streeter, Marcos Cáceres, Mark Vickers, Matt Ward, Matthew
+        Gregan, Michael(tm) Smith, Michael Thornburgh, Mounir Lamouri, Paul Adenot, Philip
+        Jägenstedt, Philippe Le Hegaret, Pierre Lemieux, Ralph Giles, Steven Robertson, and Tatsuya
+        Igarashi for their contributions to this specification.
       </p>
     </section>
     <section id="VideoPlaybackQuality" class="appendix informative">
