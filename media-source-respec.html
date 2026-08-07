@@ -765,46 +765,49 @@
             </li>
           </ol>
         </li>
-        <li>Let |SourceBuffer audioTracks list:AudioTrackList| equal the {{AudioTrackList}} object
-        returned by |sourceBuffer|.{{SourceBuffer/audioTracks}}.
-        </li>
-        <li>If the |SourceBuffer audioTracks list| is not empty, then run the following steps:
-          <ol>
-            <li>For each {{AudioTrack}} object in the |SourceBuffer audioTracks list|, run the
-            following steps:
+        <li>Run the appropriate steps from the following list:
+          <dl class="switch">
+            <dt>
+              If the {{MediaSource}} was constructed in a {{Window}}:
+            </dt>
+            <dd>
               <ol>
-                <li>Set the {{AudioTrack/sourceBuffer}} attribute on the {{AudioTrack}} object to
-                null.
+                <li>Let |SourceBuffer audioTracks list:AudioTrackList| equal the {{AudioTrackList}}
+                object returned by |sourceBuffer|.{{SourceBuffer/audioTracks}}.
                 </li>
-                <li>Remove the {{AudioTrack}} object from the |SourceBuffer audioTracks list|.
-                  <p class="note">
-                    This should trigger {{AudioTrackList}} [[HTML]] logic to [=queue a task=] to
-                    [=fire an event=] named [=AudioTrackList/removetrack=] using {{TrackEvent}}
-                    with the {{TrackEvent/track}} attribute initialized to the {{AudioTrack}}
-                    object, at the |SourceBuffer audioTracks list|. If the {{AudioTrack/enabled}}
-                    attribute on the {{AudioTrack}} object was true at the beginning of this
-                    removal step, then this should also trigger {{AudioTrackList}} [[HTML]] logic
-                    to [=queue a task=] to [=fire an event=] named [=AudioTrackList/change=] at the
-                    |SourceBuffer audioTracks list|.
-                  </p>
+                <li>Let |media element:HTMLMediaElement| be the media element that |sourceBuffer|'s
+                [=parent media source=] is attached to.
                 </li>
-                <li>Use the [=mirror if necessary=] algorithm to run the following steps in
-                {{Window}}, to remove the {{AudioTrack}} object (or instead, the {{Window}} mirror
-                of it if the {{MediaSource}} object was constructed in a
-                {{DedicatedWorkerGlobalScope}}) from the media element:
+                <li>Let |HTMLMediaElement audioTracks list:AudioTrackList| equal the
+                {{AudioTrackList}} object returned by the {{HTMLMediaElement/audioTracks}} attribute
+                on |media element|.
+                </li>
+                <li>For each |audio track:AudioTrack| in the |SourceBuffer audioTracks
+                list|, run the following steps:
                   <ol>
-                    <li>Let |HTMLMediaElement audioTracks list:AudioTrackList| equal the
-                    {{AudioTrackList}} object returned by the {{HTMLMediaElement/audioTracks}}
-                    attribute on the HTMLMediaElement.
+                    <li>Set the {{AudioTrack/sourceBuffer}} attribute on |audio track| to
+                    null.
                     </li>
-                    <li>Remove the {{AudioTrack}} object from the |HTMLMediaElement audioTracks
+                    <li>Remove |audio track| from the |SourceBuffer audioTracks list|.
+                      <p class="note">
+                        This should trigger {{AudioTrackList}} [[HTML]] logic to [=queue a task=] to
+                        [=fire an event=] named [=AudioTrackList/removetrack=] using {{TrackEvent}}
+                        with the {{TrackEvent/track}} attribute initialized to |audio track|, at the
+                        |SourceBuffer audioTracks list|. If the {{AudioTrack/enabled}}
+                        attribute on |audio track| was true at the beginning of this
+                        removal step, then this should also trigger {{AudioTrackList}} [[HTML]] logic
+                        to [=queue a task=] to [=fire an event=] named [=AudioTrackList/change=] at the
+                        |SourceBuffer audioTracks list|.
+                      </p>
+                    </li>
+                    <li>Remove |audio track| from the |HTMLMediaElement audioTracks
                     list|.
                       <p class="note">
                         This should trigger {{AudioTrackList}} [[HTML]] logic to [=queue a task=]
                         to [=fire an event=] named [=AudioTrackList/removetrack=] using
-                        {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to the
-                        {{AudioTrack}} object, at the |HTMLMediaElement audioTracks list|. If the
-                        {{AudioTrack/enabled}} attribute on the {{AudioTrack}} object was true at
+                        {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
+                        |audio track|, at the |HTMLMediaElement audioTracks list|. If the
+                        {{AudioTrack/enabled}} attribute on |audio track| was true at
                         the beginning of this removal step, then this should also trigger
                         {{AudioTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=]
                         named [=AudioTrackList/change=] at the |HTMLMediaElement audioTracks list|.
@@ -813,49 +816,86 @@
                   </ol>
                 </li>
               </ol>
-            </li>
-          </ol>
-        </li>
-        <li>Let |SourceBuffer videoTracks list:VideoTrackList| equal the {{VideoTrackList}} object
-        returned by |sourceBuffer|.{{SourceBuffer/videoTracks}}.
-        </li>
-        <li>If the |SourceBuffer videoTracks list| is not empty, then run the following steps:
-          <ol>
-            <li>For each {{VideoTrack}} object in the |SourceBuffer videoTracks list|, run the
-            following steps:
+            </dd>
+            <dt>
+              Otherwise:
+            </dt>
+            <dd>
+              Post an internal `remove track` message to {{MediaSource/[[port to main]]}} whose
+              implicit handler in {{Window}} runs the following steps:
               <ol>
-                <li>Set the {{VideoTrack/sourceBuffer}} attribute on the {{VideoTrack}} object to
-                null.
+                <li>Let |media element:HTMLMediaElement| be the media element that |sourceBuffer|'s
+                [=parent media source=] is attached to.
                 </li>
-                <li>Remove the {{VideoTrack}} object from the |SourceBuffer videoTracks list|.
-                  <p class="note">
-                    This should trigger {{VideoTrackList}} [[HTML]] logic to [=queue a task=] to
-                    [=fire an event=] named [=VideoTrackList/removetrack=] using {{TrackEvent}}
-                    with the {{TrackEvent/track}} attribute initialized to the {{VideoTrack}}
-                    object, at the |SourceBuffer videoTracks list|. If the {{VideoTrack/selected}}
-                    attribute on the {{VideoTrack}} object was true at the beginning of this
-                    removal step, then this should also trigger {{VideoTrackList}} [[HTML]] logic
-                    to [=queue a task=] to [=fire an event=] named [=VideoTrackList/change=] at the
-                    |SourceBuffer videoTracks list|.
-                  </p>
+                <li>Let |HTMLMediaElement audioTracks list:AudioTrackList| equal the
+                {{AudioTrackList}} object returned by the {{HTMLMediaElement/audioTracks}} attribute
+                on |media element|.
                 </li>
-                <li>Use the [=mirror if necessary=] algorithm to run the following steps in
-                {{Window}}, to remove the {{VideoTrack}} object (or instead, the {{Window}} mirror
-                of it if the {{MediaSource}} object was constructed in a
-                {{DedicatedWorkerGlobalScope}}) from the media element:
+                <li>For each |audio track| in the |HTMLMediaElement audioTracks
+                list| that was created by |sourceBuffer|, run the following steps:
                   <ol>
-                    <li>Let |HTMLMediaElement videoTracks list:VideoTrackList| equal the
-                    {{VideoTrackList}} object returned by the {{HTMLMediaElement/videoTracks}}
-                    attribute on the HTMLMediaElement.
+                    <li>Remove |audio track| from the |HTMLMediaElement audioTracks
+                    list|.
+                      <p class="note">
+                        This should trigger {{AudioTrackList}} [[HTML]] logic to [=queue a task=]
+                        to [=fire an event=] named [=AudioTrackList/removetrack=] using
+                        {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
+                        |audio track|, at the |HTMLMediaElement audioTracks list|. If the
+                        {{AudioTrack/enabled}} attribute on |audio track| was true at
+                        the beginning of this removal step, then this should also trigger
+                        {{AudioTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=]
+                        named [=AudioTrackList/change=] at the |HTMLMediaElement audioTracks list|.
+                      </p>
                     </li>
-                    <li>Remove the {{VideoTrack}} object from the |HTMLMediaElement videoTracks
+                  </ol>
+                </li>
+              </ol>
+            </dd>
+          </dl>
+        </li>
+        <li>Run the appropriate steps from the following list:
+          <dl class="switch">
+            <dt>
+              If the {{MediaSource}} was constructed in a {{Window}}:
+            </dt>
+            <dd>
+              <ol>
+                <li>Let |SourceBuffer videoTracks list:VideoTrackList| equal the {{VideoTrackList}}
+                object returned by |sourceBuffer|.{{SourceBuffer/videoTracks}}.
+                </li>
+                <li>Let |media element:HTMLMediaElement| be the media element that |sourceBuffer|'s
+                [=parent media source=] is attached to.
+                </li>
+                <li>Let |HTMLMediaElement videoTracks list:VideoTrackList| equal the
+                {{VideoTrackList}} object returned by the {{HTMLMediaElement/videoTracks}} attribute
+                on |media element|.
+                </li>
+                <li>For each |video track:VideoTrack| in the |SourceBuffer videoTracks
+                list|, run the following steps:
+                  <ol>
+                    <li>Set the {{VideoTrack/sourceBuffer}} attribute on |video track| to
+                    null.
+                    </li>
+                    <li>Remove |video track| from the |SourceBuffer videoTracks list|.
+                      <p class="note">
+                        This should trigger {{VideoTrackList}} [[HTML]] logic to [=queue a task=] to
+                        [=fire an event=] named [=VideoTrackList/removetrack=] using {{TrackEvent}}
+                        with the {{TrackEvent/track}} attribute initialized to |video track|, at the
+                        |SourceBuffer videoTracks list|. If the {{VideoTrack/selected}}
+                        attribute on |video track| was true at the beginning of this
+                        removal step, then this should also trigger {{VideoTrackList}} [[HTML]] logic
+                        to [=queue a task=] to [=fire an event=] named [=VideoTrackList/change=] at the
+                        |SourceBuffer videoTracks list|.
+                      </p>
+                    </li>
+                    <li>Remove |video track| from the |HTMLMediaElement videoTracks
                     list|.
                       <p class="note">
                         This should trigger {{VideoTrackList}} [[HTML]] logic to [=queue a task=]
                         to [=fire an event=] named [=VideoTrackList/removetrack=] using
-                        {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to the
-                        {{VideoTrack}} object, at the |HTMLMediaElement videoTracks list|. If the
-                        {{VideoTrack/selected}} attribute on the {{VideoTrack}} object was true at
+                        {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
+                        |video track|, at the |HTMLMediaElement videoTracks list|. If the
+                        {{VideoTrack/selected}} attribute on |video track| was true at
                         the beginning of this removal step, then this should also trigger
                         {{VideoTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=]
                         named [=VideoTrackList/change=] at the |HTMLMediaElement videoTracks list|.
@@ -864,50 +904,86 @@
                   </ol>
                 </li>
               </ol>
-            </li>
-          </ol>
-        </li>
-        <li>Let |SourceBuffer textTracks list:TextTrackList| equal the {{TextTrackList}} object
-        returned by |sourceBuffer|.{{SourceBuffer/textTracks}}.
-        </li>
-        <li>If the |SourceBuffer textTracks list| is not empty, then run the following steps:
-          <ol>
-            <li>For each {{TextTrack}} object in the |SourceBuffer textTracks list|, run the
-            following steps:
+            </dd>
+            <dt>
+              Otherwise:
+            </dt>
+            <dd>
+              Post an internal `remove track` message to {{MediaSource/[[port to main]]}} whose
+              implicit handler in {{Window}} runs the following steps:
               <ol>
-                <li>Set the {{TextTrack/sourceBuffer}} attribute on the {{TextTrack}} object to
-                null.
+                <li>Let |media element:HTMLMediaElement| be the media element that |sourceBuffer|'s
+                [=parent media source=] is attached to.
                 </li>
-                <li>Remove the {{TextTrack}} object from the |SourceBuffer textTracks list|.
-                  <p class="note">
-                    This should trigger {{TextTrackList}} [[HTML]] logic to [=queue a task=] to
-                    [=fire an event=] named [=TextTrackList/removetrack=] using {{TrackEvent}} with
-                    the {{TrackEvent/track}} attribute initialized to the {{TextTrack}} object, at
-                    the |SourceBuffer textTracks list|. If the {{TextTrack/mode}} attribute on the
-                    {{TextTrack}} object was <a def-id="texttrackmode-showing"></a> or <a def-id=
-                    "texttrackmode-hidden"></a> at the beginning of this removal step, then this
-                    should also trigger {{TextTrackList}} [[HTML]] logic to [=queue a task=] to
-                    [=fire an event=] named [=TextTrackList/change=] at the |SourceBuffer
-                    textTracks list|.
-                  </p>
+                <li>Let |HTMLMediaElement videoTracks list:VideoTrackList| equal the
+                {{VideoTrackList}} object returned by the {{HTMLMediaElement/videoTracks}} attribute
+                on |media element|.
                 </li>
-                <li>Use the [=mirror if necessary=] algorithm to run the following steps in
-                {{Window}}, to remove the {{TextTrack}} object (or instead, the {{Window}} mirror
-                of it if the {{MediaSource}} object was constructed in a
-                {{DedicatedWorkerGlobalScope}}) from the media element:
+                <li>For each |video track| in the |HTMLMediaElement videoTracks
+                list| that was created by |sourceBuffer|, run the following steps:
                   <ol>
-                    <li>Let |HTMLMediaElement textTracks list:TextTrackList| equal the
-                    {{TextTrackList}} object returned by the {{HTMLMediaElement/textTracks}}
-                    attribute on the HTMLMediaElement.
-                    </li>
-                    <li>Remove the {{TextTrack}} object from the |HTMLMediaElement textTracks
+                    <li>Remove |video track| from the |HTMLMediaElement videoTracks
                     list|.
+                      <p class="note">
+                        This should trigger {{VideoTrackList}} [[HTML]] logic to [=queue a task=]
+                        to [=fire an event=] named [=VideoTrackList/removetrack=] using
+                        {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
+                        |video track|, at the |HTMLMediaElement videoTracks list|. If the
+                        {{VideoTrack/selected}} attribute on |video track| was true at
+                        the beginning of this removal step, then this should also trigger
+                        {{VideoTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=]
+                        named [=VideoTrackList/change=] at the |HTMLMediaElement videoTracks list|.
+                      </p>
+                    </li>
+                  </ol>
+                </li>
+              </ol>
+            </dd>
+          </dl>
+        </li>
+        <li>Run the appropriate steps from the following list:
+          <dl class="switch">
+            <dt>
+              If the {{MediaSource}} was constructed in a {{Window}}:
+            </dt>
+            <dd>
+              <ol>
+                <li>Let |SourceBuffer textTracks list:TextTrackList| equal the {{TextTrackList}}
+                object returned by |sourceBuffer|.{{SourceBuffer/textTracks}}.
+                </li>
+                <li>Let |media element:HTMLMediaElement| be the media element that |sourceBuffer|'s
+                [=parent media source=] is attached to.
+                </li>
+                <li>Let |HTMLMediaElement textTracks list:TextTrackList| equal the
+                {{TextTrackList}} object returned by the {{HTMLMediaElement/textTracks}} attribute
+                on |media element|.
+                </li>
+                <li>For each |text track:TextTrack| in the |SourceBuffer textTracks list|,
+                run the following steps:
+                  <ol>
+                    <li>Set the {{TextTrack/sourceBuffer}} attribute on |text track| to
+                    null.
+                    </li>
+                    <li>Remove |text track| from the |SourceBuffer textTracks list|.
+                      <p class="note">
+                        This should trigger {{TextTrackList}} [[HTML]] logic to [=queue a task=] to
+                        [=fire an event=] named [=TextTrackList/removetrack=] using {{TrackEvent}} with
+                        the {{TrackEvent/track}} attribute initialized to |text track|, at
+                        the |SourceBuffer textTracks list|. If the {{TextTrack/mode}} attribute on
+                        |text track| was <a def-id="texttrackmode-showing"></a> or <a def-id=
+                        "texttrackmode-hidden"></a> at the beginning of this removal step, then this
+                        should also trigger {{TextTrackList}} [[HTML]] logic to [=queue a task=] to
+                        [=fire an event=] named [=TextTrackList/change=] at the |SourceBuffer
+                        textTracks list|.
+                      </p>
+                    </li>
+                    <li>Remove |text track| from the |HTMLMediaElement textTracks list|.
                       <p class="note">
                         This should trigger {{TextTrackList}} [[HTML]] logic to [=queue a task=] to
                         [=fire an event=] named [=TextTrackList/removetrack=] using {{TrackEvent}}
-                        with the {{TrackEvent/track}} attribute initialized to the {{TextTrack}}
-                        object, at the |HTMLMediaElement textTracks list|. If the
-                        {{TextTrack/mode}} attribute on the {{TextTrack}} object was <a def-id=
+                        with the {{TrackEvent/track}} attribute initialized to |text track|, at the
+                        |HTMLMediaElement textTracks list|. If the
+                        {{TextTrack/mode}} attribute on |text track| was <a def-id=
                         "texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> at
                         the beginning of this removal step, then this should also trigger
                         {{TextTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=]
@@ -917,8 +993,42 @@
                   </ol>
                 </li>
               </ol>
-            </li>
-          </ol>
+            </dd>
+            <dt>
+              Otherwise:
+            </dt>
+            <dd>
+              Post an internal `remove track` message to {{MediaSource/[[port to main]]}} whose
+              implicit handler in {{Window}} runs the following steps:
+              <ol>
+                <li>Let |media element:HTMLMediaElement| be the media element that |sourceBuffer|'s
+                [=parent media source=] is attached to.
+                </li>
+                <li>Let |HTMLMediaElement textTracks list:TextTrackList| equal the
+                {{TextTrackList}} object returned by the {{HTMLMediaElement/textTracks}} attribute
+                on |media element|.
+                </li>
+                <li>For each |text track| in the |HTMLMediaElement textTracks
+                list| that was created by |sourceBuffer|, run the following steps:
+                  <ol>
+                    <li>Remove |text track| from the |HTMLMediaElement textTracks list|.
+                      <p class="note">
+                        This should trigger {{TextTrackList}} [[HTML]] logic to [=queue a task=] to
+                        [=fire an event=] named [=TextTrackList/removetrack=] using {{TrackEvent}}
+                        with the {{TrackEvent/track}} attribute initialized to |text track|,
+                        at the |HTMLMediaElement textTracks list|. If the
+                        {{TextTrack/mode}} attribute on |text track| was <a def-id=
+                        "texttrackmode-showing"></a> or <a def-id="texttrackmode-hidden"></a> at
+                        the beginning of this removal step, then this should also trigger
+                        {{TextTrackList}} [[HTML]] logic to [=queue a task=] to [=fire an event=]
+                        named [=TextTrackList/change=] at the |HTMLMediaElement textTracks list|.
+                      </p>
+                    </li>
+                  </ol>
+                </li>
+              </ol>
+            </dd>
+          </dl>
         </li>
         <li>If |sourceBuffer| is in {{MediaSource/activeSourceBuffers}}, then remove |sourceBuffer|
         from {{MediaSource/activeSourceBuffers}} and [=queue a task=] to [=fire an event=] named
@@ -1649,16 +1759,15 @@
             During playback {{MediaSource/activeSourceBuffers}} needs to be updated if the
             {{VideoTrack/selected}} video track, the {{AudioTrack/enabled}} audio track(s), or a
             text track {{TextTrack/mode}} changes. When one or more of these changes occur the
-            following steps need to be followed. Also, when {{MediaSource}} was constructed in a
-            {{DedicatedWorkerGlobalScope}}, then each change that occurs to a {{Window}} mirror of
-            a track created previously by the implicit handler for the internal `create track
-            mirror` message MUST also be made to the corresponding {{DedicatedWorkerGlobalScope}}
-            track using an internal `update track state` message posted to
-            {{HTMLMediaElement/[[port to worker]]}} whose implicit handler makes the change and
-            runs the following steps. Likewise, each change that occurs to a
-            {{DedicatedWorkerGlobalScope}} track MUST also be made to the corresponding {{Window}}
-            mirror of the track using an internal `update track state` message posted to
-            {{MediaSource/[[port to main]]}} whose implicit handler makes the change to the mirror.
+            following steps need to be followed. Because the {{AudioTrack}}, {{VideoTrack}} and
+            {{TextTrack}} objects and their {{AudioTrackList}}, {{VideoTrackList}} and
+            {{TextTrackList}} are only exposed on the {{Window}} {{HTMLMediaElement}}, these changes
+            always occur in the {{Window}} context. When the {{MediaSource}} was constructed in a
+            {{DedicatedWorkerGlobalScope}}, then each such change MUST be communicated to the
+            {{DedicatedWorkerGlobalScope}} using an internal `update track state` message posted to
+            {{HTMLMediaElement/[[port to worker]]}} whose implicit handler runs the following steps
+            with respect to the {{SourceBuffer}} that created the affected track. When the
+            {{MediaSource}} was constructed in a {{Window}}, the following steps run directly.
           </p>
           <dl class="switch">
             <dt>
@@ -2066,9 +2175,9 @@
           readonly  attribute boolean updating;
           readonly  attribute TimeRanges buffered;
           attribute double timestampOffset;
-          readonly  attribute AudioTrackList audioTracks;
-          readonly  attribute VideoTrackList videoTracks;
-          readonly  attribute TextTrackList textTracks;
+          [Exposed=Window] readonly  attribute AudioTrackList audioTracks;
+          [Exposed=Window] readonly  attribute VideoTrackList videoTracks;
+          [Exposed=Window] readonly  attribute TextTrackList textTracks;
           attribute double appendWindowStart;
           attribute unrestricted double appendWindowEnd;
 
@@ -2084,10 +2193,13 @@
           undefined remove(double start, unrestricted double end);
         };
       </pre>
-      <div class="issue" data-number="280">
-        [[HTML]] {{AudioTrackList}}, {{VideoTrackList}} and {{TextTrackList}} need
-        Window+DedicatedWorker exposure.
-      </div>
+      <p class="note">
+        The {{SourceBuffer/audioTracks}}, {{SourceBuffer/videoTracks}} and
+        {{SourceBuffer/textTracks}} attributes are only exposed to {{Window}} contexts. When a
+        {{SourceBuffer}} is used from a {{DedicatedWorkerGlobalScope}}, its tracks are instead
+        created on and owned by the {{Window}} {{HTMLMediaElement}} it is attached to, as described
+        in the [=initialization segment received=] algorithm.
+      </p>
       <section>
         <h2>
           Attributes
@@ -2264,19 +2376,25 @@
             <dfn>audioTracks</dfn> of type {{AudioTrackList}}, readonly
           </dt>
           <dd>
-            The list of {{AudioTrack}} objects created by this object.
+            The list of {{AudioTrack}} objects created by this object. This attribute is only
+            exposed to {{Window}} contexts; it is not available when the {{SourceBuffer}} was
+            created in a {{DedicatedWorkerGlobalScope}}.
           </dd>
           <dt>
             <dfn>videoTracks</dfn> of type {{VideoTrackList}}, readonly
           </dt>
           <dd>
-            The list of {{VideoTrack}} objects created by this object.
+            The list of {{VideoTrack}} objects created by this object. This attribute is only
+            exposed to {{Window}} contexts; it is not available when the {{SourceBuffer}} was
+            created in a {{DedicatedWorkerGlobalScope}}.
           </dd>
           <dt>
             <dfn>textTracks</dfn> of type {{TextTrackList}}, readonly
           </dt>
           <dd>
-            The list of {{TextTrack}} objects created by this object.
+            The list of {{TextTrack}} objects created by this object. This attribute is only
+            exposed to {{Window}} contexts; it is not available when the {{SourceBuffer}} was
+            created in a {{DedicatedWorkerGlobalScope}}.
           </dd>
           <dt>
             <dfn>appendWindowStart</dfn> of type {{double}}
@@ -2779,6 +2897,22 @@
             created and gets updated as data is appended and removed.
           </p>
           <p>
+            Each {{SourceBuffer}} object has an <dfn data-dfn-for="SourceBuffer">[[\audio track
+            added flag]]</dfn> internal slot that keeps track of whether an {{AudioTrack}} has
+            already been created for this {{SourceBuffer}} object. It is set to false when the
+            {{SourceBuffer}} object is created and is used by the [=initialization segment
+            received=] algorithm to determine whether a newly created {{AudioTrack}} is
+            {{AudioTrack/enabled}} by default.
+          </p>
+          <p>
+            Each {{SourceBuffer}} object has an <dfn data-dfn-for="SourceBuffer">[[\video track
+            added flag]]</dfn> internal slot that keeps track of whether a {{VideoTrack}} has
+            already been created for this {{SourceBuffer}} object. It is set to false when the
+            {{SourceBuffer}} object is created and is used by the [=initialization segment
+            received=] algorithm to determine whether a newly created {{VideoTrack}} is
+            {{VideoTrack/selected}} by default.
+          </p>
+          <p>
             Each {{SourceBuffer}} object has a <dfn data-dfn-for="SourceBuffer">[[\group start
             timestamp]]</dfn> internal slot that keeps track of the starting timestamp for a new
             [=coded frame group=] in the {{AppendMode/""sequence""}} mode. It is unset when the
@@ -3227,62 +3361,67 @@
                         <li>Let |current audio kind:DOMString| equal the value from |audio kinds|
                         for this iteration of the loop.
                         </li>
-                        <li>Let |new audio track:AudioTrack| be a new {{AudioTrack}} object.
+                        <li>Let |audio track default enabled flag| be false.
                         </li>
-                        <li>Generate a unique ID and assign it to the {{AudioTrack/id}} property on
-                        |new audio track|.
-                        </li>
-                        <li>Assign |audio language| to the {{AudioTrack/language}} property on |new
-                        audio track|.
-                        </li>
-                        <li>Assign |audio label| to the {{AudioTrack/label}} property on |new audio
-                        track|.
-                        </li>
-                        <li>Assign |current audio kind| to the {{AudioTrack/kind}} property on |new
-                        audio track|.
-                        </li>
-                        <li>
-                          <p>
-                            If this {{SourceBuffer}} object's {{SourceBuffer/audioTracks}}'s
-                            {{AudioTrackList/length}} equals 0, then run the following steps:
-                          </p>
+                        <li>If this {{SourceBuffer}} object's {{SourceBuffer/[[audio track added
+                        flag]]}} internal slot is false, then run the following steps:
                           <ol>
-                            <li>Set the {{AudioTrack/enabled}} property on |new audio track| to
-                            true.
+                            <li>Set |audio track default enabled flag| to true.
                             </li>
                             <li>Set |active track flag| to true.
                             </li>
                           </ol>
                         </li>
-                        <li>Add |new audio track| to the {{SourceBuffer/audioTracks}} attribute on
-                        this {{SourceBuffer}} object.
-                          <p class="note">
-                            This should trigger {{AudioTrackList}} [[HTML]] logic to [=queue a
-                            task=] to [=fire an event=] named [=AudioTrackList/addtrack=] using
-                            {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
-                            |new audio track|, at the {{AudioTrackList}} object referenced by the
-                            {{SourceBuffer/audioTracks}} attribute on this {{SourceBuffer}} object.
-                          </p>
+                        <li>Set this {{SourceBuffer}} object's {{SourceBuffer/[[audio track added
+                        flag]]}} internal slot to true.
                         </li>
                         <li>
+                          <p>
+                            Create the {{AudioTrack}} on the {{Window}} {{HTMLMediaElement}}, running
+                            the following steps in {{Window}}:
+                          </p>
                           <dl class="switch">
                             <dt>
-                              If the [=parent media source=] was constructed in a
-                              {{DedicatedWorkerGlobalScope}}:
+                              If the [=parent media source=] was constructed in a {{Window}}:
                             </dt>
                             <dd>
-                              Post an internal `create track mirror` message to
-                              {{MediaSource/[[port to main]]}} whose implicit handler in {{Window}}
-                              runs the following steps:
                               <ol>
-                                <li>Let |mirrored audio track:AudioTrack| be a new {{AudioTrack}}
-                                object.
+                                <li>Let |new audio track:AudioTrack| be a new {{AudioTrack}} object.
                                 </li>
-                                <li>Assign the same property values to |mirrored audio track| as
-                                were determined for |new audio track|.
+                                <li>Generate a unique ID and assign it to the {{AudioTrack/id}}
+                                property on |new audio track|.
                                 </li>
-                                <li>Add |mirrored audio track| to the
-                                {{HTMLMediaElement/audioTracks}} attribute on the HTMLMediaElement.
+                                <li>Assign |audio language|, |audio label| and |current audio kind|
+                                to the {{AudioTrack/language}}, {{AudioTrack/label}} and
+                                {{AudioTrack/kind}} properties on |new audio track| respectively.
+                                </li>
+                                <li>If |audio track default enabled flag| is true, then set the
+                                {{AudioTrack/enabled}} property on |new audio track| to true.
+                                </li>
+                                <li>Add |new audio track| to the {{SourceBuffer/audioTracks}} attribute on
+                                this {{SourceBuffer}} object.
+                                  <p class="note">
+                                    This should trigger {{AudioTrackList}} [[HTML]] logic to [=queue a
+                                    task=] to [=fire an event=] named [=AudioTrackList/addtrack=] using
+                                    {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
+                                    |new audio track|, at the {{AudioTrackList}} object referenced by the
+                                    {{SourceBuffer/audioTracks}} attribute on this {{SourceBuffer}} object.
+                                  </p>
+                                </li>
+                                <li>Let |media element:HTMLMediaElement| be the media element that
+                                this {{SourceBuffer}} object's [=parent media source=] is attached
+                                to.
+                                </li>
+                                <li>Add |new audio track| to the {{HTMLMediaElement/audioTracks}}
+                                attribute on |media element|.
+                                  <p class="note">
+                                    This should trigger {{AudioTrackList}} [[HTML]] logic to [=queue a
+                                    task=] to [=fire an event=] named [=AudioTrackList/addtrack=] using
+                                    {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
+                                    |new audio track|, at the {{AudioTrackList}}
+                                    object referenced by the {{HTMLMediaElement/audioTracks}} attribute on
+                                    |media element|.
+                                  </p>
                                 </li>
                               </ol>
                             </dd>
@@ -3290,18 +3429,40 @@
                               Otherwise:
                             </dt>
                             <dd>
-                              Add |new audio track| to the {{HTMLMediaElement/audioTracks}}
-                              attribute on the HTMLMediaElement.
+                              Post an internal `create track` message to
+                              {{MediaSource/[[port to main]]}} whose implicit handler in {{Window}}
+                              runs the following steps:
+                              <ol>
+                                <li>Let |new audio track:AudioTrack| be a new {{AudioTrack}} object.
+                                </li>
+                                <li>Generate a unique ID and assign it to the {{AudioTrack/id}}
+                                property on |new audio track|.
+                                </li>
+                                <li>Assign |audio language|, |audio label| and |current audio kind|
+                                to the {{AudioTrack/language}}, {{AudioTrack/label}} and
+                                {{AudioTrack/kind}} properties on |new audio track| respectively.
+                                </li>
+                                <li>If |audio track default enabled flag| is true, then set the
+                                {{AudioTrack/enabled}} property on |new audio track| to true.
+                                </li>
+                                <li>Let |media element:HTMLMediaElement| be the media element that
+                                this {{SourceBuffer}} object's [=parent media source=] is attached
+                                to.
+                                </li>
+                                <li>Add |new audio track| to the {{HTMLMediaElement/audioTracks}}
+                                attribute on |media element|.
+                                  <p class="note">
+                                    This should trigger {{AudioTrackList}} [[HTML]] logic to [=queue a
+                                    task=] to [=fire an event=] named [=AudioTrackList/addtrack=] using
+                                    {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
+                                    |new audio track|, at the {{AudioTrackList}}
+                                    object referenced by the {{HTMLMediaElement/audioTracks}} attribute on
+                                    |media element|.
+                                  </p>
+                                </li>
+                              </ol>
                             </dd>
                           </dl>
-                          <p class="note">
-                            This should trigger {{AudioTrackList}} [[HTML]] logic to [=queue a
-                            task=] to [=fire an event=] named [=AudioTrackList/addtrack=] using
-                            {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
-                            |mirrored audio track| or |new audio track|, at the {{AudioTrackList}}
-                            object referenced by the {{HTMLMediaElement/audioTracks}} attribute on
-                            the HTMLMediaElement.
-                          </p>
                         </li>
                       </ol>
                     </li>
@@ -3338,62 +3499,67 @@
                         <li>Let |current video kind:DOMString| equal the value from |video kinds|
                         for this iteration of the loop.
                         </li>
-                        <li>Let |new video track:VideoTrack| be a new {{VideoTrack}} object.
+                        <li>Let |video track default selected flag| be false.
                         </li>
-                        <li>Generate a unique ID and assign it to the {{VideoTrack/id}} property on
-                        |new video track|.
-                        </li>
-                        <li>Assign |video language| to the {{VideoTrack/language}} property on |new
-                        video track|.
-                        </li>
-                        <li>Assign |video label| to the {{VideoTrack/label}} property on |new video
-                        track|.
-                        </li>
-                        <li>Assign |current video kind| to the {{VideoTrack/kind}} property on |new
-                        video track|.
-                        </li>
-                        <li>
-                          <p>
-                            If this {{SourceBuffer}} object's {{SourceBuffer/videoTracks}}'s
-                            {{VideoTrackList/length}} equals 0, then run the following steps:
-                          </p>
+                        <li>If this {{SourceBuffer}} object's {{SourceBuffer/[[video track added
+                        flag]]}} internal slot is false, then run the following steps:
                           <ol>
-                            <li>Set the {{VideoTrack/selected}} property on |new video track| to
-                            true.
+                            <li>Set |video track default selected flag| to true.
                             </li>
                             <li>Set |active track flag| to true.
                             </li>
                           </ol>
                         </li>
-                        <li>Add |new video track| to the {{SourceBuffer/videoTracks}} attribute on
-                        this {{SourceBuffer}} object.
-                          <p class="note">
-                            This should trigger {{VideoTrackList}} [[HTML]] logic to [=queue a
-                            task=] to [=fire an event=] named [=VideoTrackList/addtrack=] using
-                            {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
-                            |new video track|, at the {{VideoTrackList}} object referenced by the
-                            {{SourceBuffer/videoTracks}} attribute on this {{SourceBuffer}} object.
-                          </p>
+                        <li>Set this {{SourceBuffer}} object's {{SourceBuffer/[[video track added
+                        flag]]}} internal slot to true.
                         </li>
                         <li>
+                          <p>
+                            Create the {{VideoTrack}} on the {{Window}} {{HTMLMediaElement}}, running
+                            the following steps in {{Window}}:
+                          </p>
                           <dl class="switch">
                             <dt>
-                              If the [=parent media source=] was constructed in a
-                              {{DedicatedWorkerGlobalScope}}:
+                              If the [=parent media source=] was constructed in a {{Window}}:
                             </dt>
                             <dd>
-                              Post an internal `create track mirror` message to
-                              {{MediaSource/[[port to main]]}} whose implicit handler in {{Window}}
-                              runs the following steps:
                               <ol>
-                                <li>Let |mirrored video track:VideoTrack| be a new {{VideoTrack}}
-                                object.
+                                <li>Let |new video track:VideoTrack| be a new {{VideoTrack}} object.
                                 </li>
-                                <li>Assign the same property values to |mirrored video track| as
-                                were determined for |new video track|.
+                                <li>Generate a unique ID and assign it to the {{VideoTrack/id}}
+                                property on |new video track|.
                                 </li>
-                                <li>Add |mirrored video track| to the
-                                {{HTMLMediaElement/videoTracks}} attribute on the HTMLMediaElement.
+                                <li>Assign |video language|, |video label| and |current video kind|
+                                to the {{VideoTrack/language}}, {{VideoTrack/label}} and
+                                {{VideoTrack/kind}} properties on |new video track| respectively.
+                                </li>
+                                <li>If |video track default selected flag| is true, then set the
+                                {{VideoTrack/selected}} property on |new video track| to true.
+                                </li>
+                                <li>Add |new video track| to the {{SourceBuffer/videoTracks}} attribute on
+                                this {{SourceBuffer}} object.
+                                  <p class="note">
+                                    This should trigger {{VideoTrackList}} [[HTML]] logic to [=queue a
+                                    task=] to [=fire an event=] named [=VideoTrackList/addtrack=] using
+                                    {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
+                                    |new video track|, at the {{VideoTrackList}} object referenced by the
+                                    {{SourceBuffer/videoTracks}} attribute on this {{SourceBuffer}} object.
+                                  </p>
+                                </li>
+                                <li>Let |media element:HTMLMediaElement| be the media element that
+                                this {{SourceBuffer}} object's [=parent media source=] is attached
+                                to.
+                                </li>
+                                <li>Add |new video track| to the {{HTMLMediaElement/videoTracks}}
+                                attribute on |media element|.
+                                  <p class="note">
+                                    This should trigger {{VideoTrackList}} [[HTML]] logic to [=queue a
+                                    task=] to [=fire an event=] named [=VideoTrackList/addtrack=] using
+                                    {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
+                                    |new video track|, at the {{VideoTrackList}}
+                                    object referenced by the {{HTMLMediaElement/videoTracks}} attribute on
+                                    |media element|.
+                                  </p>
                                 </li>
                               </ol>
                             </dd>
@@ -3401,18 +3567,40 @@
                               Otherwise:
                             </dt>
                             <dd>
-                              Add |new video track| to the {{HTMLMediaElement/videoTracks}}
-                              attribute on the HTMLMediaElement.
+                              Post an internal `create track` message to
+                              {{MediaSource/[[port to main]]}} whose implicit handler in {{Window}}
+                              runs the following steps:
+                              <ol>
+                                <li>Let |new video track:VideoTrack| be a new {{VideoTrack}} object.
+                                </li>
+                                <li>Generate a unique ID and assign it to the {{VideoTrack/id}}
+                                property on |new video track|.
+                                </li>
+                                <li>Assign |video language|, |video label| and |current video kind|
+                                to the {{VideoTrack/language}}, {{VideoTrack/label}} and
+                                {{VideoTrack/kind}} properties on |new video track| respectively.
+                                </li>
+                                <li>If |video track default selected flag| is true, then set the
+                                {{VideoTrack/selected}} property on |new video track| to true.
+                                </li>
+                                <li>Let |media element:HTMLMediaElement| be the media element that
+                                this {{SourceBuffer}} object's [=parent media source=] is attached
+                                to.
+                                </li>
+                                <li>Add |new video track| to the {{HTMLMediaElement/videoTracks}}
+                                attribute on |media element|.
+                                  <p class="note">
+                                    This should trigger {{VideoTrackList}} [[HTML]] logic to [=queue a
+                                    task=] to [=fire an event=] named [=VideoTrackList/addtrack=] using
+                                    {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
+                                    |new video track|, at the {{VideoTrackList}}
+                                    object referenced by the {{HTMLMediaElement/videoTracks}} attribute on
+                                    |media element|.
+                                  </p>
+                                </li>
+                              </ol>
                             </dd>
                           </dl>
-                          <p class="note">
-                            This should trigger {{VideoTrackList}} [[HTML]] logic to [=queue a
-                            task=] to [=fire an event=] named [=VideoTrackList/addtrack=] using
-                            {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
-                            |mirrored video track| or |new video track|, at the {{VideoTrackList}}
-                            object referenced by the {{HTMLMediaElement/videoTracks}} attribute on
-                            the HTMLMediaElement.
-                          </p>
                         </li>
                       </ol>
                     </li>
@@ -3449,56 +3637,62 @@
                         <li>Let |current text kind:DOMString| equal the value from |text kinds| for
                         this iteration of the loop.
                         </li>
-                        <li>Let |new text track:TextTrack| be a new {{TextTrack}} object.
+                        <li>Let |text track mode| be the {{TextTrack/mode}} value determined for
+                        this track from the [=initialization segment=].
                         </li>
-                        <li>Generate a unique ID and assign it to the {{TextTrack/id}} property on
-                        |new text track|.
-                        </li>
-                        <li>Assign |text language| to the {{TextTrack/language}} property on |new
-                        text track|.
-                        </li>
-                        <li>Assign |text label| to the {{TextTrack/label}} property on |new text
-                        track|.
-                        </li>
-                        <li>Assign |current text kind| to the {{TextTrack/kind}} property on |new
-                        text track|.
-                        </li>
-                        <li>Populate the remaining properties on |new text track| with the
-                        appropriate information from the [=initialization segment=].
-                        </li>
-                        <li>If the {{TextTrack/mode}} property on |new text track| equals
-                          <a def-id="texttrackmode-showing"></a> or <a def-id=
-                          "texttrackmode-hidden"></a>, then set |active track flag| to true.
-                        </li>
-                        <li>Add |new text track| to the {{SourceBuffer/textTracks}} attribute on
-                        this {{SourceBuffer}} object.
-                          <p class="note">
-                            This should trigger {{TextTrackList}} [[HTML]] logic to [=queue a
-                            task=] to [=fire an event=] named [=TextTrackList/addtrack=] using
-                            {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
-                            |new text track|, at the {{TextTrackList}} object referenced by the
-                            {{SourceBuffer/textTracks}} attribute on this {{SourceBuffer}} object.
-                          </p>
+                        <li>If |text track mode| equals <a def-id="texttrackmode-showing"></a> or
+                          <a def-id="texttrackmode-hidden"></a>, then set |active track flag| to
+                          true.
                         </li>
                         <li>
+                          <p>
+                            Create the {{TextTrack}} on the {{Window}} {{HTMLMediaElement}}, running
+                            the following steps in {{Window}}:
+                          </p>
                           <dl class="switch">
                             <dt>
-                              If the [=parent media source=] was constructed in a
-                              {{DedicatedWorkerGlobalScope}}:
+                              If the [=parent media source=] was constructed in a {{Window}}:
                             </dt>
                             <dd>
-                              Post an internal `create track mirror` message to
-                              {{MediaSource/[[port to main]]}} whose implicit handler in {{Window}}
-                              runs the following steps:
                               <ol>
-                                <li>Let |mirrored text track:TextTrack| be a new {{TextTrack}}
-                                object.
+                                <li>Let |new text track:TextTrack| be a new {{TextTrack}} object.
                                 </li>
-                                <li>Assign the same property values to |mirrored text track| as
-                                were determined for |new text track|.
+                                <li>Generate a unique ID and assign it to the {{TextTrack/id}}
+                                property on |new text track|.
                                 </li>
-                                <li>Add |mirrored text track| to the
-                                {{HTMLMediaElement/textTracks}} attribute on the HTMLMediaElement.
+                                <li>Assign |text language|, |text label| and |current text kind| to
+                                the {{TextTrack/language}}, {{TextTrack/label}} and
+                                {{TextTrack/kind}} properties on |new text track| respectively.
+                                </li>
+                                <li>Set the {{TextTrack/mode}} property on |new text track| to |text
+                                track mode|, and populate the remaining properties on |new text
+                                track| with the appropriate information determined from the
+                                [=initialization segment=] for this track.
+                                </li>
+                                <li>Add |new text track| to the {{SourceBuffer/textTracks}}
+                                attribute on this {{SourceBuffer}} object.
+                                  <p class="note">
+                                    This should trigger {{TextTrackList}} [[HTML]] logic to [=queue a
+                                    task=] to [=fire an event=] named [=TextTrackList/addtrack=] using
+                                    {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
+                                    |new text track|, at the {{TextTrackList}} object referenced by the
+                                    {{SourceBuffer/textTracks}} attribute on this {{SourceBuffer}} object.
+                                  </p>
+                                </li>
+                                <li>Let |media element:HTMLMediaElement| be the media element that
+                                this {{SourceBuffer}} object's [=parent media source=] is attached
+                                to.
+                                </li>
+                                <li>Add |new text track| to the {{HTMLMediaElement/textTracks}}
+                                attribute on |media element|.
+                                  <p class="note">
+                                    This should trigger {{TextTrackList}} [[HTML]] logic to [=queue a
+                                    task=] to [=fire an event=] named [=TextTrackList/addtrack=] using
+                                    {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
+                                    |new text track|, at the {{TextTrackList}}
+                                    object referenced by the {{HTMLMediaElement/textTracks}} attribute on
+                                    |media element|.
+                                  </p>
                                 </li>
                               </ol>
                             </dd>
@@ -3506,18 +3700,42 @@
                               Otherwise:
                             </dt>
                             <dd>
-                              Add |new text track| to the {{HTMLMediaElement/textTracks}} attribute
-                              on the HTMLMediaElement.
+                              Post an internal `create track` message to
+                              {{MediaSource/[[port to main]]}} whose implicit handler in {{Window}}
+                              runs the following steps:
+                              <ol>
+                                <li>Let |new text track:TextTrack| be a new {{TextTrack}} object.
+                                </li>
+                                <li>Generate a unique ID and assign it to the {{TextTrack/id}}
+                                property on |new text track|.
+                                </li>
+                                <li>Assign |text language|, |text label| and |current text kind| to
+                                the {{TextTrack/language}}, {{TextTrack/label}} and
+                                {{TextTrack/kind}} properties on |new text track| respectively.
+                                </li>
+                                <li>Set the {{TextTrack/mode}} property on |new text track| to |text
+                                track mode|, and populate the remaining properties on |new text
+                                track| with the appropriate information determined from the
+                                [=initialization segment=] for this track.
+                                </li>
+                                <li>Let |media element:HTMLMediaElement| be the media element that
+                                this {{SourceBuffer}} object's [=parent media source=] is attached
+                                to.
+                                </li>
+                                <li>Add |new text track| to the {{HTMLMediaElement/textTracks}}
+                                attribute on |media element|.
+                                  <p class="note">
+                                    This should trigger {{TextTrackList}} [[HTML]] logic to [=queue a
+                                    task=] to [=fire an event=] named [=TextTrackList/addtrack=] using
+                                    {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
+                                    |new text track|, at the {{TextTrackList}}
+                                    object referenced by the {{HTMLMediaElement/textTracks}} attribute on
+                                    |media element|.
+                                  </p>
+                                </li>
+                              </ol>
                             </dd>
                           </dl>
-                          <p class="note">
-                            This should trigger {{TextTrackList}} [[HTML]] logic to [=queue a
-                            task=] to [=fire an event=] named [=TextTrackList/addtrack=] using
-                            {{TrackEvent}} with the {{TrackEvent/track}} attribute initialized to
-                            |mirrored text track| or |new text track|, at the {{TextTrackList}}
-                            object referenced by the {{HTMLMediaElement/textTracks}} attribute on
-                            the HTMLMediaElement.
-                          </p>
                         </li>
                       </ol>
                     </li>
@@ -5034,14 +5252,11 @@
       </p>
       <div>
         <pre class="idl">
-          [Exposed=(Window,DedicatedWorker)]
+          [Exposed=Window]
           partial interface AudioTrack {
             readonly attribute SourceBuffer? sourceBuffer;
           };
         </pre>
-        <div class="issue" data-number="280">
-          [[HTML]] {{AudioTrack}} needs Window+DedicatedWorker exposure.
-        </div>
         <section>
           <h2>
             Attributes
@@ -5073,9 +5288,12 @@
                 </dd>
               </dl>
               <div class="note">
-                For example, if a {{DedicatedWorkerGlobalScope}} {{SourceBuffer}} notified its
-                internal `create track mirror` handler in {{Window}} to create this track, then the
-                {{Window}} copy of the track would return null for this attribute.
+                For example, when the {{MediaSource}} was constructed in a
+                {{DedicatedWorkerGlobalScope}}, this track is created on the {{Window}}
+                {{HTMLMediaElement}} by the internal `create track` handler while the
+                {{SourceBuffer}} that created it lives in the {{DedicatedWorkerGlobalScope}}.
+                Because they are not on the same [=global object/realm=], this attribute returns
+                null.
               </div>
             </dd>
           </dl>
@@ -5091,14 +5309,11 @@
       </p>
       <div>
         <pre class="idl">
-          [Exposed=(Window,DedicatedWorker)]
+          [Exposed=Window]
           partial interface VideoTrack {
             readonly attribute SourceBuffer? sourceBuffer;
           };
         </pre>
-        <div class="issue" data-number="280">
-          [[HTML]] {{VideoTrack}} needs Window+DedicatedWorker exposure.
-        </div>
         <section>
           <h2>
             Attributes
@@ -5130,9 +5345,12 @@
                 </dd>
               </dl>
               <div class="note">
-                For example, if a {{DedicatedWorkerGlobalScope}} {{SourceBuffer}} notified its
-                internal `create track mirror` handler in {{Window}} to create this track, then the
-                {{Window}} copy of the track would return null for this attribute.
+                For example, when the {{MediaSource}} was constructed in a
+                {{DedicatedWorkerGlobalScope}}, this track is created on the {{Window}}
+                {{HTMLMediaElement}} by the internal `create track` handler while the
+                {{SourceBuffer}} that created it lives in the {{DedicatedWorkerGlobalScope}}.
+                Because they are not on the same [=global object/realm=], this attribute returns
+                null.
               </div>
             </dd>
           </dl>
@@ -5148,14 +5366,11 @@
       </p>
       <div>
         <pre class="idl">
-          [Exposed=(Window,DedicatedWorker)]
+          [Exposed=Window]
           partial interface TextTrack {
             readonly attribute SourceBuffer? sourceBuffer;
           };
         </pre>
-        <div class="issue" data-number="280">
-          [[HTML]] {{TextTrack}} needs Window+DedicatedWorker exposure.
-        </div>
         <section>
           <h2>
             Attributes
@@ -5187,9 +5402,12 @@
                 </dd>
               </dl>
               <div class="note">
-                For example, if a {{DedicatedWorkerGlobalScope}} {{SourceBuffer}} notified its
-                internal `create track mirror` handler in {{Window}} to create this track, then the
-                {{Window}} copy of the track would return null for this attribute.
+                For example, when the {{MediaSource}} was constructed in a
+                {{DedicatedWorkerGlobalScope}}, this track is created on the {{Window}}
+                {{HTMLMediaElement}} by the internal `create track` handler while the
+                {{SourceBuffer}} that created it lives in the {{DedicatedWorkerGlobalScope}}.
+                Because they are not on the same [=global object/realm=], this attribute returns
+                null.
               </div>
             </dd>
           </dl>
