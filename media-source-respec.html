@@ -4802,14 +4802,14 @@
         [=able to retrieve and buffer data in an efficient way=]
           <dl class="switch">
             <dt>
-              If |can play uninterrupted and efficiently| is not equal to
+              If the negation of |can play uninterrupted and efficiently| is not equal to
               {{ManagedMediaSource/streaming}}, [=queue an element task=] on the [=media element=]
               that runs the following steps:
             </dt>
             <dd>
               <ol>
-                <li>Set [=this=] {{ManagedMediaSource/streaming}} attribute to |can play
-                uninterrupted and efficiently|.
+                <li>Set [=this=] {{ManagedMediaSource/streaming}} attribute to the negation of |can
+                play uninterrupted and efficiently|.
                 </li>
                 <li>If |can play uninterrupted and efficiently| is false [=fire an event=] called
                 {{startstreaming}} at the {{ManagedMediaSource}}.
