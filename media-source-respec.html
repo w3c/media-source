@@ -4965,6 +4965,8 @@
         <li>Let |removed:normalized TimeRanges| equal the |new buffered ranges:normalized
         TimeRanges| subtracted from |previous buffered ranges:normalized TimeRanges|.
         </li>
+        <li>If |added| and |removed| are both empty, abort these steps.
+        </li>
         <li>Let |eventInitDict| be a new {{BufferedChangeEventInit}} dictionary initialized with
         |added| as its {{BufferedChangeEventInit/addedRanges}} and |removed| as its
         {{BufferedChangeEventInit/removedRanges}}
