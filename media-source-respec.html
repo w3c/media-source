@@ -1512,8 +1512,15 @@
             </li>
             <li>Set the {{MediaSource/readyState}} attribute to {{ReadyState/""closed""}}.
             </li>
-            <li>If [=this=] is a {{ManagedMediaSource}}, then set {{ManagedMediaSource/streaming}}
-            attribute to `false`.
+            <li>If [=this=] is a {{ManagedMediaSource}} and its {{ManagedMediaSource/streaming}}
+            attribute is `true`, then run the following steps:
+              <ol>
+                <li>Set {{ManagedMediaSource/streaming}} attribute to `false`.
+                </li>
+                <li>[=Queue a task=] to [=fire an event=] named {{endstreaming}} at the
+                {{ManagedMediaSource}}.
+                </li>
+              </ol>
             </li>
             <li>Update {{MediaSource/duration}} to NaN.
             </li>
@@ -4953,7 +4960,8 @@
         {{ManagedSourceBuffer}} |buffer:ManagedSourceBuffer| that would cause a |buffer|'s
         {{SourceBuffer/buffered}} to change. That is once {{SourceBuffer/appendBuffer()}},
         {{SourceBuffer/remove()}} or [=ManagedSourceBuffer/memory cleanup=] algorithm have
-        completed.
+        completed, and for each {{ManagedSourceBuffer}} in the parent {{ManagedMediaSource}}'s
+        {{MediaSource/sourceBuffers}} once the [=end of stream=] algorithm has completed.
       </p>
       <ol>
         <li>Let |previous buffered ranges:normalized TimeRanges| equal the
