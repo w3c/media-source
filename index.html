@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="generator" content="ReSpec 37.1.0">
+<meta name="generator" content="ReSpec 37.4.1">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <style>
 span.example-title{text-transform:none}
@@ -111,11 +111,11 @@ details.respec-tests-details>li{padding-left:1em}
 .self-link:hover{opacity:1;text-decoration:none;background-color:transparent}
 aside.example .marker>a.self-link{color:inherit}
 .header-wrapper{display:flex;align-items:baseline}
-:is(h2,h3,h4,h5,h6):not(#toc>h2,#abstract>h2,#sotd>h2,.head>h2):has(+a.self-link){position:relative;left:-.5em}
-:is(h2,h3,h4,h5,h6):not(#toch2)+a.self-link{color:inherit;order:-1;position:relative;left:-1.1em;font-size:1rem;opacity:.5}
-:is(h2,h3,h4,h5,h6)+a.self-link::before{content:"§";text-decoration:none;color:var(--heading-text)}
+:is(h2,h3,h4,h5,h6):not(:where(#toc>h2,#abstract>h2,#sotd>h2,.head>h2)):has(+a.self-link){position:relative;left:-.5em}
+:is(h2,h3,h4,h5,h6):not(:where(#toch2))+a.self-link{color:inherit;order:-1;position:relative;left:-1.1em;font-size:1rem;opacity:.8;text-decoration:none}
+:is(h2,h3,h4,h5,h6)+a.self-link::before{content:"§"}
 :is(h2,h3)+a.self-link{top:-.2em}
-:is(h4,h5,h6)+a.self-link::before{color:#000}
+:is(h2,h3)+a.self-link::before{color:var(--heading-text)}
 @media (max-width:767px){
 dd{margin-left:0}
 }
@@ -131,7 +131,7 @@ body:has(input[name=color-scheme][value=dark]:checked){color-scheme:dark}
 <link rel="stylesheet" href="mse.css">
   
 <meta name="color-scheme" content="light">
-<meta name="revision" content="8e0611a049727cc2e406698e6558430b7ba1e4f1">
+<meta name="revision" content="0684210def1ac33571251b65a715a0779605f953">
 <style>
 .hljs,body:has(input[name=color-scheme][value=light]:checked) .hljs,head:not(:has(meta[name=color-scheme][content~=dark]))+body .hljs{--base:#fafafa;--mono-1:#383a42;--mono-2:#686b77;--mono-3:#717277;--hue-1:#0b76c5;--hue-2:#336ae3;--hue-3:#a626a4;--hue-4:#42803c;--hue-5:#ca4706;--hue-5-2:#c91243;--hue-6:#986801;--hue-6-2:#9a6a01}
 @media (prefers-color-scheme:dark){
@@ -260,46 +260,47 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
   "postProcess": [
     null
   ],
-  "gitRevision": "8e0611a049727cc2e406698e6558430b7ba1e4f1",
-  "publishISODate": "2026-08-07T00:00:00.000Z",
-  "generatedSubtitle": "W3C Editor's Draft 07 August 2026"
+  "gitRevision": "0684210def1ac33571251b65a715a0779605f953",
+  "publishISODate": "2026-11-04T00:00:00.000Z",
+  "generatedSubtitle": "W3C Editor's Draft 04 November 2026"
 }</script>
-<link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED"></head>
+<link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED">
+<link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/dark.css" disabled=""></head>
   <body data-cite="WEBIDL html dom url fileapi infra" class="h-entry"><div class="head">
     <p class="logos"><a class="logo" href="https://www.w3.org/"><img crossorigin="" alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72">
   </a></p>
     <h1 id="title" class="title">Media Source Extensions™</h1> 
-    <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">W3C Editor's Draft</a> <time class="dt-published" datetime="2026-08-07">07 August 2026</time></p>
+    <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">W3C Editor's Draft</a> <time class="dt-published" datetime="2026-11-04">04 November 2026</time></p>
     <details open="">
       <summary>More details about this document</summary>
       <dl>
         <dt>This version:</dt><dd>
-                <a class="u-url" href="https://w3c.github.io/media-source/">https://w3c.github.io/media-source/</a>
-              </dd>
+                  <a class="u-url" href="https://w3c.github.io/media-source/">https://w3c.github.io/media-source/</a>
+                </dd>
         <dt>Latest published version:</dt><dd>
-                <a href="https://www.w3.org/TR/media-source-2/">https://www.w3.org/TR/media-source-2/</a>
-              </dd>
+                  <a href="https://www.w3.org/TR/media-source-2/">https://www.w3.org/TR/media-source-2/</a>
+                </dd>
         <dt>Latest editor's draft:</dt><dd><a href="https://w3c.github.io/media-source/">https://w3c.github.io/media-source/</a></dd>
         <dt>History:</dt><dd>
-                    <a href="https://www.w3.org/standards/history/media-source-2/">https://www.w3.org/standards/history/media-source-2/</a>
-                  </dd><dd>
-                    <a href="https://github.com/w3c/media-source/commits/">Commit history</a>
-                  </dd>
+                        <a href="https://www.w3.org/standards/history/media-source-2/">https://www.w3.org/standards/history/media-source-2/</a>
+                      </dd><dd>
+                        <a href="https://github.com/w3c/media-source/commits/">Commit history</a>
+                      </dd>
         
         
         
         
         <dt>Latest Recommendation:</dt><dd><a href="https://www.w3.org/TR/2016/REC-media-source-20161117/">https://www.w3.org/TR/2016/REC-media-source-20161117/</a></dd>
         <dt>
-                Editors:
-              </dt><dd class="editor p-author h-card vcard" data-editor-id="115886">
+                  Editors:
+                </dt><dd class="editor p-author h-card vcard" data-editor-id="115886">
     <a class="ed_mailto u-email email p-name" href="mailto:jya@apple.com">Jean-Yves Avenard</a> (<a class="p-org org h-org" href="https://www.apple.com/">Apple Inc.</a>)
   </dd><dd class="editor p-author h-card vcard" data-editor-id="46379">
     <span class="p-name fn">Mark Watson</span> (<a class="p-org org h-org" href="https://www.netflix.com/">Netflix Inc.</a>)
   </dd>
         <dt>
-                Former editors:
-              </dt><dd class="editor p-author h-card vcard">
+                  Former editors:
+                </dt><dd class="editor p-author h-card vcard">
     <a class="ed_mailto u-email email p-name" href="mailto:matt.wolenetz@gmail.com">Matthew Wolenetz</a> (<span class="p-org org h-org">W3C Invited Expert</span>) -  Until <time datetime="2024-02-01">01 February 2024</time>
   </dd><dd class="editor p-author h-card vcard">
     <span class="p-name fn">Jerry Smith</span> (<a class="p-org org h-org" href="https://www.microsoft.com/">Microsoft Corporation</a>) -  Until <time datetime="2017-09-01">01 September 2017</time>
@@ -396,20 +397,20 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
           Policy</a>.
       
     
-                <abbr title="World Wide Web Consortium">W3C</abbr> maintains a
-                <a rel="disclosure" href="https://www.w3.org/groups/wg/media/ipr">public list of any patent disclosures</a>
-          made in connection with the deliverables of
-          the group; that page also includes
-          instructions for disclosing a patent. An individual who has actual
-          knowledge of a patent that the individual believes contains
-          <a href="https://www.w3.org/policies/patent-policy/#def-essential">Essential Claim(s)</a>
-          must disclose the information in accordance with
-          <a href="https://www.w3.org/policies/patent-policy/#sec-Disclosure">section 6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
-        
+                    <abbr title="World Wide Web Consortium">W3C</abbr> maintains a
+                    <a rel="disclosure" href="https://www.w3.org/groups/wg/media/ipr">public list of any patent disclosures</a>
+            made in connection with the deliverables of
+            the group; that page also includes
+            instructions for disclosing a patent. An individual who has actual
+            knowledge of a patent that the individual believes contains
+            <a href="https://www.w3.org/policies/patent-policy/#def-essential">Essential Claim(s)</a>
+            must disclose the information in accordance with
+            <a href="https://www.w3.org/policies/patent-policy/#sec-Disclosure">section 6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+          
   </p><p>
-                      This document is governed by the
-                      <a id="w3c_process_revision" href="https://www.w3.org/policies/process/20250818/">18 August 2025 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
-                    </p></section><nav id="toc"><h2 class="introductory" id="table-of-contents">Table of Contents</h2><ol class="toc"><li class="tocline"><a class="tocxref" href="#abstract">Abstract</a></li><li class="tocline"><a class="tocxref" href="#sotd">Status of This Document</a></li><li class="tocline"><a class="tocxref" href="#introduction"><bdi class="secno">1. </bdi>
+                          This document is governed by the
+                          <a id="w3c_process_revision" href="https://www.w3.org/policies/process/20250818/">18 August 2025 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
+                        </p></section><nav id="toc"><h2 class="introductory" id="table-of-contents">Table of Contents</h2><ol class="toc"><li class="tocline"><a class="tocxref" href="#abstract">Abstract</a></li><li class="tocline"><a class="tocxref" href="#sotd">Status of This Document</a></li><li class="tocline"><a class="tocxref" href="#introduction"><bdi class="secno">1. </bdi>
         Introduction
       </a><ol class="toc"><li class="tocline"><a class="tocxref" href="#goals"><bdi class="secno">1.1 </bdi>
           Goals
@@ -5153,14 +5154,14 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-man
         <a data-link-type="dfn|abstract-op" href="#dfn-able-to-retrieve-and-buffer-data-in-an-efficient-way" class="internalDFN" id="ref-for-dfn-able-to-retrieve-and-buffer-data-in-an-efficient-way-1">able to retrieve and buffer data in an efficient way</a>
           <dl class="switch">
             <dt>
-              If <var>can play uninterrupted and efficiently</var> is not equal to
+              If the negation of <var>can play uninterrupted and efficiently</var> is not equal to
               <a data-link-type="idl" href="#dom-managedmediasource-streaming" class="internalDFN" id="ref-for-dom-managedmediasource-streaming-6"><code>streaming</code></a>, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-an-element-task">queue an element task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/media.html#media-element">media element</a>
               that runs the following steps:
             </dt>
             <dd>
               <ol>
-                <li>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a> <a data-link-type="idl" href="#dom-managedmediasource-streaming" class="internalDFN" id="ref-for-dom-managedmediasource-streaming-7"><code>streaming</code></a> attribute to <var>can play
-                uninterrupted and efficiently</var>.
+                <li>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a> <a data-link-type="idl" href="#dom-managedmediasource-streaming" class="internalDFN" id="ref-for-dom-managedmediasource-streaming-7"><code>streaming</code></a> attribute to the negation of <var>can
+                play uninterrupted and efficiently</var>.
                 </li>
                 <li>If <var>can play uninterrupted and efficiently</var> is false <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-fire">fire an event</a> called
                 <a data-link-type="idl" data-lt="startstreaming" href="#dfn-startstreaming" class="internalDFN" id="ref-for-dfn-startstreaming-1"><code>startstreaming</code></a> at the <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-8"><code>ManagedMediaSource</code></a>.
@@ -9098,7 +9099,7 @@ video.<span class="hljs-property">src</span> = <span class="hljs-variable langua
     </dd><dt id="bib-ecmascript">[ECMASCRIPT]</dt><dd>
       <a href="https://tc39.es/ecma262/multipage/"><cite>ECMAScript Language Specification</cite></a>.  Ecma International. URL: <a href="https://tc39.es/ecma262/multipage/">https://tc39.es/ecma262/multipage/</a>
     </dd><dt id="bib-fileapi">[FILEAPI]</dt><dd>
-      <a href="https://www.w3.org/TR/FileAPI/"><cite>File API</cite></a>. Marijn Kruisselbrink.  W3C. 4 June 2026. W3C Working Draft. URL: <a href="https://www.w3.org/TR/FileAPI/">https://www.w3.org/TR/FileAPI/</a>
+      <a href="https://www.w3.org/TR/FileAPI/"><cite>File API</cite></a>. Marijn Kruisselbrink.  W3C. 12 September 2026. W3C Working Draft. URL: <a href="https://www.w3.org/TR/FileAPI/">https://www.w3.org/TR/FileAPI/</a>
     </dd><dt id="bib-html">[HTML]</dt><dd>
       <a href="https://html.spec.whatwg.org/multipage/"><cite>HTML Standard</cite></a>. Anne van Kesteren; Domenic Denicola; Dominic Farolino; Ian Hickson; Philip Jägenstedt; Simon Pieters.  WHATWG. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
     </dd><dt id="bib-infra">[infra]</dt><dd>
