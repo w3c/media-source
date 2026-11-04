@@ -131,7 +131,7 @@ body:has(input[name=color-scheme][value=dark]:checked){color-scheme:dark}
 <link rel="stylesheet" href="mse.css">
   
 <meta name="color-scheme" content="light">
-<meta name="revision" content="7aa0c54e7c7f0892fb2247d8e75c802c1697890c">
+<meta name="revision" content="86ea3b786e1a360ce1ce05239b211e7562369df4">
 <style>
 .hljs,body:has(input[name=color-scheme][value=light]:checked) .hljs,head:not(:has(meta[name=color-scheme][content~=dark]))+body .hljs{--base:#fafafa;--mono-1:#383a42;--mono-2:#686b77;--mono-3:#717277;--hue-1:#0b76c5;--hue-2:#336ae3;--hue-3:#a626a4;--hue-4:#42803c;--hue-5:#ca4706;--hue-5-2:#c91243;--hue-6:#986801;--hue-6-2:#9a6a01}
 @media (prefers-color-scheme:dark){
@@ -260,7 +260,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
   "postProcess": [
     null
   ],
-  "gitRevision": "7aa0c54e7c7f0892fb2247d8e75c802c1697890c",
+  "gitRevision": "86ea3b786e1a360ce1ce05239b211e7562369df4",
   "publishISODate": "2026-11-04T00:00:00.000Z",
   "generatedSubtitle": "W3C Editor's Draft 04 November 2026"
 }</script>
@@ -5322,6 +5322,8 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-man
         </li>
         <li>Let <var data-type="normalized TimeRanges">removed</var> equal the <var data-type="normalized
         TimeRanges">new buffered ranges</var> subtracted from <var data-type="normalized TimeRanges">previous buffered ranges</var>.
+        </li>
+        <li>If <var data-type="normalized TimeRanges">added</var> and <var data-type="normalized TimeRanges">removed</var> are both empty, abort these steps.
         </li>
         <li>Let <var>eventInitDict</var> be a new <a data-link-type="idl" data-lt="BufferedChangeEventInit" href="#dom-bufferedchangeeventinit" class="internalDFN" id="ref-for-dom-bufferedchangeeventinit-2"><code>BufferedChangeEventInit</code></a> dictionary initialized with
         <var data-type="normalized TimeRanges">added</var> as its <a data-link-type="idl" href="#dom-bufferedchangeeventinit-addedranges" class="internalDFN" id="ref-for-dom-bufferedchangeeventinit-addedranges-1"><code>addedRanges</code></a> and <var data-type="normalized TimeRanges">removed</var> as its
