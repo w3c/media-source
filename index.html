@@ -131,7 +131,7 @@ body:has(input[name=color-scheme][value=dark]:checked){color-scheme:dark}
 <link rel="stylesheet" href="mse.css">
   
 <meta name="color-scheme" content="light">
-<meta name="revision" content="1895b1dc5282e7297e1d5d24ad599aadc88a144e">
+<meta name="revision" content="7aa0c54e7c7f0892fb2247d8e75c802c1697890c">
 <style>
 .hljs,body:has(input[name=color-scheme][value=light]:checked) .hljs,head:not(:has(meta[name=color-scheme][content~=dark]))+body .hljs{--base:#fafafa;--mono-1:#383a42;--mono-2:#686b77;--mono-3:#717277;--hue-1:#0b76c5;--hue-2:#336ae3;--hue-3:#a626a4;--hue-4:#42803c;--hue-5:#ca4706;--hue-5-2:#c91243;--hue-6:#986801;--hue-6-2:#9a6a01}
 @media (prefers-color-scheme:dark){
@@ -260,7 +260,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
   "postProcess": [
     null
   ],
-  "gitRevision": "1895b1dc5282e7297e1d5d24ad599aadc88a144e",
+  "gitRevision": "7aa0c54e7c7f0892fb2247d8e75c802c1697890c",
   "publishISODate": "2026-11-04T00:00:00.000Z",
   "generatedSubtitle": "W3C Editor's Draft 04 November 2026"
 }</script>
@@ -1941,8 +1941,15 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-med
             </li>
             <li>Set the <a data-link-type="idl" href="#dom-mediasource-readystate" class="internalDFN" id="ref-for-dom-mediasource-readystate-19"><code>readyState</code></a> attribute to "<a data-link-type="idl" href="#dom-readystate-closed" class="internalDFN" id="ref-for-dom-readystate-closed-9"><code>closed</code></a>".
             </li>
-            <li>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a> is a <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-3"><code>ManagedMediaSource</code></a>, then set <a data-link-type="idl" href="#dom-managedmediasource-streaming" class="internalDFN" id="ref-for-dom-managedmediasource-streaming-1"><code>streaming</code></a>
-            attribute to <code>false</code>.
+            <li>If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a> is a <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-3"><code>ManagedMediaSource</code></a> and its <a data-link-type="idl" href="#dom-managedmediasource-streaming" class="internalDFN" id="ref-for-dom-managedmediasource-streaming-1"><code>streaming</code></a>
+            attribute is <code>true</code>, then run the following steps:
+              <ol>
+                <li>Set <a data-link-type="idl" href="#dom-managedmediasource-streaming" class="internalDFN" id="ref-for-dom-managedmediasource-streaming-2"><code>streaming</code></a> attribute to <code>false</code>.
+                </li>
+                <li><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task">Queue a task</a> to <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-fire">fire an event</a> named <a data-link-type="idl" data-lt="endstreaming" href="#dfn-endstreaming" class="internalDFN" id="ref-for-dfn-endstreaming-1"><code>endstreaming</code></a> at the
+                <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-4"><code>ManagedMediaSource</code></a>.
+                </li>
+              </ol>
             </li>
             <li>Update <a data-link-type="idl" href="#dom-mediasource-duration" class="internalDFN" id="ref-for-dom-mediasource-duration-2"><code>duration</code></a> to NaN.
             </li>
@@ -5039,7 +5046,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
       </h2><a class="self-link" href="#managedmediasource-interface" aria-label="Permalink for Section 7."></a></div>
       
       <p>
-        A <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-4"><code>ManagedMediaSource</code></a> is a <a data-link-type="idl" data-lt="MediaSource" href="#dom-mediasource" class="internalDFN" id="ref-for-dom-mediasource-100"><code>MediaSource</code></a> that actively manages its memory content.
+        A <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-5"><code>ManagedMediaSource</code></a> is a <a data-link-type="idl" data-lt="MediaSource" href="#dom-mediasource" class="internalDFN" id="ref-for-dom-mediasource-100"><code>MediaSource</code></a> that actively manages its memory content.
         Unlike a <a data-link-type="idl" data-lt="MediaSource" href="#dom-mediasource" class="internalDFN" id="ref-for-dom-mediasource-101"><code>MediaSource</code></a>, the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#user-agent">user agent</a> can evict content through the
         <a data-link-type="dfn|abstract-op" href="#dfn-memory-cleanup" class="internalDFN" id="ref-for-dfn-memory-cleanup-1">memory cleanup</a> algorithm from its <a data-link-type="idl" href="#dom-mediasource-sourcebuffers" class="internalDFN" id="ref-for-dom-mediasource-sourcebuffers-32"><code>sourceBuffers</code></a>
         (populated with <a data-link-type="idl" data-lt="ManagedSourceBuffer" href="#dom-managedsourcebuffer" class="internalDFN" id="ref-for-dom-managedsourcebuffer-3"><code>ManagedSourceBuffer</code></a>) for any reason.
@@ -5056,9 +5063,9 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-sou
         </p>
       </aside></div>
       <pre class="idl def" id="webidl-1619111096"><span class="idlHeader"><a class="self-link" href="#webidl-1619111096">WebIDL</a></span><code><span data-idl="" class="idlInterface" id="idl-def-managedmediasource" data-title="ManagedMediaSource">[<span class="extAttr"><a data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed">Exposed</a>=(Window,DedicatedWorker)</span>]
-interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-managedmediasource" id="ref-for-dom-managedmediasource-5"><code>ManagedMediaSource</code></a> : <span class="idlSuperclass"><a data-link-type="idl" href="#dom-mediasource" class="internalDFN" id="ref-for-dom-mediasource-102"><code>MediaSource</code></a></span> {<span data-idl="" class="idlConstructor" id="idl-def-managedmediasource-constructor" data-title="constructor" data-dfn-for="ManagedMediaSource">
+interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-managedmediasource" id="ref-for-dom-managedmediasource-6"><code>ManagedMediaSource</code></a> : <span class="idlSuperclass"><a data-link-type="idl" href="#dom-mediasource" class="internalDFN" id="ref-for-dom-mediasource-102"><code>MediaSource</code></a></span> {<span data-idl="" class="idlConstructor" id="idl-def-managedmediasource-constructor" data-title="constructor" data-dfn-for="ManagedMediaSource">
   <dfn data-export="" data-dfn-type="constructor" id="dom-managedmediasource-constructor" data-idl="constructor" data-title="constructor" data-dfn-for="ManagedMediaSource" data-lt="constructor()" data-local-lt="ManagedMediaSource.constructor|ManagedMediaSource.constructor()|constructor" tabindex="0" aria-haspopup="dialog"><code>constructor</code></dfn>();</span><span data-idl="" class="idlAttribute" id="idl-def-managedmediasource-streaming" data-title="streaming" data-dfn-for="ManagedMediaSource">
-  readonly attribute<span class="idlType"> <a data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean">boolean</a></span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-managedmediasource-streaming" id="ref-for-dom-managedmediasource-streaming-2"><code>streaming</code></a>;</span><span data-idl="" class="idlAttribute" id="idl-def-managedmediasource-onstartstreaming" data-title="onstartstreaming" data-dfn-for="ManagedMediaSource">
+  readonly attribute<span class="idlType"> <a data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean">boolean</a></span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-managedmediasource-streaming" id="ref-for-dom-managedmediasource-streaming-3"><code>streaming</code></a>;</span><span data-idl="" class="idlAttribute" id="idl-def-managedmediasource-onstartstreaming" data-title="onstartstreaming" data-dfn-for="ManagedMediaSource">
   attribute<span class="idlType"> <a data-link-type="typedef" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler">EventHandler</a></span> <dfn data-export="" data-dfn-type="attribute" id="dom-managedmediasource-onstartstreaming" data-idl="attribute" data-title="onstartstreaming" data-dfn-for="ManagedMediaSource" data-type="EventHandler" data-lt="onstartstreaming" data-local-lt="ManagedMediaSource.onstartstreaming" class="idlName" tabindex="0" aria-haspopup="dialog"><code>onstartstreaming</code></dfn>;</span><span data-idl="" class="idlAttribute" id="idl-def-managedmediasource-onendstreaming" data-title="onendstreaming" data-dfn-for="ManagedMediaSource">
   attribute<span class="idlType"> <a data-link-type="typedef" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler">EventHandler</a></span> <dfn data-export="" data-dfn-type="attribute" id="dom-managedmediasource-onendstreaming" data-idl="attribute" data-title="onendstreaming" data-dfn-for="ManagedMediaSource" data-type="EventHandler" data-lt="onendstreaming" data-local-lt="ManagedMediaSource.onendstreaming" class="idlName" tabindex="0" aria-haspopup="dialog"><code>onendstreaming</code></dfn>;</span>
 };</span></code></pre>
@@ -5108,7 +5115,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-man
               <a data-link-type="interface" data-lt="Event" href="https://dom.spec.whatwg.org/#event"><code>Event</code></a>
             </td>
             <td>
-              A <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-6"><code>ManagedMediaSource</code></a>'s <a data-link-type="idl" href="#dom-managedmediasource-streaming" class="internalDFN" id="ref-for-dom-managedmediasource-streaming-3"><code>streaming</code></a> attribute changed from
+              A <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-7"><code>ManagedMediaSource</code></a>'s <a data-link-type="idl" href="#dom-managedmediasource-streaming" class="internalDFN" id="ref-for-dom-managedmediasource-streaming-4"><code>streaming</code></a> attribute changed from
               <code>false</code> to <code>true</code>.
             </td>
           </tr>
@@ -5120,7 +5127,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-man
               <a data-link-type="interface" data-lt="Event" href="https://dom.spec.whatwg.org/#event"><code>Event</code></a>
             </td>
             <td>
-              A <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-7"><code>ManagedMediaSource</code></a>'s <a data-link-type="idl" href="#dom-managedmediasource-streaming" class="internalDFN" id="ref-for-dom-managedmediasource-streaming-4"><code>streaming</code></a> attribute changed from
+              A <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-8"><code>ManagedMediaSource</code></a>'s <a data-link-type="idl" href="#dom-managedmediasource-streaming" class="internalDFN" id="ref-for-dom-managedmediasource-streaming-5"><code>streaming</code></a> attribute changed from
               <code>true</code> to <code>false</code>.
             </td>
           </tr>
@@ -5140,7 +5147,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-man
         defined condition where the user agent determines that it currently has enough data to play
         the presentation without stalling for a meaningful period of time. This condition is
         constantly evaluated to determine when to transition the value of
-        <a data-link-type="idl" href="#dom-managedmediasource-streaming" class="internalDFN" id="ref-for-dom-managedmediasource-streaming-5"><code>streaming</code></a>. These transitions indicate when the user agent believes
+        <a data-link-type="idl" href="#dom-managedmediasource-streaming" class="internalDFN" id="ref-for-dom-managedmediasource-streaming-6"><code>streaming</code></a>. These transitions indicate when the user agent believes
         it has enough data buffered or it needs more data respectively.
       </p>
       <p>
@@ -5158,19 +5165,19 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-man
           <dl class="switch">
             <dt>
               If the negation of <var>can play uninterrupted and efficiently</var> is not equal to
-              <a data-link-type="idl" href="#dom-managedmediasource-streaming" class="internalDFN" id="ref-for-dom-managedmediasource-streaming-6"><code>streaming</code></a>, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-an-element-task">queue an element task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/media.html#media-element">media element</a>
+              <a data-link-type="idl" href="#dom-managedmediasource-streaming" class="internalDFN" id="ref-for-dom-managedmediasource-streaming-7"><code>streaming</code></a>, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-an-element-task">queue an element task</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/media.html#media-element">media element</a>
               that runs the following steps:
             </dt>
             <dd>
               <ol>
-                <li>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a> <a data-link-type="idl" href="#dom-managedmediasource-streaming" class="internalDFN" id="ref-for-dom-managedmediasource-streaming-7"><code>streaming</code></a> attribute to the negation of <var>can
+                <li>Set <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a> <a data-link-type="idl" href="#dom-managedmediasource-streaming" class="internalDFN" id="ref-for-dom-managedmediasource-streaming-8"><code>streaming</code></a> attribute to the negation of <var>can
                 play uninterrupted and efficiently</var>.
                 </li>
                 <li>If <var>can play uninterrupted and efficiently</var> is false <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-fire">fire an event</a> called
-                <a data-link-type="idl" data-lt="startstreaming" href="#dfn-startstreaming" class="internalDFN" id="ref-for-dfn-startstreaming-1"><code>startstreaming</code></a> at the <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-8"><code>ManagedMediaSource</code></a>.
+                <a data-link-type="idl" data-lt="startstreaming" href="#dfn-startstreaming" class="internalDFN" id="ref-for-dfn-startstreaming-1"><code>startstreaming</code></a> at the <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-9"><code>ManagedMediaSource</code></a>.
                 </li>
-                <li>Otherwise, <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-fire">fire an event</a> called <a data-link-type="idl" data-lt="endstreaming" href="#dfn-endstreaming" class="internalDFN" id="ref-for-dfn-endstreaming-1"><code>endstreaming</code></a> at the
-                <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-9"><code>ManagedMediaSource</code></a>.
+                <li>Otherwise, <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-fire">fire an event</a> called <a data-link-type="idl" data-lt="endstreaming" href="#dfn-endstreaming" class="internalDFN" id="ref-for-dfn-endstreaming-2"><code>endstreaming</code></a> at the
+                <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-10"><code>ManagedMediaSource</code></a>.
                 </li>
               </ol>
             </dd>
@@ -5300,7 +5307,8 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-man
         <a data-link-type="idl" data-lt="ManagedSourceBuffer" href="#dom-managedsourcebuffer" class="internalDFN" id="ref-for-dom-managedsourcebuffer-6"><code>ManagedSourceBuffer</code></a> <var data-type="ManagedSourceBuffer">buffer</var> that would cause a <var data-type="ManagedSourceBuffer">buffer</var>'s
         <a data-link-type="idl" href="#dom-sourcebuffer-buffered" class="internalDFN" id="ref-for-dom-sourcebuffer-buffered-5"><code>buffered</code></a> to change. That is once <a data-link-type="idl" data-lt="appendBuffer()" href="#dom-sourcebuffer-appendbuffer" class="internalDFN" id="ref-for-dom-sourcebuffer-appendbuffer-11"><code>appendBuffer</code></a><code>()</code>,
         <a data-link-type="idl" data-lt="remove()" href="#dom-sourcebuffer-remove" class="internalDFN" id="ref-for-dom-sourcebuffer-remove-6"><code>remove</code></a><code>()</code> or <a data-link-type="dfn|abstract-op" href="#dfn-memory-cleanup-0" class="internalDFN" id="ref-for-dfn-memory-cleanup-0-4">memory cleanup</a> algorithm have
-        completed.
+        completed, and for each <a data-link-type="idl" data-lt="ManagedSourceBuffer" href="#dom-managedsourcebuffer" class="internalDFN" id="ref-for-dom-managedsourcebuffer-7"><code>ManagedSourceBuffer</code></a> in the parent <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-11"><code>ManagedMediaSource</code></a>'s
+        <a data-link-type="idl" href="#dom-mediasource-sourcebuffers" class="internalDFN" id="ref-for-dom-mediasource-sourcebuffers-34"><code>sourceBuffers</code></a> once the <a data-link-type="dfn|abstract-op" href="#dfn-end-of-stream" class="internalDFN" id="ref-for-dfn-end-of-stream-3">end of stream</a> algorithm has completed.
       </p>
       <ol>
         <li>Let <var data-type="normalized TimeRanges">previous buffered ranges</var> equal the
@@ -5330,7 +5338,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-man
         <li>
           <dl class="switch">
             <dt>
-              If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a> is not in <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>'s <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-10"><code>ManagedMediaSource</code></a> parent
+              If <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a> is not in <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>'s <a data-link-type="idl" data-lt="ManagedMediaSource" href="#dom-managedmediasource" class="internalDFN" id="ref-for-dom-managedmediasource-12"><code>ManagedMediaSource</code></a> parent
               <a data-link-type="idl" href="#dom-mediasource-activesourcebuffers" class="internalDFN" id="ref-for-dom-mediasource-activesourcebuffers-31"><code>activeSourceBuffers</code></a>:
             </dt>
             <dd>
@@ -5623,7 +5631,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="A
                 <dt>
                   If this track was created by a <a data-link-type="idl" data-lt="SourceBuffer" href="#dom-sourcebuffer" class="internalDFN" id="ref-for-dom-sourcebuffer-139"><code>SourceBuffer</code></a> that was created on the same
                   <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-global-object-realm">realm</a> as this track, and if that <a data-link-type="idl" data-lt="SourceBuffer" href="#dom-sourcebuffer" class="internalDFN" id="ref-for-dom-sourcebuffer-140"><code>SourceBuffer</code></a> has not been
-                  removed from the <a data-link-type="idl" href="#dom-mediasource-sourcebuffers" class="internalDFN" id="ref-for-dom-mediasource-sourcebuffers-34"><code>sourceBuffers</code></a> attribute of its <a data-link-type="dfn|abstract-op" href="#parent-media-source" class="internalDFN" id="ref-for-parent-media-source-45">parent media source</a>:
+                  removed from the <a data-link-type="idl" href="#dom-mediasource-sourcebuffers" class="internalDFN" id="ref-for-dom-mediasource-sourcebuffers-35"><code>sourceBuffers</code></a> attribute of its <a data-link-type="dfn|abstract-op" href="#parent-media-source" class="internalDFN" id="ref-for-parent-media-source-45">parent media source</a>:
                 </dt>
                 <dd>
                   Return the <a data-link-type="idl" data-lt="SourceBuffer" href="#dom-sourcebuffer" class="internalDFN" id="ref-for-dom-sourcebuffer-141"><code>SourceBuffer</code></a> that created this track.
@@ -5677,7 +5685,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="V
                 <dt>
                   If this track was created by a <a data-link-type="idl" data-lt="SourceBuffer" href="#dom-sourcebuffer" class="internalDFN" id="ref-for-dom-sourcebuffer-145"><code>SourceBuffer</code></a> that was created on the same
                   <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-global-object-realm">realm</a> as this track, and if that <a data-link-type="idl" data-lt="SourceBuffer" href="#dom-sourcebuffer" class="internalDFN" id="ref-for-dom-sourcebuffer-146"><code>SourceBuffer</code></a> has not been
-                  removed from the <a data-link-type="idl" href="#dom-mediasource-sourcebuffers" class="internalDFN" id="ref-for-dom-mediasource-sourcebuffers-35"><code>sourceBuffers</code></a> attribute of its <a data-link-type="dfn|abstract-op" href="#parent-media-source" class="internalDFN" id="ref-for-parent-media-source-46">parent media source</a>:
+                  removed from the <a data-link-type="idl" href="#dom-mediasource-sourcebuffers" class="internalDFN" id="ref-for-dom-mediasource-sourcebuffers-36"><code>sourceBuffers</code></a> attribute of its <a data-link-type="dfn|abstract-op" href="#parent-media-source" class="internalDFN" id="ref-for-parent-media-source-46">parent media source</a>:
                 </dt>
                 <dd>
                   Return the <a data-link-type="idl" data-lt="SourceBuffer" href="#dom-sourcebuffer" class="internalDFN" id="ref-for-dom-sourcebuffer-147"><code>SourceBuffer</code></a> that created this track.
@@ -5731,7 +5739,7 @@ partial interface <a data-idl="partial" data-link-type="interface" data-title="T
                 <dt>
                   If this track was created by a <a data-link-type="idl" data-lt="SourceBuffer" href="#dom-sourcebuffer" class="internalDFN" id="ref-for-dom-sourcebuffer-151"><code>SourceBuffer</code></a> that was created on the same
                   <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-global-object-realm">realm</a> as this track, and if that <a data-link-type="idl" data-lt="SourceBuffer" href="#dom-sourcebuffer" class="internalDFN" id="ref-for-dom-sourcebuffer-152"><code>SourceBuffer</code></a> has not been
-                  removed from the <a data-link-type="idl" href="#dom-mediasource-sourcebuffers" class="internalDFN" id="ref-for-dom-mediasource-sourcebuffers-36"><code>sourceBuffers</code></a> attribute of its <a data-link-type="dfn|abstract-op" href="#parent-media-source" class="internalDFN" id="ref-for-parent-media-source-47">parent media source</a>:
+                  removed from the <a data-link-type="idl" href="#dom-mediasource-sourcebuffers" class="internalDFN" id="ref-for-dom-mediasource-sourcebuffers-37"><code>sourceBuffers</code></a> attribute of its <a data-link-type="dfn|abstract-op" href="#parent-media-source" class="internalDFN" id="ref-for-parent-media-source-47">parent media source</a>:
                 </dt>
                 <dd>
                   Return the <a data-link-type="idl" data-lt="SourceBuffer" href="#dom-sourcebuffer" class="internalDFN" id="ref-for-dom-sourcebuffer-153"><code>SourceBuffer</code></a> that created this track.
@@ -6875,7 +6883,9 @@ video.<span class="hljs-property">src</span> = <span class="hljs-variable langua
     </li><li>
       <a href="#ref-for-dom-mediasource-sourcebuffers-33" title="§ 7.3.2 Memory Cleanup">§ 7.3.2 Memory Cleanup</a> 
     </li><li>
-      <a href="#ref-for-dom-mediasource-sourcebuffers-34" title="§ Attributes">§ Attributes</a> <a href="#ref-for-dom-mediasource-sourcebuffers-35" title="Reference 2">(2)</a> <a href="#ref-for-dom-mediasource-sourcebuffers-36" title="Reference 3">(3)</a> 
+      <a href="#ref-for-dom-mediasource-sourcebuffers-34" title="§ 9.3.1 Buffered Change">§ 9.3.1 Buffered Change</a> 
+    </li><li>
+      <a href="#ref-for-dom-mediasource-sourcebuffers-35" title="§ Attributes">§ Attributes</a> <a href="#ref-for-dom-mediasource-sourcebuffers-36" title="Reference 2">(2)</a> <a href="#ref-for-dom-mediasource-sourcebuffers-37" title="Reference 3">(3)</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-mediasource-activesourcebuffers" aria-label="Links in this document to definition: activeSourceBuffers">
@@ -7337,6 +7347,8 @@ video.<span class="hljs-property">src</span> = <span class="hljs-variable langua
       <a href="#ref-for-dfn-end-of-stream-1" title="§ 3.9 endOfStream() method">§ 3.9 endOfStream() method</a> 
     </li><li>
       <a href="#ref-for-dfn-end-of-stream-2" title="§ 5.5.3 Append Error">§ 5.5.3 Append Error</a> 
+    </li><li>
+      <a href="#ref-for-dfn-end-of-stream-3" title="§ 9.3.1 Buffered Change">§ 9.3.1 Buffered Change</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-mirror-if-necessary" aria-label="Links in this document to definition: Mirror if necessary">
@@ -8710,15 +8722,17 @@ video.<span class="hljs-property">src</span> = <span class="hljs-variable langua
     </li><li>
       <a href="#ref-for-dom-managedmediasource-2" title="§ 3.7 addSourceBuffer() method">§ 3.7 addSourceBuffer() method</a> 
     </li><li>
-      <a href="#ref-for-dom-managedmediasource-3" title="§ 3.15.2 Detaching from a media element">§ 3.15.2 Detaching from a media element</a> 
+      <a href="#ref-for-dom-managedmediasource-3" title="§ 3.15.2 Detaching from a media element">§ 3.15.2 Detaching from a media element</a> <a href="#ref-for-dom-managedmediasource-4" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dom-managedmediasource-4" title="§ 7. ManagedMediaSource interface">§ 7. ManagedMediaSource interface</a> <a href="#ref-for-dom-managedmediasource-5" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dom-managedmediasource-5" title="§ 7. ManagedMediaSource interface">§ 7. ManagedMediaSource interface</a> <a href="#ref-for-dom-managedmediasource-6" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dom-managedmediasource-6" title="§ 7.2 Event Summary">§ 7.2 Event Summary</a> <a href="#ref-for-dom-managedmediasource-7" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dom-managedmediasource-7" title="§ 7.2 Event Summary">§ 7.2 Event Summary</a> <a href="#ref-for-dom-managedmediasource-8" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dom-managedmediasource-8" title="§ 7.3.1 ManagedSourceBuffer Monitoring">§ 7.3.1 ManagedSourceBuffer Monitoring</a> <a href="#ref-for-dom-managedmediasource-9" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dom-managedmediasource-9" title="§ 7.3.1 ManagedSourceBuffer Monitoring">§ 7.3.1 ManagedSourceBuffer Monitoring</a> <a href="#ref-for-dom-managedmediasource-10" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dom-managedmediasource-10" title="§ 9.3.2 Memory cleanup">§ 9.3.2 Memory cleanup</a> 
+      <a href="#ref-for-dom-managedmediasource-11" title="§ 9.3.1 Buffered Change">§ 9.3.1 Buffered Change</a> 
+    </li><li>
+      <a href="#ref-for-dom-managedmediasource-12" title="§ 9.3.2 Memory cleanup">§ 9.3.2 Memory cleanup</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-managedmediasource-constructor" aria-label="Links in this document to definition: constructor">
@@ -8764,13 +8778,13 @@ video.<span class="hljs-property">src</span> = <span class="hljs-variable langua
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dom-managedmediasource-streaming-1" title="§ 3.15.2 Detaching from a media element">§ 3.15.2 Detaching from a media element</a> 
+      <a href="#ref-for-dom-managedmediasource-streaming-1" title="§ 3.15.2 Detaching from a media element">§ 3.15.2 Detaching from a media element</a> <a href="#ref-for-dom-managedmediasource-streaming-2" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dom-managedmediasource-streaming-2" title="§ 7. ManagedMediaSource interface">§ 7. ManagedMediaSource interface</a> 
+      <a href="#ref-for-dom-managedmediasource-streaming-3" title="§ 7. ManagedMediaSource interface">§ 7. ManagedMediaSource interface</a> 
     </li><li>
-      <a href="#ref-for-dom-managedmediasource-streaming-3" title="§ 7.2 Event Summary">§ 7.2 Event Summary</a> <a href="#ref-for-dom-managedmediasource-streaming-4" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dom-managedmediasource-streaming-4" title="§ 7.2 Event Summary">§ 7.2 Event Summary</a> <a href="#ref-for-dom-managedmediasource-streaming-5" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dom-managedmediasource-streaming-5" title="§ 7.3.1 ManagedSourceBuffer Monitoring">§ 7.3.1 ManagedSourceBuffer Monitoring</a> <a href="#ref-for-dom-managedmediasource-streaming-6" title="Reference 2">(2)</a> <a href="#ref-for-dom-managedmediasource-streaming-7" title="Reference 3">(3)</a> 
+      <a href="#ref-for-dom-managedmediasource-streaming-6" title="§ 7.3.1 ManagedSourceBuffer Monitoring">§ 7.3.1 ManagedSourceBuffer Monitoring</a> <a href="#ref-for-dom-managedmediasource-streaming-7" title="Reference 2">(2)</a> <a href="#ref-for-dom-managedmediasource-streaming-8" title="Reference 3">(3)</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-startstreaming" aria-label="Links in this document to definition: startstreaming">
@@ -8796,7 +8810,9 @@ video.<span class="hljs-property">src</span> = <span class="hljs-variable langua
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dfn-endstreaming-1" title="§ 7.3.1 ManagedSourceBuffer Monitoring">§ 7.3.1 ManagedSourceBuffer Monitoring</a> 
+      <a href="#ref-for-dfn-endstreaming-1" title="§ 3.15.2 Detaching from a media element">§ 3.15.2 Detaching from a media element</a> 
+    </li><li>
+      <a href="#ref-for-dfn-endstreaming-2" title="§ 7.3.1 ManagedSourceBuffer Monitoring">§ 7.3.1 ManagedSourceBuffer Monitoring</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-enough-managed-data-to-ensure-uninterrupted-playback" aria-label="Links in this document to definition: enough managed data to ensure uninterrupted playback">
@@ -8955,7 +8971,7 @@ video.<span class="hljs-property">src</span> = <span class="hljs-variable langua
     </li><li>
       <a href="#ref-for-dom-managedsourcebuffer-5" title="§ 9.2 Event Summary">§ 9.2 Event Summary</a> 
     </li><li>
-      <a href="#ref-for-dom-managedsourcebuffer-6" title="§ 9.3.1 Buffered Change">§ 9.3.1 Buffered Change</a> 
+      <a href="#ref-for-dom-managedsourcebuffer-6" title="§ 9.3.1 Buffered Change">§ 9.3.1 Buffered Change</a> <a href="#ref-for-dom-managedsourcebuffer-7" title="Reference 2">(2)</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-managedsourcebuffer-onbufferedchange" aria-label="Links in this document to definition: onbufferedchange">
