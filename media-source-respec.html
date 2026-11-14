@@ -2292,11 +2292,13 @@
               of the [=parent media source=] then throw an {{InvalidStateError}} exception and
               abort these steps.
               </li>
-              <li>Let |highest end time:double| be the largest [=track buffer ranges=] end time
-              across all the [=track buffers=] managed by this {{SourceBuffer}} object.
+              <li>Let |highest end time| be the largest [=track buffer ranges=] end time
+              across all the [=track buffers=] managed by this {{SourceBuffer}} object, or
+              undefined if none of those track buffers has a range.
               </li>
-              <li>Let |intersection ranges:normalized TimeRanges| equal a {{TimeRanges}} object
-              containing a single range from 0 to |highest end time|.
+              <li>Let |intersection ranges:normalized TimeRanges| equal an empty {{TimeRanges}}
+              object if |highest end time| is undefined, or a {{TimeRanges}} object containing
+              a single range from 0 to |highest end time| otherwise.
               </li>
               <li>For each audio and video [=track buffer=] managed by this {{SourceBuffer}}, run
               the following steps:
@@ -2310,8 +2312,9 @@
                   <li>Let |track ranges:normalized TimeRanges| equal the [=track buffer ranges=]
                   for the current [=track buffer=].
                   </li>
-                  <li>If {{MediaSource/readyState}} is {{ReadyState/""ended""}}, then set the end
-                  time on the last range in |track ranges| to |highest end time|.
+                  <li>If {{MediaSource/readyState}} is {{ReadyState/""ended""}} and |track ranges|
+                  is not empty, then set the end time on the last range in |track ranges| to
+                  |highest end time|.
                   </li>
                   <li>Let |new intersection ranges:normalized TimeRanges| equal the intersection
                   between the |intersection ranges| and the |track ranges|.
@@ -5177,11 +5180,12 @@
                       returned by {{SourceBuffer/buffered}} for each {{SourceBuffer}} object in
                       {{MediaSource/activeSourceBuffers}}.
                       </li>
-                      <li>Let |highest end time:unrestricted double| be the largest range end time
-                      in the |active ranges|.
+                      <li>Let |highest end time| be the largest range end time
+                      in the |active ranges|, or undefined if none of the active source buffers
+                      has a range.
                       </li>
-                      <li>Let |recent intersection ranges:normalized TimeRanges| equal a
-                      {{TimeRanges}} object containing a single range from 0 to |highest end time|.
+                      <li>If |highest end time| is not undefined, set |recent intersection ranges|
+                      to a {{TimeRanges}} object containing a single range from 0 to |highest end time|.
                       </li>
                       <li>For each {{SourceBuffer}} object in {{MediaSource/activeSourceBuffers}}
                       run the following steps:
@@ -5190,8 +5194,9 @@
                           by the {{SourceBuffer/buffered}} attribute on the current
                           {{SourceBuffer}}.
                           </li>
-                          <li>If {{MediaSource/readyState}} is {{ReadyState/""ended""}}, then set
-                          the end time on the last range in |source ranges| to |highest end time|.
+                          <li>If {{MediaSource/readyState}} is {{ReadyState/""ended""}} and
+                          |source ranges| is not empty, then set the end time on the last range
+                          in |source ranges| to |highest end time|.
                           </li>
                           <li>Let |new intersection ranges:normalized TimeRanges| equal the
                           intersection between the |recent intersection ranges| and the |source
